@@ -1,3 +1,53 @@
+;;; muse-colors.el --- Coloring and highlighting used by Muse
+
+;; Copyright (C) 2004 Free Software Foundation, Inc.
+
+;; Emacs Lisp Archive Entry
+;; Filename: muse-colors.el
+;; Version: 3.00 ALPHA
+;; Date: Thu 11-Mar-2004
+;; Keywords: hypermedia
+;; Author: John Wiegley (johnw AT gnu DOT org)
+;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
+;; URL: http://www.mwolson.org/projects/MuseMode.html
+;; Compatibility: Emacs21
+
+;; This file is not part of GNU Emacs.
+
+;; This is free software; you can redistribute it and/or modify it under
+;; the terms of the GNU General Public License as published by the Free
+;; Software Foundation; either version 2, or (at your option) any later
+;; version.
+;;
+;; This is distributed in the hope that it will be useful, but WITHOUT
+;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+;; for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
+;; MA 02111-1307, USA.
+
+;;; Commentary:
+
+;; This file is the part of the Muse project that describes regexps
+;; that are used throughout the project.
+
+;;;_ + Startup
+
+;; To be written.
+
+;;;_ + Usage
+
+;;;_ + Contributors
+
+;; Lan Yufeng (nlany DOT web AT gmail DOT com) found an error where
+;; headings were being given the wrong face, contributing a patch to
+;; fix this.
+
+;;; Code:
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Emacs Muse Highlighting
@@ -114,7 +164,7 @@ whether progress messages should be displayed to the user."
 	      (add-text-properties
 	       (line-beginning-position) (line-end-position)
 	       (list 'face (intern (concat "muse-header-"
-					   (int-to-string (1+ leader)))))))
+					   (int-to-string leader))))))
 	(save-excursion
 	  (skip-chars-forward "^*\n" end)
 	  (when (eq (char-after) ?\n)

@@ -3,13 +3,12 @@
 ;; Copyright (C) 2004 Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
-;; Filename: muse.el
+;; Filename: muse-regexps.el
 ;; Version: 3.00 ALPHA
 ;; Date: 2004-12-29
 ;; Keywords: hypermedia
 ;; Author: Michael Olson (mwolson AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
-;; Description: An authoring and publishing tool for Emacs
 ;; URL: http://www.mwolson.org/projects/MuseMode.html
 ;; Compatibility: Emacs21
 
