@@ -149,7 +149,7 @@ than the BLOSXOM table tag."
     (10600 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"
 	   0 planner-markup-task)
     (10700 "^\\.#\\([0-9]+\\)" 0 planner-markup-note)
-    (10800 "^#\\(date\\)\\s-+\\(.+\\)\n+" 0 muse-blosxom-markup-date-directive))
+    (10800 "^#date\\s-+\\(.+\\)\n+" 0 muse-blosxom-markup-date-directive))
   "List of markup rules for publishing a Muse page to BLOSXOM.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -474,30 +474,16 @@ if not escaped."
 
 ;;; Maintain (published-file . date) alist
 
-(defvar blosxom-page-date-alist nil)
+(defvar muse-blosxom-page-date-alist nil)
 
 (defun muse-blosxom-markup-date-directive ()
-  "Add a date entry to `blosxom-page-date-alist' for this page."
-  (when (string= (match-string 1) "date")
-    (let ((date (match-string 2)))
-      (save-match-data
-	(add-to-list
-	 'blosxom-page-date-alist
-	 `(,(muse-published-file) . ,date)))))
+  "Add a date entry to `muse-blosxom-page-date-alist' for this page."
+  (let ((date (match-string 1)))
+    (save-match-data
+      (add-to-list
+       'muse-blosxom-page-date-alist
+       `(,buffer-file-name . ,date))))
   "")
-
-(defun blosxom-set-time (file)
-  "Reset the modification timestamp for published FILE.
-Blosxom uses the modification time of a published file as its publication
-date-time.  Adding this function to `emacs-wiki-after-file-publish-hook'
-will set the modification time of the published page according to the value
-stored in `blosxom-page-date-alist'."
-  (let* ((page (,use-page-name file))
-	 (published (muse-published-file page))
-	 (date (cdr (assoc published blosxom-page-date-alist))))
-    (when date
-      (shell-command
-       (format "touch --date='%s' %s" date published)))))
 
 (provide 'muse-blosxom)
 
