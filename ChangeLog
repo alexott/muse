@@ -1,3 +1,17 @@
+2004-12-29  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile: Change path to `publish' script.
+
+	* contrib/pcomplete.el: New file that is used by Muse without
+	actually being a part of it: hence its location in the contrib
+	directory.
+
+	* contrib/cgi.el, contrib/httpd.el: New location.
+
+	* examples/muse-johnw.el, examples/publish-johnw: Ditto.
+
+	* scripts/publish, scripts/publish-project: Ditto.
+
 2004-12-11  Michael Olson  <mwolson@gnu.org>
 
 	* muse-project.el (muse-project-save-buffers): Attempt to fix

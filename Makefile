@@ -5,13 +5,13 @@ ELC     = $(patsubst %.el,%.elc,$(wildcard *.el))
 all: $(TARGETS) $(ELC)
 
 %.html: %
-	./publish html $<
+	./scripts/publish html $<
 
 %.pdf: %
-	./publish pdf $<
+	./scripts/publish pdf $<
 
 %.info: %
-	./publish info $<
+	./scripts/publish info $<
 
 muse-build.elc: muse-build.el
 	@echo muse-build.el is not byte-compiled
