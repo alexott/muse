@@ -2,6 +2,50 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-01 02:27:08 GMT	Michael Olson <mwolson@gnu.org>	patch-21
+
+    Summary:
+      New XHTML style, add more examples to my sample muse config
+    Revision:
+      muse--main--1.0--patch-21
+
+    2005-03-31  Michael Olson  <mwolson@gnu.org>
+    
+        * examples/mwolson/muse-init.el: Give an example of deriving a
+        custom publishing style.
+        (my-muse-blosxom-finalize): Finalizes the "my-blosxom" style.
+        (my-muse-prepare-entry-for-xanga): Mangle the published output
+        from a blosxom project and copy the result to the clipboard for
+        easy pasting into Xanga's web form.  The file is untouched.
+    
+        * muse-html.el (muse-html-style-sheet): Include the <style
+        type="text/css"></style> wrapper around the example.
+        (muse-html-header): Don't add <style type="text/css"></style>
+        around the value of `muse-html-style-sheet' anymore.  This allows
+        for the option of putting your stylesheet(s) in a separate file.
+        An example of this is given in the documentation for this
+        variable.
+    
+        * muse-xhtml: New file that implements a publishing style which is
+        derived from HTML mode.  It uses a slightly modified version of
+        the HTML markup rules to generate XHTML-compliant output.
+    
+        * muse-blosxom.el: Add new "blosxom-xhtml" style.  The old
+        "blosxom" style has been renamed to "blosxom-html".  Fix a few
+        header gaffes.
+    
+        * muse-journal.el: Add new "journal-xhtml" style.
+    
+        * muse-message.el: Add new "message-xhtml" style.
+
+    new files:
+     .arch-ids/muse-xhtml.el.id muse-xhtml.el
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el muse-blosxom.el
+     muse-html.el muse-journal.el muse-message.el
+
+
 2005-03-25 03:55:13 GMT	Michael Olson <mwolson@gnu.org>	patch-20
 
     Summary:

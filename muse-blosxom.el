@@ -1,4 +1,4 @@
-;;; emacs-wiki-blosxom.el --- Publish a wiki tree for serving by Blosxom
+;;; muse-blosxom.el --- Publish a document tree for serving by (py)Blosxom
 
 ;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
@@ -9,7 +9,7 @@
 ;; Keywords: hypermedia
 ;; Author: Gary V. Vaughan (gary AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
-;; Description: Publish a local Muse tree for serving by Blosxom
+;; Description: Publish a document tree for serving by (py)Blosxom
 ;; URL: http://www.mwolson.org/projects/MuseMode.html
 ;; Compatibility: Emacs21
 
@@ -132,10 +132,16 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
 		  function))
   :group 'muse-blosxom)
 
-;;; Register the Muse BLOSXOM Publisher
+;;; Register the BLOSXOM Publisher
 
 (unless (assoc "blosxom" muse-publishing-styles)
-  (muse-derive-style "blosxom" "html"
+  (muse-derive-style "blosxom-html" "html"
+		     :suffix    'muse-blosxom-extension
+		     :regexps   'muse-blosxom-markup-regexps
+		     :header    'muse-blosxom-header
+		     :footer    'muse-blosxom-footer)
+
+  (muse-derive-style "blosxom-xhtml" "xhtml"
 		     :suffix    'muse-blosxom-extension
 		     :regexps   'muse-blosxom-markup-regexps
 		     :header    'muse-blosxom-header

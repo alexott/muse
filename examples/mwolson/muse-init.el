@@ -14,37 +14,59 @@
 
 ;; Initialize
 (require 'muse)          ; load generic module
-(require 'muse-blosxom)  ; load blosxom module
 (require 'muse-colors)   ; load coloring/font-lock module
 (require 'muse-mode)     ; load authoring mode
-(require 'muse-html)     ; load HTML publishing style
+(require 'muse-blosxom)  ; load blosxom module
+(require 'muse-xhtml)    ; load XHTML publishing style
 
 ;; Setup projects
 
+;; Here is an example of making a customized version of your favorite
+;; publisher.  All this does is run `my-muse-blosoxm-finalize' on the
+;; published file immediately after saving it.
+
+(unless (assoc "my-blosxom" muse-publishing-styles)
+  (muse-derive-style "my-blosxom" "blosxom-xhtml"
+		     :final 'my-muse-blosxom-finalize))
+
+;; Here is my master project listing.
+;;
 ;; Note that I not do anything useful with the ProjectsWiki and
 ;; WebWiki projects; only the BlogWiki project is published.
 
 (setq muse-project-alist
       '(("ProjectsWiki"
          ("~/proj/wiki/projects/" :default "WelcomePage")
-         (:base "html" :path "~/personal-site/site/projects-muse"))
+         (:base "xhtml"
+                :path "~/personal-site/site/projects-muse"))
+
         ("BlogWiki"
          ("~/proj/wiki/blog/francais/"
           "~/proj/wiki/blog/personal/"
           "~/proj/wiki/blog/projects/"
           "~/proj/wiki/blog/website/"
           :default "personal")
-         (:base "blosxom" :path "~/personal-site/site/blog/francais"
-          :include "/francais/")
-         (:base "blosxom" :path "~/personal-site/site/blog/personal"
-          :include "/personal/")
-         (:base "blosxom" :path "~/personal-site/site/blog/projects"
-          :include "/projects/")
-         (:base "blosxom" :path "~/personal-site/site/blog/website"
-          :include "/website/"))
+
+         (:base "my-blosxom"
+                :path "~/personal-site/site/blog/francais"
+                :include "/francais/")
+         (:base "my-blosxom"
+                :path "~/personal-site/site/blog/personal"
+                :include "/personal/")
+         (:base "my-blosxom"
+                :path "~/personal-site/site/blog/projects"
+                :include "/projects/")
+         (:base "my-blosxom"
+                :path "~/personal-site/site/blog/website"
+                :include "/website/"))
+
         ("WebWiki"
          ("~/proj/wiki/web/" :default "WelcomePage")
-         (:base "html" :path "~/personal-site/site/web-muse"))))
+         (:base "xhtml" :path "~/personal-site/site/web-muse"))))
+
+;;; Functions
+
+;; Make other modes a bit less intrusive
 
 (defun my-muse-mode-affect-p ()
   "Indicate whether this text should be messed with.
@@ -58,7 +80,6 @@ things."
                  (string= (or (match-string 0) "")
                           "[["))))))
 
-
 ;; Make flyspell not mess with links
 (put 'muse-mode
      'flyspell-mode-predicate
@@ -68,8 +89,6 @@ things."
 (eval-after-load "fill"
   (add-to-list 'fill-nobreak-predicate
                (lambda nil (null (my-muse-mode-affect-p)))))
-
-;;; Functions
 
 ;; Start a new blog entry
 
@@ -114,6 +133,44 @@ The page will be initialized with the current date and TITLE."
             "\n\n")
     (forward-line 2)))
 
+;; Make the current file display correctly in Xanga
+
+(defun my-muse-blosxom-finalize (file output-path target)
+  (my-muse-prepare-entry-for-xanga output-path))
+
+(defun my-muse-prepare-entry-for-xanga (file)
+  "Mangle FILE so that Xanga doesn't bug out, saving to X clipboard.
+This is called on a generated BLOSXOM output file whenever
+something is published with the \"my-blosxom\" style.
+
+If FILE is not specified, use the current file."
+  (interactive (list buffer-file-name))
+  (with-temp-buffer
+    (insert-file-contents file t)
+    ;; Surround first line in <h3></h3>
+    (goto-char (point-min))
+    (insert "<h3>")
+    (end-of-line)
+    (insert "</h3>")
+    ;; Get rid of 2 spaces together and merge lines
+    (goto-char (point-min))
+    (while (re-search-forward (concat "["
+                                      emacs-wiki-regexp-space
+                                      "]+") nil t)
+      (replace-match " "))
+    ;; Remove trailing space
+    (goto-char (point-min))
+    (while (re-search-forward " *</p> *" nil t)
+      (replace-match "</p>"))
+    ;; Make relative links work
+    (goto-char (point-min))
+    (while (re-search-forward "href=\"../" nil t)
+      (replace-match "href=\"http://www.mwolson.org/" nil t))
+    ;; Copy entry to clipboard
+    (clipboard-kill-ring-save (point-min) (point-max))
+    ;; Don't prompt me about killing the buffer
+    (set-buffer-modified-p nil)))
+
 ;;; Key customizations
 
 (global-set-key "\C-cpl" 'my-muse-blosxom-new-entry)
@@ -121,14 +178,15 @@ The page will be initialized with the current date and TITLE."
 ;;; Custom variables
 
 (custom-set-variables
- '(muse-blosxom-custom-variables (quote ((emacs-wiki-project-server-prefix . "/blog/") (emacs-wiki-home-page . "index.html"))))
  '(muse-blosxom-publishing-directory "~/personal-site/site/blog")
  '(muse-html-charset-default "utf-8")
  '(muse-html-encoding-default (quote utf-8))
- '(muse-html-footer "~/personal-site/muse/footer.html")
- '(muse-html-header "~/personal-site/muse/header.html")
  '(muse-html-meta-content-encoding (quote utf-8))
- '(muse-html-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" href=\"../default.css\"/>"))
+ '(muse-xhtml-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/common.css\" />
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
+ '(muse-xhtml-footer "~/personal-site/muse/footer.html")
+ '(muse-xhtml-header "~/personal-site/muse/header.html"))
 (custom-set-faces
  '(muse-link-face ((t (:foreground "blue" :underline "blue" :weight bold)))))
 

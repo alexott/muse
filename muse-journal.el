@@ -541,6 +541,9 @@ For more on the structure of this list, see
   (muse-derive-style "journal-html" "html"
 		     :before-end 'muse-journal-html-munge-buffer)
 
+  (muse-derive-style "journal-xhtml" "xhtml"
+		     :before-end 'muse-journal-html-munge-buffer)
+
   (muse-derive-style "journal-latex" "latex"
 		     :tags 'muse-journal-latex-markup-tags
 		     :before-end 'muse-journal-latex-munge-buffer)

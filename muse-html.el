@@ -18,7 +18,8 @@ See `muse-html' for more information."
   :group 'muse-html)
 
 (defcustom muse-html-style-sheet
-  "body {
+  "<style type=\"text/css\">
+body {
   background: white; color: black;
   margin-left: 3%; margin-right: 7%;
 }
@@ -32,9 +33,16 @@ h2 {
   margin-top: 25px;
   margin-bottom: 0px;
 }
-h3 { margin-bottom: 0px; }"
-  "Text to prepend to a Muse mail message being published.
-This text may contain <lisp> markup tags."
+h3 { margin-bottom: 0px; }
+    </style>"
+  "Store your stylesheet definitions here.
+This is used in `muse-html-header'.
+You can put raw CSS in here or a <link> tag to an external stylesheet.
+This text may contain <lisp> markup tags.
+
+An example of using <link> is as follows.
+
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/default.css\">"
   :type 'string
   :group 'muse-html)
 
@@ -55,9 +63,7 @@ This text may contain <lisp> markup tags."
 	(when maintainer
 	  (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\">\")))
     </lisp>
-    <style type=\"text/css\">
-      <lisp>muse-html-style-sheet</lisp>
-    </style>
+    <lisp>muse-html-style-sheet</lisp>
   </head>
   <body>
     <h1><lisp>

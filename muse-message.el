@@ -180,6 +180,10 @@ function to `message-send-hook'."
 
   (muse-derive-style "message-html" "html"
 		     :header 'muse-message-html-header
+		     :footer 'muse-message-html-footer)
+
+  (muse-derive-style "message-xhtml" "xhtml"
+		     :header 'muse-message-html-header
 		     :footer 'muse-message-html-footer))
 
 (provide 'muse-message)
