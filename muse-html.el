@@ -152,7 +152,7 @@ For more on the structure of this list, see
     (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\"></a>")
     (url-link        . "<a href=\"%s\">%s</a>")
     (email-addr      . "<a href=\"mailto:%s\">%s</a>")
-    (emdash          . " &#151; ")
+    (emdash          . " &mdash; ")
     (rule            . "<hr>")
     (fn-sep          . "<hr>\n")
     (enddots         . "....")

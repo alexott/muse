@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-01-31 21:04:43 GMT	Michael Olson <mwolson@gnu.org>	patch-7
+
+    Summary:
+      Use "&mdash;" instead of "&#151;"
+    Revision:
+      muse--main--1.0--patch-7
+
+    2005-01-31  Michael Olson  <mwolson@gnu.org>
+    
+        * muse-docbook.el (muse-docbook-markup-strings): Replace "&#151;"
+        with "&mdash;" so that documents validate properly.  Thanks to
+        Björn Lindström for the suggestion.
+    
+        * muse-html.el (muse-html-markup-strings): Ditto.
+
+    modified files:
+     ChangeLog muse-docbook.el muse-html.el
+
+
 2005-01-25 19:04:31 GMT	Michael Olson <mwolson@gnu.org>	patch-6
 
     Summary:

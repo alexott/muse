@@ -77,7 +77,7 @@ For more on the structure of this list, see
 (defcustom muse-docbook-markup-strings
   '((url-link        . "<ulink url=\"%s\">%s</ulink>")
     (email-addr      . "<email>%s</email>")
-    (emdash          . " &#151; ")
+    (emdash          . " &mdash; ")
     (rule            . "")
     (enddots         . "....")
     (dots            . "...")
