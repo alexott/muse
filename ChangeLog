@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-03-01 02:25:15 GMT	Michael Olson <mwolson@gnu.org>	patch-14
+
+    Summary:
+      Correct documentation, adding some content.
+    Revision:
+      muse--main--1.0--patch-14
+
+    2005-02-28  Michael Olson  <mwolson@gnu.org>
+    
+        * muse.texi: Change license terms of the documentation to the GNU
+        GPL instead of the GNU FDL, as per the consent of the copyright
+        holders of the emacs-wiki manual, from which this is based.  Some
+        emacs-wiki-isms in the manual were corrected, and the Getting
+        Started section was updated.
+
+    modified files:
+     ChangeLog muse.texi
+
+
 2005-02-17 19:08:19 GMT	Michael Olson <mwolson@gnu.org>	patch-13
 
     Summary:
