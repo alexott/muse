@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-02-17 19:08:19 GMT	Michael Olson <mwolson@gnu.org>	patch-13
+
+    Summary:
+      Make muse-blosxom.el a bit more sane, still need to bum it down a bit
+    Revision:
+      muse--main--1.0--patch-13
+
+    2005-02-17  Michael Olson  <mwolson@gnu.org>
+    
+        * experimental/muse-blosxom.el: Somehow the contents of this file
+        managed to get duplicated.  I removed the duplicates.
+        (muse-blosxom-date): Remove this, since it is not useful.
+        (muse-blosxom-header): Use the standard header that blosxom.el
+        has.
+
+    modified files:
+     ChangeLog experimental/muse-blosxom.el
+
+
 2005-02-08 04:20:41 GMT	Michael Olson <mwolson@gnu.org>	patch-12
 
     Summary:
