@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-06 03:18:55 GMT	Michael Olson <mwolson@gnu.org>	patch-23
+
+    Summary:
+      Try to fix regexps for Emacs 21.4.
+    Revision:
+      muse--main--1.0--patch-23
+
+    2005-04-05  Michael Olson  <mwolson@gnu.org>
+    
+        * muse-regexps.el (muse-extreg-usable-p): Try to make regexps work
+        for Emacs 21.4.
+
+    modified files:
+     ChangeLog muse-regexps.el
+
+
 2005-04-01 17:59:47 GMT	Michael Olson <mwolson@gnu.org>	patch-22
 
     Summary:
