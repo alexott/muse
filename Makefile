@@ -24,7 +24,7 @@ clean:
 	-rm -f *.elc *~
 
 realclean distclean fullclean: clean
-	-rm -f README.*
+	-rm -f README.* missfont.log
 
 test: fullclean $(TARGETS) $(ELC)
 	make clean

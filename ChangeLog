@@ -2,6 +2,34 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-02-04 18:42:08 GMT	Michael Olson <mwolson@gnu.org>	patch-10
+
+    Summary:
+      Add experimental version of muse-blosxom.el to project
+    Revision:
+      muse--main--1.0--patch-10
+
+    2005-02-04  Michael Olson  <mwolson@gnu.org>
+    
+        * Makefile (realclean): Remove file that gets generated when fonts
+        are missing.
+    
+        * experimental/muse-bloxsom.el: New file that implements Blosxom
+        support for Muse.  It's in a very rough state, hence its placement
+        in the `experimental' directory.
+
+    new files:
+     experimental/.arch-ids/=id
+     experimental/.arch-ids/muse-blosxom.el.id
+     experimental/muse-blosxom.el
+
+    modified files:
+     ChangeLog Makefile
+
+    new directories:
+     experimental experimental/.arch-ids
+
+
 2005-02-04 18:19:44 GMT	Michael Olson <mwolson@gnu.org>	patch-9
 
     Summary:
