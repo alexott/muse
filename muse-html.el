@@ -42,7 +42,12 @@ This text may contain <lisp> markup tags.
 
 An example of using <link> is as follows.
 
-<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/default.css\">"
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/default.css\">
+
+If you are using XHTML, make sure to close the tag properly, as
+shown in the following example.
+
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/default.css\" />"
   :type 'string
   :group 'muse-html)
 
@@ -81,6 +86,46 @@ An example of using <link> is as follows.
   </body>
 </html>\n"
   "Footer used for publishing HTML files."
+  :type '(choice string file)
+  :group 'muse-html)
+
+(defcustom muse-xhtml-header
+  "<?xml version=\"1.0\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
+    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title><lisp>
+  (concat (muse-publishing-directive \"title\")
+	  (let ((author (muse-publishing-directive \"author\")))
+	    (if (not (string= author (user-full-name)))
+		(concat \" (by \" author \")\"))))</lisp></title>
+    <meta name=\"generator\" content=\"muse.el\" />
+    <meta http-equiv=\"<lisp>muse-html-meta-http-equiv</lisp>\"
+	  content=\"<lisp>muse-html-meta-content-type</lisp>\" />
+    <lisp>
+      (let ((maintainer (muse-style-element :maintainer)))
+	(when maintainer
+	  (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\" />\")))
+    </lisp>
+    <lisp>muse-html-style-sheet</lisp>
+  </head>
+  <body>
+    <h1><lisp>
+  (concat (muse-publishing-directive \"title\")
+	  (let ((author (muse-publishing-directive \"author\")))
+	    (if (not (string= author (user-full-name)))
+		(concat \" (by \" author \")\"))))</lisp></h1>
+    <!-- Page published by Emacs Muse begins here -->\n"
+  "Header used for publishing XHTML files."
+  :type '(choice string file)
+  :group 'muse-html)
+
+(defcustom muse-xhtml-footer "
+<!-- Page published by Emacs Muse ends here -->
+  </body>
+</html>\n"
+  "Footer used for publishing XHTML files."
   :type '(choice string file)
   :group 'muse-html)
 
@@ -201,6 +246,23 @@ For more on the structure of this list, see
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
+  :type '(alist :key-type symbol :value-type string)
+  :group 'muse-html)
+
+(defcustom muse-xhtml-markup-strings
+  '((image-with-desc . "<img src=\"%s\" alt=\"%s\" />")
+    (image-link      . "<img src=\"%s\" alt=\"\" />")
+    (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\" alt=\"\" /></a>")
+    (begin-underline . "<span style=\"text-decoration: underline;\">\n")
+    (end-underline   . "</span>")
+    (begin-center    . "<span style=\"text-align: center;\">\n")
+    (end-center      . "\n</span>"))
+  "Strings used for marking up text.
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+If a markup rule is not found here, `muse-html-markup-strings' is
+searched."
   :type '(alist :key-type symbol :value-type string)
   :group 'muse-html)
 
@@ -475,7 +537,12 @@ if not escaped."
 		     :after     'muse-html-finalize-buffer
 		     :header    'muse-html-header
 		     :footer    'muse-html-footer
-		     :browser   'muse-html-browse-file))
+		     :browser   'muse-html-browse-file)
+
+  (muse-derive-style "xhtml" "html"
+		     :strings   'muse-xhtml-markup-strings
+		     :header    'muse-xhtml-header
+		     :footer    'muse-xhtml-footer))
 
 (provide 'muse-html)
 

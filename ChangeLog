@@ -2,6 +2,34 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-06 23:25:47 GMT	Michael Olson <mwolson@gnu.org>	patch-24
+
+    Summary:
+      Merge muse-xhtml.el into muse-html.el.
+    Revision:
+      muse--main--1.0--patch-24
+
+    2005-04-06  Michael Olson  <mwolson@gnu.org>
+    
+        * examples/mwolson/muse-init.el: Update with respect to the
+        muse-xhtml.el merge.
+    
+        * muse-html.el: The contents of muse-xhtml.el have been merged in
+        as advised by John Wiegley.
+        (muse-html-style-sheet): Add example for XHTML use in the
+        function's documentation.
+        (muse-xhtml-header, muse-xhtml-footer, muse-xhtml-markup-tags):
+        Moved from muse-xhtml.el.
+    
+        * muse-xhtml.el: Removed; contents merged into muse-html.el.
+
+    removed files:
+     .arch-ids/muse-xhtml.el.id muse-xhtml.el
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el muse-html.el
+
+
 2005-04-06 03:18:55 GMT	Michael Olson <mwolson@gnu.org>	patch-23
 
     Summary:

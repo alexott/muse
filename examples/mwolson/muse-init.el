@@ -17,7 +17,7 @@
 (require 'muse-colors)   ; load coloring/font-lock module
 (require 'muse-mode)     ; load authoring mode
 (require 'muse-blosxom)  ; load blosxom module
-(require 'muse-xhtml)    ; load XHTML publishing style
+(require 'muse-html)     ; load (X)HTML publishing style
 
 ;; Setup projects
 
@@ -164,7 +164,7 @@ If FILE is not specified, use the current file."
       (replace-match "</p>"))
     ;; Make relative links work
     (goto-char (point-min))
-    (while (re-search-forward "href=\"../" nil t)
+    (while (re-search-forward "href=\"/" nil t)
       (replace-match "href=\"http://www.mwolson.org/" nil t))
     ;; Copy entry to clipboard
     (clipboard-kill-ring-save (point-min) (point-max))
@@ -182,7 +182,7 @@ If FILE is not specified, use the current file."
  '(muse-html-charset-default "utf-8")
  '(muse-html-encoding-default (quote utf-8))
  '(muse-html-meta-content-encoding (quote utf-8))
- '(muse-xhtml-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/common.css\" />
+ '(muse-html-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/common.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
  '(muse-xhtml-footer "~/personal-site/muse/footer.html")
