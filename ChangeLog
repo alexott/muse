@@ -2,6 +2,41 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-03-24 22:57:10 GMT	Michael Olson <mwolson@gnu.org>	patch-19
+
+    Summary:
+      Add muse-blosxom script and plugin for pyblosxom
+    Revision:
+      muse--main--1.0--patch-19
+
+    2005-03-24  Michael Olson  <mwolson@gnu.org>
+    
+        * muse-blosxom.el: Update copyright notice in headers and mention
+        the pyblosxom scripts.
+    
+        * contrib/pyblosxom: New directory containing pyblosxom plugins
+        and helper scripts.
+    
+        * contrib/getstamps.py: Script that generates the "timestamps"
+        file, run on the local machine.
+    
+        * contrib/hardcodedates.py: PyBlosxom plugin that interprets the
+        timestamps file.
+
+    new files:
+     contrib/pyblosxom/.arch-ids/=id
+     contrib/pyblosxom/.arch-ids/getstamps.py.id
+     contrib/pyblosxom/.arch-ids/hardcodedates.py.id
+     contrib/pyblosxom/getstamps.py
+     contrib/pyblosxom/hardcodedates.py
+
+    modified files:
+     ChangeLog muse-blosxom.el
+
+    new directories:
+     contrib/pyblosxom contrib/pyblosxom/.arch-ids
+
+
 2005-03-23 19:05:09 GMT	Michael Olson <mwolson@gnu.org>	patch-18
 
     Summary:

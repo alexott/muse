@@ -1,8 +1,6 @@
 ;;; emacs-wiki-blosxom.el --- Publish a wiki tree for serving by Blosxom
 
-;; Copyright (C) 2004 Gary V. Vaughan
-;; Copyright (C) 2004 Brad Collins
-;; Copyright (C) 2005 Michael Olson
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse-blosxom.el
@@ -50,6 +48,11 @@
 ;;     a date.
 ;;
 ;;  2. A plugin for (py)blosxom that reads this file.
+;;
+;; These 2 things are provided for pyblosxom in the contrib/pyblosxom
+;; subdirectory.  `getstamps.py' provides the 1st service, while
+;; `hardcodedates.py' provides the second service.  Eventually it is
+;; hoped that a blosxom plugin and script will be found/written.
 
 ;;; Contributors:
 
