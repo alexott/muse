@@ -2,6 +2,12 @@
 
 	* Makefile: Change path to `publish' script.
 
+	* muse.el: Change Copyright notice to FSF.  Change Maintainer to
+	myself.  Update URL.
+
+	* muse-regexps.el: New file that implements regexp handling.
+	Generalized regexp options will be moved to it eventually.
+
 	* contrib/pcomplete.el: New file that is used by Muse without
 	actually being a part of it: hence its location in the contrib
 	directory.
