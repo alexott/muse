@@ -2,6 +2,48 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-03-25 03:55:13 GMT	Michael Olson <mwolson@gnu.org>	patch-20
+
+    Summary:
+      Add my muse configuration to the examples
+    Revision:
+      muse--main--1.0--patch-20
+
+    2005-03-24  Michael Olson  <mwolson@gnu.org>
+    
+        * examples/johnw: Move John Wiegley's configuration to this
+        directory.
+    
+        * examples/mwolson: My configuration files go here.
+    
+        * examples/mwolson/muse-init.el: My Muse configuration file.  I
+        just figured out how to keep links from being spell-checked or
+        split up by fill-mode, so the implementation of this may be found
+        here.  I also made a function that sets up a blog entry for me.
+
+    new files:
+     examples/johnw/.arch-ids/=id examples/mwolson/.arch-ids/=id
+     examples/mwolson/.arch-ids/muse-init.el.id
+     examples/mwolson/muse-init.el
+
+    modified files:
+     ChangeLog
+
+    renamed files:
+     examples/.arch-ids/muse-johnw.el.id
+       ==> examples/johnw/.arch-ids/muse-johnw.el.id
+     examples/.arch-ids/publish-johnw.id
+       ==> examples/johnw/.arch-ids/publish-johnw.id
+     examples/muse-johnw.el
+       ==> examples/johnw/muse-johnw.el
+     examples/publish-johnw
+       ==> examples/johnw/publish-johnw
+
+    new directories:
+     examples/johnw examples/johnw/.arch-ids examples/mwolson
+     examples/mwolson/.arch-ids
+
+
 2005-03-24 22:57:10 GMT	Michael Olson <mwolson@gnu.org>	patch-19
 
     Summary:
