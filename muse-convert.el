@@ -1,4 +1,5 @@
 ;; Helper commands for converting a LaTeX file into a Muse file
+(require 'muse-regexps)
 
 (defun muse-write-citation (note author citation pages)
   (save-excursion
@@ -11,7 +12,10 @@
 	  (insert ", " citation ", " pages))
       (insert "\n")
       (goto-char beg)
-      (while (re-search-forward "p.\\\\[[:space:]]+" nil t)
+      (while (re-search-forward (concat "p.\\\\["
+                                        muse-regexp-space
+                                        "]+")
+                                nil t)
 	(replace-match "p."))
       (goto-char beg)
       (while (re-search-forward "--" nil t)

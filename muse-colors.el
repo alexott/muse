@@ -5,6 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'muse-mode)
+(require 'muse-regexps)
 (require 'font-lock)
 
 (defgroup muse-colors nil
@@ -140,11 +141,14 @@ whether progress messages should be displayed to the user."
       (add-text-properties (match-beginning 0) (match-end 0) '(invisible t)))))
 
 (defun muse-colors-verbatim ()
-  (skip-chars-forward "^[:space:]=>" end))
+  (skip-chars-forward (concat "^" muse-regexp-space "=>") end))
 
 (defcustom muse-colors-markup
   `(;; render in teletype and suppress further parsing
-    ("\\b=[^[:space:]=>]" ?= muse-colors-verbatim)
+    (,(concat "\\b=[^"
+              muse-regexp-space
+              "=>]")
+     ?= muse-colors-verbatim)
 
     ;; make emphasized text appear emphasized
     ("\\*+" ?* muse-colors-emphasized)
@@ -300,8 +304,11 @@ Functions should not modify the contents of the buffer.")
         (when (nth 2 tag-info)
           (let ((attrstr (match-string 2)))
             (while (and attrstr
-                        (string-match
-                         "\\([^[:space:]=]+\\)\\(=\"\\([^\"]+\\)\"\\)?" attrstr))
+                        (string-match (concat "\\([^"
+                                              muse-regexp-space
+                                              "=]+\\)\\(=\""
+                                              "\\([^\"]+\\)\"\\)?")
+                                      attrstr))
               (let ((attr (cons (downcase
                                  (match-string-no-properties 1 attrstr))
                                 (match-string-no-properties 3 attrstr))))

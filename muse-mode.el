@@ -8,6 +8,7 @@
 ;; knows a lot more about the apparent structure of the document.
 
 (require 'muse)
+(require 'muse-regexps)
 (require 'muse-project)
 
 (autoload 'muse-use-font-lock "muse-colors")
@@ -138,7 +139,8 @@ See `muse-publish' for more information."
   (let ((end (point)))
     (save-restriction
       (save-excursion
-	(skip-chars-backward "^\\[[:space:]")
+	(skip-chars-backward (concat "^\\["
+                                     muse-regexp-space))
 	(narrow-to-region (point) end))
       (pcomplete-parse-buffer-arguments))))
 
@@ -153,7 +155,8 @@ See `muse-publish' for more information."
 		   (not (eq (char-syntax (char-after pos)) ?\ ))))
       (save-excursion
 	(goto-char here)
-	(skip-chars-backward "^'\"<>{}([:space:]")
+	(skip-chars-backward (concat "^'\"<>{}("
+                                     muse-regexp-space))
 	(or (and (looking-at muse-url-regexp)
 		 (match-string 0))
 	    (and (or (looking-at muse-link-regexp)

@@ -5,6 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'muse-publish)
+(require 'muse-regexps)
 
 (defgroup muse-docbook nil
   "Options controlling the behaviour of Muse DocBook XML publishing.
@@ -46,9 +47,14 @@ See `muse-docbook' for more information."
     (10300 "\\`\n*\\([^<]\\)" 0 "<para>\\1")
     ;; plain paragraph separator
     (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?\n"
-		    "\\([[:blank:]]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?") 0
-     muse-docbook-markup-paragraph)
-    (10500 "\\([^>[:space:]]\\)\\s-+\\'" 0 "\\1</para>\n"))
+		    "\\(["
+                    muse-regexp-blank
+                    "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
+           0 muse-docbook-markup-paragraph)
+    (10500 ,(concat "\\([^>"
+                    muse-regexp-space
+                    "]\\)\\s-+\\'")
+           0 "\\1</para>\n"))
   "List of markup rules for publishing a Muse page to DocBook XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -144,7 +150,11 @@ differs little between the various styles."
 		    (replace-in-string (match-string 1) " *|+ *$" "")
 		  (match-string 1))))
 	 (fields (append (save-match-data
-			   (split-string str "[[:blank:]]*|+[[:blank:]]*"))
+			   (split-string str (concat "["
+                                                     muse-regexp-blank
+                                                     "]*|+["
+                                                     muse-regexp-blank
+                                                     "]*")))
 			 (list (match-string 4))))
 	 (len (length (match-string 3)))
 	 (row (cond ((= len 1) "tbody")

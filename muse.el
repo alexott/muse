@@ -43,6 +43,8 @@
 
 ;;; Code:
 
+(require 'muse-regexps)
+
 (defvar muse-version "3.00 ALPHA"
   "The version of Muse currently loaded")
 
@@ -53,7 +55,8 @@ familiar with Emacs."
   :group 'hypermedia)
 
 (defcustom muse-tag-regexp
-  "<\\([^/[:space:]][^[:space:]</>]*\\)\\(\\s-+[^<>]+[^</>]\\)?\\(/\\)?>"
+  (concat "<\\([^/" muse-regexp-space "][^" muse-regexp-space
+          "</>]*\\)\\(\\s-+[^<>]+[^</>]\\)?\\(/\\)?>")
   "A regexp used to find XML-style tags within a buffer when publishing.
 Group 1 should be the tag name, group 2 the properties, and group
 3 the optional immediate ending slash."
@@ -61,7 +64,7 @@ Group 1 should be the tag name, group 2 the properties, and group
   :group 'muse)
 
 (defcustom muse-link-regexp
-  "\\[\\[\\([^][[:space:]]+\\)\\]\\(?:\\[\\([^][\n]+\\)\\]\\)?\\]"
+  "\\[\\[\\([^][\t\n]+\\)\\]\\(?:\\[\\([^][\n]+\\)\\]\\)?\\]"
   "Regexp used to match [[target][description]] links.
 Paren group 1 must match the URL, and paren group 2 the description."
   :type 'regexp

@@ -1,3 +1,13 @@
+2004-12-30  Michael Olson  <mwolson@gnu.org>
+
+	* muse.el (muse-link-regexp): Allow spaces in the first part of
+	links.
+
+	* muse-colors.el, muse-convert.el, muse-docbook.el: Use
+	customizable alternatives to extended character classes.
+
+	* muse-html.el, muse-mode.el, muse-publish.el: Ditto.
+
 2004-12-29  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile: Change path to `publish' script.

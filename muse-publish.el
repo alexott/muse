@@ -5,6 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'muse)
+(require 'muse-regexps)
 
 (defgroup muse-publish nil
   "Options controlling the general behaviour of Muse publishing.
@@ -33,11 +34,11 @@ Each is passed the URL and expects a URL to be returned."
   :group 'muse-publish)
 
 (defcustom muse-publish-markup-regexps
-  '(;; Remove leading and trailing whitespace from the file
+  `(;; Remove leading and trailing whitespace from the file
     (1000 "\\(\\`\n+\\|\n+\\'\\)" 0 "")
 
     ;; Remove trailing whitespace from all lines
-    (1100 "[[:blank:]]+$" 0 "")
+    (1100 ,(concat "[" muse-regexp-blank "]+$") 0 "")
 
     ;; Handle any leading #directives
     (1200 "\\`#\\([a-zA-Z]+\\)\\s-+\\(.+\\)\n+" 0 directive)
@@ -52,9 +53,17 @@ Each is passed the URL and expects a URL to be returned."
     (1400 "^#\\(\\S-+\\)\\s-*" 0 anchor)
 
     ;; emphasized or literal text
-    (1500
-     "\\(^\\|[-[[:space:]<('`\"]\\)\\(=[^=[:space:]]\\|_[^_[:space:]]\\|\\*+[^*[:space:]]\\)"
-     2 word)
+    (1500 ,(concat
+            "\\(^\\|[-["
+            muse-regexp-space
+            "<('`\"]\\)\\(=[^="
+            muse-regexp-space
+            "]\\|_[^_"
+            muse-regexp-space
+            "]\\|\\*+[^*"
+            muse-regexp-space
+            "]\\)")
+          2 word)
 
     ;; headings, outline-mode style
     (1600 "^\\(\\*+\\)\\s-+" 0 heading)
@@ -66,7 +75,12 @@ Each is passed the URL and expects a URL to be returned."
     ;; horizontal rule, or section separator
     (1900 "^----+" 0 rule)
 
-    (2000 "\n*\\(^\\|[[:blank:]]+\\)--\\($\\|[[:blank:]]+\\)" 0 emdash)
+    (2000 ,(concat "\n*\\(^\\|["
+                   muse-regexp-blank
+                   "]+\\)--\\($\\|["
+                   muse-regexp-blank
+                   "]+\\)")
+          0 emdash)
 
     ;; beginning of footnotes section
     (2100 "^Footnotes:?\\s-*" 0 fn-sep)
@@ -81,20 +95,46 @@ Each is passed the URL and expects a URL to be returned."
     ;; reason all of these rules are handled here, is so that
     ;; blockquote detection doesn't interfere with indented list
     ;; members.
-    (2300
-     "^[[:blank:]]+\\(-[[:blank:]]*\\|[0-9]+\\.[[:blank:]]*\\|\\(?:.+?\\)[[:blank:]]+::\n?\\)" 1 list)
-    (2400 "^\\(\\(?:.+?\\)[[:blank:]]+::\n?\\)" 0 list)
-    (2500 "^\\([[:blank:]]+\\)" 0 quote)
+    (2300 ,(concat "^["
+                   muse-regexp-blank
+                   "]+\\(-["
+                   muse-regexp-blank
+                   "]*\\|[0-9]+\\.["
+                   muse-regexp-blank
+                   "]*\\|\\(?:.+?\\)["
+                   muse-regexp-blank
+                   "]+::\n?\\)")
+          1 list)
+
+    (2400 ,(concat "^\\(\\(?:.+?\\)["
+                   muse-regexp-blank
+                   "]+::\n?\\)")
+          0 list)
+
+    (2500 ,(concat "^\\(["
+                   muse-regexp-blank
+                   "]+\\)")
+          0 quote)
 
     ;; "verse" text is indicated the same way as a quoted e-mail
     ;; response: "> text", where text may contain initial whitespace
     ;; (see below).
-    (2600 "^[[:blank:]]*> " 0 verse)
+    (2600 ,(concat "^["
+                   muse-regexp-blank
+                   "]*> ")
+          0 verse)
 
     ;; simple table markup is supported, nothing fancy.  use | to
     ;; separate cells, || to separate header cells, and ||| for footer
     ;; cells
-    (2700 "^[[:blank:]]*\\(.+?\\([[:blank:]]+|+[[:blank:]]+.+?\\)\\)$" 0 table)
+    (2700 ,(concat "^["
+                   muse-regexp-blank
+                   "]*\\(.+?\\(["
+                   muse-regexp-blank
+                   "]+|+["
+                   muse-regexp-blank
+                   "]+.+?\\)\\)$")
+          0 table)
 
     ;; bare email addresses
     (2800
@@ -509,8 +549,11 @@ the file is published no matter what."
 	(when (nth 2 tag-info)
 	  (let ((attrstr (match-string 2)))
 	    (while (and attrstr
-			(string-match
-			 "\\([^[:space:]=]+\\)\\(=\"\\([^\"]+\\)\"\\)?" attrstr))
+			(string-match (concat "\\([^"
+                                              muse-regexp-space
+                                              "=]+\\)\\(=\"\\"
+                                              "([^\"]+\\)\"\\)?")
+                                      attrstr))
 	      (let ((attr (cons (downcase
 				 (match-string-no-properties 1 attrstr))
 				(match-string-no-properties 3 attrstr))))
@@ -640,7 +683,10 @@ the file is published no matter what."
 			  (goto-char (point-max))
 			  (skip-chars-backward "\n")
 			  (point-marker)))))
-	    (while (re-search-forward "^[[:blank:]]+\\([^\n]\\)" end t)
+	    (while (re-search-forward (concat "^["
+                                              muse-regexp-blank
+                                              "]+\\([^\n]\\)")
+                                      end t)
 	      (replace-match "\\1" t))
 	    (let ((footnotemark-cmd (muse-markup-text 'footnotemark))
 		  (footnotemark-end-cmd (muse-markup-text 'footnotemark-end)))
@@ -674,7 +720,7 @@ the file is published no matter what."
 
 (defun muse-publish-surround-text (beg-tag end-tag move-func)
   (let ((beg (point)) end)
-    (skip-chars-backward "[:space:]")
+    (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg)
     (insert "\n\n" beg-tag)
     (funcall move-func)
@@ -686,13 +732,15 @@ the file is published no matter what."
       (forward-line 1))
     (goto-char end)
     (setq beg (point))
-    (skip-chars-backward "[:space:]")
+    (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg))
   (insert end-tag "\n"))
 
 (defsubst muse-forward-paragraph (&optional pattern)
   (if (re-search-forward (if pattern
-			     (concat "^\\(" pattern "[[:blank:]]+\\|$\\|\\'\\)")
+			     (concat "^\\(" pattern "["
+                                     muse-regexp-blank
+                                     "]+\\|$\\|\\'\\)")
 			   "^\\s-*\\($\\|\\'\\)") nil t)
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
@@ -710,7 +758,9 @@ like read-only from being inadvertently deleted."
        (muse-markup-text 'end-uli)
        (function
 	(lambda ()
-	  (muse-forward-paragraph "[[:blank:]]+-")))))
+	  (muse-forward-paragraph (concat "["
+                                          muse-regexp-blank
+                                          "]+-"))))))
      ((and (>= (aref str 0) ?0)
 	   (<= (aref str 0) ?9))
       (delete-region (match-beginning 0) (match-end 0))
@@ -719,18 +769,29 @@ like read-only from being inadvertently deleted."
        (muse-markup-text 'end-oli)
        (function
 	(lambda ()
-	  (muse-forward-paragraph "[[:blank:]]+[0-9]+\\.")))))
+	  (muse-forward-paragraph (concat "["
+                                          muse-regexp-blank
+                                          "]+[0-9]+\\."))))))
      (t
       (goto-char (match-beginning 1))
       (insert (muse-markup-text 'begin-ddt))
       (save-match-data
 	(save-excursion
 	  (forward-line 1)
-	  (while (looking-at "^\\([[:blank:]]*\\)[^[:space:]]")
+	  (while (looking-at (concat "^\\(["
+                                     muse-regexp-blank
+                                     "]*\\)[^"
+                                     muse-regexp-space
+                                     "]"))
 	    (delete-region (match-beginning 1) (match-end 1))
 	    (forward-line 1))))
       (save-match-data
-	(when (re-search-forward "[[:space:]]+::[[:space:]]+" nil t)
+	(when (re-search-forward (concat "["
+                                         muse-regexp-space
+                                         "]+::["
+                                         muse-regexp-space
+                                         "]+")
+                                 nil t)
 	  (replace-match (muse-markup-text 'start-dde))))
       (muse-forward-paragraph)
       (insert (muse-markup-text 'end-ddt) ?\n)))))
@@ -772,7 +833,9 @@ like read-only from being inadvertently deleted."
        ((save-excursion
 	  (save-match-data
 	    (forward-line 1)
-	    (or (looking-at (concat leader "[[:blank:]]*$"))
+	    (or (looking-at (concat leader "["
+                                    muse-regexp-blank
+                                    "]*$"))
 		(not (looking-at leader)))))
 	(let ((text (muse-markup-text 'last-stanza-end)))
 	  (if text (insert text))))

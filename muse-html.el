@@ -5,6 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'muse-publish)
+(require 'muse-regexps)
 
 (defgroup muse-html nil
   "Options controlling the behaviour of Muse HTML publishing.
@@ -116,9 +117,14 @@ than the HTML table tag."
 	   "<p class=\"first\">\\1")
     ;; plain paragraph separator
     (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?\n"
-		    "\\([[:blank:]]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?") 0
-     muse-html-markup-paragraph)
-    (10500 "\\([^>[:space:]]\\)\\s-*\\'" 0 "\\1</p>\n"))
+		    "\\(["
+                    muse-regexp-blank
+                    "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
+           0 muse-html-markup-paragraph)
+    (10500 ,(concat "\\([^>"
+                    muse-regexp-space
+                    "]\\)\\s-*\\'")
+           0 "\\1</p>\n"))
   "List of markup rules for publishing a Muse page to HTML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -265,7 +271,7 @@ system to an associated HTML coding system. If no match is found,
 
 (defun muse-html-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
-  (skip-chars-forward "[:space:]")
+  (skip-chars-forward muse-regexp-space)
   (if (looking-at "<\\([^ />]+\\)>")
       (let ((tag (match-string 1)))
 	(goto-char (match-end 0))
@@ -314,7 +320,9 @@ if not escaped."
   (when str
     (let (pos code len)
       (save-match-data
-	(while (setq pos (string-match "[^-[:alnum:]/:._=@\\?~#]"
+	(while (setq pos (string-match (concat "[^-"
+                                               muse-regexp-alnum
+                                               "/:._=@\\?~#]")
 				       str pos))
 	  (setq code (int-to-string (aref str pos))
 		len (length code)
@@ -334,7 +342,10 @@ if not escaped."
 			   (prog1
 			       (copy-marker (match-beginning 0))
 			     (goto-char beg)))))
-	    (while (re-search-forward "^[[:blank:]]+\\([^\n]\\)" end t)
+	    (while (re-search-forward (concat "^["
+                                              muse-regexp-blank
+                                              "]+\\([^\n]\\)")
+                                      end t)
 	      (replace-match "\\1" t))))))))
 
 (defun muse-html-markup-table ()
