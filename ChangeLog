@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-03-23 19:05:09 GMT	Michael Olson <mwolson@gnu.org>	patch-18
+
+    Summary:
+      muse-blosxom.el has matured past experimental status
+    Revision:
+      muse--main--1.0--patch-18
+
+    2005-03-23  Michael Olson  <mwolson@gnu.org>
+    
+        * muse-blosxom.el: Remove common functionality that has already
+        been implemented in `muse-html.el'.  Derive this mode from
+        `muse-html'.  Update documentation.  I now feel that this file is
+        ready to be included in the top-level Muse directory.
+
+    modified files:
+     ChangeLog muse-blosxom.el
+
+    renamed files:
+     experimental/.arch-ids/muse-blosxom.el.id
+       ==> .arch-ids/muse-blosxom.el.id
+     experimental/muse-blosxom.el
+       ==> muse-blosxom.el
+
+
 2005-03-22 05:28:01 GMT	Michael Olson <mwolson@gnu.org>	patch-17
 
     Summary:
