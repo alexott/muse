@@ -285,6 +285,7 @@ first directory within the project's fileset is used."
        save-some-buffers-action-alist)))
 
 (defun muse-project-publish (project &optional force)
+  "Publish the pages of PROJECT that need publishing."
   (interactive (list (muse-read-project "Publish project: " nil t)
 		     current-prefix-arg))
   (setq project (muse-project project))

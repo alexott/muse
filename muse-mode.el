@@ -60,10 +60,7 @@ See `muse-publish' for more information."
 
     (define-key map [(control ?c) (control ?l)] 'font-lock-mode)
 
-    (define-key map [(control ?c) ?=]
-      (lambda ()
-	(interactive)
-	(diff-backup buffer-file-name)))
+    (define-key map [(control ?c) ?=]           'muse-what-changed)
 
     (define-key map [tab] 'muse-next-reference)
     (define-key map [(control ?i)] 'muse-next-reference)
@@ -299,6 +296,11 @@ This function is not entirely accurate, but it's close enough."
 	  (setq cycled (1+ cycled)))))
     (if pos
 	(goto-char pos))))
+
+(defun muse-what-changed ()
+  "Show the unsaved changes that have been made to the current file."
+  (interactive)
+  (diff-backup buffer-file-name))
 
 ;;; Generate an index of all known Muse pages
 

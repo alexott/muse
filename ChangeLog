@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-02-08 01:15:15 GMT	Michael Olson <mwolson@gnu.org>	patch-11
+
+    Summary:
+      Add docstring, new trivial function
+    Revision:
+      muse--main--1.0--patch-11
+
+    2005-02-07  Michael Olson  <mwolson@gnu.org>
+    
+        * muse-mode.el (muse-mode-map): Make "C-c =" trigger
+        `muse-what-changed'.  No functionality change.
+        (muse-what-changed): New function that displays in diff format the
+        changes made since the buffer was last saved.
+    
+        * muse-project.el (muse-project-publish): Add docstring.
+
+    modified files:
+     ChangeLog muse-mode.el muse-project.el
+
+
 2005-02-04 18:42:08 GMT	Michael Olson <mwolson@gnu.org>	patch-10
 
     Summary:
