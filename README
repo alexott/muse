@@ -1,0 +1,355 @@
+#title The Emacs Muse
+
+Emacs Muse is an authoring and publishing environment for Emacs.  It
+simplifies the process of writings documents and publishing them to
+various output formats.
+
+Muse consists of two main parts: an enhanced text-mode for authoring
+documents and navigating within Muse projects, and a set of publishing
+styles for generating different kinds of output.
+
+<contents>
+
+* Getting Started
+
+To use Muse, add the directory containing its files to your
+=load-path= variable, in your =.emacs= file.  Then, load in the
+authoring mode, and the styles you wish to publish to.  For example:
+
+<example>
+(add-to-list 'load-path "<path to Muse>")
+
+(require 'muse-mode)     ; load authoring mode
+
+(require 'muse-html)     ; load publishing styles I use
+(require 'muse-latex)
+(require 'muse-texinfo)
+(require 'muse-docbook)
+</example>
+
+Once loaded, the command =M-x muse-publish-this-file= will publish an
+input document to any available style.  If you enable =muse-mode=
+within a buffer, by typing =M-x muse-mode=, this command will be bound
+to =C-c C-t=.
+
+* Creating a Muse project
+
+Often you will want to publish all the files within a directory to a
+particular set of output styles automatically.  To support, Muse
+allows for the creations of "projects".  Here is a sample project, to
+be defined in your =.emacs= file:
+
+<example>
+(require 'muse-project)
+
+(setq muse-project-alist
+      '(("website"			; my various writings
+	 ("~/Pages" :default "index")
+	 (:base "html" :path "~/public_html")
+	 (:base "pdf" :path "~/public_html/pdf"))))
+</example>
+
+The above defines a project named "website", whose files are located
+in the directory =~/Pages=.  The default page to visit is =index=.
+When this project is published, each page will be output as HTML to
+the directory =~/public_html=, and as PDF to the directory
+=~/public_html/pdf=.  Within any project page, you may create a link
+to other pages using the syntax =[[pagename]]=.
+
+* Markup rules
+
+A Muse document uses special, contextual markup rules to determine how
+to format the output result.  For example, if a paragraph is indented,
+Muse assumes it should be quoted.
+
+There are not too many markup rules, and all of them strive to be as
+simple as possible so that you can focus on document creation, rather
+than formatting.
+
+** Paragraphs
+
+Separate paragraphs in Muse must be separate by a blank line.
+
+For example, the input text used for this section is:
+
+<example>
+Separate paragraphs in Muse must be separate by a blank line.
+
+For example, the input text used for this section is:
+</example>
+
+** Centered paragraphs and quotations
+
+A line that begins with six or more columns of whitespace (either tabs
+or spaces) indicates a centered paragraph.
+
+<comment>
+			   This is centered
+</comment>
+
+  But if a line begins with whitespace, though less than six columns,
+  it indicates a quoted paragraph.
+
+** Headings
+
+A heading becomes a chapter or section in printed output -- depending
+on the style.  To indicate a heading, start a new paragraph with one
+to three asterices, followed by a space and the heading title.  Then
+begin another paragraph to enter the text for that section.
+
+<example>
+* First level
+
+** Second level
+
+*** Third level
+</example>
+
+** Horizontal rules
+
+Four or more dashes indicate a horizontal rule.  Be sure to put blank
+lines around it, or it will be considered part of the proceeding or
+following paragraph!
+
+----
+
+The separator above was produced by typing:
+
+<example>
+----
+</example>
+
+** Emphasizing text
+
+To emphasize text, surround it with certain specially recognized
+characters:
+
+<example>
+*emphasis*
+**strong emphasis**
+***very strong emphasis***
+_underlined_
+=verbatim and monospace=
+</example>
+
+The above list renders as:
+
+<verse>
+*emphasis*
+**strong emphasis**
+***very strong emphasis***
+_underlined_
+=verbatim and monospace=
+</verse>
+
+** Adding footnotes
+
+A footnote reference is simply a number in square
+brackets<verbatim>[1]</verbatim>.[1] To define the footnote, place
+this definition at the bottom of your file.  =footnote-mode= can be
+used to greatly facilitate the creation of these kinds of footnotes.
+
+<example>
+ Footnotes:
+ [1]  Footnotes are defined by the same number in brackets
+      occurring at the beginning of a line.  Use footnote-mode's
+      C-c ! a command, to very easily insert footnotes while
+      typing.  Use C-x C-x to return to the point of insertion.
+</example>
+
+** Verse
+
+Poetry requires that whitespace be preserved, but without resorting to
+monospace.  To indicate this, use the following markup, reminiscent of
+e-mail quotations:
+
+<example>
+> A line of Emacs verse;
+>   forgive its being so terse.
+</example>
+
+The above is rendered as:
+
+> A line of Emacs verse;
+>   forgive its being so terse.
+
+You can also use the =<literal><verse></literal>= tag, if you prefer:
+
+<example>
+<verse>
+A line of Emacs verse;
+  forgive its being so terse.
+</verse>
+</example>
+
+** Literal paragraphs
+
+The =<literal><example></literal>= tag is used for examples, where
+whitespace should be preserved, the text rendered in monospace, and
+any characters special to the output style escaped.
+
+There is also the =<literal><literal></literal>= tag, which causes a
+marked block to be entirely left alone.  This can be used for
+inserting a hand-coded HTML blocks into HTML output, for example.
+
+** Lists
+
+Lists are given using special characters at the beginning of a line.
+Whitespace must occur before bullets or numbered items, to distinguish
+from the possibility of those characters occurring in a real sentence.
+
+The supported kinds of lists are:
+
+<example>
+  - bullet item one
+  - bullet item two
+
+  1. Enumerated item one
+  2. Enumerated item two
+
+Term1 :: A definition one
+
+Term2 :: A definition two
+</example>
+
+These are rendered as a bullet list:
+
+  - bullet item one
+  - bullet item two
+
+An enumerated list:
+
+  1. Enum item one
+  2. Enum item two
+
+And a definition list:
+
+Term1 ::
+  This is a first definition
+  And it has two lines;
+  no, make that three.
+
+Term2 ::
+  This is a second definition
+
+<comment>
+** Tables
+
+Only very simple tables are supported.  The syntax is:
+
+<example>
+  Double bars  || Separate header fields
+
+  Single bars   | Separate body fields
+  Here are more | body fields
+
+  Triple bars ||| Separate footer fields
+</example>
+
+The above is rendered as:
+
+Double bars  || Separate header fields
+
+Single bars   | Separate body fields
+Here are more | body fields
+
+Triple bars ||| Separate footer fields
+
+<comment>
+Double bars  || Separate header fields
+
+Single bars   | Separate body fields
+Here are more | body fields
+
+Triple bars ||| Separate footer fields
+</comment>
+
+** Anchors and tagged links
+
+=#example= If you begin a line with "#anchor" -- where "anchor" can be
+any word that doesn't contain whitespace -- it defines an anchor at
+that point into the document.  This point can be referenced using
+"page#anchor" as the target in a Muse link (see below).
+
+** URLs and E-mail addresses
+
+A URL or e-mail address encountered in the input text is published as
+a hyperlink if the output style supports it.  If it is an image URL,
+it will be inlined if possible.  For example, the latest Muse source
+can be downloaded at
+http://www.newartisans.com/johnw/Emacs/muse.tar.gz and mail may be
+sent to johnw@gnu.org
+
+** Links
+
+A hyperlink can reference a URL, or another page within a Muse
+project.  In addition, descriptive text can be specified, which should
+be displayed rather than the link text in output styles that supports
+link descriptions.  The syntax is:
+
+<example>
+[[link target][link description]]
+[[link target without description]]
+</example>
+
+Thus, Muse can be downloaded [[http://www.newartisans.com/johnw/Emacs/muse.tar.gz][here]], or at
+[[http://www.newartisans.com/johnw/Emacs/muse.tar.gz]].
+
+** Embedded lisp
+
+Arbitrary kinds of markup can be achieved using the
+=<literal><lisp></literal>= tag, which is the only Muse tag supported
+in a style's header and footer text.  With the
+=<literal><lisp></literal>= tag, you may generated whatever output
+text you wish.  The inserted output will get marked up, if the
+=<literal><lisp></literal>= tag appears within the main text of the
+document.
+
+<example>
+<lisp>(concat "This form gets " "inserted")</lisp>
+</example>
+
+The above renders as: <lisp>(concat "This form gets " "inserted")</lisp>.
+
+* Authoring mode
+
+* Publishing styles
+
+One of the principle features of Muse is the ability to publish a
+simple input text to a variety of different output styles.  Muse also
+makes it easy to create new styles, or derive from an existing style.
+
+** Deriving from an existing style
+
+To create a new style from an existing one, use =muse-derive-style=:
+
+<example>
+(muse-derive-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
+</example>
+
+The derived name is a string defining the new style, such as
+"my-html".  The base name must identify an existing style, such as
+"html" -- if you have loaded =muse-html=.  The style parameters are
+the same as those used to create a style, except that they override
+whatever definitions exist in the base style.  However, some
+definitions only partially override.  Those which support partial
+overriding are:
+
+:functions ::
+  If a markup function is not found in the derived style's function
+  list, the base style's function list will be queried.
+
+:strings ::
+
+:before ::
+
+:before-end ::
+
+:after ::
+
+** Overriding an existing style
+
+** Creating a new style
+
+Footnotes:
+[1]  This is a footnote.
