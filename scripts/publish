@@ -1,7 +1,7 @@
 #!/bin/bash
 style=$(echo $1 | sed 's/^--//')
 shift
-emacs -q -batch -L $(dirname $0) \
-    -l muse.el -l muse-publish.el \
+emacs -q -batch -L . -L contrib \
+    -l muse.el -l muse-regexps.el -l muse-publish.el \
     -l muse-html.el -l muse-latex.el -l muse-texinfo.el \
     -f muse-batch-publish-files $style --output-dir=. "$@"

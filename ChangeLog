@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-02-04 18:13:56 GMT	Michael Olson <mwolson@gnu.org>	patch-8
+
+    Summary:
+      Fix build problems
+    Revision:
+      muse--main--1.0--patch-8
+
+    2005-02-04  Michael Olson  <mwolson@gnu.org>
+    
+        * muse-build.el: Add contrib directory to `load-path'.
+        (muse-elint-files): Load `muse-regexps.el'.
+    
+        * scripts/publish: Change permissions so that this script is
+        executable.  Add contrib directory to load list.  Add
+        `muse-regexps.el' to list.
+
+    modified files:
+     ChangeLog muse-build.el scripts/publish
+
+
 2005-01-31 21:04:43 GMT	Michael Olson <mwolson@gnu.org>	patch-7
 
     Summary:

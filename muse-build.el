@@ -1,4 +1,5 @@
 (add-to-list 'load-path ".")
+(add-to-list 'load-path "contrib")
 
 (defun muse-elint-files ()
   (require 'elint)
@@ -17,6 +18,7 @@
   (load "muse-mode" nil nomessage)
   (load "muse-poem" nil nomessage)
   (load "muse-project" nil nomessage)
+  (load "muse-regexps" nil nomessage)
   (load "muse-texinfo" nil nomessage)
 
   (add-to-list 'elint-standard-variables 'current-prefix-arg)
