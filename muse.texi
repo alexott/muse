@@ -14,7 +14,7 @@
 @copying
 This manual is for Muse version 3.01
 
-For a list of the copyright holders, @ref{Contributors}
+Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -50,6 +50,7 @@ under the terms of the GNU General Public License.
 * Introduction::                What is Muse?
 * Installation::                How to get the stable and development versions
 * Getting Started::             
+* Projects::                    Creating a Muse project
 * Keystroke Summary::           
 * Getting Help and Reporting Bugs::  
 * History::                     
@@ -219,12 +220,13 @@ You can also obtain the archive at the following locations on the web:
 The latest development snapshot will be kept up to date since it is
 updated at the same time as the Arch repository.
 
-@node Getting Started, Keystroke Summary, Installation, Top
+
+@node Getting Started, Projects, Installation, Top
 @comment  node-name,  next,  previous,  up
 @chapter Getting Started
 
 To use Muse, add the directory containing its files to your
-@file{load-path} variable, in your @file{.emacs} file.  Then, load in
+@code{load-path} variable, in your @file{.emacs} file.  Then, load in
 the authoring mode, and the styles you wish to publish to.  For
 example:
 
@@ -248,8 +250,38 @@ You should also type @kbd{M-x customize-group}, and give the name
 @samp{muse}.  Change it to suit your preferences.  Each of the
 options has its own documentation.
 
-@node Keystroke Summary, Getting Help and Reporting Bugs, Getting Started, Top
+
+@node Projects, Keystroke Summary, Getting Started, Top
+@comment  node-name,  next,  previous,  up
+@chapter Projects
+@cindex projects
+
+Often you will want to publish all the files within a directory to a
+particular set of output styles automatically.  To support, Muse
+allows for the creations of "projects".  Here is a sample project, to
+be defined in your @file{.emacs} file:
+
+@lisp
+(require 'muse-project)
+
+(setq muse-project-alist
+      '(("website"			; my various writings
+         ("~/Pages" :default "index")
+         (:base "html" :path "~/public_html")
+         (:base "pdf" :path "~/public_html/pdf"))))
+@end lisp
+
+The above defines a project named "website", whose files are located
+in the directory @file{~/Pages}.  The default page to visit is
+@file{index}.  When this project is published, each page will be
+output as HTML to the directory @file{~/public_html}, and as PDF to
+the directory @file{~/public_html/pdf}.  Within any project page, you
+may create a link to other pages using the syntax @samp{[[pagename]]}.
+
+@node Keystroke Summary, Getting Help and Reporting Bugs, Projects, Top
+@comment  node-name,  next,  previous,  up
 @chapter Keystroke Summary
+@cindex keystrokes
 
 Here is a summary of keystrokes available in every Muse buffer:
 
