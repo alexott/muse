@@ -204,7 +204,10 @@ whether progress messages should be displayed to the user."
     ("\\*+" ?* muse-colors-emphasized)
 
     ;; make underlined text appear underlined
-    ("_[^[:blank:]_]" ?_ muse-colors-underlined)
+    (,(concat "_[^"
+              muse-regexp-blank
+              "_]")
+     ?_ muse-colors-underlined)
 
     ("^#title" ?\# muse-colors-title)
 
