@@ -2,6 +2,29 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-01 17:59:47 GMT	Michael Olson <mwolson@gnu.org>	patch-22
+
+    Summary:
+      Add comments to the publish-project example script
+    Revision:
+      muse--main--1.0--patch-22
+
+    2005-04-01  Michael Olson  <mwolson@gnu.org>
+    
+        * examples/publish-project: Moved here from
+        scripts/publish-project.  Added a few comments so people know what
+        it is used for.
+
+    modified files:
+     ChangeLog examples/publish-project
+
+    renamed files:
+     scripts/.arch-ids/publish-project.id
+       ==> examples/.arch-ids/publish-project.id
+     scripts/publish-project
+       ==> examples/publish-project
+
+
 2005-04-01 02:27:08 GMT	Michael Olson <mwolson@gnu.org>	patch-21
 
     Summary:

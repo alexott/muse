@@ -1,3 +1,0 @@
-#!/bin/bash
-emacs -q -batch -l muse-build.el -l muse-johnw.el \
-    -f muse-project-batch-publish "$@"
