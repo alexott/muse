@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-02-08 04:20:41 GMT	Michael Olson <mwolson@gnu.org>	patch-12
+
+    Summary:
+      Initial commit of muse.texi, nothing substantial
+    Revision:
+      muse--main--1.0--patch-12
+
+    2005-02-07  Michael Olson  <mwolson@gnu.org>
+    
+        * muse.texi: New file that provides the documentation for Muse.
+        It is in a very rough form at the moment.  Nothing substantial may
+        be found here yet.  Be ye warned.
+
+    new files:
+     .arch-ids/muse.texi.id muse.texi
+
+    modified files:
+     ChangeLog
+
+
 2005-02-08 01:15:15 GMT	Michael Olson <mwolson@gnu.org>	patch-11
 
     Summary:
