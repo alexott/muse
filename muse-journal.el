@@ -152,17 +152,17 @@ and group 3 is the optional heading for the entry."
   "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"
 	 xmlns=\"http://purl.org/rss/1.0/\"
 	 xmlns:dc=\"http://purl.org/dc/elements/1.1/\">
-  <channel rdf:about=\"<lisp>(concat muse-journal-rdf-base-url
+  <channel rdf:about=\"<lisp>(concat (muse-style-element :base-url)
 				     (muse-publish-output-name))</lisp>\">
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
-    <link><lisp>(concat muse-journal-rdf-base-url
+    <link><lisp>(concat (muse-style-element :base-url)
 		       (concat (muse-page-name)
 			       muse-html-extension))</lisp></link>
-    <description>A Journal</description>
+    <description><lisp>(muse-publishing-directive \"desc\")</lisp></description>
     <items>
       <rdf:Seq>
 	<rdf:li resource=\"<lisp>
-	  (concat muse-journal-rdf-base-url
+	  (concat (muse-style-element :base-url)
 		  (concat (muse-page-name)
 			  muse-html-extension))</lisp>\"/>
       </rdf:Seq>
@@ -198,7 +198,68 @@ and group 3 is the optional heading for the entry."
   :type 'string
   :group 'muse-journal)
 
-(defcustom muse-journal-rdf-markup-regexps
+(defcustom muse-journal-rdf-summarize-entries t
+  "If non-nil, include only summaries in the RDF file, not the full data."
+  :type 'boolean
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-extension ".xml"
+  ""
+  :type 'string
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-base-url ""
+  "The base URL of the website reference by the RSS file."
+  :type 'string
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-header
+  "<\?xml version=\"1.0\" encoding=\"iso-8859-1\"\?>
+<rss version=\"2.0\">
+  <channel>
+    <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
+    <link><lisp>(concat (muse-style-element :base-url)
+		        (concat (muse-page-name)
+			        muse-html-extension))</lisp></link>
+    <description><lisp>(muse-publishing-directive \"desc\")</lisp></description>
+    <language>en-us</language>
+    <generator>Emacs Muse</generator>"
+  ""
+  :type '(choice string file)
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-footer
+  "  </channel>
+</rss>\n"
+  ""
+  :type '(choice string file)
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-date-format
+  "%a, %d %b %Y %H:%M:%S %Z"
+  ""
+  :type 'string
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-entry-template
+  "    <item>
+      <title>%title%</title>
+      <link>%link%#%anchor%</link>
+      <description>%desc%</description>
+      <author><lisp>(muse-publishing-directive \"author\")</lisp></author>
+      <pubDate>%date%</pubDate>
+      <guid>%link%#%anchor%</guid>
+    </item>\n"
+  ""
+  :type 'string
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-summarize-entries nil
+  "If non-nil, include only summaries in the RSS file, not the full data."
+  :type 'boolean
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-markup-regexps
   '((10000 muse-link-regexp 0 "\\2"))
   "List of markup rules for publishing a Muse journal page to RDF.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
@@ -211,7 +272,7 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
 		  function))
   :group 'muse-journal)
 
-(defcustom muse-journal-rdf-markup-functions
+(defcustom muse-journal-rss-markup-functions
   '((email . ignore)
     (link  . ignore)
     (url   . ignore))
@@ -399,7 +460,7 @@ For more on the structure of this list, see
   (goto-char end)
   (insert (muse-markup-text 'end-quote)))
 
-(defun muse-journal-rdf-munge-buffer ()
+(defun muse-journal-rss-munge-buffer ()
   (goto-char (point-min))
   (let ((heading-regexp (concat "^\\* " muse-journal-heading-regexp "$"))
 	(inhibit-read-only t))
@@ -419,13 +480,15 @@ For more on the structure of this list, see
 				    (string-to-int (match-string 1 date))
 				    (current-time-zone))
 		  date (format-time-string
-			muse-journal-rdf-date-format date))))
+			(muse-style-element :date-format) date))))
 	(save-restriction
 	  (narrow-to-region
 	   (match-beginning 0)
 	   (if (re-search-forward heading-regexp nil t)
 	       (match-beginning 0)
-	     (point-max)))
+	     (if (re-search-forward "^Footnotes:" nil t)
+		 (match-beginning 0)
+	       (point-max))))
 	  (goto-char (point-min))
 	  (delete-region (point) (line-end-position))
 	  (re-search-forward "</qotd>\n+" nil t)
@@ -433,10 +496,22 @@ For more on the structure of this list, see
 		      (eq ?\  (char-syntax (char-after))))
 	    (delete-char 1))
 	  (let ((beg (point)))
-	    (forward-sentence 2)
-	    (setq desc (buffer-substring beg (point))))
+	    (if (muse-style-element :summarize)
+		(progn
+		  (forward-sentence 2)
+		  (setq desc (concat (buffer-substring beg (point)) "...")))
+	      (save-restriction
+		(muse-publish-markup-buffer "rss-entry" "html")
+		(goto-char (point-min))
+		(re-search-forward "Page published by Emacs Muse")
+		(goto-char (line-end-position))
+		(setq beg (point))
+		(re-search-forward "Page published by Emacs Muse")
+		(goto-char (line-beginning-position))
+		(setq desc (concat "<![CDATA[" (buffer-substring beg (point))
+				   "]]>")))))
 	  (delete-region (point-min) (point-max))
-	  (let ((entry muse-journal-rdf-entry-template))
+	  (let ((entry (muse-style-element :entry-template)))
 	    (while (string-match "%date%" entry)
 	      (setq entry (replace-match (or date "") nil t entry)))
 	    (while (string-match "%title%" entry)
@@ -445,7 +520,7 @@ For more on the structure of this list, see
 	      (setq entry (replace-match desc nil t entry)))
 	    (while (string-match "%link%" entry)
 	      (setq entry (replace-match
-			   (concat muse-journal-rdf-base-url
+			   (concat (muse-style-element :base-url)
 				   (concat (muse-page-name)
 					   muse-html-extension))
 			   nil t entry)))
@@ -458,7 +533,9 @@ For more on the structure of this list, see
 			   (or (muse-style-element :maintainer)
 			       (concat "webmaster@" (system-name)))
 			   nil t entry)))
-	    (insert entry)))))))
+	    (insert entry)))))
+    (unless (eobp)
+      (delete-region (point) (point-max)))))
 
 (unless (assoc "journal-html" muse-publishing-styles)
   (muse-derive-style "journal-html" "html"
@@ -483,12 +560,28 @@ For more on the structure of this list, see
 		     :before-end 'muse-journal-latex-munge-buffer)
 
   (muse-define-style "journal-rdf"
-		     :suffix	'muse-journal-rdf-extension
-		     :regexps	'muse-journal-rdf-markup-regexps
-		     :functions 'muse-journal-rdf-markup-functions
-		     :before	'muse-journal-rdf-munge-buffer
-		     :header	'muse-journal-rdf-header
-		     :footer	'muse-journal-rdf-footer))
+		     :suffix	     'muse-journal-rdf-extension
+		     :regexps	     'muse-journal-rss-markup-regexps
+		     :functions	     'muse-journal-rss-markup-functions
+		     :before	     'muse-journal-rss-munge-buffer
+		     :header	     'muse-journal-rdf-header
+		     :footer	     'muse-journal-rdf-footer
+		     :date-format    'muse-journal-rdf-date-format
+		     :entry-template 'muse-journal-rdf-entry-template
+		     :base-url	     'muse-journal-rdf-base-url
+		     :summarize      'muse-journal-rdf-summarize-entries)
+
+  (muse-define-style "journal-rss"
+		     :suffix	     'muse-journal-rss-extension
+		     :regexps	     'muse-journal-rss-markup-regexps
+		     :functions	     'muse-journal-rss-markup-functions
+		     :before	     'muse-journal-rss-munge-buffer
+		     :header	     'muse-journal-rss-header
+		     :footer	     'muse-journal-rss-footer
+		     :date-format    'muse-journal-rss-date-format
+		     :entry-template 'muse-journal-rss-entry-template
+		     :base-url	     'muse-journal-rss-base-url
+		     :summarize      'muse-journal-rss-summarize-entries))
 
 (provide 'muse-journal)
 

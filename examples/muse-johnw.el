@@ -59,7 +59,15 @@
 		     :before 'muse-my-journal-find-entries
 		     :after 'muse-my-journal-insert-contents
 		     :header "~/Documents/site/header.html"
-		     :footer "~/Documents/site/footer.html"))
+		     :footer "~/Documents/site/footer.html")
+  (muse-derive-style "newartisans-html" "html"
+		     :maintainer "johnw@newartisans.com"
+		     :header "~/Sites/newartisans/header.html"
+		     :footer "~/Sites/newartisans/footer.html")
+  (muse-derive-style "newartisans-journal-html" "journal-html"
+		     :maintainer "johnw@newartisans.com"
+		     :header "~/Sites/newartisans/header.html"
+		     :footer "~/Sites/newartisans/footer.html"))
 
 (custom-set-variables
  '(muse-project-alist
@@ -111,7 +119,18 @@
       (:base "site-journal-html" :path "~/Sites/johnw"
        :include "/journal/")
       (:base "journal-rdf" :path "~/Sites/johnw"
-       :include "/journal/journal")))))
+       :include "/journal/journal"
+       :base-url "http://www.newartisans.com/johnw/")
+      (:base "journal-rss" :path "~/Sites/johnw"
+       :include "/journal/journal"
+       :base-url "http://www.newartisans.com/johnw/"))
+     ("newartisans"			; my company
+      ("~/Documents/newartisans"
+       :default "index")
+      (:base "newartisans-html" :path "~/Sites/newartisans"
+       :exclude "/news")
+      (:base "newartisans-journal-html" :path "~/Sites/newartisans"
+       :include "/news")))))
  '(muse-mode-highlight-p t nil (muse-colors))
  '(muse-mode-auto-p t nil (muse-project))
  '(muse-latex-header "~/Documents/site/header.tex")
@@ -120,7 +139,6 @@
  '(muse-poem-latex-header "~/Documents/site/poem-header.tex")
  '(muse-poem-latex-footer "~/Documents/site/poem-footer.tex")
  '(muse-chapbook-latex-header "~/Documents/site/chapbook-header.tex")
- '(muse-journal-rdf-base-url "http://www.newartisans.com/johnw/")
  ;;'(muse-before-publish-hook (quote (muse-cite-munge-footnotes)))
  '(muse-mode-hook (quote (list footnote-mode turn-on-auto-fill flyspell-mode))))
 
@@ -211,7 +229,7 @@
     (setq index 1 contents (reverse contents))
     (when (> (length contents) 0)
       (goto-char (point-min))
-      (search-forward "<h2>Recent Work</h2>")
+      (search-forward "<h2>Archives</h2>")
       (beginning-of-line)
       (insert "<h2>Contents</h2>\n\n<ul>\n")
       (dolist (item contents)
@@ -257,7 +275,7 @@
 
 (defun muse-my-journal-insert-contents ()
   (goto-char (point-min))
-  (search-forward "<h2>Recent Work</h2>")
+  (search-forward "<h2>Archives</h2>")
   (beginning-of-line)
   (if (string= "journal" (muse-page-name))
       (insert "<h2>Recent Entries</h2>\n\n<ul>\n")
@@ -272,31 +290,34 @@
 		    (car entry))))
   (insert "</ul>\n\n"))
 
-(eval-when-compile
-  (defvar muse-current-project))
-
-(defvar muse-essay-tag '("essay" nil t muse-essay-markup-tag))
-
-(defun muse-essay-markup-tag (beg end attrs)
-  "This markup tag allows a poem to be included from another project page.
-The form of usage is:
-  <essay title=\"page.name\">"
-  (let ((page (cdr (assoc (cdr (assoc "title" attrs))
-			  (muse-project-file-alist))))
-	beg start end text)
-    (if (null page)
-	(insert "  *Reference to\n  unknown essay \""
-		(cdr (assoc "title" attrs)) "\".*\n")
-      (setq beg (point))
-      (insert
-       (with-temp-buffer
-	 (insert-file-contents page)
-	 (goto-char (point-min))
-	 (forward-paragraph)
-	 (forward-line)
-	 (buffer-substring-no-properties (point) (point-max)))))))
-
-(add-to-list 'muse-publish-markup-tags muse-essay-tag)
+;; (eval-when-compile
+;;   (defvar muse-current-project))
+;; 
+;; (defvar muse-ref-tag '("ref" nil t muse-ref-markup-tag))
+;; 
+;; (defun muse-ref-markup-tag (beg end attrs)
+;;   "This markup tag allows a poem to be included from another project page.
+;; The form of usage is:
+;;   <ref title=\"page.name[#subtitle]\">"
+;;   (let ((page (cdr (assoc (cdr (assoc "title" attrs))
+;; 			  (muse-project-file-alist))))
+;; 	beg start end text)
+;;     (if (null page)
+;; 	(insert "  *Reference to\n  unknown page \""
+;; 		(cdr (assoc "title" attrs)) "\".*\n")
+;;       (setq beg (point))
+;;       (let (title)
+;; 	(if (string-match "html" muse-publishing-current-style)
+;; 	    t
+;; 	  (insert
+;; 	   (with-temp-buffer
+;; 	     (insert-file-contents page)
+;; 	     (goto-char (point-min))
+;; 	     (forward-paragraph)
+;; 	     (forward-line)
+;; 	     (buffer-substring-no-properties (point) (point-max)))))))))
+;; 
+;; (add-to-list 'muse-publish-markup-tags muse-ref-tag)
 
 (when (and window-system (load "httpd" t))
   (require 'muse-http)
