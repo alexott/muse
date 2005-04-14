@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-14 23:46:47 GMT	Michael Olson <mwolson@gnu.org>	patch-25
+
+    Summary:
+      Merge contents of muse-latexcjk.el into muse-latex.el.
+    Revision:
+      muse--main--1.0--patch-25
+
+    2005-04-14  Michael Olson  <mwolson@gnu.org>
+    
+        * muse-latex.el (muse-latexcjk-header, muse-latexcjk-footer)
+        (muse-latexcjk-encoding-map, muse-latexcjk-encoding-default)
+        (muse-latexcjk-encoding, muse-latexcjk-transform-content-type):
+        Merge in from muse-latexcjk.el.
+    
+        * muse-latexcjk.el: Removed, functionality merged with
+        muse-latex.el
+
+    removed files:
+     .arch-ids/muse-latexcjk.el.id muse-latexcjk.el
+
+    modified files:
+     ChangeLog muse-latex.el
+
+
 2005-04-06 23:25:47 GMT	Michael Olson <mwolson@gnu.org>	patch-24
 
     Summary:
