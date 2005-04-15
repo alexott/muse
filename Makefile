@@ -13,11 +13,12 @@ all: $(TARGETS) $(ELC)
 %.info: %
 	./scripts/publish info $<
 
-muse-build.elc: muse-build.el
+muse-build.elc: scripts/muse-build.el
 	@echo muse-build.el is not byte-compiled
 
 %.elc: %.el
-	@$(EMACS) --no-init-file --no-site-file -batch -l muse-build.el -L . \
+	@$(EMACS) --no-init-file --no-site-file -batch \
+		-l scripts/muse-build.el -L . \
 		-f batch-byte-compile $<
 
 clean:
@@ -28,7 +29,8 @@ realclean distclean fullclean: clean
 
 test: fullclean $(TARGETS) $(ELC)
 	make clean
-	emacs -q -batch -L . -l muse-build.el -f muse-elint-files muse-*.el
+	emacs -q -batch -L . -l scripts/muse-build.el \
+		-f muse-elint-files muse-*.el
 
 dist: clean
 	(cd ..; tar cvzf ~/Public/Emacs/muse.tar.gz muse)

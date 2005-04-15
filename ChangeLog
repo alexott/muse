@@ -2,6 +2,57 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-15 05:54:30 GMT	Michael Olson <mwolson@gnu.org>	patch-26
+
+    Summary:
+      Standardize source headers, appease elint, don't require planner
+    Revision:
+      muse--main--1.0--patch-26
+
+    2005-04-15  Michael Olson  <mwolson@gnu.org>
+    
+        * Makefile, scripts/muse-build.el: Moved muse-build.el to the
+        `scripts' directory since it really isn't part of Muse proper; it
+        is used to generate Muse output from the command line.
+    
+        * muse-blosxom.el: Handle case where planner is not loaded so that
+        it isn't a hard requirement.
+    
+        * muse-colors.el: Move definition of `muse-colors-tag-info' up so
+        that elint doesn't complain.
+    
+        * muse-message.el (muse-message-markup-link): Don't throw up on
+        links with no description.
+    
+        * muse-blosxom.el, muse-book.el, muse-colors.el, muse-convert.el,
+        muse-docbook.el, muse-html.el, muse-http.el, muse-journal.el,
+        muse-latex.el, muse-message.el, muse-mode.el, muse-poem.el,
+        muse-project.el, muse-publish.el, muse-regexps.el,
+        muse-texinfo.el, muse.el: Add standard header for each file in
+        preparation for the initial release, which will hopefully happen
+        sometime within the next month.
+    
+
+    removed files:
+     experimental/.arch-ids/=id
+
+    modified files:
+     ChangeLog Makefile muse-blosxom.el muse-book.el muse-colors.el
+     muse-convert.el muse-docbook.el muse-html.el muse-http.el
+     muse-journal.el muse-latex.el muse-message.el muse-mode.el
+     muse-poem.el muse-project.el muse-publish.el muse-regexps.el
+     muse-texinfo.el muse.el
+
+    renamed files:
+     .arch-ids/muse-build.el.id
+       ==> scripts/.arch-ids/muse-build.el.id
+     muse-build.el
+       ==> scripts/muse-build.el
+
+    removed directories:
+     experimental experimental/.arch-ids
+
+
 2005-04-14 23:46:47 GMT	Michael Olson <mwolson@gnu.org>	patch-25
 
     Summary:

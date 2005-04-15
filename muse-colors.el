@@ -1,6 +1,6 @@
 ;;; muse-colors.el --- Coloring and highlighting used by Muse
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse-colors.el
@@ -347,6 +347,9 @@ of the enclosed tag or region.
 
 Functions should not modify the contents of the buffer.")
 
+(defsubst muse-colors-tag-info (tagname &rest args)
+  (assoc tagname muse-colors-tags))
+
 (defun muse-colors-custom-tags ()
   "Highlight `muse-colors-tags'."
   (let ((tag-info (muse-colors-tag-info (match-string 4))))
@@ -378,9 +381,6 @@ Functions should not modify the contents of the buffer.")
             (if (nth 2 tag-info)
                 (nconc args (list attrs)))
             (apply (nth 3 tag-info) args)))))))
-
-(defsubst muse-colors-tag-info (tagname &rest args)
-  (assoc tagname muse-colors-tags))
 
 (defun muse-colors-example-tag (beg end)
   "Strip properties from stuff in example."

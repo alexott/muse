@@ -1,17 +1,10 @@
 ;;; muse-blosxom.el --- Publish a document tree for serving by (py)Blosxom
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 
-;; Emacs Lisp Archive Entry
-;; Filename: muse-blosxom.el
-;; Version: 3.00
 ;; Date: Wed, 23 March 2005
-;; Keywords: hypermedia
 ;; Author: Gary V. Vaughan (gary AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
-;; Description: Publish a document tree for serving by (py)Blosxom
-;; URL: http://www.mwolson.org/projects/MuseMode.html
-;; Compatibility: Emacs21
 
 ;; This file is not part of GNU Emacs.
 
@@ -117,9 +110,10 @@ See `muse-blosxom' for more information."
                     "]\\)\\s-*\\'")
            0 "\\1</p>\n")
     ;; planner stuff
-    (10600 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"
-	   0 planner-markup-task)
-    (10700 "^\\.#\\([0-9]+\\)" 0 planner-markup-note)
+    ,@(when (featurep 'planner)
+        '((10600 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"
+                 0 planner-markup-task)
+          (10700 "^\\.#\\([0-9]+\\)" 0 planner-markup-note)))
     ;; date directive
     (10800 "^#date\\s-+\\(.+\\)\n+" 0 muse-blosxom-markup-date-directive))
   "List of markup rules for publishing a Muse page to BLOSXOM.

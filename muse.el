@@ -1,4 +1,4 @@
-;;; muse.el --- An authoring and publishing tool for Emacs
+;;; muse.el --- An authoring and publishing tool for Emacs.
 
 ;; Copyright (C) 2004 Free Software Foundation, Inc.
 

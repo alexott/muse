@@ -1,8 +1,25 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; muse-journal.el --- Keep and publish a journal.
+
+;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
+
+;; This file is not part of GNU Emacs.
+
+;; This is free software; you can redistribute it and/or modify it under
+;; the terms of the GNU General Public License as published by the Free
+;; Software Foundation; either version 2, or (at your option) any later
+;; version.
 ;;
-;; Muse Journal Publishing
+;; This is distributed in the hope that it will be useful, but WITHOUT
+;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+;; for more details.
 ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
+;; MA 02111-1307, USA.
+
+;;; Commentary:
 
 ;; The module facilitates the keeping and publication of a journal.
 ;; When publishing to HTML, it assumes the form of a web log, or blog.
@@ -50,6 +67,16 @@
 ;; it with the "rdf" style.  It uses the first two sentences of the
 ;; first paragraph of each entry as its "description", and
 ;; autogenerates tags for linking to the various entries.
+
+;;; Contributors:
+
+;;; Code:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Muse Journal Publishing
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'muse-publish)
 (require 'muse-html)

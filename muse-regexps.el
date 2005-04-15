@@ -1,16 +1,6 @@
-;;; muse-regexps.el --- Define regexps used by Muse
+;;; muse-regexps.el --- Define regexps used by Muse.
 
-;; Copyright (C) 2004 Free Software Foundation, Inc.
-
-;; Emacs Lisp Archive Entry
-;; Filename: muse-regexps.el
-;; Version: 3.00 ALPHA
-;; Date: 2004-12-29
-;; Keywords: hypermedia
-;; Author: Michael Olson (mwolson AT gnu DOT org)
-;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
-;; URL: http://www.mwolson.org/projects/MuseMode.html
-;; Compatibility: Emacs21
+;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 
 ;; This file is not part of GNU Emacs.
 
@@ -34,13 +24,7 @@
 ;; This file is the part of the Muse project that describes regexps
 ;; that are used throughout the project.
 
-;;;_ + Startup
-
-;; To be written.
-
-;;;_ + Usage
-
-;;;_ + Contributors
+;;; Contributors:
 
 ;;; Code:
 
