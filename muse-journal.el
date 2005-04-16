@@ -276,9 +276,16 @@ and group 3 is the optional heading for the entry."
       <author><lisp>(muse-publishing-directive \"author\")</lisp></author>
       <pubDate>%date%</pubDate>
       <guid>%link%#%anchor%</guid>
+      %enclosure%
     </item>\n"
   ""
   :type 'string
+  :group 'muse-journal)
+
+(defcustom muse-journal-rss-enclosure-types-alist
+  '(("mp3" . "audio/mpeg"))
+  ""
+  :type '(alist :key-type string :value-type string)
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-summarize-entries nil
@@ -495,7 +502,12 @@ For more on the structure of this list, see
       (let* ((date (match-string 1))
 	     (orig-date date)
 	     (title (match-string 2))
-	     qotd desc)
+	     enclosure qotd desc)
+	(if title
+	    (save-match-data
+	      (if (string-match muse-link-regexp title)
+		  (setq enclosure (match-string 1 title)
+			title (match-string 2 title)))))
 	(save-match-data
 	  (when (and date
 		     (string-match
@@ -545,6 +557,34 @@ For more on the structure of this list, see
 	      (setq entry (replace-match (or title "Untitled") nil t entry)))
 	    (while (string-match "%desc%" entry)
 	      (setq entry (replace-match desc nil t entry)))
+	    (while (string-match "%enclosure%" entry)
+	      (setq
+	       entry
+	       (replace-match
+		(if (null enclosure)
+		    ""
+		  (save-match-data
+		    (format
+		     "<enclosure url=\"%s\" %stype=\"%s\"/>"
+		     (if (string-match "//" enclosure)
+			 enclosure
+		       (concat (muse-style-element :base-url)
+			       enclosure))
+		     (let ((file
+			    (expand-file-name enclosure
+					      (muse-style-element :path))))
+		       (if (file-readable-p file)
+			   (format "length=\"%d\" "
+				   (nth 7 (file-attributes file)))
+			 ""))
+		     (if (string-match "\\.\\([^.]+\\)$" enclosure)
+			 (let* ((ext (match-string 1 enclosure))
+				(type
+				 (assoc ext muse-journal-rss-enclosure-types-alist)))
+			   (if type
+			       (cdr type)
+			     "application/octet-stream"))))))
+		nil t entry)))
 	    (while (string-match "%link%" entry)
 	      (setq entry (replace-match
 			   (concat (muse-style-element :base-url)
