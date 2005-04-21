@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-21 18:19:02 GMT	Michael Olson <mwolson@gnu.org>	patch-28
+
+    Summary:
+      Don't compile documentation by default.
+    Revision:
+      muse--main--1.0--patch-28
+
+    * Makefile (all): Don't compile documentation by default.
+      (doc): Use this rule to compile documentation.
+
+    modified files:
+     ChangeLog Makefile
+
+
 2005-04-16 18:08:24 GMT	Michael Olson <mwolson@gnu.org>	patch-27
 
     Summary:

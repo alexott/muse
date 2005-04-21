@@ -2,7 +2,9 @@ EMACS   = emacs
 TARGETS = README.html README.pdf README.info
 ELC     = $(patsubst %.el,%.elc,$(wildcard *.el))
 
-all: $(TARGETS) $(ELC)
+all: $(ELC)
+
+doc: $(TARGETS)
 
 %.html: %
 	./scripts/publish html $<
