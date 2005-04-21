@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-04-21 18:25:28 GMT	Michael Olson <mwolson@gnu.org>	patch-29
+
+    Summary:
+      Add simple `muse-version' function.
+    Revision:
+      muse--main--1.0--patch-29
+
+    * muse.el (muse-version): New function that displays the value of the
+      `muse-version' variable.  This should be easier for the user to type
+      than C-h v muse-version.
+
+    modified files:
+     ChangeLog muse.el
+
+
 2005-04-21 18:19:02 GMT	Michael Olson <mwolson@gnu.org>	patch-28
 
     Summary:

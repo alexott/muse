@@ -48,6 +48,11 @@
 (defvar muse-version "3.00 ALPHA"
   "The version of Muse currently loaded")
 
+(defun muse-version ()
+  "Display the version of Muse that is currently loaded."
+  (interactive)
+  (message muse-version))
+
 (defgroup muse nil
   "Options controlling the behaviour of Muse.
 The markup used by Muse is intended to be very friendly to people
