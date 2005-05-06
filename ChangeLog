@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-06 03:30:05 GMT	Michael Olson <mwolson@gnu.org>	patch-30
+
+    Summary:
+      Update my example Muse settings.
+    Revision:
+      muse--main--1.0--patch-30
+
+    * examples/mwolson/muse-init.el: Update from my latest version.
+      (muse-project-alist): Remove the francais part of my blog.
+      (my-muse-mode-flyspell-p): Split old `my-muse-mode-affect-p' function
+      into this and `my-muse-mode-fill-nobreak-p'.
+      (muse-mode-hook): Tell fill mode to avoid breaking links; hopefully
+      this is the best way to accomplish this.
+      (my-muse-blosxom-title-to-file): Replace more non-alphanumeric
+      characters in the title.
+      (my-muse-prepare-entry-for-xanga): Treat example regions better.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el
+
+
 2005-04-21 18:25:28 GMT	Michael Olson <mwolson@gnu.org>	patch-29
 
     Summary:

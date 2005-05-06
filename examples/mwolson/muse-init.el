@@ -41,15 +41,11 @@
                 :path "~/personal-site/site/projects-muse"))
 
         ("BlogWiki"
-         ("~/proj/wiki/blog/francais/"
-          "~/proj/wiki/blog/personal/"
+         ("~/proj/wiki/blog/personal/"
           "~/proj/wiki/blog/projects/"
           "~/proj/wiki/blog/website/"
           :default "personal")
 
-         (:base "my-blosxom"
-                :path "~/personal-site/site/blog/francais"
-                :include "/francais/")
          (:base "my-blosxom"
                 :path "~/personal-site/site/blog/personal"
                 :include "/personal/")
@@ -68,11 +64,9 @@
 
 ;; Make other modes a bit less intrusive
 
-(defun my-muse-mode-affect-p ()
-  "Indicate whether this text should be messed with.
-If nil is returned, it means that we should not fill here or
-spell-check here.  If non-nil, it is safe to do both of these
-things."
+(defun my-muse-mode-flyspell-p ()
+  "Return non-nil if this text should be spell-checked.
+If nil is returned, we should not spell-check here."
   (save-excursion
     (save-match-data
       (null (and (re-search-backward "\\[\\[\\|\\]\\]"
@@ -80,15 +74,27 @@ things."
                  (string= (or (match-string 0) "")
                           "[["))))))
 
+(defun my-muse-mode-fill-nobreak-p ()
+  "Return nil if we should allow a fill to occur at point.
+Otherwise return non-nil.
+
+This is used to keep long extended links from being mangled by
+autofill."
+  (interactive)
+  (not (my-muse-mode-flyspell-p)))
+
 ;; Make flyspell not mess with links
 (put 'muse-mode
      'flyspell-mode-predicate
-     'my-muse-mode-affect-p)
+     'my-muse-mode-flyspell-p)
 
 ;; Make fill not split up links
-(eval-after-load "fill"
-  (add-to-list 'fill-nobreak-predicate
-               (lambda nil (null (my-muse-mode-affect-p)))))
+(add-hook 'muse-mode-hook
+          (lambda nil
+            (when (boundp 'fill-nobreak-predicate)
+              (make-local-variable 'fill-nobreak-predicate)
+              (add-to-list 'fill-nobreak-predicate
+                           'my-muse-mode-fill-nobreak-p))))
 
 ;; Start a new blog entry
 
@@ -110,7 +116,7 @@ Directories starting with \".\" will be ignored."
 
 (defun my-muse-blosxom-title-to-file (title)
   "Derive a file name from the given TITLE."
-  (replace-regexp-in-string " " "_"
+  (replace-regexp-in-string "[ ,.:;']" "_"
                             (downcase title)))
 
 (defun my-muse-blosxom-new-entry (category title)
@@ -145,31 +151,51 @@ something is published with the \"my-blosxom\" style.
 
 If FILE is not specified, use the current file."
   (interactive (list buffer-file-name))
-  (with-temp-buffer
-    (insert-file-contents file t)
-    ;; Surround first line in <h3></h3>
-    (goto-char (point-min))
-    (insert "<h3>")
-    (end-of-line)
-    (insert "</h3>")
-    ;; Get rid of 2 spaces together and merge lines
-    (goto-char (point-min))
-    (while (re-search-forward (concat "["
-                                      emacs-wiki-regexp-space
-                                      "]+") nil t)
-      (replace-match " "))
-    ;; Remove trailing space
-    (goto-char (point-min))
-    (while (re-search-forward " *</p> *" nil t)
-      (replace-match "</p>"))
-    ;; Make relative links work
-    (goto-char (point-min))
-    (while (re-search-forward "href=\"/" nil t)
-      (replace-match "href=\"http://www.mwolson.org/" nil t))
-    ;; Copy entry to clipboard
-    (clipboard-kill-ring-save (point-min) (point-max))
-    ;; Don't prompt me about killing the buffer
-    (set-buffer-modified-p nil)))
+  (save-match-data
+    (with-temp-buffer
+      (insert-file-contents file t)
+      ;; Surround first line in <h3></h3>
+      (goto-char (point-min))
+      (insert "<h3>")
+      (end-of-line)
+      (insert "</h3>")
+      ;; Treat example regions properly
+      (let (beg end)
+        (while (re-search-forward "<pre[^>]*>" nil t)
+          (setq beg (match-end 0))
+          (setq end (if (re-search-forward "</pre>" nil 1)
+                        (match-beginning 0)
+                      (point)))
+          (save-restriction
+            (narrow-to-region beg end)
+            ;; Change spaces to &nbsp;
+            (goto-char (point-min))
+            (while (re-search-forward "^ +" nil t)
+              (replace-match (apply 'concat (make-list
+                                             (length (match-string 0))
+                                             "&nbsp;"))))
+            ;; Change newline to <br />
+            (goto-char (point-min))
+            (while (re-search-forward "\n" nil t)
+              (replace-match "<br />")))))
+      ;; Get rid of 2 spaces together and merge lines
+      (goto-char (point-min))
+      (while (re-search-forward (concat "["
+                                        muse-regexp-space
+                                        "]+") nil t)
+        (replace-match " "))
+      ;; Remove trailing space
+      (goto-char (point-min))
+      (while (re-search-forward " *</p> *" nil t)
+        (replace-match "</p>"))
+      ;; Make relative links work
+      (goto-char (point-min))
+      (while (re-search-forward "href=\"/" nil t)
+        (replace-match "href=\"http://www.mwolson.org/" nil t))
+      ;; Copy entry to clipboard
+      (clipboard-kill-ring-save (point-min) (point-max))
+      ;; Don't prompt me about killing the buffer
+      (set-buffer-modified-p nil))))
 
 ;;; Key customizations
 
