@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-12 22:46:10 GMT	Michael Olson <mwolson@gnu.org>	patch-31
+
+    Summary:
+      Remove flyspell overlays on links.
+    Revision:
+      muse--main--1.0--patch-31
+
+    * muse-colors.el (muse-colors-link): Remove flyspell overlays.  This
+      should make the link clickable.  On Emacs21, the color will stay red,
+      but other Emacsen should do the right thing, which is use the normal
+      link color.  Hopefully this will fix some strange flyspell-related link
+      problems.
+
+    modified files:
+     ChangeLog muse-colors.el
+
+
 2005-05-06 03:30:05 GMT	Michael Olson <mwolson@gnu.org>	patch-30
 
     Summary:

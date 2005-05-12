@@ -454,6 +454,12 @@ bad-link face"
 
 (defun muse-colors-link ()
   (when (eq ?\[ (char-after (match-beginning 0)))
+    ;; remove flyspell overlays
+    (when (fboundp 'flyspell-unhighlight-at)
+      (let ((cur (match-beginning 0)))
+        (while (> (match-end 0) cur)
+          (flyspell-unhighlight-at cur)
+          (setq cur (1+ cur)))))
     (let* ((link (match-string-no-properties 2))
 	   (desc (match-string-no-properties 3))
 	   (props (muse-link-properties
