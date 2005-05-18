@@ -280,9 +280,14 @@ differs little between the various styles."
   '((image-with-desc . "<img src=\"%s\" alt=\"%s\" />")
     (image-link      . "<img src=\"%s\" alt=\"\" />")
     (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\" alt=\"\" /></a>")
+    (rule            . "<hr />")
+    (fn-sep          . "<hr />\n")
     (begin-underline . "<span style=\"text-decoration: underline;\">\n")
     (end-underline   . "</span>")
     (begin-center    . "<span style=\"text-align: center;\">\n")
+    (end-verse-line  . "<br />")
+    (last-stanza-end . "<br />")
+    (empty-verse-line . "<br />")
     (end-center      . "\n</span>"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
