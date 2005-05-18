@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-18 06:07:02 GMT	Michael Olson <mwolson@gnu.org>	patch-35
+
+    Summary:
+      Update my example settings.
+    Revision:
+      muse--main--1.0--patch-35
+
+    * examples/mwolson/muse-init.el: Synchronize with my current settings.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el
+
+
 2005-05-18 06:03:07 GMT	Michael Olson <mwolson@gnu.org>	patch-34
 
     Summary:

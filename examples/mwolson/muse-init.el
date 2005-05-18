@@ -43,6 +43,7 @@
         ("BlogWiki"
          ("~/proj/wiki/blog/personal/"
           "~/proj/wiki/blog/projects/"
+          "~/proj/wiki/blog/quotes/"
           "~/proj/wiki/blog/website/"
           :default "personal")
 
@@ -52,6 +53,9 @@
          (:base "my-blosxom"
                 :path "~/personal-site/site/blog/projects"
                 :include "/projects/")
+         (:base "my-blosxom"
+                :path "~/personal-site/site/blog/quotes"
+                :include "/quotes/")
          (:base "my-blosxom"
                 :path "~/personal-site/site/blog/website"
                 :include "/website/"))
@@ -90,11 +94,11 @@ autofill."
 
 ;; Make fill not split up links
 (add-hook 'muse-mode-hook
-          (lambda nil
-            (when (boundp 'fill-nobreak-predicate)
-              (make-local-variable 'fill-nobreak-predicate)
-              (add-to-list 'fill-nobreak-predicate
-                           'my-muse-mode-fill-nobreak-p))))
+          #'(lambda nil
+              (when (boundp 'fill-nobreak-predicate)
+                (make-local-variable 'fill-nobreak-predicate)
+                (add-to-list 'fill-nobreak-predicate
+                             'my-muse-mode-fill-nobreak-p))))
 
 ;; Start a new blog entry
 
@@ -132,12 +136,12 @@ The page will be initialized with the current date and TITLE."
     (muse-project-find-file
      file "blosxom" nil
      (concat (directory-file-name my-muse-blosxom-base-directory)
-             "/" category))
-    (goto-char (point-min))
-    (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
-            "\n#title " title
-            "\n\n")
-    (forward-line 2)))
+             "/" category)))
+  (goto-char (point-min))
+  (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
+          "\n#title " title
+          "\n\n")
+  (forward-line 2))
 
 ;; Make the current file display correctly in Xanga
 
@@ -200,6 +204,10 @@ If FILE is not specified, use the current file."
 ;;; Key customizations
 
 (global-set-key "\C-cpl" 'my-muse-blosxom-new-entry)
+(global-set-key "\C-cpL"
+                (lambda ()
+                  (interactive)
+                  (find-file "~/proj/wiki/blog")))
 
 ;;; Custom variables
 
