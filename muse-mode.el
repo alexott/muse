@@ -26,6 +26,10 @@
 
 ;;; Contributors:
 
+;; Andrea Riciputi (ariciputi AT pito DOT com) gave an initial
+;; implementation for tag completion by means of the
+;; `muse-insert-tag' function.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -37,6 +41,7 @@
 (require 'muse)
 (require 'muse-regexps)
 (require 'muse-project)
+(require 'muse-publish)
 
 (autoload 'muse-use-font-lock "muse-colors")
 
@@ -110,6 +115,9 @@ See `muse-publish' for more information."
 
     (define-key map [(control ?c) (control ?f)] 'muse-project-find-file)
     (define-key map [(control ?c) (control ?p)] 'muse-project-publish)
+
+    (define-key map [(control ?c) tab] 'muse-insert-tag)
+    (define-key map [(control ?c) (control ?i)] 'muse-insert-tag)
 
     (when (featurep 'pcomplete)
       (define-key map [(meta tab)] 'pcomplete)
@@ -358,6 +366,48 @@ This function is not entirely accurate, but it's close enough."
       (setq muse-current-project project)
       (pop-to-buffer (current-buffer))))
   (message "Generating Muse index...done"))
+
+;;; Insert tags interactively on C-c TAB
+
+(defvar muse-tag-history nil
+  "List of recently-entered tags; used by `muse-insert-tag'.
+If you want a tag to start as the default, you may manually set
+this variable to a list.")
+
+(defvar muse-custom-tags nil
+  "Keep track of any new tags entered in `muse-insert-tag'.
+If there are (X)HTML tags that you use frequently with that
+function, you might want to set this manually.")
+
+(defun muse-insert-tag (tag)
+  "Insert a tag interactively with a blank line after it."
+  (interactive
+   (list
+    (completing-read
+     (concat "Tag: "
+             (when muse-tag-history
+               (concat "(default " (car muse-tag-history) ") ")))
+     (nconc (mapcar 'car muse-publish-markup-tags)
+            muse-custom-tags)
+     nil nil nil 'muse-tag-history
+     (car muse-tag-history))))
+  (when (equal tag "")
+    (setq tag (car muse-tag-history)))
+  (let ((tag-entry (assoc tag muse-publish-markup-tags))
+        (options ""))
+    ;; Add to custom list if no entry exists
+    (unless tag-entry
+      (add-to-list 'muse-custom-tags tag))
+    ;; Get option
+    (when (nth 2 tag-entry)
+      (setq options (read-string "Option: ")))
+    (unless (equal options "")
+      (setq options (concat " " options)))
+    ;; Insert the tag, closing if necessary
+    (when tag (insert (concat "<" tag options ">")))
+    (when (nth 1 tag-entry)
+      (insert (concat "\n\n</" tag ">\n"))
+      (forward-line -2))))
 
 (provide 'muse-mode)
 

@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-18 06:00:27 GMT	Michael Olson <mwolson@gnu.org>	patch-33
+
+    Summary:
+      New feature: tag completion with C-c TAB.
+    Revision:
+      muse--main--1.0--patch-33
+
+    * muse-mode.el (muse-mode-map): Map C-c TAB to `muse-insert-tag'.
+      (muse-tag-history, muse-custom-tags): New variables that keep track of
+      the tag history and newly-entered tags respectively for
+      `muse-insert-tag'.
+      (muse-insert-tag): New function that interactively prompts the user for
+      a tag to use.
+
+    modified files:
+     ChangeLog muse-mode.el
+
+
 2005-05-18 05:49:07 GMT	Michael Olson <mwolson@gnu.org>	patch-32
 
     Summary:
