@@ -311,6 +311,9 @@ Open another Muse page.  Prompt for the name.
 @item C-c = (`muse-what-changed')
 Diff this page against the last backup version.
 
+@item C-c TAB (`muse-insert-tag')
+Insert a tag interactively.
+
 @item TAB
 Move to the next Wiki reference.
 

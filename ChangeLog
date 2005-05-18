@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-18 06:03:07 GMT	Michael Olson <mwolson@gnu.org>	patch-34
+
+    Summary:
+      Update documentation for C-c TAB feature.
+    Revision:
+      muse--main--1.0--patch-34
+
+    * muse.texi (Keystroke Summary): Note that C-c TAB calls
+      `muse-insert-tag'.
+    
+
+    modified files:
+     ChangeLog muse.texi
+
+
 2005-05-18 06:00:27 GMT	Michael Olson <mwolson@gnu.org>	patch-33
 
     Summary:
