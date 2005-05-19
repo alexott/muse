@@ -128,7 +128,7 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
 
 ;;; Register the BLOSXOM Publisher
 
-(unless (assoc "blosxom" muse-publishing-styles)
+(unless (assoc "blosxom-html" muse-publishing-styles)
   (muse-derive-style "blosxom-html" "html"
 		     :suffix    'muse-blosxom-extension
 		     :regexps   'muse-blosxom-markup-regexps

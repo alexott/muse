@@ -199,10 +199,7 @@ than the HTML table tag."
                     muse-regexp-blank
                     "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
            0 muse-html-markup-paragraph)
-    (10500 ,(concat "\\([^>"
-                    muse-regexp-space
-                    "]\\)\\s-*\\'")
-           0 "\\1</p>\n"))
+    (10500 "\\s-*\\'" 0 muse-html-markup-paragraph-close))
   "List of markup rules for publishing a Muse page to HTML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -408,6 +405,14 @@ system to an associated HTML coding system. If no match is found,
 	(insert "<p class=\"quoted\">"))
        (t
 	(insert "<p>"))))))
+
+(defun muse-html-markup-paragraph-close ()
+  (if (save-excursion
+        (save-match-data
+          (and (re-search-backward "<\\(/\\)?p[ >]" nil t)
+               (not (equal (match-string 1) "/")))))
+      (replace-match "</p>")
+    (replace-match "")))
 
 (defun muse-html-markup-anchor ()
   (save-match-data
