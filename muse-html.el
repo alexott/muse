@@ -411,8 +411,8 @@ system to an associated HTML coding system. If no match is found,
         (save-match-data
           (and (re-search-backward "<\\(/\\)?p[ >]" nil t)
                (not (equal (match-string 1) "/")))))
-      (replace-match "</p>")
-    (replace-match "")))
+      (replace-match "</p>\n")
+    (replace-match "\n")))
 
 (defun muse-html-markup-anchor ()
   (save-match-data

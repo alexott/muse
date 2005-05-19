@@ -105,10 +105,7 @@ See `muse-blosxom' for more information."
                     muse-regexp-blank
                     "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
            0 muse-html-markup-paragraph)
-    (10500 ,(concat "\\([^>"
-                    muse-regexp-space
-                    "]\\)\\s-*\\'")
-           0 "\\1</p>\n")
+    (10500 "\\s-*\\'" 0 muse-html-markup-paragraph-close))
     ;; planner stuff
     ,@(when (featurep 'planner)
         '((10600 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"

@@ -78,10 +78,7 @@ See `muse-docbook' for more information."
                     muse-regexp-blank
                     "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
            0 muse-docbook-markup-paragraph)
-    (10500 ,(concat "\\([^>"
-                    muse-regexp-space
-                    "]\\)\\s-+\\'")
-           0 "\\1</para>\n"))
+    (10500 "\\s-*\\'" 0 muse-docbook-markup-paragraph-close))
   "List of markup rules for publishing a Muse page to DocBook XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -169,6 +166,14 @@ differs little between the various styles."
     (goto-char end)
     (unless (eq (char-after) ?\<)
       (insert "<para>"))))
+
+(defun muse-docbook-markup-paragraph-close ()
+  (if (save-excursion
+        (save-match-data
+          (and (re-search-backward "<\\(/\\)?para[ >]" nil t)
+               (not (equal (match-string 1) "/")))))
+      (replace-match "</para>\n")
+    (replace-match "\n")))
 
 (defun muse-docbook-markup-table ()
   (let* ((str (save-match-data
