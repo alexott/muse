@@ -96,6 +96,15 @@ See `muse-blosxom' for more information."
 		    "<table[^>]*>\\s-*<t\\1>\n") 0 "")
     (10200 "</table>\\s-*<table[^>]*>\n" 0 "")
 
+    ;; date directive
+    (10210 "^#date\\s-+\\(.+\\)\n+" 0 muse-blosxom-markup-date-directive)
+
+    ;; planner stuff
+    ,@(when (featurep 'planner)
+        '((10220 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"
+                 0 planner-markup-task)
+          (10230 "^\\.#\\([0-9]+\\)" 0 planner-markup-note)))
+
     ;; the beginning of the buffer begins the first paragraph
     (10300 "\\`\n*\\([^<-]\\|<\\(em\\|strong\\|code\\)>\\|<a \\)" 0
 	   "<p class=\"first\">\\1")
@@ -105,14 +114,7 @@ See `muse-blosxom' for more information."
                     muse-regexp-blank
                     "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
            0 muse-html-markup-paragraph)
-    (10500 "\\s-*\\'" 0 muse-html-markup-paragraph-close)
-    ;; planner stuff
-    ,@(when (featurep 'planner)
-        '((10600 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"
-                 0 planner-markup-task)
-          (10700 "^\\.#\\([0-9]+\\)" 0 planner-markup-note)))
-    ;; date directive
-    (10800 "^#date\\s-+\\(.+\\)\n+" 0 muse-blosxom-markup-date-directive))
+    (10500 "\\s-*\\'" 0 muse-html-markup-paragraph-close))
   "List of markup rules for publishing a Muse page to BLOSXOM.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
