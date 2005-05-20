@@ -172,8 +172,8 @@ differs little between the various styles."
         (save-match-data
           (and (re-search-backward "<\\(/\\)?para[ >]" nil t)
                (not (equal (match-string 1) "/")))))
-      (replace-match "</para>\n")
-    (replace-match "\n")))
+      "</para>\n"
+    nil))
 
 (defun muse-docbook-markup-table ()
   (let* ((str (save-match-data
