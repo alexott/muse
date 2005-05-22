@@ -90,8 +90,11 @@ when publishing files in that project."
   "Return non-nil if NAME is a private page with PROJECT."
   (unless muse-under-windows-p
     (setq file (file-truename file))
-    (or (eq ?- (aref (nth 8 (file-attributes (file-name-directory file))) 7))
-	(eq ?- (aref (nth 8 (file-attributes file)) 7)))))
+    (if (file-attributes file)  ; don't publish if no attributes exist
+      (or (eq ?- (aref (nth 8 (file-attributes
+                               (file-name-directory file))) 7))
+          (eq ?- (aref (nth 8 (file-attributes file)) 7)))
+      t)))
 
 (defun muse-project-file-entries (path)
   (let* ((names (list t))

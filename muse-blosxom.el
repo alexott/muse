@@ -96,9 +96,6 @@ See `muse-blosxom' for more information."
 		    "<table[^>]*>\\s-*<t\\1>\n") 0 "")
     (10200 "</table>\\s-*<table[^>]*>\n" 0 "")
 
-    ;; date directive
-    (10210 "^#date\\s-+\\(.+\\)\n+" 0 muse-blosxom-markup-date-directive)
-
     ;; planner stuff
     ,@(when (featurep 'planner)
         '((10220 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"

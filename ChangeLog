@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-22 01:26:13 GMT	Michael Olson <mwolson@gnu.org>	patch-41
+
+    Summary:
+      Don't let automatic backup files crash the publishing process.
+    Revision:
+      muse--main--1.0--patch-41
+
+    * muse-blosxom.el (muse-blosxom-markup-regexps): Remove rule for date
+      directive since this value is already processed by
+      `muse-publish-markup-directive', and may be obtained by using
+      the code: (muse-publishing-directive "date").
+    
+    * muse-colors.el (muse-colors-region): Make sure that we don't ever try
+      to run (funcall nil); this happened once during a debugging process.
+    
+    * muse-project.el (muse-project-private-p): Skip any file for which we
+      cannot fetch attributes.  This fixes a bug where having an
+      Emacs-generated automatic backup file in a publishing directory causes
+      the publishing process to halt with an error.
+
+    modified files:
+     ChangeLog muse-blosxom.el muse-colors.el muse-project.el
+
+
 2005-05-20 20:44:46 GMT	Michael Olson <mwolson@gnu.org>	patch-40
 
     Summary:
