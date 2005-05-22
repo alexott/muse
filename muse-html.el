@@ -407,12 +407,16 @@ system to an associated HTML coding system. If no match is found,
 	(insert "<p>"))))))
 
 (defun muse-html-markup-paragraph-close ()
-  (if (save-excursion
-        (save-match-data
-          (and (re-search-backward "<\\(/\\)?p[ >]" nil t)
-               (not (equal (match-string 1) "/")))))
-      "</p>\n"
-    nil))
+  (cond
+   ((save-excursion
+      (save-match-data
+        (and (re-search-backward "<\\(/\\)?p[ >]" nil t)
+             (not (equal (match-string 1) "/")))))
+    "</p>\n")
+   ((and (bolp) (eolp))
+    nil)
+   (t
+    "\n")))
 
 (defun muse-html-markup-anchor ()
   (save-match-data

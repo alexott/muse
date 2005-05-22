@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-22 05:58:40 GMT	Michael Olson <mwolson@gnu.org>	patch-42
+
+    Summary:
+      Always end the published document with a newline.
+    Revision:
+      muse--main--1.0--patch-42
+
+    * muse-html.el (muse-html-markup-paragraph-close): Always end the
+      published document with a newline.
+    
+    * muse-docbook.el (muse-docbook-markup-paragraph-close): Ditto.
+
+    modified files:
+     ChangeLog muse-docbook.el muse-html.el
+
+
 2005-05-22 01:26:13 GMT	Michael Olson <mwolson@gnu.org>	patch-41
 
     Summary:

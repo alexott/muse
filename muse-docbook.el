@@ -168,12 +168,16 @@ differs little between the various styles."
       (insert "<para>"))))
 
 (defun muse-docbook-markup-paragraph-close ()
-  (if (save-excursion
-        (save-match-data
-          (and (re-search-backward "<\\(/\\)?para[ >]" nil t)
-               (not (equal (match-string 1) "/")))))
-      "</para>\n"
-    nil))
+  (cond
+   ((save-excursion
+      (save-match-data
+        (and (re-search-backward "<\\(/\\)?para[ >]" nil t)
+             (not (equal (match-string 1) "/")))))
+    "</para>\n")
+   ((and (bolp) (eolp))
+    nil)
+   (t
+    "\n")))
 
 (defun muse-docbook-markup-table ()
   (let* ((str (save-match-data
