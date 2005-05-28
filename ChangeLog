@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-28 23:34:50 GMT	Michael Olson <mwolson@gnu.org>	patch-44
+
+    Summary:
+      Warn user when publishing fails due to a private directory.
+    Revision:
+      muse--main--1.0--patch-44
+
+    * muse-project.el (muse-project-private-p): Warn users when publishing a
+      file fails due to its directory not being readable by others.  Make
+      sure that you do a `chmod +o name_of_directory' if you want the
+      contents of that directory to be publishable.
+
+    modified files:
+     ChangeLog muse-project.el
+
+
 2005-05-28 23:21:39 GMT	Michael Olson <mwolson@gnu.org>	patch-43
 
     Summary:

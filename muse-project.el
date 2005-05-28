@@ -91,9 +91,13 @@ when publishing files in that project."
   (unless muse-under-windows-p
     (setq file (file-truename file))
     (if (file-attributes file)  ; don't publish if no attributes exist
-      (or (eq ?- (aref (nth 8 (file-attributes
-                               (file-name-directory file))) 7))
-          (eq ?- (aref (nth 8 (file-attributes file)) 7)))
+        (or (when (eq ?- (aref (nth 8 (file-attributes
+                                       (file-name-directory file))) 7))
+              (message (concat
+                        "The " (file-name-directory file)
+                        " directory must be readable by others"
+                        " in order for its contents to be published.")))
+            (eq ?- (aref (nth 8 (file-attributes file)) 7)))
       t)))
 
 (defun muse-project-file-entries (path)
