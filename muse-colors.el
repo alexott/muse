@@ -259,8 +259,9 @@ affect the match data results."
   :set 'muse-configure-highlighting
   :group 'muse-colors)
 
-(defvar font-lock-mode nil)
-(defvar font-lock-multiline nil)
+;; XEmacs users don't have `font-lock-multiline'.
+(unless (boundp 'font-lock-multiline)
+  (defvar font-lock-multiline nil))
 
 (defun muse-use-font-lock ()
   (set (make-local-variable 'font-lock-multiline) 'undecided)

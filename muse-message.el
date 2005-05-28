@@ -160,7 +160,7 @@ See the documentation for `muse-publish-markup-tags'."
 	(insert url))
       "")))
 
-(defun muse-message-example-tag (beg end attrs highlight-p)
+(defun muse-message-example-tag (beg end)
   "Mark up example and code by simply indenting them."
   (muse-publish-escape-specials beg end)
   (kill-line 1)
