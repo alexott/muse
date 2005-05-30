@@ -70,15 +70,13 @@ See `muse-docbook' for more information."
     (10100 "</tbody>\\s-*</table>\\s-*<table[^>]*>\\s-*<tbody>\\s-*" 0 "")
     (10200 "</table>\\s-*<table[^>]*>\\s-*" 0 "")
 
-    ;; the beginning of the buffer begins the first paragraph
-    (10300 "\\`\n*\\([^<]\\)" 0 "<para>\\1")
-    ;; plain paragraph separator
-    (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?\n"
-		    "\\(["
+    ;; beginning of doc, end of doc, or plain paragraph separator
+    (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
+                    "\\(?:\n\\(["
                     muse-regexp-blank
-                    "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
-           0 muse-docbook-markup-paragraph)
-    (10500 "\\s-*\\'" 0 muse-docbook-markup-paragraph-close))
+                    "]*\n\\)+\\|\\`\\s-*\\|\\s-*\\'\\)"
+                    "\\(<\\(blockquote\\|center\\)>\n\\)?")
+           0 muse-docbook-markup-paragraph))
   "List of markup rules for publishing a Muse page to DocBook XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -162,22 +160,20 @@ differs little between the various styles."
 (defun muse-docbook-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
     (goto-char (match-beginning 0))
-    (unless (eq (char-before) ?\>) (insert "</para>"))
-    (goto-char end)
+    (when (save-excursion
+            (save-match-data
+              (and (re-search-backward "<\\(/\\)?para[ >]" nil t)
+                   (not (string-equal (match-string 1) "/")))))
+      (insert "</para>"))
+    (goto-char end))
+  (if (eobp)
+      (cond
+       ((bolp)
+        nil)
+       (t
+        (insert "\n")))
     (unless (eq (char-after) ?\<)
       (insert "<para>"))))
-
-(defun muse-docbook-markup-paragraph-close ()
-  (cond
-   ((save-excursion
-      (save-match-data
-        (and (re-search-backward "<\\(/\\)?para[ >]" nil t)
-             (not (equal (match-string 1) "/")))))
-    "</para>\n")
-   ((and (bolp) (eolp))
-    nil)
-   (t
-    "\n")))
 
 (defun muse-docbook-markup-table ()
   (let* ((str (save-match-data

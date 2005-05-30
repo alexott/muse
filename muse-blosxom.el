@@ -102,16 +102,13 @@ See `muse-blosxom' for more information."
                  0 planner-markup-task)
           (10230 "^\\.#\\([0-9]+\\)" 0 planner-markup-note)))
 
-    ;; the beginning of the buffer begins the first paragraph
-    (10300 "\\`\n*\\([^<-]\\|<\\(em\\|strong\\|code\\)>\\|<a \\)" 0
-	   "<p class=\"first\">\\1")
-    ;; plain paragraph separator
-    (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?\n"
-		    "\\(["
+    ;; beginning of doc, end of doc, or plain paragraph separator
+    (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
+                    "\\(?:\n\\(["
                     muse-regexp-blank
-                    "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
-           0 muse-html-markup-paragraph)
-    (10500 "\\s-*\\'" 0 muse-html-markup-paragraph-close))
+                    "]*\n\\)+\\|\\`\\s-*\\|\\s-*\\'\\)"
+                    "\\(<\\(blockquote\\|center\\)>\n\\)?")
+           0 muse-html-markup-paragraph))
   "List of markup rules for publishing a Muse page to BLOSXOM.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice

@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-05-30 22:15:13 GMT	Michael Olson <mwolson@gnu.org>	patch-46
+
+    Summary:
+      Handle a few paragraph publishing edge cases better.
+    Revision:
+      muse--main--1.0--patch-46
+
+    * muse-docbook.el (muse-docbook-markup-regexps): Consolidate the
+      beginning-of-document, end-of-document, and paragraph separator regexps
+      so that one markup rule can be used in all these cases.
+      (muse-docbook-markup-paragraph): Handle more cases correctly.  In
+      particular, blockquote or center at beginning or end of document will
+      be published properly.  Hopefully this won't slow things down too much.
+      (muse-docbook-markup-paragraph-close): Removed.
+    
+    * muse-blosxom.el (muse-blosxom-markup-regexps): Ditto.
+    
+    * muse-html.el (muse-html-markup-regexps, muse-html-markup-paragraph):
+      Ditto.
+      (muse-html-markup-paragraph-close): Removed.
+
+    modified files:
+     ChangeLog muse-blosxom.el muse-docbook.el muse-html.el
+
+
 2005-05-28 23:37:11 GMT	Michael Olson <mwolson@gnu.org>	patch-45
 
     Summary:

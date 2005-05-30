@@ -190,16 +190,13 @@ than the HTML table tag."
 		    "<table[^>]*>\\s-*<t\\1>\n") 0 "")
     (10200 "</table>\\s-*<table[^>]*>\n" 0 "")
 
-    ;; the beginning of the buffer begins the first paragraph
-    (10300 "\\`\n*\\([^<-]\\|<\\(em\\|strong\\|code\\)>\\|<a \\)" 0
-	   "<p class=\"first\">\\1")
-    ;; plain paragraph separator
-    (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?\n"
-		    "\\(["
+    ;; beginning of doc, end of doc, or plain paragraph separator
+    (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
+                    "\\(?:\n\\(["
                     muse-regexp-blank
-                    "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
-           0 muse-html-markup-paragraph)
-    (10500 "\\s-*\\'" 0 muse-html-markup-paragraph-close))
+                    "]*\n\\)+\\|\\`\\s-*\\|\\s-*\\'\\)"
+                    "\\(<\\(blockquote\\|center\\)>\n\\)?")
+           0 muse-html-markup-paragraph))
   "List of markup rules for publishing a Muse page to HTML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -392,31 +389,29 @@ system to an associated HTML coding system. If no match is found,
 (defun muse-html-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
     (goto-char (match-beginning 0))
-    (unless (eq (char-before) ?\>) (insert "</p>"))
-    (goto-char end)
+    (when (save-excursion
+            (save-match-data
+              (and (re-search-backward "<\\(/\\)?p[ >]" nil t)
+                   (not (string-equal (match-string 1) "/")))))
+      (insert "</p>"))
+    (goto-char end))
+  (if (eobp)
+      (cond
+       ((bolp)
+        nil)
+       (t
+        (insert "\n")))
     (unless (and (eq (char-after) ?\<)
-		 (not (or (looking-at "<\\(em\\|strong\\|code\\)>")
-			  (and (looking-at "<a ")
-			       (not (looking-at "<a[^>]+><img"))))))
+                 (not (or (looking-at "<\\(em\\|strong\\|code\\)>")
+                          (and (looking-at "<a ")
+                               (not (looking-at "<a[^>]+><img"))))))
       (cond
        ((looking-back "\\(</h[1-4]>\\|<hr>\\)\n\n")
-	(insert "<p class=\"first\">"))
+        (insert "<p class=\"first\">"))
        ((looking-back "<\\(blockquote\\|center\\)>\n")
-	(insert "<p class=\"quoted\">"))
+        (insert "<p class=\"quoted\">"))
        (t
-	(insert "<p>"))))))
-
-(defun muse-html-markup-paragraph-close ()
-  (cond
-   ((save-excursion
-      (save-match-data
-        (and (re-search-backward "<\\(/\\)?p[ >]" nil t)
-             (not (equal (match-string 1) "/")))))
-    "</p>\n")
-   ((and (bolp) (eolp))
-    nil)
-   (t
-    "\n")))
+        (insert "<p>"))))))
 
 (defun muse-html-markup-anchor ()
   (save-match-data
