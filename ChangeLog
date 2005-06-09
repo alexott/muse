@@ -2,6 +2,35 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-09 19:48:02 GMT	Michael Olson <mwolson@gnu.org>	patch-47
+
+    Summary:
+      Update my example config, minor code cleanup.
+    Revision:
+      muse--main--1.0--patch-47
+
+    * examples/mwolson/muse-init.el (muse-project-alist): Shorten project
+      names and add "Plans" project.
+    
+    * muse-docbook.el (looking-back): Delete.
+    
+    * muse-html.el (looking-back): Delete.
+    
+    * muse-html.el (muse-html-markup-paragraph): Use `muse-looking-back'
+      instead of `looking-back'.
+    
+    * muse.el (muse-looking-back): Instead of redefining the `looking-back'
+      function, use this function.  If `looking-back' exists, call it;
+      otherwise, use a workaround.
+
+    removed files:
+     contrib/.arch-ids/pcomplete.el.id contrib/pcomplete.el
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el muse-docbook.el
+     muse-html.el muse.el
+
+
 2005-05-30 22:15:13 GMT	Michael Olson <mwolson@gnu.org>	patch-46
 
     Summary:

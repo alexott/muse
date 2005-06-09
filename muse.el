@@ -200,6 +200,14 @@ omitted, a default message listing FORM itself is used."
 			(muse-list* 'list (list 'quote form) sargs))))
 	  nil)))
 
+;; Compatibility functions
+
+(defun muse-looking-back (regexp &optional limit)
+  (if (fboundp 'looking-back)
+      (looking-back regexp limit)
+    (save-excursion
+      (re-search-backward (concat "\\(?:" regexp "\\)\\=") limit t))))
+
 (provide 'muse)
 
 ;;; muse.el ends here

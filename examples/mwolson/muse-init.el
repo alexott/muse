@@ -18,6 +18,7 @@
 (require 'muse-mode)     ; load authoring mode
 (require 'muse-blosxom)  ; load blosxom module
 (require 'muse-html)     ; load (X)HTML publishing style
+(require 'muse-message)  ; load message support
 
 ;; Setup projects
 
@@ -27,7 +28,7 @@
 
 (unless (assoc "my-blosxom" muse-publishing-styles)
   (muse-derive-style "my-blosxom" "blosxom-xhtml"
-		     :final 'my-muse-blosxom-finalize))
+                     :final 'my-muse-blosxom-finalize))
 
 ;; Here is my master project listing.
 ;;
@@ -35,12 +36,12 @@
 ;; WebWiki projects; only the BlogWiki project is published.
 
 (setq muse-project-alist
-      '(("ProjectsWiki"
+      '(("Projects"
          ("~/proj/wiki/projects/" :default "WelcomePage")
          (:base "xhtml"
-                :path "~/personal-site/site/projects-muse"))
+                :path "~/proj/wiki/projects-out"))
 
-        ("BlogWiki"
+        ("Blog"
          ("~/proj/wiki/blog/personal/"
           "~/proj/wiki/blog/projects/"
           "~/proj/wiki/blog/quotes/"
@@ -60,9 +61,19 @@
                 :path "~/personal-site/site/blog/website"
                 :include "/website/"))
 
-        ("WebWiki"
+        ("Plans"
+         ("~/proj/wiki/plans/"
+          :default "TaskPool"
+          :major-mode planner-mode
+          :visit-link planner-visit-link)
+
+         (:base "xhtml"
+                :path "~/proj/wiki/planner-out"))
+
+        ("Web"
          ("~/proj/wiki/web/" :default "WelcomePage")
-         (:base "xhtml" :path "~/personal-site/site/web-muse"))))
+         (:base "xhtml"
+                :path "~/proj/wiki/web-out"))))
 
 ;;; Functions
 

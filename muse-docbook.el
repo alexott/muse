@@ -152,11 +152,6 @@ differs little between the various styles."
   :type '(alist :key-type character :value-type string)
   :group 'muse-docbook)
 
-(unless (fboundp 'looking-back)
-  (defun looking-back (regexp &optional limit)
-    (save-excursion
-      (re-search-backward (concat "\\(?:" regexp "\\)\\=") limit t))))
-
 (defun muse-docbook-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
     (goto-char (match-beginning 0))

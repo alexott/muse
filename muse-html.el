@@ -381,11 +381,6 @@ system to an associated HTML coding system. If no match is found,
       (forward-word 1))
     (insert "</a>")))
 
-(unless (fboundp 'looking-back)
-  (defun looking-back (regexp &optional limit)
-    (save-excursion
-      (re-search-backward (concat "\\(?:" regexp "\\)\\=") limit t))))
-
 (defun muse-html-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
     (goto-char (match-beginning 0))
@@ -406,9 +401,9 @@ system to an associated HTML coding system. If no match is found,
                           (and (looking-at "<a ")
                                (not (looking-at "<a[^>]+><img"))))))
       (cond
-       ((looking-back "\\(</h[1-4]>\\|<hr>\\)\n\n")
+       ((muse-looking-back "\\(</h[1-4]>\\|<hr>\\)\n\n")
         (insert "<p class=\"first\">"))
-       ((looking-back "<\\(blockquote\\|center\\)>\n")
+       ((muse-looking-back "<\\(blockquote\\|center\\)>\n")
         (insert "<p class=\"quoted\">"))
        (t
         (insert "<p>"))))))
