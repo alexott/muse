@@ -21,6 +21,30 @@
 
 ;;; Commentary:
 
+;; To make use of this file, put (require 'muse-message) in your .emacs.
+;;
+;; By default, the way to mark up an email message is to do the
+;; following.
+;;
+;;  - Enter Message mode.  This is usually done automatically when you
+;;    compose an email message using your Emacs mail client of choice.
+;;
+;;  - Use standard Muse markup instead of plain text for your message.
+;;
+;;  - When you are ready to see what the email message will look like,
+;;    do `M-x muse-message-markup'.  This will make two versions of
+;;    your message: plaintext and HTML.
+;;
+;;  - If you want to do further editing, simply undo your changes,
+;;    edit some more, and run `muse-message-markup' when you're ready
+;;    to send.
+;;
+;;  - Send the message.
+;;
+;; If you wish the markup to be automatic at the time of sending you
+;; message (a risky proposition), just add `muse-message-markup' to
+;; `message-send-hook'.
+
 ;;; Contributors:
 
 ;;; Code:

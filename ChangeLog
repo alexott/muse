@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-11 23:35:43 GMT	Michael Olson <mwolson@gnu.org>	patch-49
+
+    Summary:
+      Make generated X(HT)ML show up in the right encoding in other modes.
+    Revision:
+      muse--main--1.0--patch-49
+
+    * muse-html.el (muse-xhtml-header): Add "encoding=..." to first line.
+      Thanks to Zhiqiang Ye for the suggestion.  This attempts to make
+      generated (X)HTML files show up in the right coding system when editing
+      them with another Emacs mode.
+    
+    * muse-journal.el (muse-journal-rss-header): Automatically determine the
+      encoding instead of hard-coding it.
+    
+    * muse-message.el: Add content to Commentary section, explaining the use
+      of this publishing style.
+
+    modified files:
+     ChangeLog muse-html.el muse-journal.el muse-message.el
+
+
 2005-06-11 01:28:01 GMT	Michael Olson <mwolson@gnu.org>	patch-48
 
     Summary:

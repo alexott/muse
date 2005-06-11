@@ -241,7 +241,8 @@ and group 3 is the optional heading for the entry."
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-header
-  "<\?xml version=\"1.0\" encoding=\"iso-8859-1\"\?>
+  "<\?xml version=\"1.0\" encoding=\"<lisp>
+  (muse-html-encoding)</lisp>\"?>
 <rss version=\"2.0\">
   <channel>
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>

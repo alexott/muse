@@ -23,6 +23,11 @@
 
 ;;; Contributors:
 
+;; Zhiqiang Ye (yezq AT mail DOT cbi DOT pku DOT edu DOT cn) suggested
+;; appending an 'encoding="..."' fragment to the first line of the
+;; sample publishing header so that when editing the resulting XHTML
+;; file, Emacs would use the proper encoding.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -117,7 +122,8 @@ shown in the following example.
   :group 'muse-html)
 
 (defcustom muse-xhtml-header
-  "<?xml version=\"1.0\"?>
+  "<?xml version=\"1.0\" encoding=\"<lisp>
+  (muse-html-encoding)</lisp>\"?>
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
     \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
