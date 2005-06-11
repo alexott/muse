@@ -128,5 +128,55 @@ the time."
   :options '("[:upper:]" "A-Z")
   :group 'muse-regexp)
 
+(defcustom muse-tag-regexp
+  (concat "<\\([^/" muse-regexp-space "][^" muse-regexp-space
+          "</>]*\\)\\(\\s-+[^<>]+[^</>]\\)?\\(/\\)?>")
+  "A regexp used to find XML-style tags within a buffer when publishing.
+Group 1 should be the tag name, group 2 the properties, and group
+3 the optional immediate ending slash."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-link-regexp
+  "\\[\\[\\([^][\t\n]+\\)\\]\\(?:\\[\\([^][\n]+\\)\\]\\)?\\]"
+  "Regexp used to match [[target][description]] links.
+Paren group 1 must match the URL, and paren group 2 the description."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-url-regexp
+  (concat "\\<\\(?:https?:/?/?\\|ftp:/?/?\\|gopher://\\|"
+	  "telnet://\\|wais://\\|file:/\\|s?news:\\|"
+	  "mailto:\\)"
+	  "[^]  \n \"'()<>[^`{}]*[^]    \n \"'()<>[^`{}.,;]+")
+  "A regexp used to match URLs within a Muse page."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-file-regexp
+  "[/?]\\|\\.\\(html?\\|pdf\\|mp3\\|el\\|zip\\|txt\\|tar\\)\\(\\.\\(gz\\|bz2\\)\\)?\\'"
+  "A link matching this regexp will be regarded as a link to a file."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-image-regexp
+  "\\.\\(eps\\|gif\\|jp\\(e?g\\)\\|p\\(bm\\|ng\\)\\|tiff\\|x\\([bp]m\\)\\)\\'"
+  "A link matching this regexp will be published inline as an image.
+For example:
+
+  [[./wife.jpg][A picture of my wife]]
+
+If you omit the description, the alt tag of the resulting HTML
+buffer will be the name of the file."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-ignored-extensions-regexp
+  "\\.\\(bz2\\|gz\\|[Zz]\\)\\'"
+  "A regexp of extensions to omit from the ending of a Muse page name."
+  :type 'string
+  :group 'muse-regexp)
+
 (provide 'muse-regexps)
+
 ;;; muse-regexps.el ends here

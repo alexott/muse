@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-11 01:28:01 GMT	Michael Olson <mwolson@gnu.org>	patch-48
+
+    Summary:
+      Move regexps to same group, only make 4 heading faces.
+    Revision:
+      muse--main--1.0--patch-48
+
+    * muse-colors.el (muse-make-faces): Only create 4 header faces since we
+      can only publish 3 of them specially, leaving the fourth to be in
+      plain text.
+      (muse-colors-markup): Only recognize 4 levels of heading.
+    
+    * muse-regexps.el (muse-tag-regexp, muse-link-regexp, muse-url-regexp)
+      (muse-file-regexp, muse-image-regexp)
+      (muse-ignored-extensions-regexp): Moved here from muse.el.  It seems
+      like a good idea to have all the regexps in the same group.
+
+    modified files:
+     ChangeLog muse-colors.el muse-regexps.el muse.el
+
+
 2005-06-09 19:48:02 GMT	Michael Olson <mwolson@gnu.org>	patch-47
 
     Summary:

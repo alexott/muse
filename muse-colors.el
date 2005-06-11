@@ -86,7 +86,7 @@ See `muse-colors-buffer' for more information."
 				     :weight bold)))
 		       "Muse header face"
 		       :group 'muse-colors))))))
-	'(1 2 3 4 5 6)))
+	'(1 2 3 4)))
 (muse-make-faces)
 
 (defface muse-link-face
@@ -201,7 +201,7 @@ whether progress messages should be displayed to the user."
      ?= muse-colors-verbatim)
 
     ;; make emphasized text appear emphasized
-    ("\\*+" ?* muse-colors-emphasized)
+    ("\\*\\{1,4\\}" ?* muse-colors-emphasized)
 
     ;; make underlined text appear underlined
     (,(concat "_[^"
