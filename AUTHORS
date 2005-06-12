@@ -1,0 +1,41 @@
+Muse
+====
+
+This is a listing of those who have made contributions of code or
+documentation to Muse.
+
+John Wiegley: Original author
+
+Michael Olson: Current maintainer
+
+Sacha Chua: Contributor -- documentation
+            (assigned past and future changes)
+
+Brad Collins: Contributor
+              (assigned past and future changes)
+
+Li Daobing: Contributor
+            (assigned past and future changes)
+
+Yann Hodique: Contributor
+              (2 lines changed in muse-publish.el)
+
+Andrea Riciputi: Idea taken from code, but re-implemented
+
+John Sullivan: Contributor -- documentation (employed by FSF)
+
+Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
+              basis for muse-blosxom.el
+              (assigned past and future changes)
+
+Lan Yufeng: Contributor (1 line changed in muse-colors.el)
+
+
+Contributed software
+====================
+
+This is a listing of authors of software in the `contrib' directory.
+
+Nathan Kent Bullock: getstamps.py, hardcodedates.py (no license)
+
+Eric Marsden: cgi.el (assigned past and future changes to FSF)

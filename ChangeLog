@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-12 22:11:20 GMT	Michael Olson <mwolson@gnu.org>	patch-51
+
+    Summary:
+      Change mailing address of FSF, add AUTHORS file.
+    Revision:
+      muse--main--1.0--patch-51
+
+    * muse-*.el, muse.texi: Change mailing address of FSF.
+    
+    * muse.texi (Contributors): Fix typo.
+    
+    * AUTHORS: New file containing a list of all of those who have
+      contributed code or documentation to Muse, how many lines were changed,
+      etc.
+
+    new files:
+     .arch-ids/AUTHORS.id AUTHORS
+
+    modified files:
+     ChangeLog muse-blosxom.el muse-convert.el muse-docbook.el
+     muse-html.el muse-http.el muse-journal.el muse-latex.el
+     muse-message.el muse-mode.el muse-poem.el muse-project.el
+     muse-publish.el muse-regexps.el muse-texinfo.el muse.el
+     muse.texi
+
+
 2005-06-12 21:33:24 GMT	Michael Olson <mwolson@gnu.org>	patch-50
 
     Summary:

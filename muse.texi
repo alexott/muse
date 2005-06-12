@@ -388,7 +388,7 @@ The first draft of this document was taken from the emacs-wiki texinfo
 manual.  Michael Olson adapted it for Muse and began the process of
 adding content to it.
 
-John Sullivan, did a majority of the work on the emacs-wiki texinfo
+John Sullivan did a majority of the work on the emacs-wiki texinfo
 manual.
 
 While Sacha Chua maintained emacs-wiki, she worked quite a bit on the
@@ -405,7 +405,7 @@ emacs-wiki texinfo manual.
 
 @display
 Copyright @copyright{} 1989, 1991 Free Software Foundation, Inc.
-59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 Everyone is permitted to copy and distribute verbatim copies
 of this license document, but changing it is not allowed.
@@ -749,9 +749,9 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 @end smallexample
 
 Also add information on how to contact you by electronic and paper mail.
