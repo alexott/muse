@@ -889,15 +889,16 @@ like read-only from being inadvertently deleted."
 
 (defun muse-publish-url (url &optional desc)
   "Resolve a URL into its final <a href> form."
-  (dolist (transform muse-publish-url-transforms)
-    (setq url (funcall transform url)))
-  (if (string-match muse-image-regexp url)
-      (if desc
-	  (muse-markup-text 'image-with-desc url desc)
-	(muse-markup-text 'image-link url))
-    (if (and desc (string-match muse-image-regexp desc))
-	(muse-markup-text 'url-with-image url desc)
-      (muse-markup-text 'url-link url (or desc url)))))
+  (let ((orig-url url))
+    (dolist (transform muse-publish-url-transforms)
+      (setq url (funcall transform url)))
+    (if (string-match muse-image-regexp url)
+        (if desc
+            (muse-markup-text 'image-with-desc url desc)
+          (muse-markup-text 'image-link url))
+      (if (and desc (string-match muse-image-regexp desc))
+          (muse-markup-text 'url-with-image url desc)
+        (muse-markup-text 'url-link url (or desc orig-url))))))
 
 (defun muse-publish-insert-url (url &optional desc)
   "Resolve a URL into its final <a href> form."
