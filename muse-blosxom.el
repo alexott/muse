@@ -3,7 +3,7 @@
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 
 ;; Date: Wed, 23 March 2005
-;; Author: Gary V. Vaughan (gary AT gnu DOT org)
+;; Author: Michael Olson (mwolson AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
 
 ;; This file is not part of GNU Emacs.
@@ -28,6 +28,9 @@
 ;; Blosxom publishes a tree of categorised files to a mirrored tree of
 ;; blosxom stories to be served by blosxom.cgi or pyblosxom.cgi.
 ;;
+;; Serving your entries with (py)blosxom
+;; -------------------------------------
+;;
 ;; Each Blosxom file must include `#date yyyy-mm-dd', or optionally
 ;; the longer `#date yyyy-mm-dd-hh-mm', plus whatever normal content
 ;; is desired.
@@ -46,6 +49,33 @@
 ;; subdirectory.  `getstamps.py' provides the 1st service, while
 ;; `hardcodedates.py' provides the second service.  Eventually it is
 ;; hoped that a blosxom plugin and script will be found/written.
+;;
+;; Creating new blog entries
+;; -------------------------
+;;
+;; There is a function called `muse-blosxom-new-entry' that will
+;; automate the process of making a new blog entry.  To make use of
+;; it, do the following.
+;;
+;;  - Customize `muse-blosxom-base-directory' to the location that
+;;    your blog entries are stored.
+;;
+;;  - Assign the `muse-blosxom-base-directory' function to a key
+;;    sequence.  I use the following code to assign this function to
+;;    `C-c p l'.
+;;
+;;    (global-set-key "\C-cpl" 'muse-blosxom-new-entry)
+;;
+;;  - You should create your directory structure ahead of time under
+;;    your base directory.  These directories, which correspond with
+;;    category names, may be nested.
+;;
+;;  - When you enter this key sequence, you will be prompted for the
+;;    category of your entry and its title.  Upon entering this
+;;    information, a new file will be created that corresponds with
+;;    the title, but in lowercase letters and having special
+;;    characters converted to underscores.  The title and date
+;;    directives will be inserted automatically.
 
 ;;; Contributors:
 
@@ -65,6 +95,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'muse-project)
 (require 'muse-publish)
 (require 'muse-html)
 
@@ -84,57 +115,12 @@ See `muse-blosxom' for more information."
   :type '(choice string file)
   :group 'muse-blosxom)
 
-(defcustom muse-blosxom-footer "\n"
+(defcustom muse-blosxom-footer ""
   "Footer used for publishing BLOSXOM files."
   :type '(choice string file)
   :group 'muse-blosxom)
 
-(defcustom muse-blosxom-markup-regexps
-  `(;; join together the parts of a list or table
-    (10000 "</\\([oud]l\\)>\\s-*<\\1>\\s-*" 0 "")
-    (10100 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>\\s-*"
-		    "<table[^>]*>\\s-*<t\\1>\n") 0 "")
-    (10200 "</table>\\s-*<table[^>]*>\n" 0 "")
-
-    ;; planner stuff
-    ,@(when (featurep 'planner)
-        '((10220 "^#\\([A-C]\\)\\([0-9]*\\)\\s-*\\([_oX>CP]\\)\\s-*\\(.+\\)"
-                 0 planner-markup-task)
-          (10230 "^\\.#\\([0-9]+\\)" 0 planner-markup-note)))
-
-    ;; beginning of doc, end of doc, or plain paragraph separator
-    (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
-                    "\\(?:\n\\(["
-                    muse-regexp-blank
-                    "]*\n\\)+\\|\\`\\s-*\\|\\s-*\\'\\)"
-                    "\\(<\\(blockquote\\|center\\)>\n\\)?")
-           0 muse-html-markup-paragraph))
-  "List of markup rules for publishing a Muse page to BLOSXOM.
-For more on the structure of this list, see `muse-publish-markup-regexps'."
-  :type '(repeat (choice
-		  (list :tag "Markup rule"
-			(choice regexp symbol)
-			integer
-			(choice string function symbol))
-		  function))
-  :group 'muse-blosxom)
-
-;;; Register the BLOSXOM Publisher
-
-(unless (assoc "blosxom-html" muse-publishing-styles)
-  (muse-derive-style "blosxom-html" "html"
-		     :suffix    'muse-blosxom-extension
-		     :regexps   'muse-blosxom-markup-regexps
-		     :header    'muse-blosxom-header
-		     :footer    'muse-blosxom-footer)
-
-  (muse-derive-style "blosxom-xhtml" "xhtml"
-		     :suffix    'muse-blosxom-extension
-		     :regexps   'muse-blosxom-markup-regexps
-		     :header    'muse-blosxom-header
-		     :footer    'muse-blosxom-footer))
-
-;;; Maintain (published-file . date) alist
+;; Maintain (published-file . date) alist
 
 (defvar muse-blosxom-page-date-alist nil)
 
@@ -147,6 +133,70 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
        'muse-blosxom-page-date-alist
        `(,buffer-file-name . ,date))))
   "")
+
+;; Enter a new blog entry
+
+(defcustom muse-blosxom-base-directory "~/Blog"
+  "Base directory of blog entries, used by `muse-blosxom-new-entry'."
+  :type 'directory
+  :group 'muse-blosxom)
+
+(defun muse-blosxom-get-categories (&optional base)
+  "Retrieve all of the categories from a Blosxom project.
+The base directory is specified by BASE, and defaults to
+`muse-blosxom-base-directory'.
+
+Directories starting with \".\" will be ignored."
+  (unless base (setq base muse-blosxom-base-directory))
+  (let (list dir)
+    (dolist (file (directory-files base t "^[^.]"))
+      (when (file-directory-p file)     ; must be a directory
+        (setq dir (file-name-nondirectory file))
+        (push dir list)
+        (nconc list (mapcar #'(lambda (item)
+                                (concat dir "/" item))
+                            (muse-blosxom-get-categories file)))))
+    list))
+
+(defun muse-blosxom-title-to-file (title)
+  "Derive a file name from the given TITLE.
+
+Feel free to overwrite this if you have a different concept of what
+should be allowed in a filename."
+  (replace-regexp-in-string (concat "[^-." muse-regexp-alnum "]")
+                            "_" (downcase title)))
+
+(defun muse-blosxom-new-entry (category title)
+  "Start a new blog entry with given CATEGORY.
+The filename of the blog entry is derived from TITLE.
+The page will be initialized with the current date and TITLE."
+  (interactive
+   (list
+    (completing-read "Category: " (muse-blosxom-get-categories))
+    (read-string "Title: ")))
+  (let ((file (muse-blosxom-title-to-file title)))
+    (muse-project-find-file
+     file "blosxom" nil
+     (concat (directory-file-name muse-blosxom-base-directory)
+             "/" category)))
+  (goto-char (point-min))
+  (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
+          "\n#title " title
+          "\n\n")
+  (forward-line 2))
+
+;; Register the BLOSXOM Publisher
+
+(unless (assoc "blosxom-html" muse-publishing-styles)
+  (muse-derive-style "blosxom-html" "html"
+                     :suffix    'muse-blosxom-extension
+                     :header    'muse-blosxom-header
+                     :footer    'muse-blosxom-footer)
+
+  (muse-derive-style "blosxom-xhtml" "xhtml"
+                     :suffix    'muse-blosxom-extension
+                     :header    'muse-blosxom-header
+                     :footer    'muse-blosxom-footer))
 
 (provide 'muse-blosxom)
 

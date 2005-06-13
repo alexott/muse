@@ -111,49 +111,6 @@ autofill."
                 (add-to-list 'fill-nobreak-predicate
                              'my-muse-mode-fill-nobreak-p))))
 
-;; Start a new blog entry
-
-(defvar my-muse-blosxom-base-directory "~/proj/wiki/blog"
-  "Base directory of blog entries.")
-
-(defun my-muse-blosxom-get-categories ()
-  "Retrieve all of the categories from a Blosxom project.
-Currently it is hard-coded to get the base directory from
-`my-muse-blosxom-base-directory'.
-
-Directories starting with \".\" will be ignored."
-  (let (list)
-    (dolist (file (directory-files my-muse-blosxom-base-directory
-                                   t "^[^.]"))
-      (when (file-directory-p file)     ; must be a directory
-        (push (file-name-nondirectory file) list)))
-    list))
-
-(defun my-muse-blosxom-title-to-file (title)
-  "Derive a file name from the given TITLE."
-  (replace-regexp-in-string "[ ,.:;']" "_"
-                            (downcase title)))
-
-(defun my-muse-blosxom-new-entry (category title)
-  "Start a new blog entry with given CATEGORY.
-The filename of the blog entry is derived from TITLE.
-The page will be initialized with the current date and TITLE."
-  (interactive
-   (list
-    (completing-read "Category: " (my-muse-blosxom-get-categories)
-                     nil nil nil nil "personal")
-    (read-string "Title: ")))
-  (let ((file (my-muse-blosxom-title-to-file title)))
-    (muse-project-find-file
-     file "blosxom" nil
-     (concat (directory-file-name my-muse-blosxom-base-directory)
-             "/" category)))
-  (goto-char (point-min))
-  (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
-          "\n#title " title
-          "\n\n")
-  (forward-line 2))
-
 ;; Make the current file display correctly in Xanga
 
 (defun my-muse-blosxom-finalize (file output-path target)
@@ -214,11 +171,11 @@ If FILE is not specified, use the current file."
 
 ;;; Key customizations
 
-(global-set-key "\C-cpl" 'my-muse-blosxom-new-entry)
+(global-set-key "\C-cpl" 'muse-blosxom-new-entry)
 (global-set-key "\C-cpL"
-                (lambda ()
-                  (interactive)
-                  (find-file "~/proj/wiki/blog")))
+                #'(lambda ()
+                    (interactive)
+                    (find-file muse-blosxom-base-directory)))
 
 ;;; Custom variables
 

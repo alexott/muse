@@ -2,6 +2,43 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-13 00:41:10 GMT	Michael Olson <mwolson@gnu.org>	patch-52
+
+    Summary:
+      Add ability to automate the creation a new blosxom entry.
+    Revision:
+      muse--main--1.0--patch-52
+
+    * examples/mwolson/muse-init.el: Move new entry section to
+      muse-blosxom.el.  Modify the key settings in my example accordingly.
+    
+    * muse-blosxom.el (muse-blosxom-footer): Just use the empty string, since
+      Muse always makes sure that the file ends with a newline.
+    
+    * muse-blosxom.el (muse-blosxom-markup-regexps): Remove this, since
+      planner markup is now provided automatically by the planner port to
+      Muse, and we don't have any customized markup.
+    
+    * muse-blosxom.el (muse-blosxom-base-directory): New customizable
+      variable that specifies where the base directory of your blog entries
+      is found.
+    
+    * muse-blosxom.el (muse-blosxom-get-categories): Get the categories from
+      the base directory.  Explore categories recursively.
+    
+    * muse-blosxom.el (muse-blosxom-title-to-file): Helper function for
+      `muse-blosxom-new-entry'.  Turns the given title into a lowercase, sans
+      special characters file name.
+    
+    * muse-blosxom.el (muse-blosxom-new-entry): Automate the process of
+      making a new blog entry.  It will prompt you for a category, then a
+      title, and then will create a new file that has the date and title
+      inserted.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el muse-blosxom.el
+
+
 2005-06-12 22:11:20 GMT	Michael Olson <mwolson@gnu.org>	patch-51
 
     Summary:
