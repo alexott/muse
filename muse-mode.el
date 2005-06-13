@@ -46,9 +46,10 @@
 (autoload 'muse-use-font-lock "muse-colors")
 
 (require 'derived)
-(condition-case nil
-    (require 'pcomplete)		; load if available
-  (error nil))
+(eval-when-compile
+  (condition-case nil
+      (require 'pcomplete)		; load if available
+    (error nil)))
 
 ;;; Options:
 

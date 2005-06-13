@@ -700,7 +700,7 @@ the file is published no matter what."
   (if (= (line-beginning-position) (match-beginning 0))
       ""
     (let ((footnote (save-match-data
-		      (string-to-int (match-string 1))))
+		      (string-to-number (match-string 1))))
 	  footnotemark)
       (delete-region (match-beginning 0) (match-end 0))
       (save-excursion
@@ -920,7 +920,7 @@ like read-only from being inadvertently deleted."
   (set (make-local-variable 'muse-publish-generate-contents)
        (cons (copy-marker (point) t)
 	     (let ((depth (cdr (assoc "depth" attrs))))
-	       (or (and depth (string-to-int depth)) 2)))))
+	       (or (and depth (string-to-number depth)) 2)))))
 
 (defun muse-publish-verse-tag (beg end)
   (save-excursion

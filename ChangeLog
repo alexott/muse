@@ -2,6 +2,43 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-13 01:13:08 GMT	Michael Olson <mwolson@gnu.org>	patch-53
+
+    Summary:
+      Minor code cleanup to address elint issues.
+    Revision:
+      muse--main--1.0--patch-53
+
+    * Makefile (test): Don't build README files during this rule.  Remove
+      spurious "make clean" statement.
+    
+    * muse-colors.el (muse-colors-tags): Make sure that this appears in the
+      `muse-colors' group, and give it a proper type.
+    
+    * muse-mode.el: Wrap condition-case around `eval-when-compile'.
+    
+    * examples/johnw/muse-johnw.el (muse-my-html-insert-contents,
+      muse-my-journal-find-entries): Replace `string-to-int' with
+      `string-to-number'.
+    
+    * muse-html.el (muse-html-insert-contents): Ditto.
+    
+    * muse-journal.el (muse-journal-html-munge-buffer,
+      muse-journal-latex-munge-buffer): Ditto.
+    
+    * muse-journal.el (muse-journal-rss-munge-buffer): Ditto.
+    
+    * muse-publish.el (muse-publish-markup-footnote,
+      muse-publish-contents-tag): Ditto.
+    
+    * muse-regexps.el (muse-extreg-usable-p): Ditto.
+
+    modified files:
+     ChangeLog Makefile examples/johnw/muse-johnw.el muse-colors.el
+     muse-html.el muse-journal.el muse-mode.el muse-publish.el
+     muse-regexps.el
+
+
 2005-06-13 00:41:10 GMT	Michael Olson <mwolson@gnu.org>	patch-52
 
     Summary:

@@ -50,7 +50,7 @@ options."
           ;; don't use if version is of format 21.x
           ((null (match-string 1 emacs-version)) nil)
           ;; don't trust the 21.3.1 release or its predecessors
-          ((> (string-to-int (match-string 1 emacs-version)) 1) t)
+          ((> (string-to-number (match-string 1 emacs-version)) 1) t)
           (t nil))))
 
 (defgroup muse-regexp nil

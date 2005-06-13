@@ -488,7 +488,7 @@ if not escaped."
       (catch 'done
 	(while (re-search-forward "^<h\\([0-9]+\\)>\\(.+?\\)</h\\1>" nil t)
 	  (unless (get-text-property (point) 'read-only)
-	    (setq l (1- (string-to-int (match-string 1))))
+	    (setq l (1- (string-to-number (match-string 1))))
 	    (if (null base)
 		(setq base l)
 	      (if (< l base)

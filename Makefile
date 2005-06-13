@@ -29,8 +29,7 @@ clean:
 realclean distclean fullclean: clean
 	-rm -f README.* missfont.log
 
-test: fullclean $(TARGETS) $(ELC)
-	make clean
+test: fullclean $(ELC)
 	emacs -q -batch -L . -l scripts/muse-build.el \
 		-f muse-elint-files muse-*.el
 

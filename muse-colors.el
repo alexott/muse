@@ -349,7 +349,12 @@ allowed, they are passed as a third argument in the form of an
 alist. The `end' argument to the function is the last character
 of the enclosed tag or region.
 
-Functions should not modify the contents of the buffer.")
+Functions should not modify the contents of the buffer."
+  :type '(repeat (list (string :tag "Markup tag")
+		       (boolean :tag "Expect closing tag" :value t)
+		       (boolean :tag "Parse attributes" :value nil)
+		       function))
+  :group 'muse-colors)
 
 (defsubst muse-colors-tag-info (tagname &rest args)
   (assoc tagname muse-colors-tags))
