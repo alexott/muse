@@ -143,52 +143,86 @@ whether progress messages should be displayed to the user."
   (defvar end))
 
 (defun muse-colors-emphasized ()
-  ;; here we need to check four different points - the start and end of the
-  ;; leading *s, and the start and end of the trailing *s. we allow the
-  ;; outsides to be surrounded by whitespace or punctuation, but no word
-  ;; characters, and the insides must not be surrounded by whitespace or
-  ;; punctuation. thus the following are valid:
+  ;; Here we need to check four different points - the start and end
+  ;; of the leading *s, and the start and end of the trailing *s.  We
+  ;; allow the outsides to be surrounded by whitespace or punctuation,
+  ;; but no word characters, and the insides must not be surrounded by
+  ;; whitespace or punctuation.  Thus the following are valid:
+  ;;
   ;; " *foo bar* "
   ;; "**foo**,"
   ;; and the following is invalid:
   ;; "** testing **"
   (let* ((beg (match-beginning 0))
-	 (e1 (match-end 0))
-	 (leader (- e1 beg))
-	 b2 e2 multiline)
+         (e1 (match-end 0))
+         (leader (- e1 beg))
+         b2 e2 multiline)
     (unless (get-text-property beg 'invisible)
       ;; check if it's a header
       (if (eq (char-after e1) ?\ )
-	  (if (or (= beg (point-min))
-		  (eq (char-before beg) ?\n))
-	      (add-text-properties
-	       (line-beginning-position) (line-end-position)
-	       (list 'face (intern (concat "muse-header-"
-					   (int-to-string leader))))))
-	(save-excursion
-	  (skip-chars-forward "^*\n" end)
-	  (when (eq (char-after) ?\n)
-	    (setq multiline t)
-	    (skip-chars-forward "^*" end))
-	  (setq b2 (point))
-	  (skip-chars-forward "*" end)
-	  (setq e2 (point))
-	  (add-text-properties beg e1 '(invisible t))
-	  (add-text-properties
-	   e1 b2 (list 'face (cond ((= leader 1) 'italic)
-				   ((= leader 2) 'bold)
-				   ((= leader 3) 'bold-italic))))
-	  (add-text-properties b2 e2 '(invisible t))
-	  (goto-char e1)
-	  (if multiline
-	      (add-text-properties beg e2 '(font-lock-multiline t))))))))
+          (when (or (= beg (point-min))
+                    (eq (char-before beg) ?\n))
+            (add-text-properties
+             (line-beginning-position) (line-end-position)
+             (list 'face (intern (concat "muse-header-"
+                                         (int-to-string leader))))))
+        ;; beginning of line or space or symbol
+        (when (or (= beg (point-min))
+                  (memq (char-syntax (char-before beg)) '(?\  ?\-))
+                  (memq (char-before beg)
+                        '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
+          (save-excursion
+            (skip-chars-forward "^*<>\n" end)
+            (when (eq (char-after) ?\n)
+              (setq multiline t)
+              (skip-chars-forward "^*<>" end))
+            (setq b2 (point))
+            (skip-chars-forward "*" end)
+            (setq e2 (point))
+            ;; Abort if space exists just before end
+            ;; or bad leader
+            ;; or no '*' at end
+            (unless (or (> leader 3)
+                        (not (eq leader (- e2 b2)))
+                        (eq (char-before b2) ?\ )
+                        (not (eq (char-after b2) ?*)))
+              (add-text-properties beg e1 '(invisible t))
+              (add-text-properties
+               e1 b2 (list 'face (cond ((= leader 1) 'italic)
+                                       ((= leader 2) 'bold)
+                                       ((= leader 3) 'bold-italic))))
+              (add-text-properties b2 e2 '(invisible t))
+              (when multiline
+                (add-text-properties
+                 beg e2 '(font-lock-multiline t))))))))))
 
 (defun muse-colors-underlined ()
-  (let ((start (match-beginning 0)))
-    (when (search-forward "_" end t)
-      (add-text-properties start (+ start 1) '(invisible t))
-      (add-text-properties (+ start 1) (match-beginning 0) '(face underline))
-      (add-text-properties (match-beginning 0) (match-end 0) '(invisible t)))))
+  (let ((start (match-beginning 0))
+        multiline)
+    (unless (get-text-property start 'invisible)
+      ;; beginning of line or space or symbol
+      (when (or (= start (point-min))
+                (memq (char-syntax (char-before start)) '(?\  ?\-))
+                (memq (char-before start)
+                      '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
+        (save-excursion
+          (skip-chars-forward "^_<>\n" end)
+          (when (eq (char-after) ?\n)
+            (setq multiline t)
+            (skip-chars-forward "^_<>" end))
+          ;; Abort if space exists just before end
+          ;; or no '_' at end
+          (unless (or (eq (char-before (point)) ?\ )
+                      (not (eq (char-after (point)) ?_)))
+            (add-text-properties start (1+ start) '(invisible t))
+            (add-text-properties (1+ start) (point) '(face underline))
+            (add-text-properties (point)
+                                 (min (1+ (point)) (point-max))
+                                 '(invisible t))
+            (when multiline
+              (add-text-properties
+               start (min (1+ (point)) (point-max))
+               '(font-lock-multiline t)))))))))
 
 (defun muse-colors-verbatim ()
   (skip-chars-forward (concat "^" muse-regexp-space "=>") end))

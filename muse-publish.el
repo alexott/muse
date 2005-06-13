@@ -626,6 +626,7 @@ the file is published no matter what."
 	 open-tag close-tag mark-read-only loc multi-line)
     (cond
      ((string= leader "_")
+      (setq multi-line t)
       (setq open-tag (muse-markup-text 'begin-underline)
 	    close-tag (muse-markup-text 'end-underline)))
      ((string= leader "=")

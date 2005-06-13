@@ -157,7 +157,7 @@ differs little between the various styles."
     (goto-char (match-beginning 0))
     (when (save-excursion
             (save-match-data
-              (and (re-search-backward "<\\(/\\)?para[ >]" nil t)
+              (and (re-search-backward "<\\(/?\\)para[ >]" nil t)
                    (not (string-equal (match-string 1) "/")))))
       (insert "</para>"))
     (goto-char end))

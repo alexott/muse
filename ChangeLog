@@ -2,6 +2,44 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-13 22:01:00 GMT	Michael Olson <mwolson@gnu.org>	patch-54
+
+    Summary:
+      WYSIWYG emphasis, XEmacs compatibility hacks.
+    Revision:
+      muse--main--1.0--patch-54
+
+    * muse-colors.el (muse-colors-emphasized): Make emphasis more WYSIWIG
+      compliant.  Only colorize if we end with the same number of asterisks
+      as we start with, preventing unnoticed syntax errors.  Don't colorize
+      in the middle of a word.
+      (muse-colors-underlined): Make underlining more WYSIWIG compliant.
+      Only colorize if we end with an underscore.  Don't colorize in the
+      middle of a word.
+    
+    * muse-docbook.el (muse-docbook-markup-paragraph): Move question mark
+      inside of group.  This will probably not do anything, but it seems
+      syntactically good.
+    
+    * muse-html.el (muse-html-markup-paragraph): Attempt to deal with case
+      where we start with an image link.  JohnW didn't seem to like having
+      <p> tags inserted before image links, but they don't validate properly
+      as they are.  For now, I will surround such links/paragraphs with <div
+      class="image-link"> in an attempt to be as not invasive and yet
+      standards compliant as possible.
+    
+    * muse-html.el (muse-html-escape-string): Work around distinction between
+      int and char types in XEmacs.  Deal with an annoying replace-match bug
+      in XEmacs that rears its head at times.
+    
+    * muse-publish.el (muse-publish-markup-word): Allow underlines to be
+      multi-line.
+
+    modified files:
+     ChangeLog muse-colors.el muse-docbook.el muse-html.el
+     muse-publish.el
+
+
 2005-06-13 01:13:08 GMT	Michael Olson <mwolson@gnu.org>	patch-53
 
     Summary:
