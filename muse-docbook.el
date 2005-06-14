@@ -35,7 +35,7 @@
 (require 'muse-regexps)
 
 (defgroup muse-docbook nil
-  "Options controlling the behaviour of Muse DocBook XML publishing.
+  "Options controlling the behavior of Muse DocBook XML publishing.
 See `muse-docbook' for more information."
   :group 'muse-publish)
 

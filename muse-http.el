@@ -37,7 +37,7 @@
 (require 'cgi)
 
 (defgroup muse-http nil
-  "Options controlling the behaviour of Emacs Muse over HTTP."
+  "Options controlling the behavior of Emacs Muse over HTTP."
   :group 'press)
 
 (defcustom muse-http-maintainer (concat "webmaster@" (system-name))

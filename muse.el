@@ -54,7 +54,7 @@
   (message muse-version))
 
 (defgroup muse nil
-  "Options controlling the behaviour of Muse.
+  "Options controlling the behavior of Muse.
 The markup used by Muse is intended to be very friendly to people
 familiar with Emacs."
   :group 'hypermedia)

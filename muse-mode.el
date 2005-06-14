@@ -54,7 +54,7 @@
 ;;; Options:
 
 (defgroup muse-mode nil
-  "Options controlling the behaviour of the Muse editing Mode.
+  "Options controlling the behavior of the Muse editing Mode.
 See `muse-publish' for more information."
   :group 'muse)
 

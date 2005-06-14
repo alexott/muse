@@ -31,16 +31,7 @@
 
 ;;; Commentary:
 
-;; This file is the part of the Muse project that describes regexps
-;; that are used throughout the project.
-
-;;;_ + Startup
-
-;; To be written.
-
-;;;_ + Usage
-
-;;;_ + Contributors
+;;; Contributors:
 
 ;; Lan Yufeng (nlany DOT web AT gmail DOT com) found an error where
 ;; headings were being given the wrong face, contributing a patch to
@@ -59,35 +50,72 @@
 (require 'font-lock)
 
 (defgroup muse-colors nil
-  "Options controlling the behaviour of Emacs Muse highlighting.
+  "Options controlling the behavior of Emacs Muse highlighting.
 See `muse-colors-buffer' for more information."
   :group 'muse-mode)
 
+(defcustom muse-colors-autogen-headings t
+  "Specify whether the heading faces should be auto-generated.
+The default is to scale them.
+
+Choosing 'outline will copy the colors from the outline-mode
+headings.
+
+If you want to customize each of the headings individually, set
+this to nil."
+  :type '(choice (const :tag "Default (scaled) headings" t)
+                 (const :tag "Use outline-mode headings" outline)
+                 (const :tag "Don't touch the headings" nil))
+  :group 'muse-colors)
+
+(defvar muse-colors-outline-faces-list
+  (if (facep 'outline-1)
+      '(outline-1 outline-2 outline-3 outline-4)
+    ;; These are supposed to be equivalent in coloring
+    '(font-lock-function-name-face
+      font-lock-variable-name-face
+      font-lock-keyword-face
+      font-lock-builtin-face))
+  "Outline faces to use when assigning Muse header faces.")
+
 (defun muse-make-faces ()
-  (mapc (lambda (newsym)
-	  (let (num)
-	    (setq num newsym)
-	    (setq newsym (intern (concat "muse-header-"
-					 (int-to-string num))))
-	    (cond
-	     ((featurep 'xemacs)
-	      (eval `(defface ,newsym
-		       '((t (:size
-			     ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt"))
-			     :bold t)))
-		       "Muse header face"
-		       :group 'muse-colors)))
-	     ((< emacs-major-version 21)
-	      (copy-face 'default newsym))
-	     (t
-	      (eval `(defface ,newsym
-		       '((t (:height ,(1+ (* 0.1 (- 5 num)))
-				     :inherit variable-pitch
-				     :weight bold)))
-		       "Muse header face"
-		       :group 'muse-colors))))))
-	'(1 2 3 4)))
-(muse-make-faces)
+  (dolist (num '(1 2 3 4))
+    (setq newsym (intern (concat "muse-header-"
+                                 (int-to-string num))))
+    (cond
+     ((null muse-colors-autogen-headings)
+      (make-empty-face newsym))
+     ((featurep 'xemacs)
+      (if (eq muse-colors-autogen-headings 'outline)
+          (copy-face (nth (1- num)
+                          muse-colors-outline-faces-list)
+                     newsym)
+        (eval `(defface ,newsym
+                 '((t (:size
+                       ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt"))
+                       :bold t)))
+                 "Muse header face"
+                 :group 'muse-colors))))
+     ((< emacs-major-version 21)
+      (if (eq muse-colors-autogen-headings 'outline)
+          (copy-face (nth (1- num)
+                          muse-colors-outline-faces-list)
+                     newsym)
+        (copy-face 'default newsym)))
+     ((eq muse-colors-autogen-headings 'outline)
+      (eval `(defface ,newsym
+               '((t (:inherit
+                     ,(nth (1- num)
+                           muse-colors-outline-faces-list))))
+               "Muse header face"
+               :group 'muse-colors)))
+     (t
+      (eval `(defface ,newsym
+               '((t (:height ,(1+ (* 0.1 (- 5 num)))
+                             :inherit variable-pitch
+                             :weight bold)))
+               "Muse header face"
+               :group 'muse-colors))))))
 
 (defface muse-link-face
   '((((class color) (background light))
@@ -308,6 +336,7 @@ affect the match data results."
        'muse-colors-region)
   (set (make-local-variable 'font-lock-unfontify-region-function)
        'muse-unhighlight-region)
+  (muse-make-faces)
   (font-lock-mode t))
 
 (defun muse-colors-buffer ()

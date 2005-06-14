@@ -54,8 +54,7 @@ options."
           (t nil))))
 
 (defgroup muse-regexp nil
-  "Options relating to regular expressions as used in publishing
-and syntax highlighting."
+  "Regular expressions used in publishing and syntax highlighting."
   :group 'muse)
 
 (defcustom muse-regexp-blank

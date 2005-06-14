@@ -2,6 +2,88 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-14 03:08:54 GMT	Michael Olson <mwolson@gnu.org>	patch-56
+
+    Summary:
+      Provide optional outline-style faces; customization fixes; experimental stuff.
+    Revision:
+      muse--main--1.0--patch-56
+
+    * muse-colors.el (muse-colors-autogen-headings): New user-customizable
+      option that determines what the header faces should look like.  If
+      'outline, use outline-style faces.  If nil, don't generate the faces at
+      all, which allows the user to specify their own.  Otherwise, use the
+      scaled faces, which is the default behavior.
+      (muse-colors-outline-faces-list): List of faces to use.  In case the
+      outline faces are not available, provide reasonable defaults.
+      (muse-make-faces): Use dolist instead of mapc.  Implement the
+      possibility of having outline-style colors for heading.  Don't call
+      this function immediately -- give the users time to make their changes
+      through the customize interface.  Once we call this function, Emcs from
+      CVS will not allow the faces to be changed easily, which is a shame.
+    
+    * muse-message.el (muse-message-contents-tag): Copied from
+      `muse-publish-contents-tag' in order to keep the customization
+      interface from making the `muse-markup-tags' option from throwing a
+      type mismatch error.  This function is untested and will likely do
+      nothing useful.  This file has been moved to the experimental folder
+      until it gets fleshed out more.
+    
+    * experimental/muse-wiki.el: New file from johnw's initial attempt at a
+      file that could eventually provide wiki-like ability.  Currently this
+      is just a collection of functions that were pruned out when he remade
+      Muse, so don't get too excited.  I plan to eventually merge Yann
+      Hodique's work here, probably after the first release of Muse.
+    
+    * muse-regexps.el (muse-regexp): Improve description.
+    
+    * muse-project.el (muse-project-ignore-regexp): Make this be a part of
+      the muse-regexp group since it is just a single regexp.  Lists of
+      regexps don't have to be in muse-regexp, however.
+    
+    * muse-blosxom.el (muse-blosxom): Change use of `behaviour' to `behavior'
+      since the Emacs devel mailing list seems to not want Britain-izations
+      in Emacs code.
+    
+    * muse-colors.el (muse-colors): Ditto.
+    
+    * muse-docbook.el (muse-docbook): Ditto.
+    
+    * muse-html.el (muse-html): Ditto.
+    
+    * muse-http.el (muse-http): Ditto.
+    
+    * muse-message.el (muse-message): Ditto.
+    
+    * muse-mode.el (muse-mode): Ditto.
+    
+    * muse-project.el (muse-project): Ditto.
+    
+    * muse-publish.el (muse-publish): Ditto.
+    
+    * muse.el (muse): Ditto.
+
+    new files:
+     experimental/.arch-ids/=id
+     experimental/.arch-ids/muse-wiki.el.id
+     experimental/muse-wiki.el
+
+    modified files:
+     ChangeLog experimental/muse-message.el muse-blosxom.el
+     muse-colors.el muse-docbook.el muse-html.el muse-http.el
+     muse-mode.el muse-project.el muse-publish.el muse-regexps.el
+     muse.el
+
+    renamed files:
+     .arch-ids/muse-message.el.id
+       ==> experimental/.arch-ids/muse-message.el.id
+     muse-message.el
+       ==> experimental/muse-message.el
+
+    new directories:
+     experimental experimental/.arch-ids
+
+
 2005-06-13 22:37:20 GMT	Michael Olson <mwolson@gnu.org>	patch-55
 
     Summary:

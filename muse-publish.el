@@ -38,7 +38,7 @@
 (require 'muse-regexps)
 
 (defgroup muse-publish nil
-  "Options controlling the general behaviour of Muse publishing.
+  "Options controlling the general behavior of Muse publishing.
 See `muse-publish' for more information."
   :group 'muse)
 

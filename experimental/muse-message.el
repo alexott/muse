@@ -21,6 +21,8 @@
 
 ;;; Commentary:
 
+;; This file is in experimental status due to unimplemented features.
+;;
 ;; To make use of this file, put (require 'muse-message) in your .emacs.
 ;;
 ;; By default, the way to mark up an email message is to do the
@@ -62,7 +64,7 @@
 (require 'muse-html)
 
 (defgroup muse-message nil
-  "Options controlling the behaviour of Emacs Wiki Mail Markup."
+  "Options controlling the behavior of Emacs Wiki Mail Markup."
   :group 'hypermedia
   :group 'muse-publish)
 
@@ -192,6 +194,14 @@ See the documentation for `muse-publish-markup-tags'."
   (kill-line -1)
   (string-rectangle beg (point) muse-message-indent)
   (muse-publish-mark-read-only beg (point)))
+
+;; Copied from `muse-publish-contents-tag'.
+;; FIXME: Make this do something worthwhile.
+(defun muse-message-contents-tag (beg end attrs)
+  (set (make-local-variable 'muse-publish-generate-contents)
+       (cons (copy-marker (point) t)
+             (let ((depth (cdr (assoc "depth" attrs))))
+               (or (and depth (string-to-number depth)) 2)))))
 
 ;;;###autoload
 (defun muse-message-markup ()

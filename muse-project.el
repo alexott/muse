@@ -35,7 +35,7 @@
 (require 'muse-publish)
 
 (defgroup muse-project nil
-  "Options controlling the behaviour of Muse project handling."
+  "Options controlling the behavior of Muse project handling."
   :group 'muse)
 
 (defcustom muse-before-project-publish-hook nil
@@ -66,7 +66,7 @@ when publishing files in that project."
   "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\)\\'"
   "A regexp matching files to be ignored in Wiki directories."
   :type 'regexp
-  :group 'muse-project)
+  :group 'muse-regexps)
 
 (defvar muse-current-project nil)
 (make-variable-buffer-local 'muse-current-project)

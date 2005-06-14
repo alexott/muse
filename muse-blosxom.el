@@ -100,7 +100,7 @@
 (require 'muse-html)
 
 (defgroup muse-blosxom nil
-  "Options controlling the behaviour of Muse BLOSXOM publishing.
+  "Options controlling the behavior of Muse BLOSXOM publishing.
 See `muse-blosxom' for more information."
   :group 'muse-publish)
 
