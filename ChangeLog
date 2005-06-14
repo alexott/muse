@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-14 03:14:05 GMT	Michael Olson <mwolson@gnu.org>	patch-57
+
+    Summary:
+      Update my example configuration.
+    Revision:
+      muse--main--1.0--patch-57
+
+    * examples/mwolson/muse-init.el: Update to reflect use of outline faces
+      and experimental status of muse-message.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el
+
+
 2005-06-14 03:08:54 GMT	Michael Olson <mwolson@gnu.org>	patch-56
 
     Summary:

@@ -13,12 +13,13 @@
   (debian-pkg-add-load-path-item "/stuff/proj/emacs/muse/mwolson"))
 
 ;; Initialize
+(require 'outline)       ; I like outline-style faces
 (require 'muse)          ; load generic module
 (require 'muse-colors)   ; load coloring/font-lock module
 (require 'muse-mode)     ; load authoring mode
 (require 'muse-blosxom)  ; load blosxom module
 (require 'muse-html)     ; load (X)HTML publishing style
-(require 'muse-message)  ; load message support
+;;(require 'muse-message)  ; load message support (experimental)
 
 ;; Setup projects
 
@@ -180,7 +181,9 @@ If FILE is not specified, use the current file."
 ;;; Custom variables
 
 (custom-set-variables
+ '(muse-blosxom-base-directory "~/proj/wiki/blog/")
  '(muse-blosxom-publishing-directory "~/personal-site/site/blog")
+ '(muse-colors-autogen-headings (quote outline))
  '(muse-html-charset-default "utf-8")
  '(muse-html-encoding-default (quote utf-8))
  '(muse-html-meta-content-encoding (quote utf-8))
@@ -190,6 +193,7 @@ If FILE is not specified, use the current file."
  '(muse-xhtml-footer "~/personal-site/muse/footer.html")
  '(muse-xhtml-header "~/personal-site/muse/header.html"))
 (custom-set-faces
+ '(muse-bad-link-face ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold))))
  '(muse-link-face ((t (:foreground "blue" :underline "blue" :weight bold)))))
 
 ;;; muse-init.el ends here
