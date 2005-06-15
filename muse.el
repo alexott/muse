@@ -4,8 +4,8 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.00 ALPHA
-;; Date: Thu 11-Mar-2004
+;; Version: 3.00.90 (RC1)
+;; Date: Thu 15-Jun-2005
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
@@ -38,14 +38,14 @@
 ;; Texinfo, etc.
 
 ;; The markup rules used by Muse are intended to be very friendly to
-;; people familiar with Emacs.  See the included README file for more
-;; information.
+;; people familiar with Emacs.  See the included README file in the
+;; `examples' directory for more information.
 
 ;;; Contributors:
 
 ;;; Code:
 
-(defvar muse-version "3.00 ALPHA"
+(defvar muse-version "3.00.90 (RC1)"
   "The version of Muse currently loaded")
 
 (defun muse-version ()

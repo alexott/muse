@@ -8,6 +8,16 @@ Muse consists of two main parts: an enhanced text-mode for authoring
 documents and navigating within Muse projects, and a set of publishing
 styles for generating different kinds of output.
 
+* About this document
+
+This document provides an example of Muse markup and also functions as
+a quickstart for Muse.
+
+To see what it looks like when published, type =make examples=.  You
+will then get an Info document, an HTML document, and a PDF document
+(provided you have an implementation of LaTeX installed with the
+necessary fonts).
+
 <contents>
 
 * Getting Started

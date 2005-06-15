@@ -1,19 +1,11 @@
-EMACS   = emacs
-TARGETS = README.html README.pdf README.info
-ELC     = $(patsubst %.el,%.elc,$(wildcard *.el))
+.PHONY: all examples clean realclean distclean fullclean test dist
+EMACS    = emacs
+ELC      = $(patsubst %.el,%.elc,$(wildcard *.el))
 
 all: $(ELC)
 
-doc: $(TARGETS)
-
-%.html: %
-	./scripts/publish html $<
-
-%.pdf: %
-	./scripts/publish pdf $<
-
-%.info: %
-	./scripts/publish info $<
+examples:
+	(cd examples && $(MAKE))
 
 muse-build.elc: scripts/muse-build.el
 	@echo muse-build.el is not byte-compiled
@@ -25,9 +17,10 @@ muse-build.elc: scripts/muse-build.el
 
 clean:
 	-rm -f *.elc *~
+	(cd examples && $(MAKE) clean)
 
 realclean distclean fullclean: clean
-	-rm -f README.* missfont.log
+	(cd examples && $(MAKE) distclean)
 
 test: fullclean $(ELC)
 	emacs -q -batch -L . -l scripts/muse-build.el \
@@ -35,12 +28,3 @@ test: fullclean $(ELC)
 
 dist: clean
 	(cd ..; tar cvzf ~/Public/Emacs/muse.tar.gz muse)
-
-######################################################################
-
-# Makefile rules for Arabic transliteration tool
-
-CFLAGS = -g -DSTANDALONE
-
-atranslit: atranslit.cpp
-	g++ $(CFLAGS) -o $@ $<
