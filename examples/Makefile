@@ -1,6 +1,6 @@
 .PHONY: all examples clean realclean distclean fullclean
 EMACS    = emacs
-EXAMPLES = README.html README.pdf README.info
+EXAMPLES = QuickStart.html QuickStart.pdf QuickStart.info
 
 all: examples
 
@@ -19,4 +19,4 @@ clean:
 	-rm -f missfont.log
 
 realclean distclean fullclean: clean
-	-rm -f README.* 
+	-rm -f QuickStart.* 

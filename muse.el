@@ -38,8 +38,8 @@
 ;; Texinfo, etc.
 
 ;; The markup rules used by Muse are intended to be very friendly to
-;; people familiar with Emacs.  See the included README file in the
-;; `examples' directory for more information.
+;; people familiar with Emacs.  See the included QuickStart file in
+;; the `examples' directory for more information.
 
 ;;; Contributors:
 

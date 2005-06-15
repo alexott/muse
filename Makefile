@@ -11,7 +11,7 @@ muse-build.elc: scripts/muse-build.el
 	@echo muse-build.el is not byte-compiled
 
 %.elc: %.el
-	@$(EMACS) --no-init-file --no-site-file -batch \
+	@$(EMACS) -q --no-site-file -batch \
 		-l scripts/muse-build.el -L . \
 		-f batch-byte-compile $<
 

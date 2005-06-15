@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-15 23:50:12 GMT	Michael Olson <mwolson@gnu.org>	patch-59
+
+    Summary:
+      Release this as Muse 3.00.90 (RC1).
+    Revision:
+      muse--main--1.0--patch-59
+
+    * Makefile (%.elc): Use -q instead of --no-init-file because the former
+      is compatible with both Emacs and XEmacs.
+    
+    * examples/README: Renamed to QuickStart.
+    
+    * examples/Makefile (EXAMPLES): Reflect name change of README.
+    
+    * muse.el: Ditto.
+
+    modified files:
+     ChangeLog Makefile examples/Makefile muse.el
+
+    renamed files:
+     examples/.arch-ids/README.id
+       ==> examples/.arch-ids/QuickStart.id
+     examples/README
+       ==> examples/QuickStart
+
+
 2005-06-15 22:47:05 GMT	Michael Olson <mwolson@gnu.org>	patch-58
 
     Summary:
