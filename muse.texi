@@ -1,4 +1,5 @@
 \input texinfo @c -*-texinfo-*-
+@include{http://www.mwolson.org/default.css}
 @c %**start of header
 @setfilename muse.info
 @settitle Muse
@@ -46,25 +47,42 @@ under the terms of the GNU General Public License.
 @end ifnottex
 
 @menu
-* Preface::                     About the documentation
+* Preface::                     About the documentation.
 * Introduction::                What is Muse?
-* Installation::                How to get the stable and development versions
-* Getting Started::             
-* Projects::                    Creating a Muse project
-* Keystroke Summary::           
-* Getting Help and Reporting Bugs::  
-* History::                     
-* Contributors::                Contributors to this documentation
-* GNU General Public License::  
-* Concept Index::               
+* Installation::                How to get the stable and development
+                                  versions.
+* Getting Started::             Settings for Muse.
+* Projects::                    Creating a Muse project.
+* Keystroke Summary::           Keys used in Muse mode.
+* Markup Rules::                Rules for creating special markup.
+* Publishing::                  Publishing styles available in Muse.
+* Getting Help and Reporting Bugs::  Further ways of getting help.
+* History::                     History of this document.
+* Contributors::                Contributors to this documentation.
+* GNU General Public License::  The license for this manual and Muse.
+* Concept Index::               Search for terms.
 
 @detailmenu
  --- The Detailed Node Listing ---
 
 Installation
 
-* Releases::                    Released versions of Muse
-* Development::                 Latest unreleased changes
+* Releases::                    Released versions of Muse.
+* Development::                 Latest unreleased changes.
+
+Markup Rules
+
+* Paragraphs::                  Paragraphs: centering and quoting.
+* Headings::                    Levels of headings.
+* Emphasizing Text::            Bold, italicized, and underlined text.
+* Footnotes::                   Making notes to be shown at the end.
+* Verse::                       Indicating poetic stanzas.
+* Lists::                       Lists of items.
+* Tables::                      Generation of data tables.
+* Links::                       Hyperlinks and email addresses.
+* Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
+* Embedded Lisp::               Evaluating Emacs Lisp code in documents
+                                  for extensibility.
 
 @end detailmenu
 @end menu
@@ -112,8 +130,8 @@ special by default.
 @chapter Installation
 
 @menu
-* Releases::                    Released versions of Muse
-* Development::                 Latest unreleased changes
+* Releases::                    Released versions of Muse.
+* Development::                 Latest unreleased changes.
 @end menu
 
 @node Releases, Development, Installation, Installation
@@ -224,6 +242,7 @@ updated at the same time as the Arch repository.
 @node Getting Started, Projects, Installation, Top
 @comment  node-name,  next,  previous,  up
 @chapter Getting Started
+@cindex settings
 
 To use Muse, add the directory containing its files to your
 @code{load-path} variable, in your @file{.emacs} file.  Then, load in
@@ -278,7 +297,8 @@ output as HTML to the directory @file{~/public_html}, and as PDF to
 the directory @file{~/public_html/pdf}.  Within any project page, you
 may create a link to other pages using the syntax @samp{[[pagename]]}.
 
-@node Keystroke Summary, Getting Help and Reporting Bugs, Projects, Top
+
+@node Keystroke Summary, Markup Rules, Projects, Top
 @comment  node-name,  next,  previous,  up
 @chapter Keystroke Summary
 @cindex keystrokes
@@ -323,7 +343,331 @@ Move to the previous Wiki reference.
 @end table
 
 
-@node Getting Help and Reporting Bugs, History, Keystroke Summary, Top
+@node Markup Rules, Publishing, Keystroke Summary, Top
+@comment  node-name,  next,  previous,  up
+@chapter Markup Rules
+@cindex markup
+
+A Muse document uses special, contextual markup rules to determine how
+to format the output result.  For example, if a paragraph is indented,
+Muse assumes it should be quoted.
+
+There are not too many markup rules, and all of them strive to be as
+simple as possible so that you can focus on document creation, rather
+than formatting.
+
+@menu
+* Paragraphs::                  Paragraphs: centering and quoting.
+* Headings::                    Levels of headings.
+* Emphasizing Text::            Bold, italicized, and underlined text.
+* Footnotes::                   Making notes to be shown at the end.
+* Verse::                       Indicating poetic stanzas.
+* Lists::                       Lists of items.
+* Tables::                      Generation of data tables.
+* Links::                       Hyperlinks and email addresses.
+* Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
+* Embedded Lisp::               Evaluating Emacs Lisp code in documents
+                                  for extensibility.
+@end menu
+
+@node Paragraphs, Headings, Markup Rules, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Paragraphs
+@cindex paragraphs
+
+Paragraphs in Muse must be separated by a blank line.
+
+@cindex paragraphs, centered
+@strong{Centered paragraphs and quotations}
+
+A line that begins with six or more columns of whitespace (either tabs
+or spaces) indicates a centered paragraph.
+
+@cindex paragraphs, quoted
+@cindex quotations
+But if a line begins with whitespace, though less than six columns, it
+indicates a quoted paragraph.
+
+@cindex examples
+@cindex monospace, rendering blocks
+@cindex HTML, rendering blocks in monospace
+@strong{Literal paragraphs}
+
+The @verb{|<example>|} tag is used for examples, where whitespace should
+be preserved, the text rendered in monospace, and any characters special
+to the output style escaped.
+
+@cindex literal text
+@cindex HTML, inserting a raw block
+There is also the @verb{|<literal>|} tag, which causes a marked block to
+be entirely left alone.  This can be used for inserting a hand-coded
+HTML blocks into HTML output, for example.
+
+@node Headings, Emphasizing Text, Paragraphs, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Headings
+@cindex headings
+
+A heading becomes a chapter or section in printed output -- depending on
+the style.  To indicate a heading, start a new paragraph with one to
+three asterices, followed by a space and the heading title.  Then begin
+another paragraph to enter the text for that section.
+
+Only 3 levels of headings will be published as headings.  A fourth level
+of headings will be marked up, but displayed as plain text.
+
+@example
+* First level
+
+** Second level
+
+*** Third level
+@end example
+
+@node Emphasizing Text, Footnotes, Headings, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Emphasizing Text
+@cindex emphasizing text
+@cindex underlining text
+@cindex italicizing text
+@cindex verbatim text
+@cindex monospace, rendering words
+
+To emphasize text, surround it with certain specially recognized
+characters:
+
+@example
+*emphasis*
+**strong emphasis**
+***very strong emphasis***
+_underlined_
+=verbatim and monospace=
+@end example
+
+@cindex WYSIWYG
+While editing a Muse document in Muse mode, these forms of emphasis will
+be highlighted in a WYSIWYG manner.  Each of these forms may span
+multiple lines, with the exception of the verbatim and monospace form.
+
+@node Footnotes, Verse, Emphasizing Text, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Footnotes
+@cindex footnotes
+
+A footnote reference is simply a number in square brackets.  To define
+the footnote, place this definition at the bottom of your file.
+@samp{footnote-mode} can be used to greatly facilitate the creation of
+these kinds of footnotes.
+
+Footnotes are defined by the same number in brackets occurring at the
+beginning of a line.  Use footnote-mode's @kbd{C-c ! a} command, to very
+easily insert footnotes while typing.  Use @kbd{C-x C-x} to return to
+the point of insertion.
+
+@node Verse, Lists, Footnotes, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Verse
+@cindex verses
+@cindex poetry
+
+Poetry requires that whitespace be preserved, but without resorting to
+monospace.  To indicate this, use the following markup, reminiscent of
+email quotations:
+
+@example
+> A line of Emacs verse;
+>   forgive its being so terse.
+@end example
+
+You can also use the @verb{|<verse>|} tag, if you prefer:
+
+@example
+<verse>
+A line of Emacs verse;
+  forgive its being so terse.
+</verse>
+@end example
+
+Multiple stanzas may be included in one set of @verb{|<verse>|} tags, as
+follows.
+
+@cindex verses, multiple stanzas
+@example
+<verse>
+A line of Emacs verse;
+  forgive its being so terse.
+
+This a second stanza:
+Something longer should go here,
+But the author is out of ideas.
+</verse>
+@end example
+
+@node Lists, Tables, Verse, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Lists
+@cindex lists
+
+Lists are given using special characters at the beginning of a line.
+Whitespace must occur before bullets or numbered items, to distinguish
+from the possibility of those characters occurring in a real sentence.
+
+@cindex lists, bullets
+These are rendered as a bullet list:
+
+@example
+  - bullet item one
+  - bullet item two
+@end example
+
+@cindex lists, enumerated
+An enumerated list:
+
+@example
+  1. Enum item one
+  2. Enum item two
+@end example
+
+@cindex lists, definitions
+And a definition list:
+
+@example
+Term1 ::
+  This is a first definition
+  And it has two lines;
+  no, make that three.
+
+Term2 ::
+  This is a second definition
+@end example
+
+@node Tables, Links, Lists, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Tables
+@cindex tables
+
+@cindex tables, simple
+Only very simple tables are supported.  The syntax is:
+
+@example
+  Double bars  || Separate header fields
+
+  Single bars   | Separate body fields
+  Here are more | body fields
+
+  Triple bars ||| Separate footer fields
+@end example
+
+@node Links, Horizontal Rules and Anchors, Tables, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Links
+@cindex links
+
+@cindex links, explicit
+@strong{Explicit Links}
+
+A hyperlink can reference a URL, or another page within a Muse
+project.  In addition, descriptive text can be specified, which should
+be displayed rather than the link text in output styles that supports
+link descriptions.  The syntax is:
+
+@example
+[[link target][link description]]
+[[link target without description]]
+@end example
+
+Thus, the current maintainer's homepage for Muse can be found
+@samp{[[http://www.mwolson.org/projects/MuseMode.html][here]]},
+or at @samp{[[http://www.mwolson.org/projects/MuseMode.html]]}.
+
+@cindex images
+@cindex links, with images
+@strong{Image links}
+
+Links to images may be used in either the target or the description, or
+both.  Thus, the following code will publish as a clickable image that
+points to @url{http://www.mwolson.org/}.
+
+@example
+[[http://www.mwolson.org/][http://www.mwolson.org/static/logos/site-logo.png]]
+@end example
+
+@cindex images, local
+@cindex images, displaying
+If a link to a locally-available image is encountered in the link
+description, Muse mode will attempt to display it if your version of
+Emacs permits this.  The following example will display correctly and
+publish correctly if a @acronym{PNG} file called @file{TestLogo.png}
+exists in the @file{../pics/} directory.
+
+@example
+[[TestPage][../pics/TestLogo.png]]
+@end example
+
+@cindex images, without a description
+An image link is not required to have a description.  The link
+@samp{[[../myimage.png]]} will display and publish as expected.
+
+@cindex links, raw
+@cindex URLs
+@cindex Email addresses
+@cindex images, inlined
+@strong{Bare URLs and Email addresses}
+
+A URL or email address encountered in the input text is published as
+a hyperlink if the output style supports it.  If it is an image URL,
+it will be inlined if possible.
+
+@node Horizontal Rules and Anchors, Embedded Lisp, Links, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Horizontal Rules and Anchors
+
+@cindex horizontal rules
+@cindex dashes
+@strong{Horizontal Rules}
+
+Four or more dashes indicate a horizontal rule.  Be sure to put blank
+lines around it, or it will be considered part of the proceeding or
+following paragraph!
+
+@cindex anchors
+@cindex links, with target on same page
+@strong{Anchors}
+
+If you begin a line with "#anchor" -- where "anchor" can be any word
+that doesn't contain whitespace -- it defines an anchor at that point
+into the document.  This point can be referenced using "page#anchor" as
+the target in a Muse link.
+
+@node Embedded Lisp, , Horizontal Rules and Anchors, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Embedded Lisp
+@cindex lisp, embedded
+
+Arbitrary kinds of markup can be achieved using the @verb{|<lisp>|} tag,
+which is the only Muse tag supported in a style's header and footer
+text.  With the @verb{|<lisp>|} tag, you may generated whatever output
+text you wish.  The inserted output will get marked up, if the
+@verb{|<lisp>|} tag appears within the main text of the document.
+
+@example
+<lisp>(concat "This form gets " "inserted")</lisp>
+@end example
+
+@cindex lisp, and insert command
+Note that you should not use the @code{insert} command within a set of
+@verb{|<lisp>|} tags, since the return value from the @verb{|<lisp>|}
+tags will be automatically inserted into the document.
+
+@node Publishing, Getting Help and Reporting Bugs, Markup Rules, Top
+@comment  node-name,  next,  previous,  up
+@chapter Publishing
+@cindex publishing
+
+To be completed.
+
+
+@node Getting Help and Reporting Bugs, History, Publishing, Top
 @comment  node-name,  next,  previous,  up
 @chapter Getting Help and Reporting Bugs
 @cindex help, getting
