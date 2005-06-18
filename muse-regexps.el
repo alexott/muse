@@ -145,9 +145,9 @@ Paren group 1 must match the URL, and paren group 2 the description."
 
 (defcustom muse-url-regexp
   (concat "\\<\\(?:https?:/?/?\\|ftp:/?/?\\|gopher://\\|"
-	  "telnet://\\|wais://\\|file:/\\|s?news:\\|"
-	  "mailto:\\)"
-	  "[^]  \n \"'()<>[^`{}]*[^]    \n \"'()<>[^`{}.,;]+")
+          "telnet://\\|wais://\\|file:/\\|s?news:\\|"
+          "mailto:\\)"
+          "[^]  \n \"'()<>[^`{}]*[^]    \n \"'()<>[^`{}.,;]+")
   "A regexp used to match URLs within a Muse page."
   :type 'regexp
   :group 'muse-regexp)

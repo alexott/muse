@@ -195,12 +195,12 @@ the regular expressions can be a tricky business.  Note that case
 is never ignored.  `case-fold-search' is always bound to nil
 while processing the markup rules."
   :type '(repeat (choice
-		  (list :tag "Markup rule"
-			integer
-			(choice regexp symbol)
-			integer
-			(choice string function symbol))
-		  function))
+                  (list :tag "Markup rule"
+                        integer
+                        (choice regexp symbol)
+                        integer
+                        (choice string function symbol))
+                  function))
   :group 'muse-publish)
 
 (defcustom muse-publish-markup-functions
@@ -261,9 +261,9 @@ These tag rules are processed once at the beginning of markup, and
 once at the end, to catch any tags which may have been inserted
 in-between."
   :type '(repeat (list (string :tag "Markup tag")
-		       (boolean :tag "Expect closing tag" :value t)
-		       (boolean :tag "Parse attributes" :value nil)
-		       function))
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       function))
   :group 'muse-publish)
 
 (defcustom muse-publish-markup-specials nil
@@ -293,141 +293,141 @@ contents were requested.")
   (if (null style)
       muse-publishing-current-style
     (if (stringp style)
-	(assoc style muse-publishing-styles)
+        (assoc style muse-publishing-styles)
       (muse-assert (consp style))
       style)))
 
 (defun muse-define-style (name &rest elements)
   (let ((entry (assoc name muse-publishing-styles)))
     (if entry
-	(error "There is already a style named %s." name)
+        (error "There is already a style named %s." name)
       (setq muse-publishing-styles
-	    (cons (append (list name) elements)
-		  muse-publishing-styles)))))
+            (cons (append (list name) elements)
+                  muse-publishing-styles)))))
 
 (defun muse-derive-style (new-name base-name &rest elements)
   (let ((entry (assoc new-name muse-publishing-styles)))
     (if entry
-	(error "There is already a style named %s." new-name)
+        (error "There is already a style named %s." new-name)
       (apply 'muse-define-style new-name
-	     (append elements (list :base base-name))))))
+             (append elements (list :base base-name))))))
 
 (defsubst muse-get-keyword (keyword list &optional direct)
   (let ((value (cadr (memq keyword list))))
     (if (and (not direct) (symbolp value))
-	(symbol-value value)
+        (symbol-value value)
       value)))
 
 (defsubst muse-style-element (elem &optional style direct)
   (setq style (muse-style style))
   (let ((value (muse-get-keyword elem style direct)))
     (if value
-	value
+        value
       (let ((base (muse-get-keyword :base style)))
-	(if base
-	    (muse-style-element elem base direct))))))
+        (if base
+            (muse-style-element elem base direct))))))
 
 (defun muse-find-markup-element (keyword ident style)
   (let ((def (assq ident (muse-style-element keyword style))))
     (if def
-	(cdr def)
+        (cdr def)
       (let ((base (muse-style-element :base style)))
-	(if base
-	    (muse-find-markup-element keyword ident base))))))
+        (if base
+            (muse-find-markup-element keyword ident base))))))
 
 (defsubst muse-markup-text (ident &rest args)
   (let ((text (muse-find-markup-element :strings ident (muse-style))))
     (if (and text args)
-	(apply 'format text args)
+        (apply 'format text args)
       (or text ""))))
 
 (defun muse-find-markup-tag (keyword tagname style)
   (let ((def (assoc tagname (muse-style-element keyword style))))
     (or def
-	(let ((base (muse-style-element :base style)))
-	  (if base
-	      (muse-find-markup-tag keyword tagname base))))))
+        (let ((base (muse-style-element :base style)))
+          (if base
+              (muse-find-markup-tag keyword tagname base))))))
 
 (defsubst muse-markup-tag-info (tagname &rest args)
   (let ((tag-info (muse-find-markup-tag :tags tagname (muse-style))))
     (or tag-info
-	(assoc (match-string 1) muse-publish-markup-tags))))
+        (assoc (match-string 1) muse-publish-markup-tags))))
 
 (defsubst muse-markup-function (category)
   (let ((func (muse-find-markup-element :functions category (muse-style))))
     (or func
-	(cdr (assq category muse-publish-markup-functions)))))
+        (cdr (assq category muse-publish-markup-functions)))))
 
 ;; Publishing routines
 
 (defun muse-publish-markup (name rules)
   (let* ((case-fold-search nil)
-	 (inhibit-read-only t)
-	 (limit (* (length rules) (point-max)))
-	 (verbose (and muse-publish-report-threshhold
-		       (> (point-max) muse-publish-report-threshhold)))
-	 (base 0))
+         (inhibit-read-only t)
+         (limit (* (length rules) (point-max)))
+         (verbose (and muse-publish-report-threshhold
+                       (> (point-max) muse-publish-report-threshhold)))
+         (base 0))
     (while rules
       (goto-char (point-min))
       (let ((regexp (nth 1 (car rules)))
-	    (group (nth 2 (car rules)))
-	    (repl (nth 3 (car rules)))
-	    start last-pos pos)
-	(if (symbolp regexp)
-	    (setq regexp (symbol-value regexp)))
-	(if (and verbose (not muse-batch-publishing-p))
-	    (message "Publishing %s...%d%%" name
-		     (* (/ (float (+ (point) base)) limit) 100)))
-	(while (and regexp (setq pos (re-search-forward regexp nil t)))
-	  (if (and verbose (not muse-batch-publishing-p))
-	      (message "Publishing %s...%d%%" name
-		       (* (/ (float (+ (point) base)) limit) 100)))
-	  (unless (get-text-property (match-beginning group) 'read-only)
-	    (let* (func
-		   (text (cond
-			  ((and (symbolp repl)
-				(setq func (muse-markup-function repl)))
-			   (funcall func))
-			  ((functionp repl)
-			   (funcall repl))
-			  ((symbolp repl)
-			   (symbol-value repl))
-			  (t repl))))
-	      (if text
-		  (replace-match text t))))
-	  (if (and last-pos (= pos last-pos))
-	      (if (eobp)
-		  (setq regexp nil)
-		(forward-char 1)))
-	  (setq last-pos pos)))
+            (group (nth 2 (car rules)))
+            (repl (nth 3 (car rules)))
+            start last-pos pos)
+        (if (symbolp regexp)
+            (setq regexp (symbol-value regexp)))
+        (if (and verbose (not muse-batch-publishing-p))
+            (message "Publishing %s...%d%%" name
+                     (* (/ (float (+ (point) base)) limit) 100)))
+        (while (and regexp (setq pos (re-search-forward regexp nil t)))
+          (if (and verbose (not muse-batch-publishing-p))
+              (message "Publishing %s...%d%%" name
+                       (* (/ (float (+ (point) base)) limit) 100)))
+          (unless (get-text-property (match-beginning group) 'read-only)
+            (let* (func
+                   (text (cond
+                          ((and (symbolp repl)
+                                (setq func (muse-markup-function repl)))
+                           (funcall func))
+                          ((functionp repl)
+                           (funcall repl))
+                          ((symbolp repl)
+                           (symbol-value repl))
+                          (t repl))))
+              (if text
+                  (replace-match text t))))
+          (if (and last-pos (= pos last-pos))
+              (if (eobp)
+                  (setq regexp nil)
+                (forward-char 1)))
+          (setq last-pos pos)))
       (setq rules (cdr rules)
-	    base (+ base (point-max))))
+            base (+ base (point-max))))
     (if (and verbose (not muse-batch-publishing-p))
-	(message "Publishing %s...done" name))))
+        (message "Publishing %s...done" name))))
 
 (defun muse-insert-file-or-string (file-or-string &optional title)
   (let ((beg (point)) end)
     (if (and (not (string-equal file-or-string ""))
              (file-readable-p file-or-string))
-	(setq end (+ beg (cadr (insert-file-contents file-or-string))))
+        (setq end (+ beg (cadr (insert-file-contents file-or-string))))
       (insert file-or-string)
       (setq end (point)))
     (save-restriction
       (narrow-to-region beg end)
       (muse-publish-markup (or title "")
-			   '((100 "<\\(lisp\\)>" 0
-			      muse-publish-markup-tag))))))
+                           '((100 "<\\(lisp\\)>" 0
+                              muse-publish-markup-tag))))))
 
 (defun muse-style-run-hooks (keyword style &rest args)
   (let (handled)
     (while (and style (not handled))
       (setq style (muse-style style))
       (let ((func (muse-get-keyword keyword style t)))
-	(if func
-	    (if (apply func args)
-		(setq handled t))))
+        (if func
+            (if (apply func args)
+                (setq handled t))))
       (unless handled
-	(setq style (muse-style-element :base style))))
+        (setq style (muse-style-element :base style))))
     handled))
 
 (defun muse-publish-markup-region (beg end title style)
@@ -438,23 +438,23 @@ contents were requested.")
     (muse-publish-markup
      title
      (sort (copy-alist (append muse-publish-markup-regexps
-			       (muse-style-element :regexps style)))
-	   (function
-	    (lambda (l r)
-	      (< (car l) (car r))))))
+                               (muse-style-element :regexps style)))
+           (function
+            (lambda (l r)
+              (< (car l) (car r))))))
     (muse-style-run-hooks :before-end style)))
 
 (defun muse-publish-markup-buffer (title style)
   "Apply the given STYLE's markup rules to the current buffer."
   (setq style (muse-style style))
   (let ((style-header (muse-style-element :header style))
-	(style-footer (muse-style-element :footer style))
-	(muse-publishing-current-style style)
-	(muse-publishing-directives
-	 (list (cons "title" title)
-	       (cons "author" (user-full-name))
-	       (cons "date" (format-time-string "%B %e, %Y"))))
-	(muse-publishing-p t))
+        (style-footer (muse-style-element :footer style))
+        (muse-publishing-current-style style)
+        (muse-publishing-directives
+         (list (cons "title" title)
+               (cons "author" (user-full-name))
+               (cons "date" (format-time-string "%B %e, %Y"))))
+        (muse-publishing-p t))
     (run-hooks 'muse-before-publish-hook)
     (muse-publish-markup-region (point-min) (point-max) title style)
     (goto-char (point-min))
@@ -470,7 +470,7 @@ contents were requested.")
   (with-temp-buffer
     (insert string)
     (let ((muse-publishing-current-style style)
-	  (muse-publishing-p t))
+          (muse-publishing-p t))
       (muse-publish-markup "*string*" (muse-style-element :rules style)))
     (buffer-string)))
 
@@ -480,24 +480,24 @@ contents were requested.")
   (if (= 1 (length muse-publishing-styles))
       (car muse-publishing-styles)
     (assoc (completing-read "Publish with style: "
-			    muse-publishing-styles nil t)
-	   muse-publishing-styles)))
+                            muse-publishing-styles nil t)
+           muse-publishing-styles)))
 
 (defsubst muse-publish-get-output-dir (style)
   (let ((default-directory (or (muse-style-element :path style)
-			       default-directory)))
+                               default-directory)))
     (read-file-name "Publish to directory: " nil default-directory)))
 
 (defsubst muse-publish-get-info ()
   (let ((style (muse-publish-get-style)))
     (list style (muse-publish-get-output-dir style)
-	  current-prefix-arg)))
+          current-prefix-arg)))
 
 (defsubst muse-publish-output-name (&optional file style)
   (setq style (muse-style style))
   (concat (muse-style-element :prefix style)
-	  (muse-page-name (or file muse-publishing-current-file))
-	  (muse-style-element :suffix style)))
+          (muse-page-name (or file muse-publishing-current-file))
+          (muse-style-element :suffix style)))
 
 (defsubst muse-publish-output-file (file output-dir &optional style)
   (setq style (muse-style style))
@@ -509,26 +509,26 @@ If the argument FORCE is nil, each file is only published if it is
 newer than the published version.  If the argument FORCE is non-nil,
 the file is published no matter what."
   (interactive (cons (read-file-name "Publish file: ")
-		     (muse-publish-get-info)))
+                     (muse-publish-get-info)))
   (setq style (muse-style style))
   (let* ((output-path (muse-publish-output-file file output-dir style))
-	 (output-suffix (muse-style-element :osuffix style))
-	 (muse-publishing-current-file file)
-	 (target (if output-suffix
-		     (concat (file-name-sans-extension output-path)
-			     output-suffix)
-		   output-path)))
+         (output-suffix (muse-style-element :osuffix style))
+         (muse-publishing-current-file file)
+         (target (if output-suffix
+                     (concat (file-name-sans-extension output-path)
+                             output-suffix)
+                   output-path)))
     (when (or force (file-newer-than-file-p file target))
       (if (and muse-publish-report-threshhold
-	       (> (nth 7 (file-attributes file))
-		  muse-publish-report-threshhold))
-	  (message "Publishing %s ..." file))
+               (> (nth 7 (file-attributes file))
+                  muse-publish-report-threshhold))
+          (message "Publishing %s ..." file))
       (with-temp-buffer
-	(insert-file-contents file t)
-	(muse-publish-markup-buffer (muse-page-name file) style)
-	(let ((backup-inhibited t))
-	  (write-file output-path))
-	(muse-style-run-hooks :final style file output-path target))
+        (insert-file-contents file t)
+        (muse-publish-markup-buffer (muse-page-name file) style)
+        (let ((backup-inhibited t))
+          (write-file output-path))
+        (muse-style-run-hooks :final style file output-path target))
       t)))
 
 (defun muse-publish-this-file (style output-dir &optional force)
@@ -539,16 +539,16 @@ the file is published no matter what."
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
   (let ((muse-batch-publishing-p t)
-	style-name style output-dir)
+        style-name style output-dir)
     (setq style-name (car command-line-args-left)
-	  style (muse-style style-name)
-	  command-line-args-left (cdr command-line-args-left)
-	  output-dir (car command-line-args-left)
-	  output-dir
-	  (if (string-match "\\`--output-dir=" output-dir)
-	      (prog1
-		  (substring output-dir (match-end 0))
-		(setq command-line-args-left (cdr command-line-args-left)))))
+          style (muse-style style-name)
+          command-line-args-left (cdr command-line-args-left)
+          output-dir (car command-line-args-left)
+          output-dir
+          (if (string-match "\\`--output-dir=" output-dir)
+              (prog1
+                  (substring output-dir (match-end 0))
+                (setq command-line-args-left (cdr command-line-args-left)))))
     (unless style
       (error "There is no style '%s' defined." style-name))
     (dolist (file command-line-args-left)
@@ -561,10 +561,10 @@ the file is published no matter what."
   (unless value (setq value (match-string 2)))
   (let ((elem (assoc name muse-publishing-directives)))
     (if elem
-	(setcdr elem value)
+        (setcdr elem value)
       (setq muse-publishing-directives
-	    (cons (cons name value)
-		  muse-publishing-directives))))
+            (cons (cons name value)
+                  muse-publishing-directives))))
   (delete-region (match-beginning 0) (match-end 0)))
 
 (defun muse-publish-markup-anchor () "")
@@ -573,37 +573,37 @@ the file is published no matter what."
 (defun muse-publish-markup-tag ()
   (let ((tag-info (muse-markup-tag-info (match-string 1))))
     (when (and tag-info
-	       (not (get-text-property (match-beginning 0) 'read-only)))
+               (not (get-text-property (match-beginning 0) 'read-only)))
       (let ((closed-tag (match-string 3))
-	    (start (match-beginning 0))
-	    (beg (point)) end attrs)
-	(when (nth 2 tag-info)
-	  (let ((attrstr (match-string 2)))
-	    (while (and attrstr
-			(string-match (concat "\\([^"
+            (start (match-beginning 0))
+            (beg (point)) end attrs)
+        (when (nth 2 tag-info)
+          (let ((attrstr (match-string 2)))
+            (while (and attrstr
+                        (string-match (concat "\\([^"
                                               muse-regexp-space
                                               "=]+\\)\\(=\"\\"
                                               "([^\"]+\\)\"\\)?")
                                       attrstr))
-	      (let ((attr (cons (downcase
-				 (match-string-no-properties 1 attrstr))
-				(match-string-no-properties 3 attrstr))))
-		(setq attrstr (replace-match "" t t attrstr))
-		(if attrs
-		    (nconc attrs (list attr))
-		  (setq attrs (list attr)))))))
-	(if (and (cadr tag-info) (not closed-tag))
-	    (if (search-forward (concat "</" (car tag-info) ">") nil t)
-		(delete-region (match-beginning 0) (point))
-	      (setq tag-info nil)))
-	(when tag-info
-	  (setq end (point-marker))
-	  (delete-region start beg)
-	  (goto-char start)
-	  (let ((args (list start end)))
-	    (if (nth 2 tag-info)
-		(nconc args (list attrs)))
-	    (apply (nth 3 tag-info) args))))))
+              (let ((attr (cons (downcase
+                                 (match-string-no-properties 1 attrstr))
+                                (match-string-no-properties 3 attrstr))))
+                (setq attrstr (replace-match "" t t attrstr))
+                (if attrs
+                    (nconc attrs (list attr))
+                  (setq attrs (list attr)))))))
+        (if (and (cadr tag-info) (not closed-tag))
+            (if (search-forward (concat "</" (car tag-info) ">") nil t)
+                (delete-region (match-beginning 0) (point))
+              (setq tag-info nil)))
+        (when tag-info
+          (setq end (point-marker))
+          (delete-region start beg)
+          (goto-char start)
+          (let ((args (list start end)))
+            (if (nth 2 tag-info)
+                (nconc args (list attrs)))
+            (apply (nth 3 tag-info) args))))))
   nil)
 
 (defun muse-publish-escape-specials (beg end)
@@ -611,54 +611,54 @@ the file is published no matter what."
     (goto-char beg)
     (while (< (point) end)
       (if (get-text-property (point) 'read-only)
-	  (forward-char 1)
-	(let ((repl
-	       (or (assoc (char-after) (muse-style-element :specials))
-		   (assoc (char-after) muse-publish-markup-specials))))
-	  (if (null repl)
-	      (forward-char 1)
-	    (delete-char 1)
-	    (insert (cdr repl))))))))
+          (forward-char 1)
+        (let ((repl
+               (or (assoc (char-after) (muse-style-element :specials))
+                   (assoc (char-after) muse-publish-markup-specials))))
+          (if (null repl)
+              (forward-char 1)
+            (delete-char 1)
+            (insert (cdr repl))))))))
 
 (defun muse-publish-markup-word ()
   (let* ((beg (match-beginning 2))
-	 (end (1- (match-end 2)))
-	 (leader (buffer-substring-no-properties beg end))
-	 open-tag close-tag mark-read-only loc multi-line)
+         (end (1- (match-end 2)))
+         (leader (buffer-substring-no-properties beg end))
+         open-tag close-tag mark-read-only loc multi-line)
     (cond
      ((string= leader "_")
       (setq multi-line t)
       (setq open-tag (muse-markup-text 'begin-underline)
-	    close-tag (muse-markup-text 'end-underline)))
+            close-tag (muse-markup-text 'end-underline)))
      ((string= leader "=")
       (setq open-tag (muse-markup-text 'begin-literal)
-	    close-tag (muse-markup-text 'end-literal))
+            close-tag (muse-markup-text 'end-literal))
       (setq mark-read-only t))
      (t
       (setq multi-line t)
       (let ((l (length leader)))
-	(cond
-	 ((= l 1) (setq open-tag (muse-markup-text 'begin-emph)
-			close-tag (muse-markup-text 'end-emph)))
-	 ((= l 2) (setq open-tag (muse-markup-text 'begin-more-emph)
-			close-tag (muse-markup-text 'end-more-emph)))
-	 ((= l 3) (setq open-tag (muse-markup-text 'begin-most-emph)
-			close-tag (muse-markup-text 'end-most-emph)))))))
+        (cond
+         ((= l 1) (setq open-tag (muse-markup-text 'begin-emph)
+                        close-tag (muse-markup-text 'end-emph)))
+         ((= l 2) (setq open-tag (muse-markup-text 'begin-more-emph)
+                        close-tag (muse-markup-text 'end-more-emph)))
+         ((= l 3) (setq open-tag (muse-markup-text 'begin-most-emph)
+                        close-tag (muse-markup-text 'end-most-emph)))))))
     (if (and (setq loc (search-forward leader nil t))
-	     (eq 0 (skip-syntax-forward "w" (1+ loc)))
-	     (or multi-line (= 1 (count-lines beg loc))))
-	(progn
-	  (replace-match "")
-	  (delete-region beg end)
-	  (setq end (point-marker))
-	  (insert close-tag)
-	  (save-excursion
-	    (goto-char beg)
-	    (insert open-tag)
-	    (setq beg (point)))
-	  (when mark-read-only
-	    (muse-publish-escape-specials beg end)
-	    (muse-publish-mark-read-only (1- beg) (1+ end))))
+             (eq 0 (skip-syntax-forward "w" (1+ loc)))
+             (or multi-line (= 1 (count-lines beg loc))))
+        (progn
+          (replace-match "")
+          (delete-region beg end)
+          (setq end (point-marker))
+          (insert close-tag)
+          (save-excursion
+            (goto-char beg)
+            (insert open-tag)
+            (setq beg (point)))
+          (when mark-read-only
+            (muse-publish-escape-specials beg end)
+            (muse-publish-mark-read-only (1- beg) (1+ end))))
       (backward-char))
     nil))
 
@@ -682,14 +682,14 @@ the file is published no matter what."
 
 (defun muse-publish-markup-heading ()
   (let* ((len (length (match-string 1)))
-	 (start (muse-markup-text
-		 (cond ((= len 1) 'section)
-		       ((= len 2) 'subsection)
-		       ((= len 3) 'subsubsection))))
-	 (end   (muse-markup-text
-		 (cond ((= len 1) 'section-end)
-		       ((= len 2) 'subsection-end)
-		       ((= len 3) 'subsubsection-end)))))
+         (start (muse-markup-text
+                 (cond ((= len 1) 'section)
+                       ((= len 2) 'subsection)
+                       ((= len 3) 'subsubsection))))
+         (end   (muse-markup-text
+                 (cond ((= len 1) 'section-end)
+                       ((= len 2) 'subsection-end)
+                       ((= len 3) 'subsubsection-end)))))
     (delete-region (match-beginning 0) (match-end 0))
     (insert start)
     (end-of-line)
@@ -702,48 +702,48 @@ the file is published no matter what."
   (if (= (line-beginning-position) (match-beginning 0))
       ""
     (let ((footnote (save-match-data
-		      (string-to-number (match-string 1))))
-	  footnotemark)
+                      (string-to-number (match-string 1))))
+          footnotemark)
       (delete-region (match-beginning 0) (match-end 0))
       (save-excursion
-	(when (re-search-forward (format "^\\[%d\\]\\s-+" footnote) nil t)
-	  (let* ((start (match-beginning 0))
-		 (beg (goto-char (match-end 0)))
-		 (end (save-excursion
-			(if (search-forward "\n\n" nil t)
-			    (copy-marker (match-beginning 0))
-			  (goto-char (point-max))
-			  (skip-chars-backward "\n")
-			  (point-marker)))))
-	    (while (re-search-forward (concat "^["
+        (when (re-search-forward (format "^\\[%d\\]\\s-+" footnote) nil t)
+          (let* ((start (match-beginning 0))
+                 (beg (goto-char (match-end 0)))
+                 (end (save-excursion
+                        (if (search-forward "\n\n" nil t)
+                            (copy-marker (match-beginning 0))
+                          (goto-char (point-max))
+                          (skip-chars-backward "\n")
+                          (point-marker)))))
+            (while (re-search-forward (concat "^["
                                               muse-regexp-blank
                                               "]+\\([^\n]\\)")
                                       end t)
-	      (replace-match "\\1" t))
-	    (let ((footnotemark-cmd (muse-markup-text 'footnotemark))
-		  (footnotemark-end-cmd (muse-markup-text 'footnotemark-end)))
-	      (if (string= "" footnotemark-cmd)
-		  (setq footnotemark
-			(concat (muse-markup-text 'footnote)
-				(buffer-substring-no-properties beg end)
-				(muse-markup-text 'footnote-end)))
-		(setq footnotemark (format footnotemark-cmd footnote
-					   footnotemark-end-cmd))
-		(unless muse-publish-footnotes
-		  (set (make-local-variable 'muse-publish-footnotes)
-		       (make-vector 256 nil)))
-		(unless (aref muse-publish-footnotes footnote)
-		  (setq footnotemark
-			(concat
-			 footnotemark
-			 (concat (format (muse-markup-text 'footnotetext)
-					 footnote)
-				 (buffer-substring-no-properties beg end)
-				 (muse-markup-text 'footnotetext-end))))
-		  (aset muse-publish-footnotes footnote footnotemark))))
-	    (goto-char end)
-	    (skip-chars-forward "\n")
-	    (delete-region start (point)))))
+              (replace-match "\\1" t))
+            (let ((footnotemark-cmd (muse-markup-text 'footnotemark))
+                  (footnotemark-end-cmd (muse-markup-text 'footnotemark-end)))
+              (if (string= "" footnotemark-cmd)
+                  (setq footnotemark
+                        (concat (muse-markup-text 'footnote)
+                                (buffer-substring-no-properties beg end)
+                                (muse-markup-text 'footnote-end)))
+                (setq footnotemark (format footnotemark-cmd footnote
+                                           footnotemark-end-cmd))
+                (unless muse-publish-footnotes
+                  (set (make-local-variable 'muse-publish-footnotes)
+                       (make-vector 256 nil)))
+                (unless (aref muse-publish-footnotes footnote)
+                  (setq footnotemark
+                        (concat
+                         footnotemark
+                         (concat (format (muse-markup-text 'footnotetext)
+                                         footnote)
+                                 (buffer-substring-no-properties beg end)
+                                 (muse-markup-text 'footnotetext-end))))
+                  (aset muse-publish-footnotes footnote footnotemark))))
+            (goto-char end)
+            (skip-chars-forward "\n")
+            (delete-region start (point)))))
       (insert (or footnotemark footnote)))))
 
 (defun muse-publish-markup-fn-sep ()
@@ -760,7 +760,7 @@ the file is published no matter what."
     (goto-char beg)
     (while (< (point) end)
       (if (looking-at "^\\s-+")
-	  (replace-match ""))
+          (replace-match ""))
       (forward-line 1))
     (goto-char end)
     (setq beg (point))
@@ -770,10 +770,10 @@ the file is published no matter what."
 
 (defsubst muse-forward-paragraph (&optional pattern)
   (if (re-search-forward (if pattern
-			     (concat "^\\(" pattern "["
+                             (concat "^\\(" pattern "["
                                      muse-regexp-blank
                                      "]+\\|$\\|\\'\\)")
-			   "^\\s-*\\($\\|\\'\\)") nil t)
+                           "^\\s-*\\($\\|\\'\\)") nil t)
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
 
@@ -789,42 +789,42 @@ like read-only from being inadvertently deleted."
        (muse-markup-text 'begin-uli)
        (muse-markup-text 'end-uli)
        (function
-	(lambda ()
-	  (muse-forward-paragraph (concat "["
+        (lambda ()
+          (muse-forward-paragraph (concat "["
                                           muse-regexp-blank
                                           "]+-"))))))
      ((and (>= (aref str 0) ?0)
-	   (<= (aref str 0) ?9))
+           (<= (aref str 0) ?9))
       (delete-region (match-beginning 0) (match-end 0))
       (muse-publish-surround-text
        (muse-markup-text 'begin-oli)
        (muse-markup-text 'end-oli)
        (function
-	(lambda ()
-	  (muse-forward-paragraph (concat "["
+        (lambda ()
+          (muse-forward-paragraph (concat "["
                                           muse-regexp-blank
                                           "]+[0-9]+\\."))))))
      (t
       (goto-char (match-beginning 1))
       (insert (muse-markup-text 'begin-ddt))
       (save-match-data
-	(save-excursion
-	  (forward-line 1)
-	  (while (looking-at (concat "^\\(["
+        (save-excursion
+          (forward-line 1)
+          (while (looking-at (concat "^\\(["
                                      muse-regexp-blank
                                      "]*\\)[^"
                                      muse-regexp-space
                                      "]"))
-	    (delete-region (match-beginning 1) (match-end 1))
-	    (forward-line 1))))
+            (delete-region (match-beginning 1) (match-end 1))
+            (forward-line 1))))
       (save-match-data
-	(when (re-search-forward (concat "["
+        (when (re-search-forward (concat "["
                                          muse-regexp-space
                                          "]+::["
                                          muse-regexp-space
                                          "]+")
                                  nil t)
-	  (replace-match (muse-markup-text 'start-dde))))
+          (replace-match (muse-markup-text 'start-dde))))
       (muse-forward-paragraph)
       (insert (muse-markup-text 'end-ddt) ?\n)))))
 
@@ -833,22 +833,22 @@ like read-only from being inadvertently deleted."
 The reason this function is so funky, is to prevent text properties
 like read-only from being inadvertently deleted."
   (let* ((ws (match-string 0))
-	 (centered (>= (string-width ws) 6))
-	 (begin-elem (if centered 'begin-center 'begin-quote))
-	 (end-elem (if centered 'end-center 'end-quote)))
+         (centered (>= (string-width ws) 6))
+         (begin-elem (if centered 'begin-center 'begin-quote))
+         (end-elem (if centered 'end-center 'end-quote)))
     (muse-publish-surround-text (muse-markup-text begin-elem)
-				(muse-markup-text end-elem)
-				'muse-forward-paragraph)))
+                                (muse-markup-text end-elem)
+                                'muse-forward-paragraph)))
 
 (defun muse-publish-markup-leading-space ()
   (let ((markup-space (muse-markup-text 'verse-space))
-	count)
+        count)
     (when (and markup-space
-	       (>= (setq count (skip-chars-forward " ")) 0))
+               (>= (setq count (skip-chars-forward " ")) 0))
       (delete-region (line-beginning-position) (point))
       (while (> count 0)
-	(insert markup-space)
-	(setq count (- count 2))))))
+        (insert markup-space)
+        (setq count (- count 2))))))
 
 (defun muse-publish-markup-verse ()
   (let ((leader (match-string 0)))
@@ -860,20 +860,20 @@ like read-only from being inadvertently deleted."
       (end-of-line)
       (cond
        ((bolp)
-	(let ((text (muse-markup-text 'empty-verse-line)))
-	  (if text (insert text))))
+        (let ((text (muse-markup-text 'empty-verse-line)))
+          (if text (insert text))))
        ((save-excursion
-	  (save-match-data
-	    (forward-line 1)
-	    (or (looking-at (concat leader "["
+          (save-match-data
+            (forward-line 1)
+            (or (looking-at (concat leader "["
                                     muse-regexp-blank
                                     "]*$"))
-		(not (looking-at leader)))))
-	(let ((text (muse-markup-text 'last-stanza-end)))
-	  (if text (insert text))))
+                (not (looking-at leader)))))
+        (let ((text (muse-markup-text 'last-stanza-end)))
+          (if text (insert text))))
        (t
-	(let ((text (muse-markup-text 'end-verse-line)))
-	  (if text (insert text)))))
+        (let ((text (muse-markup-text 'end-verse-line)))
+          (if text (insert text)))))
       (forward-line 1)))
   (insert (muse-markup-text 'end-verse) ?\n))
 
@@ -882,7 +882,7 @@ like read-only from being inadvertently deleted."
 
 (defun muse-publish-markup-email ()
   (let* ((beg (match-end 1))
-	 (addr (buffer-substring-no-properties beg (match-end 0))))
+         (addr (buffer-substring-no-properties beg (match-end 0))))
     (with-temp-buffer
       (insert addr)
       (muse-publish-escape-specials (point-min) (point-max))
@@ -921,8 +921,8 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-contents-tag (beg end attrs)
   (set (make-local-variable 'muse-publish-generate-contents)
        (cons (copy-marker (point) t)
-	     (let ((depth (cdr (assoc "depth" attrs))))
-	       (or (and depth (string-to-number depth)) 2)))))
+             (let ((depth (cdr (assoc "depth" attrs))))
+               (or (and depth (string-to-number depth)) 2)))))
 
 (defun muse-publish-verse-tag (beg end)
   (save-excursion
@@ -956,9 +956,9 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-lisp-tag (beg end)
   (save-excursion
     (let ((str (muse-eval-lisp
-		(prog1
-		    (buffer-substring-no-properties beg end)
-		  (delete-region beg end)))))
+                (prog1
+                    (buffer-substring-no-properties beg end)
+                  (delete-region beg end)))))
       (set-text-properties 0 (length str) nil str)
       (insert str))))
 
@@ -967,10 +967,10 @@ like read-only from being inadvertently deleted."
     (forward-line))
   (let ((interp (cdr (assoc "interp" attrs))))
     (if (null interp)
-	(shell-command
-	 (prog1
-	     (buffer-substring-no-properties (point) end)
-	   (delete-region beg end)) t)
+        (shell-command
+         (prog1
+             (buffer-substring-no-properties (point) end)
+           (delete-region beg end)) t)
       (shell-command-on-region beg end interp t t))
     (muse-publish-mark-read-only beg (point))))
 
@@ -996,9 +996,9 @@ like read-only from being inadvertently deleted."
   (with-current-buffer buffer
     (goto-char (point-min))
     (let ((beg (and (search-forward "Emacs Muse begins here")
-		    (line-end-position)))
-	  (end (and (search-forward "Emacs Muse ends here")
-		    (line-beginning-position))))
+                    (line-end-position)))
+          (end (and (search-forward "Emacs Muse ends here")
+                    (line-beginning-position))))
       (buffer-substring-no-properties beg end))))
 
 (defun muse-published-contents (file)
@@ -1019,25 +1019,25 @@ like read-only from being inadvertently deleted."
     (dolist (ext cleanup-exts)
       (muse-delete-file-if-exists
        (expand-file-name (concat file ext)
-			 (file-name-directory output-path))))
+                         (file-name-directory output-path))))
     (message "Wrote %s" output-path)))
 
 (defun muse-publish-read-only (string)
   (add-text-properties 0 (1- (length string))
-		       '(rear-nonsticky (read-only) read-only t)
-		       string)
+                       '(rear-nonsticky (read-only) read-only t)
+                       string)
   string)
 
 (defun muse-publish-prepare-url (target)
   (save-match-data
     (unless (or (string-match muse-url-regexp target)
-		(string-match muse-image-regexp target)
-		(string-match muse-file-regexp target))
+                (string-match muse-image-regexp target)
+                (string-match muse-file-regexp target))
       (setq target (if (string-match "#" target)
-		       (concat (muse-publish-output-name
-				(substring target 0 (match-beginning 0)))
-			       "#" (substring target (match-end 0)))
-		     (muse-publish-output-name target)))))
+                       (concat (muse-publish-output-name
+                                (substring target 0 (match-beginning 0)))
+                               "#" (substring target (match-end 0)))
+                     (muse-publish-output-name target)))))
   (muse-publish-read-only target))
 
 (provide 'muse-publish)

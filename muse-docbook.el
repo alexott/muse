@@ -80,12 +80,12 @@ See `muse-docbook' for more information."
   "List of markup rules for publishing a Muse page to DocBook XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
-		  (list :tag "Markup rule"
-			integer
-			(choice regexp symbol)
-			integer
-			(choice string function symbol))
-		  function))
+                  (list :tag "Markup rule"
+                        integer
+                        (choice regexp symbol)
+                        integer
+                        (choice string function symbol))
+                  function))
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-functions
@@ -172,33 +172,33 @@ differs little between the various styles."
 
 (defun muse-docbook-markup-table ()
   (let* ((str (save-match-data
-		(if (featurep 'xemacs)
-		    ;; more emacs divergence. :(
-		    (replace-in-string (match-string 1) " *|+ *$" "")
-		  (match-string 1))))
-	 (fields (append (save-match-data
-			   (split-string str (concat "["
+                (if (featurep 'xemacs)
+                    ;; more emacs divergence. :(
+                    (replace-in-string (match-string 1) " *|+ *$" "")
+                  (match-string 1))))
+         (fields (append (save-match-data
+                           (split-string str (concat "["
                                                      muse-regexp-blank
                                                      "]*|+["
                                                      muse-regexp-blank
                                                      "]*")))
-			 (list (match-string 4))))
-	 (len (length (match-string 3)))
-	 (row (cond ((= len 1) "tbody")
-		    ((= len 2) "thead")
-		    ((= len 3) "tfoot")))
-	 (col "entry"))
+                         (list (match-string 4))))
+         (len (length (match-string 3)))
+         (row (cond ((= len 1) "tbody")
+                    ((= len 2) "thead")
+                    ((= len 3) "tfoot")))
+         (col "entry"))
     (concat "<table>\n" "<" row ">\n" "<row>\n<" col ">"
-	    (mapconcat 'identity fields (format "</%s><%s>" col col))
-	    "</" col ">\n" "</row>\n" "</" row ">\n"
-	    "</table>\n")))
+            (mapconcat 'identity fields (format "</%s><%s>" col col))
+            "</" col ">\n" "</row>\n" "</" row ">\n"
+            "</table>\n")))
 
 (defun muse-docbook-fixup-sections ()
   (goto-char (point-min))
   (let (last)
     (while (re-search-forward "\n*<section>" nil t)
       (when last
-	(replace-match "\n</section>\n\n<section>"))
+        (replace-match "\n</section>\n\n<section>"))
       (setq last (match-beginning 0)))
     (when last
       (goto-char (point-max))
@@ -208,15 +208,15 @@ differs little between the various styles."
 
 (unless (assoc "docbook" muse-publishing-styles)
   (muse-define-style "docbook"
-		     :suffix     'muse-docbook-extension
-		     :regexps    'muse-docbook-markup-regexps
-		     :functions  'muse-docbook-markup-functions
-		     :strings    'muse-docbook-markup-strings
-		     :specials   'muse-docbook-markup-specials
-		     :before-end 'muse-docbook-fixup-sections
-		     :header     'muse-docbook-header
-		     :footer     'muse-docbook-footer
-		     :browser    'find-file))
+                     :suffix     'muse-docbook-extension
+                     :regexps    'muse-docbook-markup-regexps
+                     :functions  'muse-docbook-markup-functions
+                     :strings    'muse-docbook-markup-strings
+                     :specials   'muse-docbook-markup-specials
+                     :before-end 'muse-docbook-fixup-sections
+                     :header     'muse-docbook-header
+                     :footer     'muse-docbook-footer
+                     :browser    'find-file))
 
 (provide 'muse-docbook)
 

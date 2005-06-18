@@ -48,7 +48,7 @@
 (require 'derived)
 (eval-when-compile
   (condition-case nil
-      (require 'pcomplete)		; load if available
+      (require 'pcomplete)              ; load if available
     (error nil)))
 
 ;;; Options:
@@ -68,18 +68,18 @@ See `muse-publish' for more information."
   "If non-nil, automagically determine when Muse mode should be activated."
   :type 'boolean
   :set (function
-	(lambda (sym value)
-	  (if value
-	      (add-hook 'find-file-hooks 'muse-mode-maybe)
-	    (remove-hook 'find-file-hooks 'muse-mode-maybe))
-	  (set sym value)))
+        (lambda (sym value)
+          (if value
+              (add-hook 'find-file-hooks 'muse-mode-maybe)
+            (remove-hook 'find-file-hooks 'muse-mode-maybe))
+          (set sym value)))
   :group 'muse-mode)
 
 (defcustom muse-mode-hook nil
   "A hook that is run when Muse mode is entered."
   :type 'hook
   :options '(flyspell-mode footnote-mode turn-on-auto-fill
-	     highlight-changes-mode)
+             highlight-changes-mode)
   :group 'muse-mode)
 
 (defvar muse-mode-map
@@ -99,18 +99,18 @@ See `muse-publish' for more information."
     (define-key map [(control ?i)] 'muse-next-reference)
 
     (if (featurep 'xemacs)
-	(progn
-	  (define-key map [(button2)] 'muse-follow-name-at-mouse)
-	  (define-key map [(shift button2)]
-	    'muse-follow-name-at-mouse-other-window))
+        (progn
+          (define-key map [(button2)] 'muse-follow-name-at-mouse)
+          (define-key map [(shift button2)]
+            'muse-follow-name-at-mouse-other-window))
       (define-key map [(shift control ?m)]
-	'muse-follow-name-at-point-other-window)
+        'muse-follow-name-at-point-other-window)
       (define-key map [mouse-2] 'muse-follow-name-at-mouse)
       (define-key map [(shift mouse-2)]
-	'muse-follow-name-at-mouse-other-window))
+        'muse-follow-name-at-mouse-other-window))
 
     (if (featurep 'xemacs)
-	(define-key map [(shift tab)] 'muse-previous-reference)
+        (define-key map [(shift tab)] 'muse-previous-reference)
       (define-key map [(shift iso-lefttab)] 'muse-previous-reference)
       (define-key map [(shift control ?i)] 'muse-previous-reference))
 
@@ -138,7 +138,7 @@ See `muse-publish' for more information."
   (condition-case err
       (hack-local-variables)
     (error (message "File local-variables error: %s"
-		    (prin1-to-string err))))
+                    (prin1-to-string err))))
   (if muse-mode-highlight-p
       (muse-use-font-lock))
   (setq muse-current-project (muse-project-of-file))
@@ -146,18 +146,18 @@ See `muse-publish' for more information."
   (when (featurep 'pcomplete)
     ;; if pcomplete is available, set it up!
     (set (make-variable-buffer-local 'pcomplete-default-completion-function)
-	 'muse-mode-completions)
+         'muse-mode-completions)
     (set (make-variable-buffer-local 'pcomplete-command-completion-function)
-	 'muse-mode-completions)
+         'muse-mode-completions)
     (set (make-variable-buffer-local 'pcomplete-parse-arguments-function)
-	 'muse-mode-current-word)))
+         'muse-mode-current-word)))
 
 (defun muse-mode-maybe ()
   "Maybe turn Emacs Muse mode on for this file."
   (let ((project (muse-project-of-file)))
     (and project
-	 (funcall (or (muse-get-keyword :major-mode (cadr project) t)
-		      'muse-mode)))))
+         (funcall (or (muse-get-keyword :major-mode (cadr project) t)
+                      'muse-mode)))))
 
 ;;; Support page name completion using pcomplete
 
@@ -165,16 +165,16 @@ See `muse-publish' for more information."
   "Return a list of possible completions names for this buffer."
   (let ((project (muse-project-of-file)))
     (if project
-	(while (pcomplete-here
-		(mapcar 'car (muse-project-file-alist project)))))))
+        (while (pcomplete-here
+                (mapcar 'car (muse-project-file-alist project)))))))
 
 (defun muse-current-word ()
   (let ((end (point)))
     (save-restriction
       (save-excursion
-	(skip-chars-backward (concat "^\\["
+        (skip-chars-backward (concat "^\\["
                                      muse-regexp-space))
-	(narrow-to-region (point) end))
+        (narrow-to-region (point) end))
       (pcomplete-parse-buffer-arguments))))
 
 ;;; Navigate/visit links or URLs.  Use TAB, S-TAB and RET (or mouse-2).
@@ -182,21 +182,21 @@ See `muse-publish' for more information."
 (defun muse-link-at-point (&optional pos)
   "Return link text if a URL or Muse link name is at point."
   (let ((case-fold-search nil)
-	(here (or pos (point))))
+        (here (or pos (point))))
     (when (or (null pos)
-	      (and (char-after pos)
-		   (not (eq (char-syntax (char-after pos)) ?\ ))))
+              (and (char-after pos)
+                   (not (eq (char-syntax (char-after pos)) ?\ ))))
       (save-excursion
-	(goto-char here)
-	(skip-chars-backward (concat "^'\"<>{}("
+        (goto-char here)
+        (skip-chars-backward (concat "^'\"<>{}("
                                      muse-regexp-space))
-	(or (and (looking-at muse-url-regexp)
-		 (match-string 0))
-	    (and (or (looking-at muse-link-regexp)
-		     (and (search-backward "[[" (line-beginning-position) t)
-			  (looking-at muse-link-regexp)))
-		 (<= here (match-end 0))
-		 (match-string 1)))))))
+        (or (and (looking-at muse-url-regexp)
+                 (match-string 0))
+            (and (or (looking-at muse-link-regexp)
+                     (and (search-backward "[[" (line-beginning-position) t)
+                          (looking-at muse-link-regexp)))
+                 (<= here (match-end 0))
+                 (match-string 1)))))))
 
 (defun muse-make-link (link &optional name)
   "Return a link to LINK with NAME as the text."
@@ -225,49 +225,49 @@ Do not rename the page originally referred to."
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK-NAME."
   (let ((visit-link-function
-	 (muse-get-keyword :visit-link (cadr (muse-project-of-file)) t)))
+         (muse-get-keyword :visit-link (cadr (muse-project-of-file)) t)))
     (if visit-link-function
-	(funcall visit-link-function link other-window)
+        (funcall visit-link-function link other-window)
       (if (string-match muse-url-regexp link)
-	  (browse-url link)
-	(let (anchor)
-	  (if (string-match "#" link)
-	      (setq anchor (substring link (match-beginning 0))
-		    link (substring link 0 (match-beginning 0))))
-	  (let ((project (muse-project-of-file)))
-	    (if project
-		(muse-project-find-file link project
-					(and other-window
-					     'find-file-other-window))
-	      (if other-window
-		  (find-file-other-window link)
-		(find-file link))))
-	  (if anchor
-	      (search-forward anchor nil t)))))))
+          (browse-url link)
+        (let (anchor)
+          (if (string-match "#" link)
+              (setq anchor (substring link (match-beginning 0))
+                    link (substring link 0 (match-beginning 0))))
+          (let ((project (muse-project-of-file)))
+            (if project
+                (muse-project-find-file link project
+                                        (and other-window
+                                             'find-file-other-window))
+              (if other-window
+                  (find-file-other-window link)
+                (find-file link))))
+          (if anchor
+              (search-forward anchor nil t)))))))
 
 (defun muse-browse-result (style &optional other-window)
   "Visit the current page's published result."
   (interactive (list (muse-publish-get-style) current-prefix-arg))
   (setq style (muse-style style))
   (let ((result-path
-	 (muse-publish-output-file buffer-file-name
-				   (muse-style-element :path style) style)))
+         (muse-publish-output-file buffer-file-name
+                                   (muse-style-element :path style) style)))
     (if (not (file-readable-p result-path))
-	(error "Cannot open output file '%s" result-path)
+        (error "Cannot open output file '%s" result-path)
       (if other-window
-	  (find-file-other-window result-path)
-	(let ((func (muse-style-element :browser style t)))
-	  (if func
-	      (funcall func result-path)
-	    (message "The publishing style %s does not support browsing."
-		     style)))))))
+          (find-file-other-window result-path)
+        (let ((func (muse-style-element :browser style t)))
+          (if func
+              (funcall func result-path)
+            (message "The publishing style %s does not support browsing."
+                     style)))))))
 
 (defun muse-follow-name-at-point (&optional other-window)
   "Visit the link at point, or insert a newline if none."
   (interactive "P")
   (let ((link (muse-link-at-point)))
     (if link
-	(muse-visit-link link other-window)
+        (muse-visit-link link other-window)
       (error "There is no valid link at point"))))
 
 (defun muse-follow-name-at-point-other-window ()
@@ -280,12 +280,12 @@ Do not rename the page originally referred to."
   (interactive "eN")
   (save-excursion
     (cond ((fboundp 'event-window)      ; XEmacs
-	   (set-buffer (window-buffer (event-window event)))
-	   (and (funcall (symbol-function 'event-point) event)
-		(goto-char (funcall (symbol-function 'event-point) event))))
-	  ((fboundp 'posn-window)       ; Emacs
-	   (set-buffer (window-buffer (posn-window (event-start event))))
-	   (goto-char (posn-point (event-start event)))))
+           (set-buffer (window-buffer (event-window event)))
+           (and (funcall (symbol-function 'event-point) event)
+                (goto-char (funcall (symbol-function 'event-point) event))))
+          ((fboundp 'posn-window)       ; Emacs
+           (set-buffer (window-buffer (posn-window (event-start event))))
+           (goto-char (posn-point (event-start event)))))
     (muse-follow-name-at-point other-window)))
 
 (defun muse-follow-name-at-mouse-other-window (event)
@@ -300,38 +300,38 @@ Do not rename the page originally referred to."
   "Move forward to next Muse link or URL, cycling if necessary."
   (interactive)
   (let ((case-fold-search nil)
-	(cycled 0) pos)
+        (cycled 0) pos)
     (save-excursion
       (if (muse-link-at-point)
-	  (goto-char (match-end 0)))
+          (goto-char (match-end 0)))
       (while (< cycled 2)
-	(if (re-search-forward
-	     (concat "\\(" muse-link-regexp "\\|"
-		     muse-url-regexp "\\)") nil t)
-	    (setq pos (match-beginning 0)
-		  cycled 2)
-	  (goto-char (point-min))
-	  (setq cycled (1+ cycled)))))
+        (if (re-search-forward
+             (concat "\\(" muse-link-regexp "\\|"
+                     muse-url-regexp "\\)") nil t)
+            (setq pos (match-beginning 0)
+                  cycled 2)
+          (goto-char (point-min))
+          (setq cycled (1+ cycled)))))
     (if pos
-	(goto-char pos))))
+        (goto-char pos))))
 
 (defun muse-previous-reference ()
   "Move backward to the next Muse link or URL, cycling if necessary.
 This function is not entirely accurate, but it's close enough."
   (interactive)
   (let ((case-fold-search nil)
-	(cycled 0) pos)
+        (cycled 0) pos)
     (save-excursion
       (while (< cycled 2)
-	(if (re-search-backward
-	     (concat "\\(" muse-link-regexp "\\|"
-		     muse-url-regexp "\\)") nil t)
-	    (setq pos (point)
-		  cycled 2)
-	  (goto-char (point-max))
-	  (setq cycled (1+ cycled)))))
+        (if (re-search-backward
+             (concat "\\(" muse-link-regexp "\\|"
+                     muse-url-regexp "\\)") nil t)
+            (setq pos (point)
+                  cycled 2)
+          (goto-char (point-max))
+          (setq cycled (1+ cycled)))))
     (if pos
-	(goto-char pos))))
+        (goto-char pos))))
 
 (defun muse-what-changed ()
   "Show the unsaved changes that have been made to the current file."
@@ -363,16 +363,16 @@ This function is not entirely accurate, but it's close enough."
 (defun muse-index-as-string (&optional as-list exclude-private)
   "Generate an index of all Muse pages."
   (let ((files (sort (copy-alist (muse-project-file-alist))
-		     (function
-		      (lambda (l r)
-			(string-lessp (car l) (car r))))))
-	file)
+                     (function
+                      (lambda (l r)
+                        (string-lessp (car l) (car r))))))
+        file)
     (with-temp-buffer
       (while files
-	(unless (and exclude-private
-		     (muse-project-private-p (cdar files)))
-	  (insert (if as-list " - " "") "[[" (caar files) "]]\n"))
-	(setq files (cdr files)))
+        (unless (and exclude-private
+                     (muse-project-private-p (cdar files)))
+          (insert (if as-list " - " "") "[[" (caar files) "]]\n"))
+        (setq files (cdr files)))
       (buffer-string))))
 
 ;;; Insert tags interactively on C-c TAB

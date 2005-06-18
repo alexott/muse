@@ -73,21 +73,21 @@
 	reporting this.
 
 2004-10-26  Michael Olson  <mwolson@gnu.org>
-    
+
 	* muse-html.el (muse-html-style-sheet): Make part of "muse-html"
-        group, not "muse-message" group.
+	group, not "muse-message" group.
 
 2004-10-14  Li Daobing  <lidaobing@gmail.com>
-    
+
 	* muse-latexcjk.el: New file that provides LaTeX publishing with
-        CJK support.
+	CJK support.
 
 2004-10-09  Li Daobing  <lidaobing@gmail.com>
-    
+
 	* muse-html.el (muse-html-encoding-map): Add entries for
-        mule-utf8, chinese-iso-8bit, and chinese-gbk.
+	mule-utf8, chinese-iso-8bit, and chinese-gbk.
 	(muse-html-transform-content-type): Change use of cadr to cdr so
-        that the content type is chosen correctly.
+	that the content type is chosen correctly.
 
 2004-04-27  Sandra Jean Chua (Sacha)  <sacha@free.net.ph>
 

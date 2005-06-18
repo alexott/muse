@@ -89,25 +89,25 @@ shown in the following example.
   <head>
     <title><lisp>
   (concat (muse-publishing-directive \"title\")
-	  (let ((author (muse-publishing-directive \"author\")))
-	    (if (not (string= author (user-full-name)))
-		(concat \" (by \" author \")\"))))</lisp></title>
+          (let ((author (muse-publishing-directive \"author\")))
+            (if (not (string= author (user-full-name)))
+                (concat \" (by \" author \")\"))))</lisp></title>
     <meta name=\"generator\" content=\"muse.el\">
     <meta http-equiv=\"<lisp>muse-html-meta-http-equiv</lisp>\"
-	  content=\"<lisp>muse-html-meta-content-type</lisp>\">
+          content=\"<lisp>muse-html-meta-content-type</lisp>\">
     <lisp>
       (let ((maintainer (muse-style-element :maintainer)))
-	(when maintainer
-	  (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\">\")))
+        (when maintainer
+          (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\">\")))
     </lisp>
     <lisp>muse-html-style-sheet</lisp>
   </head>
   <body>
     <h1><lisp>
   (concat (muse-publishing-directive \"title\")
-	  (let ((author (muse-publishing-directive \"author\")))
-	    (if (not (string= author (user-full-name)))
-		(concat \" (by \" author \")\"))))</lisp></h1>
+          (let ((author (muse-publishing-directive \"author\")))
+            (if (not (string= author (user-full-name)))
+                (concat \" (by \" author \")\"))))</lisp></h1>
     <!-- Page published by Emacs Muse begins here -->\n"
   "Header used for publishing HTML files."
   :type '(choice string file)
@@ -130,25 +130,25 @@ shown in the following example.
   <head>
     <title><lisp>
   (concat (muse-publishing-directive \"title\")
-	  (let ((author (muse-publishing-directive \"author\")))
-	    (if (not (string= author (user-full-name)))
-		(concat \" (by \" author \")\"))))</lisp></title>
+          (let ((author (muse-publishing-directive \"author\")))
+            (if (not (string= author (user-full-name)))
+                (concat \" (by \" author \")\"))))</lisp></title>
     <meta name=\"generator\" content=\"muse.el\" />
     <meta http-equiv=\"<lisp>muse-html-meta-http-equiv</lisp>\"
-	  content=\"<lisp>muse-html-meta-content-type</lisp>\" />
+          content=\"<lisp>muse-html-meta-content-type</lisp>\" />
     <lisp>
       (let ((maintainer (muse-style-element :maintainer)))
-	(when maintainer
-	  (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\" />\")))
+        (when maintainer
+          (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\" />\")))
     </lisp>
     <lisp>muse-html-style-sheet</lisp>
   </head>
   <body>
     <h1><lisp>
   (concat (muse-publishing-directive \"title\")
-	  (let ((author (muse-publishing-directive \"author\")))
-	    (if (not (string= author (user-full-name)))
-		(concat \" (by \" author \")\"))))</lisp></h1>
+          (let ((author (muse-publishing-directive \"author\")))
+            (if (not (string= author (user-full-name)))
+                (concat \" (by \" author \")\"))))</lisp></h1>
     <!-- Page published by Emacs Muse begins here -->\n"
   "Header used for publishing XHTML files."
   :type '(choice string file)
@@ -193,7 +193,7 @@ than the HTML table tag."
   `(;; join together the parts of a list or table
     (10000 "</\\([oud]l\\)>\\s-*<\\1>\\s-*" 0 "")
     (10100 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>\\s-*"
-		    "<table[^>]*>\\s-*<t\\1>\n") 0 "")
+                    "<table[^>]*>\\s-*<t\\1>\n") 0 "")
     (10200 "</table>\\s-*<table[^>]*>\n" 0 "")
 
     ;; beginning of doc, end of doc, or plain paragraph separator
@@ -206,12 +206,12 @@ than the HTML table tag."
   "List of markup rules for publishing a Muse page to HTML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
-		  (list :tag "Markup rule"
-			integer
-			(choice regexp symbol)
-			integer
-			(choice string function symbol))
-		  function))
+                  (list :tag "Markup rule"
+                        integer
+                        (choice regexp symbol)
+                        integer
+                        (choice string function symbol))
+                  function))
   :group 'muse-html)
 
 (defcustom muse-html-markup-functions
@@ -302,9 +302,9 @@ searched."
   '(("class" t t muse-html-class-tag))
   "A list of tag specifications, for specially marking up HTML."
   :type '(repeat (list (string :tag "Markup tag")
-		       (boolean :tag "Expect closing tag" :value t)
-		       (boolean :tag "Parse attributes" :value nil)
-		       function))
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       function))
   :group 'muse-html)
 
 (defcustom muse-html-markup-specials
@@ -329,8 +329,8 @@ change this to \"application/xhtml+xml\"."
   :group 'muse-html)
 
 (defcustom muse-html-meta-content-encoding (if (featurep 'mule)
-					      'detect
-					    "iso-8859-1")
+                                              'detect
+                                            "iso-8859-1")
   "The charset to append to the HTML <meta> tag.
 If set to the symbol 'detect, use `muse-html-encoding-map' to try
 and determine the HTML charset from emacs's coding.  If set to a
@@ -351,10 +351,10 @@ This will be used if no special characters are found."
   :group 'muse-html)
 
 (defcustom muse-html-encoding-map
-  '((iso-2022-jp	. "iso-2022-jp")
-    (utf-8		. "utf-8")
-    (japanese-iso-8bit	. "euc-jp")
-    (chinese-big5	. "big5")
+  '((iso-2022-jp        . "iso-2022-jp")
+    (utf-8              . "utf-8")
+    (japanese-iso-8bit  . "euc-jp")
+    (chinese-big5       . "big5")
     (mule-utf-8         . "utf-8")
     (chinese-iso-8bit   . "gb2312")
     (chinese-gbk        . "gbk"))
@@ -368,9 +368,9 @@ Use the base name of the coding system (i.e. without the -unix)."
 system to an associated HTML coding system. If no match is found,
 `muse-html-charset-default' is used instead."
   (let ((match (assoc (coding-system-base content-type)
-		      muse-html-encoding-map)))
+                      muse-html-encoding-map)))
     (if match
-	(cdr match)
+        (cdr match)
       muse-html-charset-default)))
 
 (defun muse-html-insert-anchor (anchor)
@@ -378,14 +378,14 @@ system to an associated HTML coding system. If no match is found,
   (skip-chars-forward muse-regexp-space)
   (if (looking-at "<\\([^ />]+\\)>")
       (let ((tag (match-string 1)))
-	(goto-char (match-end 0))
-	(insert "<a name=\"" anchor "\" id=\"" anchor "\">")
-	(when muse-html-anchor-on-word
-	  (or (and (search-forward (format "</%s>" tag)
-				   (line-end-position) t)
-		   (goto-char (match-beginning 0)))
-	      (forward-word 1)))
-	(insert "</a>"))
+        (goto-char (match-end 0))
+        (insert "<a name=\"" anchor "\" id=\"" anchor "\">")
+        (when muse-html-anchor-on-word
+          (or (and (search-forward (format "</%s>" tag)
+                                   (line-end-position) t)
+                   (goto-char (match-beginning 0)))
+              (forward-word 1)))
+        (insert "</a>"))
     (insert "<a name=\"" anchor "\" id=\"" anchor "\">")
     (when muse-html-anchor-on-word
       (forward-word 1))
@@ -459,92 +459,92 @@ if not escaped."
   (if (/= (line-beginning-position) (match-beginning 0))
       "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">\\1</a></sup>"
     (prog1
-	"<p class=\"footnote\"><a name=\"fn.\\1\" href=\"#fnr.\\1\">\\1.</a>"
+        "<p class=\"footnote\"><a name=\"fn.\\1\" href=\"#fnr.\\1\">\\1.</a>"
       (save-excursion
-	(save-match-data
-	  (let* ((beg (goto-char (match-end 0)))
-		 (end (and (search-forward "\n\n" nil t)
-			   (prog1
-			       (copy-marker (match-beginning 0))
-			     (goto-char beg)))))
-	    (while (re-search-forward (concat "^["
+        (save-match-data
+          (let* ((beg (goto-char (match-end 0)))
+                 (end (and (search-forward "\n\n" nil t)
+                           (prog1
+                               (copy-marker (match-beginning 0))
+                             (goto-char beg)))))
+            (while (re-search-forward (concat "^["
                                               muse-regexp-blank
                                               "]+\\([^\n]\\)")
                                       end t)
-	      (replace-match "\\1" t))))))))
+              (replace-match "\\1" t))))))))
 
 (defun muse-html-markup-table ()
   (let* ((str (prog1
-		  (match-string 1)
-		(delete-region (match-beginning 0) (match-end 0))))
-	 (fields (split-string str "\\s-*|+\\s-*"))
-	 (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
-		    (length (match-string 1 str))))
-	 (part (cond ((= type 1) "tbody")
-		     ((= type 2) "thead")
-		     ((= type 3) "tfoot")))
-	 (col (cond ((= type 1) "td")
-		    ((= type 2) "th")
-		    ((= type 3) "td")))
-	 field)
+                  (match-string 1)
+                (delete-region (match-beginning 0) (match-end 0))))
+         (fields (split-string str "\\s-*|+\\s-*"))
+         (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
+                    (length (match-string 1 str))))
+         (part (cond ((= type 1) "tbody")
+                     ((= type 2) "thead")
+                     ((= type 3) "tfoot")))
+         (col (cond ((= type 1) "td")
+                    ((= type 2) "th")
+                    ((= type 3) "td")))
+         field)
     (insert "<table " muse-html-table-attributes ">\n"
-	    "  <" part ">\n"
-	    "    <tr>\n")
+            "  <" part ">\n"
+            "    <tr>\n")
     (dolist (field fields)
       (insert "      <" col ">" field "</" col ">\n"))
     (insert "    </tr>\n"
-	    "  </" part ">\n"
-	    "</table>\n")))
+            "  </" part ">\n"
+            "</table>\n")))
 
 ;; Handling of tags for HTML
 
 (defun muse-html-insert-contents (depth)
   (let ((max-depth (or depth 2))
-	(index 1)
-	base contents l)
+        (index 1)
+        base contents l)
     (save-excursion
       (goto-char (point-min))
       (search-forward "Page published by Emacs Muse begins here" nil t)
       (catch 'done
-	(while (re-search-forward "^<h\\([0-9]+\\)>\\(.+?\\)</h\\1>" nil t)
-	  (unless (get-text-property (point) 'read-only)
-	    (setq l (1- (string-to-number (match-string 1))))
-	    (if (null base)
-		(setq base l)
-	      (if (< l base)
-		  (throw 'done t)))
-	    (when (<= l max-depth)
-	      (setq contents (cons (cons l (match-string-no-properties 2))
-				   contents))
-	      (goto-char (match-beginning 2))
-	      (muse-html-insert-anchor (concat "sec" (int-to-string index)))
-	      (setq index (1+ index)))))))
+        (while (re-search-forward "^<h\\([0-9]+\\)>\\(.+?\\)</h\\1>" nil t)
+          (unless (get-text-property (point) 'read-only)
+            (setq l (1- (string-to-number (match-string 1))))
+            (if (null base)
+                (setq base l)
+              (if (< l base)
+                  (throw 'done t)))
+            (when (<= l max-depth)
+              (setq contents (cons (cons l (match-string-no-properties 2))
+                                   contents))
+              (goto-char (match-beginning 2))
+              (muse-html-insert-anchor (concat "sec" (int-to-string index)))
+              (setq index (1+ index)))))))
     (setq index 1 contents (reverse contents))
     (let ((depth 1) (sub-open 0) (p (point)))
       (insert "<dl class=\"contents\">\n")
       (while contents
-	(insert "<dt class=\"contents\">\n")
-	(insert "<a href=\"#sec" (int-to-string index) "\">"
-		(muse-publish-strip-tags (cdar contents))
-		"</a>\n")
-	(setq index (1+ index))
-	(insert "</dt>\n")
-	(setq depth (caar contents)
-	      contents (cdr contents))
-	(if contents
-	    (cond
-	     ((< (caar contents) depth)
-	      (let ((idx (caar contents)))
-		(while (< idx depth)
-		  (insert "</dl>\n</dd>\n")
-		  (setq sub-open (1- sub-open)
-			idx (1+ idx)))))
-	     ((> (caar contents) depth)	; can't jump more than one ahead
-	      (insert "<dd>\n<dl class=\"contents\">\n")
-	      (setq sub-open (1+ sub-open))))))
+        (insert "<dt class=\"contents\">\n")
+        (insert "<a href=\"#sec" (int-to-string index) "\">"
+                (muse-publish-strip-tags (cdar contents))
+                "</a>\n")
+        (setq index (1+ index))
+        (insert "</dt>\n")
+        (setq depth (caar contents)
+              contents (cdr contents))
+        (if contents
+            (cond
+             ((< (caar contents) depth)
+              (let ((idx (caar contents)))
+                (while (< idx depth)
+                  (insert "</dl>\n</dd>\n")
+                  (setq sub-open (1- sub-open)
+                        idx (1+ idx)))))
+             ((> (caar contents) depth) ; can't jump more than one ahead
+              (insert "<dd>\n<dl class=\"contents\">\n")
+              (setq sub-open (1+ sub-open))))))
       (while (> sub-open 0)
-	(insert "</dl>\n</dd>\n")
-	(setq sub-open (1- sub-open)))
+        (insert "</dl>\n</dd>\n")
+        (setq sub-open (1- sub-open)))
       (insert "</dl>\n")
       (muse-publish-mark-read-only p (point)))))
 
@@ -564,7 +564,7 @@ if not escaped."
       muse-html-meta-content-encoding
     (muse-html-transform-content-type
      (or buffer-file-coding-system
-	 muse-html-encoding-default))))
+         muse-html-encoding-default))))
 
 (defun muse-html-prepare-buffer ()
   (set (make-local-variable 'muse-publish-url-transforms)
@@ -572,7 +572,7 @@ if not escaped."
   (make-local-variable 'muse-html-meta-http-equiv)
   (set (make-local-variable 'muse-html-meta-content-type)
        (concat muse-html-meta-content-type "; charset="
-	       (muse-html-encoding))))
+               (muse-html-encoding))))
 
 (defun muse-html-finalize-buffer ()
   (when muse-publish-generate-contents
@@ -584,22 +584,22 @@ if not escaped."
 
 (unless (assoc "html" muse-publishing-styles)
   (muse-define-style "html"
-		     :suffix    'muse-html-extension
-		     :regexps   'muse-html-markup-regexps
-		     :functions 'muse-html-markup-functions
-		     :strings   'muse-html-markup-strings
-		     :tags      'muse-html-markup-tags
-		     :specials  'muse-html-markup-specials
-		     :before    'muse-html-prepare-buffer
-		     :after     'muse-html-finalize-buffer
-		     :header    'muse-html-header
-		     :footer    'muse-html-footer
-		     :browser   'muse-html-browse-file)
+                     :suffix    'muse-html-extension
+                     :regexps   'muse-html-markup-regexps
+                     :functions 'muse-html-markup-functions
+                     :strings   'muse-html-markup-strings
+                     :tags      'muse-html-markup-tags
+                     :specials  'muse-html-markup-specials
+                     :before    'muse-html-prepare-buffer
+                     :after     'muse-html-finalize-buffer
+                     :header    'muse-html-header
+                     :footer    'muse-html-footer
+                     :browser   'muse-html-browse-file)
 
   (muse-derive-style "xhtml" "html"
-		     :strings   'muse-xhtml-markup-strings
-		     :header    'muse-xhtml-header
-		     :footer    'muse-xhtml-footer))
+                     :strings   'muse-xhtml-markup-strings
+                     :header    'muse-xhtml-header
+                     :footer    'muse-xhtml-footer))
 
 (provide 'muse-html)
 

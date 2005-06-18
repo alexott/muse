@@ -217,8 +217,8 @@ first rule catches 'WikiMarkup' for instance):
 
   (setq muse-publishing-directory \"/webserver:/var/www/\")
   (setq muse-publishing-transforms
-	'((\".*Wiki.*\" . \"emacs/wiki/\\&\")
-	 (\"EmacsWiki\\|WelcomePage\" . \"index\")))
+        '((\".*Wiki.*\" . \"emacs/wiki/\\&\")
+         (\"EmacsWiki\\|WelcomePage\" . \"index\")))
 
 Then when trying to publish a page EmacsWiki:
 

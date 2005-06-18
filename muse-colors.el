@@ -148,22 +148,22 @@ whether progress messages should be displayed to the user."
 
 (defun muse-configure-highlighting (sym val)
   (setq muse-colors-regexp
-	(concat "\\(" (mapconcat (function
-				  (lambda (rule)
-				    (if (symbolp (car rule))
-					(symbol-value (car rule))
-				      (car rule)))) val "\\|") "\\)")
-	muse-colors-vector (make-vector 128 nil))
+        (concat "\\(" (mapconcat (function
+                                  (lambda (rule)
+                                    (if (symbolp (car rule))
+                                        (symbol-value (car rule))
+                                      (car rule)))) val "\\|") "\\)")
+        muse-colors-vector (make-vector 128 nil))
   (let ((rules val))
     (while rules
       (if (eq (cadr (car rules)) t)
-	  (let ((i 0) (l 128))
-	    (while (< i l)
-	      (unless (aref muse-colors-vector i)
-		(aset muse-colors-vector i (nth 2 (car rules))))
-	      (setq i (1+ i))))
-	(aset muse-colors-vector (cadr (car rules))
-	      (nth 2 (car rules))))
+          (let ((i 0) (l 128))
+            (while (< i l)
+              (unless (aref muse-colors-vector i)
+                (aset muse-colors-vector i (nth 2 (car rules))))
+              (setq i (1+ i))))
+        (aset muse-colors-vector (cadr (car rules))
+              (nth 2 (car rules))))
       (setq rules (cdr rules))))
   (set sym val))
 
@@ -312,12 +312,12 @@ fontification in that area.
 Lastly, none of the regexp should contain grouping elements that will
 affect the match data results."
   :type '(repeat
-	  (list :tag "Highlight rule"
-		(choice (regexp :tag "Locate regexp")
-			(symbol :tag "Regexp symbol"))
-		(choice (character :tag "Confirm character")
-			(const :tag "Default rule" t))
-		function))
+          (list :tag "Highlight rule"
+                (choice (regexp :tag "Locate regexp")
+                        (symbol :tag "Regexp symbol"))
+                (choice (character :tag "Confirm character")
+                        (const :tag "Default rule" t))
+                function))
   :set 'muse-configure-highlighting
   :group 'muse-colors)
 
@@ -329,9 +329,9 @@ affect the match data results."
   (set (make-local-variable 'font-lock-multiline) 'undecided)
   (set (make-local-variable 'font-lock-defaults)
        `(nil t nil nil 'beginning-of-line
-	 (font-lock-fontify-region-function . muse-colors-region)
-	 (font-lock-unfontify-region-function
-	  . muse-unhighlight-region)))
+         (font-lock-fontify-region-function . muse-colors-region)
+         (font-lock-unfontify-region-function
+          . muse-unhighlight-region)))
   (set (make-local-variable 'font-lock-fontify-region-function)
        'muse-colors-region)
   (set (make-local-variable 'font-lock-unfontify-region-function)
@@ -349,50 +349,50 @@ affect the match data results."
 Note that this function should NOT change the buffer, nor should any
 of the functions listed in `muse-colors-markup'."
   (let ((buffer-undo-list t)
-	(inhibit-read-only t)
-	(inhibit-point-motion-hooks t)
-	(inhibit-modification-hooks t)
-	(modified-p (buffer-modified-p))
-	deactivate-mark)
+        (inhibit-read-only t)
+        (inhibit-point-motion-hooks t)
+        (inhibit-modification-hooks t)
+        (modified-p (buffer-modified-p))
+        deactivate-mark)
     (unwind-protect
-	(save-excursion
-	  (save-restriction
-	    (widen)
-	    ;; check to see if we should expand the beg/end area for
-	    ;; proper multiline matches
-	    (when (and font-lock-multiline
-		       (> beg (point-min))
-		       (get-text-property (1- beg) 'font-lock-multiline))
-	      ;; We are just after or in a multiline match.
-	      (setq beg (or (previous-single-property-change
-			     beg 'font-lock-multiline)
-			    (point-min)))
-	      (goto-char beg)
-	      (setq beg (line-beginning-position)))
-	    (when font-lock-multiline
-	      (setq end (or (text-property-any end (point-max)
-					       'font-lock-multiline nil)
-			    (point-max))))
-	    (goto-char end)
-	    (setq end (line-beginning-position 2))
-	    ;; Undo any fontification in the area.
-	    (font-lock-unfontify-region beg end)
-	    ;; And apply fontification based on `muse-colors-markup'
-	    (let ((len (float (- end beg)))
-		  (case-fold-search nil)
+        (save-excursion
+          (save-restriction
+            (widen)
+            ;; check to see if we should expand the beg/end area for
+            ;; proper multiline matches
+            (when (and font-lock-multiline
+                       (> beg (point-min))
+                       (get-text-property (1- beg) 'font-lock-multiline))
+              ;; We are just after or in a multiline match.
+              (setq beg (or (previous-single-property-change
+                             beg 'font-lock-multiline)
+                            (point-min)))
+              (goto-char beg)
+              (setq beg (line-beginning-position)))
+            (when font-lock-multiline
+              (setq end (or (text-property-any end (point-max)
+                                               'font-lock-multiline nil)
+                            (point-max))))
+            (goto-char end)
+            (setq end (line-beginning-position 2))
+            ;; Undo any fontification in the area.
+            (font-lock-unfontify-region beg end)
+            ;; And apply fontification based on `muse-colors-markup'
+            (let ((len (float (- end beg)))
+                  (case-fold-search nil)
                   markup-func)
-	      (goto-char beg)
-	      (while (re-search-forward muse-colors-regexp end t)
-		(if verbose
-		    (message "Highlighting buffer...%d%%"
-			     (* (/ (float (- (point) beg)) len) 100)))
-		(setq markup-func
+              (goto-char beg)
+              (while (re-search-forward muse-colors-regexp end t)
+                (if verbose
+                    (message "Highlighting buffer...%d%%"
+                             (* (/ (float (- (point) beg)) len) 100)))
+                (setq markup-func
                       (aref muse-colors-vector
                             (char-after (match-beginning 0))))
                 (when markup-func (funcall markup-func)))
-	      (run-hook-with-args 'muse-colors-buffer-hook
-				  beg end verbose)
-	      (if verbose (message "Highlighting buffer...done")))))
+              (run-hook-with-args 'muse-colors-buffer-hook
+                                  beg end verbose)
+              (if verbose (message "Highlighting buffer...done")))))
       (set-buffer-modified-p modified-p))))
 
 (defcustom muse-colors-tags
@@ -414,9 +414,9 @@ of the enclosed tag or region.
 
 Functions should not modify the contents of the buffer."
   :type '(repeat (list (string :tag "Markup tag")
-		       (boolean :tag "Expect closing tag" :value t)
-		       (boolean :tag "Parse attributes" :value nil)
-		       function))
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       function))
   :group 'muse-colors)
 
 (defsubst muse-colors-tag-info (tagname &rest args)
@@ -462,16 +462,16 @@ Functions should not modify the contents of the buffer."
 (defun muse-unhighlight-region (begin end &optional verbose)
   "Remove all visual highlights in the buffer (except font-lock)."
   (let ((buffer-undo-list t)
-	(inhibit-read-only t)
-	(inhibit-point-motion-hooks t)
-	(inhibit-modification-hooks t)
-	(modified-p (buffer-modified-p))
-	deactivate-mark)
+        (inhibit-read-only t)
+        (inhibit-point-motion-hooks t)
+        (inhibit-modification-hooks t)
+        (modified-p (buffer-modified-p))
+        deactivate-mark)
     (unwind-protect
-	(remove-text-properties
-	 begin end '(face nil font-lock-multiline nil
-			  invisible nil intangible nil display nil
-			  mouse-face nil keymap nil help-echo nil))
+        (remove-text-properties
+         begin end '(face nil font-lock-multiline nil
+                          invisible nil intangible nil display nil
+                          mouse-face nil keymap nil help-echo nil))
       (set-buffer-modified-p modified-p))))
 
 (defvar muse-mode-local-map
@@ -480,49 +480,52 @@ Functions should not modify the contents of the buffer."
     (define-key map [(control ?m)] 'muse-follow-name-at-point)
     (define-key map [(shift return)] 'muse-follow-name-at-point-other-window)
     (if (featurep 'xemacs)
-	(progn
-	  (define-key map [(button2)] 'muse-follow-name-at-mouse)
-	  (define-key map [(shift button2)] 'muse-follow-name-at-mouse-other-window))
-      (define-key map [(shift control ?m)] 'muse-follow-name-at-point-other-window)
+        (progn
+          (define-key map [(button2)] 'muse-follow-name-at-mouse)
+          (define-key map [(shift button2)]
+            'muse-follow-name-at-mouse-other-window))
+      (define-key map [(shift control ?m)]
+        'muse-follow-name-at-point-other-window)
       (define-key map [mouse-2] 'muse-follow-name-at-mouse)
-      (define-key map [(shift mouse-2)] 'muse-follow-name-at-mouse-other-window)
+      (define-key map [(shift mouse-2)]
+        'muse-follow-name-at-mouse-other-window)
       (unless (eq emacs-major-version 21)
-	(set-keymap-parent map muse-mode-map)))
+        (set-keymap-parent map muse-mode-map)))
     map)
   "Local keymap used by Muse while on a link.")
 
 (defvar muse-keymap-property
   (if (or (featurep 'xemacs)
-	  (>= emacs-major-version 21))
+          (>= emacs-major-version 21))
       'keymap
     'local-map))
 
 (defsubst muse-link-properties (help-str &optional face)
   (append (if face
-	      (list 'face face 'rear-nonsticky t
-		    muse-keymap-property muse-mode-local-map)
-	    (list 'invisible t 'intangible t 'rear-nonsticky t
-		  muse-keymap-property muse-mode-local-map))
-	  (list 'mouse-face 'highlight
-		'help-echo help-str
-		muse-keymap-property muse-mode-local-map)))
+              (list 'face face 'rear-nonsticky t
+                    muse-keymap-property muse-mode-local-map)
+            (list 'invisible t 'intangible t 'rear-nonsticky t
+                  muse-keymap-property muse-mode-local-map))
+          (list 'mouse-face 'highlight
+                'help-echo help-str
+                muse-keymap-property muse-mode-local-map)))
 
 (defun muse-link-face (link-name)
   "Return the type of LINK-NAME as a face symbol - either a normal link, or a
 bad-link face"
   (save-match-data
     (if (or (string-match muse-file-regexp link-name)
-	    (string-match muse-url-regexp link-name))
-	'muse-link-face
+            (string-match muse-url-regexp link-name))
+        'muse-link-face
       (if (not (featurep 'muse-project))
-	  'muse-link-face
-	(if (string-match "#" link-name)
-	    (setq link-name (substring link-name 0 (match-beginning 0))))
-	(if (or (and (muse-project-of-file)
-		     (muse-project-page-file link-name muse-current-project t))
-		(file-exists-p link-name))
-	    'muse-link-face
-	  'muse-bad-link-face)))))
+          'muse-link-face
+        (if (string-match "#" link-name)
+            (setq link-name (substring link-name 0 (match-beginning 0))))
+        (if (or (and (muse-project-of-file)
+                     (muse-project-page-file link-name muse-current-project t))
+                (file-exists-p link-name))
+            'muse-link-face
+          'muse-bad-link-face)))))
 
 (defun muse-colors-link ()
   (when (eq ?\[ (char-after (match-beginning 0)))
@@ -535,7 +538,7 @@ bad-link face"
     (let* ((link (match-string-no-properties 2))
            (desc (match-string-no-properties 3))
            (props (muse-link-properties
-        	   desc (muse-link-face (match-string 2))))
+                   desc (muse-link-face (match-string 2))))
            (invis-props (append props (muse-link-properties desc))))
       (if desc
           (progn
@@ -543,24 +546,24 @@ bad-link face"
             ;; portion too, since emacs sometimes will position
             ;; the cursor on an intangible character
             (add-text-properties (match-beginning 0)
-        			 (match-beginning 3) invis-props)
+                                 (match-beginning 3) invis-props)
             (add-text-properties (match-beginning 3) (match-end 3) props)
             (add-text-properties (match-end 3) (match-end 0) invis-props))
         (add-text-properties (match-beginning 0)
-        		     (match-beginning 2) invis-props)
+                             (match-beginning 2) invis-props)
         (add-text-properties (match-beginning 2) (match-end 0) props)
         (add-text-properties (match-end 2) (match-end 0) invis-props)))
     (goto-char (match-end 0))
     (add-text-properties
      (match-beginning 0) (match-end 0)
      (muse-link-properties (match-string-no-properties 0)
-			   (muse-link-face (match-string 2))))
+                           (muse-link-face (match-string 2))))
     (goto-char (match-end 0))))
 
 (defun muse-colors-title ()
   (add-text-properties (+ 7 (match-beginning 0))
-		       (line-end-position)
-		       '(face muse-header-1)))
+                       (line-end-position)
+                       '(face muse-header-1)))
 
 (provide 'muse-colors)
 

@@ -165,9 +165,9 @@ For more on the structure of this list, see
   "A list of tag specifications, for specially marking up text.
 See the documentation for `muse-publish-markup-tags'."
   :type '(repeat (list (string :tag "Markup tag")
-		       (boolean :tag "Expect closing tag" :value t)
-		       (boolean :tag "Parse attributes" :value nil)
-		       function))
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       function))
   :group 'muse-message)
 
 (defcustom muse-message-markup-specials nil
@@ -177,13 +177,13 @@ See the documentation for `muse-publish-markup-tags'."
 
 (defun muse-message-markup-link ()
   (let ((desc (match-string 2))
-	(url (match-string 1)))
+        (url (match-string 1)))
     (save-match-data
       (delete-region (match-beginning 0) (match-end 0))
       (when desc (insert desc))
       (save-excursion
-	(Footnote-add-footnote)
-	(insert url))
+        (Footnote-add-footnote)
+        (insert url))
       "")))
 
 (defun muse-message-example-tag (beg end)
@@ -214,38 +214,38 @@ function to `message-send-hook'."
   (save-excursion
     (message-goto-body)
     (let ((text (buffer-substring-no-properties (point) (point-max)))
-	  (subject (message-fetch-field "subject"))
-	  (encoding (muse-html-encoding)))
+          (subject (message-fetch-field "subject"))
+          (encoding (muse-html-encoding)))
       (delete-region (point) (point-max))
       (insert
        "<#multipart type=alternative>\n"
        "<#part type=text/plain charset=\"" encoding "\" nofile=yes>\n"
        (with-temp-buffer
-	 (insert text)
-	 (muse-publish-markup-buffer
-	  subject muse-message-publishing-style)
-	 (buffer-substring-no-properties (point-min) (point-max)))
+         (insert text)
+         (muse-publish-markup-buffer
+          subject muse-message-publishing-style)
+         (buffer-substring-no-properties (point-min) (point-max)))
        "\n<#part type=text/html charset=\"" encoding "\" nofile=yes>\n"
        (with-temp-buffer
-	 (insert text)
-	 (muse-publish-markup-buffer
-	  subject muse-message-html-publishing-style)
-	 (buffer-substring-no-properties (point-min) (point-max)))
+         (insert text)
+         (muse-publish-markup-buffer
+          subject muse-message-html-publishing-style)
+         (buffer-substring-no-properties (point-min) (point-max)))
        "<#/multipart>\n"))))
 
 (unless (assoc "message" muse-publishing-styles)
   (muse-define-style "message"
-		     :functions 'muse-message-markup-functions
-		     :strings   'muse-message-markup-strings
-		     :tags      'muse-message-markup-tags)
+                     :functions 'muse-message-markup-functions
+                     :strings   'muse-message-markup-strings
+                     :tags      'muse-message-markup-tags)
 
   (muse-derive-style "message-html" "html"
-		     :header 'muse-message-html-header
-		     :footer 'muse-message-html-footer)
+                     :header 'muse-message-html-header
+                     :footer 'muse-message-html-footer)
 
   (muse-derive-style "message-xhtml" "xhtml"
-		     :header 'muse-message-html-header
-		     :footer 'muse-message-html-footer))
+                     :header 'muse-message-html-header
+                     :footer 'muse-message-html-footer))
 
 (provide 'muse-message)
 

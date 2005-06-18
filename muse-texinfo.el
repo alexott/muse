@@ -101,12 +101,12 @@ This text may contain <lisp> markup tags."
   "List of markup rules for publishing a Muse page to Texinfo.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
-		  (list :tag "Markup rule"
-			integer
-			(choice regexp symbol)
-			integer
-			(choice string function symbol))
-		  function))
+                  (list :tag "Markup rule"
+                        integer
+                        (choice regexp symbol)
+                        integer
+                        (choice string function symbol))
+                  function))
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-markup-functions
@@ -173,9 +173,9 @@ differs little between the various styles."
 
 (defun muse-texinfo-markup-table ()
   (let* ((str (prog1
-		  (match-string 1)
-		(delete-region (match-beginning 0) (match-end 0))))
-	 (fields (split-string str "\\s-*|+\\s-*")) field)
+                  (match-string 1)
+                (delete-region (match-beginning 0) (match-end 0))))
+         (fields (split-string str "\\s-*|+\\s-*")) field)
     (insert "@multitable @columnfractions ")
     (dotimes (field (length fields))
       (insert (number-to-string (/ 1.0 (length fields))) " "))
@@ -197,21 +197,21 @@ differs little between the various styles."
    (function
     (lambda (file output-path)
       (if muse-texinfo-process-natively
-	  (save-window-excursion
-	    (save-excursion
-	      (find-file file)
-	      (let ((inhibit-read-only t))
-		(texinfo-format-buffer))
-	      (save-buffer)
-	      (kill-buffer (current-buffer))
-	      (let ((buf (get-file-buffer file)))
-		(with-current-buffer buf
-		  (set-buffer-modified-p nil)
-		  (kill-buffer (current-buffer))))
-	      t))
-	(= 0 (shell-command
-	      (concat "makeinfo --enable-encoding --output="
-		      output-path " " file))))))))
+          (save-window-excursion
+            (save-excursion
+              (find-file file)
+              (let ((inhibit-read-only t))
+                (texinfo-format-buffer))
+              (save-buffer)
+              (kill-buffer (current-buffer))
+              (let ((buf (get-file-buffer file)))
+                (with-current-buffer buf
+                  (set-buffer-modified-p nil)
+                  (kill-buffer (current-buffer))))
+              t))
+        (= 0 (shell-command
+              (concat "makeinfo --enable-encoding --output="
+                      output-path " " file))))))))
 
 (defun muse-texinfo-pdf-generate (file output-path final-target)
   (muse-publish-transform-output
@@ -219,29 +219,29 @@ differs little between the various styles."
    (function
     (lambda (file output-path)
       (= 0 (shell-command (concat "texi2pdf -q --clean --output="
-				  output-path " " file)))))))
+                                  output-path " " file)))))))
 
 (unless (assoc "texi" muse-publishing-styles)
   (muse-define-style "texi"
-		     :suffix    'muse-texinfo-extension
-		     :regexps   'muse-texinfo-markup-regexps
-		     :functions 'muse-texinfo-markup-functions
-		     :strings   'muse-texinfo-markup-strings
-		     :specials  'muse-texinfo-markup-specials
-		     :after     'muse-texinfo-finalize-buffer
-		     :header    'muse-texinfo-header
-		     :footer    'muse-texinfo-footer
-		     :browser   'find-file)
+                     :suffix    'muse-texinfo-extension
+                     :regexps   'muse-texinfo-markup-regexps
+                     :functions 'muse-texinfo-markup-functions
+                     :strings   'muse-texinfo-markup-strings
+                     :specials  'muse-texinfo-markup-specials
+                     :after     'muse-texinfo-finalize-buffer
+                     :header    'muse-texinfo-header
+                     :footer    'muse-texinfo-footer
+                     :browser   'find-file)
 
   (muse-derive-style "info" "texi"
-		     :final   'muse-texinfo-info-generate
-		     :osuffix 'muse-texinfo-info-extension
-		     :browser 'info)
+                     :final   'muse-texinfo-info-generate
+                     :osuffix 'muse-texinfo-info-extension
+                     :browser 'info)
 
   (muse-derive-style "info-pdf" "texi"
-		     :final   'muse-texinfo-pdf-generate
-		     :osuffix 'muse-texinfo-pdf-extension
-		     :browser 'muse-texinfo-pdf-browse-file))
+                     :final   'muse-texinfo-pdf-generate
+                     :osuffix 'muse-texinfo-pdf-extension
+                     :browser 'muse-texinfo-pdf-browse-file))
 
 (provide 'muse-texinfo)
 

@@ -67,7 +67,7 @@
 \\maketitle
 
 <lisp>(and muse-publish-generate-contents
-	   \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
+           \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
   "Header used for publishing LaTeX files."
   :type '(choice string file)
   :group 'muse-latex)
@@ -94,7 +94,7 @@
 \\maketitle
 
 <lisp>(and muse-publish-generate-contents
-	   \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
+           \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
   "Header used for publishing LaTeX files(CJK)."
   :type '(choice string file)
   :group 'muse-latex)
@@ -119,17 +119,17 @@
 
     ;; join together the parts of a list or table
     (10300 ,(concat
-	     "\\\\end{\\(tabular\\|description\\|itemize\\|enumerate\\)}\n+"
-	     "\\\\begin{\\1}\\({[^\n}]+}\\)?\n+") 0 ""))
+             "\\\\end{\\(tabular\\|description\\|itemize\\|enumerate\\)}\n+"
+             "\\\\begin{\\1}\\({[^\n}]+}\\)?\n+") 0 ""))
   "List of markup regexps for identifying regions in a Muse page.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
-		  (list :tag "Markup rule"
-			integer
-			(choice regexp symbol)
-			integer
-			(choice string function symbol))
-		  function))
+                  (list :tag "Markup rule"
+                        integer
+                        (choice regexp symbol)
+                        integer
+                        (choice string function symbol))
+                  function))
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-functions
@@ -199,9 +199,9 @@ differs little between the various styles."
   :group 'muse-latex)
 
 (defcustom muse-latexcjk-encoding-map
-  '((utf-8		. "{UTF8}{song}")
-    (japanese-iso-8bit	. "[dnp]{JIS}{min}")
-    (chinese-big5	. "{Bg5}{bsmi}")
+  '((utf-8              . "{UTF8}{song}")
+    (japanese-iso-8bit  . "[dnp]{JIS}{min}")
+    (chinese-big5       . "{Bg5}{bsmi}")
     (mule-utf-8         . "{UTF8}{song}")
     (chinese-iso-8bit   . "{GB}{song}")
     (chinese-gbk        . "{GBK}{song}"))
@@ -222,9 +222,9 @@ differs little between the various styles."
   "Using `muse-cjklatex-encoding-map', try and resolve an emacs coding
 system to an associated CJK coding system."
   (let ((match (assoc (coding-system-base content-type)
-		      muse-latexcjk-encoding-map)))
+                      muse-latexcjk-encoding-map)))
     (if match
-	(cdr match)
+        (cdr match)
       muse-latexcjk-encoding-default)))
 
 (defcustom muse-latex-markup-specials
@@ -235,11 +235,11 @@ system to an associated CJK coding system."
 
 (defun muse-latex-markup-table ()
   (let* ((str (prog1
-		  (match-string 1)
-		(delete-region (match-beginning 0) (match-end 0))))
-	 (fields (split-string str "\\s-*|+\\s-*"))
-	 (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
-		    (length (match-string 1 str)))))
+                  (match-string 1)
+                (delete-region (match-beginning 0) (match-end 0))))
+         (fields (split-string str "\\s-*|+\\s-*"))
+         (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
+                    (length (match-string 1 str)))))
     (insert "\\begin{tabular}{" (make-string (length fields) ?l) "}\n")
     (insert (mapconcat 'identity fields " & "))
     (insert " \\\\\n\\end{tabular}")))
@@ -249,14 +249,14 @@ system to an associated CJK coding system."
   (let ((open t))
     (while (search-forward "\"" nil t)
       (unless (get-text-property (match-beginning 0) 'read-only)
-	(if (and (bolp) (eq (char-before) ?\n))
-	    (setq open t))
-	(if open
-	    (progn
-	      (replace-match "``")
-	      (setq open nil))
-	  (replace-match "''")
-	  (setq open t))))))
+        (if (and (bolp) (eq (char-before) ?\n))
+            (setq open t))
+        (if open
+            (progn
+              (replace-match "``")
+              (setq open nil))
+          (replace-match "''")
+          (setq open t))))))
 
 (defun muse-latex-finalize-buffer ()
   (goto-char (point-min))
@@ -271,37 +271,37 @@ system to an associated CJK coding system."
    (function
     (lambda (file output-path)
       (let ((command (format "cd %s; pdflatex %s"
-			     (file-name-directory output-path) file)))
-	(and (= 0 (shell-command command))
-	     (= 0 (shell-command command))
-	     (= 0 (shell-command command))))))
+                             (file-name-directory output-path) file)))
+        (and (= 0 (shell-command command))
+             (= 0 (shell-command command))
+             (= 0 (shell-command command))))))
    ".aux" ".toc" ".out" ".log"))
 
 (unless (assoc "latex" muse-publishing-styles)
   (muse-define-style "latex"
-		     :suffix    'muse-latex-extension
-		     :regexps   'muse-latex-markup-regexps
-		     :functions 'muse-latex-markup-functions
-		     :strings   'muse-latex-markup-strings
-		     :specials  'muse-latex-markup-specials
-		     :after     'muse-latex-finalize-buffer
-		     :header    'muse-latex-header
-		     :footer    'muse-latex-footer
-		     :browser   'find-file)
+                     :suffix    'muse-latex-extension
+                     :regexps   'muse-latex-markup-regexps
+                     :functions 'muse-latex-markup-functions
+                     :strings   'muse-latex-markup-strings
+                     :specials  'muse-latex-markup-specials
+                     :after     'muse-latex-finalize-buffer
+                     :header    'muse-latex-header
+                     :footer    'muse-latex-footer
+                     :browser   'find-file)
 
   (muse-derive-style "pdf" "latex"
-		     :final   'muse-latex-pdf-generate
-		     :browser 'muse-latex-pdf-browse-file
-		     :osuffix 'muse-latex-pdf-extension)
+                     :final   'muse-latex-pdf-generate
+                     :browser 'muse-latex-pdf-browse-file
+                     :osuffix 'muse-latex-pdf-extension)
 
   (muse-derive-style "latexcjk" "latex"
-		     :header    'muse-latexcjk-header
-		     :footer    'muse-latexcjk-footer)
+                     :header    'muse-latexcjk-header
+                     :footer    'muse-latexcjk-footer)
 
   (muse-derive-style "pdfcjk" "latexcjk"
-		     :final   'muse-latex-pdf-generate
-		     :browser 'muse-latex-pdf-browse-file
-		     :osuffix 'muse-latex-pdf-extension))
+                     :final   'muse-latex-pdf-generate
+                     :browser 'muse-latex-pdf-browse-file
+                     :osuffix 'muse-latex-pdf-extension))
 
 (provide 'muse-latex)
 

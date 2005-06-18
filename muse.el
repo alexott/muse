@@ -74,7 +74,7 @@ familiar with Emacs."
   "Say whether time T1 is less than time T2."
   (or (< (car t1) (car t2))
       (and (= (car t1) (car t2))
-	   (< (nth 1 t1) (nth 1 t2)))))
+           (< (nth 1 t1) (nth 1 t2)))))
 
 (defun muse-page-name (&optional name)
   "Return the canonical form of a Muse page name.
@@ -83,10 +83,10 @@ All this means is that certain extensions, like .gz, are removed."
     (unless name
       (setq name buffer-file-name))
     (if name
-	(let ((page (file-name-nondirectory name)))
-	  (if (string-match muse-ignored-extensions-regexp page)
-	      (replace-match "" t t page)
-	    page)))))
+        (let ((page (file-name-nondirectory name)))
+          (if (string-match muse-ignored-extensions-regexp page)
+              (replace-match "" t t page)
+            page)))))
 
 (defun muse-eval-lisp (form)
   "Evaluate the given form and return the result as a string."
@@ -96,26 +96,26 @@ All this means is that certain extensions, like .gz, are removed."
       (cond
        ((stringp object) object)
        ((and (listp object)
-	     (not (eq object nil)))
-	(let ((string (pp-to-string object)))
-	  (substring string 0 (1- (length string)))))
+             (not (eq object nil)))
+        (let ((string (pp-to-string object)))
+          (substring string 0 (1- (length string)))))
        ((numberp object)
-	(number-to-string object))
+        (number-to-string object))
        ((eq object nil) "")
        (t
-	(pp-to-string object))))))
+        (pp-to-string object))))))
 
 ;; The following code was extracted from cl
 
 (defun muse-const-expr-p (x)
   (cond ((consp x)
-	 (or (eq (car x) 'quote)
-	     (and (memq (car x) '(function function*))
-		  (or (symbolp (nth 1 x))
-		      (and (eq (and (consp (nth 1 x))
-				    (car (nth 1 x))) 'lambda) 'func)))))
-	((symbolp x) (and (memq x '(nil t)) t))
-	(t t)))
+         (or (eq (car x) 'quote)
+             (and (memq (car x) '(function function*))
+                  (or (symbolp (nth 1 x))
+                      (and (eq (and (consp (nth 1 x))
+                                    (car (nth 1 x))) 'lambda) 'func)))))
+        ((symbolp x) (and (memq x '(nil t)) t))
+        (t t)))
 
 (put 'muse-assertion-failed 'error-conditions '(error))
 (put 'muse-assertion-failed 'error-message "Assertion failed")
@@ -125,12 +125,12 @@ All this means is that certain extensions, like .gz, are removed."
 Thus, `(list* A B C D)' is equivalent to `(nconc (list A B C) D)', or to
 `(cons A (cons B (cons C D)))'."
   (cond ((not rest) arg)
-	((not (cdr rest)) (cons arg (car rest)))
-	(t (let* ((n (length rest))
-		  (copy (copy-sequence rest))
-		  (last (nthcdr (- n 2) copy)))
-	     (setcdr last (car (cdr last)))
-	     (cons arg copy)))))
+        ((not (cdr rest)) (cons arg (car rest)))
+        (t (let* ((n (length rest))
+                  (copy (copy-sequence rest))
+                  (last (nthcdr (- n 2) copy)))
+             (setcdr last (car (cdr last)))
+             (cons arg copy)))))
 
 (defmacro muse-assert (form &optional show-args string &rest args)
   "Verify that FORM returns non-nil; signal an error if not.
@@ -139,19 +139,19 @@ Other args STRING and ARGS... are arguments to be passed to `error'.
 They are not evaluated unless the assertion fails.  If STRING is
 omitted, a default message listing FORM itself is used."
   (let ((sargs
-	 (and show-args
-	      (delq nil (mapcar
-			 (function
-			  (lambda (x)
-			    (and (not (muse-const-expr-p x)) x)))
-			 (cdr form))))))
+         (and show-args
+              (delq nil (mapcar
+                         (function
+                          (lambda (x)
+                            (and (not (muse-const-expr-p x)) x)))
+                         (cdr form))))))
     (list 'progn
-	  (list 'or form
-		(if string
-		    (muse-list* 'error string (append sargs args))
-		  (list 'signal '(quote muse-assertion-failed)
-			(muse-list* 'list (list 'quote form) sargs))))
-	  nil)))
+          (list 'or form
+                (if string
+                    (muse-list* 'error string (append sargs args))
+                  (list 'signal '(quote muse-assertion-failed)
+                        (muse-list* 'list (list 'quote form) sargs))))
+          nil)))
 
 ;; Compatibility functions
 

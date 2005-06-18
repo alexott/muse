@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-18 20:12:05 GMT	Michael Olson <mwolson@gnu.org>	patch-64
+
+    Summary:
+      Massively untabify files.
+    Revision:
+      muse--main--1.0--patch-64
+
+
+    modified files:
+     ChangeLog ChangeLog.2004 experimental/muse-message.el
+     experimental/muse-wiki.el muse-book.el muse-colors.el
+     muse-convert.el muse-docbook.el muse-html.el muse-http.el
+     muse-journal.el muse-latex.el muse-mode.el muse-poem.el
+     muse-project.el muse-publish.el muse-regexps.el
+     muse-texinfo.el muse.el
+
+
 2005-06-18 19:57:44 GMT	Michael Olson <mwolson@gnu.org>	patch-63
 
     Summary:

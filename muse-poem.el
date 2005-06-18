@@ -163,10 +163,10 @@
   (insert "\n<verse>")
   (let ((beg (point)) end line)
     (if (search-forward "\n\n\n" nil t)
-	(progn
-	  (setq end (copy-marker (match-beginning 0) t))
-	  (replace-match "\n</verse>\n")
-	  (delete-region (point) (point-max)))
+        (progn
+          (setq end (copy-marker (match-beginning 0) t))
+          (replace-match "\n</verse>\n")
+          (delete-region (point) (point-max)))
       (goto-char (point-max))
       (setq end (point))
       (insert "</verse>\n"))
@@ -174,9 +174,9 @@
     (set (make-local-variable 'muse-poem-longest-line) "")
     (while (< (point) end)
       (setq line (buffer-substring-no-properties (point)
-						 (line-end-position)))
+                                                 (line-end-position)))
       (if (> (length line) (length muse-poem-longest-line))
-	  (setq muse-poem-longest-line line))
+          (setq muse-poem-longest-line line))
       (forward-line 1))
     nil))
 
@@ -190,61 +190,61 @@
 The form of usage is:
   <poem title=\"page.name\">"
   (let ((page (cdr (assoc (cdr (assoc "title" attrs))
-			  (muse-project-file-alist))))
-	beg start end text)
+                          (muse-project-file-alist))))
+        beg start end text)
     (if (null page)
-	(insert "  *Reference to\n  unknown poem \""
-		(cdr (assoc "title" attrs)) "\".*\n")
+        (insert "  *Reference to\n  unknown poem \""
+                (cdr (assoc "title" attrs)) "\".*\n")
       (setq beg (point))
       (insert
        (with-temp-buffer
-	 (insert-file-contents page)
-	 (goto-char (point-min))
-	 (if (assoc "nohead" attrs)
-	     (progn
-	       (forward-line 3)
-	       (delete-region (point-min) (point)))
-	   (insert "** ")
-	   (search-forward "\n\n\n")
-	   (replace-match "\n\n"))
-	 (if (search-forward "\n\n\n" nil t)
-	     (setq end (match-beginning 0))
-	   (setq end (point-max)))
-	 (buffer-substring-no-properties (point-min) end)))
+         (insert-file-contents page)
+         (goto-char (point-min))
+         (if (assoc "nohead" attrs)
+             (progn
+               (forward-line 3)
+               (delete-region (point-min) (point)))
+           (insert "** ")
+           (search-forward "\n\n\n")
+           (replace-match "\n\n"))
+         (if (search-forward "\n\n\n" nil t)
+             (setq end (match-beginning 0))
+           (setq end (point-max)))
+         (buffer-substring-no-properties (point-min) end)))
       (setq end (point-marker))
       (goto-char beg)
       (unless (assoc "nohead" attrs)
-	(forward-line 2))
+        (forward-line 2))
       (while (< (point) end)
-	(insert "> ")
-	(forward-line 1)))))
+        (insert "> ")
+        (forward-line 1)))))
 
 (add-to-list 'muse-publish-markup-tags muse-poem-tag)
 
 (unless (assoc "poem-latex" muse-publishing-styles)
   (muse-derive-style "poem-latex" "latex"
-		     :before  'muse-poem-prepare-buffer
-		     :strings 'muse-poem-markup-strings
-		     :header  'muse-poem-latex-header
-		     :footer  'muse-poem-latex-footer)
+                     :before  'muse-poem-prepare-buffer
+                     :strings 'muse-poem-markup-strings
+                     :header  'muse-poem-latex-header
+                     :footer  'muse-poem-latex-footer)
 
   (muse-derive-style "poem-pdf" "pdf"
-		     :before  'muse-poem-prepare-buffer
-		     :strings 'muse-poem-markup-strings
-		     :header  'muse-poem-latex-header
-		     :footer  'muse-poem-latex-footer)
+                     :before  'muse-poem-prepare-buffer
+                     :strings 'muse-poem-markup-strings
+                     :header  'muse-poem-latex-header
+                     :footer  'muse-poem-latex-footer)
 
   (muse-derive-style "chapbook-latex" "latex"
-		     :before  'muse-poem-prepare-buffer
-		     :strings 'muse-poem-chapbook-strings
-		     :header  'muse-chapbook-latex-header
-		     :footer  'muse-chapbook-latex-footer)
+                     :before  'muse-poem-prepare-buffer
+                     :strings 'muse-poem-chapbook-strings
+                     :header  'muse-chapbook-latex-header
+                     :footer  'muse-chapbook-latex-footer)
 
   (muse-derive-style "chapbook-pdf" "pdf"
-		     :before  'muse-poem-prepare-buffer
-		     :strings 'muse-poem-chapbook-strings
-		     :header  'muse-chapbook-latex-header
-		     :footer  'muse-chapbook-latex-footer))
+                     :before  'muse-poem-prepare-buffer
+                     :strings 'muse-poem-chapbook-strings
+                     :header  'muse-chapbook-latex-header
+                     :footer  'muse-chapbook-latex-footer))
 
 (provide 'muse-poem)
 
