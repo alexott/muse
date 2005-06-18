@@ -320,8 +320,6 @@ document.
 
 The above renders as: <lisp>(concat "This form gets " "inserted")</lisp>.
 
-* Authoring mode
-
 * Publishing styles
 
 One of the principle features of Muse is the ability to publish a

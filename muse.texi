@@ -13,7 +13,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for Muse version 3.00.90 (RC1).
+This manual is for the Emacs Muse version 3.00.90 (RC1).
 
 Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
@@ -55,7 +55,7 @@ under the terms of the GNU General Public License.
 * Projects::                    Creating a Muse project.
 * Keystroke Summary::           Keys used in Muse mode.
 * Markup Rules::                Rules for creating special markup.
-* Publishing::                  Publishing styles available in Muse.
+* Publishing Styles::           Generating different kinds of documents.
 * Getting Help and Reporting Bugs::  Further ways of getting help.
 * History::                     History of this document.
 * Contributors::                Contributors to this documentation.
@@ -83,6 +83,10 @@ Markup Rules
 * Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
+
+Publishing Styles
+
+* Deriving Styles::             Deriving from an existing style.
 
 @end detailmenu
 @end menu
@@ -343,7 +347,7 @@ Move to the previous Wiki reference.
 @end table
 
 
-@node Markup Rules, Publishing, Keystroke Summary, Top
+@node Markup Rules, Publishing Styles, Keystroke Summary, Top
 @comment  node-name,  next,  previous,  up
 @chapter Markup Rules
 @cindex markup
@@ -564,7 +568,6 @@ Only very simple tables are supported.  The syntax is:
 @cindex links
 
 @cindex links, explicit
-@strong{Explicit Links}
 
 A hyperlink can reference a URL, or another page within a Muse
 project.  In addition, descriptive text can be specified, which should
@@ -659,15 +662,62 @@ Note that you should not use the @code{insert} command within a set of
 @verb{|<lisp>|} tags, since the return value from the @verb{|<lisp>|}
 tags will be automatically inserted into the document.
 
-@node Publishing, Getting Help and Reporting Bugs, Markup Rules, Top
+@node Publishing Styles, Getting Help and Reporting Bugs, Markup Rules, Top
 @comment  node-name,  next,  previous,  up
-@chapter Publishing
-@cindex publishing
+@chapter Publishing Styles
+@cindex publishing styles
 
-To be completed.
+One of the principle features of Muse is the ability to publish a simple
+input text to a variety of different output styles.  Muse also makes it
+easy to create new styles, or derive from an existing style.
+
+@menu
+* Deriving Styles::             Deriving a style from an existing one.
+@end menu
+
+@node Deriving Styles, , Publishing Styles, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Deriving styles
+@cindex publishing styles, deriving
+
+To create a new style from an existing one, use @code{muse-derive-style}
+as follows.  This is a good way to fix something you don't like about a
+particular publishing style, or to personalize it.
+
+@example
+(muse-derive-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
+@end example
+
+The derived name is a string defining the new style, such as "my-html".
+The base name must identify an existing style, such as "html" -- if you
+have loaded @file{muse-html}.  The style parameters are the same as
+those used to create a style, except that they override whatever
+definitions exist in the base style.  However, some definitions only
+partially override.  Those which support partial overriding are:
+
+@table @option
+
+@item :functions
+If a markup function is not found in the derived style's function list,
+the base style's function list will be queried.
+
+@item :strings
+If a markup string is not found in the derived style's string list, the
+base style's string list will be queried.
+
+@item :before
+If this option is specified, it will be consulted rather than the
+corresponding value in the derived style.  This applies to the following
+options as well.
+
+@item :before-end
+
+@item :after
+
+@end table
 
 
-@node Getting Help and Reporting Bugs, History, Publishing, Top
+@node Getting Help and Reporting Bugs, History, Publishing Styles, Top
 @comment  node-name,  next,  previous,  up
 @chapter Getting Help and Reporting Bugs
 @cindex help, getting
@@ -681,15 +731,16 @@ go.
 Michael Olson made for Muse.  For the duration of his
 maintainership, it may be considered the official Muse website.
 
+@uref{http://www.emacswiki.org/cgi-bin/wiki/MuseMode} is the
+emacswiki.org page, and anyone may add tips, hints, or bug descriptions
+to it.
+
 You can join the mailing list at
 @email{emacs-wiki-discuss@@nongnu.org} using the subscription form at
 @uref{http://mail.nongnu.org/mailman/listinfo/
 emacs-wiki-discuss}. This mailing list is also available via Gmane
 (@uref{http://gmane.org/}). The group is called
 @samp{gmane.emacs.wiki.general}.
-
-@uref{http://www.emacswiki.org/cgi-bin/wiki/MuseMode} is the
-emacswiki.org page, and anyone may add tips and hints to it.
 
 You can visit the IRC Freenode channel @samp{#emacs}. Many of the
 contributors are frequently around and willing to answer your
@@ -724,13 +775,9 @@ John Wiegley's request.
 @chapter Contributors
 @cindex contributors
 
-@example
-Copyright @copyright{} 2001, 2002, 2003, 2004 Free Software Foundation
-@end example
-
 The first draft of this document was taken from the emacs-wiki texinfo
-manual.  Michael Olson adapted it for Muse and began the process of
-adding content to it.
+manual.  Michael Olson adapted it for Muse and added most of its
+content.
 
 John Sullivan did a majority of the work on the emacs-wiki texinfo
 manual.
