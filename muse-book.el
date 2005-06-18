@@ -42,12 +42,12 @@ style keyword :nochapters is used, in which case they are all run
 together as if one giant chapter."
   :group 'muse-publish)
 
-(defcustom muse-before-book-publish-hook nil
+(defcustom muse-book-before-publish-hook nil
   "A hook run in the book buffer before it is marked up."
   :type 'hook
   :group 'muse-book)
 
-(defcustom muse-after-book-publish-hook nil
+(defcustom muse-book-after-publish-hook nil
   "A hook run in the book buffer after it is marked up."
   :type 'hook
   :group 'muse-book)

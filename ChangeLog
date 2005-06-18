@@ -2,6 +2,33 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-18 06:21:19 GMT	Michael Olson <mwolson@gnu.org>	patch-62
+
+    Summary:
+      Document Blosxom, Book, DocBook, and HTML publishing styles.
+    Revision:
+      muse--main--1.0--patch-62
+
+    * muse-blosxom.el: Clean up header.
+    
+    * muse-book.el (muse-before-book-publish-hook): Rename to
+      `muse-book-before-publish-hook'.
+      (muse-after-book-publish-hook): Rename to
+      `muse-book-after-publish-hook'.
+    
+    * muse-html.el (muse-html-anchor-on-word, muse-html-table-attributes)
+      (muse-html-markup-strings, muse-xhtml-markup-strings)
+      (muse-html-meta-content-type, muse-html-meta-content-encoding)
+      (muse-html-charset-default, muse-html-encoding-default)
+      (muse-html-encoding-map): Docfixes.
+    
+    * muse.texi (Blosxom, Book, DocBook, HTML, Deriving Styles): New
+      sections.
+
+    modified files:
+     ChangeLog muse-blosxom.el muse-book.el muse-html.el muse.texi
+
+
 2005-06-18 01:35:33 GMT	Michael Olson <mwolson@gnu.org>	patch-61
 
     Summary:

@@ -164,8 +164,8 @@ shown in the following example.
 
 (defcustom muse-html-anchor-on-word nil
   "When true, anchors surround the closest word. This allows you
-to select them in a browser (ie, for pasting), but has the
-side-effect of marking up headers in multiple colours if your
+to select them in a browser (i.e. for pasting), but has the
+side-effect of marking up headers in multiple colors if your
 header style is different from your link style."
   :type 'boolean
   :group 'muse-html)
@@ -175,7 +175,7 @@ header style is different from your link style."
   "The attribute to be used with HTML <table> tags.
 Note that since Muse supports direct insertion of HTML tags, you
 can easily create any kind of table you want, as long as each
-line begins at column 0 (to prevent it from being blockquote'd).
+line begins at column 0 (to prevent it from being blockquoted).
 To make such a table, use this idiom:
 
   <verbatim>
@@ -270,7 +270,7 @@ For more on the structure of this list, see
     (begin-ddt       . "<dl>\n<dt><strong>")
     (start-dde       . "</strong></dt>\n<dd>")
     (end-ddt         . "</dd>\n</dl>"))
-  "Strings used for marking up text.
+  "Strings used for marking up text as HTML.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
   :type '(alist :key-type symbol :value-type string)
@@ -289,7 +289,7 @@ differs little between the various styles."
     (last-stanza-end . "<br />")
     (empty-verse-line . "<br />")
     (end-center      . "\n</span>"))
-  "Strings used for marking up text.
+  "Strings used for marking up text as XHTML.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles.
 
@@ -322,27 +322,31 @@ searched."
   :group 'muse-html)
 
 (defcustom muse-html-meta-content-type "text/html"
-  "The content type used for the HTML <meta> tag."
+  "The content type used for the HTML <meta> tag.
+If you are striving for XHTML 1.1 compliance, you may want to
+change this to \"application/xhtml+xml\"."
   :type 'string
   :group 'muse-html)
 
 (defcustom muse-html-meta-content-encoding (if (featurep 'mule)
 					      'detect
 					    "iso-8859-1")
-  "If set to the symbol 'detect, use `muse-coding-map' to try
-  and determine the HTML charset from emacs's coding. If set to a string, this
-  string will be used to force a particular charset"
+  "The charset to append to the HTML <meta> tag.
+If set to the symbol 'detect, use `muse-html-encoding-map' to try
+and determine the HTML charset from emacs's coding.  If set to a
+string, this string will be used to force a particular charset"
   :type '(choice string symbol)
   :group 'muse-html)
 
 (defcustom muse-html-charset-default "iso-8859-1"
   "The default HTML meta charset to use if no translation is found in
-  `muse-coding-map'"
+`muse-html-encoding-map'."
   :type 'string
   :group 'muse-html)
 
 (defcustom muse-html-encoding-default 'iso-8859-1
-  "The default emacs coding  use if no special characters are found"
+  "The default Emacs buffer encoding to use in published files.
+This will be used if no special characters are found."
   :type 'symbol
   :group 'muse-html)
 
@@ -355,7 +359,7 @@ searched."
     (chinese-iso-8bit   . "gb2312")
     (chinese-gbk        . "gbk"))
   "An alist mapping emacs coding systems to appropriate HTML charsets.
-  Use the base name of the coding system (ie, without the -unix)"
+Use the base name of the coding system (i.e. without the -unix)."
   :type '(alist :key-type coding-system :value-type string)
   :group 'muse-html)
 

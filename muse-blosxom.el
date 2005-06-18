@@ -25,17 +25,18 @@
 
 ;;; Commentary:
 
-;; Blosxom publishes a tree of categorised files to a mirrored tree of
-;; blosxom stories to be served by blosxom.cgi or pyblosxom.cgi.
+;; The Blosxom publishing style publishes a tree of categorised files
+;; to a mirrored tree of blosxom stories to be served by blosxom.cgi
+;; or pyblosxom.cgi.
 ;;
-;; Serving your entries with (py)blosxom
-;; -------------------------------------
+;; Serving entries with (py)blosxom
+;; --------------------------------
 ;;
 ;; Each Blosxom file must include `#date yyyy-mm-dd', or optionally
-;; the longer `#date yyyy-mm-dd-hh-mm', plus whatever normal content
-;; is desired.
+;; the longer `#date yyyy-mm-dd-hh-mm', a title (using the `#title'
+;; directive) plus whatever normal content is desired.
 ;;
-;; This date directive is not used directly by (py)blosxom or this
+;; The date directive is not used directly by (py)blosxom or this
 ;; program.  You need to find two additional items to make use of this
 ;; feature.
 ;;

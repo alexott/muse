@@ -86,7 +86,18 @@ Markup Rules
 
 Publishing Styles
 
-* Deriving Styles::             Deriving from an existing style.
+* Blosxom::                     Integrating Muse and pyblosxom.
+* Blosxom Requirements::        
+* Blosxom Entries::             
+* Book::                        Publish entries into a compilation.
+* DocBook::                     Publish in DocBook XML form.
+* HTML::                        Publish in HTML or XHTML form.
+* Deriving Styles::             Deriving a style from an existing one.
+
+Blosxom
+
+* Blosxom Requirements::        Necessary publishing-related tools.
+* Blosxom Entries::             Format of an entry and automation.
 
 @end detailmenu
 @end menu
@@ -672,10 +683,309 @@ input text to a variety of different output styles.  Muse also makes it
 easy to create new styles, or derive from an existing style.
 
 @menu
+* Blosxom::                     Integrating Muse and pyblosxom.
+* Blosxom Requirements::        
+* Blosxom Entries::             
+* Book::                        Publish entries into a compilation.
+* DocBook::                     Publish in DocBook XML form.
+* HTML::                        Publish in HTML or XHTML form.
 * Deriving Styles::             Deriving a style from an existing one.
 @end menu
 
-@node Deriving Styles, , Publishing Styles, Publishing Styles
+@node Blosxom, Book, Publishing Styles, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Blosxom
+
+The blosxom publishing style publishes a tree of categorised files to a
+mirrored tree of blosxom stories to be served by blosxom.cgi or
+pyblosxom.cgi.
+
+@menu
+* Blosxom Requirements::        Necessary publishing-related tools.
+* Blosxom Entries::             Format of an entry and automation.
+@end menu
+
+@node Blosxom Requirements, Blosxom Entries, Blosxom, Blosxom
+@comment  node-name,  next,  previous,  up
+@section Blosxom Requirements
+
+You will need to have @command{pyblosxom.cgi} or @command{blosxom.cgi}
+installed on a machine that you have upload access to.
+
+The following additional components are required in order to make the
+date of blog entries display as something sensible.
+
+@enumerate
+@item
+A script to gather date directives from the entire blog tree into a
+single file.  The file must associate a blog entry with a date.
+
+@item
+A plugin for (py)blosxom that reads this file.
+@end enumerate
+
+These 2 things are provided for @command{pyblosxom.cgi} in the
+@file{contrib/pyblosxom} subdirectory.  @file{getstamps.py} provides the
+former service, while @file{hardcodedates.py} provides the latter
+service.  Eventually it is hoped that a @command{blosxom.cgi} plugin and
+script will be found/written.
+
+Here is a sample listing from my @file{timestamps} file, which maps
+each file to a date.  This can really be in any format, as long as your
+date-gathering script and your plugin can both understand it.
+
+@example
+2005-04-01-14-16 personal/paper_cranes
+2005-03-21 personal/spring_break_over
+2004-10-24 personal/finished_free_culture
+@end example
+
+@node Blosxom Entries, , Blosxom Requirements, Blosxom
+@comment  node-name,  next,  previous,  up
+@section Blosxom Entries
+
+Each Blosxom file must include `#date yyyy-mm-dd', or optionally the
+longer `#date yyyy-mm-dd-hh-mm', a title (using the #title directive),
+plus whatever normal content is desired.
+
+The date directive is not used directly by @command{pyblosxom.cgi} or
+this program.  You need to have the two additional items from the former
+section to make use of this feature.
+
+There is a function called @code{muse-blosxom-new-entry} that will
+automate the process of making a new blog entry.  To make use of it, do
+the following.
+
+@itemize @bullet
+@item
+Customize @code{muse-blosxom-base-directory} to the location that your
+blog entries are stored.
+
+@item
+Assign the @code{muse-blosxom-base-directory} function to a key
+sequence.  I use the following code to assign this function to
+@kbd{C-c p l'}.
+
+@example
+(global-set-key "\C-cpl" 'muse-blosxom-new-entry)
+@end example
+
+@item
+You should create your directory structure ahead of time under your base
+directory.  These directories, which correspond with category names, may
+be nested.
+
+@item
+When you enter this key sequence, you will be prompted for the category
+of your entry and its title.  Upon entering this information, a new file
+will be created that corresponds with the title, but in lowercase
+letters and having special characters converted to underscores.  The
+title and date directives will be inserted automatically.
+@end itemize
+
+@node Book, DocBook, Blosxom, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Book
+
+This publishing style is used to output ``books'' in LaTeX or PDF
+format.
+
+Each page will become a separate chapter in the book, unless the style
+keyword @option{:nochapters} is used, in which case they are all run
+together as if one giant chapter.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, book-latex
+@item book-latex
+Publish a book in LaTeX form.  The header and footer are different than
+the normal LaTeX publishing mode.
+
+@cindex publishing styles, book-pdf
+@item book-pdf
+Publish a book in PDF form.  The header and footer are different than
+the normal PDF publishing mode.
+
+@end table
+
+@emph{Options provided}
+
+@table @code
+
+@item muse-book-before-publish-hook
+A hook run in the book buffer before it is marked up.
+
+@item muse-book-after-publish-hook
+A hook run in the book buffer after it is marked up.
+
+@item muse-book-latex-header
+Header used for publishing books to LaTeX.
+
+@item muse-book-latex-footer
+Footer used for publishing books to LaTeX.
+
+@end table
+
+@node DocBook, HTML, Book, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Book
+
+This publishing style is used to generate DocBook XML files.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, docbook
+@item docbook
+
+@end table
+
+@emph{Options provided}
+
+@table @code
+
+@item muse-docbook-extension
+Default file extension for publishing DocBook XML files.
+
+@item muse-docbook-header
+Header used for publishing DocBook XML files.
+
+@item muse-docbook-footer
+Footer used for publishing DocBook XML files.
+
+@item muse-docbook-publishing-regexps
+List of markup rules for publishing a Muse page to DocBook XML.
+
+@item muse-docbook-markup-function
+An alist of style types to custom functions for that kind of text.
+
+@item muse-docbook-publishing-strings
+Strings used for marking up text.
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@item muse-docbook-markup-specials
+A table of characters which must be represented specially.
+
+@end table
+
+@node HTML, Deriving Styles, DocBook, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Book
+
+This publishing style is capable of producing HTML or XHTML documents.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, html
+@item html
+Supports publishing to HTML 4.0 and HTML 4.01, Strict or Transitional.
+
+@item xhtml
+Supports publishing to XHTML 1.0 and XHTML 1.1, Strict or Transitional.
+
+@end table
+
+@emph{Options provided}
+
+If an HTML option does not have a corresponding XHTML option, it will
+be used for both of these publishing styles.
+
+@table @code
+
+@item muse-html-extension
+Default file extension for publishing HTML files.
+
+@item muse-html-style-sheet
+Store your stylesheet definitions here.  This is used in
+@code{muse-html-header}.  You can put raw CSS in here or a
+@verb{|<link>|} tag to an external stylesheet.  This text may contain
+@verb{|<lisp>|} markup tags.
+
+If you are using XHTML, make sure to close the @verb{|<link>|} tag
+properly.
+
+@item muse-html-header
+Header used for publishing HTML files.
+
+@item muse-html-footer
+Footer used for publishing HTML files.
+
+@item muse-xhtml-header
+Header used for publishing XHTML files.
+
+@item muse-xhtml-footer
+Footer used for publishing XHTML files.
+
+@item muse-html-anchor-on-word
+When true, anchors surround the closest word. This allows you to select
+them in a browser (i.e. for pasting), but has the side-effect of marking
+up headers in multiple colors if your header style is different from
+your link style.
+
+@item muse-html-table-attributes
+The attribute to be used with HTML @verb{|<table>|} tags.  Note that
+since Muse supports direct insertion of HTML tags, you can easily create
+any kind of table you want, as long as each line begins at column 0 (to
+prevent it from being blockquoted).
+
+@item muse-html-markup-regexps
+List of markup rules for publishing a Muse page to HTML.
+
+@item muse-html-markup-functions
+An alist of style types to custom functions for that kind of text.
+
+@item muse-html-markup-strings
+Strings used for marking up text as HTML.  These cover the most basic
+kinds of markup, the handling of which differs little between the
+various styles.
+
+@item muse-xhtml-markup-strings
+Strings used for marking up text as XHTML.  These cover the most basic
+kinds of markup, the handling of which differs little between the
+various styles.
+
+@item muse-html-markup-tags
+A list of tag specifications, for specially marking up HTML.
+
+@item muse-html-markup-specials
+A table of characters which must be represented specially.  By default,
+this includes @samp{"}, @samp{<}, @samp{>}, and @samp{&}.
+
+@item muse-html-meta-http-equiv
+The http-equiv attribute used for the HTML @verb{|<meta>|} tag.
+
+@item muse-html-meta-content-type
+The content type used for the HTML @verb{|<meta>|} tag.
+If you are striving for XHTML 1.1 compliance, you may want to change
+this to ``application/xhtml+xml''.
+
+@item muse-html-meta-content-encoding
+The charset to append to the HTML @verb{|<meta>|} tag.  If set to the
+symbol 'detect, use @code{muse-html-encoding-map} to try and determine
+the HTML charset from emacs's coding.  If set to a string, this string
+will be used to force a particular charset.
+
+@item muse-html-charset-default
+The default HTML meta charset to use if no translation is found in
+@code{muse-html-encoding-map}.
+
+@item muse-html-encoding-default
+The default Emacs buffer encoding to use in published files.  This will
+be used if no special characters are found.
+
+@item muse-html-encoding-map
+An alist mapping emacs coding systems to appropriate HTML charsets.  Use
+the base name of the coding system (i.e. without the -unix).
+
+@end table
+
+@node Deriving Styles, , HTML, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Deriving styles
 @cindex publishing styles, deriving
