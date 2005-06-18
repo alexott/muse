@@ -206,7 +206,7 @@ See `muse-publish' for more information."
            (not (string= link name)))
       (concat "[[" (or link "") "][" name "]]")
     (concat "[[" (or link "") "]]")))
-        
+
 (defun muse-edit-link-at-point ()
   "Edit the current link.
 Do not rename the page originally referred to."
@@ -342,18 +342,10 @@ This function is not entirely accurate, but it's close enough."
 
 (defun muse-generate-index (&optional as-list exclude-private)
   "Generate an index of all Muse pages."
-  (let ((files (sort (copy-alist (muse-project-file-alist))
-		     (function
-		      (lambda (l r)
-			(string-lessp (car l) (car r))))))
-	file)
+  (let ((index (muse-index-as-string as-list exclude-private)))
     (with-current-buffer (get-buffer-create "*Muse Index*")
       (erase-buffer)
-      (while files
-	(unless (and exclude-private
-		     (muse-project-private-p (cdar files)))
-	  (insert (if as-list "- " "") "[[" (caar files) "]]\n"))
-	(setq files (cdr files)))
+      (insert index)
       (current-buffer))))
 
 (defun muse-index ()
@@ -367,6 +359,21 @@ This function is not entirely accurate, but it's close enough."
       (setq muse-current-project project)
       (pop-to-buffer (current-buffer))))
   (message "Generating Muse index...done"))
+
+(defun muse-index-as-string (&optional as-list exclude-private)
+  "Generate an index of all Muse pages."
+  (let ((files (sort (copy-alist (muse-project-file-alist))
+		     (function
+		      (lambda (l r)
+			(string-lessp (car l) (car r))))))
+	file)
+    (with-temp-buffer
+      (while files
+	(unless (and exclude-private
+		     (muse-project-private-p (cdar files)))
+	  (insert (if as-list " - " "") "[[" (caar files) "]]\n"))
+	(setq files (cdr files)))
+      (buffer-string))))
 
 ;;; Insert tags interactively on C-c TAB
 

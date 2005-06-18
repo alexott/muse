@@ -2,6 +2,51 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-18 19:57:44 GMT	Michael Olson <mwolson@gnu.org>	patch-63
+
+    Summary:
+      Merged from hodique@lifl.fr--2005 (patch 2-6), without the WikiWord change.
+    Revision:
+      muse--main--1.0--patch-63
+
+    (Summary of changes that Yann made)
+    
+    * muse-colors.el (muse-colors-link): Whitespace cleanup.
+    
+    * muse-mode.el (muse-generate-index): Move index generation code into
+      `muse-index-as-string'.
+      (muse-index-as-string): New function that generates an index and
+      returns it as a string, instead of placing it in a buffer like
+      `muse-generate-index' used to.
+    
+    Patches applied:
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-2
+       merge from mwolson@gnu.org--2005
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-3
+       Accept WikiWords as links [mostly rescinded]
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-4
+       merge from mwolson@gnu.org--2005/muse--main--1.0
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-5
+       Merged from mwolson@gnu.org--2005 (patch 60-62)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-6
+       provide a string view of the index
+
+    modified files:
+     ChangeLog muse-colors.el muse-latex.el muse-mode.el
+
+    new patches:
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-2
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-3
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-4
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-5
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-6
+
+
 2005-06-18 06:21:19 GMT	Michael Olson <mwolson@gnu.org>	patch-62
 
     Summary:

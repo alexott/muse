@@ -533,23 +533,23 @@ bad-link face"
           (flyspell-unhighlight-at cur)
           (setq cur (1+ cur)))))
     (let* ((link (match-string-no-properties 2))
-	   (desc (match-string-no-properties 3))
-	   (props (muse-link-properties
-		   desc (muse-link-face (match-string 2))))
-	   (invis-props (append props (muse-link-properties desc))))
+           (desc (match-string-no-properties 3))
+           (props (muse-link-properties
+        	   desc (muse-link-face (match-string 2))))
+           (invis-props (append props (muse-link-properties desc))))
       (if desc
-	  (progn
-	    ;; we put the normal face properties on the invisible
-	    ;; portion too, since emacs sometimes will position
-	    ;; the cursor on an intangible character
-	    (add-text-properties (match-beginning 0)
-				 (match-beginning 3) invis-props)
-	    (add-text-properties (match-beginning 3) (match-end 3) props)
-	    (add-text-properties (match-end 3) (match-end 0) invis-props))
-	(add-text-properties (match-beginning 0)
-			     (match-beginning 2) invis-props)
-	(add-text-properties (match-beginning 2) (match-end 0) props)
-	(add-text-properties (match-end 2) (match-end 0) invis-props)))
+          (progn
+            ;; we put the normal face properties on the invisible
+            ;; portion too, since emacs sometimes will position
+            ;; the cursor on an intangible character
+            (add-text-properties (match-beginning 0)
+        			 (match-beginning 3) invis-props)
+            (add-text-properties (match-beginning 3) (match-end 3) props)
+            (add-text-properties (match-end 3) (match-end 0) invis-props))
+        (add-text-properties (match-beginning 0)
+        		     (match-beginning 2) invis-props)
+        (add-text-properties (match-beginning 2) (match-end 0) props)
+        (add-text-properties (match-end 2) (match-end 0) invis-props)))
     (goto-char (match-end 0))
     (add-text-properties
      (match-beginning 0) (match-end 0)

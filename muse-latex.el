@@ -99,7 +99,7 @@
   :type '(choice string file)
   :group 'muse-latex)
 
-(defcustom muse-latexcjk-footer 
+(defcustom muse-latexcjk-footer
   "
 \\end{CJK*}
 \\end{document}"
