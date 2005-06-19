@@ -87,17 +87,19 @@ Markup Rules
 Publishing Styles
 
 * Blosxom::                     Integrating Muse and pyblosxom.
-* Blosxom Requirements::        
-* Blosxom Entries::             
 * Book::                        Publish entries into a compilation.
 * DocBook::                     Publish in DocBook XML form.
 * HTML::                        Publish in HTML or XHTML form.
+* Journal::                     Keeping a journal or blog.
+* LaTeX::                       Publishing LaTeX documents.
+* Common Elements::             Styles share some common functionality.
 * Deriving Styles::             Deriving a style from an existing one.
 
 Blosxom
 
 * Blosxom Requirements::        Necessary publishing-related tools.
 * Blosxom Entries::             Format of an entry and automation.
+* Blosxom Options::             Styles provided and options available.
 
 @end detailmenu
 @end menu
@@ -684,11 +686,12 @@ easy to create new styles, or derive from an existing style.
 
 @menu
 * Blosxom::                     Integrating Muse and pyblosxom.
-* Blosxom Requirements::        
-* Blosxom Entries::             
 * Book::                        Publish entries into a compilation.
 * DocBook::                     Publish in DocBook XML form.
 * HTML::                        Publish in HTML or XHTML form.
+* Journal::                     Keeping a journal or blog.
+* LaTeX::                       Publishing LaTeX documents.
+* Common Elements::             Styles share some common functionality.
 * Deriving Styles::             Deriving a style from an existing one.
 @end menu
 
@@ -696,13 +699,13 @@ easy to create new styles, or derive from an existing style.
 @comment  node-name,  next,  previous,  up
 @section Blosxom
 
-The blosxom publishing style publishes a tree of categorised files to a
-mirrored tree of blosxom stories to be served by blosxom.cgi or
-pyblosxom.cgi.
+The Blosxom publishing style publishes a tree of categorised files to a
+mirrored tree of stories to be served by blosxom.cgi or pyblosxom.cgi.
 
 @menu
 * Blosxom Requirements::        Necessary publishing-related tools.
 * Blosxom Entries::             Format of an entry and automation.
+* Blosxom Options::             Styles provided and options available.
 @end menu
 
 @node Blosxom Requirements, Blosxom Entries, Blosxom, Blosxom
@@ -740,7 +743,7 @@ date-gathering script and your plugin can both understand it.
 2004-10-24 personal/finished_free_culture
 @end example
 
-@node Blosxom Entries, , Blosxom Requirements, Blosxom
+@node Blosxom Entries, Blosxom Options, Blosxom Requirements, Blosxom
 @comment  node-name,  next,  previous,  up
 @section Blosxom Entries
 
@@ -783,6 +786,48 @@ letters and having special characters converted to underscores.  The
 title and date directives will be inserted automatically.
 @end itemize
 
+@node Blosxom Options, , Blosxom Entries, Blosxom
+@comment  node-name,  next,  previous,  up
+@section Blosxom Options
+
+The following styles and options are available in the Blosxom publishing
+style.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, blosxom-html
+@item blosxom-html
+Publish Blosxom entries in HTML form.
+
+@cindex publishing styles, blosxom-xhtml
+@item blosxom-xhtml
+Publish Blosxom entries in XHTML form.
+
+@end table
+
+@emph{Options provided}
+
+@table @code
+
+@item muse-blosxom-extension
+Default file extension for publishing Blosxom files.
+
+@item muse-blosxom-header
+Header used for publishing Blosxom files.
+
+@item muse-blosxom-footer
+Footer used for publishing Blosxom files.
+
+@item muse-blosxom-base-directory
+Base directory of blog entries, used by @code{muse-blosxom-new-entry}.
+
+This is the top-level directory where your blog entries may be found
+locally.
+
+@end table
+
 @node Book, DocBook, Blosxom, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Book
@@ -793,6 +838,10 @@ format.
 Each page will become a separate chapter in the book, unless the style
 keyword @option{:nochapters} is used, in which case they are all run
 together as if one giant chapter.
+
+You will need to call the @code{muse-book-publish-project} function in
+order to publish this style.  An example of this may be found in John
+Wiegley's configuration file at @file{examples/johnw/muse-johnw.el}.
 
 @emph{Styles provided}
 
@@ -830,7 +879,7 @@ Footer used for publishing books to LaTeX.
 
 @node DocBook, HTML, Book, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Book
+@section DocBook
 
 This publishing style is used to generate DocBook XML files.
 
@@ -864,6 +913,7 @@ An alist of style types to custom functions for that kind of text.
 
 @item muse-docbook-publishing-strings
 Strings used for marking up text.
+
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles.
 
@@ -872,9 +922,9 @@ A table of characters which must be represented specially.
 
 @end table
 
-@node HTML, Deriving Styles, DocBook, Publishing Styles
+@node HTML, Journal, DocBook, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Book
+@section HTML
 
 This publishing style is capable of producing HTML or XHTML documents.
 
@@ -902,9 +952,10 @@ be used for both of these publishing styles.
 Default file extension for publishing HTML files.
 
 @item muse-html-style-sheet
-Store your stylesheet definitions here.  This is used in
-@code{muse-html-header}.  You can put raw CSS in here or a
-@verb{|<link>|} tag to an external stylesheet.  This text may contain
+Store your stylesheet definitions here.
+
+This is used in @code{muse-html-header}.  You can put raw CSS in here or
+a @verb{|<link>|} tag to an external stylesheet.  This text may contain
 @verb{|<lisp>|} markup tags.
 
 If you are using XHTML, make sure to close the @verb{|<link>|} tag
@@ -923,16 +974,18 @@ Header used for publishing XHTML files.
 Footer used for publishing XHTML files.
 
 @item muse-html-anchor-on-word
-When true, anchors surround the closest word. This allows you to select
-them in a browser (i.e. for pasting), but has the side-effect of marking
-up headers in multiple colors if your header style is different from
-your link style.
+When true, anchors surround the closest word.
+
+This allows you to select them in a browser (i.e. for pasting), but has
+the side-effect of marking up headers in multiple colors if your header
+style is different from your link style.
 
 @item muse-html-table-attributes
-The attribute to be used with HTML @verb{|<table>|} tags.  Note that
-since Muse supports direct insertion of HTML tags, you can easily create
-any kind of table you want, as long as each line begins at column 0 (to
-prevent it from being blockquoted).
+The attribute to be used with HTML @verb{|<table>|} tags.
+
+Note that since Muse supports direct insertion of HTML tags, you can
+easily create any kind of table you want, as long as each line begins at
+column 0 (to prevent it from being blockquoted).
 
 @item muse-html-markup-regexps
 List of markup rules for publishing a Muse page to HTML.
@@ -941,17 +994,20 @@ List of markup rules for publishing a Muse page to HTML.
 An alist of style types to custom functions for that kind of text.
 
 @item muse-html-markup-strings
-Strings used for marking up text as HTML.  These cover the most basic
-kinds of markup, the handling of which differs little between the
-various styles.
+Strings used for marking up text as HTML.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
 
 @item muse-xhtml-markup-strings
-Strings used for marking up text as XHTML.  These cover the most basic
-kinds of markup, the handling of which differs little between the
-various styles.
+Strings used for marking up text as XHTML.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
 
 @item muse-html-markup-tags
 A list of tag specifications, for specially marking up HTML.
+@xref{muse-publish-markup-tags}, for more information.
 
 @item muse-html-markup-specials
 A table of characters which must be represented specially.  By default,
@@ -962,30 +1018,409 @@ The http-equiv attribute used for the HTML @verb{|<meta>|} tag.
 
 @item muse-html-meta-content-type
 The content type used for the HTML @verb{|<meta>|} tag.
+
 If you are striving for XHTML 1.1 compliance, you may want to change
 this to ``application/xhtml+xml''.
 
 @item muse-html-meta-content-encoding
-The charset to append to the HTML @verb{|<meta>|} tag.  If set to the
-symbol 'detect, use @code{muse-html-encoding-map} to try and determine
-the HTML charset from emacs's coding.  If set to a string, this string
-will be used to force a particular charset.
+The charset to append to the HTML @verb{|<meta>|} tag.
+
+If set to the symbol 'detect, use @code{muse-html-encoding-map} to try
+and determine the HTML charset from emacs's coding.  If set to a string,
+this string will be used to force a particular charset.
 
 @item muse-html-charset-default
 The default HTML meta charset to use if no translation is found in
 @code{muse-html-encoding-map}.
 
 @item muse-html-encoding-default
-The default Emacs buffer encoding to use in published files.  This will
-be used if no special characters are found.
+The default Emacs buffer encoding to use in published files.
+This will be used if no special characters are found.
 
 @item muse-html-encoding-map
-An alist mapping emacs coding systems to appropriate HTML charsets.  Use
-the base name of the coding system (i.e. without the -unix).
+An alist mapping emacs coding systems to appropriate HTML charsets.
+Use the base name of the coding system (i.e. without the -unix).
 
 @end table
 
-@node Deriving Styles, , HTML, Publishing Styles
+@node Journal, LaTeX, HTML, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Journal
+@cindex journal
+
+The module facilitates the keeping and publication of a journal.  When
+publishing to HTML, it assumes the form of a web log, or blog.
+
+The input format for each entry is as follows:
+
+@example
+  * 20040317: Title of entry
+
+  Text for the entry.
+
+  <qotd>
+  "You know who you are. It comes down to a simple gut check: You
+  either love what you do or you don't. Period." -- P. Bronson
+  </qotd>
+@end example
+
+The "qotd", or Quote of the Day, is entirely optional.  When generated
+to HTML, this entry is rendered as:
+
+@example
+  <div id="entry">
+    <div id="entry-qotd">
+      <h3>Quote of the Day:</h3>
+      <p>"You know who you are. It comes down to a simple gut
+        check: You either love what you do or you don't. Period."
+        -- P. Bronson</p>
+    </div>
+    <div id="entry-body">
+      <div id="entry-head">
+        <div id="entry-date">
+          <span class="date">March 17, 2004</span>
+        </div>
+        <div id="entry-title">
+          <h2>Title of entry</h2>
+        </div>
+      </div>
+      <div id="entry-text">
+        <p>Text for the entry.</p>
+      </div>
+    </div>
+  </div>
+@end example
+
+The plurality of "div" tags makes it possible to display the entries in
+any form you wish, using a CSS style.
+
+Also, an .RDF file can be generated from your journal by publishing it
+with the "rdf" style.  It uses the first two sentences of the first
+paragraph of each entry as its "description", and auto-generates tags
+for linking to the various entries.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, journal-html
+@item journal-html
+Publish journal entries as an HTML document.
+
+@cindex publishing styles, journal-xhtml
+@item journal-xhtml
+Publish journal entries as an XHTML document.
+
+@cindex publishing styles, journal-latex
+@item journal-latex
+Publish journal entries as a LaTeX document.
+
+@cindex publishing styles, journal-pdf
+@item journal-pdf
+Publish journal entries as a PDF document.
+
+@cindex publishing styles, journal-book-latex
+@item journal-book-latex
+Publish journal entries as a LaTeX book.
+
+@cindex publishing styles, journal-book-pdf
+@item journal-book-pdf
+Publish journal entries as a PDF book.
+
+@cindex publishing styles, journal-rdf
+@cindex publishing styles, RSS 1.0
+@item journal-rdf
+Publish journal entries as an RDF file (RSS 1.0).
+
+@cindex publishing styles, journal-rss
+@cindex publishing styles, RSS 2.0
+@item journal-rss
+Publish journal entries as an RSS file (RSS 2.0).
+
+@end table
+
+@emph{Options provided}
+
+@table @code
+
+@item muse-journal-heading-regexp
+A regexp that matches a journal heading.
+
+Paren group 1 is the ISO date, group 2 is the optional category, and
+group 3 is the optional heading for the entry.
+
+@item muse-journal-date-format
+Date format to use for journal entries.
+
+@item muse-journal-html-heading-regexp
+A regexp that matches a journal heading from an HTML document.
+
+Paren group 1 is the ISO date, group 2 is the optional category, and
+group 3 is the optional heading for the entry.
+
+@item muse-journal-html-entry-template
+Template used to publish individual journal entries as HTML.
+
+@item muse-journal-latex-section
+Template used to publish a LaTeX section.
+
+@item muse-journal-latex-subsection
+Template used to publish a LaTeX subsection.
+
+@item muse-journal-latex-markup-tags
+A list of tag specifications, for specially marking up LaTeX.
+
+@xref{muse-publish-markup-tags}, for more information.
+
+@item muse-journal-rdf-extension
+Default file extension for publishing RDF (RSS 1.0) files.
+
+@item muse-journal-rdf-base-url
+The base URL of the website referenced by the RDF file.
+
+@item muse-journal-rdf-header
+Header used for publishing RDF (RSS 1.0) files.
+
+@item muse-journal-rdf-footer
+Footer used for publishing RDF (RSS 1.0) files.
+
+@item muse-journal-rdf-date-format
+Date format to use for RDF entries.
+
+@item muse-journal-rdf-entry-template
+Template used to publish individual journal entries as RDF.
+
+@item muse-journal-rdf-summarize-entries
+If non-nil, include only summaries in the RDF file, not the full data.
+
+@item muse-journal-rss-extension
+Default file extension for publishing RSS 2.0 files.
+
+@item muse-journal-rss-base-url
+The base URL of the website referenced by the RSS file.
+
+@item muse-journal-rss-header
+Header used for publishing RSS 2.0 files.
+
+@item muse-journal-rss-footer
+Footer used for publishing RSS 2.0 files.
+
+@item muse-journal-rss-date-format
+Date format to use for RSS 2.0 entries.
+
+@item muse-journal-rss-entry-template
+Template used to publish individual journal entries as RSS 2.0.
+
+@item muse-journal-rss-enclosure-types-alist
+File types that are accepted as RSS enclosures.
+
+This is an alist that maps file extension to content type.
+
+Useful for podcasting.
+
+@item muse-journal-rss-summarize-entries
+If non-nil, include only summaries in the RSS file, not the full data.
+
+Many RSS subscribers find this annoying.
+
+@item muse-journal-rss-markup-regexps
+List of markup rules for publishing a Muse journal page to RSS.
+
+For more information on the structure of this list,
+@xref{muse-publish-markup-regexps}.
+
+@item muse-journal-rss-markup-functions
+An alist of style types to custom functions for that kind of text.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-functions}.
+
+@end table
+
+@node LaTeX, Common Elements, Journal, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section LaTeX
+
+This publishing style is capable of producing LaTeX or PDF documents.
+
+If you wish to publish PDF documents, you will need to have a good TeX
+installation.  For Debian, this can be accomplished by installing the
+``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts are also a must.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, latex
+@item latex
+Publish a LaTeX document.
+
+@cindex publishing styles, pdf
+@item pdf
+Publish a PDF document, using an external LaTeX document conversion
+tool.
+
+@cindex publishing styles, latexcjk
+@item latexcjk
+Publish a LaTeX document with CJK (Chinese) encodings.
+
+@cindex publishing styles, latexcjk
+@item latexcjk
+Publish a PDF document with CJK (Chinese) encodings, using an external
+LaTeX document conversion tool.
+
+@end table
+
+@emph{Options provided}
+
+@table @code
+
+@item muse-latex-extension
+Default file extension for publishing LaTeX files.
+
+@item muse-latex-pdf-extension
+Default file extension for publishing LaTeX files to PDF.
+
+@item muse-latex-header
+Header used for publishing LaTeX files.
+
+@item muse-latex-footer
+Footer used for publishing LaTeX files.
+
+@item muse-latexcjk-header
+Header used for publishing LaTeX files (CJK).
+
+@item muse-latexcjk-footer
+Footer used for publishing LaTeX files (CJK).
+
+@item muse-latex-markup-regexps
+List of markup regexps for identifying regions in a Muse page.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-regexps}.
+
+@item muse-latex-markup-functions
+An alist of style types to custom functions for that kind of text.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-functions}.
+
+@item muse-latex-markup-strings
+Strings used for marking up text.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@item muse-latexcjk-encoding-map
+An alist mapping emacs coding systems to appropriate CJK codings.
+Use the base name of the coding system (ie, without the -unix).
+
+@item muse-latexcjk-encoding-default
+The default Emacs buffer encoding to use in published files.
+
+This will be used if no special characters are found.
+
+@item muse-latex-markup-specials
+A table of characters which must be represented specially.
+
+@end table
+
+@node Common Elements, Deriving Styles, LaTeX, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Common Elements
+@cindex publishing styles, common
+
+@table @code
+
+@cindex publishing, markup functions
+@anchor{muse-publish-markup-functions}
+@item muse-publish-markup-functions
+An alist of style types to custom functions for that kind of text.
+
+This is used by publishing styles to attempt to minimize the amount of
+custom regexps that each has to define.  @file{muse-publish} provides
+rules for the most common types of markup.
+
+Each member of the list is the form:
+
+@example
+  (SYMBOL FUNCTION)
+@end example
+
+@itemize @bullet
+@item SYMBOL
+Describes the type of text to associate with this rule.
+@code{muse-publish-markup-regexps} maps regexps to these symbols.
+
+@item FUNCTION
+Function to use to mark up this kind of rule if no suitable function is
+found through the @option{:functions} tag of the current style.
+@end itemize
+
+@cindex publishing, markup regexps
+@anchor{muse-publish-markup-regexps}
+@item muse-publish-markup-regexps
+List of markup rules for publishing a page with Muse.
+
+The rules given in this variable are invoked first, followed by whatever
+rules are specified by the current style.
+
+Each member of the list is either a function, or a list of the form:
+
+@example
+  (REGEXP/SYMBOL TEXT-BEGIN-GROUP REPLACEMENT-TEXT/FUNCTION/SYMBOL)
+@end example
+
+@itemize @bullet
+@item REGEXP
+A regular expression, or symbol whose value is a regular expression,
+which is searched for using `re-search-forward'.
+
+@item TEXT-BEGIN-GROUP
+The matching group within that regexp which denotes the beginning of the
+actual text to be marked up.
+
+@item REPLACEMENT-TEXT
+A string that will be passed to `replace-match'.
+
+If it is not a string, but a function, it will be called to determine
+what the replacement text should be (it must return a string).  If it is
+a symbol, the value of that symbol should be a string.
+@end itemize
+
+The replacements are done in order, one rule at a time.  Writing
+the regular expressions can be a tricky business.  Note that case
+is never ignored.  `case-fold-search' is always bound to nil
+while processing the markup rules.
+
+@cindex publishing, markup tags
+@anchor{muse-publish-markup-tags}
+@item muse-publish-markup-tags
+A list of tag specifications, for specially marking up text.
+
+XML-style tags are the best way to add custom markup to Muse.  This is
+easily accomplished by customizing this list of markup tags.
+
+For each entry, the name of the tag is given, whether it expects a
+closing tag and/or an optional set of attributes, and a function that
+performs whatever action is desired within the delimited region.
+
+The tags themselves are deleted during publishing, before the function
+is called.  The function is called with three arguments, the beginning
+and end of the region surrounded by the tags.  If properties are
+allowed, they are passed as a third argument in the form of an alist.
+The `end' argument to the function is always a marker.
+
+Point is always at the beginning of the region within the tags, when the
+function is called.  Wherever point is when the function finishes is
+where tag markup will resume.
+
+These tag rules are processed once at the beginning of markup, and once
+at the end, to catch any tags which may have been inserted in-between.
+
+@end table
+
+@node Deriving Styles, , Common Elements, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Deriving styles
 @cindex publishing styles, deriving

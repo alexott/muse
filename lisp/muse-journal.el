@@ -89,20 +89,20 @@
 
 (defcustom muse-journal-heading-regexp
   "\\(?:\\([0-9]+\\)\\(?:: \\)?\\)?\\(.+?\\)?"
-  "A regexp that match a journal heading.
+  "A regexp that matches a journal heading.
 Paren group 1 is the ISO date, group 2 is the optional category,
 and group 3 is the optional heading for the entry."
   :type 'regexp
   :group 'muse-journal)
 
 (defcustom muse-journal-date-format "%a, %e %b %Y"
-  "Date formats to use for journal entries."
+  "Date format to use for journal entries."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-html-heading-regexp
   (concat "^<h2[^>]*>" muse-journal-heading-regexp "</h2>$")
-  "A regexp that match a journal heading.
+  "A regexp that matches a journal heading from an HTML document.
 Paren group 1 is the ISO date, group 2 is the optional category,
 and group 3 is the optional heading for the entry."
   :type 'regexp
@@ -128,27 +128,28 @@ and group 3 is the optional heading for the entry."
     </div>
   </div>
 </div>\n\n"
-  ""
+  "Template used to publish individual journal entries as HTML."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-latex-section
   "\\section*{%title% \\hfill {\\normalsize %date%}}
 \\addcontentsline{toc}{chapter}{%title%}"
-  ""
+  "Template used to publish a LaTeX section."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-latex-subsection
   "\\subsection*{%title%}
 \\addcontentsline{toc}{section}{%title%}"
-  ""
+  "Template used to publish a LaTeX subsection."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-latex-markup-tags
   '(("qotd" t nil muse-journal-latex-qotd-tag))
-  "See `muse-publish-markup-tags' for more info."
+  "A list of tag specifications, for specially marking up LaTeX.
+See `muse-publish-markup-tags' for more info."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
@@ -167,12 +168,12 @@ and group 3 is the optional heading for the entry."
         t))))
 
 (defcustom muse-journal-rdf-extension ".rdf"
-  ""
+  "Default file extension for publishing RDF (RSS 1.0) files."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rdf-base-url ""
-  "The base URL of the website reference by the RDF file."
+  "The base URL of the website referenced by the RDF file."
   :type 'string
   :group 'muse-journal)
 
@@ -196,19 +197,19 @@ and group 3 is the optional heading for the entry."
       </rdf:Seq>
     </items>
   </channel>\n"
-  ""
+  "Header used for publishing RDF (RSS 1.0) files."
   :type '(choice string file)
   :group 'muse-journal)
 
 (defcustom muse-journal-rdf-footer
   "</rdf:RDF>\n"
-  ""
+  "Footer used for publishing RDF (RSS 1.0) files."
   :type '(choice string file)
   :group 'muse-journal)
 
 (defcustom muse-journal-rdf-date-format
   "%Y-%m-%dT%H:%M:%S"
-  ""
+  "Date format to use for RDF entries."
   :type 'string
   :group 'muse-journal)
 
@@ -222,7 +223,7 @@ and group 3 is the optional heading for the entry."
     <dc:date>%date%</dc:date>
     <dc:creator>%maintainer%</dc:creator>
   </item>\n"
-  ""
+  "Template used to publish individual journal entries as RDF."
   :type 'string
   :group 'muse-journal)
 
@@ -232,12 +233,12 @@ and group 3 is the optional heading for the entry."
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-extension ".xml"
-  ""
+  "Default file extension for publishing RSS 2.0 files."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-base-url ""
-  "The base URL of the website reference by the RSS file."
+  "The base URL of the website referenced by the RSS file."
   :type 'string
   :group 'muse-journal)
 
@@ -253,20 +254,20 @@ and group 3 is the optional heading for the entry."
     <description><lisp>(muse-publishing-directive \"desc\")</lisp></description>
     <language>en-us</language>
     <generator>Emacs Muse</generator>"
-  ""
+  "Header used for publishing RSS 2.0 files."
   :type '(choice string file)
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-footer
   "  </channel>
 </rss>\n"
-  ""
+  "Footer used for publishing RSS 2.0 files."
   :type '(choice string file)
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-date-format
   "%a, %d %b %Y %H:%M:%S %Z"
-  ""
+  "Date format to use for RSS 2.0 entries."
   :type 'string
   :group 'muse-journal)
 
@@ -280,25 +281,29 @@ and group 3 is the optional heading for the entry."
       <guid>%link%#%anchor%</guid>
       %enclosure%
     </item>\n"
-  ""
+  "Template used to publish individual journal entries as RSS 2.0."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-enclosure-types-alist
   '(("mp3" . "audio/mpeg"))
-  ""
+  "File types that are accepted as RSS enclosures.
+This is an alist that maps file extension to content type.
+Useful for podcasting."
   :type '(alist :key-type string :value-type string)
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-summarize-entries nil
-  "If non-nil, include only summaries in the RSS file, not the full data."
+  "If non-nil, include only summaries in the RSS file, not the full data.
+Many RSS subscribers find this annoying."
   :type 'boolean
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-markup-regexps
   '((10000 muse-link-regexp 0 "\\2"))
-  "List of markup rules for publishing a Muse journal page to RDF.
-For more on the structure of this list, see `muse-publish-markup-regexps'."
+  "List of markup rules for publishing a Muse journal page to RSS 2.0.
+For more information on the structure of this list, see
+`muse-publish-markup-regexps'."
   :type '(repeat (choice
                   (list :tag "Markup rule"
                         integer

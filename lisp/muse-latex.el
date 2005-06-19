@@ -76,6 +76,7 @@
   "Footer used for publishing LaTeX files."
   :type '(choice string file)
   :group 'muse-latex)
+
 (defcustom muse-latexcjk-header
   "\\documentclass{article}
 
@@ -95,15 +96,14 @@
 
 <lisp>(and muse-publish-generate-contents
            \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
-  "Header used for publishing LaTeX files(CJK)."
+  "Header used for publishing LaTeX files (CJK)."
   :type '(choice string file)
   :group 'muse-latex)
 
 (defcustom muse-latexcjk-footer
-  "
-\\end{CJK*}
+  "\n\\end{CJK*}
 \\end{document}"
-  "Footer used for publishing LaTeX files(CJK)."
+  "Footer used for publishing LaTeX files (CJK)."
   :type '(choice string file)
   :group 'muse-latex)
 
@@ -206,12 +206,13 @@ differs little between the various styles."
     (chinese-iso-8bit   . "{GB}{song}")
     (chinese-gbk        . "{GBK}{song}"))
   "An alist mapping emacs coding systems to appropriate CJK codings.
-  Use the base name of the coding system (ie, without the -unix)"
+Use the base name of the coding system (ie, without the -unix)."
   :type '(alist :key-type coding-system :value-type string)
   :group 'muse-latex)
 
 (defcustom muse-latexcjk-encoding-default "{GB}{song}"
-  "The default emacs coding  use if no special characters are found"
+  "The default Emacs buffer encoding to use in published files.
+This will be used if no special characters are found."
   :type 'string
   :group 'muse-latex)
 

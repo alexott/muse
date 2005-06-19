@@ -223,7 +223,18 @@ while processing the markup rules."
     (email     . muse-publish-markup-email)
     (link      . muse-publish-markup-link)
     (url       . muse-publish-markup-url))
-  "An alist of style types to custom functions for that kind of text."
+  "An alist of style types to custom functions for that kind of text.
+
+Each member of the list is of the form:
+
+  (SYMBOL FUNCTION)
+
+SYMBOL describes the type of text to associate with this rule.
+`muse-publish-markup-regexps' maps regexps to these symbols.
+
+FUNCTION is the function to use to mark up this kind of rule if
+no suitable function is found through the :functions tag of the
+current style."
   :type '(alist :key-type symbol :value-type function)
   :group 'muse-publish)
 

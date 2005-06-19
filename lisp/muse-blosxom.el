@@ -26,8 +26,8 @@
 ;;; Commentary:
 
 ;; The Blosxom publishing style publishes a tree of categorised files
-;; to a mirrored tree of blosxom stories to be served by blosxom.cgi
-;; or pyblosxom.cgi.
+;; to a mirrored tree of stories to be served by blosxom.cgi or
+;; pyblosxom.cgi.
 ;;
 ;; Serving entries with (py)blosxom
 ;; --------------------------------
@@ -101,23 +101,23 @@
 (require 'muse-html)
 
 (defgroup muse-blosxom nil
-  "Options controlling the behavior of Muse BLOSXOM publishing.
+  "Options controlling the behavior of Muse Blosxom publishing.
 See `muse-blosxom' for more information."
   :group 'muse-publish)
 
 (defcustom muse-blosxom-extension ".txt"
-  "Default file extension for publishing BLOSXOM files."
+  "Default file extension for publishing Blosxom files."
   :type 'string
   :group 'muse-blosxom)
 
 (defcustom muse-blosxom-header
   "<lisp>(muse-publishing-directive \"title\")</lisp>\n"
-  "Header used for publishing BLOSXOM files."
+  "Header used for publishing Blosxom files."
   :type '(choice string file)
   :group 'muse-blosxom)
 
 (defcustom muse-blosxom-footer ""
-  "Footer used for publishing BLOSXOM files."
+  "Footer used for publishing Blosxom files."
   :type '(choice string file)
   :group 'muse-blosxom)
 
@@ -138,7 +138,9 @@ See `muse-blosxom' for more information."
 ;; Enter a new blog entry
 
 (defcustom muse-blosxom-base-directory "~/Blog"
-  "Base directory of blog entries, used by `muse-blosxom-new-entry'."
+  "Base directory of blog entries, used by `muse-blosxom-new-entry'.
+This is the top-level directory where your blog entries may be found
+locally."
   :type 'directory
   :group 'muse-blosxom)
 
@@ -186,7 +188,7 @@ The page will be initialized with the current date and TITLE."
           "\n\n")
   (forward-line 2))
 
-;; Register the BLOSXOM Publisher
+;; Register the Blosxom Publisher
 
 (unless (assoc "blosxom-html" muse-publishing-styles)
   (muse-derive-style "blosxom-html" "html"
