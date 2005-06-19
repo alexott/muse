@@ -273,9 +273,7 @@ system to an associated CJK coding system."
     (lambda (file output-path)
       (let ((command (format "cd %s; pdflatex %s"
                              (file-name-directory output-path) file)))
-        (and (= 0 (shell-command command))
-             (= 0 (shell-command command))
-             (= 0 (shell-command command))))))
+        (shell-command command))))
    ".aux" ".toc" ".out" ".log"))
 
 (unless (assoc "latex" muse-publishing-styles)

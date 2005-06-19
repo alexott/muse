@@ -72,8 +72,7 @@ customization group."
 
 (defun muse-winnow-list (entries &optional predicate)
   "Return only those ENTRIES for which PREDICATE returns non-nil."
-  (let ((flist (list t))
-        valid p)
+  (let ((flist (list t)))
     (let ((entry entries))
       (while entry
         (if (funcall predicate (car entry))

@@ -164,8 +164,8 @@ Directories starting with \".\" will be ignored."
 
 Feel free to overwrite this if you have a different concept of what
 should be allowed in a filename."
-  (replace-regexp-in-string (concat "[^-." muse-regexp-alnum "]")
-                            "_" (downcase title)))
+  (muse-replace-regexp-in-string (concat "[^-." muse-regexp-alnum "]")
+                                 "_" (downcase title)))
 
 (defun muse-blosxom-new-entry (category title)
   "Start a new blog entry with given CATEGORY.

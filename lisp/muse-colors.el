@@ -429,7 +429,7 @@ Functions should not modify the contents of the buffer."
     (when tag-info
       (let ((closed-tag (match-string 3))
             (start (match-beginning 0))
-            (beg (point)) end attrs)
+            end attrs)
         (when (nth 2 tag-info)
           (let ((attrstr (match-string 2)))
             (while (and attrstr
@@ -536,7 +536,8 @@ bad-link face"
         (while (> (match-end 0) cur)
           (flyspell-unhighlight-at cur)
           (setq cur (1+ cur)))))
-    (let* ((link (muse-match-string-no-properties 2))
+    (let* (;; FIXME: link is not used
+           (link (muse-match-string-no-properties 2))
            (desc (muse-match-string-no-properties 3))
            (props (muse-link-properties
                    desc (muse-link-face (match-string 2))))

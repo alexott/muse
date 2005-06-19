@@ -102,8 +102,7 @@ when publishing files in that project."
 
 (defun muse-project-file-entries (path)
   (let* ((names (list t))
-         (lnames names)
-         file)
+         (lnames names))
     (cond
      ((file-directory-p path)
       (dolist (file (directory-files path t))

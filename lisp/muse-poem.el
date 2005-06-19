@@ -191,7 +191,7 @@ The form of usage is:
   <poem title=\"page.name\">"
   (let ((page (cdr (assoc (cdr (assoc "title" attrs))
                           (muse-project-file-alist))))
-        beg start end text)
+        beg end)
     (if (null page)
         (insert "  *Reference to\n  unknown poem \""
                 (cdr (assoc "title" attrs)) "\".*\n")

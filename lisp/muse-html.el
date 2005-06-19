@@ -485,8 +485,7 @@ if not escaped."
                      ((= type 3) "tfoot")))
          (col (cond ((= type 1) "td")
                     ((= type 2) "th")
-                    ((= type 3) "td")))
-         field)
+                    ((= type 3) "td"))))
     (insert "<table " muse-html-table-attributes ">\n"
             "  <" part ">\n"
             "    <tr>\n")

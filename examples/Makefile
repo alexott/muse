@@ -10,13 +10,13 @@ all: examples
 examples: $(EXAMPLES)
 
 %.html: %
-	SITEFLAG=$(SITEFLAG) ../scripts/publish html $<
+	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish html $<
 
 %.pdf: %
-	SITEFLAG=$(SITEFLAG) ../scripts/publish pdf $<
+	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish pdf $<
 
 %.info: %
-	SITEFLAG=$(SITEFLAG) ../scripts/publish info $<
+	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish info $<
 
 clean:
 	-rm -f missfont.log

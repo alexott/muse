@@ -176,6 +176,19 @@ omitted, a default message listing FORM itself is used."
       (match-string-no-properties num string)
     (match-string num string)))
 
+(defun muse-replace-regexp-in-string (regexp replacement text &rest args)
+  "Replace REGEXP with REPLACEMENT in TEXT.
+Other ARGS are ignored."
+  ;; If we really need any more args, that could be hacked in later.
+  (cond
+   ((fboundp 'replace-regexp-in-string)
+    (replace-regexp-in-string regexp replacement text))
+   ((fboundp 'replace-in-string)
+    (replace-in-string text regexp replacement))
+   (t (while (string-match regexp text)
+        (setq text (replace-match replacement nil t text)))
+      text)))
+
 (provide 'muse)
 
 ;;; muse.el ends here

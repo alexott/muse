@@ -2,6 +2,68 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-19 03:05:38 GMT	Michael Olson <mwolson@gnu.org>	patch-66
+
+    Summary:
+      Cater even more to XEmacs and its annoying whims.
+    Revision:
+      muse--main--1.0--patch-66
+
+    * examples/Makefile (%.html, %.pdf, %.info): Pass EMACS value as
+      environment variable.
+    
+    * lisp/Makefile (%.elc, test): Don't use "-L" option since XEmacs can't
+      handle it.  Load `muse-build.el' instead.
+    
+    * lisp/muse-colors.el (muse-colors-link): Add note that `link' is not
+      used.
+    
+    * lisp/muse-journal.el (muse-journal-latex-munge-buffer)
+      (muse-journal-rss-munge-buffer): Add note that the `qotd' binding is
+      not used.
+    
+    * lisp/muse-journal.el (muse-journal-generate-pages): Add note that this
+      function does not appear to be used.
+    
+    * lisp/muse.el (muse-replace-regexp-in-string): Use in place of
+      `replace-regexp-in-string', since XEmacs doesn't have this function.
+      We only implement the first 3 args, but this could be extended if we
+      need to do so.
+    
+    * lisp/muse-blosxom.el (muse-blosxom-title-to-file): Use
+      `muse-replace-regexp-in-string' in place of `replace-regexp-in-string'
+    
+    * lisp/muse-journal.el (muse-journal-anchorize-title): Ditto.
+    
+    * lisp/muse-colors.el (muse-colors-custom-tags): Remove unused binding to
+      make XEmacs shut up.
+    
+    * lisp/muse-convert.el (muse-write-footnote): Ditto.
+    
+    * lisp/muse-html.el (muse-html-markup-table): Ditto.
+    
+    * lisp/muse-http.el (muse-winnow-list): Ditto.
+    
+    * lisp/muse-poem.el (muse-poem-markup-tag): Ditto.
+    
+    * lisp/muse-project.el (muse-project-file-entries): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-markup): Ditto.
+    
+    * scripts/muse-build.el: Add contrib path first; probably doesn't change
+      anything.
+    
+    * scripts/publish: Use EMACS environment variable instead of hard-coding
+      it.
+
+    modified files:
+     ChangeLog examples/Makefile lisp/Makefile lisp/muse-blosxom.el
+     lisp/muse-colors.el lisp/muse-convert.el lisp/muse-html.el
+     lisp/muse-http.el lisp/muse-journal.el lisp/muse-latex.el
+     lisp/muse-poem.el lisp/muse-project.el lisp/muse-publish.el
+     lisp/muse.el scripts/muse-build.el scripts/publish
+
+
 2005-06-19 00:43:54 GMT	Michael Olson <mwolson@gnu.org>	patch-65
 
     Summary:

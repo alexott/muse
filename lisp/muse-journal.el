@@ -155,6 +155,7 @@ and group 3 is the optional heading for the entry."
                        function))
   :group 'muse-journal)
 
+;; FIXME: This doesn't appear to be used.
 (defun muse-journal-generate-pages ()
   (let ((output-dir (muse-style-element :path)))
     (goto-char (point-min))
@@ -323,8 +324,7 @@ For more on the structure of this list, see
         (setq title (substring title 0 (match-beginning 0))))
     (if (string-match "<[^>]+>" title)
         (setq title (replace-match "" nil nil title)))
-    (downcase (replace-regexp-in-string "[^a-zA-Z0-9_]" ""
-  title))))
+    (downcase (muse-replace-regexp-in-string "[^a-zA-Z0-9_]" "" title))))
 
 (defun muse-journal-sort-entries (&optional direction)
   (interactive "P")
@@ -453,6 +453,7 @@ For more on the structure of this list, see
     (while (re-search-forward heading-regexp nil t)
       (let ((date (match-string 1))
             (title (match-string 2))
+            ;; FIXME: Nothing is done with qotd
             qotd section)
         (save-match-data
           (when (and date
@@ -503,6 +504,7 @@ For more on the structure of this list, see
       (let* ((date (match-string 1))
              (orig-date date)
              (title (match-string 2))
+             ;; FIXME: Nothing is done with qotd
              enclosure qotd desc)
         (if title
             (save-match-data

@@ -55,8 +55,7 @@
     (goto-char (point-max))
     (if (= note 1)
         (insert "\nFootnotes:\n\n"))
-    (let ((beg (point)))
-      (insert "\n[" (number-to-string note) "]  " text ?\n))))
+    (insert "\n[" (number-to-string note) "]  " text ?\n)))
 
 ;;;###autoload
 (defun muse-latex-transform ()
