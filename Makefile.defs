@@ -9,5 +9,5 @@ SITEFLAG = --no-site-file
 # Installation options
 # PREFIX is only used here.
 PREFIX   = /usr/local
-ELISPDIR = $PREFIX/share/emacs/site-lisp
-INFODIR  = $PREFIX/info
+ELISPDIR = $(PREFIX)/share/emacs/site-lisp/muse
+INFODIR  = $(PREFIX)/info

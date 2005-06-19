@@ -52,13 +52,33 @@ Emacs Muse.  By default, the program that is installed with the name
 
 If you want to use the `xemacs' binary to perform the compilation, we
 would need to edit `Makefile.defs' in the top-level directory as
-follows.
+follows.  You can put either a full path to an Emacs or XEmacs binary
+or just the command name, as long as it is in the PATH.
 
 EMACS    = xemacs
 SITEFLAG = -no-site-file
 
+Running `make' should compile the Muse source files in the `lisp'
+directory.
+
 Installation
 ------------
+
+Muse may be installed into your file hierarchy by doing the following.
+
+Edit the `Makefile.defs' file so that ELISPDIR points to where you
+want the source and compiled Muse files to be installed and INFODIR
+indicates where to put the Muse manual.  Of course, you will want to
+edit EMACS and SITEFLAG as shown in the previous section as well if
+you are using XEmacs.
+
+Run `make' as a normal user.
+
+Run `make install' as the root user if you have chosen installation
+locations that require this.
+
+Insinuation
+-----------
 
 Two things need to happen in order for Muse to be usable with your
 version of Emacs or XEmacs.
@@ -108,8 +128,13 @@ Please consult http://www.emacswiki.org/cgi-bin/wiki/MuseMode to find
 more information on bugs, unimplemented features, and user-contributed
 tweaks.
 
-A TexInfo document is distributed with Muse in the `muse.texi' file.
-It is currently incomplete, but may still be of use.
+A full manual is distributed with Muse in the `muse.texi' file.  If
+you have installed Muse fully, it should be browsable from Info.
+Alternatively, type `make muse.html' in the top-level directory in
+order to make an HTML document.
+
+The current maintainer's website is at
+http://www.mwolson.org/projects/MuseMode.html.
 
 A mailing list for Muse and some related software exists; consult
 http://www.emacswiki.org/cgi-bin/wiki/EmacsWikiMailingList for details

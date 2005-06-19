@@ -192,6 +192,12 @@ differs little between the various styles."
   (shell-command (concat "open " file)))
 
 (defun muse-texinfo-info-generate (file output-path final-target)
+  ;; The version of `texinfmt.el' that comes with Emacs 21 doesn't
+  ;; support @documentencoding, so hack it in.
+  (when (and (not (featurep 'xemacs))
+             (eq emacs-major-version 21))
+    (put 'documentencoding 'texinfo-format
+         'texinfo-discard-line-with-args))
   (muse-publish-transform-output
    file output-path final-target "Info"
    (function
