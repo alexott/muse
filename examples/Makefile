@@ -1,5 +1,8 @@
 .PHONY: all examples clean realclean distclean fullclean
-EMACS    = emacs
+.PRECIOUS: %.html %.pdf %.info
+
+include ../Makefile.defs
+
 EXAMPLES = QuickStart.html QuickStart.pdf QuickStart.info
 
 all: examples
@@ -7,13 +10,13 @@ all: examples
 examples: $(EXAMPLES)
 
 %.html: %
-	../scripts/publish html $<
+	SITEFLAG=$(SITEFLAG) ../scripts/publish html $<
 
 %.pdf: %
-	../scripts/publish pdf $<
+	SITEFLAG=$(SITEFLAG) ../scripts/publish pdf $<
 
 %.info: %
-	../scripts/publish info $<
+	SITEFLAG=$(SITEFLAG) ../scripts/publish info $<
 
 clean:
 	-rm -f missfont.log

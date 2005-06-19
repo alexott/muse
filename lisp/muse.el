@@ -161,6 +161,21 @@ omitted, a default message listing FORM itself is used."
     (save-excursion
       (re-search-backward (concat "\\(?:" regexp "\\)\\=") limit t))))
 
+(defun muse-line-end-position (&optional n)
+  (if (fboundp 'line-end-position)
+      (line-end-position n)
+    (save-excursion (end-of-line n) (point))))
+
+(defun muse-line-beginning-position (&optional n)
+  (if (fboundp 'line-beginning-position)
+      (line-beginning-position n)
+    (save-excursion (beginning-of-line n) (point))))
+
+(defun muse-match-string-no-properties (num &optional string)
+  (if (fboundp 'match-string-no-properties)
+      (match-string-no-properties num string)
+    (match-string num string)))
+
 (provide 'muse)
 
 ;;; muse.el ends here

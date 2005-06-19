@@ -238,6 +238,7 @@ system to an associated CJK coding system."
                   (match-string 1)
                 (delete-region (match-beginning 0) (match-end 0))))
          (fields (split-string str "\\s-*|+\\s-*"))
+         ;; FIXME: `type' isn't used
          (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
                     (length (match-string 1 str)))))
     (insert "\\begin{tabular}{" (make-string (length fields) ?l) "}\n")

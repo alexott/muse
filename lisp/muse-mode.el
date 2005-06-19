@@ -193,7 +193,8 @@ See `muse-publish' for more information."
         (or (and (looking-at muse-url-regexp)
                  (match-string 0))
             (and (or (looking-at muse-link-regexp)
-                     (and (search-backward "[[" (line-beginning-position) t)
+                     (and (search-backward
+                           "[[" (muse-line-beginning-position) t)
                           (looking-at muse-link-regexp)))
                  (<= here (match-end 0))
                  (match-string 1)))))))
@@ -211,16 +212,15 @@ See `muse-publish' for more information."
   "Edit the current link.
 Do not rename the page originally referred to."
   (interactive)
-  (let (old-name)
-    (if (muse-link-at-point)
-        (replace-match
-         (muse-make-link
-          (read-string "Link: "
-                       (match-string-no-properties 1))
-          (read-string "Text: "
-                       (match-string-no-properties 2)))
-         t t)
-      (error "There is no valid link at point"))))
+  (if (muse-link-at-point)
+      (replace-match
+       (muse-make-link
+        (read-string "Link: "
+                     (muse-match-string-no-properties 1))
+        (read-string "Text: "
+                     (muse-match-string-no-properties 2)))
+       t t)
+    (error "There is no valid link at point")))
 
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK-NAME."
@@ -365,8 +365,7 @@ This function is not entirely accurate, but it's close enough."
   (let ((files (sort (copy-alist (muse-project-file-alist))
                      (function
                       (lambda (l r)
-                        (string-lessp (car l) (car r))))))
-        file)
+                        (string-lessp (car l) (car r)))))))
     (with-temp-buffer
       (while files
         (unless (and exclude-private

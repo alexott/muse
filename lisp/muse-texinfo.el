@@ -175,7 +175,7 @@ differs little between the various styles."
   (let* ((str (prog1
                   (match-string 1)
                 (delete-region (match-beginning 0) (match-end 0))))
-         (fields (split-string str "\\s-*|+\\s-*")) field)
+         (fields (split-string str "\\s-*|+\\s-*")))
     (insert "@multitable @columnfractions ")
     (dotimes (field (length fields))
       (insert (number-to-string (/ 1.0 (length fields))) " "))

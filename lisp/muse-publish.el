@@ -586,8 +586,8 @@ the file is published no matter what."
                                               "([^\"]+\\)\"\\)?")
                                       attrstr))
               (let ((attr (cons (downcase
-                                 (match-string-no-properties 1 attrstr))
-                                (match-string-no-properties 3 attrstr))))
+                                 (muse-match-string-no-properties 1 attrstr))
+                                (muse-match-string-no-properties 3 attrstr))))
                 (setq attrstr (replace-match "" t t attrstr))
                 (if attrs
                     (nconc attrs (list attr))
@@ -699,7 +699,7 @@ the file is published no matter what."
 
 (defun muse-publish-markup-footnote ()
   "Scan ahead and snarf up the footnote body"
-  (if (= (line-beginning-position) (match-beginning 0))
+  (if (= (muse-line-beginning-position) (match-beginning 0))
       ""
     (let ((footnote (save-match-data
                       (string-to-number (match-string 1))))
@@ -845,7 +845,7 @@ like read-only from being inadvertently deleted."
         count)
     (when (and markup-space
                (>= (setq count (skip-chars-forward " ")) 0))
-      (delete-region (line-beginning-position) (point))
+      (delete-region (muse-line-beginning-position) (point))
       (while (> count 0)
         (insert markup-space)
         (setq count (- count 2))))))
@@ -996,9 +996,9 @@ like read-only from being inadvertently deleted."
   (with-current-buffer buffer
     (goto-char (point-min))
     (let ((beg (and (search-forward "Emacs Muse begins here")
-                    (line-end-position)))
+                    (muse-line-end-position)))
           (end (and (search-forward "Emacs Muse ends here")
-                    (line-beginning-position))))
+                    (muse-line-beginning-position))))
       (buffer-substring-no-properties beg end))))
 
 (defun muse-published-contents (file)

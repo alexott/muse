@@ -242,6 +242,7 @@ Term1 ::
 Term2 ::
   This is a second definition
 
+<comment>
 ** Tables
 
 Only very simple tables are supported.  The syntax is:

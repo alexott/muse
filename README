@@ -18,9 +18,9 @@ styles for generating different kinds of output.
 Directory contents
 ==================
 
-When you unpack the Muse tarball, you will find the source files for
-Muse in the top level of the newly-created directory.  The directory
-structure is as follows.
+The directory structure is as follows.
+
+The manual is in the top-level directory.
 
 contrib :: Files that are not a part of Muse proper, but are useful
            enough to be bundled with Muse.
@@ -29,6 +29,8 @@ examples :: Example configuration files for use with Muse, as well as
             a publishable quickstart guide.
 
 experimental :: Source code that is not yet considered stable.
+
+lisp :: Muse source code.
 
 scripts :: Scripts that are used when publishing the QuickStart
            document; they might prove useful if you want to automate
@@ -42,24 +44,18 @@ Compiling
 
 This is an optional step, since Emacs Lisp source code does not
 necessarily have to be byte-compiled.  It will yield a speed increase,
-however.
+though.
 
 A working copy of Emacs or XEmacs is needed in order to compile the
 Emacs Muse.  By default, the program that is installed with the name
 `emacs' will be used.
 
 If you want to use the `xemacs' binary to perform the compilation, we
-would need to do the following.
-
- - Change the second line of `Makefile' and `examples/Makefile' to:
+would need to edit `Makefile.defs' in the top-level directory as
+follows.
 
 EMACS    = xemacs
-
- - Change the use of "--no-site-file" in `Makefile' to
-   "-no-site-file".
-
-It is hoped that these steps will be unnecessary in future Muse
-releases.
+SITEFLAG = -no-site-file
 
 Installation
 ------------

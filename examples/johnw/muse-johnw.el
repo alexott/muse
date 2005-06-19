@@ -221,7 +221,7 @@
 	      (if (< l base)
 		  (throw 'done t)))
 	    (when (<= l 1)
-	      (setq contents (cons (cons l (match-string-no-properties 2))
+	      (setq contents (cons (cons l (muse-match-string-no-properties 2))
 				   contents))
 	      (goto-char (match-beginning 2))
 	      (muse-html-insert-anchor (concat "sec" (int-to-string index)))
@@ -254,7 +254,7 @@
 	entries)
     (while (re-search-forward heading-regexp nil t)
       (let ((date (match-string 1))
-	    (title (match-string-no-properties 2))
+	    (title (muse-match-string-no-properties 2))
 	    qotd desc)
 	(save-match-data
 	  (when (and date

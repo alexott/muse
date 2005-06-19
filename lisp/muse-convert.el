@@ -21,11 +21,13 @@
 
 ;;; Commentary:
 
+;; Helper commands for converting a LaTeX file into a Muse file.
+
 ;;; Contributors:
 
 ;;; Code:
 
-;; Helper commands for converting a LaTeX file into a Muse file
+(require 'muse)
 (require 'muse-regexps)
 
 (defun muse-write-citation (note author citation pages)
@@ -69,9 +71,9 @@
           (looking-at "^\\\\author")
           (looking-at "^\\\\\\(med\\|big\\|small\\)skip")
           (looking-at "^\\\\maketitle"))
-      (delete-region (point) (line-end-position)))
+      (delete-region (point) (muse-line-end-position)))
      ((looking-at "^\\\\title{\\(.+\\)}")
-      (delete-region (match-end 1) (line-end-position))
+      (delete-region (match-end 1) (muse-line-end-position))
       (delete-region (point) (match-beginning 1))
       (insert "#title ")))
     (forward-line))

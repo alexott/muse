@@ -79,43 +79,44 @@ this to nil."
   "Outline faces to use when assigning Muse header faces.")
 
 (defun muse-make-faces ()
-  (dolist (num '(1 2 3 4))
-    (setq newsym (intern (concat "muse-header-"
-                                 (int-to-string num))))
-    (cond
-     ((null muse-colors-autogen-headings)
-      (make-empty-face newsym))
-     ((featurep 'xemacs)
-      (if (eq muse-colors-autogen-headings 'outline)
-          (copy-face (nth (1- num)
-                          muse-colors-outline-faces-list)
-                     newsym)
+  (let (newsym)
+    (dolist (num '(1 2 3 4))
+      (setq newsym (intern (concat "muse-header-"
+                                   (int-to-string num))))
+      (cond
+       ((null muse-colors-autogen-headings)
+        (make-empty-face newsym))
+       ((featurep 'xemacs)
+        (if (eq muse-colors-autogen-headings 'outline)
+            (copy-face (nth (1- num)
+                            muse-colors-outline-faces-list)
+                       newsym)
+          (eval `(defface ,newsym
+                   '((t (:size
+                         ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt"))
+                         :bold t)))
+                   "Muse header face"
+                   :group 'muse-colors))))
+       ((< emacs-major-version 21)
+        (if (eq muse-colors-autogen-headings 'outline)
+            (copy-face (nth (1- num)
+                            muse-colors-outline-faces-list)
+                       newsym)
+          (copy-face 'default newsym)))
+       ((eq muse-colors-autogen-headings 'outline)
         (eval `(defface ,newsym
-                 '((t (:size
-                       ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt"))
-                       :bold t)))
+                 '((t (:inherit
+                       ,(nth (1- num)
+                             muse-colors-outline-faces-list))))
                  "Muse header face"
-                 :group 'muse-colors))))
-     ((< emacs-major-version 21)
-      (if (eq muse-colors-autogen-headings 'outline)
-          (copy-face (nth (1- num)
-                          muse-colors-outline-faces-list)
-                     newsym)
-        (copy-face 'default newsym)))
-     ((eq muse-colors-autogen-headings 'outline)
-      (eval `(defface ,newsym
-               '((t (:inherit
-                     ,(nth (1- num)
-                           muse-colors-outline-faces-list))))
-               "Muse header face"
-               :group 'muse-colors)))
-     (t
-      (eval `(defface ,newsym
-               '((t (:height ,(1+ (* 0.1 (- 5 num)))
-                             :inherit variable-pitch
-                             :weight bold)))
-               "Muse header face"
-               :group 'muse-colors))))))
+                 :group 'muse-colors)))
+       (t
+        (eval `(defface ,newsym
+                 '((t (:height ,(1+ (* 0.1 (- 5 num)))
+                               :inherit variable-pitch
+                               :weight bold)))
+                 "Muse header face"
+                 :group 'muse-colors)))))))
 
 (defface muse-link-face
   '((((class color) (background light))
@@ -191,7 +192,7 @@ whether progress messages should be displayed to the user."
           (when (or (= beg (point-min))
                     (eq (char-before beg) ?\n))
             (add-text-properties
-             (line-beginning-position) (line-end-position)
+             (muse-line-beginning-position) (muse-line-end-position)
              (list 'face (intern (concat "muse-header-"
                                          (int-to-string leader))))))
         ;; beginning of line or space or symbol
@@ -368,13 +369,13 @@ of the functions listed in `muse-colors-markup'."
                              beg 'font-lock-multiline)
                             (point-min)))
               (goto-char beg)
-              (setq beg (line-beginning-position)))
+              (setq beg (muse-line-beginning-position)))
             (when font-lock-multiline
               (setq end (or (text-property-any end (point-max)
                                                'font-lock-multiline nil)
                             (point-max))))
             (goto-char end)
-            (setq end (line-beginning-position 2))
+            (setq end (muse-line-beginning-position 2))
             ;; Undo any fontification in the area.
             (font-lock-unfontify-region beg end)
             ;; And apply fontification based on `muse-colors-markup'
@@ -438,8 +439,8 @@ Functions should not modify the contents of the buffer."
                                               "\\([^\"]+\\)\"\\)?")
                                       attrstr))
               (let ((attr (cons (downcase
-                                 (match-string-no-properties 1 attrstr))
-                                (match-string-no-properties 3 attrstr))))
+                                 (muse-match-string-no-properties 1 attrstr))
+                                (muse-match-string-no-properties 3 attrstr))))
                 (setq attrstr (replace-match "" t t attrstr))
                 (if attrs
                     (nconc attrs (list attr))
@@ -535,8 +536,8 @@ bad-link face"
         (while (> (match-end 0) cur)
           (flyspell-unhighlight-at cur)
           (setq cur (1+ cur)))))
-    (let* ((link (match-string-no-properties 2))
-           (desc (match-string-no-properties 3))
+    (let* ((link (muse-match-string-no-properties 2))
+           (desc (muse-match-string-no-properties 3))
            (props (muse-link-properties
                    desc (muse-link-face (match-string 2))))
            (invis-props (append props (muse-link-properties desc))))
@@ -556,13 +557,13 @@ bad-link face"
     (goto-char (match-end 0))
     (add-text-properties
      (match-beginning 0) (match-end 0)
-     (muse-link-properties (match-string-no-properties 0)
+     (muse-link-properties (muse-match-string-no-properties 0)
                            (muse-link-face (match-string 2))))
     (goto-char (match-end 0))))
 
 (defun muse-colors-title ()
   (add-text-properties (+ 7 (match-beginning 0))
-                       (line-end-position)
+                       (muse-line-end-position)
                        '(face muse-header-1)))
 
 (provide 'muse-colors)

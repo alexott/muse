@@ -2,6 +2,170 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-19 00:43:54 GMT	Michael Olson <mwolson@gnu.org>	patch-65
+
+    Summary:
+      Move lisp files to `lisp' directory; hack on Makefiles, XEmacs compat.
+    Revision:
+      muse--main--1.0--patch-65
+
+    * AUTHORS: Update entry.
+    
+    * muse-*.el: Move to the lisp directory.
+    
+    * lisp/Makefile: New file containing rules to test and compile the
+      source.
+    
+    * Makefile.defs: New file that contains common definitions for all other
+      Makefiles, such as Emacs command to use.
+    
+    * Makefile: Move lisp-specific rules to lisp/Makefile.
+      (SUBDIRS): New variable containing subdirectories to clean.
+    
+    * README: Update to reflect new location of source files.  Give updated
+      directions for compiling with XEmacs.
+    
+    * examples/Makefile (.PRECIOUS): Added to denote which type of files to
+      compile.
+      (%.html): Pass SITEFLAG as an environment variable to
+      ../scripts/publish.
+    
+    * examples/QuickStart (The): Re-add the stray <comment> tag since it
+      seems to be needed to keep the process from failing.  This has *got* to
+      be a bug in Muse, but I don't want to deal with it now.
+    
+    * lisp/muse-colors.el (muse-make-faces): Bind newsym locally.
+    
+    * lisp/muse-convert.el: Move line to commentary section.
+    
+    * lisp/muse-latex.el (muse-latex-markup-table): Note that the
+      locally-bound `type' variable isn't used here.
+    
+    * lisp/muse-mode.el (muse-index-as-string): Remove unused `file' binding.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-table): Remove unused `field'
+      binding.
+    
+    * scripts/muse-build.el (load-path): Correct paths.
+    
+    * scripts/muse-build.el (muse-elint-files): Add a few variables here so
+      as to avoid spurious warnings.
+    
+    * scripts/publish (style): Make use of SITEFLAG environment variable, if
+      it exists.
+    
+    * lisp/muse.el (muse-line-end-position, muse-line-beginning-position):
+      (muse-match-string-no-properties): New functions that take the place of
+      `line-end-position', `line-beginning-position', and
+      `match-string-no-properties', respectively.
+    
+    * examples/johnw/muse-johnw.el (muse-my-html-insert-contents)
+      (muse-my-journal-find-entries): Use Muse-specific version of
+      `match-string-no-properties', `line-beginning-position', and
+      `line-end-position' since these do not exist in XEmacs.
+    
+    * lisp/muse-colors.el (muse-colors-emphasized, muse-colors-region)
+      (muse-colors-custom-tags, muse-colors-link, muse-colors-title): Ditto.
+    
+    * lisp/muse-convert.el (muse-latex-transform): Ditto.
+    
+    * lisp/muse-html.el (muse-html-insert-anchor, muse-html-markup-footnote)
+      (muse-html-insert-contents): Ditto.
+    
+    * lisp/muse-journal.el (muse-journal-rss-munge-buffer): Ditto.
+    
+    * lisp/muse-mode.el (muse-link-at-point, muse-edit-link-at-point): Ditto.
+    
+    * lisp/muse-poem.el (muse-poem-prepare-buffer): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-markup-tag)
+      (muse-publish-markup-footnote, muse-publish-markup-leading-space)
+      (muse-published-buffer-contents): Ditto.
+    
+    * scripts/muse-build.el (muse-elint-files): Ditto.
+
+    new files:
+     .arch-ids/Makefile.defs.id Makefile.defs lisp/.arch-ids/=id
+     lisp/.arch-ids/Makefile.id lisp/Makefile
+
+    modified files:
+     AUTHORS ChangeLog Makefile README examples/Makefile
+     examples/QuickStart examples/johnw/muse-johnw.el
+     lisp/muse-colors.el lisp/muse-convert.el lisp/muse-html.el
+     lisp/muse-journal.el lisp/muse-latex.el lisp/muse-mode.el
+     lisp/muse-poem.el lisp/muse-publish.el lisp/muse-texinfo.el
+     lisp/muse.el scripts/muse-build.el scripts/publish
+
+    renamed files:
+     .arch-ids/muse-blosxom.el.id
+       ==> lisp/.arch-ids/muse-blosxom.el.id
+     .arch-ids/muse-book.el.id
+       ==> lisp/.arch-ids/muse-book.el.id
+     .arch-ids/muse-colors.el.id
+       ==> lisp/.arch-ids/muse-colors.el.id
+     .arch-ids/muse-convert.el.id
+       ==> lisp/.arch-ids/muse-convert.el.id
+     .arch-ids/muse-docbook.el.id
+       ==> lisp/.arch-ids/muse-docbook.el.id
+     .arch-ids/muse-html.el.id
+       ==> lisp/.arch-ids/muse-html.el.id
+     .arch-ids/muse-http.el.id
+       ==> lisp/.arch-ids/muse-http.el.id
+     .arch-ids/muse-journal.el.id
+       ==> lisp/.arch-ids/muse-journal.el.id
+     .arch-ids/muse-latex.el.id
+       ==> lisp/.arch-ids/muse-latex.el.id
+     .arch-ids/muse-mode.el.id
+       ==> lisp/.arch-ids/muse-mode.el.id
+     .arch-ids/muse-poem.el.id
+       ==> lisp/.arch-ids/muse-poem.el.id
+     .arch-ids/muse-project.el.id
+       ==> lisp/.arch-ids/muse-project.el.id
+     .arch-ids/muse-publish.el.id
+       ==> lisp/.arch-ids/muse-publish.el.id
+     .arch-ids/muse-regexps.el.id
+       ==> lisp/.arch-ids/muse-regexps.el.id
+     .arch-ids/muse-texinfo.el.id
+       ==> lisp/.arch-ids/muse-texinfo.el.id
+     .arch-ids/muse.el.id
+       ==> lisp/.arch-ids/muse.el.id
+     muse-blosxom.el
+       ==> lisp/muse-blosxom.el
+     muse-book.el
+       ==> lisp/muse-book.el
+     muse-colors.el
+       ==> lisp/muse-colors.el
+     muse-convert.el
+       ==> lisp/muse-convert.el
+     muse-docbook.el
+       ==> lisp/muse-docbook.el
+     muse-html.el
+       ==> lisp/muse-html.el
+     muse-http.el
+       ==> lisp/muse-http.el
+     muse-journal.el
+       ==> lisp/muse-journal.el
+     muse-latex.el
+       ==> lisp/muse-latex.el
+     muse-mode.el
+       ==> lisp/muse-mode.el
+     muse-poem.el
+       ==> lisp/muse-poem.el
+     muse-project.el
+       ==> lisp/muse-project.el
+     muse-publish.el
+       ==> lisp/muse-publish.el
+     muse-regexps.el
+       ==> lisp/muse-regexps.el
+     muse-texinfo.el
+       ==> lisp/muse-texinfo.el
+     muse.el
+       ==> lisp/muse.el
+
+    new directories:
+     lisp lisp/.arch-ids
+
+
 2005-06-18 20:12:05 GMT	Michael Olson <mwolson@gnu.org>	patch-64
 
     Summary:

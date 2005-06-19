@@ -382,7 +382,7 @@ system to an associated HTML coding system. If no match is found,
         (insert "<a name=\"" anchor "\" id=\"" anchor "\">")
         (when muse-html-anchor-on-word
           (or (and (search-forward (format "</%s>" tag)
-                                   (line-end-position) t)
+                                   (muse-line-end-position) t)
                    (goto-char (match-beginning 0)))
               (forward-word 1)))
         (insert "</a>"))
@@ -456,7 +456,7 @@ if not escaped."
         str))))
 
 (defun muse-html-markup-footnote ()
-  (if (/= (line-beginning-position) (match-beginning 0))
+  (if (/= (muse-line-beginning-position) (match-beginning 0))
       "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">\\1</a></sup>"
     (prog1
         "<p class=\"footnote\"><a name=\"fn.\\1\" href=\"#fnr.\\1\">\\1.</a>"
@@ -514,7 +514,7 @@ if not escaped."
               (if (< l base)
                   (throw 'done t)))
             (when (<= l max-depth)
-              (setq contents (cons (cons l (match-string-no-properties 2))
+              (setq contents (cons (cons l (muse-match-string-no-properties 2))
                                    contents))
               (goto-char (match-beginning 2))
               (muse-html-insert-anchor (concat "sec" (int-to-string index)))
