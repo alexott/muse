@@ -49,14 +49,15 @@ under the terms of the GNU General Public License.
 @menu
 * Preface::                     About the documentation.
 * Introduction::                What is Muse?
-* Installation::                How to get the stable and development
-                                  versions.
+* Obtaining Muse::              How to get Muse releases and development
+                                  changes.
+* Installation::                Compiling and installing Muse.
 * Getting Started::             Settings for Muse.
-* Projects::                    Creating a Muse project.
+* Projects::                    Creating and managing Muse projects.
 * Keystroke Summary::           Keys used in Muse mode.
-* Markup Rules::                Rules for creating special markup.
-* Publishing Styles::           Generating different kinds of documents.
-* Getting Help and Reporting Bugs::  Further ways of getting help.
+* Markup Rules::                Rules for using markup.
+* Publishing Styles::           Publishing various types of documents.
+* Getting Help and Reporting Bugs::
 * History::                     History of this document.
 * Contributors::                Contributors to this documentation.
 * GNU General Public License::  The license for this manual and Muse.
@@ -65,12 +66,12 @@ under the terms of the GNU General Public License.
 @detailmenu
  --- The Detailed Node Listing ---
 
-Installation
+How to Get Muse Releases and Development Changes
 
 * Releases::                    Released versions of Muse.
-* Development::                 Latest unreleased changes.
+* Development::                 Latest unreleased development changes.
 
-Markup Rules
+Rules for Using Markup
 
 * Paragraphs::                  Paragraphs: centering and quoting.
 * Headings::                    Levels of headings.
@@ -84,29 +85,30 @@ Markup Rules
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
 
-Publishing Styles
+Publishing Various Types of Documents
 
-* Blosxom::                     Integrating Muse and pyblosxom.
-* Book::                        Publish entries into a compilation.
-* DocBook::                     Publish in DocBook XML form.
-* HTML::                        Publish in HTML or XHTML form.
+* Blosxom::                     Integrating Muse and pyblosxom.cgi.
+* Book::                        Publishing entries into a compilation.
+* DocBook::                     Publishing in DocBook XML form.
+* HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
-* Common Elements::             Styles share some common functionality.
-* Deriving Styles::             Deriving a style from an existing one.
+* Common Elements::             Common functionality shared by styles.
+* Deriving Styles::             Deriving a new style from an existing
+                                  one.
 
-Blosxom
+Integrating Muse and pyblosxom.cgi
 
-* Blosxom Requirements::        Necessary publishing-related tools.
-* Blosxom Entries::             Format of an entry and automation.
-* Blosxom Options::             Styles provided and options available.
+* Blosxom Requirements::        Other tools needed to the Blosxom style.
+* Blosxom Entries::             Format of a Blosxom entry and automation.
+* Blosxom Options::             Blosxom styles and options provided.
 
 @end detailmenu
 @end menu
 
 @node Preface, Introduction, Top, Top
 @comment  node-name,  next,  previous,  up
-@chapter Preface
+@chapter About the documentation
 
 This document describes Muse, which was written by John Wiegley
 and is now maintained by Michael Olson.
@@ -114,9 +116,9 @@ and is now maintained by Michael Olson.
 This document is a work in progress, and your contribution will be
 greatly appreciated.
 
-@node Introduction, Installation, Preface, Top
+@node Introduction, Obtaining Muse, Preface, Top
 @comment  node-name,  next,  previous,  up
-@chapter Introduction
+@chapter What is Muse?
 
 Emacs Muse is an authoring and publishing environment for Emacs.  It
 simplifies the process of writings documents and publishing them to
@@ -142,94 +144,87 @@ aspects, and the "wikiness" has been removed as a default behavior (to
 be offered again as an optional module). CamelCase words are no longer
 special by default.
 
-@node Installation, Getting Started, Introduction, Top
+@node Obtaining Muse, Installation, Introduction, Top
 @comment  node-name,  next,  previous,  up
-@chapter Installation
+@chapter How to Get Muse Releases and Development Changes
 
 @menu
 * Releases::                    Released versions of Muse.
-* Development::                 Latest unreleased changes.
+* Development::                 Latest unreleased development changes.
 @end menu
 
-@node Releases, Development, Installation, Installation
+@node Releases, Development, Obtaining Muse, Obtaining Muse
 @comment  node-name,  next,  previous,  up
-@section Installing a release
+@section Released versions of Muse
 
-Choose to install a release if you want to minimize risk.  Currently
-Muse is in a pre-release stage, so no official releases have been made
-yet.
+Choose to install a release if you want to minimize risk.
 
-Errors are corrected in development first.  Once fixes are confirmed, a
-new release will be made.  User-visible changes will be announced on the
-@email{emacs-wiki-discuss@@nongnu.org} mailing list.  @pxref{Getting
-Help and Reporting Bugs}.
+Errors are corrected in development first.  User-visible changes will be
+announced on the @email{emacs-wiki-discuss@@nongnu.org} mailing list.
+This mailing list also provides support for @command{Planner} and
+@command{emacs-wiki}, which is the predecessor of Muse.
+@pxref{Getting Help and Reporting Bugs}.
 
+@cindex releases, Debian package
 @cindex Debian package for Muse
-
-Debian users can get Muse via apt-get.  @file{Muse} is available only at
-Michael Olson's Debian repository.
-
-@cindex releases, from source
-
-You can also install the source distribution.
-
-@enumerate
-@item Download and unpack the latest version from @uref{http://www.mwolson.org/static/dist/muse/} .
-@item Edit your @file{~/.emacs}.
+Debian users can get Muse via apt-get.  The @file{muse} package will be
+made available at Michael Olson's Debian repository.  To make use of it,
+add the following line to your @file{/etc/apt/sources.list} file and run
+@code{apt-get install muse}.
 
 @example
-;; Add the directories to your load path
-(add-to-list 'load-path "/path/to/muse")
-;; Load Muse
-(require 'muse)
+deb http://www.mwolson.org/debian/ ./
 @end example
 
-@end enumerate
+@cindex releases, from source
+Alternatively, you can download the latest release from
+@uref{http://www.mwolson.org/static/dist/muse/} .
 
-You can download the archive at the following locations:
-
-@itemize
-@item Current and past releases: @uref{http://www.mwolson.org/static/dist/muse/}
-@end itemize
-
-@node Development,  , Releases, Installation
+@node Development,  , Releases, Obtaining Muse
 @comment  node-name,  next,  previous,  up
-@section Installing the development version
+@section Latest unreleased development changes
 @cindex development
 
-Choose the development version if you want to live on the bleeding
-edge of Muse development or try out new features before release.
+Choose the development version if you want to live on the bleeding edge
+of Muse development or try out new features before release.
 
-@cindex arch revision control system, downloading
+@cindex arch revision control system, using
 The Arch revision control system allows you to retrieve previous
-versions and select specific features and bug fixes.
+versions and select specific features and bug fixes.  If you would like
+to contribute to Muse development, it is highly recommended that you use
+Arch, but this is not a requirement.
 
-Downloading the modules for the first time:
+If you are new to Arch, you might find this tutorial helpful:
+@uref{http://www.mwolson.org/projects/ArchTutorial.html}.
+
+Downloading the Muse module with Arch and staying up-to-date involves
+the following steps.
 
 @enumerate
-@item Install arch. Debian: @kbd{apt-get install tla} .  Other distros: see @uref{http://regexps.srparish.net/www/} .
-@item Register the archive and download the modules.
+@item Install arch
 
+@itemize @bullet
+@item Debian: @kbd{apt-get install tla}.
+@item Other distributions: see @uref{http://regexps.srparish.net/www/}.
+@end itemize
+
+@item Register the archive.
 @example
-# Register the archive
-tla register-archive http://www.mwolson.org/archives/2005
+tla register-archive -f http://www.mwolson.org/archives/2005
+@end example
 
-# Download Muse into the @file{muse/} subdirectory
+@item Download the Muse package.
+@example
+# Download Muse into the @file{muse} directory.
 tla get mwolson@@gnu.org--2005/muse--main--1.0 muse
 @end example
 
-@item Open your @file{~/.emacs} and add the @file{Muse/} directory to your load path.
+@item List upstream changes that are missing from your local copy.
+Do this whenever you want to see whether new changes have been committed
+to Muse.
 
 @example
-(add-to-list 'load-path "/path/to/muse")
-@end example
-
-@end enumerate
-
-To list upstream changes not in local copy:
-
-@example
-# Change to the source directory you are interested in. Example:
+# Change to the source directory you are interested in.
 cd muse/
 
 # Display the summary of changes
@@ -237,23 +232,68 @@ tla missing --summary
 @end example
 
 @cindex updating Muse with Arch
-
-To update to the latest version:
-
+@item Update to the latest version by replaying missing changes.
 @example
 cd muse
 tla replay
 @end example
 
-You can also obtain the archive at the following locations on the web:
+@end enumerate
+
+There are other ways to interact with the Muse archive.
 
 @itemize
 @item Browse arch repository: @uref{http://www.mwolson.org/archives/}
 @item Latest development snapshot: @uref{http://www.mwolson.org/static/dist/muse-latest.tar.gz}
 @end itemize
 
-The latest development snapshot will be kept up to date since it is
+The latest development snapshot will be kept up-to-date since it is
 updated at the same time as the Arch repository.
+
+@node Installation, Getting Started, Obtaining Muse, Top
+@comment  node-name,  next,  previous,  up
+@chapter Compiling and Installing Muse
+
+Muse may be compiled and installed on your machine.
+
+@emph{Compilation}
+
+This is an optional step, since Emacs Lisp source code does not
+necessarily have to be byte-compiled.  It will yield a speed increase,
+though.
+
+A working copy of Emacs or XEmacs is needed in order to compile the
+Emacs Muse.  By default, the program that is installed with the name
+@command{emacs} will be used.
+
+If you want to use the @command{xemacs} binary to perform the
+compilation, you would need to edit @file{Makefile.defs} in the
+top-level directory as follows.  You can put either a full path to an
+Emacs or XEmacs binary or just the command name, as long as it is in the
+@env{PATH}.
+
+@example
+EMACS    = xemacs
+SITEFLAG = -no-site-file
+@end example
+
+Running @code{make} should compile the Muse source files in the
+@file{lisp} directory.
+
+@emph{Installation}
+
+Muse may be installed into your file hierarchy by doing the following.
+
+Edit the @file{Makefile.defs} file so that @env{ELISPDIR} points to
+where you want the source and compiled Muse files to be installed and
+@env{INFODIR} indicates where to put the Muse manual.  Of course, you
+will want to edit @env{EMACS} and @env{SITEFLAG} as shown in the
+Compilation section if you are using XEmacs.
+
+Run @code{make} as a normal user.
+
+Run @code{make install} as the root user if you have chosen installation
+locations that require this.
 
 
 @node Getting Started, Projects, Installation, Top
@@ -263,8 +303,8 @@ updated at the same time as the Arch repository.
 
 To use Muse, add the directory containing its files to your
 @code{load-path} variable, in your @file{.emacs} file.  Then, load in
-the authoring mode, and the styles you wish to publish to.  For
-example:
+the authoring mode, and the styles you wish to publish to.  An example
+follows.
 
 @lisp
 (add-to-list 'load-path "<path to Muse>")
@@ -282,6 +322,9 @@ an input document to any available style.  If you enable
 @file{muse-mode} within a buffer, by typing @kbd{M-x muse-mode}, this
 command will be bound to @kbd{C-c C-t}.
 
+If the currently opened file is part of a defined project in
+@code{muse-project-alist}, it may be published using @kbd{C-c C-p}.
+
 You should also type @kbd{M-x customize-group}, and give the name
 @samp{muse}.  Change it to suit your preferences.  Each of the
 options has its own documentation.
@@ -289,13 +332,13 @@ options has its own documentation.
 
 @node Projects, Keystroke Summary, Getting Started, Top
 @comment  node-name,  next,  previous,  up
-@chapter Projects
+@chapter Creating and Managing Muse Projects
 @cindex projects
 
 Often you will want to publish all the files within a directory to a
 particular set of output styles automatically.  To support, Muse
 allows for the creations of "projects".  Here is a sample project, to
-be defined in your @file{.emacs} file:
+be defined in your @file{.emacs} file.
 
 @lisp
 (require 'muse-project)
@@ -317,10 +360,10 @@ may create a link to other pages using the syntax @samp{[[pagename]]}.
 
 @node Keystroke Summary, Markup Rules, Projects, Top
 @comment  node-name,  next,  previous,  up
-@chapter Keystroke Summary
+@chapter Keys Used in Muse Mode
 @cindex keystrokes
 
-Here is a summary of keystrokes available in every Muse buffer:
+This is a summary of keystrokes available in every Muse buffer.
 
 @table @kbd
 
@@ -362,7 +405,7 @@ Move to the previous Wiki reference.
 
 @node Markup Rules, Publishing Styles, Keystroke Summary, Top
 @comment  node-name,  next,  previous,  up
-@chapter Markup Rules
+@chapter Rules for Using Markup
 @cindex markup
 
 A Muse document uses special, contextual markup rules to determine how
@@ -389,7 +432,7 @@ than formatting.
 
 @node Paragraphs, Headings, Markup Rules, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Paragraphs
+@section Paragraphs: centering and quoting
 @cindex paragraphs
 
 Paragraphs in Muse must be separated by a blank line.
@@ -422,7 +465,7 @@ HTML blocks into HTML output, for example.
 
 @node Headings, Emphasizing Text, Paragraphs, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Headings
+@section Levels of headings
 @cindex headings
 
 A heading becomes a chapter or section in printed output -- depending on
@@ -443,7 +486,7 @@ of headings will be marked up, but displayed as plain text.
 
 @node Emphasizing Text, Footnotes, Headings, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Emphasizing Text
+@section Bold, italicized, and underlined text
 @cindex emphasizing text
 @cindex underlining text
 @cindex italicizing text
@@ -451,7 +494,7 @@ of headings will be marked up, but displayed as plain text.
 @cindex monospace, rendering words
 
 To emphasize text, surround it with certain specially recognized
-characters:
+characters.
 
 @example
 *emphasis*
@@ -468,7 +511,7 @@ multiple lines, with the exception of the verbatim and monospace form.
 
 @node Footnotes, Verse, Emphasizing Text, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Footnotes
+@section Making notes to be shown at the end
 @cindex footnotes
 
 A footnote reference is simply a number in square brackets.  To define
@@ -483,20 +526,20 @@ the point of insertion.
 
 @node Verse, Lists, Footnotes, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Verse
+@section Indicating poetic stanzas
 @cindex verses
 @cindex poetry
 
 Poetry requires that whitespace be preserved, but without resorting to
 monospace.  To indicate this, use the following markup, reminiscent of
-email quotations:
+email quotations.
 
 @example
 > A line of Emacs verse;
 >   forgive its being so terse.
 @end example
 
-You can also use the @verb{|<verse>|} tag, if you prefer:
+You can also use the @verb{|<verse>|} tag, if you prefer.
 
 @example
 <verse>
@@ -522,7 +565,7 @@ But the author is out of ideas.
 
 @node Lists, Tables, Verse, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Lists
+@section Lists of items
 @cindex lists
 
 Lists are given using special characters at the beginning of a line.
@@ -530,7 +573,7 @@ Whitespace must occur before bullets or numbered items, to distinguish
 from the possibility of those characters occurring in a real sentence.
 
 @cindex lists, bullets
-These are rendered as a bullet list:
+These are rendered as a bullet list.
 
 @example
   - bullet item one
@@ -538,7 +581,7 @@ These are rendered as a bullet list:
 @end example
 
 @cindex lists, enumerated
-An enumerated list:
+An enumerated list follows.
 
 @example
   1. Enum item one
@@ -546,7 +589,7 @@ An enumerated list:
 @end example
 
 @cindex lists, definitions
-And a definition list:
+Here is a definition list.
 
 @example
 Term1 ::
@@ -560,11 +603,11 @@ Term2 ::
 
 @node Tables, Links, Lists, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Tables
+@section Generation of data tables
 @cindex tables
 
 @cindex tables, simple
-Only very simple tables are supported.  The syntax is:
+Only very simple tables are supported.  The syntax is as follows.
 
 @example
   Double bars  || Separate header fields
@@ -577,7 +620,7 @@ Only very simple tables are supported.  The syntax is:
 
 @node Links, Horizontal Rules and Anchors, Tables, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Links
+@section Hyperlinks and email addresses
 @cindex links
 
 @cindex links, explicit
@@ -585,7 +628,7 @@ Only very simple tables are supported.  The syntax is:
 A hyperlink can reference a URL, or another page within a Muse
 project.  In addition, descriptive text can be specified, which should
 be displayed rather than the link text in output styles that supports
-link descriptions.  The syntax is:
+link descriptions.  The syntax is as follows.
 
 @example
 [[link target][link description]]
@@ -636,7 +679,7 @@ it will be inlined if possible.
 
 @node Horizontal Rules and Anchors, Embedded Lisp, Links, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Horizontal Rules and Anchors
+@section Inserting a horizontal line or anchor
 
 @cindex horizontal rules
 @cindex dashes
@@ -657,7 +700,7 @@ the target in a Muse link.
 
 @node Embedded Lisp, , Horizontal Rules and Anchors, Markup Rules
 @comment  node-name,  next,  previous,  up
-@section Embedded Lisp
+@section Evaluating Emacs Lisp code in documents for extensibility
 @cindex lisp, embedded
 
 Arbitrary kinds of markup can be achieved using the @verb{|<lisp>|} tag,
@@ -677,7 +720,7 @@ tags will be automatically inserted into the document.
 
 @node Publishing Styles, Getting Help and Reporting Bugs, Markup Rules, Top
 @comment  node-name,  next,  previous,  up
-@chapter Publishing Styles
+@chapter Publishing Various Types of Documents
 @cindex publishing styles
 
 One of the principle features of Muse is the ability to publish a simple
@@ -685,32 +728,35 @@ input text to a variety of different output styles.  Muse also makes it
 easy to create new styles, or derive from an existing style.
 
 @menu
-* Blosxom::                     Integrating Muse and pyblosxom.
-* Book::                        Publish entries into a compilation.
-* DocBook::                     Publish in DocBook XML form.
-* HTML::                        Publish in HTML or XHTML form.
+* Blosxom::                     Integrating Muse and pyblosxom.cgi.
+* Book::                        Publishing entries into a compilation.
+* DocBook::                     Publishing in DocBook XML form.
+* HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
-* Common Elements::             Styles share some common functionality.
-* Deriving Styles::             Deriving a style from an existing one.
+* Common Elements::             Common functionality shared by styles.
+* Deriving Styles::             Deriving a new style from an existing
+                                  one.
 @end menu
 
 @node Blosxom, Book, Publishing Styles, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Blosxom
+@section Integrating Muse and pyblosxom.cgi
+@cindex blog, one-file-per-entry style
 
 The Blosxom publishing style publishes a tree of categorised files to a
 mirrored tree of stories to be served by blosxom.cgi or pyblosxom.cgi.
+In other words, each blog entry corresponds with one file.
 
 @menu
-* Blosxom Requirements::        Necessary publishing-related tools.
-* Blosxom Entries::             Format of an entry and automation.
-* Blosxom Options::             Styles provided and options available.
+* Blosxom Requirements::        Other tools needed to the Blosxom style.
+* Blosxom Entries::             Format of a Blosxom entry and automation.
+* Blosxom Options::             Blosxom styles and options provided.
 @end menu
 
 @node Blosxom Requirements, Blosxom Entries, Blosxom, Blosxom
 @comment  node-name,  next,  previous,  up
-@section Blosxom Requirements
+@subsection Other tools needed to the Blosxom style
 
 You will need to have @command{pyblosxom.cgi} or @command{blosxom.cgi}
 installed on a machine that you have upload access to.
@@ -745,7 +791,7 @@ date-gathering script and your plugin can both understand it.
 
 @node Blosxom Entries, Blosxom Options, Blosxom Requirements, Blosxom
 @comment  node-name,  next,  previous,  up
-@section Blosxom Entries
+@subsection Format of a Blosxom entry and automation
 
 Each Blosxom file must include `#date yyyy-mm-dd', or optionally the
 longer `#date yyyy-mm-dd-hh-mm', a title (using the #title directive),
@@ -788,7 +834,7 @@ title and date directives will be inserted automatically.
 
 @node Blosxom Options, , Blosxom Entries, Blosxom
 @comment  node-name,  next,  previous,  up
-@section Blosxom Options
+@subsection Blosxom styles and options provided
 
 The following styles and options are available in the Blosxom publishing
 style.
@@ -830,7 +876,7 @@ locally.
 
 @node Book, DocBook, Blosxom, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Book
+@section Publishing entries into a compilation
 
 This publishing style is used to output ``books'' in LaTeX or PDF
 format.
@@ -879,7 +925,7 @@ Footer used for publishing books to LaTeX.
 
 @node DocBook, HTML, Book, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section DocBook
+@section Publishing in DocBook XML form
 
 This publishing style is used to generate DocBook XML files.
 
@@ -924,7 +970,7 @@ A table of characters which must be represented specially.
 
 @node HTML, Journal, DocBook, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section HTML
+@section Publishing in HTML or XHTML form
 
 This publishing style is capable of producing HTML or XHTML documents.
 
@@ -1045,13 +1091,14 @@ Use the base name of the coding system (i.e. without the -unix).
 
 @node Journal, LaTeX, HTML, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Journal
+@section Keeping a journal or blog
 @cindex journal
+@cindex blog, journal style
 
 The module facilitates the keeping and publication of a journal.  When
 publishing to HTML, it assumes the form of a web log, or blog.
 
-The input format for each entry is as follows:
+The input format for each entry is as follows.
 
 @example
   * 20040317: Title of entry
@@ -1065,7 +1112,7 @@ The input format for each entry is as follows:
 @end example
 
 The "qotd", or Quote of the Day, is entirely optional.  When generated
-to HTML, this entry is rendered as:
+to HTML, this entry is rendered as the following.
 
 @example
   <div id="entry">
@@ -1239,7 +1286,7 @@ For more on the structure of this list,
 
 @node LaTeX, Common Elements, Journal, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section LaTeX
+@section Publishing LaTeX documents
 
 This publishing style is capable of producing LaTeX or PDF documents.
 
@@ -1264,8 +1311,8 @@ tool.
 @item latexcjk
 Publish a LaTeX document with CJK (Chinese) encodings.
 
-@cindex publishing styles, latexcjk
-@item latexcjk
+@cindex publishing styles, pdfcjk
+@item pdfcjk
 Publish a PDF document with CJK (Chinese) encodings, using an external
 LaTeX document conversion tool.
 
@@ -1327,7 +1374,7 @@ A table of characters which must be represented specially.
 
 @node Common Elements, Deriving Styles, LaTeX, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Common Elements
+@section Common functionality shared by styles
 @cindex publishing styles, common
 
 @table @code
@@ -1341,7 +1388,7 @@ This is used by publishing styles to attempt to minimize the amount of
 custom regexps that each has to define.  @file{muse-publish} provides
 rules for the most common types of markup.
 
-Each member of the list is the form:
+Each member of the list is of the following form.
 
 @example
   (SYMBOL FUNCTION)
@@ -1365,7 +1412,8 @@ List of markup rules for publishing a page with Muse.
 The rules given in this variable are invoked first, followed by whatever
 rules are specified by the current style.
 
-Each member of the list is either a function, or a list of the form:
+Each member of the list is either a function, or a list of the following
+form.
 
 @example
   (REGEXP/SYMBOL TEXT-BEGIN-GROUP REPLACEMENT-TEXT/FUNCTION/SYMBOL)
@@ -1422,7 +1470,7 @@ at the end, to catch any tags which may have been inserted in-between.
 
 @node Deriving Styles, , Common Elements, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Deriving styles
+@section Deriving a new style from an existing one
 @cindex publishing styles, deriving
 
 To create a new style from an existing one, use @code{muse-derive-style}
@@ -1438,7 +1486,8 @@ The base name must identify an existing style, such as "html" -- if you
 have loaded @file{muse-html}.  The style parameters are the same as
 those used to create a style, except that they override whatever
 definitions exist in the base style.  However, some definitions only
-partially override.  Those which support partial overriding are:
+partially override.  The following parameters support partial
+overriding.
 
 @table @option
 
@@ -1472,37 +1521,48 @@ After you have read this guide, if you still have questions about
 Muse, or if you have bugs to report, there are several places you can
 go.
 
-@uref{http://www.mwolson.org/projects/MuseMode.html} is the page that
-Michael Olson made for Muse.  For the duration of his
-maintainership, it may be considered the official Muse website.
+@itemize @bullet
 
+@item
 @uref{http://www.emacswiki.org/cgi-bin/wiki/MuseMode} is the
 emacswiki.org page, and anyone may add tips, hints, or bug descriptions
 to it.
 
-You can join the mailing list at
-@email{emacs-wiki-discuss@@nongnu.org} using the subscription form at
-@uref{http://mail.nongnu.org/mailman/listinfo/
-emacs-wiki-discuss}. This mailing list is also available via Gmane
-(@uref{http://gmane.org/}). The group is called
-@samp{gmane.emacs.wiki.general}.
+@item
+@uref{http://www.mwolson.org/projects/MuseMode.html} is the web page
+that Michael Olson (the current maintainer) made for Muse.
 
+@item
+You can join the mailing list at @email{emacs-wiki-discuss@@nongnu.org}
+using the subscription form at
+@uref{http://mail.nongnu.org/mailman/listinfo/ emacs-wiki-discuss}.
+This mailing list provides support for Muse, @command{Planner} and
+@command{emacs-wiki}, which is the predecessor of Muse.
+
+There are additional methods for accessing the mailing list, adding
+content to it, and searching it.  Consult
+@uref{http://www.emacswiki.org/cgi-bin/wiki/EmacsWikiMailingList} for
+more information.
+
+@item
 You can visit the IRC Freenode channel @samp{#emacs}. Many of the
 contributors are frequently around and willing to answer your
 questions.  The @samp{#muse} channel is also available for
 Muse-specific help, and its current maintainer hangs out there.
 
-You can also contact the maintainer of MuseMode, Michael Olson,
-at @email{mwolson@@gnu.org}.
+@item
+The maintainer of MuseMode, Michael Olson, may be contacted at
+@email{mwolson@@gnu.org}.
+
+@end itemize
 
 @node History, Contributors, Getting Help and Reporting Bugs, Top
 @comment  node-name,  next,  previous,  up
-@chapter History
+@chapter History of This Document
 @cindex history, of Muse
 
 @itemize
 @item 2004
-
 John Wiegley started Muse upon realizing that EmacsWiki had some serious
 limitations. Around February 2004, he started making "emacs-wiki version
 3.00 APLHA", which eventually became known as Muse.
@@ -1513,11 +1573,15 @@ emacs-wiki, mainly because Planner hasn't been ported over to it.
 As of 2004-12-01, Michael Olson became the maintainer of Muse, as per
 John Wiegley's request.
 
+@item 2005
+Michael Olson overhauled this document and added many new sections in
+preparation for the first release of Muse (3.01).
+
 @end itemize
 
 @node Contributors, GNU General Public License, History, Top
 @comment  node-name,  next,  previous,  up
-@chapter Contributors
+@chapter Contributors to This Documentation
 @cindex contributors
 
 The first draft of this document was taken from the emacs-wiki texinfo

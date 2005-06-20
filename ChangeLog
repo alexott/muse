@@ -2,6 +2,38 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-20 02:29:08 GMT	Michael Olson <mwolson@gnu.org>	patch-69
+
+    Summary:
+      Tweak documentation thoroughly; still incomplete.
+    Revision:
+      muse--main--1.0--patch-69
+
+    * README: Minor tweaks.
+    
+    * muse.texi: Massively rename chapters so that the titles are more
+      descriptive.  Clean up grammar.
+    
+    * muse.texi (Obtaining Muse): Move content of Installation node here,
+      stripping out any customization tips, since those are covered later.
+      Re-work this chapter since I was dissatisfied with it.
+    
+    * muse.texi (Installation): This node has the content of README regarding
+      installation, which fits the title of the node much better than the
+      previous content.
+    
+    * muse.texi (Blosxom): Turn the sections of this section into
+      subsections.
+    
+    * muse.texi (Getting Help and Reporting Bugs): Turn this into a list.  I
+      like lists!
+    
+    * muse.texi (History): Add a "2005" item.
+
+    modified files:
+     ChangeLog README muse.texi
+
+
 2005-06-19 07:15:45 GMT	Michael Olson <mwolson@gnu.org>	patch-68
 
     Summary:

@@ -20,7 +20,7 @@ Directory contents
 
 The directory structure is as follows.
 
-The manual is in the top-level directory.
+The manual (muse.texi) is in the top-level directory.
 
 contrib :: Files that are not a part of Muse proper, but are useful
            enough to be bundled with Muse.
@@ -39,8 +39,8 @@ scripts :: Scripts that are used when publishing the QuickStart
 Getting started
 ===============
 
-Compiling
----------
+Compilation
+-----------
 
 This is an optional step, since Emacs Lisp source code does not
 necessarily have to be byte-compiled.  It will yield a speed increase,
@@ -50,7 +50,7 @@ A working copy of Emacs or XEmacs is needed in order to compile the
 Emacs Muse.  By default, the program that is installed with the name
 `emacs' will be used.
 
-If you want to use the `xemacs' binary to perform the compilation, we
+If you want to use the `xemacs' binary to perform the compilation, you
 would need to edit `Makefile.defs' in the top-level directory as
 follows.  You can put either a full path to an Emacs or XEmacs binary
 or just the command name, as long as it is in the PATH.
@@ -69,8 +69,8 @@ Muse may be installed into your file hierarchy by doing the following.
 Edit the `Makefile.defs' file so that ELISPDIR points to where you
 want the source and compiled Muse files to be installed and INFODIR
 indicates where to put the Muse manual.  Of course, you will want to
-edit EMACS and SITEFLAG as shown in the previous section as well if
-you are using XEmacs.
+edit EMACS and SITEFLAG as shown in the Compilation section if you are
+using XEmacs.
 
 Run `make' as a normal user.
 
@@ -119,7 +119,7 @@ files, take a look at `examples/QuickStart'.
 To view the generated Info document from within Emacs, try the
 following.
 
-C-u M-x info RET /path/to/muse/examples/QuickStart.info
+C-u M-x info RET /path/to/muse/examples/QuickStart.info RET
 
 Further Documentation
 =====================
