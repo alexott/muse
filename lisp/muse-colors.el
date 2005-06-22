@@ -4,7 +4,6 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse-colors.el
-;; Version: 3.00 ALPHA
 ;; Date: Thu 11-Mar-2004
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)

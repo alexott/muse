@@ -104,10 +104,14 @@
   :type '(choice string file)
   :group 'muse-poem)
 
-(defvar muse-poem-markup-strings
+(defcustom muse-poem-markup-strings
   '((begin-verse . "\\begin{verse}[\\versewidth]\n")
     (verse-space . "\\vin "))
-  "Redefine the section heads, to match my private LaTeX setup.")
+  "Strings used for marking up poems.
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles."
+  :type '(alist :key-type symbol :value-type string)
+  :group 'muse-poem)
 
 (defcustom muse-chapbook-latex-header
   "\\documentclass{book}
@@ -130,18 +134,18 @@
 
 \\renewcommand{\\poemtoc}{section}
 \\settocdepth{section}\n"
-  "Header used for publishing books to LaTeX."
+  "Header used for publishing a book of poems in LaTeX form."
   :type '(choice string file)
   :group 'muse-poem)
 
 (defcustom muse-chapbook-latex-footer "\n\\end{document}"
-  "Footer used for publishing books to LaTeX."
+  "Footer used for publishing a book of poems in LaTeX form."
   :type '(choice string file)
   :group 'muse-poem)
 
 (defvar muse-poem-longest-line "")
 
-(defvar muse-poem-chapbook-strings
+(defcustom muse-poem-chapbook-strings
   '((begin-verse . "\\newpage
 \\mbox{}
 \\vfill
@@ -153,7 +157,11 @@
 \\begin{verse}[\\versewidth]\n")
     (end-verse   . "\n\\end{verse}\n\\vfill\n\\mbox{}")
     (verse-space . "\\vin "))
-  "Redefine the section heads, to match my private LaTeX setup.")
+  "Strings used for marking up books of poems.
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles."
+  :type '(alist :key-type symbol :value-type string)
+  :group 'muse-poem)
 
 (defun muse-poem-prepare-buffer ()
   (goto-char (point-min))

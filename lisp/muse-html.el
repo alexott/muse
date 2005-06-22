@@ -351,7 +351,8 @@ This will be used if no special characters are found."
   :group 'muse-html)
 
 (defcustom muse-html-encoding-map
-  '((iso-2022-jp        . "iso-2022-jp")
+  '((iso-8859-1         . "iso-8859-1")
+    (iso-2022-jp        . "iso-2022-jp")
     (utf-8              . "utf-8")
     (japanese-iso-8bit  . "euc-jp")
     (chinese-big5       . "big5")

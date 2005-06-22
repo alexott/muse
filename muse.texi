@@ -13,7 +13,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for the Emacs Muse version 3.00.90 (RC1).
+This manual is for the Emacs Muse version 3.01.
 
 Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
@@ -57,7 +57,7 @@ under the terms of the GNU General Public License.
 * Keystroke Summary::           Keys used in Muse mode.
 * Markup Rules::                Rules for using markup.
 * Publishing Styles::           Publishing various types of documents.
-* Getting Help and Reporting Bugs::
+* Getting Help and Reporting Bugs::  
 * History::                     History of this document.
 * Contributors::                Contributors to this documentation.
 * GNU General Public License::  The license for this manual and Muse.
@@ -93,6 +93,8 @@ Publishing Various Types of Documents
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
+* Poem::                        Publish a poem to LaTex or PDF.
+* Texinfo::                     Publish entries to Texinfo format or PDF.
 * Common Elements::             Common functionality shared by styles.
 * Deriving Styles::             Deriving a new style from an existing
                                   one.
@@ -734,6 +736,8 @@ easy to create new styles, or derive from an existing style.
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
+* Poem::                        Publish a poem to LaTex or PDF.
+* Texinfo::                     Publish entries to Texinfo format or PDF.
 * Common Elements::             Common functionality shared by styles.
 * Deriving Styles::             Deriving a new style from an existing
                                   one.
@@ -1284,7 +1288,7 @@ For more on the structure of this list,
 
 @end table
 
-@node LaTeX, Common Elements, Journal, Publishing Styles
+@node LaTeX, Poem, Journal, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Publishing LaTeX documents
 
@@ -1372,7 +1376,173 @@ A table of characters which must be represented specially.
 
 @end table
 
-@node Common Elements, Deriving Styles, LaTeX, Publishing Styles
+@node Poem, Texinfo, LaTeX, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Publish a poem to LaTex or PDF
+
+The @code{muse-poem} module makes it easy to attractively publish and
+reference poems in the following format, using the "memoir" module for
+LaTeX publishing.  It will also markup poems for every other output
+style, though none are nearly as pretty.
+
+@example
+Title
+
+
+Body of poem
+
+
+Annotations, history, notes, etc.
+@end example
+
+Once a poem is written in this format, just publish it to PDF using the
+@code{poem-pdf} style.  To make an inlined reference to a poem that
+you've written -- for example, from a blog page -- there is a "poem" tag
+defined by this module.
+
+@example
+<poem title="name.of.poem.page">
+@end example
+
+Let's assume the template above was called @file{name.of.poem.page};
+then the above tag would result in this inclusion.
+
+@example
+** Title
+
+> Body of poem
+@end example
+
+John Wiegley uses this module for publishing all of the poems on his
+website, which are at
+@uref{http://www.newartisans.com/johnw/poems.html}.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, poem-latex
+@item poem-latex
+Publish a poem in LaTeX form.
+
+@cindex publishing styles, poem-pdf
+@item poem-pdf
+Publish a poem to a PDF document.
+
+@cindex publishing styles, chapbook-latex
+@item chapbook-latex
+Publish a book of poems in LaTeX form.
+
+@cindex publishing styles, chapbook-pdf
+@item chapbook-pdf
+Publish a book of poems to a PDF document.
+
+@end table
+
+@emph{Options provided}
+
+@table @code
+
+@item muse-poem-latex-header
+Header used for publishing LaTeX poems.
+
+@item muse-poem-latex-footer
+Footer used for publishing LaTeX files.
+
+@item muse-poem-markup-strings
+Strings used for marking up poems.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@item muse-chapbook-latex-header
+Header used for publishing a book of poems in LaTeX form.
+
+@item muse-chapbook-latex-footer
+Footer used for publishing a book of poems in LaTeX form.
+
+@item muse-poem-chapbook-strings
+Strings used for marking up books of poems.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@end table
+
+@node Texinfo, Common Elements, Poem, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Publish entries to Texinfo format or PDF
+
+Rules for publishing a Muse file as a Texinfo article.
+
+@emph{Styles provided}
+
+@table @code
+
+@cindex publishing styles, texi
+@item texi
+Publish a file in Texinfo form.
+
+@cindex publishing styles, texi
+@item info
+Generate an Info file from a Muse file.
+
+@cindex publishing styles, info-pdf
+@item info-pdf
+Publish a file in PDF form.
+
+@end table
+
+@emph{Options provided}
+
+@table @code
+
+@item muse-texinfo-process-natively
+If non-nil, use the Emacs `texinfmt' module to make Info files.
+
+@item muse-texinfo-extension
+Default file extension for publishing Texinfo files.
+
+@item muse-texinfo-info-extension
+Default file extension for publishing Info files.
+
+@item muse-texinfo-pdf-extension
+Default file extension for publishing PDF files.
+
+@item muse-texinfo-header
+Text to prepend to a Muse page being published as Texinfo.
+
+This text may contain @verb{|<lisp>|} markup tags.
+
+@item muse-texinfo-footer
+Text to append to a Muse page being published as Texinfo.
+
+This text may contain @verb{|<lisp>|} markup tags.
+
+@item muse-texinfo-markup-regexps
+List of markup rules for publishing a Muse page to Texinfo.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-regexps}.
+
+@item muse-texinfo-markup-functions
+An alist of style types to custom functions for that kind of text.
+
+For more on the structure of this list, see
+@xref{muse-publish-markup-functions}.
+
+@item muse-texinfo-markup-strings
+Strings used for marking up text.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@item muse-texinfo-markup-specials
+A table of characters which must be represented specially.
+
+@end table
+
+@node Common Elements, Deriving Styles, Texinfo, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Common functionality shared by styles
 @cindex publishing styles, common

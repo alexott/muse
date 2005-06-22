@@ -51,12 +51,12 @@
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-info-extension ".info"
-  "Default file extension for publishing Texinfo files."
+  "Default file extension for publishing Info files."
   :type 'string
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-pdf-extension ".pdf"
-  "Default file extension for publishing Texinfo files."
+  "Default file extension for publishing PDF files."
   :type 'string
   :group 'muse-texinfo)
 
