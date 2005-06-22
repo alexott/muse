@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-22 23:05:33 GMT	Michael Olson <mwolson@gnu.org>	patch-73
+
+    Summary:
+      Tell people where to find on-line version of manual.
+    Revision:
+      muse--main--1.0--patch-73
+
+    * README: Add on-line locations for manual.
+    
+    * muse.texi: Remove @include directive.  This makes generating a PDF of
+      this documentation a lot easier.
+    
+    * muse.texi (Preface): Add on-line locations for manual.
+
+    modified files:
+     ChangeLog README muse.texi
+
+
 2005-06-22 19:57:42 GMT	Michael Olson <mwolson@gnu.org>	patch-72
 
     Summary:

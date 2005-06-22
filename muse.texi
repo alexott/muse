@@ -1,5 +1,4 @@
 \input texinfo @c -*-texinfo-*-
-@include{http://www.mwolson.org/default.css}
 @c %**start of header
 @setfilename muse.info
 @settitle Muse
@@ -113,10 +112,14 @@ Integrating Muse and pyblosxom.cgi
 @chapter About the documentation
 
 This document describes Muse, which was written by John Wiegley
-and is now maintained by Michael Olson.
+and is now maintained by Michael Olson.  Several versions of it are
+available on-line.
 
-This document is a work in progress, and your contribution will be
-greatly appreciated.
+@itemize @bullet
+@item PDF: http://www.mwolson.org/static/doc/muse.pdf
+@item HTML (single file): http://www.mwolson.org/static/doc/muse.html
+@item HTML (multiple files): http://www.mwolson.org/static/doc/muse/
+@end itemize
 
 @node Introduction, Obtaining Muse, Preface, Top
 @comment  node-name,  next,  previous,  up
