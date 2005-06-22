@@ -185,7 +185,7 @@ whether progress messages should be displayed to the user."
          (e1 (match-end 0))
          (leader (- e1 beg))
          b2 e2 multiline)
-    (unless (get-text-property beg 'invisible)
+    (unless (eq (get-text-property beg 'invisible) 'muse)
       ;; check if it's a header
       (if (eq (char-after e1) ?\ )
           (when (or (= beg (point-min))
@@ -214,12 +214,12 @@ whether progress messages should be displayed to the user."
                         (not (eq leader (- e2 b2)))
                         (eq (char-before b2) ?\ )
                         (not (eq (char-after b2) ?*)))
-              (add-text-properties beg e1 '(invisible t))
+              (add-text-properties beg e1 '(invisible muse))
               (add-text-properties
                e1 b2 (list 'face (cond ((= leader 1) 'italic)
                                        ((= leader 2) 'bold)
                                        ((= leader 3) 'bold-italic))))
-              (add-text-properties b2 e2 '(invisible t))
+              (add-text-properties b2 e2 '(invisible muse))
               (when multiline
                 (add-text-properties
                  beg e2 '(font-lock-multiline t))))))))))
@@ -227,7 +227,7 @@ whether progress messages should be displayed to the user."
 (defun muse-colors-underlined ()
   (let ((start (match-beginning 0))
         multiline)
-    (unless (get-text-property start 'invisible)
+    (unless (eq (get-text-property start 'invisible) 'muse)
       ;; beginning of line or space or symbol
       (when (or (= start (point-min))
                 (memq (char-syntax (char-before start)) '(?\  ?\-))
@@ -242,11 +242,11 @@ whether progress messages should be displayed to the user."
           ;; or no '_' at end
           (unless (or (eq (char-before (point)) ?\ )
                       (not (eq (char-after (point)) ?_)))
-            (add-text-properties start (1+ start) '(invisible t))
+            (add-text-properties start (1+ start) '(invisible muse))
             (add-text-properties (1+ start) (point) '(face underline))
             (add-text-properties (point)
                                  (min (1+ (point)) (point-max))
-                                 '(invisible t))
+                                 '(invisible muse))
             (when multiline
               (add-text-properties
                start (min (1+ (point)) (point-max))
@@ -326,6 +326,7 @@ affect the match data results."
   (defvar font-lock-multiline nil))
 
 (defun muse-use-font-lock ()
+  (muse-add-to-invisibility-spec 'muse)
   (set (make-local-variable 'font-lock-multiline) 'undecided)
   (set (make-local-variable 'font-lock-defaults)
        `(nil t nil nil 'beginning-of-line
@@ -504,7 +505,7 @@ Functions should not modify the contents of the buffer."
   (append (if face
               (list 'face face 'rear-nonsticky t
                     muse-keymap-property muse-mode-local-map)
-            (list 'invisible t 'intangible t 'rear-nonsticky t
+            (list 'invisible 'muse 'intangible t 'rear-nonsticky t
                   muse-keymap-property muse-mode-local-map))
           (list 'mouse-face 'highlight
                 'help-echo help-str

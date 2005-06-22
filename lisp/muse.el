@@ -189,6 +189,17 @@ Other ARGS are ignored."
         (setq text (replace-match replacement nil t text)))
       text)))
 
+(defun muse-add-to-invisibility-spec (element)
+  "Add ELEMENT to `buffer-invisibility-spec'.
+See documentation for `buffer-invisibility-spec' for the kind of elements
+that can be added."
+  (if (fboundp 'add-to-invisibility-spec)
+      (add-to-invisibility-spec element)
+    (if (eq buffer-invisibility-spec t)
+        (setq buffer-invisibility-spec (list t)))
+    (setq buffer-invisibility-spec
+          (cons element buffer-invisibility-spec))))
+
 (provide 'muse)
 
 ;;; muse.el ends here
