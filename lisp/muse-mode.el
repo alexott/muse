@@ -82,6 +82,16 @@ See `muse-publish' for more information."
              highlight-changes-mode)
   :group 'muse-mode)
 
+(defcustom muse-mode-link-functions nil
+  "A list of functions to recognize a link"
+  :type '(repeat function)
+  :group 'muse-mode)
+
+(defcustom muse-mode-handler-functions nil
+  "A list of functions to handle a link"
+  :type '(repeat function)
+  :group 'muse-mode)
+
 (defvar muse-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [(control ?c) (control ?a)] 'muse-index)
@@ -179,6 +189,17 @@ See `muse-publish' for more information."
 
 ;;; Navigate/visit links or URLs.  Use TAB, S-TAB and RET (or mouse-2).
 
+(defun muse-handled-url (url)
+  (or (let ((funcs muse-mode-handler-functions)
+            (res nil))
+        (while funcs
+          (setq res (funcall (car funcs) url))
+          (if res
+              (setq funcs nil)
+            (setq funcs (cdr funcs))))
+        res)
+      url))
+
 (defun muse-link-at-point (&optional pos)
   "Return link text if a URL or Muse link name is at point."
   (let ((case-fold-search nil)
@@ -197,7 +218,15 @@ See `muse-publish' for more information."
                            "[[" (muse-line-beginning-position) t)
                           (looking-at muse-link-regexp)))
                  (<= here (match-end 0))
-                 (match-string 1)))))))
+                 (muse-handled-url (match-string 1)))
+            (let ((funcs muse-mode-link-functions)
+                  (res nil))
+              (while funcs
+                (setq res (funcall (car funcs)))
+                (if res
+                    (setq funcs nil)
+                  (setq funcs (cdr funcs))))
+              res))))))
 
 (defun muse-make-link (link &optional name)
   "Return a link to LINK with NAME as the text."

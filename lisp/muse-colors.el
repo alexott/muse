@@ -514,19 +514,21 @@ Functions should not modify the contents of the buffer."
 (defun muse-link-face (link-name)
   "Return the type of LINK-NAME as a face symbol - either a normal link, or a
 bad-link face"
-  (save-match-data
-    (if (or (string-match muse-file-regexp link-name)
-            (string-match muse-url-regexp link-name))
-        'muse-link-face
-      (if (not (featurep 'muse-project))
+  (let ((link (muse-handled-url link-name)))
+    (save-match-data
+      (if (or (string-match muse-file-regexp link)
+              (string-match muse-url-regexp link))
           'muse-link-face
-        (if (string-match "#" link-name)
-            (setq link-name (substring link-name 0 (match-beginning 0))))
-        (if (or (and (muse-project-of-file)
-                     (muse-project-page-file link-name muse-current-project t))
-                (file-exists-p link-name))
+        (if (not (featurep 'muse-project))
             'muse-link-face
-          'muse-bad-link-face)))))
+          (if (string-match "#" link)
+              (setq link (substring link 0 (match-beginning 0))))
+          (if (or (and (muse-project-of-file)
+                       (muse-project-page-file
+                        link-name muse-current-project t))
+                  (file-exists-p link))
+              'muse-link-face
+            'muse-bad-link-face))))))
 
 (defun muse-colors-link ()
   (when (eq ?\[ (char-after (match-beginning 0)))

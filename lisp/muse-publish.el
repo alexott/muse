@@ -166,13 +166,14 @@ Each is passed the URL and expects a URL to be returned."
                    "]+.+?\\)\\)$")
           0 table)
 
-    ;; bare email addresses
-    (2800
-     "\\([^[]\\)[-a-zA-Z0-9._]+@\\([-a-zA-z0-9_]+\\.\\)+[a-zA-Z0-9]+" 0 email)
-
     ;; replace links in the buffer (links to other pages)
     (2900 muse-link-regexp 0 link)
-    (3000 muse-url-regexp  0 url))
+    (3000 muse-url-regexp  0 url)
+
+    ;; bare email addresses
+    (3500
+     "\\([^[]\\)[-a-zA-Z0-9._]+@\\([-a-zA-z0-9_]+\\.\\)+[a-zA-Z0-9]+" 0 email)
+    )
   "List of markup rules for publishing a page with Muse.
 The rules given in this variable are invoked first, followed by
 whatever rules are specified by the current style.
@@ -907,7 +908,7 @@ like read-only from being inadvertently deleted."
   "Resolve a URL into its final <a href> form."
   (let ((orig-url url))
     (dolist (transform muse-publish-url-transforms)
-      (setq url (funcall transform url)))
+      (setq url (save-match-data (funcall transform url))))
     (if (string-match muse-image-regexp url)
         (if desc
             (muse-markup-text 'image-with-desc url desc)
@@ -919,7 +920,9 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-insert-url (url &optional desc)
   "Resolve a URL into its final <a href> form."
   (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-publish-url url desc)))
+  (let ((beg (point)))
+    (insert (muse-publish-url url desc))
+    (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-markup-link ()
   (muse-publish-insert-url (match-string 1) (match-string 2)))
@@ -1034,10 +1037,11 @@ like read-only from being inadvertently deleted."
     (message "Wrote %s" output-path)))
 
 (defun muse-publish-read-only (string)
-  (add-text-properties 0 (1- (length string))
-                       '(rear-nonsticky (read-only) read-only t)
-                       string)
-  string)
+  (let ((end (1- (length string))))
+    (add-text-properties 0 end
+                         '(rear-nonsticky (read-only) read-only t)
+                         string)
+    string))
 
 (defun muse-publish-prepare-url (target)
   (save-match-data

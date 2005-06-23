@@ -390,7 +390,7 @@ system to an associated HTML coding system. If no match is found,
     (insert "<a name=\"" anchor "\" id=\"" anchor "\">")
     (when muse-html-anchor-on-word
       (forward-word 1))
-    (insert "</a>")))
+    (insert "</a>\n")))
 
 (defun muse-html-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))

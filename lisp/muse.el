@@ -86,7 +86,8 @@ All this means is that certain extensions, like .gz, are removed."
         (let ((page (file-name-nondirectory name)))
           (if (string-match muse-ignored-extensions-regexp page)
               (replace-match "" t t page)
-            page)))))
+            page))
+      "")))
 
 (defun muse-eval-lisp (form)
   "Evaluate the given form and return the result as a string."

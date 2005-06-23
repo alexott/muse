@@ -2,6 +2,51 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-23 05:20:04 GMT	Michael Olson <mwolson@gnu.org>	patch-74
+
+    Summary:
+      Merged from hodique@lifl.fr--2005 (patch 7-11)
+    Revision:
+      muse--main--1.0--patch-74
+
+    Patches applied:
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-7
+       split WikiWords and InterWiki links into their own package
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-8
+       Merged from mwolson@gnu.org--2005 (patch 63-67), adapted muse-wiki features
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-9
+       Mimic experimental behavior for interwiki
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-10
+       fix notes publishing
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-11
+       various minor fixes
+
+    new files:
+     lisp/.arch-ids/muse-wiki.el.id lisp/muse-wiki.el
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-html.el
+     lisp/muse-mode.el lisp/muse-publish.el lisp/muse.el
+
+    renamed files:
+     experimental/.arch-ids/muse-wiki.el.id
+       ==> experimental/.arch-ids/muse-wiki-old.el.id
+     experimental/muse-wiki.el
+       ==> experimental/muse-wiki-old.el
+
+    new patches:
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-7
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-8
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-9
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-10
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-11
+
+
 2005-06-22 23:05:33 GMT	Michael Olson <mwolson@gnu.org>	patch-73
 
     Summary:
