@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-23 07:13:35 GMT	Michael Olson <mwolson@gnu.org>	patch-75
+
+    Summary:
+      Minor doc changes and code prettification.
+    Revision:
+      muse--main--1.0--patch-75
+
+    * AUTHORS: Note that YH's assignment is in the mail.
+    
+    * README (scripts): Explain better the contents of the `scripts'
+      directory.
+    
+    * lisp/muse-wiki.el (muse-wiki-wikiword-regexp): Split long line.
+
+    modified files:
+     AUTHORS ChangeLog README lisp/muse-wiki.el
+
+
 2005-06-23 05:20:04 GMT	Michael Olson <mwolson@gnu.org>	patch-74
 
     Summary:

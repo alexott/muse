@@ -32,9 +32,9 @@ experimental :: Source code that is not yet considered stable.
 
 lisp :: Muse source code.
 
-scripts :: Scripts that are used when publishing the QuickStart
-           document; they might prove useful if you want to automate
-           the building of Muse documents.
+scripts :: Scripts that are used when compiling Muse and publishing
+           the QuickStart document; they might prove useful if you
+           want to automate the building of Muse documents.
 
 Getting started
 ===============

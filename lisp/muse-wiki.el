@@ -32,7 +32,9 @@
   :group 'muse-mode)
 
 (defcustom muse-wiki-wikiword-regexp
-  (concat "\\<\\(\\(?:[" muse-regexp-upper "][" muse-regexp-lower "]+\\)\\(?:[" muse-regexp-upper "][" muse-regexp-lower "]+\\)+\\)\\>")
+  (concat "\\<\\(\\(?:[" muse-regexp-upper
+          "][" muse-regexp-lower "]+\\)\\(?:["
+          muse-regexp-upper "][" muse-regexp-lower "]+\\)+\\)\\>")
   "Regexp used to match WikiWords"
   :type 'regexp
   :group 'muse-wiki)
