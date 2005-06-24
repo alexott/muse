@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-24 21:15:35 GMT	Michael Olson <mwolson@gnu.org>	patch-77
+
+    Summary:
+      Make muse-replace-regexp-in-string closer to its parent; no func change.
+    Revision:
+      muse--main--1.0--patch-77
+
+    * lisp/muse.el (muse-replace-regexp-in-string): Add 2 more optional args
+      to implement all functionality of `replace-regexp-in-string'.  No
+      functionality change.
+    
+
+    modified files:
+     ChangeLog lisp/muse.el
+
+
 2005-06-24 00:22:12 GMT	Michael Olson <mwolson@gnu.org>	patch-76
 
     Summary:

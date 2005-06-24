@@ -177,17 +177,17 @@ omitted, a default message listing FORM itself is used."
       (match-string-no-properties num string)
     (match-string num string)))
 
-(defun muse-replace-regexp-in-string (regexp replacement text &rest args)
+(defun muse-replace-regexp-in-string (regexp replacement text &optional fixedcase literal)
   "Replace REGEXP with REPLACEMENT in TEXT.
-Other ARGS are ignored."
-  ;; If we really need any more args, that could be hacked in later.
+If fourth arg FIXEDCASE is non-nil, do not alter case of replacement text.
+If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
   (cond
    ((fboundp 'replace-regexp-in-string)
-    (replace-regexp-in-string regexp replacement text))
+    (replace-regexp-in-string regexp replacement text fixedcase literal))
    ((fboundp 'replace-in-string)
-    (replace-in-string text regexp replacement))
+    (replace-in-string text regexp replacement literal))
    (t (while (string-match regexp text)
-        (setq text (replace-match replacement nil t text)))
+        (setq text (replace-match replacement fixedcase literal text)))
       text)))
 
 (defun muse-add-to-invisibility-spec (element)
