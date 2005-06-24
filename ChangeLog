@@ -2,6 +2,39 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-24 00:22:12 GMT	Michael Olson <mwolson@gnu.org>	patch-76
+
+    Summary:
+      Play nicely with fill, adaptive-fill, and flyspell.
+    Revision:
+      muse--main--1.0--patch-76
+
+    * muse-mode.el (muse-mode-intangible-links): New function used to
+      determine whether links will be considered intangible.
+    
+    * lisp/muse-mode.el (muse-mode-link-functions)
+      (muse-mode-handler-functions): Minor docfix.
+    
+    * lisp/muse-mode.el (muse-mode): Don't split long links when performing
+      fill.  Play nicely with adaptive-fill.  Avoid lockup with flyspell by
+      making links intangible by default, but this may be adjusted by use of
+      the `muse-mode-intangible-links' function.
+    
+    * lisp/muse-mode.el (muse-mode-fill-nobreak-p): New function that returns
+      nil if we should allow a fill to occur here.  Keeps links from being
+      broken up.
+    
+    * lisp/muse-mode.el (muse-mode-flyspell-p): New function that returns
+      non-nil if we allow spell-checking to occur here.  Keeps links from
+      being improperly colorized.
+    
+    * lisp/muse-wiki.el (muse-wiki-interwiki-handle): Break up long line; no
+      functionality change.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse-wiki.el
+
+
 2005-06-23 07:13:35 GMT	Michael Olson <mwolson@gnu.org>	patch-75
 
     Summary:

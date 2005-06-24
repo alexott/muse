@@ -75,6 +75,13 @@ See `muse-publish' for more information."
           (set sym value)))
   :group 'muse-mode)
 
+(defcustom muse-mode-intangible-links nil
+  "If non-nil, use the intangible property on links.
+This can cause problems with flyspell (and potentially fill-mode),
+so only enable this if you don't use either of these."
+  :type 'boolean
+  :group 'muse-mode)
+
 (defcustom muse-mode-hook nil
   "A hook that is run when Muse mode is entered."
   :type 'hook
@@ -83,12 +90,12 @@ See `muse-publish' for more information."
   :group 'muse-mode)
 
 (defcustom muse-mode-link-functions nil
-  "A list of functions to recognize a link"
+  "A list of functions to recognize a link."
   :type '(repeat function)
   :group 'muse-mode)
 
 (defcustom muse-mode-handler-functions nil
-  "A list of functions to handle a link"
+  "A list of functions to handle a link."
   :type '(repeat function)
   :group 'muse-mode)
 
@@ -143,24 +150,68 @@ See `muse-publish' for more information."
 (define-derived-mode muse-mode text-mode "Muse"
   "Muse is an Emacs mode for authoring and publishing documents.
 \\{muse-mode-map}"
-  ;; because we're not inheriting from normal-mode, we need to
-  ;; explicitly run file variables if the user wants to
+  ;; Since we're not inheriting from normal-mode, we need to
+  ;; explicitly run file variables.
   (condition-case err
       (hack-local-variables)
     (error (message "File local-variables error: %s"
                     (prin1-to-string err))))
+  ;; Avoid lock-up caused by use of the 'intangible' text property
+  ;; with flyspell.
+  (unless muse-mode-intangible-links
+    (set (make-local-variable 'inhibit-point-motion-hooks) t))
   (if muse-mode-highlight-p
       (muse-use-font-lock))
   (setq muse-current-project (muse-project-of-file))
   (muse-project-set-variables)
+  ;; Make fill not split up links
+  (when (boundp 'fill-nobreak-predicate)
+    (make-local-variable 'fill-nobreak-predicate)
+    ;; Work around annoying inconsistency in fill handling between
+    ;; Emacs CVS and all other Emacs types.
+    (if (not (muse-extreg-usable-p))
+        (setq fill-nobreak-predicate 'muse-mode-fill-nobreak-p)
+      (add-to-list 'fill-nobreak-predicate
+                   'muse-mode-fill-nobreak-p)))
+  ;; Make adaptive fill work nicely with item lists
+  (set (make-local-variable 'adaptive-fill-regexp)
+       (concat "[" muse-regexp-blank "]*\\(-+["
+               muse-regexp-blank
+               "]*\\|[0-9]+\\.["
+               muse-regexp-blank "]*\\)*"))
   (when (featurep 'pcomplete)
-    ;; if pcomplete is available, set it up!
+    ;; If pcomplete is available, set it up
     (set (make-variable-buffer-local 'pcomplete-default-completion-function)
          'muse-mode-completions)
     (set (make-variable-buffer-local 'pcomplete-command-completion-function)
          'muse-mode-completions)
     (set (make-variable-buffer-local 'pcomplete-parse-arguments-function)
          'muse-mode-current-word)))
+
+(put 'muse-mode
+     'flyspell-mode-predicate
+     'muse-mode-flyspell-p)
+
+(defun muse-mode-fill-nobreak-p ()
+  "Return nil if we should allow a fill to occur at point.
+Otherwise return non-nil.
+
+This is used to keep long extended links from being mangled by
+fill mode."
+  (save-excursion
+    (save-match-data
+      (and (re-search-backward "\\[\\[\\|\\]\\]"
+                               (line-beginning-position) t)
+           (string= (or (match-string 0) "")
+                    "[[")))))
+
+(defun muse-mode-flyspell-p ()
+  "Return non-nil if we should allow spell-checking to occur at point.
+Otherwise return nil.
+
+This is used to keep links from being improperly colorized by flyspell."
+  (save-match-data
+    (null (muse-link-at-point))))
 
 (defun muse-mode-maybe ()
   "Maybe turn Emacs Muse mode on for this file."

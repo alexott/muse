@@ -85,7 +85,8 @@ this."
 (defun muse-wiki-interwiki-handle (url)
   (save-match-data
     (when (string-match (concat muse-wiki-interwiki-regexp "::\\(.*\\)") url)
-      (let ((subst (cdr (assoc (match-string 1 url) muse-wiki-interwiki-alist)))
+      (let ((subst (cdr (assoc (match-string 1 url)
+                               muse-wiki-interwiki-alist)))
             (word (match-string 2 url)))
         (if (functionp subst)
             (funcall subst word)
