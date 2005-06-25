@@ -34,7 +34,7 @@ install: lisp muse.info
 	(cd lisp && $(MAKE) install)
 	install -d $(INFODIR)
 	install -m 0644 muse.info $(INFODIR)/muse
-	install-info --section "Emacs" "emacs" --info-dir=$(INFODIR) $(INFODIR)/muse
+	$(INSTALLINFO) $(INFODIR)/muse
 
 test: 
 	(cd lisp && $(MAKE) test)

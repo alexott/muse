@@ -11,3 +11,10 @@ SITEFLAG = --no-site-file
 PREFIX   = /usr/local
 ELISPDIR = $(PREFIX)/share/emacs/site-lisp/muse
 INFODIR  = $(PREFIX)/info
+
+# Command to use to install the Info dir entry
+INSTALLINFO = install-info --info-dir=$(INFODIR)
+
+# If you're using Debian, uncomment the following line and comment out
+#the above line.
+#INSTALLINFO = install-info --section "Emacs" "emacs" --info-dir=$(INFODIR)

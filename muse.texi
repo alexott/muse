@@ -295,6 +295,12 @@ where you want the source and compiled Muse files to be installed and
 will want to edit @env{EMACS} and @env{SITEFLAG} as shown in the
 Compilation section if you are using XEmacs.
 
+If you are installing Muse on a Debian system, you might want to change
+the value of @env{INSTALLINFO} as specified in @file{Makefile.defs}.
+
+If you wish to install Muse to different locations than the defaults
+specify, edit @file{Makefile.defs} accordingly.
+
 Run @code{make} as a normal user.
 
 Run @code{make install} as the root user if you have chosen installation

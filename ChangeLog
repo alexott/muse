@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-25 04:44:00 GMT	Michael Olson <mwolson@gnu.org>	patch-80
+
+    Summary:
+      Make installation of manual when not using Debian go smoothly.
+    Revision:
+      muse--main--1.0--patch-80
+
+    * Makefile.defs (INSTALLINFO): New variable that specifies what command
+      and options are to be used when insinuating the Muse documentation into
+      the Info menu.
+    
+    * Makefile (install): Make use of INSTALLINFO.
+    
+    * README (Installation): Give directions for changing INSTALLINFO on a
+      Debian system and changing where Muse is installed.
+    
+    * muse.texi: Ditto.
+
+    modified files:
+     ChangeLog Makefile Makefile.defs README muse.texi
+
+
 2005-06-25 04:09:15 GMT	Michael Olson <mwolson@gnu.org>	patch-79
 
     Summary:

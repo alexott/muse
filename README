@@ -72,6 +72,12 @@ indicates where to put the Muse manual.  Of course, you will want to
 edit EMACS and SITEFLAG as shown in the Compilation section if you are
 using XEmacs.
 
+If you are installing Muse on a Debian system, you might want to
+change the value of INSTALLINFO as specified in `Makefile.defs'.
+
+If you wish to install Muse to different locations than the defaults
+specify, edit `Makefile.defs' accordingly.
+
 Run `make' as a normal user.
 
 Run `make install' as the root user if you have chosen installation
