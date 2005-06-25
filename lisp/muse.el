@@ -63,6 +63,10 @@ familiar with Emacs."
 
 (require 'muse-regexps)
 
+(defvar muse-current-file nil
+  "File currently being published.")
+(make-variable-buffer-local 'muse-current-file)
+
 ;;; Return an list of known wiki names and the files they represent.
 
 (defsubst muse-delete-file-if-exists (file)

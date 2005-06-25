@@ -72,10 +72,6 @@ when publishing files in that project."
   "Project we are currently visiting.")
 (make-variable-buffer-local 'muse-current-project)
 
-(defvar muse-current-file nil
-  "File currently being published.")
-(make-variable-buffer-local 'muse-current-file)
-
 (defsubst muse-project (&optional project)
   "Resolve the given PROJECT into a full Muse project, if it is a string."
   (if (null project)
