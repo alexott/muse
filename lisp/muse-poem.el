@@ -188,9 +188,6 @@ differs little between the various styles."
       (forward-line 1))
     nil))
 
-(eval-when-compile
-  (defvar muse-current-project))
-
 (defvar muse-poem-tag '("poem" nil t muse-poem-markup-tag))
 
 (defun muse-poem-markup-tag (beg end attrs)

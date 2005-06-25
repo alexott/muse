@@ -537,6 +537,7 @@ the file is published no matter what."
           (message "Publishing %s ..." file))
       (with-temp-buffer
         (insert-file-contents file t)
+        (setq muse-current-file file)
         (muse-publish-markup-buffer (muse-page-name file) style)
         (let ((backup-inhibited t))
           (write-file output-path))

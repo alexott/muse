@@ -2,6 +2,35 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-25 04:02:11 GMT	Michael Olson <mwolson@gnu.org>	patch-78
+
+    Summary:
+      Add `muse-current-file', fix minor QuickStart issue.
+    Revision:
+      muse--main--1.0--patch-78
+
+    * examples/QuickStart: Make John Wiegley the author.
+    
+    * lisp/muse-blosxom.el (muse-blosxom-markup-date-directive): Use
+      `muse-current-file' instead of `buffer-file-name'.
+    
+    * lisp/muse-project.el (muse-current-project): Document.
+    
+    * lisp/muse-project.el (muse-current-file): New variable indicating the
+      name, including path, of the file that is currently being published.
+      (muse-project-of-file): Make use of
+      `muse-current-file'.
+    
+    * lisp/muse-publish.el (muse-publish-file): Set `muse-current-file' here.
+    
+    * lisp/muse.el (muse-page-name): Make use of `muse-current-file'.
+
+    modified files:
+     ChangeLog examples/QuickStart lisp/muse-blosxom.el
+     lisp/muse-poem.el lisp/muse-project.el lisp/muse-publish.el
+     lisp/muse.el
+
+
 2005-06-24 21:15:35 GMT	Michael Olson <mwolson@gnu.org>	patch-77
 
     Summary:

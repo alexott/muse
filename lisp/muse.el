@@ -81,7 +81,7 @@ familiar with Emacs."
 All this means is that certain extensions, like .gz, are removed."
   (save-match-data
     (unless name
-      (setq name buffer-file-name))
+      (setq name (or muse-current-file buffer-file-name)))
     (if name
         (let ((page (file-name-nondirectory name)))
           (if (string-match muse-ignored-extensions-regexp page)

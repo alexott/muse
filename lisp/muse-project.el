@@ -68,8 +68,13 @@ when publishing files in that project."
   :type 'regexp
   :group 'muse-regexps)
 
-(defvar muse-current-project nil)
+(defvar muse-current-project nil
+  "Project we are currently visiting.")
 (make-variable-buffer-local 'muse-current-project)
+
+(defvar muse-current-file nil
+  "File currently being published.")
+(make-variable-buffer-local 'muse-current-file)
 
 (defsubst muse-project (&optional project)
   "Resolve the given PROJECT into a full Muse project, if it is a string."
@@ -183,7 +188,7 @@ disk."
 If PATHNAME is nil, the current buffer's filename is used."
   (if (and (null pathname) muse-current-project)
       muse-current-project
-    (when (or pathname buffer-file-name)
+    (when (or pathname muse-current-file buffer-file-name)
       (let* ((file (file-truename (or pathname buffer-file-name)))
              (dir  (file-name-directory file))
              (project-entry muse-project-alist)
