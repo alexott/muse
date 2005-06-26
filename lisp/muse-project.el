@@ -66,7 +66,7 @@ when publishing files in that project."
   "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\)\\'"
   "A regexp matching files to be ignored in Wiki directories."
   :type 'regexp
-  :group 'muse-regexps)
+  :group 'muse-regexp)
 
 (defvar muse-current-project nil
   "Project we are currently visiting.")

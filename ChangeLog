@@ -2,6 +2,53 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-06-26 22:55:55 GMT	Michael Olson <mwolson@gnu.org>	patch-81
+
+    Summary:
+      Wiki hacking, regexp tweaks.
+    Revision:
+      muse--main--1.0--patch-81
+
+    * lisp/muse-project.el (muse-project-ignore-regexp): Change group to
+      muse-regexp.
+    
+    * lisp/muse-regexps.el (muse-regexp-use-character-classes): New variable
+      that indicates whether or not to use character classes in regexps.  The
+      default is to let Muse try to figure it out.
+      (muse-extreg-usable-p): Make use of this variable.
+    
+    * lisp/muse-regexps.el (muse-url-regexp): There's too much whitespace in
+      this regexp.  I'm guessing it was supposed to have a TAB in there at
+      one time.  Replace this stuff with muse-regexp-space.
+    
+    * lisp/muse-wiki.el (muse-wiki-interwiki-alist): Use wikified EmacsWiki
+      by default.
+    
+    * lisp/muse-wiki.el (muse-wiki-interwiki-alist): Use "choice" instead of
+      "or".
+    
+    * lisp/muse-wiki.el (muse-wiki-interwiki-regexp): Include the page
+      delimiter as part of the regexp.  Allow "#" or "::" to be a delimiter.
+      We'll fix those anchor problems eventually!
+    
+    * lisp/muse-wiki.el (muse-wiki-interwiki-at-point): New function that
+      uses `muse-interwiki-handle' to determine whether an interwiki link is
+      at point.
+    
+    * lisp/muse-wiki.el (muse-wiki-interwiki-handle): Make URL optional and
+      look for a suitable value at point if needed.
+    
+    * lisp/muse-wiki.el: Make interwiki regexps color the same as wikiwords.
+    
+    * lisp/muse-wiki.el: Add publishing rule for muse-wiki-interwiki-regexp.
+    
+    * lisp/muse-wiki.el (muse-mode-link-functions): Add interwiki handling.
+
+    modified files:
+     ChangeLog lisp/muse-project.el lisp/muse-regexps.el
+     lisp/muse-wiki.el
+
+
 2005-06-25 04:44:00 GMT	Michael Olson <mwolson@gnu.org>	patch-80
 
     Summary:

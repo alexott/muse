@@ -34,28 +34,49 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defgroup muse-regexp nil
+  "Regular expressions used in publishing and syntax highlighting."
+  :group 'muse)
+
+(defcustom muse-regexp-use-character-classes 'undecided
+  "Indicate whether to use extended character classes like [:space:].
+If 'undecided, Muse will use them if your emacs is known to support them.
+
+Emacs 22 and Emacs 21.3.50 are known to support them, XEmacs does
+not support them
+
+Emacs 21.2 or higher might support them, but the maintainer is
+uncertain, so by default extended regexps are not used with these
+versions of Emacs."
+  :type '(choice (const :tag "Yes" t)
+                 (const :tag "No" nil)
+                 (const :tag "Let Muse decide" undecided))
+  :group 'muse-regexp)
+
 (defun muse-extreg-usable-p ()
   "Return non-nil if extended character classes can be used,
 nil otherwise.
 
 This is used when deciding the initial values of the muse-regexp
 options."
-  (save-match-data
-    (string-match "^[0-9]+\\.[0-9]+\\.\\([0-9]+\\)"
-                  emacs-version)
-    (cond ((featurep 'xemacs) nil)             ; unusable on XEmacs
-          ((> emacs-major-version 21) t)       ; usable if > 21
-          ((< emacs-major-version 21) nil)
-          ((< emacs-minor-version 3) nil)
-          ;; don't use if version is of format 21.x
-          ((null (match-string 1 emacs-version)) nil)
-          ;; don't trust the 21.3.1 release or its predecessors
-          ((> (string-to-number (match-string 1 emacs-version)) 1) t)
-          (t nil))))
-
-(defgroup muse-regexp nil
-  "Regular expressions used in publishing and syntax highlighting."
-  :group 'muse)
+  (cond
+   ((eq muse-regexp-use-character-classes t)
+    t)
+   ((eq muse-regexp-use-character-classes nil)
+    nil)
+   (t
+    (save-match-data
+      (string-match "^[0-9]+\\.[0-9]+\\.\\([0-9]+\\)"
+                    emacs-version)
+      (cond ((featurep 'xemacs) nil)             ; unusable on XEmacs
+            ((> emacs-major-version 21) t)       ; usable if > 21
+            ((< emacs-major-version 21) nil)
+            ((< emacs-minor-version 3) nil)
+            ;; don't use if version is of format 21.x
+            ((null (match-string 1 emacs-version)) nil)
+            ;; don't trust the 21.3.1 release or its predecessors
+            ((> (string-to-number (match-string 1 emacs-version)) 1) t)
+            (t nil))))))
 
 (defcustom muse-regexp-blank
   (if (muse-extreg-usable-p)
@@ -147,7 +168,8 @@ Paren group 1 must match the URL, and paren group 2 the description."
   (concat "\\<\\(?:https?:/?/?\\|ftp:/?/?\\|gopher://\\|"
           "telnet://\\|wais://\\|file:/\\|s?news:\\|"
           "mailto:\\)"
-          "[^]  \n \"'()<>[^`{}]*[^]    \n \"'()<>[^`{}.,;]+")
+          "[^]" muse-regexp-space "\"'()<>[^`{}]*[^]"
+          muse-regexp-space "\"'()<>[^`{}.,;]+")
   "A regexp used to match URLs within a Muse page."
   :type 'regexp
   :group 'muse-regexp)

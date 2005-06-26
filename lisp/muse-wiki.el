@@ -40,7 +40,7 @@
   :group 'muse-wiki)
 
 (defcustom muse-wiki-interwiki-alist
-  '(("emacswiki" . "http://www.emacswiki.org/cgi-bin/wiki/"))
+  '(("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/"))
   "A table of WikiNames that refer to external entities.
 The format of this table is an alist, or series of cons cells.
 Each cons cell must be of the form:
@@ -67,24 +67,30 @@ character, any number, % or _.  If you need other special characters,
 use % to specify the hex code, as in %2E.  All browsers should support
 this."
   :type '(repeat (cons (string :tag "WikiName")
-                       (or (string :tag "URL") function)))
+                       (choice (string :tag "URL") function)))
   :group 'muse-wiki)
 
 (defvar muse-wiki-interwiki-regexp
-  (concat "\\(" (mapconcat 'car muse-wiki-interwiki-alist "\\|") "\\)"))
+  (concat "\\<\\(" (mapconcat 'car muse-wiki-interwiki-alist "\\|")
+          "\\)\\(?:\\(?:#\\|::\\)\\(\\sw+\\)\\)?\\>"))
 
 (defun muse-wiki-wikiword-at-point ()
   (and (looking-at muse-wiki-wikiword-regexp)
        (match-string 1)))
+
+(defun muse-wiki-interwiki-at-point ()
+  (muse-wiki-interwiki-handle))
 
 (defun muse-wiki-interwiki-expand (url)
   (setq url (or (muse-wiki-interwiki-handle url)
                 url))
   (muse-publish-read-only url))
 
-(defun muse-wiki-interwiki-handle (url)
+(defun muse-wiki-interwiki-handle (&optional url)
   (save-match-data
-    (when (string-match (concat muse-wiki-interwiki-regexp "::\\(.*\\)") url)
+    (when (if url
+              (string-match muse-wiki-interwiki-regexp url)
+            (looking-at muse-wiki-interwiki-regexp))
       (let ((subst (cdr (assoc (match-string 1 url)
                                muse-wiki-interwiki-alist)))
             (word (match-string 2 url)))
@@ -108,6 +114,9 @@ this."
          (add-text-properties (match-beginning 1) (match-end 0) props)))
 
      (add-to-list 'muse-colors-markup
+                  '(muse-wiki-interwiki-regexp t muse-wiki-colors-wikiword)
+                  t)
+     (add-to-list 'muse-colors-markup
                   '(muse-wiki-wikiword-regexp t muse-wiki-colors-wikiword)
                   t)
 
@@ -116,6 +125,9 @@ this."
 (eval-after-load 'muse-publish
   '(progn
      (add-to-list 'muse-publish-markup-regexps
+                  '(3050 muse-wiki-interwiki-regexp 0 url)
+                  t)
+     (add-to-list 'muse-publish-markup-regexps
                   '(3100 muse-wiki-wikiword-regexp 0 url)
                   t)
      (add-to-list 'muse-publish-url-transforms
@@ -123,6 +135,7 @@ this."
 
 (eval-after-load 'muse-mode
   '(progn
+     (add-to-list 'muse-mode-link-functions 'muse-wiki-interwiki-at-point t)
      (add-to-list 'muse-mode-link-functions 'muse-wiki-wikiword-at-point t)
      (add-to-list 'muse-mode-handler-functions 'muse-wiki-interwiki-handle)))
 
