@@ -125,10 +125,10 @@ this."
 (eval-after-load 'muse-publish
   '(progn
      (add-to-list 'muse-publish-markup-regexps
-                  '(3050 muse-wiki-interwiki-regexp 0 url)
+                  '(3100 muse-wiki-interwiki-regexp 0 url)
                   t)
      (add-to-list 'muse-publish-markup-regexps
-                  '(3100 muse-wiki-wikiword-regexp 0 url)
+                  '(3200 muse-wiki-wikiword-regexp 0 url)
                   t)
      (add-to-list 'muse-publish-url-transforms
                   'muse-wiki-interwiki-expand)))

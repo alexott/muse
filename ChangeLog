@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-01 22:48:51 GMT	Michael Olson <mwolson@gnu.org>	patch-82
+
+    Summary:
+      Interpret explicit links before emphasis.
+    Revision:
+      muse--main--1.0--patch-82
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Interpret explicit
+      links before emphasis.
+    
+    * lisp/muse-wiki.el (muse-publish): Make rules use a multiple of 100 just
+      for the heck of it.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el lisp/muse-wiki.el
+
+
 2005-06-26 22:55:55 GMT	Michael Olson <mwolson@gnu.org>	patch-81
 
     Summary:

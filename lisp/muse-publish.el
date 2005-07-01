@@ -82,8 +82,11 @@ Each is passed the URL and expects a URL to be returned."
     ;; define anchor points
     (1400 "^#\\(\\S-+\\)\\s-*" 0 anchor)
 
+    ;; replace links in the buffer (links to other pages)
+    (1500 muse-link-regexp 0 link)
+
     ;; emphasized or literal text
-    (1500 ,(concat
+    (1600 ,(concat
             "\\(^\\|[-["
             muse-regexp-space
             "<('`\"]\\)\\(=[^="
@@ -96,11 +99,11 @@ Each is passed the URL and expects a URL to be returned."
           2 word)
 
     ;; headings, outline-mode style
-    (1600 "^\\(\\*+\\)\\s-+" 0 heading)
+    (1700 "^\\(\\*+\\)\\s-+" 0 heading)
 
     ;; ellipses
-    (1700 "\\.\\.\\.\\." 0 enddots)
-    (1800 "\\.\\.\\." 0 dots)
+    (1800 "\\.\\.\\.\\." 0 enddots)
+    (1850 "\\.\\.\\." 0 dots)
 
     ;; horizontal rule, or section separator
     (1900 "^----+" 0 rule)
@@ -166,8 +169,7 @@ Each is passed the URL and expects a URL to be returned."
                    "]+.+?\\)\\)$")
           0 table)
 
-    ;; replace links in the buffer (links to other pages)
-    (2900 muse-link-regexp 0 link)
+    ;; base URLs
     (3000 muse-url-regexp  0 url)
 
     ;; bare email addresses
