@@ -157,10 +157,25 @@ Group 1 should be the tag name, group 2 the properties, and group
   :type 'regexp
   :group 'muse-regexp)
 
-(defcustom muse-link-regexp
+(defcustom muse-explicit-link-regexp
   "\\[\\[\\([^][\t\n]+\\)\\]\\(?:\\[\\([^][\n]+\\)\\]\\)?\\]"
   "Regexp used to match [[target][description]] links.
 Paren group 1 must match the URL, and paren group 2 the description."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-implicit-link-regexp
+  (concat "\\([^" muse-regexp-space "]+\\)")
+  "Regexp used to match an implicit link.
+An implicit link is the largest block of text to be checked for
+URLs and bare WikiNames by the `muse-link-at-point' function.
+Paren group 1 is the text to be checked.
+
+URLs are checked by default.  To get WikiNames, load
+muse-wiki.el.
+
+If you want to match things with spaces in them, you will have to
+modify this."
   :type 'regexp
   :group 'muse-regexp)
 

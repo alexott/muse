@@ -351,12 +351,14 @@ first directory within the project's fileset is used."
   "Publish Muse files in batch mode."
   (let ((muse-batch-publishing-p t)
         force)
-    (if (string= "--force" (car command-line-args-left))
+    (if (string= "--force" (or (car command-line-args-left) ""))
         (setq force t
               command-line-args-left (cdr command-line-args-left)))
-    (dolist (project command-line-args-left)
-      (message "Publishing project %s ..." project)
-      (muse-project-publish project force))))
+    (if command-line-args-left
+        (dolist (project command-line-args-left)
+          (message "Publishing project %s ..." project)
+          (muse-project-publish project force))
+      (message "No projects specified."))))
 
 (eval-when-compile
   (put 'make-local-hook 'byte-compile nil))

@@ -89,16 +89,6 @@ so only enable this if you don't use either of these."
              highlight-changes-mode)
   :group 'muse-mode)
 
-(defcustom muse-mode-link-functions nil
-  "A list of functions to recognize a link."
-  :type '(repeat function)
-  :group 'muse-mode)
-
-(defcustom muse-mode-handler-functions nil
-  "A list of functions to handle a link."
-  :type '(repeat function)
-  :group 'muse-mode)
-
 (defvar muse-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [(control ?c) (control ?a)] 'muse-index)
@@ -196,7 +186,7 @@ so only enable this if you don't use either of these."
   "Return nil if we should allow a fill to occur at point.
 Otherwise return non-nil.
 
-This is used to keep long extended links from being mangled by
+This is used to keep long explicit links from being mangled by
 fill mode."
   (save-excursion
     (save-match-data
@@ -240,19 +230,8 @@ This is used to keep links from being improperly colorized by flyspell."
 
 ;;; Navigate/visit links or URLs.  Use TAB, S-TAB and RET (or mouse-2).
 
-(defun muse-handled-url (url)
-  (or (let ((funcs muse-mode-handler-functions)
-            (res nil))
-        (while funcs
-          (setq res (funcall (car funcs) url))
-          (if res
-              (setq funcs nil)
-            (setq funcs (cdr funcs))))
-        res)
-      url))
-
 (defun muse-link-at-point (&optional pos)
-  "Return link text if a URL or Muse link name is at point."
+  "Return link text if a URL or link is at point."
   (let ((case-fold-search nil)
         (here (or pos (point))))
     (when (or (null pos)
@@ -260,24 +239,22 @@ This is used to keep links from being improperly colorized by flyspell."
                    (not (eq (char-syntax (char-after pos)) ?\ ))))
       (save-excursion
         (goto-char here)
-        (skip-chars-backward (concat "^'\"<>{}("
-                                     muse-regexp-space))
-        (or (and (looking-at muse-url-regexp)
-                 (match-string 0))
-            (and (or (looking-at muse-link-regexp)
-                     (and (search-backward
-                           "[[" (muse-line-beginning-position) t)
-                          (looking-at muse-link-regexp)))
-                 (<= here (match-end 0))
-                 (muse-handled-url (match-string 1)))
-            (let ((funcs muse-mode-link-functions)
-                  (res nil))
-              (while funcs
-                (setq res (funcall (car funcs)))
-                (if res
-                    (setq funcs nil)
-                  (setq funcs (cdr funcs))))
-              res))))))
+        ;; Check for explicit link here or before point
+        (if (or (looking-at muse-explicit-link-regexp)
+                (and
+                 (re-search-backward "\\[\\[\\|\\]\\]"
+                                     (muse-line-beginning-position)
+                                     t)
+                 (string= (or (match-string 0) "") "[[")
+                 (looking-at muse-explicit-link-regexp)))
+            (muse-handle-explicit-link (match-string 1))
+          (goto-char here)
+          ;; Check for bare URL or other link type
+          (skip-chars-backward (concat "^'\"<>{}("
+                                       muse-regexp-space))
+          (and (looking-at muse-implicit-link-regexp)
+               (match-string 1)
+               (muse-handle-implicit-link (match-string 1))))))))
 
 (defun muse-make-link (link &optional name)
   "Return a link to LINK with NAME as the text."
@@ -302,28 +279,37 @@ Do not rename the page originally referred to."
        t t)
     (error "There is no valid link at point")))
 
+(defun muse-visit-link-default (link &optional other-window anchor)
+  "Visit the URL or link named by LINK.
+If ANCHOR is specified, search for it after opening LINK.
+
+This is the default function to call when visiting links; it is
+used by `muse-visit-link' if you have not specified :visit-link
+in `muse-project-alist'."
+  (if (string-match muse-url-regexp link)
+      (browse-url link)
+      (let ((project (muse-project-of-file)))
+        (if project
+            (muse-project-find-file link project
+                                    (and other-window
+                                         'find-file-other-window))
+          (if other-window
+              (find-file-other-window link)
+            (find-file link))))
+      (if anchor
+          (search-forward anchor nil t))))
+
 (defun muse-visit-link (link &optional other-window)
-  "Visit the URL or link named by LINK-NAME."
+  "Visit the URL or link named by LINK."
   (let ((visit-link-function
-         (muse-get-keyword :visit-link (cadr (muse-project-of-file)) t)))
+         (muse-get-keyword :visit-link (cadr (muse-project-of-file)) t))
+        anchor)
     (if visit-link-function
         (funcall visit-link-function link other-window)
-      (if (string-match muse-url-regexp link)
-          (browse-url link)
-        (let (anchor)
-          (if (string-match "#" link)
-              (setq anchor (substring link (match-beginning 0))
-                    link (substring link 0 (match-beginning 0))))
-          (let ((project (muse-project-of-file)))
-            (if project
-                (muse-project-find-file link project
-                                        (and other-window
-                                             'find-file-other-window))
-              (if other-window
-                  (find-file-other-window link)
-                (find-file link))))
-          (if anchor
-              (search-forward anchor nil t)))))))
+      (if (string-match "#" link)
+          (setq anchor (substring link (match-beginning 0))
+                link (substring link 0 (match-beginning 0))))
+      (muse-visit-link-default link other-window anchor))))
 
 (defun muse-browse-result (style &optional other-window)
   "Visit the current page's published result."
@@ -379,19 +365,22 @@ Do not rename the page originally referred to."
 (defun muse-next-reference ()
   "Move forward to next Muse link or URL, cycling if necessary."
   (interactive)
-  (let ((case-fold-search nil)
-        (cycled 0) pos)
+  (let ((cycled 0) pos)
     (save-excursion
-      (if (muse-link-at-point)
-          (goto-char (match-end 0)))
+      (when (eq (get-text-property (point) 'face) 'muse-link-face)
+        (goto-char (or (next-single-property-change (point) 'face)
+                       (point-max))))
       (while (< cycled 2)
-        (if (re-search-forward
-             (concat "\\(" muse-link-regexp "\\|"
-                     muse-url-regexp "\\)") nil t)
-            (setq pos (match-beginning 0)
-                  cycled 2)
-          (goto-char (point-min))
-          (setq cycled (1+ cycled)))))
+        (let ((next (point)))
+          (if (while (and (null pos)
+                          (setq next
+                                (next-single-property-change
+                                 next 'face)))
+                (when (eq (get-text-property next 'face) 'muse-link-face)
+                  (setq pos next)))
+              (setq cycled 2)
+            (goto-char (point-min))
+            (setq cycled (1+ cycled))))))
     (if pos
         (goto-char pos))))
 
@@ -399,17 +388,19 @@ Do not rename the page originally referred to."
   "Move backward to the next Muse link or URL, cycling if necessary.
 This function is not entirely accurate, but it's close enough."
   (interactive)
-  (let ((case-fold-search nil)
-        (cycled 0) pos)
+  (let ((cycled 0) pos)
     (save-excursion
       (while (< cycled 2)
-        (if (re-search-backward
-             (concat "\\(" muse-link-regexp "\\|"
-                     muse-url-regexp "\\)") nil t)
-            (setq pos (point)
-                  cycled 2)
-          (goto-char (point-max))
-          (setq cycled (1+ cycled)))))
+        (let ((prev (point)))
+          (if (while (and (null pos)
+                          (setq prev
+                                (previous-single-property-change
+                                 prev 'face)))
+              (when (eq (get-text-property prev 'face) 'muse-link-face)
+                (setq pos prev)))
+              (setq cycled 2)
+            (goto-char (point-max))
+            (setq cycled (1+ cycled))))))
     (if pos
         (goto-char pos))))
 

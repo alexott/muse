@@ -205,6 +205,61 @@ that can be added."
     (setq buffer-invisibility-spec
           (cons element buffer-invisibility-spec))))
 
+;; Link-handling functions and variables
+
+(defun muse-handle-url (string)
+  "If STRING has a URL, return it."
+  (if (string-match muse-url-regexp string)
+      (match-string 0 string)))
+
+(defcustom muse-implicit-link-functions '(muse-handle-url)
+  "A list of functions to handle an implicit link.
+An implicit link is one that is not surrounded by brackets.
+
+By default, Muse handles URLs only.
+If you want to handle WikiWords, load muse-wiki.el."
+  :type '(repeat function)
+  :group 'muse)
+
+(defun muse-handle-implicit-link (url)
+  "Handle implicit links.
+An implicit link is one that is not surrounded by brackets.
+By default, Muse handles URLs only.
+If you want to handle WikiWords, load muse-wiki.el.
+
+This function modifies the match data so that match 1 is the link
+and match 2 is the description."
+  (let ((funcs muse-implicit-link-functions)
+        (res nil))
+    (while funcs
+      (setq res (funcall (car funcs) url))
+      (if res
+          (setq funcs nil)
+        (setq funcs (cdr funcs))))
+    res))
+
+(defcustom muse-explicit-link-functions nil
+  "A list of functions to handle an explicit link.
+An explicit link is one [[like][this]] or [[this]]."
+  :type '(repeat function)
+  :group 'muse)
+
+(defun muse-handle-explicit-link (url)
+  "Handle explicit links.
+An explicit link is one that looks [[like][this]] or [[this]].
+
+This function modifies the match data so that match 1 is the link
+and match 2 is the description."
+  (or (let ((funcs muse-explicit-link-functions)
+            (res nil))
+        (while funcs
+          (setq res (funcall (car funcs) url))
+          (if res
+              (setq funcs nil)
+            (setq funcs (cdr funcs))))
+        res)
+      url))
+
 (provide 'muse)
 
 ;;; muse.el ends here

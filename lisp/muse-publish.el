@@ -83,7 +83,7 @@ Each is passed the URL and expects a URL to be returned."
     (1400 "^#\\(\\S-+\\)\\s-*" 0 anchor)
 
     ;; replace links in the buffer (links to other pages)
-    (1500 muse-link-regexp 0 link)
+    (1500 muse-explicit-link-regexp 0 link)
 
     ;; emphasized or literal text
     (1600 ,(concat

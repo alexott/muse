@@ -300,7 +300,7 @@ Many RSS subscribers find this annoying."
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-markup-regexps
-  '((10000 muse-link-regexp 0 "\\2"))
+  '((10000 muse-explicit-link-regexp 0 "\\2"))
   "List of markup rules for publishing a Muse journal page to RSS 2.0.
 For more information on the structure of this list, see
 `muse-publish-markup-regexps'."
@@ -513,7 +513,7 @@ For more on the structure of this list, see
              enclosure qotd desc)
         (if title
             (save-match-data
-              (if (string-match muse-link-regexp title)
+              (if (string-match muse-explicit-link-regexp title)
                   (setq enclosure (match-string 1 title)
                         title (match-string 2 title)))))
         (save-match-data

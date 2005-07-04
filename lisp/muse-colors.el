@@ -273,7 +273,7 @@ whether progress messages should be displayed to the user."
 
     ("^#title" ?\# muse-colors-title)
 
-    (muse-link-regexp ?\[ muse-colors-link)
+    (muse-explicit-link-regexp ?\[ muse-colors-link)
 
     ;; highlight any markup tags encountered
     (muse-tag-regexp ?\< muse-colors-custom-tags)
@@ -511,11 +511,15 @@ Functions should not modify the contents of the buffer."
                 'help-echo help-str
                 muse-keymap-property muse-mode-local-map)))
 
-(defun muse-link-face (link-name)
-  "Return the type of LINK-NAME as a face symbol - either a normal link, or a
-bad-link face"
-  (let ((link (muse-handled-url link-name)))
-    (save-match-data
+(defun muse-link-face (link-name &optional explicit)
+  "Return the type of LINK-NAME as a face symbol.
+For EXPLICIT links, this is either a normal link or a bad-link
+face.  For implicit links, it is either colored normally or
+ignored."
+  (save-match-data
+    (let ((link (if explicit
+                    (muse-handle-explicit-link link-name)
+                  (muse-handle-implicit-link link-name))))
       (if (or (string-match muse-file-regexp link)
               (string-match muse-url-regexp link))
           'muse-link-face
@@ -528,7 +532,8 @@ bad-link face"
                         link-name muse-current-project t))
                   (file-exists-p link))
               'muse-link-face
-            'muse-bad-link-face))))))
+            (when explicit
+              'muse-bad-link-face)))))))
 
 (defun muse-colors-link ()
   (when (eq ?\[ (char-after (match-beginning 0)))
@@ -542,7 +547,7 @@ bad-link face"
            (link (muse-match-string-no-properties 2))
            (desc (muse-match-string-no-properties 3))
            (props (muse-link-properties
-                   desc (muse-link-face (match-string 2))))
+                   desc (muse-link-face (match-string 2) t)))
            (invis-props (append props (muse-link-properties desc))))
       (if desc
           (progn
@@ -561,7 +566,7 @@ bad-link face"
     (add-text-properties
      (match-beginning 0) (match-end 0)
      (muse-link-properties (muse-match-string-no-properties 0)
-                           (muse-link-face (match-string 2))))
+                           (muse-link-face (match-string 2) t)))
     (goto-char (match-end 0))))
 
 (defun muse-colors-title ()

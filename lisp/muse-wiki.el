@@ -33,7 +33,7 @@
 
 (defcustom muse-wiki-hide-nop-tag t
   "If non-nil, hide <nop> tags when coloring a Muse buffer."
-  :type boolean
+  :type 'boolean
   :group 'muse-wiki)
 
 (defcustom muse-wiki-wikiword-regexp
@@ -79,35 +79,33 @@ this."
   (concat "\\<\\(" (mapconcat 'car muse-wiki-interwiki-alist "\\|")
           "\\)\\(?:\\(?:#\\|::\\)\\(\\sw+\\)\\)?\\>"))
 
-(defun muse-wiki-wikiword-at-point ()
-  "Return the WikiWord at point.
-This function modifies the match data."
-  (and (looking-at muse-wiki-wikiword-regexp)
-       (match-string 1)))
-
-(defun muse-wiki-interwiki-at-point ()
-  (muse-wiki-interwiki-handle))
-
-(defun muse-wiki-interwiki-expand (url)
-  (setq url (or (muse-wiki-interwiki-handle url)
-                url))
-  (muse-publish-read-only url))
-
-(defun muse-wiki-interwiki-handle (&optional url)
+(defun muse-wiki-expand-interwiki (url)
   (save-match-data
-    (when (if url
-              (string-match muse-wiki-interwiki-regexp url)
-            (looking-at muse-wiki-interwiki-regexp))
-      (let ((subst (cdr (assoc (match-string 1 url)
-                               muse-wiki-interwiki-alist)))
-            (word (match-string 2 url)))
-        (if (functionp subst)
-            (funcall subst word)
-          (concat subst word))))))
+    (setq url (or (muse-wiki-handle-interwiki url)
+                  url))
+    (muse-publish-read-only url)))
+
+(defun muse-wiki-handle-interwiki (url)
+  "If URL is an interwiki link, resolve it and return the result.
+Match 1 is set to the original URL.
+Match 2 is set to the description."
+  (when (string-match muse-wiki-interwiki-regexp url)
+    (let ((subst (cdr (assoc (match-string 1 url)
+                             muse-wiki-interwiki-alist)))
+          (word (match-string 2 url)))
+      (if (functionp subst)
+          (funcall subst word)
+        (concat subst word)))))
+
+(defun muse-wiki-handle-wikiword (link)
+  "If URL is a WikiWord, return it.
+Match 1 is set to the WikiWord."
+  (and (string-match muse-wiki-wikiword-regexp link)
+       (match-string 1 link)))
 
 ;; Coloring setup
 
-(eval-after-load 'muse-colors
+(eval-after-load "muse-colors"
   '(progn
      (defun muse-wiki-colors-wikiword ()
        ;; remove flyspell overlays
@@ -116,14 +114,15 @@ This function modifies the match data."
            (while (> (match-end 0) cur)
              (flyspell-unhighlight-at cur)
              (setq cur (1+ cur)))))
-       (let* ((link (match-string-no-properties 1))
-              (props (muse-link-properties
-                      (match-string-no-properties 1)
-                      (muse-link-face (match-string 1)))))
-         (add-text-properties (match-beginning 1) (match-end 0) props)))
+       (let ((link (match-string-no-properties 1))
+             (face (muse-link-face (match-string 1))))
+         (when face
+           (add-text-properties (match-beginning 1) (match-end 0)
+                                (muse-link-properties
+                                 (match-string-no-properties 1) face)))))
 
      (defun muse-wiki-colors-nop-tag (beg end)
-       (when (and (not muse-wiki-hide-nop-tag)
+       (when (and muse-wiki-hide-nop-tag
                   (<= (- end beg) 5))
          (add-text-properties beg end
                               '(invisible muse intangible t))))
@@ -141,7 +140,9 @@ This function modifies the match data."
 
      (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
 
-(eval-after-load 'muse-publish
+;; Publishing setup
+
+(eval-after-load "muse-publish"
   '(progn
      (add-to-list 'muse-publish-markup-regexps
                   '(3100 muse-wiki-interwiki-regexp 0 url)
@@ -149,14 +150,19 @@ This function modifies the match data."
      (add-to-list 'muse-publish-markup-regexps
                   '(3200 muse-wiki-wikiword-regexp 0 url)
                   t)
-     (add-to-list 'muse-publish-url-transforms
-                  'muse-wiki-interwiki-expand)))
 
-(eval-after-load 'muse-mode
-  '(progn
-     (add-to-list 'muse-mode-link-functions 'muse-wiki-interwiki-at-point t)
-     (add-to-list 'muse-mode-link-functions 'muse-wiki-wikiword-at-point t)
-     (add-to-list 'muse-mode-handler-functions 'muse-wiki-interwiki-handle)))
+     (add-to-list 'muse-publish-url-transforms
+                  'muse-wiki-expand-interwiki)))
+
+;; Insinuate link handling
+
+(add-to-list 'muse-implicit-link-functions
+             'muse-wiki-handle-interwiki t)
+(add-to-list 'muse-implicit-link-functions
+             'muse-wiki-handle-wikiword t)
+
+(add-to-list 'muse-explicit-link-functions
+             'muse-wiki-handle-interwiki)
 
 (provide 'muse-wiki)
 ;;; muse-wiki.el ends here

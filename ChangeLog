@@ -2,6 +2,99 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-04 23:00:06 GMT	Michael Olson <mwolson@gnu.org>	patch-85
+
+    Summary:
+      Hack on WikiName handling and make TAB work for Wiki links.
+    Revision:
+      muse--main--1.0--patch-85
+
+    * lisp/muse-colors.el (muse-colors-markup): Use
+      `muse-explicit-link-regexp' instead of `muse-link-regexp'.
+    
+    * lisp/muse-colors.el (muse-link-face): Add new argument EXPLICIT.  If
+      nil, don't color bad links.  If non-nil, color bad links.
+    
+    * lisp/muse-colors.el (muse-colors-link): Pass `t' to `muse-link-face'.
+    
+    * lisp/muse-journal.el (muse-journal-rss-markup-regexps): Use
+      `muse-explicit-link-regexp' instead of `muse-link-regexp'.
+      (muse-journal-rss-munge-buffer): Ditto.
+    
+    * lisp/muse-mode.el (muse-mode-fill-nobreak-p, muse-link-at-point):
+      Docfix.
+    
+    * lisp/muse-mode.el (muse-link-at-point): Rewrite so that explicit links
+      are handled first, then implicit ones.  It should work better in all
+      cases.  For now, we depend on the value of `muse-implicit-link-regexp'
+      to determine how far to scan for an implicit link.  This defaults to
+      the text between the point and the next space.
+    
+    * lisp/muse-mode.el (muse-visit-link-default): Refactored code from
+      `muse-visit-link'.  If the ANCHOR argument is a string, search for it
+      literally after opening the buffer.  Hopefully this can be of use in
+      custom visit-link functions, when necessary.
+    
+    * lisp/muse-mode.el (muse-visit-link): Docfix.  Call
+      `muse-visit-link-default'.
+    
+    * lisp/muse-mode.el (muse-next-reference, muse-previous-reference):
+      Search by text properties instead of regexps.  This allows Muse to find
+      links without having to have a massive regexp that contains all link
+      types.  The downside is that this will not work if the user defontifies
+      the buffer.  But it would somewhat defeat the purpose of following
+      links if you can't see them.
+    
+    * lisp/muse-project.el (muse-project-batch-publish): Handle case when not
+      enough command line args are passed in batch mode.
+    
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Use
+      `muse-explicit-link-regexp'.
+    
+    * lisp/muse-regexps.el (muse-explicit-link-regexp): Renamed from
+      `muse-link-regexp'.
+    
+    * lisp/muse-regexps.el (muse-implicit-link-regexp): New option that
+      specifies the "common ground" of all implicit links, like URLs, bare
+      WikiNames, and -- in the future -- email addresses.
+    
+    * lisp/muse-wiki.el (muse-wiki-hide-nop-tag): Quote 'boolean.
+    
+    * lisp/muse-wiki.el (muse-wiki-handle-interwiki): Arg URL is no longer
+      optional.  That was a bad idea on my part.  Renamed from
+      `muse-wiki-interwiki-handle'.  Hopefully all this renaming doesn't
+      annoy anyone :^) .
+    
+    * lisp/muse-wiki.el (muse-wiki-expand-interwiki): Renamed from
+      `muse-wiki-interwiki-expand'.
+      (muse-wiki-handle-wikiword): Renamed from
+      `muse-wiki-wikiword-handle'.
+    
+    * lisp/muse-wiki.el ("muse-colors", "muse-publish"): Use a string value
+      for the eval-after-load arg since XEmacs chokes on constants.
+    
+    * lisp/muse-wiki.el (muse-wiki-colors-wikiword): Don't display a bad-link
+      face on WikiWords that don't correspond with a file.  If people really
+      want this to appear in bad-link face, I could accommodate that.
+    
+    * lisp/muse.el (muse-handle-url): New function that detects whether the
+      given string is a URL.
+      (muse-implicit-link-functions): Renamed from
+      `muse-mode-link-functions'.  Defaults to `muse-handle-url'.
+      (muse-explicit-link-functions): Renamed from
+      `muse-mode-handler-functions'.
+      (muse-handle-implicit-link): New function that handles all
+      implicit links by calling functions from `muse-implicit-link-functions'.
+      (muse-handle-explicit-link): Renamed from
+      `muse-handled-url'.
+    
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-journal.el
+     lisp/muse-mode.el lisp/muse-project.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-04 14:40:31 GMT	Michael Olson <mwolson@gnu.org>	patch-84
 
     Summary:
