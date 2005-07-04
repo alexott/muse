@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-04 14:40:31 GMT	Michael Olson <mwolson@gnu.org>	patch-84
+
+    Summary:
+      Allow WikiWords to be ignored with <nop> or "''''".
+    Revision:
+      muse--main--1.0--patch-84
+
+    * lisp/muse-mode.el (muse-browse-result): Docfixes.
+    
+    * lisp/muse-wiki.el (muse-wiki-hide-nop-tag): New option that determines
+      whether to hide <nop> tags when coloring a Muse buffer.
+      (muse-wiki-wikiword-at-point): Docfix.
+      (muse-wiki-colors-nop-tag): New function that colors <nop> tags.
+      (muse-wiki-publish-nop-tag): New function that interprets <nop> tags
+      during publishing.
+      (muse-colors-tags, muse-publish-markup-tags): Interpret <nop> tags,
+      which keeps the WikiWord that follows it from being interpreted.
+      (muse-publish-markup-regexps): Allow 4 single quotes to function as a
+      WikiWord delimiter.
+    
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse-wiki.el
+
+
 2005-07-04 11:20:50 GMT	Michael Olson <mwolson@gnu.org>	patch-83
 
     Summary:

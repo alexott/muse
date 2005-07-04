@@ -333,13 +333,13 @@ Do not rename the page originally referred to."
          (muse-publish-output-file buffer-file-name
                                    (muse-style-element :path style) style)))
     (if (not (file-readable-p result-path))
-        (error "Cannot open output file '%s" result-path)
+        (error "Cannot open output file '%s'" result-path)
       (if other-window
           (find-file-other-window result-path)
         (let ((func (muse-style-element :browser style t)))
           (if func
               (funcall func result-path)
-            (message "The publishing style %s does not support browsing."
+            (message "The %s publishing style does not support browsing."
                      style)))))))
 
 (defun muse-follow-name-at-point (&optional other-window)

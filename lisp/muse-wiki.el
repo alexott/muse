@@ -31,6 +31,11 @@
   "Options controlling the behavior of Emacs Muse Wiki features."
   :group 'muse-mode)
 
+(defcustom muse-wiki-hide-nop-tag t
+  "If non-nil, hide <nop> tags when coloring a Muse buffer."
+  :type boolean
+  :group 'muse-wiki)
+
 (defcustom muse-wiki-wikiword-regexp
   (concat "\\<\\(\\(?:[" muse-regexp-upper
           "][" muse-regexp-lower "]+\\)\\(?:["
@@ -75,6 +80,8 @@ this."
           "\\)\\(?:\\(?:#\\|::\\)\\(\\sw+\\)\\)?\\>"))
 
 (defun muse-wiki-wikiword-at-point ()
+  "Return the WikiWord at point.
+This function modifies the match data."
   (and (looking-at muse-wiki-wikiword-regexp)
        (match-string 1)))
 
@@ -98,6 +105,8 @@ this."
             (funcall subst word)
           (concat subst word))))))
 
+;; Coloring setup
+
 (eval-after-load 'muse-colors
   '(progn
      (defun muse-wiki-colors-wikiword ()
@@ -112,6 +121,16 @@ this."
                       (match-string-no-properties 1)
                       (muse-link-face (match-string 1)))))
          (add-text-properties (match-beginning 1) (match-end 0) props)))
+
+     (defun muse-wiki-colors-nop-tag (beg end)
+       (when (and (not muse-wiki-hide-nop-tag)
+                  (<= (- end beg) 5))
+         (add-text-properties beg end
+                              '(invisible muse intangible t))))
+
+     (add-to-list 'muse-colors-tags
+                  '("nop" nil nil muse-wiki-colors-nop-tag)
+                  t)
 
      (add-to-list 'muse-colors-markup
                   '(muse-wiki-interwiki-regexp t muse-wiki-colors-wikiword)
