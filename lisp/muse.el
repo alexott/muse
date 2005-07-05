@@ -207,9 +207,10 @@ that can be added."
 
 ;; Link-handling functions and variables
 
-(defun muse-handle-url (string)
-  "If STRING has a URL, return it."
-  (if (string-match muse-url-regexp string)
+(defun muse-handle-url (&optional string)
+  "If STRING or point has a URL, match and return it."
+  (if (if string (string-match muse-url-regexp string)
+        (looking-at muse-url-regexp))
       (match-string 0 string)))
 
 (defcustom muse-implicit-link-functions '(muse-handle-url)
@@ -221,21 +222,32 @@ If you want to handle WikiWords, load muse-wiki.el."
   :type '(repeat function)
   :group 'muse)
 
-(defun muse-handle-implicit-link (url)
-  "Handle implicit links.
+(defun muse-handle-implicit-link (&optional link)
+  "Handle implicit links.  If LINK is not specified, look at point.
 An implicit link is one that is not surrounded by brackets.
 By default, Muse handles URLs only.
 If you want to handle WikiWords, load muse-wiki.el.
 
-This function modifies the match data so that match 1 is the link
-and match 2 is the description."
+This function modifies the match data so that match 1 is the
+link.  Match 2 will usually be nil, unless the description is
+embedded in the text of the buffer.
+
+The match data is restored after each unsuccessful handler
+function call.  If LINK is specified, only restore at very end.
+
+This behavior is needed because the part of the buffer that
+`muse-implicit-link-regexp' matches must be narrowed to the part
+that is an accepted link."
   (let ((funcs muse-implicit-link-functions)
-        (res nil))
+        (res nil)
+        (data (match-data t)))
     (while funcs
-      (setq res (funcall (car funcs) url))
+      (setq res (funcall (car funcs) link))
       (if res
           (setq funcs nil)
+        (unless link (set-match-data data))
         (setq funcs (cdr funcs))))
+    (when link (set-match-data data))
     res))
 
 (defcustom muse-explicit-link-functions nil
@@ -244,21 +256,30 @@ An explicit link is one [[like][this]] or [[this]]."
   :type '(repeat function)
   :group 'muse)
 
-(defun muse-handle-explicit-link (url)
-  "Handle explicit links.
+(defun muse-handle-explicit-link (&optional link)
+  "Handle explicit links.  If LINK is not specified, look at point.
 An explicit link is one that looks [[like][this]] or [[this]].
 
 This function modifies the match data so that match 1 is the link
-and match 2 is the description."
-  (or (let ((funcs muse-explicit-link-functions)
-            (res nil))
-        (while funcs
-          (setq res (funcall (car funcs) url))
-          (if res
-              (setq funcs nil)
-            (setq funcs (cdr funcs))))
-        res)
-      url))
+and match 2 is the description.  Perhaps someday match 3 might be
+the text to use for the alt element of an <a> or <img> tag.
+
+The match data is saved.  If no handlers are able to process
+LINK, return LINK (if specified) or the 1st match string.  If
+LINK is not specified, it is assumed that Muse has matched
+against `muse-explicit-link-regexp' before calling this
+function."
+  (let ((funcs muse-explicit-link-functions)
+        (res nil))
+    (save-match-data
+      (while funcs
+        (setq res (funcall (car funcs) link))
+        (if res
+            (setq funcs nil)
+          (setq funcs (cdr funcs)))))
+    (if res
+        res
+      (or link (match-string 1)))))
 
 (provide 'muse)
 

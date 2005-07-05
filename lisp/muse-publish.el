@@ -549,7 +549,9 @@ the file is published no matter what."
 (defun muse-publish-this-file (style output-dir &optional force)
   "Publish the page in the current file."
   (interactive (muse-publish-get-info))
-  (muse-publish-file buffer-file-name style output-dir force))
+  (unless (muse-publish-file buffer-file-name style output-dir force)
+    (message (concat "The published version is up-to-date; use"
+                     " C-u C-c C-t to force an update."))))
 
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
@@ -911,14 +913,16 @@ like read-only from being inadvertently deleted."
   "Resolve a URL into its final <a href> form."
   (let ((orig-url url))
     (dolist (transform muse-publish-url-transforms)
-      (setq url (save-match-data (funcall transform url))))
-    (if (string-match muse-image-regexp url)
-        (if desc
-            (muse-markup-text 'image-with-desc url desc)
-          (muse-markup-text 'image-link url))
-      (if (and desc (string-match muse-image-regexp desc))
-          (muse-markup-text 'url-with-image url desc)
-        (muse-markup-text 'url-link url (or desc orig-url))))))
+      (setq url (save-match-data (when url (funcall transform url)))))
+    (if url
+        (if (string-match muse-image-regexp url)
+            (if desc
+                (muse-markup-text 'image-with-desc url desc)
+              (muse-markup-text 'image-link url))
+          (if (and desc (string-match muse-image-regexp desc))
+              (muse-markup-text 'url-with-image url desc)
+            (muse-markup-text 'url-link url (or desc orig-url))))
+      orig-url)))
 
 (defun muse-publish-insert-url (url &optional desc)
   "Resolve a URL into its final <a href> form."

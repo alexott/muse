@@ -2,6 +2,62 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-05 20:41:49 GMT	Michael Olson <mwolson@gnu.org>	patch-86
+
+    Summary:
+      Warn if file not published; hack further on Wiki stuff.
+    Revision:
+      muse--main--1.0--patch-86
+
+    * lisp/muse-html.el (muse-html-markup-paragraph): Make this only try to
+      complete <div> tags that are of the class "image-link".  It is hoped
+      that this will prevent user-added <div> tags from being mangled.
+    
+    * lisp/muse-mode.el (muse-link-at-point): Don't pass an argument to
+      `muse-handle-implicit-link' or `muse-handle-explicit-link' since they
+      need to look at the text at point.
+    
+    * lisp/muse-publish.el (muse-publish-this-file): Warn the user if the
+      current file has not been published since it was up-to-date.  Thanks to
+      Bill Freeman for the suggestion.
+    
+    * lisp/muse-publish.el (muse-publish-url): Handle case when returned url
+      is nil.  If this happens, return the original URL.
+    
+    * lisp/muse-wiki.el (muse-wiki-interwiki-regexp): Set using
+      `muse-wiki-update-interwiki-regexp.'
+      (muse-wiki-update-interwiki-regexp): New function that sets the value
+      of `muse-wiki-interwiki-regexp'.
+      (muse-wiki-interwiki-alist): Call `muse-wiki-update-interwiki-regexp'
+      on :set.
+    
+    * lisp/muse-wiki.el (muse-wiki-transform-interwiki): Renamed from
+      `muse-wiki-expand-interwiki'.
+      (muse-wiki-transform-wikiword): New function that prevents WikiWords
+      with no matching file from being published as links.
+    
+    * lisp/muse-wiki.el (muse-wiki-handle-interwiki): Accept an optional
+      string argument once again, since this behavior is needed when
+      publishing.
+      (muse-wiki-handle-wikiword): Ditto.
+    
+    * lisp/muse.el (muse-handle-url): Ditto.
+    
+    * lisp/muse.el (muse-handle-implicit-link): Ditto.  Restore match data
+      after every unsuccessful attempt at handling the link.  If argument is
+      given, restore match-data at end, too.
+    
+    * lisp/muse.el (muse-handle-explicit-link): Accept optional string
+      argument.  Match data is always saved.  If argument is not given,
+      assume that `muse-implicit-link-regexp' has been matched against, and
+      return the 1st match string if no handlers worked.
+    
+
+    modified files:
+     ChangeLog lisp/muse-html.el lisp/muse-mode.el
+     lisp/muse-publish.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-04 23:00:06 GMT	Michael Olson <mwolson@gnu.org>	patch-85
 
     Summary:

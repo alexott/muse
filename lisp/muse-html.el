@@ -398,7 +398,9 @@ system to an associated HTML coding system. If no match is found,
     (insert
      (or (save-excursion
            (save-match-data
-             (and (re-search-backward "<\\(/?\\)\\(p\\|div\\)[ >]"
+             (and (re-search-backward (concat
+                                       "<\\(/?\\)\\(p\\|"
+                                      "div class=\"image-link\"\\)[ >]")
                                       nil t)
                   (not (string-equal (match-string 1) "/"))
                   (if (string-equal (match-string 2) "p")
