@@ -105,9 +105,16 @@ so only enable this if you don't use either of these."
     (define-key map [tab] 'muse-next-reference)
     (define-key map [(control ?i)] 'muse-next-reference)
 
-    (unless (featurep 'xemacs)
+    (if (featurep 'xemacs)
+        (progn
+          (define-key map [(button2)] 'muse-follow-name-at-mouse)
+          (define-key map [(shift button2)]
+            'muse-follow-name-at-mouse-other-window))
       (define-key map [(shift control ?m)]
-        'muse-follow-name-at-point-other-window))
+        'muse-follow-name-at-point-other-window)
+      (define-key map [mouse-2] 'muse-follow-name-at-mouse)
+      (define-key map [(shift mouse-2)]
+        'muse-follow-name-at-mouse-other-window))
 
     (if (featurep 'xemacs)
         (define-key map [(shift tab)] 'muse-previous-reference)
@@ -347,7 +354,10 @@ in `muse-project-alist'."
            (goto-char (posn-point (event-start event)))))
     (let ((link (muse-link-at-point)))
       (if link
-          (muse-visit-link link other-window)))))
+          (muse-visit-link link other-window)
+        ;; Fall back to normal binding for this event
+        (call-interactively
+         (lookup-key (current-global-map) (this-command-keys)))))))
 
 (defun muse-follow-name-at-mouse-other-window (event)
   "Visit the link at point"

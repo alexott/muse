@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 18:54:52 GMT	Michael Olson <mwolson@gnu.org>	patch-93
+
+    Summary:
+      Re-add global mouse-2 event.
+    Revision:
+      muse--main--1.0--patch-93
+
+    * lisp/muse-mode.el (muse-mode-map): Re-add the global binding for
+      mouse-2, since Yann found a way around the problem I was facing.
+      (muse-follow-name-at-mouse): Call the event that would normally be used
+      here if we don't have a link at point.
+    
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-07-06 07:19:41 GMT	Michael Olson <mwolson@gnu.org>	patch-92
 
     Summary:
