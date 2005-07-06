@@ -54,13 +54,12 @@
                 :path "~/proj/notmine/projects-out"))
 
         ("Blog"
-         ("~/proj/wiki/blog/"
+         (,@(muse-blosxom-project-alist-dirs "~/proj/wiki/blog")
           :default "guestbook")
 
-         ,(muse-blosxom-project-alist-entry "~/proj/wiki/blog"
-                                            "~/personal-site/site/blog"
-                                            "my-blosxom")
-         )
+         ,@(muse-blosxom-project-alist-entry "~/proj/wiki/blog"
+                                             "~/personal-site/site/blog"
+                                             "my-blosxom"))
 
         ("Plans"
          ("~/proj/wiki/plans/"

@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 23:17:35 GMT	Michael Olson <mwolson@gnu.org>	patch-98
+
+    Summary:
+      Further work on `muse-project-alist' entry generation for blosxom.
+    Revision:
+      muse--main--1.0--patch-98
+
+    * examples/mwolson/muse-init.el (muse-project-alist): Use proper syntax.
+      Include subdirectories in first part of "Blog" entry.
+    
+    * lisp/muse-blosxom.el (muse-blosxom-project-alist-dirs): New function
+      that returns a list of dirs that are to be used with the first part of
+      a `muse-project-alist' entry.
+    
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el lisp/muse-blosxom.el
+
+
 2005-07-06 22:42:35 GMT	Michael Olson <mwolson@gnu.org>	patch-97
 
     Summary:
