@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 07:19:41 GMT	Michael Olson <mwolson@gnu.org>	patch-92
+
+    Summary:
+      Fix publishing error.
+    Revision:
+      muse--main--1.0--patch-92
+
+    * lisp/muse-project.el (muse-project-publish-file): Don't try to fetch
+      the cdr of output-dir.  This was a code fragment from a previous
+      attempt to refactor this function.
+    
+
+    modified files:
+     ChangeLog lisp/muse-project.el
+
+
 2005-07-06 06:39:21 GMT	Michael Olson <mwolson@gnu.org>	patch-91
 
     Summary:

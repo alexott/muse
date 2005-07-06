@@ -294,11 +294,11 @@ The name of a project may be used for STYLES."
     (dolist (style styles)
       (let ((output-dir (muse-style-element :path style)))
         ;; ensure the publishing location is available
-        (unless (file-exists-p (cdr output-dir))
-          (message "Creating publishing directory %s" (cdr output-dir))
-          (make-directory (cdr output-dir)))
+        (unless (file-exists-p output-dir)
+          (message "Creating publishing directory %s" output-dir)
+          (make-directory output-dir))
         ;; publish the member file!
-        (if (muse-publish-file file style (cdr output-dir) force)
+        (if (muse-publish-file file style output-dir force)
             (setq published t))))
     published))
 
