@@ -2,6 +2,70 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 20:52:03 GMT	Michael Olson <mwolson@gnu.org>	patch-96
+
+    Summary:
+      Merged from hodique@lifl.fr--2005 (patch 12-23)
+    Revision:
+      muse--main--1.0--patch-96
+
+    Patches applied:
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-12
+       Merged from mwolson@gnu.org--2005 (patch 68-76)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-13
+       Merged from mwolson@gnu.org--2005 (patch 77-80)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-14
+       Merged from mwolson@gnu.org--2005 (patch 81)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-15
+       Merged from mwolson@gnu.org--2005 (patch 82)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-16
+       Escape % in latex publishing
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-17
+       bugfix
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-18
+       small improvement on muse-make-link
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-19
+       Fix customization of muse-wiki-wikiword-regexp
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-20
+       Allow full customization of WikiWords
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-21
+       Fix mouse-2 yank bug in muse-mode
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-22
+       Fix interpretation order
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-23
+       Merged from mwolson@gnu.org--2005 (patch 83-95)
+    
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+    new patches:
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-12
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-13
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-14
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-15
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-16
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-17
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-18
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-19
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-20
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-21
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-22
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-23
+
+
 2005-07-06 19:55:48 GMT	Michael Olson <mwolson@gnu.org>	patch-95
 
     Summary:
