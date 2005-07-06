@@ -329,7 +329,7 @@ in `muse-project-alist'."
                      style)))))))
 
 (defun muse-follow-name-at-point (&optional other-window)
-  "Visit the link at point, or insert a newline if none."
+  "Visit the link at point, or insert a newline if none is found."
   (interactive "P")
   (let ((link (muse-link-at-point)))
     (if link
@@ -342,7 +342,7 @@ in `muse-project-alist'."
   (muse-follow-name-at-point t))
 
 (defun muse-follow-name-at-mouse (event &optional other-window)
-  "Visit the link at point, or yank text if none."
+  "Visit the link at point, or yank text if none is found."
   (interactive "eN")
   (save-excursion
     (cond ((fboundp 'event-window)      ; XEmacs
