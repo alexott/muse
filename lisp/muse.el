@@ -63,10 +63,6 @@ familiar with Emacs."
 
 (require 'muse-regexps)
 
-(defvar muse-current-file nil
-  "File currently being published.")
-(make-variable-buffer-local 'muse-current-file)
-
 ;;; Return an list of known wiki names and the files they represent.
 
 (defsubst muse-delete-file-if-exists (file)
@@ -80,12 +76,17 @@ familiar with Emacs."
       (and (= (car t1) (car t2))
            (< (nth 1 t1) (nth 1 t2)))))
 
+(eval-when-compile
+  (defvar muse-publishing-current-file nil))
+
 (defun muse-page-name (&optional name)
   "Return the canonical form of a Muse page name.
 All this means is that certain extensions, like .gz, are removed."
   (save-match-data
     (unless name
-      (setq name (or muse-current-file buffer-file-name)))
+      (setq name (or (and (boundp 'muse-publishing-current-file)
+                          muse-publishing-current-file)
+                     buffer-file-name)))
     (if name
         (let ((page (file-name-nondirectory name)))
           (if (string-match muse-ignored-extensions-regexp page)
@@ -203,15 +204,6 @@ that can be added."
         (setq buffer-invisibility-spec (list t)))
     (setq buffer-invisibility-spec
           (cons element buffer-invisibility-spec))))
-
-(defun muse-assoc-string (key list)
-  "Like `assoc' but specifically for strings."
-  (if (fboundp 'assoc-string)
-      (assoc-string key list)
-    (catch 'found
-      (dolist (el list)
-        (when (string= key el)
-          (throw 'found el))))))
 
 ;; Link-handling functions and variables
 

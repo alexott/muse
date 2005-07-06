@@ -184,7 +184,10 @@ disk."
 If PATHNAME is nil, the current buffer's filename is used."
   (if (and (null pathname) muse-current-project)
       muse-current-project
-    (when (or pathname muse-current-file buffer-file-name)
+    (when (or pathname
+              (and (boundp 'muse-publishing-current-file)
+                   muse-publishing-current-file)
+              buffer-file-name)
       (let* ((file (file-truename (or pathname buffer-file-name)))
              (dir  (file-name-directory file))
              (project-entry muse-project-alist)
@@ -266,8 +269,12 @@ first directory within the project's fileset is used."
       (error "There is no page %s in project %s."
              (car name) project-name))))
 
-(defun muse-project-publish-file (file styles &optional force ignore-regexp)
-  (let (published)
+(defun muse-project-applicable-styles (file styles &optional ignore-regexp)
+  "Given STYLES, return a list of the ones that are considered for FILE.
+The name of a project may be used for STYLES."
+  (when (stringp styles)
+    (setq styles (cddr (muse-project styles))))
+  (let (used-styles)
     (dolist (style styles)
       (let ((include-regexp (muse-style-element :include style))
             (exclude-regexp (muse-style-element :exclude style)))
@@ -278,14 +285,21 @@ first directory within the project's fileset is used."
                            (string-match include-regexp file)
                          (not (string-match exclude-regexp file))))
                    (not (muse-project-private-p file)))
-          ;; ensure the publishing location is available
-          (let ((output-dir (muse-style-element :path style)))
-            (unless (file-exists-p output-dir)
-              (message "Creating publishing directory %s" output-dir)
-              (make-directory output-dir))
-            ;; publish the member file!
-            (if (muse-publish-file file style output-dir force)
-                (setq published t))))))
+          (add-to-list 'used-styles style))))
+    used-styles))
+
+(defun muse-project-publish-file (file styles &optional force ignore-regexp)
+  (setq styles (muse-project-applicable-styles file styles ignore-regexp))
+  (let (published)
+    (dolist (style styles)
+      (let ((output-dir (muse-style-element :path style)))
+        ;; ensure the publishing location is available
+        (unless (file-exists-p (cdr output-dir))
+          (message "Creating publishing directory %s" (cdr output-dir))
+          (make-directory (cdr output-dir)))
+        ;; publish the member file!
+        (if (muse-publish-file file style (cdr output-dir) force)
+            (setq published t))))
     published))
 
 (defun muse-project-save-buffers (&optional project)

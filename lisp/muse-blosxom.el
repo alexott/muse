@@ -132,7 +132,7 @@ See `muse-blosxom' for more information."
     (save-match-data
       (add-to-list
        'muse-blosxom-page-date-alist
-       `(,muse-current-file . ,date))))
+       `(,muse-publishing-current-file . ,date))))
   "")
 
 ;; Enter a new blog entry

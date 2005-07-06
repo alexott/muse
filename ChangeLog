@@ -2,6 +2,66 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 06:39:21 GMT	Michael Olson <mwolson@gnu.org>	patch-91
+
+    Summary:
+      Work on getting to the point where we can resolve project interwiki links.
+    Revision:
+      muse--main--1.0--patch-91
+
+    * lisp/muse-blosxom.el (muse-blosxom-markup-date-directive): Use
+      `muse-publishing-current-file'.
+    
+    * lisp/muse-project.el (muse-project-of-file): Ditto.
+    
+    * lisp/muse-project.el (muse-project-applicable-styles): New function
+      that returns the usable styles for a file, given either a list of
+      styles or a project name.  This is useful for removing styles that will
+      be ignored for a file.
+      (muse-project-publish-file): Split :include and :exclude processing
+      into `muse-project-applicable-styles'.
+    
+    * lisp/muse-publish.el (muse-publish-output-name): Use
+      `muse-publishing-current-file'.
+    
+    * lisp/muse-publish.el (muse-publish-file): Don't set `muse-current-file'.
+    
+    * lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Recognize
+      project names.
+    
+    * lisp/muse-wiki.el (muse-wiki-transform-wikiword): Don't cause project
+      names to be uninterpreted.  Remove need for muse-assoc-string.
+    
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): First draft of
+      function that will be called to fetch a link to a page from a Muse
+      project from the output file of the currently-published file.  This is
+      commented out for now since I ran out of energy.
+    
+    * lisp/muse-wiki.el (muse-wiki-handle-interwiki): Use
+      `muse-wiki-resolve-project-page' for handling Muse project interwiki
+      links, but only when no match was found in `muse-wiki-interwiki-alist'.
+      Handle case where no interwiki can be found, even though this should
+      never happen.
+    
+    * lisp/muse-wiki.el (muse-mode-hook): Update `muse-wiki-interwiki-regexp'
+      whenever Muse mode is entered.  That way we don't have to enter an
+      extra command in our .emacs.
+    
+    * lisp/muse.el (muse-current-file): Remove this, since a variable called
+      `muse-publishing-current-file' already exists that does the same thing.
+      How embarrassing.
+    
+    * lisp/muse.el (muse-page-name): Use `muse-publishing-current-file'.
+    
+    * lisp/muse.el (muse-assoc-string): Remove this, since we no longer need
+      to use it.
+    
+
+    modified files:
+     ChangeLog lisp/muse-blosxom.el lisp/muse-project.el
+     lisp/muse-publish.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-06 04:00:57 GMT	Michael Olson <mwolson@gnu.org>	patch-90
 
     Summary:

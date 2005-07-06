@@ -510,7 +510,7 @@ contents were requested.")
 (defsubst muse-publish-output-name (&optional file style)
   (setq style (muse-style style))
   (concat (muse-style-element :prefix style)
-          (muse-page-name (or file muse-publishing-current-file))
+          (muse-page-name file)
           (muse-style-element :suffix style)))
 
 (defsubst muse-publish-output-file (file output-dir &optional style)
@@ -539,7 +539,6 @@ the file is published no matter what."
           (message "Publishing %s ..." file))
       (with-temp-buffer
         (insert-file-contents file t)
-        (setq muse-current-file file)
         (muse-publish-markup-buffer (muse-page-name file) style)
         (let ((backup-inhibited t))
           (write-file output-path))
