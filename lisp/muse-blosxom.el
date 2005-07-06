@@ -187,6 +187,17 @@ The page will be initialized with the current date and TITLE."
           "\n\n")
   (forward-line 2))
 
+;; Make it easier to specify the muse-project-alist entry
+(defun muse-blosxom-project-alist-entry (entry-dir output-dir style)
+  (cons `(:base ,style :path ,(expand-file-name output-dir)
+                :include ,(concat "/" (file-name-nondirectory entry-dir)
+                                  "/[^/]+$"))
+        (mapcar (lambda (dir);
+                  `(:base ,style
+                          :path ,(expand-file-name dir output-dir)
+                          :include ,(concat "/" dir "/")))
+                (muse-blosxom-get-categories entry-dir))))
+
 ;; Register the Blosxom Publisher
 
 (unless (assoc "blosxom-html" muse-publishing-styles)

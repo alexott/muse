@@ -10,7 +10,7 @@
 
 ;; Add to load path
 (when (fboundp 'debian-pkg-add-load-path-item)
-  (debian-pkg-add-load-path-item "/stuff/proj/emacs/muse/mwolson"))
+  (debian-pkg-add-load-path-item "/stuff/proj/emacs/muse/mwolson/lisp"))
 
 ;; Initialize
 (require 'outline)       ; I like outline-style faces
@@ -19,6 +19,7 @@
 (require 'muse-mode)     ; load authoring mode
 (require 'muse-blosxom)  ; load blosxom module
 (require 'muse-html)     ; load (X)HTML publishing style
+(require 'muse-wiki)     ; load Wiki support
 ;;(require 'muse-message)  ; load message support (experimental)
 
 ;; Setup projects
@@ -29,7 +30,11 @@
 
 (unless (assoc "my-blosxom" muse-publishing-styles)
   (muse-derive-style "my-blosxom" "blosxom-xhtml"
-                     :final 'my-muse-blosxom-finalize))
+                     :final 'my-muse-blosxom-finalize)
+
+  (muse-derive-style "my-xhtml" "xhtml"
+                     :header "~/personal-site/muse/header.html"
+                     :footer "~/personal-site/muse/footer.html"))
 
 ;; Here is my master project listing.
 ;;
@@ -37,30 +42,25 @@
 ;; WebWiki projects; only the BlogWiki project is published.
 
 (setq muse-project-alist
-      '(("Projects"
+      `(
+        ("Web"
+         ("~/proj/wiki/web/" :default "WelcomePage")
+         (:base "my-xhtml"
+                :path "~/proj/notmine/web-out"))
+
+        ("Projects"
          ("~/proj/wiki/projects/" :default "WelcomePage")
-         (:base "xhtml"
-                :path "~/proj/wiki/projects-out"))
+         (:base "my-xhtml"
+                :path "~/proj/notmine/projects-out"))
 
         ("Blog"
-         ("~/proj/wiki/blog/personal/"
-          "~/proj/wiki/blog/projects/"
-          "~/proj/wiki/blog/quotes/"
-          "~/proj/wiki/blog/website/"
-          :default "personal")
+         ("~/proj/wiki/blog/"
+          :default "guestbook")
 
-         (:base "my-blosxom"
-                :path "~/personal-site/site/blog/personal"
-                :include "/personal/")
-         (:base "my-blosxom"
-                :path "~/personal-site/site/blog/projects"
-                :include "/projects/")
-         (:base "my-blosxom"
-                :path "~/personal-site/site/blog/quotes"
-                :include "/quotes/")
-         (:base "my-blosxom"
-                :path "~/personal-site/site/blog/website"
-                :include "/website/"))
+         ,(muse-blosxom-project-alist-entry "~/proj/wiki/blog"
+                                            "~/personal-site/site/blog"
+                                            "my-blosxom")
+         )
 
         ("Plans"
          ("~/proj/wiki/plans/"
@@ -68,49 +68,24 @@
           :major-mode planner-mode
           :visit-link planner-visit-link)
 
-         (:base "xhtml"
-                :path "~/proj/wiki/planner-out"))
+         (:base "my-xhtml"
+                :path "~/proj/notmine/planner-out"))
+        ))
 
-        ("Web"
-         ("~/proj/wiki/web/" :default "WelcomePage")
-         (:base "xhtml"
-                :path "~/proj/wiki/web-out"))))
+;; Wiki settings
+(setq muse-wiki-interwiki-alist
+      '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/plugwiki/")
+        ("ArchWiki" . "http://wiki.gnuarch.org/")
+        ("WebWiki" .
+         (lambda (tag)
+           (concat "../web/"
+                   (or tag "WelcomePage"))))
+        ("ProjectsWiki" .
+         (lambda (tag)
+           (concat "../projects/"
+                   (or tag "WelcomePage"))))))
 
 ;;; Functions
-
-;; Make other modes a bit less intrusive
-
-(defun my-muse-mode-flyspell-p ()
-  "Return non-nil if this text should be spell-checked.
-If nil is returned, we should not spell-check here."
-  (save-excursion
-    (save-match-data
-      (null (and (re-search-backward "\\[\\[\\|\\]\\]"
-                                     (line-beginning-position) t)
-                 (string= (or (match-string 0) "")
-                          "[["))))))
-
-(defun my-muse-mode-fill-nobreak-p ()
-  "Return nil if we should allow a fill to occur at point.
-Otherwise return non-nil.
-
-This is used to keep long extended links from being mangled by
-autofill."
-  (interactive)
-  (not (my-muse-mode-flyspell-p)))
-
-;; Make flyspell not mess with links
-(put 'muse-mode
-     'flyspell-mode-predicate
-     'my-muse-mode-flyspell-p)
-
-;; Make fill not split up links
-(add-hook 'muse-mode-hook
-          #'(lambda nil
-              (when (boundp 'fill-nobreak-predicate)
-                (make-local-variable 'fill-nobreak-predicate)
-                (add-to-list 'fill-nobreak-predicate
-                             'my-muse-mode-fill-nobreak-p))))
 
 ;; Make the current file display correctly in Xanga
 
@@ -190,8 +165,8 @@ If FILE is not specified, use the current file."
  '(muse-html-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/common.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
- '(muse-xhtml-footer "~/personal-site/muse/footer.html")
- '(muse-xhtml-header "~/personal-site/muse/header.html"))
+ '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
+ '(muse-xhtml-header "~/personal-site/muse/generic-header.html"))
 (custom-set-faces
  '(muse-bad-link-face ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold))))
  '(muse-link-face ((t (:foreground "blue" :underline "blue" :weight bold)))))

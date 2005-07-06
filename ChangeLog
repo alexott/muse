@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 22:42:35 GMT	Michael Olson <mwolson@gnu.org>	patch-97
+
+    Summary:
+      New function: muse-blosxom-project-alist-entry.
+    Revision:
+      muse--main--1.0--patch-97
+
+    * examples/mwolson/muse-init.el: Update from my latest settings.
+      (muse-project-alist): Make use of `muse-blosxom-project-alist-entry'.
+    
+    * lisp/muse-blosxom.el (muse-blosxom-project-alist-entry): New function
+      that generates the latter part of an entry for `muse-project-alist'.
+    
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el lisp/muse-blosxom.el
+
+
 2005-07-06 20:52:03 GMT	Michael Olson <mwolson@gnu.org>	patch-96
 
     Summary:
