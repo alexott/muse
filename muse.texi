@@ -824,9 +824,8 @@ Customize @code{muse-blosxom-base-directory} to the location that your
 blog entries are stored.
 
 @item
-Assign the @code{muse-blosxom-base-directory} function to a key
-sequence.  I use the following code to assign this function to
-@kbd{C-c p l'}.
+Assign the @code{muse-blosxom-new-entry} function to a key sequence.  I
+use the following code to assign this function to @kbd{C-c p l'}.
 
 @example
 (global-set-key "\C-cpl" 'muse-blosxom-new-entry)

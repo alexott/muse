@@ -61,9 +61,8 @@
 ;;  - Customize `muse-blosxom-base-directory' to the location that
 ;;    your blog entries are stored.
 ;;
-;;  - Assign the `muse-blosxom-base-directory' function to a key
-;;    sequence.  I use the following code to assign this function to
-;;    `C-c p l'.
+;;  - Assign the `muse-blosxom-new-entry' function to a key sequence.
+;;    I use the following code to assign this function to `C-c p l'.
 ;;
 ;;    (global-set-key "\C-cpl" 'muse-blosxom-new-entry)
 ;;

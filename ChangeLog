@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 19:30:34 GMT	Michael Olson <mwolson@gnu.org>	patch-94
+
+    Summary:
+      Fix goof-up in instructions for using `muse-blosxom-new-entry'.
+    Revision:
+      muse--main--1.0--patch-94
+
+    * lisp/muse-blosxom.el: Fix goof-up in instructions for using
+      `muse-blosxom-new-entry'.
+    
+    * muse.texi (Blosxom Entries): Ditto.
+    
+
+    modified files:
+     ChangeLog lisp/muse-blosxom.el muse.texi
+
+
 2005-07-06 18:54:52 GMT	Michael Olson <mwolson@gnu.org>	patch-93
 
     Summary:
