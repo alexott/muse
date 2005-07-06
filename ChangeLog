@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 01:41:24 GMT	Michael Olson <mwolson@gnu.org>	patch-87
+
+    Summary:
+      Apply a few fixes from Yann's branch.
+    Revision:
+      muse--main--1.0--patch-87
+
+    Background: I hacked on Muse over the weekend while offline, and so did
+                Yann.  His changes to muse-wiki.el are different than the
+                ones that I made, so we should probably figure out the best
+                way to handle this when we both get on IRC again.  For now,
+                I've merged in the bugfixes that he's made, omitting most of
+                the changes to muse-wiki.
+    
+    * lisp/muse-latex.el (muse-latex-markup-regexps): Escape %.
+    
+    * lisp/muse-wiki.el (muse-wiki-colors-wikiword): Add docstring.
+    
+    * lisp/muse.el (muse-page-name): Fix a bug that was inadvertently
+      introduced previously.
+    
+
+    modified files:
+     ChangeLog lisp/muse-latex.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-05 20:41:49 GMT	Michael Olson <mwolson@gnu.org>	patch-86
 
     Summary:

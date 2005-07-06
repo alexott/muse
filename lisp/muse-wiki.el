@@ -139,6 +139,7 @@ Match 1 is set to the WikiWord."
 (eval-after-load "muse-colors"
   '(progn
      (defun muse-wiki-colors-wikiword ()
+       "Color WikiWords."
        ;; remove flyspell overlays
        (when (fboundp 'flyspell-unhighlight-at)
          (let ((cur (match-beginning 0)))
