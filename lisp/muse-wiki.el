@@ -109,8 +109,9 @@ Read-only properties are added to the string."
                       url muse-current-project t))
                 (file-exists-p url)
                 ;; This is allowed to be the first name of an interwiki
-                (assoc url (mapcar 'car muse-wiki-interwiki-alist)))
-      (set url nil)))
+                (muse-assoc-string
+                 url (mapcar 'car muse-wiki-interwiki-alist)))
+      (setq url nil)))
     (when url (muse-publish-read-only url)))
 
 (defun muse-wiki-handle-interwiki (&optional string)

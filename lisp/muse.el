@@ -204,6 +204,15 @@ that can be added."
     (setq buffer-invisibility-spec
           (cons element buffer-invisibility-spec))))
 
+(defun muse-assoc-string (key list)
+  "Like `assoc' but specifically for strings."
+  (if (fboundp 'assoc-string)
+      (assoc-string key list)
+    (catch 'found
+      (dolist (el list)
+        (when (string= key el)
+          (throw 'found el))))))
+
 ;; Link-handling functions and variables
 
 (defun muse-handle-url (&optional string)
