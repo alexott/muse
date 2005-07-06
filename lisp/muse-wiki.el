@@ -95,8 +95,10 @@ this."
 (defun muse-wiki-transform-interwiki (url)
   "Return the destination of the given URL if it is an interwiki link.
 Otherwise return URL.  Read-only properties are added to the string."
-  (setq url (or (muse-wiki-handle-interwiki url)
-                url))
+  (let ((res (muse-wiki-handle-interwiki url)))
+    (if (and res (not (string-match muse-image-regexp res)))
+        (setq url (concat (file-name-directory res)
+                          (muse-publish-output-name res)))))
   (muse-publish-read-only url))
 
 (defun muse-wiki-transform-wikiword (url)

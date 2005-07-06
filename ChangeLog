@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-06 02:25:56 GMT	Michael Olson <mwolson@gnu.org>	patch-89
+
+    Summary:
+      Make interwiki links publish with the correct extension.
+    Revision:
+      muse--main--1.0--patch-89
+
+    * lisp/muse-wiki.el (muse-wiki-transform-interwiki): Add the correct
+      prefix and suffix to interwiki names, as well as stripping out unwanted
+      extensions.
+    
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-07-06 02:02:42 GMT	Michael Olson <mwolson@gnu.org>	patch-88
 
     Summary:
