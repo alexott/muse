@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-07 03:16:38 GMT	Michael Olson <mwolson@gnu.org>	patch-99
+
+    Summary:
+      Document new blosxom convenience feature.
+    Revision:
+      muse--main--1.0--patch-99
+
+    * lisp/muse-blosxom.el: Document `muse-blosxom-project-alist-dirs' and
+      `muse-blosxom-project-alist-entry'.  An example is provided in the
+      header.
+    
+
+    modified files:
+     ChangeLog lisp/muse-blosxom.el
+
+
 2005-07-06 23:17:35 GMT	Michael Olson <mwolson@gnu.org>	patch-98
 
     Summary:

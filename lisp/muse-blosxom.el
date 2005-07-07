@@ -51,6 +51,24 @@
 ;; `hardcodedates.py' provides the second service.  Eventually it is
 ;; hoped that a blosxom plugin and script will be found/written.
 ;;
+;; Generating a project description
+;; --------------------------------
+;;
+;; Muse-blosxom has some helper functions to make specifying
+;; muse-blosxom projects a lot easier.  An example follows.
+;;
+;; (setq muse-project-alist
+;;       `(("blog"
+;;          (,@(muse-blosxom-project-alist-dirs "~/path/to/blog-entries")
+;;           :default "index")
+;;          ,@(muse-blosxom-project-alist-entry "~/path/to/blog-entries"
+;;                                              "~/public_html/blog"
+;;                                              "blosxom-xhtml")
+;;         )))
+;;
+;; Note that we need a backtick instead of a single quote on the
+;; second line of this example.
+;;
 ;; Creating new blog entries
 ;; -------------------------
 ;;
@@ -190,6 +208,13 @@ The page will be initialized with the current date and TITLE."
 ;; Make it easier to specify the muse-project-alist entry
 
 (defun muse-blosxom-project-alist-entry (entry-dir output-dir style)
+  "Return a list of styles to use when publishing a muse-blosxom project.
+ENTRY-DIR is where your Muse blog entries are kept.
+OUTPUT-DIR is where these entries are published.
+STYLE is the publishing style to use.
+
+For an example of the use of this function, see
+`examples/mwolson/muse-init.el' from the Muse distribution."
   (cons `(:base ,style :path ,(expand-file-name output-dir)
                 :include ,(concat "/" (file-name-nondirectory entry-dir)
                                   "/[^/]+$"))
@@ -200,6 +225,11 @@ The page will be initialized with the current date and TITLE."
                 (muse-blosxom-get-categories entry-dir))))
 
 (defun muse-blosxom-project-alist-dirs (entry-dir)
+  "Return a list of directories to use when publishing a muse-blosxom project.
+ENTRY-DIR is where your Muse blog entries are kept.
+
+For an example of the use of this function, see
+`examples/mwolson/muse-init.el' from the Muse distribution."
   (cons (expand-file-name entry-dir)
         (mapcar (lambda (dir) (expand-file-name dir entry-dir))
                 (muse-blosxom-get-categories entry-dir))))
