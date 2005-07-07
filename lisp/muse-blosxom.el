@@ -138,19 +138,16 @@ See `muse-blosxom' for more information."
   :type '(choice string file)
   :group 'muse-blosxom)
 
-;; Maintain (published-file . date) alist
+;; Maintain (published-file . date) alist, which will later be written
+;; to a timestamps file; not implemented yet.
 
 (defvar muse-blosxom-page-date-alist nil)
 
-;; This isn't really used for anything, but it may be someday
 (defun muse-blosxom-markup-date-directive ()
   "Add a date entry to `muse-blosxom-page-date-alist' for this page."
-  (let ((date (match-string 1)))
-    (save-match-data
-      (add-to-list
-       'muse-blosxom-page-date-alist
-       `(,muse-publishing-current-file . ,date))))
-  "")
+  (add-to-list
+   'muse-blosxom-page-date-alist
+   `(,muse-publishing-current-file . ,(muse-publishing-directive "date"))))
 
 ;; Enter a new blog entry
 
@@ -240,12 +237,14 @@ For an example of the use of this function, see
   (muse-derive-style "blosxom-html" "html"
                      :suffix    'muse-blosxom-extension
                      :header    'muse-blosxom-header
-                     :footer    'muse-blosxom-footer)
+                     :footer    'muse-blosxom-footer
+                     :after     'muse-blosxom-markup-date-directive)
 
   (muse-derive-style "blosxom-xhtml" "xhtml"
                      :suffix    'muse-blosxom-extension
                      :header    'muse-blosxom-header
-                     :footer    'muse-blosxom-footer))
+                     :footer    'muse-blosxom-footer
+                     :after     'muse-blosxom-markup-date-directive))
 
 (provide 'muse-blosxom)
 
