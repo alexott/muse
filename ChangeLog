@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-07 05:57:51 GMT	Michael Olson <mwolson@gnu.org>	patch-101
+
+    Summary:
+      Note that muse-file-extension should not have "." in front.
+    Revision:
+      muse--main--1.0--patch-101
+
+    * lisp/muse-project.el (muse-project-find-file): Handle case where
+      muse-file-extension is not specified.
+    
+    * lisp/muse.el (muse-file-extension): Note that the period at the
+      beginning of this value should be omitted.
+    
+    * lisp/muse-regexps.el (muse-update-ignored-extensions-regexp): Quote
+      file extension so that regexp characters inside the extension will not
+      goof it up.  This should never be a problem in normal cases, but let's
+      be robust.
+    
+
+    modified files:
+     ChangeLog lisp/muse-project.el lisp/muse-regexps.el
+     lisp/muse.el
+
+
 2005-07-07 05:36:53 GMT	Michael Olson <mwolson@gnu.org>	patch-100
 
     Summary:

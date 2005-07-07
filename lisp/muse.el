@@ -285,7 +285,7 @@ function."
 ;; Default file extension
 
 (defcustom muse-file-extension nil
-  "File extension of Muse files."
+  "File extension of Muse files.  Omit the period at the beginning."
   :type '(choice
           (const :tag "None" nil)
           (string))
