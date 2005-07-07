@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-07 20:06:35 GMT	Michael Olson <mwolson@gnu.org>	patch-104
+
+    Summary:
+      Make muse-blosxom use relative name of published file in page-date alist.
+    Revision:
+      muse--main--1.0--patch-104
+
+    * lisp/muse-blosxom.el (muse-blosxom-base-directory): Move higher in
+      file.
+      (muse-blosxom-update-page-date-alist): Renamed from
+      `muse-blosxom-markup-date-directive'.  Make the current file name
+      relative to the base directory and strip file extension if necessary.
+    
+
+    modified files:
+     ChangeLog lisp/muse-blosxom.el
+
+
 2005-07-07 19:14:38 GMT	Michael Olson <mwolson@gnu.org>	patch-103
 
     Summary:

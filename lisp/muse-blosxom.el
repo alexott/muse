@@ -138,25 +138,35 @@ See `muse-blosxom' for more information."
   :type '(choice string file)
   :group 'muse-blosxom)
 
+(defcustom muse-blosxom-base-directory "~/Blog"
+  "Base directory of blog entries.
+This is the top-level directory where your Muse blog entries may be found."
+  :type 'directory
+  :group 'muse-blosxom)
+
 ;; Maintain (published-file . date) alist, which will later be written
 ;; to a timestamps file; not implemented yet.
 
 (defvar muse-blosxom-page-date-alist nil)
 
-(defun muse-blosxom-markup-date-directive ()
+(defun muse-blosxom-update-page-date-alist ()
   "Add a date entry to `muse-blosxom-page-date-alist' for this page."
-  (add-to-list
-   'muse-blosxom-page-date-alist
-   `(,muse-publishing-current-file . ,(muse-publishing-directive "date"))))
+  ;; Make current file be relative to base directory
+  (let ((rel-file (file-relative-name
+                   (expand-file-name muse-publishing-current-file)
+                   (expand-file-name muse-blosxom-base-directory))))
+    ;; Strip the file extension
+    (when muse-ignored-file-extensions-regexp
+      (set rel-file (save-match-data
+                      (and (string-match muse-ignored-file-extensions-regexp
+                                         rel-file)
+                           (replace-match "" t t rel-file)))))
+    ;; Add to page-date alist
+    (add-to-list
+     'muse-blosxom-page-date-alist
+     `(,rel-file . ,(muse-publishing-directive "date")))))
 
 ;; Enter a new blog entry
-
-(defcustom muse-blosxom-base-directory "~/Blog"
-  "Base directory of blog entries, used by `muse-blosxom-new-entry'.
-This is the top-level directory where your blog entries may be found
-locally."
-  :type 'directory
-  :group 'muse-blosxom)
 
 (defun muse-blosxom-get-categories (&optional base)
   "Retrieve all of the categories from a Blosxom project.
@@ -238,13 +248,13 @@ For an example of the use of this function, see
                      :suffix    'muse-blosxom-extension
                      :header    'muse-blosxom-header
                      :footer    'muse-blosxom-footer
-                     :after     'muse-blosxom-markup-date-directive)
+                     :after     'muse-blosxom-update-page-date-alist)
 
   (muse-derive-style "blosxom-xhtml" "xhtml"
                      :suffix    'muse-blosxom-extension
                      :header    'muse-blosxom-header
                      :footer    'muse-blosxom-footer
-                     :after     'muse-blosxom-markup-date-directive))
+                     :after     'muse-blosxom-update-page-date-alist))
 
 (provide 'muse-blosxom)
 
