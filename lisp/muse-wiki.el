@@ -259,7 +259,7 @@ Match 1 is set to the WikiWord."
      (add-to-list 'muse-publish-markup-regexps
                   '(3100 muse-wiki-interwiki-regexp 0 url)
                   t)
-     (muse-wiki-update-use-wikiword-markup muse-wiki-use-wikiword)
+     (muse-wiki-update-use-wikiword-markup-regexp muse-wiki-use-wikiword)
      (muse-wiki-update-use-wikiword-url-transforms muse-wiki-use-wikiword)
      (add-to-list 'muse-publish-url-transforms
                   'muse-wiki-transform-interwiki)))

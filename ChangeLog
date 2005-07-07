@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-07 06:27:02 GMT	Michael Olson <mwolson@gnu.org>	patch-102
+
+    Summary:
+      Fix several startup and compile errors.
+    Revision:
+      muse--main--1.0--patch-102
+
+    * lisp/muse-wiki.el ("muse-publish"): Use correct name of function.  This
+      fixes an error that occurred during startup.
+    
+    * lisp/muse-regexps.el (muse-ignored-extensions-regexp)
+      (muse-update-ignored-extensions-regexp, muse-ignored-extensions): Move
+      to muse.el.
+    
+    * lisp/muse.el (muse-update-ignored-extensions-regexp): Fix ordering so
+      that the nasty compile errors go away.  Fix a few typos.
+      (muse-ignored-extensions): Fix docstring.
+      (muse-file-extension): Move this higher in the file.
+    
+    
+
+    modified files:
+     ChangeLog lisp/muse-regexps.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-07 05:57:51 GMT	Michael Olson <mwolson@gnu.org>	patch-101
 
     Summary:
