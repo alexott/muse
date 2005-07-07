@@ -259,7 +259,9 @@ first directory within the project's fileset is used."
                 (setq directory (car pats) pats nil)
               (setq pats (cdr pats))))))
       (when directory
-        (let ((filename (expand-file-name (car name) directory)))
+        (let ((filename (expand-file-name (concat (car name)
+                                                  muse-file-extension)
+                                          directory)))
           (unless (file-exists-p directory)
             (make-directory directory t))
           (setcdr name filename))))

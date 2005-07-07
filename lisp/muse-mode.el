@@ -154,6 +154,10 @@ so only enable this if you don't use either of these."
       (muse-use-font-lock))
   (setq muse-current-project (muse-project-of-file))
   (muse-project-set-variables)
+  ;; Make sure several variables get updated if the user has changed
+  ;; them without using the customize interface.
+  (muse-update-ignored-extensions-regexp 'muse-ignored-extensions
+                                         muse-ignored-extensions)
   ;; Make fill not split up links
   (when (boundp 'fill-nobreak-predicate)
     (make-local-variable 'fill-nobreak-predicate)

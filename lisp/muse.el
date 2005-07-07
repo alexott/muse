@@ -89,7 +89,8 @@ All this means is that certain extensions, like .gz, are removed."
                      buffer-file-name)))
     (if name
         (let ((page (file-name-nondirectory name)))
-          (if (string-match muse-ignored-extensions-regexp page)
+          (if (and muse-ignored-extensions-regexp
+                   (string-match muse-ignored-extensions-regexp page))
               (replace-match "" t t page)
             page)))))
 
@@ -280,6 +281,16 @@ function."
     (if res
         res
       (or link (match-string 1)))))
+
+;; Default file extension
+
+(defcustom muse-file-extension nil
+  "File extension of Muse files."
+  :type '(choice
+          (const :tag "None" nil)
+          (string))
+  :set 'muse-update-ignored-extensions-regexp
+  :group 'muse)
 
 (provide 'muse)
 
