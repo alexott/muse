@@ -338,6 +338,7 @@ affect the match data results."
   (set (make-local-variable 'font-lock-unfontify-region-function)
        'muse-unhighlight-region)
   (muse-make-faces)
+  (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)
   (font-lock-mode t))
 
 (defun muse-colors-buffer ()

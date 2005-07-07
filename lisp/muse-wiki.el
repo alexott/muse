@@ -54,53 +54,10 @@
   :group 'muse-wiki
   :set 'muse-wiki-update-wikiword-regexp)
 
-(defconst muse-wiki-wikiword-colors-markup
-  '(muse-wiki-wikiword-regexp t muse-wiki-colors-wikiword)
-  "Markup for WikiWords, to be put in `muse-colors-markup'")
-
-(defun muse-wiki-update-use-wikiword-colors (val)
-  "Update `muse-colors-markup' according to the new value of `muse-wiki-use-wikiword'"
-  (if val
-      (add-to-list 'muse-colors-markup muse-wiki-wikiword-colors-markup t)
-    (setq muse-colors-markup (remove muse-wiki-wikiword-colors-markup  muse-colors-markup)))
-  (muse-configure-highlighting 'muse-colors-markup muse-colors-markup))
-
-(defconst muse-wiki-wikiword-markup-regexp
-  '(3200 muse-wiki-wikiword-regexp 0 url)
-  "Rule for WikiWords, to be put in `muse-publish-markup-regexps'")
-
-(defun muse-wiki-update-use-wikiword-markup-regexp (val)
-  "Update `muse-publish-markup-regexps' according to the new value of `muse-wiki-use-wikiword'"
-  (if val
-      (add-to-list 'muse-publish-markup-regexps muse-wiki-wikiword-markup-regexp t)
-    (setq muse-publish-markup-regexps
-          (remove muse-wiki-wikiword-markup-regexp muse-publish-markup-regexps))))
-
-(defun muse-wiki-update-use-wikiword-link-function (val)
-  "Update `muse-mode-link-functions' according to the new value of `muse-wiki-use-wikiword'"
-  (if val
-     (add-to-list 'muse-implicit-link-functions 'muse-wiki-handle-wikiword t)
-    (setq muse-implicit-link-functions (remove 'muse-wiki-handle-wikiword muse-implicit-link-functions))))
-
-(defun muse-wiki-update-use-wikiword-url-transforms (val)
-  (if val
-      (add-to-list 'muse-publish-url-transforms 'muse-wiki-transform-wikiword t)
-    (setq muse-publish-url-transforms (remove 'muse-wiki-transform-wikiword muse-publish-url-transforms))))
-
-(defun muse-wiki-update-use-wikiword (sym val)
-  "Update everything related to `muse-wiki-use-wikiword'"
-  (set sym val)
-  (when (featurep 'muse-colors)
-    (muse-wiki-update-use-wikiword-colors val))
-  (muse-wiki-update-use-wikiword-markup-regexp val)
-  (muse-wiki-update-use-wikiword-link-function val)
-  (muse-wiki-update-use-wikiword-url-transforms val))
-
 (defcustom muse-wiki-use-wikiword t
   "Wether to use WikiWord syntax or not"
   :type 'boolean
-  :group 'muse-wiki
-  :set 'muse-wiki-update-use-wikiword)
+  :group 'muse-wiki)
 
 (defvar muse-wiki-interwiki-regexp ""
   "Regexp that matches all interwiki links.
@@ -164,7 +121,8 @@ Otherwise return URL.  Read-only properties are added to the string."
   "If URL is a WikiWord but does not correspond with an existing
 file or interwiki name, return nil.  Otherwise, return URL.
 Read-only properties are added to the string."
-  (when (string-match (concat "^" muse-wiki-wikiword-regexp "$") url)
+  (when (and muse-wiki-use-wikiword
+             (string-match (concat "^" muse-wiki-wikiword-regexp "$") url))
     (unless (or (and (muse-project-of-file)
                      (muse-project-page-file
                       url muse-current-project t))
@@ -214,9 +172,10 @@ Match 2 is set to the description."
 (defun muse-wiki-handle-wikiword (&optional string)
   "If STRING or point has a WikiWord, return it.
 Match 1 is set to the WikiWord."
-  (if (if string (string-match muse-wiki-wikiword-regexp string)
-        (looking-at muse-wiki-wikiword-regexp))
-      (match-string 1 string)))
+  (when muse-wiki-use-wikiword
+    (if (if string (string-match muse-wiki-wikiword-regexp string)
+          (looking-at muse-wiki-wikiword-regexp))
+        (match-string 1 string))))
 
 ;; Coloring setup
 
@@ -250,7 +209,11 @@ Match 1 is set to the WikiWord."
      (add-to-list 'muse-colors-markup
                   '(muse-wiki-interwiki-regexp t muse-wiki-colors-wikiword)
                   t)
-     (muse-wiki-update-use-wikiword-colors muse-wiki-use-wikiword)))
+     (add-to-list 'muse-colors-markup
+                  '(muse-wiki-wikiword-regexp t muse-wiki-colors-wikiword)
+                  t)
+
+     (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
 
 ;; Publishing setup
 
@@ -259,16 +222,20 @@ Match 1 is set to the WikiWord."
      (add-to-list 'muse-publish-markup-regexps
                   '(3100 muse-wiki-interwiki-regexp 0 url)
                   t)
-     (muse-wiki-update-use-wikiword-markup-regexp muse-wiki-use-wikiword)
-     (muse-wiki-update-use-wikiword-url-transforms muse-wiki-use-wikiword)
+     (add-to-list 'muse-publish-markup-regexps
+                  '(3200 muse-wiki-wikiword-regexp 0 url)
+                  t)
      (add-to-list 'muse-publish-url-transforms
-                  'muse-wiki-transform-interwiki)))
+                  'muse-wiki-transform-interwiki)
+     (add-to-list 'muse-publish-url-transforms
+                  'muse-wiki-transform-wikiword)))
 
 ;; Insinuate link handling
 
 (add-to-list 'muse-implicit-link-functions
              'muse-wiki-handle-interwiki t)
-(muse-wiki-update-use-wikiword-link-function muse-wiki-use-wikiword)
+(add-to-list 'muse-implicit-link-functions
+             'muse-wiki-handle-wikiword t)
 
 (add-to-list 'muse-explicit-link-functions
              'muse-wiki-handle-interwiki)

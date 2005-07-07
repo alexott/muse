@@ -2,6 +2,46 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-07 21:34:12 GMT	Michael Olson <mwolson@gnu.org>	patch-105
+
+    Summary:
+      Attempt to simplify muse-wiki a bit.
+    Revision:
+      muse--main--1.0--patch-105
+
+    * lisp/muse-colors.el (muse-use-font-lock): Set up muse-colors-markup
+      here.
+    
+    * lisp/muse-wiki.el (muse-wiki-wikiword-colors-markup)
+      (muse-wiki-update-use-wikiword-colors, muse-wiki-wikiword-markup-regexp)
+      (muse-wiki-update-use-wikiword-markup-regexp)
+      (muse-wiki-update-use-wikiword-link-function)
+      (muse-wiki-update-use-wikiword-url-transforms): Remove.
+      (muse-wiki-update-use-wikiword): Not :set function is needed anymore.
+    
+    * lisp/muse-wiki.el (muse-wiki-transform-wikiword): Only modify URL if
+      `muse-wiki-use-wikiword' is specified.
+    
+    * lisp/muse-wiki.el (muse-wiki-handle-wikiword): Don't process the URL
+      unless `muse-wiki-use-wikiword' is specified.
+    
+    * lisp/muse-wiki.el ("muse-colors"): Add muse-wiki-wikiword-regexp to
+      muse-colors-markup.
+    
+    * lisp/muse-wiki.el ("muse-publish"): Add muse-wiki-wikiword-regexp to
+      muse-publish-markup-regexps.
+    
+    * lisp/muse-wiki.el ("muse-publish"): Add muse-wiki-transform-wikiword to
+      muse-publish-url-transforms.
+    
+    * lisp/muse-wiki.el (muse-implicit-link-functions): Add
+      muse-wiki-handle-wikiword to muse-implicit-link-functions.
+    
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-wiki.el
+
+
 2005-07-07 20:06:35 GMT	Michael Olson <mwolson@gnu.org>	patch-104
 
     Summary:
