@@ -175,15 +175,17 @@ The base directory is specified by BASE, and defaults to
 
 Directories starting with \".\" will be ignored."
   (unless base (setq base muse-blosxom-base-directory))
-  (let (list dir)
-    (dolist (file (directory-files base t "^[^.]"))
-      (when (file-directory-p file)     ; must be a directory
-        (setq dir (file-name-nondirectory file))
-        (push dir list)
-        (nconc list (mapcar #'(lambda (item)
-                                (concat dir "/" item))
-                            (muse-blosxom-get-categories file)))))
-    list))
+  (when (file-directory-p base)
+    (let (list dir)
+      (dolist (file (directory-files base t "^[^.]"))
+        (when (file-directory-p file)     ; must be a directory
+          (setq dir (file-name-nondirectory file))
+          (when dir
+            (push dir list)
+            (nconc list (mapcar #'(lambda (item)
+                                    (concat dir "/" item))
+                                (muse-blosxom-get-categories file))))))
+      list)))
 
 (defun muse-blosxom-title-to-file (title)
   "Derive a file name from the given TITLE.
