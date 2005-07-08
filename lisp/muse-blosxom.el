@@ -201,7 +201,8 @@ The filename of the blog entry is derived from TITLE.
 The page will be initialized with the current date and TITLE."
   (interactive
    (list
-    (completing-read "Category: " (muse-blosxom-get-categories))
+    (completing-read "Category: "
+                     (mapcar 'list (muse-blosxom-get-categories)))
     (read-string "Title: ")))
   (let ((file (muse-blosxom-title-to-file title)))
     (muse-project-find-file

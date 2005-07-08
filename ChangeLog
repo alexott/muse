@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-08 22:55:20 GMT	Michael Olson <mwolson@gnu.org>	patch-109
+
+    Summary:
+      Fix error with `muse-blosxom-new-entry' and Emacs21.
+    Revision:
+      muse--main--1.0--patch-109
+
+    * lisp/muse-blosxom.el (muse-blosxom-new-entry): Mess with call to
+      `completing-read' so that old versions of Emacs don't complain.
+
+    modified files:
+     ChangeLog lisp/muse-blosxom.el
+
+
 2005-07-08 21:59:41 GMT	Michael Olson <mwolson@gnu.org>	patch-108
 
     Summary:
