@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-08 22:57:55 GMT	Michael Olson <mwolson@gnu.org>	patch-110
+
+    Summary:
+      Fix Emacs21 issue with muse-insert-tag.
+    Revision:
+      muse--main--1.0--patch-110
+
+    * lisp/muse-mode.el (muse-insert-tag): Pass a list of lists to
+      completing-read to appease older Emacsen.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-07-08 22:55:20 GMT	Michael Olson <mwolson@gnu.org>	patch-109
 
     Summary:

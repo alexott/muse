@@ -475,8 +475,8 @@ function, you might want to set this manually.")
      (concat "Tag: "
              (when muse-tag-history
                (concat "(default: " (car muse-tag-history) ") ")))
-     (nconc (mapcar 'car muse-publish-markup-tags)
-            muse-custom-tags)
+     (mapcar 'list (nconc (mapcar 'car muse-publish-markup-tags)
+                          muse-custom-tags))
      nil nil nil 'muse-tag-history
      (car muse-tag-history))))
   (when (equal tag "")
