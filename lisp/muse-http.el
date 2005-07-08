@@ -123,9 +123,10 @@ customization group."
     (muse-publish-markup-buffer title muse-http-publishing-style)
     (muse-http-send-buffer nil 404 msg)))
 
-(defun muse-http-prepare-url (target)
+(defun muse-http-prepare-url (target explicit)
   (save-match-data
-    (unless (or (string-match muse-url-regexp target)
+    (unless (or (not explicit)
+                (string-match muse-url-regexp target)
                 (string-match muse-image-regexp target)
                 (string-match muse-file-regexp target))
       (setq target (concat "page?" target

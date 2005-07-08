@@ -433,7 +433,7 @@ system to an associated HTML coding system. If no match is found,
   (save-match-data
     (muse-html-insert-anchor (match-string 1))) "")
 
-(defun muse-html-escape-string (str)
+(defun muse-html-escape-string (str &rest ignored)
   "Convert to character entities any non-alphanumeric characters
 outside a few punctuation symbols, that risk being misinterpreted
 if not escaped."

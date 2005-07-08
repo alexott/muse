@@ -908,11 +908,11 @@ like read-only from being inadvertently deleted."
     (insert (format (muse-markup-text 'email-addr) addr addr))
     (muse-publish-mark-read-only beg (point))))
 
-(defun muse-publish-url (url &optional desc)
+(defun muse-publish-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
   (let ((orig-url url))
     (dolist (transform muse-publish-url-transforms)
-      (setq url (save-match-data (when url (funcall transform url)))))
+      (setq url (save-match-data (when url (funcall transform url explicit)))))
     (if url
         (if (string-match muse-image-regexp url)
             (if desc
@@ -923,15 +923,19 @@ like read-only from being inadvertently deleted."
             (muse-markup-text 'url-link url (or desc orig-url))))
       orig-url)))
 
-(defun muse-publish-insert-url (url &optional desc)
+(defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
   (delete-region (match-beginning 0) (match-end 0))
   (let ((beg (point)))
-    (insert (muse-publish-url url desc))
+    (insert (muse-publish-url url desc explicit))
     (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-markup-link ()
-  (muse-publish-insert-url (match-string 1) (match-string 2)))
+  (let ((explicit (save-match-data
+                    (if (string-match muse-explicit-link-regexp
+                                      (match-string 0))
+                        t nil))))
+    (muse-publish-insert-url (match-string 1) (match-string 2) explicit)))
 
 (defun muse-publish-markup-url ()
   (muse-publish-insert-url (match-string 0)))
@@ -1049,7 +1053,7 @@ like read-only from being inadvertently deleted."
                          string)
     string))
 
-(defun muse-publish-prepare-url (target)
+(defun muse-publish-prepare-url (target &rest ignored)
   (save-match-data
     (unless (or (string-match muse-url-regexp target)
                 (string-match muse-image-regexp target)

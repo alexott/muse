@@ -109,7 +109,7 @@ this."
           (set sym value)))
   :group 'muse-wiki)
 
-(defun muse-wiki-transform-interwiki (url)
+(defun muse-wiki-transform-interwiki (url explicit)
   "Return the destination of the given URL if it is an interwiki link.
 Otherwise return URL.  Read-only properties are added to the string."
   (let ((res (muse-wiki-handle-interwiki url)))
@@ -118,11 +118,12 @@ Otherwise return URL.  Read-only properties are added to the string."
                           (muse-publish-output-name res)))))
   (muse-publish-read-only url))
 
-(defun muse-wiki-transform-wikiword (url)
+(defun muse-wiki-transform-wikiword (url explicit)
   "If URL is a WikiWord but does not correspond with an existing
 file or interwiki name, return nil.  Otherwise, return URL.
 Read-only properties are added to the string."
   (when (and muse-wiki-use-wikiword
+             (not explicit)
              (string-match (concat "^" muse-wiki-wikiword-regexp "$") url))
     (unless (or (and (muse-project-of-file)
                      (muse-project-page-file
