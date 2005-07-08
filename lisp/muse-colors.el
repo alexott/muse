@@ -521,20 +521,22 @@ ignored."
     (let ((link (if explicit
                     (muse-handle-explicit-link link-name)
                   (muse-handle-implicit-link link-name))))
-      (if (or (string-match muse-file-regexp link)
-              (string-match muse-url-regexp link))
-          'muse-link-face
-        (if (not (featurep 'muse-project))
+      (when link
+        (if (or (not explicit)
+                (string-match muse-file-regexp link)
+                (string-match muse-url-regexp link))
             'muse-link-face
-          (if (string-match "#" link)
-              (setq link (substring link 0 (match-beginning 0))))
-          (if (or (and (muse-project-of-file)
-                       (muse-project-page-file
-                        link-name muse-current-project t))
-                  (file-exists-p link))
+          (if (not (featurep 'muse-project))
               'muse-link-face
-            (when explicit
-              'muse-bad-link-face)))))))
+            (if (string-match "#" link)
+                (setq link (substring link 0 (match-beginning 0))))
+            (if (or (and (muse-project-of-file)
+                         (muse-project-page-file
+                          link-name muse-current-project t))
+                    (file-exists-p link))
+                'muse-link-face
+              (when explicit
+                'muse-bad-link-face))))))))
 
 (defun muse-colors-link ()
   (when (eq ?\[ (char-after (match-beginning 0)))

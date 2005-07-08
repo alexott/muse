@@ -69,9 +69,10 @@ It can also be set by calling `muse-wiki-update-interwiki-regexp'.")
   (if value
       (setq muse-wiki-interwiki-regexp
             (concat "\\<\\(" (mapconcat 'car muse-project-alist "\\|")
-                    (mapconcat 'car value "\\|")
+                    "\\|" (mapconcat 'car value "\\|")
                     "\\)\\(?:\\(?:#\\|::\\)\\(\\sw+\\)\\)?\\>"))
-    (setq muse-wiki-interwiki-regexp "")))
+    (setq muse-wiki-interwiki-regexp ""))
+  (muse-configure-highlighting 'muse-colors-markup muse-colors-markup))
 
 (defcustom muse-wiki-interwiki-alist
   '(("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/"))
@@ -172,10 +173,15 @@ Match 2 is set to the description."
 (defun muse-wiki-handle-wikiword (&optional string)
   "If STRING or point has a WikiWord, return it.
 Match 1 is set to the WikiWord."
-  (when muse-wiki-use-wikiword
-    (if (if string (string-match muse-wiki-wikiword-regexp string)
-          (looking-at muse-wiki-wikiword-regexp))
-        (match-string 1 string))))
+  (when (and muse-wiki-use-wikiword
+             (if string
+                 (string-match muse-wiki-wikiword-regexp string)
+               (looking-at muse-wiki-wikiword-regexp))
+             (or (and (muse-project-of-file)
+                      (muse-project-page-file
+                       (match-string 1 string) muse-current-project t))
+                 (file-exists-p (match-string 1 string))))
+    (match-string 1 string)))
 
 ;; Coloring setup
 

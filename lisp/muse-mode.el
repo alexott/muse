@@ -251,13 +251,14 @@ This is used to keep links from being improperly colorized by flyspell."
                                      t)
                  (string= (or (match-string 0) "") "[[")
                  (looking-at muse-explicit-link-regexp)))
-            (muse-handle-explicit-link)
+            (progn
+              (goto-char (match-beginning 1))
+              (muse-handle-explicit-link))
           (goto-char here)
           ;; Check for bare URL or other link type
           (skip-chars-backward (concat "^'\"<>{}("
                                        muse-regexp-space))
           (and (looking-at muse-implicit-link-regexp)
-               (match-string 1)
                (muse-handle-implicit-link)))))))
 
 (defun muse-make-link (link &optional name)
