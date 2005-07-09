@@ -109,13 +109,17 @@ this."
           (set sym value)))
   :group 'muse-wiki)
 
+(defun muse-wiki-output-name (name)
+  "Much like `muse-publish-output-name', but keep the directory part."
+  (concat (file-name-directory name)
+          (muse-publish-output-name name)))
+
 (defun muse-wiki-transform-interwiki (url explicit)
   "Return the destination of the given URL if it is an interwiki link.
 Otherwise return URL.  Read-only properties are added to the string."
   (let ((res (muse-wiki-handle-interwiki url)))
     (if (and res (not (string-match muse-image-regexp res)))
-        (setq url (concat (file-name-directory res)
-                          (muse-publish-output-name res)))))
+        (setq url (muse-wiki-output-name res))))
   url)
 
 (defun muse-wiki-transform-wikiword (url explicit)
@@ -189,6 +193,36 @@ Match 1 is set to the WikiWord."
                        (match-string 1 string) muse-current-project t))
                  (file-exists-p (match-string 1 string))))
     (match-string 1 string)))
+
+;; Pretty title
+
+(defcustom muse-wiki-publish-small-title-words
+  '("the" "and" "at" "on" "of" "for" "in" "an" "a")
+  "Strings that should be downcased in a page title.
+This is used by `muse-wiki-publish-pretty-title', which must be
+called manually."
+  :type '(repeat string)
+  :group 'muse-wiki)
+
+(defun muse-wiki-publish-pretty-title (&optional title)
+  "Return a pretty version of the given TITLE."
+  (unless title (setq title (muse-publishing-directive "title")))
+  (save-match-data
+    (let ((case-fold-search nil))
+      (while (string-match (concat "\\([" muse-regexp-upper
+                                   muse-regexp-lower
+                                   "]\\)\\([" muse-regexp-upper
+                                   "0-9]\\)")
+                           title)
+        (setq title (replace-match "\\1 \\2" t nil title)))
+      (let* ((words (split-string title))
+             (w (cdr words)))
+        (while w
+          (if (member (downcase (car w))
+                      muse-wiki-publish-small-title-words)
+              (setcar w (downcase (car w))))
+          (setq w (cdr w)))
+        (mapconcat 'identity words " ")))))
 
 ;; Coloring setup
 

@@ -395,18 +395,11 @@ system to an associated HTML coding system. If no match is found,
 (defun muse-html-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
     (goto-char (match-beginning 0))
-    (insert
-     (or (save-excursion
-           (save-match-data
-             (and (re-search-backward (concat
-                                       "<\\(/?\\)\\(p\\|"
-                                      "div class=\"image-link\"\\)[ >]")
-                                      nil t)
-                  (not (string-equal (match-string 1) "/"))
-                  (if (string-equal (match-string 2) "p")
-                      "</p>"
-                    "</div>"))))
-         ""))
+    (when (save-excursion
+            (save-match-data
+              (and (re-search-backward "<\\(/?\\)p[ >]" nil t)
+                   (not (string-equal (match-string 1) "/")))))
+      (insert "</p>"))
     (goto-char end))
   (cond
    ((eobp)
@@ -418,10 +411,10 @@ system to an associated HTML coding system. If no match is found,
       (insert "<p>"))
      ((looking-at "<a ")
       (if (looking-at "<a[^>]+><img")
-          (insert "<div class=\"image-link\">")
+          (insert "<p class=\"image-link\">")
         (insert "<p>")))
      ((looking-at "<img[ >]")
-      (insert "<div class=\"image-link\">"))))
+      (insert "<p class=\"image-link\">"))))
    ((muse-looking-back "\\(</h[1-4]>\\|<hr>\\)\n\n")
     (insert "<p class=\"first\">"))
    ((muse-looking-back "<\\(blockquote\\|center\\)>\n")

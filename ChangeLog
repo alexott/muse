@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-09 07:41:44 GMT	Michael Olson <mwolson@gnu.org>	patch-117
+
+    Summary:
+      Fix image-link goof-up and add pretty titles.
+    Revision:
+      muse--main--1.0--patch-117
+
+    * lisp/muse-html.el (muse-html-markup-paragraph): Use <p
+      class="image-link"> instead of <div class="image-link">.  I found a bug
+      with the way I was handling both, so I decided to simplify things.
+    
+    * lisp/muse-wiki.el (muse-wiki-output-name): New function that acts like
+      `muse-publish-output-name', but keeps the directory prefix.
+      (muse-wiki-transform-interwiki): Use `muse-publish-output-name'.
+    
+    * lisp/muse-wiki.el (muse-wiki-publish-small-title-words): New
+      customizable option that determines the words to downcase in title.
+      (muse-wiki-publish-pretty-title): New function that Makes a Nicely
+      Capitalized Title out of either a string or the current title.  This is
+      not currently used by any other function -- for now it is meant to be
+      called by the user.
+
+    modified files:
+     ChangeLog lisp/muse-html.el lisp/muse-wiki.el
+
+
 2005-07-09 05:22:12 GMT	Michael Olson <mwolson@gnu.org>	patch-116
 
     Summary:
