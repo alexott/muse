@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-09 03:24:01 GMT	Michael Olson <mwolson@gnu.org>	patch-114
+
+    Summary:
+      Update my example configuration.
+    Revision:
+      muse--main--1.0--patch-114
+
+    * examples/mwolson/muse-init.el (muse-project-alist): Rename the "Web"
+      project to "WebSite" in order to make it more distinct.
+      (muse-wiki-interwiki-alist): Add mapping for "TheEmacsWiki".
+      (my-muse-blosxom-finalize): Don't run the Xanga preparation code
+      anymore.
+      (my-muse-prepare-entry-for-xanga): Make this able to figure out the
+      published name of the current file.  I really should make a function
+      called `muse-published-name' or something similar!
+      ("\C-cpx"): Use this key sequence for
+      `my-muse-prepare-entry-for-xanga'.
+      (muse-file-extension): I'm making use of this so I can figure out its
+      intricacies.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el
+
+
 2005-07-09 03:11:28 GMT	Michael Olson <mwolson@gnu.org>	patch-113
 
     Summary:

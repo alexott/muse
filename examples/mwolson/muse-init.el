@@ -43,8 +43,9 @@
 
 (setq muse-project-alist
       `(
-        ("Web"
-         ("~/proj/wiki/web/" :default "WelcomePage")
+        ("WebSite"
+         ("~/proj/wiki/web/" :default "WelcomePage"
+          :set 'muse-file-extension nil)
          (:base "my-xhtml"
                 :path "~/proj/notmine/web-out"))
 
@@ -67,13 +68,14 @@
           :major-mode planner-mode
           :visit-link planner-visit-link)
 
-         (:base "my-xhtml"
+         (:base "xhtml"
                 :path "~/proj/notmine/planner-out"))
         ))
 
 ;; Wiki settings
 (setq muse-wiki-interwiki-alist
       '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/plugwiki/")
+        ("TheEmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
         ("ArchWiki" . "http://wiki.gnuarch.org/")
         ("WebWiki" .
          (lambda (tag)
@@ -89,15 +91,23 @@
 ;; Make the current file display correctly in Xanga
 
 (defun my-muse-blosxom-finalize (file output-path target)
-  (my-muse-prepare-entry-for-xanga output-path))
+;;  (my-muse-prepare-entry-for-xanga output-path)
+;; For now, do nothing.
+  )
+
+;; I call this using C-c p x now.
 
 (defun my-muse-prepare-entry-for-xanga (file)
   "Mangle FILE so that Xanga doesn't bug out, saving to X clipboard.
-This is called on a generated BLOSXOM output file whenever
-something is published with the \"my-blosxom\" style.
 
-If FILE is not specified, use the current file."
-  (interactive (list buffer-file-name))
+If FILE is not specified, use the published version of the current file."
+  (interactive
+   (list
+    (expand-file-name (concat (muse-page-name) ".txt")
+                      (muse-style-element
+                       :path (car (muse-project-applicable-styles
+                                   buffer-file-name
+                                   (cddr (muse-project-of-file))))))))
   (save-match-data
     (with-temp-buffer
       (insert-file-contents file t)
@@ -151,6 +161,7 @@ If FILE is not specified, use the current file."
                 #'(lambda ()
                     (interactive)
                     (find-file muse-blosxom-base-directory)))
+(global-set-key "\C-cpx" 'my-muse-prepare-entry-for-xanga)
 
 ;;; Custom variables
 
@@ -158,6 +169,7 @@ If FILE is not specified, use the current file."
  '(muse-blosxom-base-directory "~/proj/wiki/blog/")
  '(muse-blosxom-publishing-directory "~/personal-site/site/blog")
  '(muse-colors-autogen-headings (quote outline))
+ '(muse-file-extension "muse")
  '(muse-html-charset-default "utf-8")
  '(muse-html-encoding-default (quote utf-8))
  '(muse-html-meta-content-encoding (quote utf-8))
