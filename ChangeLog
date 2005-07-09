@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-09 20:24:40 GMT	Michael Olson <mwolson@gnu.org>	patch-119
+
+    Summary:
+      XEmacs wiki fix.
+    Revision:
+      muse--main--1.0--patch-119
+
+    * lisp/muse-wiki.el (muse-wiki-colors-wikiword): Use
+      `muse-match-string-no-properties' so XEmacs doesn't complain.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-07-09 08:53:33 GMT	Michael Olson <mwolson@gnu.org>	patch-118
 
     Summary:

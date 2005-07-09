@@ -235,12 +235,12 @@ called manually."
            (while (> (match-end 0) cur)
              (flyspell-unhighlight-at cur)
              (setq cur (1+ cur)))))
-       (let ((link (match-string-no-properties 1))
+       (let ((link (muse-match-string-no-properties 1))
              (face (muse-link-face (match-string 1))))
          (when face
            (add-text-properties (match-beginning 1) (match-end 0)
                                 (muse-link-properties
-                                 (match-string-no-properties 1) face)))))
+                                 (muse-match-string-no-properties 1) face)))))
 
      (defun muse-wiki-colors-nop-tag (beg end)
        (when (and muse-wiki-hide-nop-tag
