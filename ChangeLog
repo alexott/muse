@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-09 03:59:44 GMT	Michael Olson <mwolson@gnu.org>	patch-115
+
+    Summary:
+      Escape "&", "<", and ">" in URL text.
+    Revision:
+      muse--main--1.0--patch-115
+
+    * lisp/muse-html.el (muse-html-escape-string): Escape "&", "<", and ">"
+      specially.  Thanks to John Sullivan for the suggestion.
+
+    modified files:
+     ChangeLog lisp/muse-html.el
+
+
 2005-07-09 03:24:01 GMT	Michael Olson <mwolson@gnu.org>	patch-114
 
     Summary:
