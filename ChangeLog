@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-09 03:11:28 GMT	Michael Olson <mwolson@gnu.org>	patch-113
+
+    Summary:
+      Tackle a project name interwiki highlighting snafu.
+    Revision:
+      muse--main--1.0--patch-113
+
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): Hack still more on
+      this.  It seems to be more robust now.  Highlighting is going the way I
+      want it.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-07-09 02:25:26 GMT	Michael Olson <mwolson@gnu.org>	patch-112
 
     Summary:

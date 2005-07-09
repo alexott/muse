@@ -148,9 +148,13 @@ style and ignore the others."
   (setq project (or project (caar muse-project-alist))
         page (or page (muse-get-keyword :default
                                         (cadr (muse-project project)))))
-  (let ((remote-style (car (muse-project-applicable-styles page project)))
+  (let ((remote-style (car (muse-project-applicable-styles
+                            (muse-project-page-file page project)
+                            project)))
         (local-style (car (muse-project-applicable-styles
-                           (muse-page-name) (muse-project-of-file)))))
+                           (muse-project-page-file page
+                                                   (muse-project-of-file))
+                           (cddr (muse-project-of-file))))))
     (file-relative-name (expand-file-name
                          page (muse-style-element :path remote-style))
                         (expand-file-name
