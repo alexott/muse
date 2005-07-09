@@ -251,24 +251,30 @@ first directory within the project's fileset is used."
     (unless (interactive-p)
       (setq project (muse-project project)
             name (cons name (muse-project-page-file name project))))
-    ;; At this point, name is (PAGE . FILE).
-    (unless (cdr name)
-      (let ((pats (cadr project)))
-        (while (and pats (null directory))
-          (if (symbolp (car pats))
-              (setq pats (cddr pats))
-            (if (file-directory-p (car pats))
-                (setq directory (car pats) pats nil)
-              (setq pats (cdr pats))))))
-      (when directory
-        (let ((filename (expand-file-name
-                         (if muse-file-extension
-                             (concat (car name) "." muse-file-extension)
-                           (car name))
-                         directory)))
-          (unless (file-exists-p directory)
-            (make-directory directory t))
-          (setcdr name filename))))
+    ;; If we're given a relative name, open it as-is
+    (if (and (car name)
+             (save-match-data (string-match "\\.\\./" (car name))))
+        (setcdr name (if muse-file-extension
+                         (concat (car name) "." muse-file-extension)
+                       (car name)))
+      ;; At this point, name is (PAGE . FILE).
+      (unless (cdr name)
+        (let ((pats (cadr project)))
+          (while (and pats (null directory))
+            (if (symbolp (car pats))
+                (setq pats (cddr pats))
+              (if (file-directory-p (car pats))
+                  (setq directory (car pats) pats nil)
+                (setq pats (cdr pats))))))
+        (when directory
+          (let ((filename (expand-file-name
+                           (if muse-file-extension
+                               (concat (car name) "." muse-file-extension)
+                             (car name))
+                           directory)))
+            (unless (file-exists-p directory)
+              (make-directory directory t))
+            (setcdr name filename)))))
     ;; Open the file
     (if (cdr name)
         (funcall (or command 'find-file) (cdr name))
@@ -280,6 +286,8 @@ first directory within the project's fileset is used."
 The name of a project may be used for STYLES."
   (when (stringp styles)
     (setq styles (cddr (muse-project styles))))
+  (muse-assert (and file styles) t
+               "Incorrect arguments passed to `muse-project-applicable-styles")
   (let (used-styles)
     (dolist (style styles)
       (let ((include-regexp (muse-style-element :include style))
@@ -290,7 +298,8 @@ The name of a project may be used for STYLES."
                        (if include-regexp
                            (string-match include-regexp file)
                          (not (string-match exclude-regexp file))))
-                   (not (muse-project-private-p file)))
+                   (or (not (file-exists-p file))
+                       (not (muse-project-private-p file))))
           (add-to-list 'used-styles style))))
     used-styles))
 

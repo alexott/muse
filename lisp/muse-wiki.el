@@ -156,9 +156,8 @@ style and ignore the others."
                             (muse-project-page-file page project)
                             project)))
         (local-style (car (muse-project-applicable-styles
-                           (muse-project-page-file page
-                                                   (muse-project-of-file))
-                           (cddr (muse-project-of-file))))))
+                            (or muse-publishing-current-file buffer-file-name)
+                            (cddr (muse-project-of-file))))))
     (file-relative-name (expand-file-name
                          page (muse-style-element :path remote-style))
                         (expand-file-name

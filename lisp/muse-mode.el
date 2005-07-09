@@ -256,7 +256,7 @@ This is used to keep links from being improperly colorized by flyspell."
               (muse-handle-explicit-link))
           (goto-char here)
           ;; Check for bare URL or other link type
-          (skip-chars-backward (concat "^'\"<>{}("
+          (skip-chars-backward (concat "^'\"<>{}(\n"
                                        muse-regexp-space))
           (and (looking-at muse-implicit-link-regexp)
                (muse-handle-implicit-link)))))))
