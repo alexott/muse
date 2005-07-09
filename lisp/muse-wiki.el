@@ -136,23 +136,25 @@ Read-only properties are added to the string."
       (setq url nil)))
   (when url (muse-publish-read-only url)))
 
-;; (defun muse-wiki-resolve-project-page (project page)
-;;   "Return the published path from the current page to PAGE of PROJECT.
-;; If PAGE is not specified, use the value of :default in PROJECT.
-;; If PROJECT is not specified, default to first project of
-;; `muse-projects-alist'.
+(defun muse-wiki-resolve-project-page (&optional project page)
+  "Return the published path from the current page to PAGE of PROJECT.
+If PAGE is not specified, use the value of :default in PROJECT.
+If PROJECT is not specified, default to first project of
+`muse-projects-alist'.
 
-;; Note that PAGE can have several output directories.  If this is
-;; the case, we will use the first one that matches our current
-;; style and ignore the others."
-;;   (setq project (or project (caar muse-project-alist))
-;;         page (or page (muse-get-keyword :default
-;;                                         (cadr (muse-project project)))))
-;;   (let* ((styles (muse-project-applicable-styles project))
-;;          (dirs (search-styles-for-:base-that-matches-ours)))
-;;     (file-relative-name (file-plus-extensions (car dirs) current-file)
-;;                         (our-current-publishing-dir)
-;;                         )))
+Note that PAGE can have several output directories.  If this is
+the case, we will use the first one that matches our current
+style and ignore the others."
+  (setq project (or project (caar muse-project-alist))
+        page (or page (muse-get-keyword :default
+                                        (cadr (muse-project project)))))
+  (let ((remote-style (car (muse-project-applicable-styles page project)))
+        (local-style (car (muse-project-applicable-styles
+                           (muse-page-name) (muse-project-of-file)))))
+    (file-relative-name (expand-file-name
+                         page (muse-style-element :path remote-style))
+                        (expand-file-name
+                         (muse-style-element :path local-style)))))
 
 (defun muse-wiki-handle-interwiki (&optional string)
   "If STRING or point has an interwiki link, resolve it and
@@ -161,15 +163,15 @@ Match 1 is set to the link.
 Match 2 is set to the description."
   (when (if string (string-match muse-wiki-interwiki-regexp string)
           (looking-at muse-wiki-interwiki-regexp))
-    (let ((subst (or (cdr (assoc (match-string 1 string)
-                                 muse-wiki-interwiki-alist))
-                     (and (assoc (match-string 1 string) muse-project-alist)
-                          'muse-wiki-resolve-project-page)))
-          (word (match-string 2 string)))
-      (when subst
-        (if (functionp subst)
-            (funcall subst word)
-          (concat subst word))))))
+    (let* ((project (match-string 1 string))
+           (subst (cdr (assoc project muse-wiki-interwiki-alist)))
+           (word (match-string 2 string)))
+      (if subst
+          (if (functionp subst)
+              (funcall subst word)
+            (concat subst word))
+        (and (assoc project muse-project-alist)
+             (muse-wiki-resolve-project-page project word))))))
 
 (defun muse-wiki-handle-wikiword (&optional string)
   "If STRING or point has a WikiWord, return it.
