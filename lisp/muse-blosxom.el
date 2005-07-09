@@ -156,11 +156,11 @@ This is the top-level directory where your Muse blog entries may be found."
                    (expand-file-name muse-publishing-current-file)
                    (expand-file-name muse-blosxom-base-directory))))
     ;; Strip the file extension
-    (when muse-ignored-file-extensions-regexp
-      (set rel-file (save-match-data
-                      (and (string-match muse-ignored-file-extensions-regexp
-                                         rel-file)
-                           (replace-match "" t t rel-file)))))
+    (when muse-ignored-extensions-regexp
+      (setq rel-file (save-match-data
+                       (and (string-match muse-ignored-extensions-regexp
+                                          rel-file)
+                            (replace-match "" t t rel-file)))))
     ;; Add to page-date alist
     (add-to-list
      'muse-blosxom-page-date-alist

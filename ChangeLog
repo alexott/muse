@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-09 02:25:26 GMT	Michael Olson <mwolson@gnu.org>	patch-112
+
+    Summary:
+      Fix some gross mistakes.
+    Revision:
+      muse--main--1.0--patch-112
+
+    * lisp/muse-blosxom.el (muse-blosxom-update-page-date-alist): Fix several
+      gross misspellings.
+    
+    * lisp/muse-project.el (muse-project-file-entries): If
+      `muse-file-extension' is defined, use it to filter the entries.
+    
+    * lisp/muse.el (muse-file-extension): Fix messed up attempt to set
+      variable.  Move higher in file.
+    
+    * lisp/muse.el (muse-update-ignored-extensions-regexp): Use given
+      argument instead of the real name of the variable.
+
+    modified files:
+     ChangeLog lisp/muse-blosxom.el lisp/muse-project.el
+     lisp/muse.el
+
+
 2005-07-09 00:10:01 GMT	Michael Olson <mwolson@gnu.org>	patch-111
 
     Summary:

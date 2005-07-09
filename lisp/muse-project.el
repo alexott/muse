@@ -106,7 +106,9 @@ when publishing files in that project."
          (lnames names))
     (cond
      ((file-directory-p path)
-      (dolist (file (directory-files path t))
+      (dolist (file (directory-files
+                     path t (when muse-file-extension
+                              (concat "." muse-file-extension "\\'"))))
         (unless (or (string-match muse-project-ignore-regexp file)
                     (file-directory-p file))
           (setcdr lnames
