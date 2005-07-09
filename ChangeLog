@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-09 05:22:12 GMT	Michael Olson <mwolson@gnu.org>	patch-116
+
+    Summary:
+      Escape specials in link descriptions.
+    Revision:
+      muse--main--1.0--patch-116
+
+    * lisp/muse-publish.el (muse-publish-escape-specials-in-string): New
+      function that escapes special characters in the given string according
+      to the current publishing style.
+      (muse-publish-url): Use the above function to escape the description
+      part of extended links.
+      (muse-publish-prepare-url): Don't make string read-only; it does
+      nothing.
+    
+    * lisp/muse-wiki.el (muse-wiki-transform-interwiki)
+      (muse-wiki-transform-wikiword): Don't make string read-only.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el lisp/muse-wiki.el
+
+
 2005-07-09 03:59:44 GMT	Michael Olson <mwolson@gnu.org>	patch-115
 
     Summary:

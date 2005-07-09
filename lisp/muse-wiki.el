@@ -116,7 +116,7 @@ Otherwise return URL.  Read-only properties are added to the string."
     (if (and res (not (string-match muse-image-regexp res)))
         (setq url (concat (file-name-directory res)
                           (muse-publish-output-name res)))))
-  (muse-publish-read-only url))
+  url)
 
 (defun muse-wiki-transform-wikiword (url explicit)
   "If URL is a WikiWord but does not correspond with an existing
@@ -134,7 +134,7 @@ Read-only properties are added to the string."
                 (assoc url muse-project-alist)
                 (assoc url muse-wiki-interwiki-alist))
       (setq url nil)))
-  (when url (muse-publish-read-only url)))
+  url)
 
 (defun muse-wiki-resolve-project-page (&optional project page)
   "Return the published path from the current page to PAGE of PROJECT.

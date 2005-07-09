@@ -908,11 +908,26 @@ like read-only from being inadvertently deleted."
     (insert (format (muse-markup-text 'email-addr) addr addr))
     (muse-publish-mark-read-only beg (point))))
 
+(defun muse-publish-escape-specials-in-string (string)
+  "Escape specials in STRING using style-specific :specials."
+  (save-excursion
+    (apply (function concat)
+           (mapcar
+            (lambda (ch)
+              (let ((repl
+                     (or (assoc ch (muse-style-element :specials))
+                         (assoc ch muse-publish-markup-specials))))
+                (if (null repl)
+                    (char-to-string ch)
+                  (cdr repl))))
+            (append string nil)))))
+
 (defun muse-publish-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
   (let ((orig-url url))
     (dolist (transform muse-publish-url-transforms)
       (setq url (save-match-data (when url (funcall transform url explicit)))))
+    (setq desc (when desc (muse-publish-escape-specials-in-string desc)))
     (if url
         (if (string-match muse-image-regexp url)
             (if desc
@@ -1063,7 +1078,7 @@ like read-only from being inadvertently deleted."
                                 (substring target 0 (match-beginning 0)))
                                "#" (substring target (match-end 0)))
                      (muse-publish-output-name target)))))
-  (muse-publish-read-only target))
+  target)
 
 (provide 'muse-publish)
 
