@@ -48,7 +48,9 @@ See `muse-docbook' for more information."
   :group 'muse-docbook)
 
 (defcustom muse-docbook-header
-  "<!DOCTYPE article PUBLIC \"-//OASIS//DTD DocBook V4.2//EN\">
+  "<?xml version=\"1.0\" encoding=\"<lisp>
+  (muse-docbook-encoding)</lisp>\"?>
+<!DOCTYPE article PUBLIC \"-//OASIS//DTD DocBook V4.2//EN\">
 <article>
   <articleinfo>
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
@@ -155,6 +157,47 @@ differs little between the various styles."
   :type '(alist :key-type character :value-type string)
   :group 'muse-docbook)
 
+(defcustom muse-docbook-encoding-default 'utf-8
+  "The default Emacs buffer encoding to use in published files.
+This will be used if no special characters are found."
+  :type 'symbol
+  :group 'muse-docbook)
+
+(defcustom muse-docbook-charset-default "utf-8"
+  "The default DocBook XML charset to use if no translation is
+found in `muse-docbook-encoding-map'."
+  :type 'string
+  :group 'muse-docbook)
+
+(defcustom muse-docbook-encoding-map
+  '((iso-8859-1         . "iso-8859-1")
+    (iso-2022-jp        . "iso-2022-jp")
+    (utf-8              . "utf-8")
+    (japanese-iso-8bit  . "euc-jp")
+    (chinese-big5       . "big5")
+    (mule-utf-8         . "utf-8")
+    (chinese-iso-8bit   . "gb2312")
+    (chinese-gbk        . "gbk"))
+  "An alist mapping emacs coding systems to appropriate DocBook charsets.
+Use the base name of the coding system (i.e. without the -unix)."
+  :type '(alist :key-type coding-system :value-type string)
+  :group 'muse-docbook)
+
+(defun muse-docbook-transform-content-type (content-type)
+  "Using `muse-docbook-encoding-map', try and resolve an emacs
+coding system to an associated DocBook XML coding system. If no
+match is found, `muse-docbook-charset-default' is used instead."
+  (let ((match (assoc (coding-system-base content-type)
+                      muse-docbook-encoding-map)))
+    (if match
+        (cdr match)
+      muse-docbook-charset-default)))
+
+(defun muse-docbook-encoding ()
+  (muse-docbook-transform-content-type
+   (or buffer-file-coding-system
+       muse-docbook-encoding-default)))
+
 (defun muse-docbook-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
     (goto-char (match-beginning 0))
@@ -207,6 +250,11 @@ differs little between the various styles."
       (goto-char (point-max))
       (insert "</section>"))))
 
+(defun muse-docbook-finalize-buffer ()
+  (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
+    ;; make it agree with the default charset
+    (setq buffer-file-coding-system muse-docbook-encoding-default)))
+
 ;; Register the Muse DocBook XML Publisher
 
 (unless (assoc "docbook" muse-publishing-styles)
@@ -217,6 +265,7 @@ differs little between the various styles."
                      :strings    'muse-docbook-markup-strings
                      :specials   'muse-docbook-markup-specials
                      :before-end 'muse-docbook-fixup-sections
+                     :after      'muse-docbook-finalize-buffer
                      :header     'muse-docbook-header
                      :footer     'muse-docbook-footer
                      :browser    'find-file))

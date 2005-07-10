@@ -2,6 +2,37 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-10 22:04:50 GMT	Michael Olson <mwolson@gnu.org>	patch-122
+
+    Summary:
+      muse-docbook: Output an XML tag with encoding at the beginning of document.
+    Revision:
+      muse--main--1.0--patch-122
+
+    * lisp/muse-docbook.el (muse-docbook-header): Add <xml> tag at beginning
+      of document.
+      (muse-docbook-encoding-default): New option that determines which Emacs
+      buffer encoding to use by default in Muse DocBook files if none is
+      found.
+      (muse-docbook-charset-default): New option that determines the DocBook
+      XML charset to use if no translation is found in
+      muse-docbook-encoding-map.
+      (muse-docbook-encoding-map): New option alist that maps an emacs coding
+      system to its associated DocBook coding system.
+      (muse-docbook-transform-content-type): New function that determines the
+      DocBook XML encoding to use based on the contents of
+      muse-docbook-encoding-map.
+      (muse-docbook-encoding): New function that calls
+      muse-docbook-transform-content-type.
+      (muse-docbook-finalize-buffer): New function that sets the buffer file
+      coding system to the value of muse-docbook-encoding-default, but only
+      if the buffers contents have no special characters.
+      ("docbook"): Include :after tag that calls muse-docbook-finalize-buffer.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el
+
+
 2005-07-10 21:35:49 GMT	Michael Olson <mwolson@gnu.org>	patch-121
 
     Summary:
