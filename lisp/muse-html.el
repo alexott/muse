@@ -431,7 +431,7 @@ system to an associated HTML coding system. If no match is found,
 outside a few punctuation symbols, that risk being misinterpreted
 if not escaped."
   (when str
-    (let (pos code len)
+    (let (pos code len ch)
       (save-match-data
         (while (setq pos (string-match (concat "[^-"
                                                muse-regexp-alnum

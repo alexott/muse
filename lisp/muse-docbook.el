@@ -246,7 +246,7 @@ match is found, `muse-docbook-charset-default' is used instead."
   :group 'muse-docbook)
 
 (defun muse-docbook-fixup-tags ()
-  "Merge multiple sections of TAG together."
+  "Merge multiple sections of tags from `muse-docbook-merged-tags'."
   (dolist (tag muse-docbook-merged-tags)
     (goto-char (point-min))
     (let (last)

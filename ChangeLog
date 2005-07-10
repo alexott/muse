@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-10 22:41:49 GMT	Michael Olson <mwolson@gnu.org>	patch-124
+
+    Summary:
+      Silence compiler warnings.
+    Revision:
+      muse--main--1.0--patch-124
+
+    * lisp/muse-docbook.el (muse-docbook-fixup-tags): Docfix.
+    
+    * lisp/muse-html.el (muse-html-escape-string): Let-bind `ch' to silence a
+      compiler warning.
+    
+    * lisp/muse-project.el (muse-project-applicable-styles): Call
+      `muse-assert' with only 1 argument to silence a compiler warning.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-project.el
+
+
 2005-07-10 22:19:26 GMT	Michael Olson <mwolson@gnu.org>	patch-123
 
     Summary:

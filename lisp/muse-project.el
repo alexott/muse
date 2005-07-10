@@ -286,8 +286,7 @@ first directory within the project's fileset is used."
 The name of a project may be used for STYLES."
   (when (stringp styles)
     (setq styles (cddr (muse-project styles))))
-  (muse-assert (and file styles) t
-               "Incorrect arguments passed to `muse-project-applicable-styles")
+  (muse-assert (and file styles))
   (let (used-styles)
     (dolist (style styles)
       (let ((include-regexp (muse-style-element :include style))
