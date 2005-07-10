@@ -23,6 +23,9 @@
 
 ;;; Contributors:
 
+;; Dale P. Smith (dpsm AT en DOT com) improved the markup
+;; significantly and made many valuable suggestions.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -109,8 +112,8 @@ For more on the structure of this list, see
     (subsection-end  . "</title>")
     (subsubsection   . "<section><title>")
     (subsubsection-end . "</title>")
-    (footnote        . "<footnote>")
-    (footnote-end    . "</footnote>")
+    (footnote        . "<footnote><para>")
+    (footnote-end    . "</para></footnote>")
     (begin-underline . "")
     (end-underline   . "")
     (begin-literal   . "<filename>")
@@ -120,23 +123,23 @@ For more on the structure of this list, see
     (begin-more-emph . "<emphasis role=\"strong\">")
     (end-more-emph   . "</emphasis>")
     (begin-most-emph . "<emphasis role=\"strong\"><emphasis>")
-    (end-most-emph   . "</emphasis>></emphasis role=\"strong\">")
+    (end-most-emph   . "</emphasis></emphasis>")
     (begin-verse     . "<literallayout>\n")
     (verse-space     . "  ")
     (end-verse       . "</literallayout>")
-    (begin-example   . "<example>")
-    (end-example     . "</example>")
+    (begin-example   . "<programlisting>")
+    (end-example     . "</programlisting>")
     (begin-center    . "<center>\n")
     (end-center      . "\n</center>")
     (begin-quote     . "<blockquote>\n")
     (end-quote       . "\n</blockquote>")
-    (begin-uli       . "<itemizedlist mark=\"bullet\">\n<listitem>")
-    (end-uli         . "</listitem>\n</itemizedlist>")
-    (begin-oli       . "<orderedlist>\n<listitem>")
-    (end-oli         . "</listitem>\n</orderedlist>")
-    (begin-ddt       . "<dl>\n<dt>")
-    (start-dde       . "</dt>\n  <dd>")
-    (end-ddt         . "</dd>\n</dl>"))
+    (begin-uli       . "<itemizedlist mark=\"bullet\">\n<listitem><para>")
+    (end-uli         . "</para></listitem>\n</itemizedlist>")
+    (begin-oli       . "<orderedlist>\n<listitem><para>")
+    (end-oli         . "</para></listitem>\n</orderedlist>")
+    (begin-ddt       . "<variablelist>\n<varlistentry>\n<term>")
+    (start-dde       . "</term>\n<listitem><para>")
+    (end-ddt         . "</para></listitem>\n</varlistentry>\n</variablelist>"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
