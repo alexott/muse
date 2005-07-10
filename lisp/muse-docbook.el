@@ -239,16 +239,24 @@ match is found, `muse-docbook-charset-default' is used instead."
             "</" col ">\n" "</row>\n" "</" row ">\n"
             "</table>\n")))
 
-(defun muse-docbook-fixup-sections ()
-  (goto-char (point-min))
-  (let (last)
-    (while (re-search-forward "\n*<section>" nil t)
+(defcustom muse-docbook-merged-tags
+  '("itemizedlist" "orderedlist" "section" "variablelist")
+  "Tags which need to be merged together if they are consecutive."
+  :type '(repeat (string :tag "Tag"))
+  :group 'muse-docbook)
+
+(defun muse-docbook-fixup-tags ()
+  "Merge multiple sections of TAG together."
+  (dolist (tag muse-docbook-merged-tags)
+    (goto-char (point-min))
+    (let (last)
+      (while (re-search-forward (concat "\n*<" tag ">") nil t)
+        (when last
+          (replace-match (concat "\n</" tag ">\n\n<" tag ">")))
+        (setq last (match-beginning 0)))
       (when last
-        (replace-match "\n</section>\n\n<section>"))
-      (setq last (match-beginning 0)))
-    (when last
-      (goto-char (point-max))
-      (insert "</section>"))))
+        (goto-char (point-max))
+        (insert "</" tag ">")))))
 
 (defun muse-docbook-finalize-buffer ()
   (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
@@ -264,7 +272,7 @@ match is found, `muse-docbook-charset-default' is used instead."
                      :functions  'muse-docbook-markup-functions
                      :strings    'muse-docbook-markup-strings
                      :specials   'muse-docbook-markup-specials
-                     :before-end 'muse-docbook-fixup-sections
+                     :before-end 'muse-docbook-fixup-tags
                      :after      'muse-docbook-finalize-buffer
                      :header     'muse-docbook-header
                      :footer     'muse-docbook-footer
