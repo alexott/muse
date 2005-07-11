@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-11 10:08:45 GMT	Michael Olson <mwolson@gnu.org>	patch-125
+
+    Summary:
+      Make `muse-project-alist' more intuitively customizable.
+    Revision:
+      muse--main--1.0--patch-125
+
+    * examples/mwolson/muse-init.el (muse-project-alist): Resync with my
+      settings.
+    
+    * lisp/muse-project.el: Thanks to jessealama on IRC for the suggestion.
+      (muse-project-alist-get): New function that pre-parses
+      `muse-projects-alist' before customization in order to work around an
+      annoying limitation in the customize interface.
+      (muse-project-alist-set): New function that takes the value that
+      customize gave us and turns it into something Muse can use.
+      (muse-project): New widget that outlines the form of the
+      `muse-project-alist' variable.
+      (muse-project-alist): Use the `muse-project' widget and specify :set
+      and :get.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el lisp/muse-project.el
+
+
 2005-07-10 22:41:49 GMT	Michael Olson <mwolson@gnu.org>	patch-124
 
     Summary:

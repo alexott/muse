@@ -43,16 +43,15 @@
 
 (setq muse-project-alist
       `(
-        ("WebSite"
-         ("~/proj/wiki/web/" :default "WelcomePage"
-          :set 'muse-file-extension nil)
+        ("Website"
+         ("~/proj/wiki/web/" :default "WelcomePage")
          (:base "my-xhtml"
-                :path "~/proj/notmine/web-out"))
+                :path "~/personal-site/site/web"))
 
         ("Projects"
          ("~/proj/wiki/projects/" :default "WelcomePage")
          (:base "my-xhtml"
-                :path "~/proj/notmine/projects-out"))
+                :path "~/personal-site/site/projects"))
 
         ("Blog"
          (,@(muse-blosxom-project-alist-dirs "~/proj/wiki/blog")

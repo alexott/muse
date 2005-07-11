@@ -52,11 +52,86 @@ Each function is passed the project object, a cons with the format
   :type 'hook
   :group 'muse-project)
 
+(defun muse-project-alist-get (sym)
+  "Turn `muse-project-alist' into something we can customize easily."
+  (when (boundp sym)
+    (let* ((val (copy-alist (symbol-value sym)))
+           (head val))
+      (while val
+        (let ((head (car (cdar val)))
+              res)
+          (while head
+            (cond ((stringp (car head))
+                   (add-to-list 'res (car head))
+                   (setq head (cdr head)))
+                  ((and (symbolp (car head))
+                        (or (symbolp (cadr head))
+                            (stringp (cadr head))))
+                   (add-to-list 'res (list (car head) (cadr head)) t)
+                   (setq head (cddr head)))
+                  (t
+                   (setq head (cdr head)))))
+          (setcdr (car val) (cons res (cdr (cdar val)))))
+        (setq val (cdr val)))
+      head)))
+
+(defun muse-project-alist-set (sym val)
+  "Turn customized version of `muse-project-alist' into something
+Muse can make use of."
+  (set sym val)
+  (while val
+    (let ((head (car (cdar val)))
+          res)
+      (while head
+        (cond ((stringp (car head))
+               (add-to-list 'res (car head) t))
+              ((consp (car head))
+               (add-to-list 'res (caar head) t)
+               (add-to-list 'res (car (cdar head)) t)))
+        (setq head (cdr head)))
+      (setcdr (car val) (cons res (cdr (cdar val)))))
+    (setq val (cdr val))))
+
+(define-widget 'muse-project 'lazy
+  "A widget that defines a Muse project."
+  :tag "Project"
+  :type '(cons (repeat :tag "Contents"
+                    (choice
+                     (string :tag "Directory")
+                     (list :tag "Setting"
+                      (choice :tag "Property"
+                              (const :book-chapter)
+                              (const :book-end)
+                              (const :book-funcall)
+                              (const :book-part)
+                              (const :book-style)
+                              (const :default)
+                              (const :major-mode)
+                              (const :nochapters)
+                              (const :set)
+                              (const :visit-link))
+                      (choice :tag "Value"
+                              (string) (symbol)))))
+               (repeat (repeat :tag "Style"
+                               (group :inline t
+                                     (choice
+                                      :tag "Property"
+                                      (const :base)
+                                      (const :base-url)
+                                      (const :exclude)
+                                      (const :include)
+                                      (const :path))
+                                     (string :tag "Value"))))))
+
 (defcustom muse-project-alist nil
   "An alist of Muse projects.
 A project defines a fileset, and a list of custom attributes for use
 when publishing files in that project."
-  :type '(alist :key-type string :value sexp)
+  :type '(alist
+          :key-type (string :tag "Project name")
+          :value-type muse-project)
+  :get 'muse-project-alist-get
+  :set 'muse-project-alist-set
   :group 'muse-project)
 
 (defvar muse-project-file-alist nil
