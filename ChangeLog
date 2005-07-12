@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-12 07:18:27 GMT	Michael Olson <mwolson@gnu.org>	patch-129
+
+    Summary:
+      Compilation fix, minor shuffling in `muse-mode'.
+    Revision:
+      muse--main--1.0--patch-129
+
+    * lisp/muse.el (muse-file-extension): Make sure sym is bound before
+      accessing it.  Fixes Yet Another Compiler Error.
+    
+    * lisp/muse-mode.el (muse-mode): Move font-lock setup to very end so that
+     project-specific settings happen first.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse.el
+
+
 2005-07-12 07:12:49 GMT	Michael Olson <mwolson@gnu.org>	patch-128
 
     Summary:

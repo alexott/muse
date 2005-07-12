@@ -150,8 +150,6 @@ so only enable this if you don't use either of these."
   ;; with flyspell.
   (unless muse-mode-intangible-links
     (set (make-local-variable 'inhibit-point-motion-hooks) t))
-  (if muse-mode-highlight-p
-      (muse-use-font-lock))
   (setq muse-current-project (muse-project-of-file))
   (muse-project-set-variables)
   ;; Make sure several variables get updated if the user has changed
@@ -180,7 +178,9 @@ so only enable this if you don't use either of these."
     (set (make-variable-buffer-local 'pcomplete-command-completion-function)
          'muse-mode-completions)
     (set (make-variable-buffer-local 'pcomplete-parse-arguments-function)
-         'muse-mode-current-word)))
+         'muse-mode-current-word))
+    (when muse-mode-highlight-p
+      (muse-use-font-lock)))
 
 (put 'muse-mode
      'flyspell-mode-predicate
