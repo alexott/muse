@@ -2,6 +2,18 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-12 07:54:08 GMT	Michael Olson <mwolson@gnu.org>	patch-131
+
+    Summary:
+      AUTHORS: Fix typo, add that Yann authored muse-wiki.el.
+    Revision:
+      muse--main--1.0--patch-131
+
+
+    modified files:
+     AUTHORS ChangeLog
+
+
 2005-07-12 07:52:25 GMT	Michael Olson <mwolson@gnu.org>	patch-130
 
     Summary:
