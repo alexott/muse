@@ -175,6 +175,8 @@ If FILE is not specified, use the published version of the current file."
  '(muse-html-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/common.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
+ '(muse-mode-auto-p nil)
+ '(muse-mode-hook (quote (footnote-mode turn-on-auto-fill)))
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
  '(muse-xhtml-header "~/personal-site/muse/generic-header.html"))
 (custom-set-faces
