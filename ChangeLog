@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-12 07:12:49 GMT	Michael Olson <mwolson@gnu.org>	patch-128
+
+    Summary:
+      Fix annoying initial buffer coloring problem.
+    Revision:
+      muse--main--1.0--patch-128
+
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): Handle the case
+      where even buffer-file-name is not set.  This happens the first time we
+      attempt to colorize the buffer.  I'm rather astonished that I had to do
+      this.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-07-12 06:12:08 GMT	Michael Olson <mwolson@gnu.org>	patch-127
 
     Summary:

@@ -156,7 +156,10 @@ style and ignore the others."
                             (muse-project-page-file page project)
                             project)))
         (local-style (car (muse-project-applicable-styles
-                            (or muse-publishing-current-file buffer-file-name)
+                            (or muse-publishing-current-file buffer-file-name
+                                ;; astonishingly, sometimes even
+                                ;; buffer-file-name is not set!
+                                (concat default-directory (buffer-name)))
                             (cddr (muse-project-of-file))))))
     (file-relative-name (expand-file-name
                          page (muse-style-element :path remote-style))
