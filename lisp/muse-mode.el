@@ -207,6 +207,12 @@ This is used to keep links from being improperly colorized by flyspell."
   (save-match-data
     (null (muse-link-at-point))))
 
+(defun muse-mode-choose-mode ()
+  "Turn the proper Emacs Muse related mode on for this file."
+  (let ((project (muse-project-of-file)))
+    (funcall (or (and project (muse-get-keyword :major-mode (cadr project) t))
+                 'muse-mode))))
+
 (defun muse-mode-maybe ()
   "Maybe turn Emacs Muse mode on for this file."
   (let ((project (muse-project-of-file)))
@@ -377,7 +383,8 @@ in `muse-project-alist'."
   (interactive)
   (let ((cycled 0) pos)
     (save-excursion
-      (when (eq (get-text-property (point) 'face) 'muse-link-face)
+      (when (memq (get-text-property (point) 'face)
+                  '(muse-link-face muse-bad-link-face))
         (goto-char (or (next-single-property-change (point) 'face)
                        (point-max))))
       (while (< cycled 2)
@@ -386,7 +393,8 @@ in `muse-project-alist'."
                           (setq next
                                 (next-single-property-change
                                  next 'face)))
-                (when (eq (get-text-property next 'face) 'muse-link-face)
+                (when (memq (get-text-property next 'face)
+                            '(muse-link-face muse-bad-link-face))
                   (setq pos next)))
               (setq cycled 2)
             (goto-char (point-min))
@@ -406,7 +414,8 @@ This function is not entirely accurate, but it's close enough."
                           (setq prev
                                 (previous-single-property-change
                                  prev 'face)))
-              (when (eq (get-text-property prev 'face) 'muse-link-face)
+              (when (memq (get-text-property prev 'face)
+                          '(muse-link-face muse-bad-link-face))
                 (setq pos prev)))
               (setq cycled 2)
             (goto-char (point-max))
