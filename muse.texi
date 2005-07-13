@@ -12,7 +12,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for the Emacs Muse version 3.01.
+This manual is for the Emacs Muse version 3.01.90 (3.02 RC1).
 
 Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
