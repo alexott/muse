@@ -194,6 +194,7 @@ when publishing files in that project."
               (cons (cons (muse-page-name path) path) nil))
       (setq lnames (cdr lnames)))
      (t                                 ; regexp
+      (muse-assert (file-name-directory path))
       (dolist (file (directory-files
                      (file-name-directory path) t
                      (file-name-nondirectory path)))

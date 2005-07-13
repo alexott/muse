@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-13 03:38:52 GMT	Michael Olson <mwolson@gnu.org>	patch-132
+
+    Summary:
+      Add invalid directory assertion.
+    Revision:
+      muse--main--1.0--patch-132
+
+    * lisp/muse-project.el (muse-project-file-entries): Add assertion so that
+      any invalid directories will trigger an error.
+
+    modified files:
+     ChangeLog lisp/muse-project.el
+
+
 2005-07-12 07:54:08 GMT	Michael Olson <mwolson@gnu.org>	patch-131
 
     Summary:
