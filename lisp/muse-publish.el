@@ -56,6 +56,7 @@ See `muse-publish' for more information."
   "A list of functions used to prepare URLs for publication.
 Each is passed the URL and expects a URL to be returned."
   :type 'hook
+  :options '(muse-publish-prepare-url)
   :group 'muse-publish)
 
 (defcustom muse-publish-report-threshhold 100000
@@ -513,9 +514,12 @@ contents were requested.")
           (muse-page-name file)
           (muse-style-element :suffix style)))
 
-(defsubst muse-publish-output-file (file output-dir &optional style)
+(defsubst muse-publish-output-file (file &optional output-dir style)
   (setq style (muse-style style))
-  (expand-file-name (muse-publish-output-name file style) output-dir))
+  (if output-dir
+      (expand-file-name (muse-publish-output-name file style) output-dir)
+    (concat (file-name-directory file)
+            (muse-publish-output-name file style))))
 
 (defun muse-publish-file (file style &optional output-dir force)
   "Publish the given file in list FILES.
@@ -946,11 +950,18 @@ like read-only from being inadvertently deleted."
     (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-markup-link ()
-  (let ((explicit (save-match-data
-                    (if (string-match muse-explicit-link-regexp
-                                      (match-string 0))
-                        t nil))))
-    (muse-publish-insert-url (match-string 1) (match-string 2) explicit)))
+  (let* ((explicit (save-match-data
+                     (if (string-match muse-explicit-link-regexp
+                                       (match-string 0))
+                         t nil)))
+         (link (if explicit
+                   (progn
+                     (goto-char (match-beginning 1))
+                     (muse-handle-explicit-link))
+                 (goto-char (match-beginning 0))
+                 (muse-handle-implicit-link))))
+    (when link
+      (muse-publish-insert-url link (match-string 2) explicit))))
 
 (defun muse-publish-markup-url ()
   (muse-publish-insert-url (match-string 0)))

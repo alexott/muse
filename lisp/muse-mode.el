@@ -86,7 +86,12 @@ so only enable this if you don't use either of these."
   "A hook that is run when Muse mode is entered."
   :type 'hook
   :options '(flyspell-mode footnote-mode turn-on-auto-fill
-             highlight-changes-mode)
+             highlight-changes-mode
+             muse-wiki-update-custom-values)
+  :set #'(lambda (sym val)
+           (when (featurep 'muse-wiki)
+             (add-to-list 'val 'muse-wiki-update-custom-values))
+           (set sym val))
   :group 'muse-mode)
 
 (defvar muse-mode-map

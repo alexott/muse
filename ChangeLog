@@ -2,6 +2,57 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-13 21:12:27 GMT	Michael Olson <mwolson@gnu.org>	patch-133
+
+    Summary:
+      Make published link handling do the right thing, plus misc. fixes.
+    Revision:
+      muse--main--1.0--patch-133
+
+    * lisp/muse-mode.el (muse-mode-hook): Add option for
+      `muse-wiki-update-custom-values'.  The :set function makes sure that
+      this is always included in `muse-mode-hook' if muse-wiki is loaded.
+      This probably isn't best-practice, but it works.
+    
+    * lisp/muse-project.el (muse-project-of-file): Fix some duplicated code.
+      Save match data.
+    
+    * lisp/muse-publish.el (muse-publish-url-transforms): Add
+      `muse-publish-prepare-url' to the listed options.
+    
+    * lisp/muse-publish.el (muse-publish-output-file): Handle case where
+      output-dir is not specified.
+    
+    * lisp/muse-publish.el (muse-publish-markup-link): Call link handlers
+      here instead of later on.
+    
+    * lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Try to do the
+      right thing when `muse-wiki-interwiki-alist' is nil.
+    
+    * lisp/muse-wiki.el (muse-wiki-output-name): Removed in favor of calling
+      `muse-publish-output-file'.
+    
+    * lisp/muse-wiki.el (muse-wiki-transform-interwiki)
+      (muse-wiki-transform-wikiword): Removed.  We should not use the
+      publishing transforms facility to handle these.
+    
+    * lisp/muse-wiki.el ("muse-publish"): Publish wikiwords and interwiki
+      links as "link" rather than "url".
+    
+    * lisp/muse-wiki.el (muse-wiki-update-custom-values): New function that
+      takes care of any customization cleaups that need to happen whenever
+      muse-mode is entered.
+    
+    * lisp/muse.el (muse-implicit-link-functions): Add options for
+      `muse-handle-url' and the wiki handlers.
+      (muse-explicit-link-functions): Add option for
+      `muse-wiki-handle-internal'.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse-project.el
+     lisp/muse-publish.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-13 03:38:52 GMT	Michael Olson <mwolson@gnu.org>	patch-132
 
     Summary:
