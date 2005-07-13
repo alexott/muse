@@ -75,15 +75,7 @@
 (setq muse-wiki-interwiki-alist
       '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/plugwiki/")
         ("TheEmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
-        ("ArchWiki" . "http://wiki.gnuarch.org/")
-        ("WebWiki" .
-         (lambda (tag)
-           (concat "../web/"
-                   (or tag "WelcomePage"))))
-        ("ProjectsWiki" .
-         (lambda (tag)
-           (concat "../projects/"
-                   (or tag "WelcomePage"))))))
+        ("ArchWiki" . "http://wiki.gnuarch.org/")))
 
 ;;; Functions
 
@@ -176,7 +168,7 @@ If FILE is not specified, use the published version of the current file."
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
  '(muse-mode-auto-p nil)
- '(muse-mode-hook (quote (footnote-mode turn-on-auto-fill)))
+ '(muse-mode-hook (quote (footnote-mode turn-on-auto-fill muse-wiki-update-custom-values)))
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
  '(muse-xhtml-header "~/personal-site/muse/generic-header.html"))
 (custom-set-faces

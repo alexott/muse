@@ -120,19 +120,24 @@ style and ignore the others."
   (setq project (or project (caar muse-project-alist))
         page (or page (muse-get-keyword :default
                                         (cadr (muse-project project)))))
-  (let ((remote-style (car (muse-project-applicable-styles
-                            (muse-project-page-file page project)
-                            project)))
-        (local-style (car (muse-project-applicable-styles
+  (let* ((page-path (muse-project-page-file page project))
+         (remote-style (when page-path (car (muse-project-applicable-styles
+                                             page-path project))))
+         (local-style (car (muse-project-applicable-styles
                             (or muse-publishing-current-file buffer-file-name
                                 ;; astonishingly, sometimes even
                                 ;; buffer-file-name is not set!
                                 (concat default-directory (buffer-name)))
                             (cddr (muse-project-of-file))))))
-    (file-relative-name (expand-file-name
-                         page (muse-style-element :path remote-style))
-                        (expand-file-name
-                         (muse-style-element :path local-style)))))
+    (when remote-style
+      (let ((output
+             (file-relative-name (expand-file-name
+                                  page (muse-style-element :path remote-style))
+                                 (expand-file-name
+                                  (muse-style-element :path local-style)))))
+        (if muse-publishing-p
+            (muse-publish-output-file output nil remote-style)
+          output)))))
 
 (defun muse-wiki-handle-interwiki (&optional string)
   "If STRING or point has an interwiki link, resolve it and
@@ -214,10 +219,8 @@ called manually."
                                  (muse-match-string-no-properties 1) face)))))
 
      (defun muse-wiki-colors-nop-tag (beg end)
-       (when (and muse-wiki-hide-nop-tag
-                  (<= (- end beg) 5))
-         (add-text-properties beg end
-                              '(invisible muse intangible t))))
+       (add-text-properties beg (+ beg 5)
+                            '(invisible muse intangible t)))
 
      (add-to-list 'muse-colors-tags
                   '("nop" nil nil muse-wiki-colors-nop-tag)

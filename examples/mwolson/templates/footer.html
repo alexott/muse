@@ -1,0 +1,95 @@
+<!-- Page published by Muse ends here -->
+    <div class="navfoot"><lisp>
+      (when (muse-publishing-directive "related")
+        (concat
+          "\n<p><strong>Related:</strong>\n        "
+          (mapconcat
+            (lambda (page)
+              (concat "<a href=\"../bookmarks/"
+                      page "\">" page "</a>"))
+            (split-string
+              (muse-publishing-directive "related"))
+            "\n        ")
+          "\n      </p>"))
+      </lisp>
+      <hr />
+      <table width="100%" border="0" summary="Footer navigation">
+        <col width="90%" /><col width="5%" /><col width="5%" />
+        <tr>
+          <td align="left">
+            <lisp>
+              (concat
+                "[ <a href=\""
+                (muse-wiki-resolve-project-page)
+                "\">Front</a> | <a href=\""
+                (muse-wiki-resolve-project-page (muse-project))
+                "\">" (car (muse-project)) "</a>"
+                " | <a href=\""
+                (muse-wiki-resolve-project-page (muse-project) "WikiIndex")
+                "\">Index</a> | <a href=\""
+                "./wikisource/" (muse-page-name) "." muse-file-extension
+                "\">Source</a>"
+                " ]")
+            </lisp>
+          </td>
+          <td>
+            <a href="http://validator.w3.org/check?uri=referer"
+               style="text-decoration: none;">
+              <img src="http://www.w3.org/Icons/valid-xhtml10"
+                   alt="Valid XHTML 1.0!" height="31" width="88" />
+            </a>
+          </td>
+          <td>
+            <a href="http://jigsaw.w3.org/css-validator/"
+               style="text-decoration: none;">
+              <img style="border:0;width:88px;height:31px"
+                   src="http://jigsaw.w3.org/css-validator/images/vcss"
+                   alt="Valid CSS!" />
+            </a>
+          </td>
+        </tr>
+      </table>
+      <table width="100%">
+        <tr>
+          <td align="left">
+            <a href="http://www.gnu.org/software/emacs/emacs.html"
+               style="text-decoration: none;">
+            <img alt="Emacs logo 1"
+                 src="/static/logos/gnu_emacs_icon_grey.png" />
+            </a>
+            <a href="http://www.debian.org/"
+               style="text-decoration: none;">
+            <img alt="Debian logo" src="/static/logos/debian.png" />
+            </a>
+            <a href="http://www.gnu.org/software/emacs/emacs.html"
+               style="text-decoration: none;">
+            <img alt="Emacs logo 2" src="/static/logos/crtemacs.png" />
+            </a>
+            <a href="http://www.emacswiki.org/"
+               style="text-decoration: none;">
+            <img alt="Emacswiki.org logo"
+                 src="/static/logos/emacswiki.png" />
+            </a>
+            <a href="http://www.catb.org/hacker-emblem/"
+               style="text-decoration: none;">
+            <img alt="Hacker emblem" src="/static/logos/glider.png" />
+            </a>
+            <a href="http://hcoop.net/"
+               style="text-decoration: none;">
+            <img alt="hcoop logo" src="/static/logos/hcoop_member.png" />
+            </a>
+          </td>
+          <td align="right">
+            <span class="footdate">
+            Updated
+              <lisp>(format-time-string
+                      "%Y-%m-%d"
+                      (nth 5 (file-attributes muse-publishing-current-file)))
+              </lisp>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

@@ -2,6 +2,50 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-13 23:11:08 GMT	Michael Olson <mwolson@gnu.org>	patch-134
+
+    Summary:
+      Attempt to get the right file extension when publishing; more examples.
+    Revision:
+      muse--main--1.0--patch-134
+
+    * examples/mwolson/muse-init.el: Update my configuration.
+    
+    * examples/mwolson/templates: Store my web page templates here.
+    
+    * examples/mwolson/stylesheets: Store my CSS stylesheets here.
+    
+    * lisp/muse-publish.el (muse-publish-markup-link): Fix mangling of
+      descriptions.  Yet another reason to implement my list-returning from
+      handlers idea.
+    
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): Deal gracefully
+      with a few more edge cases.  Throw together a rough hack for
+      determining when to include the output file extension.
+    
+    * lisp/muse-wiki.el (muse-wiki-colors-nop-tag): Make this less odious,
+      but still ineffective.
+
+    new files:
+     examples/mwolson/templates/.arch-ids/=id
+     examples/mwolson/templates/.arch-ids/footer.html.id
+     examples/mwolson/templates/.arch-ids/generic-footer.html.id
+     examples/mwolson/templates/.arch-ids/generic-header.html.id
+     examples/mwolson/templates/.arch-ids/header.html.id
+     examples/mwolson/templates/footer.html
+     examples/mwolson/templates/generic-footer.html
+     examples/mwolson/templates/generic-header.html
+     examples/mwolson/templates/header.html
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el lisp/muse-publish.el
+     lisp/muse-wiki.el
+
+    new directories:
+     examples/mwolson/templates
+     examples/mwolson/templates/.arch-ids
+
+
 2005-07-13 21:12:27 GMT	Michael Olson <mwolson@gnu.org>	patch-133
 
     Summary:

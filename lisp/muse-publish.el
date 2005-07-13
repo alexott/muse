@@ -950,18 +950,17 @@ like read-only from being inadvertently deleted."
     (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-markup-link ()
-  (let* ((explicit (save-match-data
+  (let (desc explicit link)
+    (setq explicit (save-match-data
                      (if (string-match muse-explicit-link-regexp
                                        (match-string 0))
                          t nil)))
-         (link (if explicit
-                   (progn
-                     (goto-char (match-beginning 1))
-                     (muse-handle-explicit-link))
-                 (goto-char (match-beginning 0))
-                 (muse-handle-implicit-link))))
+    (setq desc (if explicit (match-string 2) (match-string 0)))
+    (setq link (if explicit
+                   (muse-handle-explicit-link (match-string 1))
+                 (muse-handle-implicit-link (match-string 0))))
     (when link
-      (muse-publish-insert-url link (match-string 2) explicit))))
+      (muse-publish-insert-url link desc explicit))))
 
 (defun muse-publish-markup-url ()
   (muse-publish-insert-url (match-string 0)))
