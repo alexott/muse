@@ -2,6 +2,61 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-14 23:27:14 GMT	Michael Olson <mwolson@gnu.org>	patch-138
+
+    Summary:
+      Merged from hodique@lifl.fr--2005 (patch 24-33)
+    Revision:
+      muse--main--1.0--patch-138
+
+    Patches applied:
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-24
+       Merged from mwolson@gnu.org--2005 (patch 96)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-25
+       Merged from mwolson@gnu.org--2005 (patch 97-101)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-26
+       Merged from mwolson@gnu.org--2005 (patch 102-106)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-27
+       Merged from mwolson@gnu.org--2005 (patch 107-120)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-28
+       Merged from mwolson@gnu.org--2005 (patch 121-131)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-29
+       Merged from mwolson@gnu.org--2005 (patch 132)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-30
+       Merged from mwolson@gnu.org--2005 (patch 133-135)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-31
+       Merged from mwolson@gnu.org--2005 (patch 136)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-32
+       Merged from mwolson@gnu.org--2005 (patch 137)
+    
+     * hodique@lifl.fr--2005/muse--yh--1.0--patch-33
+       Introduce :force-publish project keyword. Fix bug #2637
+
+    modified files:
+     ChangeLog lisp/muse-project.el
+
+    new patches:
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-24
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-25
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-26
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-27
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-28
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-29
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-30
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-31
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-32
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-33
+
+
 2005-07-14 20:48:56 GMT	Michael Olson <mwolson@gnu.org>	patch-137
 
     Summary:

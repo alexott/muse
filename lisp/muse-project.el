@@ -442,9 +442,10 @@ The name of a project may be used for STYLES."
     ;; publish all files in the project, for each style; the actual
     ;; publishing will only happen if the files are newer than the
     ;; last published output
-    (dolist (pair (muse-project-file-alist project))
-      (if (muse-project-publish-file (cdr pair) styles force)
-          (setq published t)))
+    (let ((forced-files (muse-get-keyword :force-publish (cadr project))))
+      (dolist (pair (muse-project-file-alist project))
+        (if (muse-project-publish-file (cdr pair) styles (or force (member (car pair) forced-files)))
+            (setq published t))))
     ;; run hook after publishing ends
     (run-hook-with-args 'muse-after-project-publish-hook project)
     ;; notify the user that everything is now done
