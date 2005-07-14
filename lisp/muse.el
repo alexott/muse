@@ -151,18 +151,54 @@ All this means is that certain extensions, like .gz, are removed."
   "Evaluate the given form and return the result as a string."
   (require 'pp)
   (save-match-data
-    (let ((object (eval (read form))))
-      (cond
-       ((stringp object) object)
-       ((and (listp object)
-             (not (eq object nil)))
-        (let ((string (pp-to-string object)))
-          (substring string 0 (1- (length string)))))
-       ((numberp object)
-        (number-to-string object))
-       ((eq object nil) "")
-       (t
-        (pp-to-string object))))))
+    (condition-case err
+        (let ((object (eval (read form))))
+          (cond
+           ((stringp object) object)
+           ((and (listp object)
+                 (not (eq object nil)))
+            (let ((string (pp-to-string object)))
+              (substring string 0 (1- (length string)))))
+           ((numberp object)
+            (number-to-string object))
+           ((eq object nil) "")
+           (t
+            (pp-to-string object))))
+      (error
+       (if (fboundp 'display-warning)
+           (display-warning 'muse
+                            (format "%s/%s: Error evaluating %s: %s"
+                                    (if (consp muse-current-project)
+                                        (car muse-current-project)
+                                      "")
+                                    (muse-page-name)
+                                    form
+                                    err)
+                            :warning)
+         (message "%s/%s: Error evaluating %s: %s"
+                  (if (consp muse-current-project)
+                      (car muse-current-project)
+                    "")
+                  (muse-page-name)
+                  form
+                  err))
+       "<!--INVALID LISP CODE-->"))))
+
+(defmacro muse-with-temp-buffer-no-prompt (&rest body)
+  "Create a temporary buffer, and evaluate BODY there like `progn'.
+See also `with-temp-file' and `with-output-to-string'.
+Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
+  (let ((temp-buffer (make-symbol "temp-buffer")))
+    `(let ((,temp-buffer (generate-new-buffer " *temp*")))
+       (unwind-protect
+           (with-current-buffer ,temp-buffer
+             ,@body)
+         (with-current-buffer ,temp-buffer
+           (set-buffer-modified-p nil))
+         (and (buffer-name ,temp-buffer)
+              (kill-buffer ,temp-buffer))))))
+(put 'muse-with-temp-buffer-no-prompt 'lisp-indent-function 0)
+(put 'muse-with-temp-buffer-no-prompt 'edebug-form-spec '(body))
 
 ;; The following code was extracted from cl
 

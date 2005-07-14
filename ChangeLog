@@ -2,6 +2,47 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-14 20:48:56 GMT	Michael Olson <mwolson@gnu.org>	patch-137
+
+    Summary:
+      Prevent temp buffers from prompting for save; handle lisp errors better.
+    Revision:
+      muse--main--1.0--patch-137
+
+    * lisp/muse-colors.el (muse-colors-region): Try to fix "Invalid search
+      bound" error.  I don't know for certain where this is coming from,
+      though ... *grumble*.
+    
+    * lisp/muse.el (muse-eval-lisp): Wrap this in a `condition-case', much
+      like how emacs-wiki does it.  Warn the user about lisp errors,
+      returning "<!--INVALID LISP CODE-->" if an error occurs.  This will
+      publish as something valid in most markup styles, with increased
+      emphasis on those that don't support it.  That's a win-win ... I think
+      :^) .
+    
+    * lisp/muse.el (muse-with-temp-buffer-no-prompt): New macro that acts
+      like `with-temp-buffer', but sets buffer-modfied-p to nil before trying
+      to kill the buffer so we don't get any annoying prompts.  I *strongly*
+      believe that this should be the default behavior of `with-temp-buffer'.
+    
+    * lisp/muse-book.el (muse-book-publish-project): Use
+      `muse-with-temp-buffer-no-prompt'.
+    
+    * lisp/muse-http.el (muse-http-reject): Ditto.
+    
+    * lisp/muse-mode.el (muse-index-as-string): Ditto.
+    
+    * lisp/muse-poem.el (muse-poem-markup-tag): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-markup-string, muse-publish-file): 
+      (muse-publish-markup-email, muse-published-contents): Ditto.
+
+    modified files:
+     ChangeLog lisp/muse-book.el lisp/muse-colors.el
+     lisp/muse-http.el lisp/muse-mode.el lisp/muse-poem.el
+     lisp/muse-publish.el lisp/muse.el
+
+
 2005-07-14 18:49:56 GMT	Michael Olson <mwolson@gnu.org>	patch-136
 
     Summary:

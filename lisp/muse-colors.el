@@ -384,14 +384,15 @@ of the functions listed in `muse-colors-markup'."
                   (case-fold-search nil)
                   markup-func)
               (goto-char beg)
-              (while (re-search-forward muse-colors-regexp end t)
-                (if verbose
-                    (message "Highlighting buffer...%d%%"
-                             (* (/ (float (- (point) beg)) len) 100)))
-                (setq markup-func
-                      (aref muse-colors-vector
-                            (char-after (match-beginning 0))))
-                (when markup-func (funcall markup-func)))
+              (when (< beg end)
+                (while (re-search-forward muse-colors-regexp end t)
+                  (if verbose
+                      (message "Highlighting buffer...%d%%"
+                               (* (/ (float (- (point) beg)) len) 100)))
+                  (setq markup-func
+                        (aref muse-colors-vector
+                              (char-after (match-beginning 0))))
+                  (when markup-func (funcall markup-func))))
               (run-hook-with-args 'muse-colors-buffer-hook
                                   beg end verbose)
               (if verbose (message "Highlighting buffer...done")))))

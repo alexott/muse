@@ -202,7 +202,7 @@ The form of usage is:
                 (cdr (assoc "title" attrs)) "\".*\n")
       (setq beg (point))
       (insert
-       (with-temp-buffer
+       (muse-with-temp-buffer-no-prompt
          (insert-file-contents page)
          (goto-char (point-min))
          (if (assoc "nohead" attrs)
