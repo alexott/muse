@@ -273,7 +273,7 @@ An implicit link is one that is not surrounded by brackets.
 
 By default, Muse handles URLs only.
 If you want to handle WikiWords, load muse-wiki.el."
-  :type '(repeat function)
+  :type 'hook
   :options '(muse-handle-url
              muse-wiki-handle-interwiki
              muse-wiki-handle-wikiword)
@@ -310,7 +310,7 @@ that is an accepted link."
 (defcustom muse-explicit-link-functions nil
   "A list of functions to handle an explicit link.
 An explicit link is one [[like][this]] or [[this]]."
-  :type '(repeat function)
+  :type 'hook
   :options '(muse-wiki-handle-interwiki)
   :group 'muse)
 

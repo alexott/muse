@@ -39,5 +39,15 @@ install: lisp muse.info
 test: 
 	(cd lisp && $(MAKE) test)
 
-dist: distclean
-	(cd ..; tar cvzf ~/Public/Emacs/muse.tar.gz muse)
+dist: distclean ../muse-$(VERSION).zip ../muse-$(VERSION).tar.gz
+	tla inventory -sB | tar -cf - --no-recursion -T- | \
+	  (mkdir -p ../muse-$(VERSION); cd ../muse-$(VERSION) && \
+	  tar xf -)
+	(cd .. && tar czf muse-$(VERSION).tar.gz muse-$(VERSION) ; \
+	  zip -r muse-$(VERSION).zip muse-$(VERSION))
+
+upload: dist
+	(cd .. && gpg --detach muse-$(VERSION).tar.gz && \
+	  gpg --detach muse-$(VERSION).zip && \
+	  scp muse-$(VERSION).zip* muse-$(VERSION).tar.gz* \
+	    mwolson@download.gna.org:/upload/muse-el)
