@@ -50,7 +50,8 @@ See `muse-docbook' for more information."
 (defcustom muse-docbook-header
   "<?xml version=\"1.0\" encoding=\"<lisp>
   (muse-docbook-encoding)</lisp>\"?>
-<!DOCTYPE article PUBLIC \"-//OASIS//DTD DocBook V4.2//EN\">
+<!DOCTYPE article PUBLIC \"-//OASIS//DTD DocBook V4.2//EN\"
+                  \"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd\">
 <article>
   <articleinfo>
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
@@ -75,8 +76,13 @@ See `muse-docbook' for more information."
     (10100 "</tbody>\\s-*</table>\\s-*<table[^>]*>\\s-*<tbody>\\s-*" 0 "")
     (10200 "</table>\\s-*<table[^>]*>\\s-*" 0 "")
 
+    ;; Merge consecutive list tags
+    (10300 ,(concat "</\\(itemized\\|ordered\\|variable\\)list>"
+                    "\\s-*<\\(itemized\\|ordered\\|variable\\)list"
+                    "[^>]*>") 0 "")
+
     ;; beginning of doc, end of doc, or plain paragraph separator
-    (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
+    (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
                     "\\(?:\n\\(["
                     muse-regexp-blank
                     "]*\n\\)+\\|\\`\\s-*\\|\\s-*\\'\\)"
@@ -239,24 +245,17 @@ match is found, `muse-docbook-charset-default' is used instead."
             "</" col ">\n" "</row>\n" "</" row ">\n"
             "</table>\n")))
 
-(defcustom muse-docbook-merged-tags
-  '("itemizedlist" "orderedlist" "section" "variablelist")
-  "Tags which need to be merged together if they are consecutive."
-  :type '(repeat (string :tag "Tag"))
-  :group 'muse-docbook)
-
-(defun muse-docbook-fixup-tags ()
-  "Merge multiple sections of tags from `muse-docbook-merged-tags'."
-  (dolist (tag muse-docbook-merged-tags)
-    (goto-char (point-min))
-    (let (last)
-      (while (re-search-forward (concat "\n*<" tag ">") nil t)
-        (when last
-          (replace-match (concat "\n</" tag ">\n\n<" tag ">")))
-        (setq last (match-beginning 0)))
+(defun muse-docbook-fixup-sections ()
+  "Add </section> tags."
+  (goto-char (point-min))
+  (let (last)
+    (while (re-search-forward "\n*<section>" nil t)
       (when last
-        (goto-char (point-max))
-        (insert "</" tag ">")))))
+        (replace-match "\n</section>\n\n<section>"))
+      (setq last (match-beginning 0)))
+    (when last
+      (goto-char (point-max))
+      (insert "</section>"))))
 
 (defun muse-docbook-finalize-buffer ()
   (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
@@ -272,7 +271,7 @@ match is found, `muse-docbook-charset-default' is used instead."
                      :functions  'muse-docbook-markup-functions
                      :strings    'muse-docbook-markup-strings
                      :specials   'muse-docbook-markup-specials
-                     :before-end 'muse-docbook-fixup-tags
+                     :before-end 'muse-docbook-fixup-sections
                      :after      'muse-docbook-finalize-buffer
                      :header     'muse-docbook-header
                      :footer     'muse-docbook-footer

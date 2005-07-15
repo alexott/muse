@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-15 01:50:05 GMT	Michael Olson <mwolson@gnu.org>	patch-140
+
+    Summary:
+      Do the right thing with consecutive list items, hopefully.
+    Revision:
+      muse--main--1.0--patch-140
+
+    * lisp/muse-docbook.el: Apply patch from Dale Smith and add to it.
+      (muse-docbook-header): Add DTD string.
+      (muse-docbook-markup-regexps): Add rule that merges consecutive list
+      tags.
+      (muse-docbook-merged-tags, muse-docbook-fixup-tags): Removed.
+      ("docbook"): Change :before-end back to 'muse-docbook-fixup-sections.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el
+
+
 2005-07-15 01:07:35 GMT	Michael Olson <mwolson@gnu.org>	patch-139
 
     Summary:
