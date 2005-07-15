@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-15 04:40:26 GMT	Michael Olson <mwolson@gnu.org>	patch-142
+
+    Summary:
+      muse-docbook: Parse author directive so that it validates properly.
+    Revision:
+      muse--main--1.0--patch-142
+
+    * lisp/muse-docbook.el (muse-docbook-get-author): New function that
+      attempts to publish the contents a DocBook-usable <author> tag.
+      (muse-docbook-header): Use `muse-docbook-get-author'.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el
+
+
 2005-07-15 01:57:51 GMT	Michael Olson <mwolson@gnu.org>	patch-141
 
     Summary:

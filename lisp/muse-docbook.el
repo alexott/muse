@@ -55,7 +55,8 @@ See `muse-docbook' for more information."
 <article>
   <articleinfo>
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
-    <author><lisp>(muse-publishing-directive \"author\")</lisp></author>
+    <author><lisp>(muse-docbook-get-author
+                    (muse-publishing-directive \"author\"))</lisp></author>
     <pubdate><lisp>(muse-publishing-directive \"date\")</lisp></pubdate>
   </articleinfo>
   <!-- Page published by Emacs Muse begins here -->\n"
@@ -243,6 +244,33 @@ match is found, `muse-docbook-charset-default' is used instead."
             (mapconcat 'identity fields (format "</%s><%s>" col col))
             "</" col ">\n" "</row>\n" "</" row ">\n"
             "</table>\n")))
+
+(defun muse-docbook-get-author (&optional author)
+  "Split the AUTHOR directive into separate fields.
+AUTHOR should be of the form: \"Firstname Other Names Lastname\",
+and anything after `Firstname' is optional."
+  (setq author (save-match-data (split-string author nil t)))
+  (let ((num-el (length author)))
+    (cond ((eq num-el 1)
+           (concat "<firstname>" (car author) "</firstname>"))
+          ((eq num-el 2)
+           (concat "<firstname>" (nth 0 author) "</firstname>"
+                   "<surname>" (nth 1 author) "</surname>"))
+          ((eq num-el 3)
+           (concat "<firstname>" (nth 0 author) "</firstname>"
+                   "<othername>" (nth 1 author) "</othername>"
+                   "<surname>" (nth 2 author) "</surname>"))
+          (t
+           (let (first last)
+             (setq first (car author))
+             (setq author (nreverse (cdr author)))
+             (setq last (car author))
+             (setq author (nreverse (cdr author)))
+             (concat "<firstname>" first "</firstname>"
+                     "<othername>"
+                     (mapconcat 'identity author " ")
+                     "</othername>"
+                     "<surname>" last "</surname>"))))))
 
 (defun muse-docbook-fixup-sections ()
   "Add </section> tags."
