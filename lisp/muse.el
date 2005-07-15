@@ -167,18 +167,12 @@ All this means is that certain extensions, like .gz, are removed."
       (error
        (if (fboundp 'display-warning)
            (display-warning 'muse
-                            (format "%s/%s: Error evaluating %s: %s"
-                                    (if (consp muse-current-project)
-                                        (car muse-current-project)
-                                      "")
+                            (format "%s: Error evaluating %s: %s"
                                     (muse-page-name)
                                     form
                                     err)
                             :warning)
-         (message "%s/%s: Error evaluating %s: %s"
-                  (if (consp muse-current-project)
-                      (car muse-current-project)
-                    "")
+         (message "%s: Error evaluating %s: %s"
                   (muse-page-name)
                   form
                   err))

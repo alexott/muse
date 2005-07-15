@@ -64,9 +64,7 @@ Each function is passed the project object, a cons with the format
             (cond ((stringp (car head))
                    (add-to-list 'res (car head))
                    (setq head (cdr head)))
-                  ((and (symbolp (car head))
-                        (or (symbolp (cadr head))
-                            (stringp (cadr head))))
+                  ((symbolp (car head))
                    (add-to-list 'res (list (car head) (cadr head)) t)
                    (setq head (cddr head)))
                   (t
@@ -95,33 +93,69 @@ Muse can make use of."
 (define-widget 'muse-project 'lazy
   "A widget that defines a Muse project."
   :tag "Project"
-  :type '(cons (repeat :tag "Contents"
-                    (choice
-                     (string :tag "Directory")
-                     (list :tag "Setting"
-                      (choice :tag "Property"
-                              (const :book-chapter)
-                              (const :book-end)
+  :type '(cons (repeat :tag "Settings"
+                (choice
+                        (string :tag "Directory")
+                        (list :tag "Book function"
                               (const :book-funcall)
+                              (choice (function)
+                                      (sexp :tag "Unknown")))
+                        (list :tag "Book part"
                               (const :book-part)
+                              (string :tag "Name"))
+                        (list :tag "Book style"
                               (const :book-style)
+                              (string :tag "Style"))
+                        (list :tag "Default file"
                               (const :default)
+                              (string :tag "File"))
+                        (list :tag "End of book"
+                              (const :book-end)
+                              (const t))
+                        (list :tag "Force publishing"
+                              (const :force-publish)
+                              (repeat (string :tag "File")))
+                        (list :tag "Major mode"
                               (const :major-mode)
+                              (choice (function :tag "Mode")
+                                      (sexp :tag "Unknown")))
+                        (list :tag "New chapter"
+                              (const :book-chapter)
+                              (string :tag "Name"))
+                        (list :tag "No chapters"
                               (const :nochapters)
+                              (const t))
+                        (list :tag "Set variables"
                               (const :set)
-                              (const :visit-link))
-                      (choice :tag "Value"
-                              (string) (symbol)))))
-               (repeat (repeat :tag "Style"
-                               (group :inline t
-                                     (choice
-                                      :tag "Property"
-                                      (const :base)
-                                      (const :base-url)
-                                      (const :exclude)
-                                      (const :include)
-                                      (const :path))
-                                     (string :tag "Value"))))))
+                              (repeat (list (symbol :tag "Variable")
+                                            (sexp :tag "Setting"))))
+                        (list :tag "Visit links using"
+                              (const :visit-link)
+                              (choice (function)
+                                      (sexp :tag "Unknown")))))
+               (repeat :tag "Styles"
+                       (repeat :tag "Style" :inline t
+                               (set :tag "Setting"
+                                       (list :inline t
+                                             :tag "Publishing style"
+                                             (const :base)
+                                             (string :tag "Style"))
+                                       (list :inline t
+                                             :tag "Base URL"
+                                             (const :base-url)
+                                             (string :tag "URL"))
+                                       (list :inline t
+                                             :tag "Exclude matching"
+                                             (const :exclude)
+                                             (regexp))
+                                       (list :inline t
+                                             :tag "Include matching"
+                                             (const :include)
+                                             (regexp))
+                                       (list :inline t
+                                             :tag "Path"
+                                             (const :path)
+                                             (string :tag "Path")))))))
 
 (defcustom muse-project-alist nil
   "An alist of Muse projects.
@@ -444,8 +478,9 @@ The name of a project may be used for STYLES."
     ;; last published output
     (let ((forced-files (muse-get-keyword :force-publish (cadr project))))
       (dolist (pair (muse-project-file-alist project))
-        (if (muse-project-publish-file (cdr pair) styles (or force (member (car pair) forced-files)))
-            (setq published t))))
+        (when (muse-project-publish-file
+               (cdr pair) styles (or force (member (car pair) forced-files)))
+          (setq published t))))
     ;; run hook after publishing ends
     (run-hook-with-args 'muse-after-project-publish-hook project)
     ;; notify the user that everything is now done
