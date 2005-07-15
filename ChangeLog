@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-15 01:57:51 GMT	Michael Olson <mwolson@gnu.org>	patch-141
+
+    Summary:
+      Be a bit more clever with our consecutive list regexp.
+    Revision:
+      muse--main--1.0--patch-141
+
+    * lisp/muse-docbook.el (muse-docbook-markup-regexps): Be a bit more
+      clever with our consecutive list regexp.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el
+
+
 2005-07-15 01:50:05 GMT	Michael Olson <mwolson@gnu.org>	patch-140
 
     Summary:

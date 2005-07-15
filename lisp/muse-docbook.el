@@ -78,8 +78,7 @@ See `muse-docbook' for more information."
 
     ;; Merge consecutive list tags
     (10300 ,(concat "</\\(itemized\\|ordered\\|variable\\)list>"
-                    "\\s-*<\\(itemized\\|ordered\\|variable\\)list"
-                    "[^>]*>") 0 "")
+                    "\\s-*<\\1list" "[^>]*>\\s-*") 0 "")
 
     ;; beginning of doc, end of doc, or plain paragraph separator
     (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
