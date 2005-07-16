@@ -121,8 +121,8 @@ so only enable this if you don't use either of these."
       (define-key map [(shift mouse-2)]
         'muse-follow-name-at-mouse-other-window))
 
-    (if (or (featurep 'xemacs) muse-under-windows-p)
-        (define-key map [(shift tab)] 'muse-previous-reference)
+    (define-key map [(shift tab)] 'muse-previous-reference)
+    (unless (featurep 'xemacs)
       (define-key map [(shift iso-lefttab)] 'muse-previous-reference)
       (define-key map [(shift control ?i)] 'muse-previous-reference))
 

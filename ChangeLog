@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-16 04:56:02 GMT	Michael Olson <mwolson@gnu.org>	patch-145
+
+    Summary:
+      S-TAB issue with Windows.
+    Revision:
+      muse--main--1.0--patch-145
+
+    * lisp/muse-mode.el (muse-mode-map): Try once more to fix the Shift-TAB
+      issue with Windows.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-07-16 04:39:52 GMT	Michael Olson <mwolson@gnu.org>	patch-144
 
     Summary:
