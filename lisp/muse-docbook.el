@@ -249,7 +249,7 @@ match is found, `muse-docbook-charset-default' is used instead."
   "Split the AUTHOR directive into separate fields.
 AUTHOR should be of the form: \"Firstname Other Names Lastname\",
 and anything after `Firstname' is optional."
-  (setq author (save-match-data (split-string author nil t)))
+  (setq author (save-match-data (split-string author)))
   (let ((num-el (length author)))
     (cond ((eq num-el 1)
            (concat "<firstname>" (car author) "</firstname>"))
