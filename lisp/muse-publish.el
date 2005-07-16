@@ -482,7 +482,7 @@ contents were requested.")
 (defun muse-publish-markup-string (string &optional style)
   "Markup STRING using the given STYLE's markup rules."
   (setq style (muse-style style))
-  (muse-with-temp-buffer-no-prompt
+  (muse-with-temp-buffer
     (insert string)
     (let ((muse-publishing-current-style style)
           (muse-publishing-p t))
@@ -541,8 +541,8 @@ the file is published no matter what."
                (> (nth 7 (file-attributes file))
                   muse-publish-report-threshhold))
           (message "Publishing %s ..." file))
-      (muse-with-temp-buffer-no-prompt
-        (insert-file-contents file t)
+      (muse-with-temp-buffer
+        (insert-file-contents file)
         (muse-publish-markup-buffer (muse-page-name file) style)
         (let ((backup-inhibited t))
           (write-file output-path))
@@ -903,7 +903,7 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-markup-email ()
   (let* ((beg (match-end 1))
          (addr (buffer-substring-no-properties beg (match-end 0))))
-    (muse-with-temp-buffer-no-prompt
+    (muse-with-temp-buffer
       (insert addr)
       (muse-publish-escape-specials (point-min) (point-max))
       (setq addr (buffer-string)))
@@ -1052,7 +1052,7 @@ like read-only from being inadvertently deleted."
 
 (defun muse-published-contents (file)
   (when (file-readable-p file)
-    (muse-with-temp-buffer-no-prompt
+    (muse-with-temp-buffer
       (insert-file-contents file)
       (muse-published-buffer-contents (current-buffer)))))
 

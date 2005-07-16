@@ -178,21 +178,32 @@ All this means is that certain extensions, like .gz, are removed."
                   err))
        "<!--INVALID LISP CODE-->"))))
 
-(defmacro muse-with-temp-buffer-no-prompt (&rest body)
+(defmacro muse-with-temp-buffer (&rest body)
   "Create a temporary buffer, and evaluate BODY there like `progn'.
 See also `with-temp-file' and `with-output-to-string'.
 Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
   (let ((temp-buffer (make-symbol "temp-buffer")))
     `(let ((,temp-buffer (generate-new-buffer " *temp*")))
        (unwind-protect
-           (with-current-buffer ,temp-buffer
-             ,@body)
+           (condition-case err
+               (with-current-buffer ,temp-buffer
+                 ,@body)
+             (error
+              (if (fboundp 'display-warning)
+                  (display-warning 'muse
+                                   (format "%s: Error occurred: %s"
+                                           (muse-page-name)
+                                           err)
+                                   :warning)
+                (message "%s: Error occured: %s"
+                         (muse-page-name)
+                         err))))
          (with-current-buffer ,temp-buffer
            (set-buffer-modified-p nil))
          (and (buffer-name ,temp-buffer)
               (kill-buffer ,temp-buffer))))))
-(put 'muse-with-temp-buffer-no-prompt 'lisp-indent-function 0)
-(put 'muse-with-temp-buffer-no-prompt 'edebug-form-spec '(body))
+(put 'muse-with-temp-buffer 'lisp-indent-function 0)
+(put 'muse-with-temp-buffer 'edebug-form-spec '(body))
 
 ;; The following code was extracted from cl
 

@@ -461,7 +461,7 @@ This function is not entirely accurate, but it's close enough."
                      (function
                       (lambda (l r)
                         (string-lessp (car l) (car r)))))))
-    (muse-with-temp-buffer-no-prompt
+    (muse-with-temp-buffer
       (while files
         (unless (and exclude-private
                      (muse-project-private-p (cdar files)))

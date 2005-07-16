@@ -151,7 +151,7 @@ pages has changed since it was last published."
     ;; Create the book from all its component parts
     (if (not publish)
         (message "The book \"%s\" is up-to-date." book)
-      (muse-with-temp-buffer-no-prompt
+      (muse-with-temp-buffer
         (let ((style-final  (muse-style-element :final  style t))
               (style-header (muse-style-element :header style))
               (style-footer (muse-style-element :footer style))

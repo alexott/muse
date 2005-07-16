@@ -116,7 +116,7 @@ customization group."
   (httpd-send-eof))
 
 (defun muse-http-reject (title msg &optional annotation)
-  (muse-with-temp-buffer-no-prompt
+  (muse-with-temp-buffer
     (insert msg ".\n")
     (if annotation
         (insert annotation "\n"))
