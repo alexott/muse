@@ -455,12 +455,17 @@ This function is not entirely accurate, but it's close enough."
       (pop-to-buffer (current-buffer))))
   (message "Generating Muse index...done"))
 
-(defun muse-index-as-string (&optional as-list exclude-private)
-  "Generate an index of all Muse pages."
+(defun muse-index-as-string (&optional as-list exclude-private exclude-current)
+  "Generate an index of all Muse pages.
+If AS-LIST is non-nil, insert a dash and spaces before each item.
+If EXCLUDE-PRIVATE is non-nil, exclude files that have private permissions.
+If EXCLUDE-CURRENT is non-nil, exclude the current file from the output."
   (let ((files (sort (copy-alist (muse-project-file-alist))
                      (function
                       (lambda (l r)
                         (string-lessp (car l) (car r)))))))
+    (when (and exclude-current (muse-page-name))
+      (setq files (delete (assoc (muse-page-name) files) files)))
     (muse-with-temp-buffer
       (while files
         (unless (and exclude-private
