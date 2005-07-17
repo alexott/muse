@@ -198,10 +198,10 @@ Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
                 (message "%s: Error occured: %s"
                          (muse-page-name)
                          err))))
-         (with-current-buffer ,temp-buffer
-           (set-buffer-modified-p nil))
-         (and (buffer-name ,temp-buffer)
-              (kill-buffer ,temp-buffer))))))
+           (and (buffer-name ,temp-buffer)
+                (with-current-buffer ,temp-buffer
+                  (set-buffer-modified-p nil))
+                (kill-buffer ,temp-buffer))))))
 (put 'muse-with-temp-buffer 'lisp-indent-function 0)
 (put 'muse-with-temp-buffer 'edebug-form-spec '(body))
 

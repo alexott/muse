@@ -83,8 +83,8 @@ Each is passed the URL and expects a URL to be returned."
     ;; define anchor points
     (1400 "^#\\(\\S-+\\)\\s-*" 0 anchor)
 
-    ;; replace links in the buffer (links to other pages)
-    (1500 muse-explicit-link-regexp 0 link)
+    ;; prevent emphasis characters in explicit links from being marked
+    (1500 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
 
     ;; emphasized or literal text
     (1600 ,(concat
@@ -109,17 +109,10 @@ Each is passed the URL and expects a URL to be returned."
     ;; horizontal rule, or section separator
     (1900 "^----+" 0 rule)
 
-    (2000 ,(concat "\n*\\(^\\|["
-                   muse-regexp-blank
-                   "]+\\)--\\($\\|["
-                   muse-regexp-blank
-                   "]+\\)")
-          0 emdash)
-
     ;; beginning of footnotes section
-    (2100 "^Footnotes:?\\s-*" 0 fn-sep)
+    (2000 "^Footnotes:?\\s-*" 0 fn-sep)
     ;; footnote definition/reference (def if at beginning of line)
-    (2200 "\\[\\([1-9][0-9]*\\)\\]" 0 footnote)
+    (2100 "\\[\\([1-9][0-9]*\\)\\]" 0 footnote)
 
     ;; unnumbered List items begin with a -.  numbered list items
     ;; begin with number and a period.  definition lists have a
@@ -129,7 +122,7 @@ Each is passed the URL and expects a URL to be returned."
     ;; reason all of these rules are handled here, is so that
     ;; blockquote detection doesn't interfere with indented list
     ;; members.
-    (2300 ,(concat "^["
+    (2200 ,(concat "^["
                    muse-regexp-blank
                    "]+\\(-["
                    muse-regexp-blank
@@ -140,15 +133,22 @@ Each is passed the URL and expects a URL to be returned."
                    "]+::\n?\\)")
           1 list)
 
-    (2400 ,(concat "^\\(\\(?:.+?\\)["
+    (2300 ,(concat "^\\(\\(?:.+?\\)["
                    muse-regexp-blank
                    "]+::\n?\\)")
           0 list)
 
-    (2500 ,(concat "^\\(["
+    (2400 ,(concat "^\\(["
                    muse-regexp-blank
                    "]+\\)")
           0 quote)
+
+    (2500 ,(concat "\\(^\\|["
+                   muse-regexp-blank
+                   "]+\\)--\\($\\|["
+                   muse-regexp-blank
+                   "]+\\)")
+          0 emdash)
 
     ;; "verse" text is indicated the same way as a quoted e-mail
     ;; response: "> text", where text may contain initial whitespace
@@ -170,7 +170,10 @@ Each is passed the URL and expects a URL to be returned."
                    "]+.+?\\)\\)$")
           0 table)
 
-    ;; base URLs
+    ;; replace links in the buffer (links to other pages)
+    (2900 muse-explicit-link-regexp 0 link)
+
+    ;; bare URLs
     (3000 muse-url-regexp  0 url)
 
     ;; bare email addresses
@@ -664,8 +667,11 @@ the file is published no matter what."
                         close-tag (muse-markup-text 'end-more-emph)))
          ((= l 3) (setq open-tag (muse-markup-text 'begin-most-emph)
                         close-tag (muse-markup-text 'end-most-emph)))))))
-    (if (and (setq loc (search-forward leader nil t))
+    (if (and (not (get-text-property beg 'noemphasis))
+             (setq loc (search-forward leader nil t))
              (eq 0 (skip-syntax-forward "w" (1+ loc)))
+             (not (eq (char-syntax (char-before (point))) ?\ ))
+             (not (get-text-property (point) 'noemphasis))
              (or multi-line (= 1 (count-lines beg loc))))
         (progn
           (replace-match "")
@@ -994,6 +1000,12 @@ like read-only from being inadvertently deleted."
 
 (defun muse-publish-mark-read-only (beg end)
   (add-text-properties beg end '(rear-nonsticky (read-only) read-only t))
+  nil)
+
+(defun muse-publish-mark-noemphasis (&optional beg end)
+  (unless beg (setq beg (match-beginning 0)))
+  (unless end (setq end (match-end 0)))
+  (add-text-properties beg end '(noemphasis t))
   nil)
 
 (defun muse-publish-verbatim-tag (beg end)

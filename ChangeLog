@@ -2,6 +2,40 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-17 20:52:18 GMT	Michael Olson <mwolson@gnu.org>	patch-149
+
+    Summary:
+      Fix links in table, links in verbatim, emphasis publishing, publishing from script.
+    Revision:
+      muse--main--1.0--patch-149
+
+    * lisp/muse-colors.el (muse-colors-emphasized): Fix an edge case where
+      the beginning of a header would be emphasized if an asterisk came
+      before it.
+      (muse-colors-underlined): Don't allow end of underlined text to be the
+      beginning of a line.  Don't use memq to check for whitespace syntax; eq
+      is sufficient.
+    
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Mark links later
+      on.  We'll use a more clever trick to keep emphasis characters from
+      being interpreted in explicit links -- add a custom 'noemphasis text
+      property to them.  Move mdash rule further down so that I can add
+      designations after blockquoted text.
+    
+    * lisp/muse-publish.el (muse-publish-markup-word): If beginning or end of
+      text has the 'noemphasis property, ignore it.
+      (muse-publish-mark-noemphasis): New function that adds the 'noemphasis
+      property to the text between BEG and END, or match beginning and end.
+    
+    * lisp/muse.el (muse-with-temp-buffer): Make sure the buffer is alive
+      before trying to set buffer-modified to nil.  This should fix a
+      "selecting deleted buffer" error when publishing from command line.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-publish.el
+     lisp/muse.el
+
+
 2005-07-17 18:36:55 GMT	Michael Olson <mwolson@gnu.org>	patch-148
 
     Summary:

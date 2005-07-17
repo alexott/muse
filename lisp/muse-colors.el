@@ -212,7 +212,7 @@ whether progress messages should be displayed to the user."
             ;; or no '*' at end
             (unless (or (> leader 3)
                         (not (eq leader (- e2 b2)))
-                        (eq (char-before b2) ?\ )
+                        (eq (char-syntax (char-before b2)) ?\ )
                         (not (eq (char-after b2) ?*)))
               (add-text-properties beg e1 '(invisible muse))
               (add-text-properties
@@ -230,7 +230,7 @@ whether progress messages should be displayed to the user."
     (unless (eq (get-text-property start 'invisible) 'muse)
       ;; beginning of line or space or symbol
       (when (or (= start (point-min))
-                (memq (char-syntax (char-before start)) '(?\  ?\-))
+                (eq (char-syntax (char-before start)) ?\ )
                 (memq (char-before start)
                       '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
         (save-excursion
@@ -240,7 +240,7 @@ whether progress messages should be displayed to the user."
             (skip-chars-forward "^_<>" end))
           ;; Abort if space exists just before end
           ;; or no '_' at end
-          (unless (or (eq (char-before (point)) ?\ )
+          (unless (or (eq (char-syntax (char-before (point))) ?\ )
                       (not (eq (char-after (point)) ?_)))
             (add-text-properties start (1+ start) '(invisible muse))
             (add-text-properties (1+ start) (point) '(face underline))
