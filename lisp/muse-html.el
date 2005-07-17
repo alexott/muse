@@ -84,7 +84,7 @@ shown in the following example.
   :group 'muse-html)
 
 (defcustom muse-html-header
-  "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">
+  "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
 <html>
   <head>
     <title><lisp>
@@ -226,7 +226,7 @@ For more on the structure of this list, see
 
 (defcustom muse-html-markup-strings
   '((image-with-desc . "<img src=\"%s\" alt=\"%s\">")
-    (image-link      . "<img src=\"%s\">")
+    (image-link      . "<img src=\"%s\" alt=\"\">")
     (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\"></a>")
     (url-link        . "<a href=\"%s\">%s</a>")
     (email-addr      . "<a href=\"mailto:%s\">%s</a>")

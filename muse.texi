@@ -1127,23 +1127,23 @@ The "qotd", or Quote of the Day, is entirely optional.  When generated
 to HTML, this entry is rendered as the following.
 
 @example
-  <div id="entry">
-    <div id="entry-qotd">
+  <div class="entry">
+    <div class="entry-qotd">
       <h3>Quote of the Day:</h3>
       <p>"You know who you are. It comes down to a simple gut
         check: You either love what you do or you don't. Period."
         -- P. Bronson</p>
     </div>
-    <div id="entry-body">
-      <div id="entry-head">
-        <div id="entry-date">
+    <div class="entry-body">
+      <div class="entry-head">
+        <div class="entry-date">
           <span class="date">March 17, 2004</span>
         </div>
-        <div id="entry-title">
+        <div class="entry-title">
           <h2>Title of entry</h2>
         </div>
       </div>
-      <div id="entry-text">
+      <div class="entry-text">
         <p>Text for the entry.</p>
       </div>
     </div>
