@@ -56,20 +56,12 @@ install: build
 	install -m 644 experimental/*.el	$(PKGDIR)$(LISPDIR)/experimental
 	install -m 644 contrib/*.el		$(PKGDIR)$(LISPDIR)/contrib
 	install -m 644 contrib/pyblosxom/*.py	$(PKGDIR)$(DOCDIR)/contrib/pyblosxom
-	install -m 644 examples/QuickStart	$(PKGDIR)$(DOCDIR)/examples
-	install -m 644 examples/QuickStart.html	$(PKGDIR)$(DOCDIR)/examples
-	install -m 644 examples/QuickStart.info	$(PKGDIR)$(DOCDIR)/examples
-	install -m 644 examples/QuickStart.pdf	$(PKGDIR)$(DOCDIR)/examples
-	install -m 644 examples/publish-project	$(PKGDIR)$(DOCDIR)/examples
-	install -m 644 examples/johnw/muse-johnw.el  $(PKGDIR)$(DOCDIR)/examples/johnw
-	install -m 644 examples/johnw/publish-johnw  $(PKGDIR)$(DOCDIR)/examples/johnw
-	install -m 644 examples/mwolson/muse-init.el $(PKGDIR)$(DOCDIR)/examples/mwolson
 
 	# Other documentation
-#	install -m 0644 debian/changelog ${PKGDIR}${DOCDIR}/changelog.Debian
-#	install -m 0644 ChangeLog ${PKGDIR}${DOCDIR}/changelog
-#	cat ChangeLog.2004 >> ${PKGDIR}${DOCDIR}/changelog
-#	gzip -9f ${PKGDIR}${DOCDIR}/changelog
+	install -m 0644 AUTHORS ${PKGDIR}${DOCDIR}/AUTHORS
+	install -m 0644 README ${PKGDIR}${DOCDIR}/README
+	install -m 0644 ChangeLog ${PKGDIR}${DOCDIR}/changelog
+	cat ChangeLog.2004 >> ${PKGDIR}${DOCDIR}/changelog
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -81,7 +73,7 @@ binary-arch: build install
 	dh_testroot
 #	dh_installdebconf	
 	dh_installdocs
-#	dh_installexamples
+	dh_installexamples
 #	dh_installmenu
 #	dh_installlogrotate
 	dh_installemacsen

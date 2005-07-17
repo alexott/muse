@@ -2,6 +2,47 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-17 23:23:34 GMT	Michael Olson <mwolson@gnu.org>	patch-150
+
+    Summary:
+      Improve debian build and put together a package.
+    Revision:
+      muse--main--1.0--patch-150
+
+    * Makefile (debclean): New target that cleans up the mess that the
+      `debian' target makes.
+      (debian): Build using debuild rather than dpkg-buildpackage.  Copy
+      results to my debian dist dir two levels up.
+    
+    * Makefile.defs (VERSION): Set to 3.01.90.arch.149 for the debian build.
+    
+    * debian/changelog: Sign 3.01.90.arch.149-1 snapshot.
+    
+    * debian/control (Standards-Version): Update to 3.6.2.
+    
+    * debian/control (Depends): Add emacs21 and xemacs21 to make lintian shut
+      up.
+    
+    * debian/copyright (Copyright): Improve.
+    
+    * debian/emacsen-install (FILES): Include contrib directory so that
+      muse-http.el compiles properly.
+    
+    * debian/muse-el.examples: New file containing the example files to
+      install.
+    
+    * debian/rules: Move example stuff to muse-el.examples.  Install some
+      additional documentation.
+
+    new files:
+     debian/.arch-ids/muse-el.examples.id debian/muse-el.examples
+
+    modified files:
+     ChangeLog Makefile Makefile.defs debian/changelog
+     debian/control debian/copyright debian/emacsen-install
+     debian/rules
+
+
 2005-07-17 20:52:18 GMT	Michael Olson <mwolson@gnu.org>	patch-149
 
     Summary:

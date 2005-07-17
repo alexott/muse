@@ -38,7 +38,8 @@ cp ${FILES} ${ELCDIR}
 cd ${ELCDIR}
 
 cat << EOF > path.el
-(setq load-path (cons "." load-path) byte-compile-warnings nil)
+(setq load-path (cons "." (cons "${ELDIR}/contrib" load-path))
+      byte-compile-warnings nil)
 EOF
 ${FLAVOR} ${FLAGS} ${FILES} 2>&1 | gzip -9qf > CompilationLog.gz
 rm -f *.el path.el

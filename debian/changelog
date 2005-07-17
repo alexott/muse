@@ -1,8 +1,8 @@
-muse-el (3.01.90-1) unstable; urgency=low
+muse-el (3.01.90.arch.149-1) unstable; urgency=low
 
-  * New upstream release.
+  * New Arch snapshot.
 
- --
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Sun, 17 Jul 2005 16:04:06 -0500
 
 muse-el (3.01-1) unstable; urgency=low
 
