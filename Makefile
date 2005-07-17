@@ -1,4 +1,4 @@
-.PHONY: all lisp examples doc clean realclean distclean fullclean install test dist
+.PHONY: all lisp examples doc clean realclean distclean fullclean install test dist release debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
@@ -25,7 +25,7 @@ clean:
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) clean); done
 
-realclean distclean fullclean: clean
+realclean fullclean: clean
 	-rm -f muse.info muse.html
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) distclean); done
@@ -39,14 +39,26 @@ install: lisp muse.info
 test: 
 	(cd lisp && $(MAKE) test)
 
-dist: distclean ../muse-$(VERSION).zip ../muse-$(VERSION).tar.gz
+distclean: realclean
+	test -d ../muse-$(VERSION) && rm -r ../muse-$(VERSION) || :
+
+dist: distclean
 	tla inventory -sB | tar -cf - --no-recursion -T- | \
 	  (mkdir -p ../muse-$(VERSION); cd ../muse-$(VERSION) && \
 	  tar xf -)
-	(cd .. && tar czf muse-$(VERSION).tar.gz muse-$(VERSION) ; \
+	rm -fr ../muse-$(VERSION)/debian
+
+release: dist
+	(cd .. && tar -czf muse-$(VERSION).tar.gz muse-$(VERSION) ; \
 	  zip -r muse-$(VERSION).zip muse-$(VERSION))
 
-upload: dist
+debrelease: dist
+	(cd .. && tar -czf muse_$(VERSION).orig.tar.gz muse-$(VERSION))
+	cp -r debian ../muse-$(VERSION)
+	rm -fr ../muse-$(VERSION)/debian/.arch-ids
+	(cd ../muse-$(VERSION) && dpkg-buildpackage -rfakeroot)
+
+upload: release
 	(cd .. && gpg --detach muse-$(VERSION).tar.gz && \
 	  gpg --detach muse-$(VERSION).zip && \
 	  scp muse-$(VERSION).zip* muse-$(VERSION).tar.gz* \

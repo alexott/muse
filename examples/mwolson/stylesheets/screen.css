@@ -1,0 +1,113 @@
+/* Michael Olson's tweaked emacs-wiki stylesheet
+
+   Elements for most of my web site.
+*/
+
+/* Footnote */
+
+.navfoot hr {
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.navfoot table {
+  border-spacing: 0;
+  border-width: 0;
+  clear: right;
+  margin: 0;
+  padding: 0;
+}
+
+.navfoot td {
+  border-spacing: 0;
+  border-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Menu */
+
+.menu {
+  background-color: #F5F5F5;    /* white smoke */
+  color: white;
+  border: 1px solid black;
+  display: inline;
+  float: right;
+  clear: both;
+  margin-left: 0.2em;
+  margin-bottom: 0.2em;
+  padding: .5em;
+}
+
+.menuitem {
+  text-align: left;
+}
+
+.menuitem a:link, .menuitem a:visited {
+  color: #006400;               /* dark green */
+  display: block;
+  margin: .2em;
+  padding-top: 4px;
+  text-decoration: none;
+}
+
+.menuitem a:hover { 
+  background-color: #D3D3D3;    /* light gray */
+}
+
+#tooltipbox {
+  float: right;
+  visibility: hidden;
+}
+
+#tooltip {
+  color: #006400;               /* dark green */
+}
+
+/* Planner */
+
+.taskA { color: red }
+
+.taskB { color: green }
+
+.taskC { color: navy }
+
+.taskX {
+  color: #696969;               /* dim gray */
+  text-decoration: line-through;
+}
+
+/* Source coloring */
+
+.builtin {
+  /* font-lock-builtin-face */
+  color: #9370db;
+}
+
+.comment {
+  /* font-lock-comment-face */
+  color: #b22222;
+}
+
+.constant {
+  /* font-lock-constant-face */
+  color: #b8860b;
+}
+
+.doc {
+}
+
+.function-name {
+  /* font-lock-function-name-face */
+  color: #0000ff;
+}
+
+.keyword {
+  /* font-lock-keyword-face */
+  color: #a020f0;
+}
+  
+.string {
+  /* font-lock-string-face */
+  color: #228b22;
+}

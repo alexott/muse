@@ -1,0 +1,23 @@
+This package was debianized by Trent Buck <trentbuck@gmail.com> on
+Thu, 23 Jun 2005 13:12:12 +1000.
+
+It was downloaded from
+<http://www.mwolson.org/projects/MuseMode.html>
+
+Upstream Authors: John Wiegley <johnw@gnu.org>
+                  Michael Olson <mwolson@gnu.org>
+		  Sacha Chua <sacha@free.net.ph>
+		  Brad Collins <brad@chenla.org>
+		  Li Daobing <lidaobing@gmail.com>
+		  Yann Hodique <yann.hodique@gmail.com
+		  Andrea Riciputi <ariciputi@pito.com>
+		  John Sullivan <john@wjsullivan.net>
+		  Gary Vaughan (gary@gnu.org)
+		  Lan Yufeng (nlany.web@gmail.com)
+
+Copyright:
+
+   GPL
+
+On Debian systems, the complete text of the GNU General Public License
+can be found in /usr/share/common-licenses/GPL.

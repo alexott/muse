@@ -1,0 +1,156 @@
+/* Michael Olson's tweaked emacs-wiki stylesheet
+
+   Common elements.
+*/
+
+/* Normal elements */
+
+a.nonexistent {
+  background-color: white;
+  color: red;
+  font-weight: bold;
+}
+
+a.nonexistent:visited {
+  background-color: white;
+  color: red;
+}
+
+a.top, a:visited.top, a:link.top {
+  color: #F5DEB3;               /* wheat */
+  line-height: 90%;
+  position: relative;
+  text-decoration: none;
+  top: -13px;
+}
+
+a:visited {
+  color: #556B2F;               /* dark olive green */
+}
+
+a {
+  color: #0000CD;               /* blue */
+}
+
+blockquote {
+  border-left: 2px solid #CCCCCC; /* gray80 */
+  padding: 5px;
+  font-style: italic;
+  margin: 5px 20px;
+}
+
+body {
+  background-color: #DCDCDC;    /* gainsboro */
+  color: black;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 1%;
+}
+
+dl.contents {
+  margin-top: 0;
+}
+
+dt.contents {
+  margin-bottom: .5em;
+}
+
+dt {
+  font-weight: bold;
+  margin-top: .5em;
+  padding: 3px;
+}
+
+em {
+  font-style: italic;
+}
+
+h1 {
+  background-color: #2F4F4F;    /* dark slate gray */
+  color: #F5DEB3;               /* wheat */
+  border: 1px solid black;
+  font-size: large;
+  overflow: hidden;             /* don't crowd the menu */
+  padding: 0;
+  white-space: nowrap;
+}
+
+h2 {
+  border-bottom: solid 2px #708090; /* slate gray */
+  font-size: large;
+  margin-top: 2.5em;
+  margin-bottom: .5em;
+  overflow: hidden;             /* don't crowd the menu */
+  padding-right: 6px;
+}
+
+h3 {
+  border-bottom: solid 1px #708090; /* slate gray */
+  border-right: solid 2px #DCDCDC;  /* gainsboro */
+  font-size: medium;
+  margin-top: 2em;
+  margin-bottom: .5em;
+  overflow: hidden;             /* don't crowd the menu */
+  padding-right: 6px;
+}
+
+h4 {
+  border-bottom: dashed 1px #BEBEBE;    /* light gray */
+  border-right: solid 2px #DCDCDC;      /* gainsboro */
+  margin-top: 1.5em;
+  margin-bottom: .7em;
+  overflow: hidden;             /* don't crowd the menu */
+  padding-right: 6px;
+}
+
+img {
+  border: 0;
+}
+
+li {
+  line-height: 1.5em;
+  margin-top: .7em;
+}
+
+p.verse {
+  line-height: 2em;
+  margin-left: 5%;
+}
+
+p {
+  line-height: 1.5em;
+}
+
+pre.example {
+  margin-left: 5%;
+  margin-bottom: 2.5em;
+}
+
+pre.verse {
+  font-family: inherit;
+  line-height: 2em;
+  margin-left: 5%;
+}
+
+pre {
+  font-family: monospace;
+  margin-left: 5%;
+  white-space: pre;
+}
+
+span.footdate {
+  color: red;
+}
+
+strong {
+  font-weight: bold;
+}
+
+table {
+  overflow: hidden;             /* don't crowd the menu */
+}
+
+ul {
+  list-style-type: disc;
+  margin-bottom: 1.5em;
+}
