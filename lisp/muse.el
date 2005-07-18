@@ -183,7 +183,7 @@ All this means is that certain extensions, like .gz, are removed."
 See also `with-temp-file' and `with-output-to-string'.
 Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
   (let ((temp-buffer (make-symbol "temp-buffer")))
-    `(let ((,temp-buffer (generate-new-buffer " *temp*")))
+    `(let ((,temp-buffer (generate-new-buffer " *muse-temp*")))
        (unwind-protect
            (condition-case err
                (with-current-buffer ,temp-buffer
@@ -201,7 +201,7 @@ Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
            (and (buffer-name ,temp-buffer)
                 (with-current-buffer ,temp-buffer
                   (set-buffer-modified-p nil))
-                (kill-buffer ,temp-buffer))))))
+                (unless debug-on-error (kill-buffer ,temp-buffer)))))))
 (put 'muse-with-temp-buffer 'lisp-indent-function 0)
 (put 'muse-with-temp-buffer 'edebug-form-spec '(body))
 
