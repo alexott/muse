@@ -1,3 +1,10 @@
+muse-el (3.01.arch.152-1) unstable; urgency=low
+
+  * New Arch snapshot.
+  * debian/control: Expand description.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Sun, 17 Jul 2005 21:57:34 -0500
+
 muse-el (3.01.arch.150-1) unstable; urgency=low
 
   * New Arch snapshot.

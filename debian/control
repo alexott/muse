@@ -11,8 +11,27 @@ Depends: emacs21 | xemacs21 (>= 1.4.14) | emacsen
 Description: Maintain a local Wiki using Emacs-friendly markup
  Emacs Muse is an authoring and publishing environment for Emacs.  It
  simplifies the process of writings documents and publishing them to
- various output formats.
+ various output formats, such as DocBook, LaTeX, (X)HTML, TexInfo, and
+ PDF.  It can even produce content suitable for blogging, such as
+ Blosxom-style .txt files and RDF or RSS 2.0 feeds, using the
+ muse-blosxom and muse-journal modules.
  .
  Muse consists of two main parts: an enhanced text-mode for authoring
  documents and navigating within Muse projects, and a set of publishing
  styles for generating different kinds of output.
+ .
+ This idea is not in any way new. Numerous systems exist - even one
+ other for Emacs itself (Bhl Mode). What Muse adds to the picture is a
+ more modular environment, with a rather simple core, in which
+ "styles" are derived from to create new styles. Much of Muse's
+ overall functionality is optional. For example, you can use the
+ publisher without the major-mode, or the mode without doing any
+ publishing; or if you don't load the Texinfo or LaTeX modules, those
+ styles won't be available.
+ .
+ The Muse codebase is a departure from emacs-wiki version 2.44. The
+ code has been restructured and rewritten, especially its publishing
+ functions. The focus in this revision is on the authoring and
+ publishing aspects, and the "wikiness" has been removed as a default
+ behavior (available by loading the included muse-wiki
+ module). CamelCase words are no longer special by default.

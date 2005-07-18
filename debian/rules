@@ -52,10 +52,10 @@ install: build
 
 	# Add here commands to install the package into debian/muse.
 	# $(MAKE) install DESTDIR=$(CURDIR)/debian/muse
-	install -m 644 lisp/*.el		$(PKGDIR)$(LISPDIR)
-	install -m 644 experimental/*.el	$(PKGDIR)$(LISPDIR)/experimental
-	install -m 644 contrib/*.el		$(PKGDIR)$(LISPDIR)/contrib
-	install -m 644 contrib/pyblosxom/*.py	$(PKGDIR)$(DOCDIR)/contrib/pyblosxom
+	install -m 644 lisp/*.el $(PKGDIR)$(LISPDIR)
+	install -m 644 experimental/*.el $(PKGDIR)$(LISPDIR)/experimental
+	install -m 644 contrib/*.el $(PKGDIR)$(LISPDIR)/contrib
+	install -m 644 contrib/pyblosxom/*.py $(PKGDIR)$(DOCDIR)/contrib/pyblosxom
 
 	# Other documentation
 	install -m 0644 AUTHORS ${PKGDIR}${DOCDIR}/AUTHORS
