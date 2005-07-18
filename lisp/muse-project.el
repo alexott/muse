@@ -60,16 +60,29 @@ Each function is passed the project object, a cons with the format
       (while val
         (let ((head (car (cdar val)))
               res)
+          ;; Turn settings of first part into cons cells, symbol->string
           (while head
             (cond ((stringp (car head))
-                   (add-to-list 'res (car head))
+                   (add-to-list 'res (car head) t)
                    (setq head (cdr head)))
                   ((symbolp (car head))
-                   (add-to-list 'res (list (car head) (cadr head)) t)
+                   (add-to-list 'res (list (symbol-name (car head))
+                                           (cadr head)) t)
                    (setq head (cddr head)))
                   (t
                    (setq head (cdr head)))))
           (setcdr (car val) (cons res (cdr (cdar val)))))
+        (let ((styles (cdar val)))
+          ;; Symbol->string in every style
+          (while (cdr styles)
+            (let ((head (cadr styles))
+                  res)
+              (while (consp head)
+                (setq res (plist-put res (symbol-name (car head))
+                                     (cadr head)))
+                (setq head (cddr head)))
+              (setcdr styles (cons res (cddr styles))))
+            (setq styles (cdr styles))))
         (setq val (cdr val)))
       head)))
 
@@ -80,90 +93,108 @@ Muse can make use of."
   (while val
     (let ((head (car (cdar val)))
           res)
+      ;; Turn cons cells into flat list, string->symbol
       (while head
         (cond ((stringp (car head))
                (add-to-list 'res (car head) t))
               ((consp (car head))
-               (add-to-list 'res (caar head) t)
+               (add-to-list 'res (intern (caar head)) t)
                (add-to-list 'res (car (cdar head)) t)))
         (setq head (cdr head)))
       (setcdr (car val) (cons res (cdr (cdar val)))))
+    (let ((styles (cdar val)))
+      ;; String->symbol in every style
+      (while (cdr styles)
+        (let ((head (cadr styles))
+              res)
+          (while (consp head)
+            (setq res (plist-put res (intern (car head))
+                                 (cadr head)))
+            (setq head (cddr head)))
+          (setcdr styles (cons res (cddr styles))))
+        (setq styles (cdr styles))))
     (setq val (cdr val))))
 
-(define-widget 'muse-project 'lazy
+(define-widget 'muse-project 'default
   "A widget that defines a Muse project."
-  :tag "Project"
-  :type '(cons (repeat :tag "Settings"
-                (choice
+  :format "\n%v"
+  :value-create 'muse-widget-type-value-create
+  :value-get 'muse-widget-child-value-get
+  :match 'muse-widget-type-match
+  :type '(cons :format "    %v"
+          (repeat :tag "Settings" :format "%{%t%}:\n%v%i\n\n"
+                       (choice
                         (string :tag "Directory")
                         (list :tag "Book function"
-                              (const :book-funcall)
+                              (const :tag ":book-funcall" ":book-funcall")
                               (choice (function)
                                       (sexp :tag "Unknown")))
                         (list :tag "Book part"
-                              (const :book-part)
+                              (const :tag ":book-part" ":book-part")
                               (string :tag "Name"))
                         (list :tag "Book style"
-                              (const :book-style)
+                              (const :tag ":book-style" ":book-style")
                               (string :tag "Style"))
                         (list :tag "Default file"
-                              (const :default)
+                              (const :tag ":default" ":default")
                               (string :tag "File"))
                         (list :tag "End of book"
-                              (const :book-end)
+                              (const :tag ":book-end" ":book-end")
                               (const t))
                         (list :tag "Force publishing"
-                              (const :force-publish)
+                              (const :tag ":force-publish" ":force-publish")
                               (repeat (string :tag "File")))
                         (list :tag "Major mode"
-                              (const :major-mode)
+                              (const :tag ":major-mode" ":major-mode")
                               (choice (function :tag "Mode")
                                       (sexp :tag "Unknown")))
                         (list :tag "New chapter"
-                              (const :book-chapter)
+                              (const :tag ":book-chapter" ":book-chapter")
                               (string :tag "Name"))
                         (list :tag "No chapters"
-                              (const :nochapters)
+                              (const :tag ":nochapters" ":nochapters")
                               (const t))
                         (list :tag "Set variables"
-                              (const :set)
+                              (const :tag ":set" ":set")
                               (repeat (list (symbol :tag "Variable")
                                             (sexp :tag "Setting"))))
                         (list :tag "Visit links using"
-                              (const :visit-link)
+                              (const :tag ":visit-link" ":visit-link")
                               (choice (function)
                                       (sexp :tag "Unknown")))))
-               (repeat :tag "Styles"
-                       (repeat :tag "Style" :inline t
-                               (set :tag "Setting"
-                                       (list :inline t
-                                             :tag "Publishing style"
-                                             (const :base)
-                                             (string :tag "Style"))
-                                       (list :inline t
-                                             :tag "Base URL"
-                                             (const :base-url)
-                                             (string :tag "URL"))
-                                       (list :inline t
-                                             :tag "Exclude matching"
-                                             (const :exclude)
-                                             (regexp))
-                                       (list :inline t
-                                             :tag "Include matching"
-                                             (const :include)
-                                             (regexp))
-                                       (list :inline t
-                                             :tag "Path"
-                                             (const :path)
-                                             (string :tag "Path")))))))
+               (repeat :tag "Styles" :format "%{%t%}:\n%v%i\n\n"
+                       (set :tag "Style"
+                            (list :inline t
+                                  :tag "Publishing style"
+                                  (const :tag ":base" ":base")
+                                  (string :tag "Style"))
+                            (list :inline t
+                                  :tag "Base URL"
+                                  (const :tag ":base-url" ":base-url")
+                                  (string :tag "URL"))
+                            (list :inline t
+                                  :tag "Exclude matching"
+                                  (const :tag ":exclude" ":exclude")
+                                  (regexp))
+                            (list :inline t
+                                  :tag "Include matching"
+                                  (const :tag ":include" ":include")
+                                  (regexp))
+                            (list :inline t
+                                  :tag "Path"
+                                  (const :tag ":path" ":path")
+                                  (string :tag "Path"))))))
 
 (defcustom muse-project-alist nil
   "An alist of Muse projects.
 A project defines a fileset, and a list of custom attributes for use
 when publishing files in that project."
-  :type '(alist
-          :key-type (string :tag "Project name")
-          :value-type muse-project)
+  :type '(choice (const :tag "No projects defined." nil)
+                 (repeat (cons :format "%{%t%}:\n\n%v"
+                               :tag "Project" :indent 4
+                               (string :tag "Project name")
+                               muse-project))
+                 (sexp :tag "Cannot parse expression"))
   :get 'muse-project-alist-get
   :set 'muse-project-alist-set
   :group 'muse-project)

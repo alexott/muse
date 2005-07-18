@@ -61,6 +61,7 @@ familiar with Emacs."
 
 (defvar muse-under-windows-p (memq system-type '(ms-dos windows-nt)))
 
+(require 'wid-edit)
 (require 'muse-regexps)
 
 ;; Default file extension
@@ -300,6 +301,30 @@ that can be added."
     (setq buffer-invisibility-spec
           (cons element buffer-invisibility-spec))))
 
+;; Widget compatibility functions
+
+(defun muse-widget-type-value-create (widget)
+  "Convert and instantiate the value of the :type attribute of WIDGET.
+Store the newly created widget in the :children attribute.
+
+The value of the :type attribute should be an unconverted widget type."
+  (let ((value (widget-get widget :value))
+        (type (widget-get widget :type)))
+    (widget-put widget :children
+                (list (widget-create-child-value widget
+                                                 (widget-convert type)
+                                                 value)))))
+
+(defun muse-widget-child-value-get (widget)
+  "Get the value of the first member of :children in WIDGET."
+  (widget-value (car (widget-get widget :children))))
+
+(defun muse-widget-type-match (widget value)
+  "Non-nil if the :type value of WIDGET matches VALUE.
+
+The value of the :type attribute should be an unconverted widget type."
+  (widget-apply (widget-convert (widget-get widget :type)) :match value))
+
 ;; Link-handling functions and variables
 
 (defun muse-handle-url (&optional string)
@@ -315,9 +340,7 @@ An implicit link is one that is not surrounded by brackets.
 By default, Muse handles URLs only.
 If you want to handle WikiWords, load muse-wiki.el."
   :type 'hook
-  :options '(muse-handle-url
-             muse-wiki-handle-interwiki
-             muse-wiki-handle-wikiword)
+  :options '(muse-handle-url)
   :group 'muse)
 
 (defun muse-handle-implicit-link (&optional link)
@@ -352,7 +375,6 @@ that is an accepted link."
   "A list of functions to handle an explicit link.
 An explicit link is one [[like][this]] or [[this]]."
   :type 'hook
-  :options '(muse-wiki-handle-interwiki)
   :group 'muse)
 
 (defun muse-handle-explicit-link (&optional link)

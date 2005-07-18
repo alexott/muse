@@ -196,7 +196,7 @@ whether progress messages should be displayed to the user."
                                          (int-to-string leader))))))
         ;; beginning of line or space or symbol
         (when (or (= beg (point-min))
-                  (memq (char-syntax (char-before beg)) '(?\  ?\-))
+                  (eq (char-syntax (char-before beg)) ?\ )
                   (memq (char-before beg)
                         '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
           (save-excursion

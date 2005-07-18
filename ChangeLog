@@ -2,6 +2,46 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-18 08:23:00 GMT	Michael Olson <mwolson@gnu.org>	patch-155
+
+    Summary:
+      Make customize of muse-project-alist work in Emacs21 and XEmacs.
+    Revision:
+      muse--main--1.0--patch-155
+
+    * lisp/muse.el (muse-widget-type-value-create)
+      (muse-widget-child-value-get, muse-widget-type-match): Minimum set of
+      extra widgets from 'lazy type that are needed to get the
+      `muse-project-alist' customize interface to work on XEmacs and Emacs21.
+    
+    * lisp/muse.el (muse-implicit-link-functions)
+      (muse-explicit-link-functions): Remove predefined wiki-related options.
+      These are added in muse-wiki via custom-add-option.
+    
+    * lisp/muse-mode.el (muse-mode-hook): Ditto.
+    
+    * lisp/muse-colors.el (muse-colors-emphasized): Use eq instead of memq.
+    
+    * lisp/muse-project.el (muse-project-alist-get): Turn :symbols into
+      ":strings" to cope with Emacs21 and XEmacs.
+      (muse-project-alist-set): Turn ":strings" back into ":symbols".
+    
+    * lisp/muse-project.el (muse-project): Derive from 'default rather than
+      'lazy, since that is an Emacs CVS-ism.  Separate logical groups with
+      newlines.  Control indentation.  Remove an unnecessary inlined repeat.
+    
+    * lisp/muse-project.el (muse-project-alist): Use cons instead of alist,
+      since XEmacs doesn't support the alist widget.  Deal with case where no
+      projects are defined, or a strange expression is used.
+    
+    * lisp/muse-wiki.el: Insinuate muse-wiki link handlers and mode hook
+      stuff using custom-add-option.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-mode.el
+     lisp/muse-project.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-18 03:31:38 GMT	Michael Olson <mwolson@gnu.org>	patch-154
 
     Summary:

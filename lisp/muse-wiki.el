@@ -248,6 +248,14 @@ called manually."
 
 ;; Insinuate link handling
 
+(custom-add-option 'muse-implicit-link-functions
+                   'muse-wiki-handle-interwiki)
+(custom-add-option 'muse-implicit-link-functions
+                   'muse-wiki-handle-wikiword)
+
+(custom-add-option 'muse-explicit-link-functions
+                   'muse-wiki-handle-interwiki)
+
 (add-to-list 'muse-implicit-link-functions
              'muse-wiki-handle-interwiki t)
 (add-to-list 'muse-implicit-link-functions
@@ -260,6 +268,9 @@ called manually."
 (defun muse-wiki-update-custom-values ()
   "Update some important muse-wiki values that may have been altered manually."
   (muse-wiki-update-interwiki-regexp muse-wiki-interwiki-alist))
+
+(custom-add-option 'muse-mode-hook
+                   'muse-wiki-update-custom-values)
 
 (add-hook 'muse-mode-hook
           'muse-wiki-update-custom-values)
