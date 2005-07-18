@@ -197,14 +197,16 @@ See `muse-publish-markup-tags' for more info."
       </rdf:Seq>
     </items>
   </channel>\n"
-  "Header used for publishing RDF (RSS 1.0) files."
-  :type '(choice string file)
+  "Header used for publishing RDF (RSS 1.0) files.
+This may be text or a filename."
+  :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rdf-footer
   "</rdf:RDF>\n"
-  "Footer used for publishing RDF (RSS 1.0) files."
-  :type '(choice string file)
+  "Footer used for publishing RDF (RSS 1.0) files.
+This may be text or a filename."
+  :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rdf-date-format
@@ -254,15 +256,15 @@ See `muse-publish-markup-tags' for more info."
     <description><lisp>(muse-publishing-directive \"desc\")</lisp></description>
     <language>en-us</language>
     <generator>Emacs Muse</generator>"
-  "Header used for publishing RSS 2.0 files."
-  :type '(choice string file)
+  "Header used for publishing RSS 2.0 files.  This may be text or a filename."
+  :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-footer
   "  </channel>
 </rss>\n"
-  "Footer used for publishing RSS 2.0 files."
-  :type '(choice string file)
+  "Footer used for publishing RSS 2.0 files.  This may be text or a filename."
+  :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-date-format

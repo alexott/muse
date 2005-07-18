@@ -81,7 +81,8 @@
 @top Overview
 @c Page published by Emacs Muse begins here\n\n"
   "Text to prepend to a Muse page being published as Texinfo.
-This text may contain <lisp> markup tags."
+This may be text or a filename.
+It may contain <lisp> markup tags."
   :type 'string
   :group 'muse-texinfo)
 
@@ -90,7 +91,8 @@ This text may contain <lisp> markup tags."
 <lisp>(and muse-publish-generate-contents \"@contents\")</lisp>
 @bye\n"
   "Text to append to a Muse page being published as Texinfo.
-This text may contain <lisp> markup tags."
+This may be text or a filename.
+It may contain <lisp> markup tags."
   :type 'string
   :group 'muse-texinfo)
 

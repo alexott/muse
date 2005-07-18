@@ -109,16 +109,16 @@ shown in the following example.
             (if (not (string= author (user-full-name)))
                 (concat \" (by \" author \")\"))))</lisp></h1>
     <!-- Page published by Emacs Muse begins here -->\n"
-  "Header used for publishing HTML files."
-  :type '(choice string file)
+  "Header used for publishing HTML files.  This may be text or a filename."
+  :type 'string
   :group 'muse-html)
 
 (defcustom muse-html-footer "
 <!-- Page published by Emacs Muse ends here -->
   </body>
 </html>\n"
-  "Footer used for publishing HTML files."
-  :type '(choice string file)
+  "Footer used for publishing HTML files.  This may be text or a filename."
+  :type 'string
   :group 'muse-html)
 
 (defcustom muse-xhtml-header
@@ -150,16 +150,16 @@ shown in the following example.
             (if (not (string= author (user-full-name)))
                 (concat \" (by \" author \")\"))))</lisp></h1>
     <!-- Page published by Emacs Muse begins here -->\n"
-  "Header used for publishing XHTML files."
-  :type '(choice string file)
+  "Header used for publishing XHTML files.  This may be text or a filename."
+  :type 'string
   :group 'muse-html)
 
 (defcustom muse-xhtml-footer "
 <!-- Page published by Emacs Muse ends here -->
   </body>
 </html>\n"
-  "Footer used for publishing XHTML files."
-  :type '(choice string file)
+  "Footer used for publishing XHTML files.  This may be text or a filename."
+  :type 'string
   :group 'muse-html)
 
 (defcustom muse-html-anchor-on-word nil

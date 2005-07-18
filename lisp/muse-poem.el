@@ -92,16 +92,16 @@
 \\poemtitle{<lisp>(muse-publishing-directive \"title\")</lisp>}
 
 \\settowidth{\\versewidth}{<lisp>muse-poem-longest-line</lisp>}\n\n"
-  "Header used for publishing LaTeX poems."
-  :type '(choice string file)
+  "Header used for publishing LaTeX poems.  This may be text or a filename."
+  :type 'string
   :group 'muse-poem)
 
 (defcustom muse-poem-latex-footer "\n\\vfill
 \\mbox{}
 
 \\end{document}"
-  "Footer used for publishing LaTeX files."
-  :type '(choice string file)
+  "Footer used for publishing LaTeX files.  This may be text or a filename."
+  :type 'string
   :group 'muse-poem)
 
 (defcustom muse-poem-markup-strings
@@ -134,13 +134,15 @@ differs little between the various styles."
 
 \\renewcommand{\\poemtoc}{section}
 \\settocdepth{section}\n"
-  "Header used for publishing a book of poems in LaTeX form."
-  :type '(choice string file)
+  "Header used for publishing a book of poems in LaTeX form.
+This may be text or a filename."
+  :type 'string
   :group 'muse-poem)
 
 (defcustom muse-chapbook-latex-footer "\n\\end{document}"
-  "Footer used for publishing a book of poems in LaTeX form."
-  :type '(choice string file)
+  "Footer used for publishing a book of poems in LaTeX form.
+This may be text or a filename."
+  :type 'string
   :group 'muse-poem)
 
 (defvar muse-poem-longest-line "")

@@ -60,15 +60,17 @@ See `muse-docbook' for more information."
     <pubdate><lisp>(muse-publishing-directive \"date\")</lisp></pubdate>
   </articleinfo>
   <!-- Page published by Emacs Muse begins here -->\n"
-  "Header used for publishing DocBook XML files."
-  :type '(choice string file)
+  "Header used for publishing DocBook XML files.
+This may be text or a filename."
+  :type 'string
   :group 'muse-docbook)
 
 (defcustom muse-docbook-footer "
   <!-- Page published by Emacs Muse ends here -->
 </article>\n"
-  "Footer used for publishing DocBook XML files."
-  :type '(choice string file)
+  "Footer used for publishing DocBook XML files.
+This may be text or a filename."
+  :type 'string
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-regexps

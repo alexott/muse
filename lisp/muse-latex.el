@@ -68,13 +68,13 @@
 
 <lisp>(and muse-publish-generate-contents
            \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
-  "Header used for publishing LaTeX files."
-  :type '(choice string file)
+  "Header used for publishing LaTeX files.  This may be text or a filename."
+  :type 'string
   :group 'muse-latex)
 
 (defcustom muse-latex-footer "\n\\end{document}"
-  "Footer used for publishing LaTeX files."
-  :type '(choice string file)
+  "Footer used for publishing LaTeX files.  This may be text or a filename."
+  :type 'string
   :group 'muse-latex)
 
 (defcustom muse-latexcjk-header
@@ -96,15 +96,17 @@
 
 <lisp>(and muse-publish-generate-contents
            \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
-  "Header used for publishing LaTeX files (CJK)."
-  :type '(choice string file)
+  "Header used for publishing LaTeX files (CJK).  This may be text or a
+filename."
+  :type 'string
   :group 'muse-latex)
 
 (defcustom muse-latexcjk-footer
   "\n\\end{CJK*}
 \\end{document}"
-  "Footer used for publishing LaTeX files (CJK)."
-  :type '(choice string file)
+  "Footer used for publishing LaTeX files (CJK).  This may be text or a
+filename."
+  :type 'string
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-regexps

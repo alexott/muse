@@ -68,13 +68,13 @@ together as if one giant chapter."
 \\maketitle
 
 \\tableofcontents\n"
-  "Header used for publishing books to LaTeX."
-  :type '(choice string file)
+  "Header used for publishing books to LaTeX.  This may be text or a filename."
+  :type 'string
   :group 'muse-book)
 
 (defcustom muse-book-latex-footer "\n\\end{document}"
-  "Footer used for publishing books to LaTeX."
-  :type '(choice string file)
+  "Footer used for publishing books to LaTeX.  This may be text or a filename."
+  :type 'string
   :group 'muse-book)
 
 (defun muse-book-publish-chapter (title entry style &optional nochapters)

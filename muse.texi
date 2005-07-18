@@ -875,8 +875,12 @@ Default file extension for publishing Blosxom files.
 @item muse-blosxom-header
 Header used for publishing Blosxom files.
 
+This may be text or a filename.
+
 @item muse-blosxom-footer
 Footer used for publishing Blosxom files.
+
+This may be text or a filename.
 
 @item muse-blosxom-base-directory
 Base directory of blog entries, used by @code{muse-blosxom-new-entry}.
@@ -930,8 +934,12 @@ A hook run in the book buffer after it is marked up.
 @item muse-book-latex-header
 Header used for publishing books to LaTeX.
 
+This may be text or a filename.
+
 @item muse-book-latex-footer
 Footer used for publishing books to LaTeX.
+
+This may be text or a filename.
 
 @end table
 
@@ -960,8 +968,12 @@ Default file extension for publishing DocBook XML files.
 @item muse-docbook-header
 Header used for publishing DocBook XML files.
 
+This may be text or a filename.
+
 @item muse-docbook-footer
 Footer used for publishing DocBook XML files.
+
+This may be text or a filename.
 
 @item muse-docbook-publishing-regexps
 List of markup rules for publishing a Muse page to DocBook XML.
@@ -1022,14 +1034,22 @@ properly.
 @item muse-html-header
 Header used for publishing HTML files.
 
+This may be text or a filename.
+
 @item muse-html-footer
 Footer used for publishing HTML files.
+
+This may be text or a filename.
 
 @item muse-xhtml-header
 Header used for publishing XHTML files.
 
+This may be text or a filename.
+
 @item muse-xhtml-footer
 Footer used for publishing XHTML files.
+
+This may be text or a filename.
 
 @item muse-html-anchor-on-word
 When true, anchors surround the closest word.
@@ -1240,8 +1260,12 @@ The base URL of the website referenced by the RDF file.
 @item muse-journal-rdf-header
 Header used for publishing RDF (RSS 1.0) files.
 
+This may be text or a filename.
+
 @item muse-journal-rdf-footer
 Footer used for publishing RDF (RSS 1.0) files.
+
+This may be text or a filename.
 
 @item muse-journal-rdf-date-format
 Date format to use for RDF entries.
@@ -1261,8 +1285,12 @@ The base URL of the website referenced by the RSS file.
 @item muse-journal-rss-header
 Header used for publishing RSS 2.0 files.
 
+This may be text or a filename.
+
 @item muse-journal-rss-footer
 Footer used for publishing RSS 2.0 files.
+
+This may be text or a filename.
 
 @item muse-journal-rss-date-format
 Date format to use for RSS 2.0 entries.
@@ -1343,14 +1371,22 @@ Default file extension for publishing LaTeX files to PDF.
 @item muse-latex-header
 Header used for publishing LaTeX files.
 
+This may be text or a filename.
+
 @item muse-latex-footer
 Footer used for publishing LaTeX files.
+
+This may be text or a filename.
 
 @item muse-latexcjk-header
 Header used for publishing LaTeX files (CJK).
 
+This may be text or a filename.
+
 @item muse-latexcjk-footer
 Footer used for publishing LaTeX files (CJK).
+
+This may be text or a filename.
 
 @item muse-latex-markup-regexps
 List of markup regexps for identifying regions in a Muse page.
@@ -1454,8 +1490,12 @@ Publish a book of poems to a PDF document.
 @item muse-poem-latex-header
 Header used for publishing LaTeX poems.
 
+This may be text or a filename.
+
 @item muse-poem-latex-footer
 Footer used for publishing LaTeX files.
+
+This may be text or a filename.
 
 @item muse-poem-markup-strings
 Strings used for marking up poems.
@@ -1466,8 +1506,12 @@ differs little between the various styles.
 @item muse-chapbook-latex-header
 Header used for publishing a book of poems in LaTeX form.
 
+This may be text or a filename.
+
 @item muse-chapbook-latex-footer
 Footer used for publishing a book of poems in LaTeX form.
+
+This may be text or a filename.
 
 @item muse-poem-chapbook-strings
 Strings used for marking up books of poems.
@@ -1520,12 +1564,14 @@ Default file extension for publishing PDF files.
 @item muse-texinfo-header
 Text to prepend to a Muse page being published as Texinfo.
 
-This text may contain @verb{|<lisp>|} markup tags.
+This may be text or a filename.
+It may contain @verb{|<lisp>|} markup tags.
 
 @item muse-texinfo-footer
 Text to append to a Muse page being published as Texinfo.
 
-This text may contain @verb{|<lisp>|} markup tags.
+This may be text or a filename.
+It may contain @verb{|<lisp>|} markup tags.
 
 @item muse-texinfo-markup-regexps
 List of markup rules for publishing a Muse page to Texinfo.

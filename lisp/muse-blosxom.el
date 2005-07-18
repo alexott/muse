@@ -129,13 +129,13 @@ See `muse-blosxom' for more information."
 
 (defcustom muse-blosxom-header
   "<lisp>(muse-publishing-directive \"title\")</lisp>\n"
-  "Header used for publishing Blosxom files."
-  :type '(choice string file)
+  "Header used for publishing Blosxom files.  This may be text or a filename."
+  :type 'string
   :group 'muse-blosxom)
 
 (defcustom muse-blosxom-footer ""
-  "Footer used for publishing Blosxom files."
-  :type '(choice string file)
+  "Footer used for publishing Blosxom files.  This may be text or a filename."
+  :type 'string
   :group 'muse-blosxom)
 
 (defcustom muse-blosxom-base-directory "~/Blog"
