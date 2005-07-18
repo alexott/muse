@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-18 00:53:34 GMT	Michael Olson <mwolson@gnu.org>	patch-151
+
+    Summary:
+      Slight Debian version tweak.
+    Revision:
+      muse--main--1.0--patch-151
+
+    * Makefile.defs (VERSION): Use a slightly different version naming
+      scheme.  I've dropped the ".90".  The new scheme is X.YY.arch.YYY where
+      X.YY is the Muse version, and YYY is the patch level.
+    
+    * debian/changelog: Ditto.
+
+    modified files:
+     ChangeLog Makefile.defs debian/changelog
+
+
 2005-07-17 23:23:34 GMT	Michael Olson <mwolson@gnu.org>	patch-150
 
     Summary:
