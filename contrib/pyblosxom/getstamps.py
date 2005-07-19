@@ -41,7 +41,7 @@ def recurse(so_far):
             thisfile = open(filepath,'r')
             thisdate = getdate (thisfile)
             if thisdate:
-                OutFile.write("%s %s\n" % (thisdate, filepath[2:]))
+                OutFile.write("%s %s\n" % (thisdate, filepath[2:] + ".txt"))
                 continue
 
 if __name__ == "__main__":

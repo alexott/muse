@@ -44,7 +44,7 @@ def get_all_timestamps(datadir):
                 minute = 0
             mtime = time.mktime((year,mo,day,hr,minute,0,0,0,-1))
             
-            t.append( (datadir + "/" + m.group(7) + ".txt", mtime) )
+            t.append( (datadir + "/" + m.group(7), mtime) )
 
     f.close()
     return t

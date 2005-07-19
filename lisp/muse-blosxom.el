@@ -152,9 +152,15 @@ This is the top-level directory where your Muse blog entries may be found."
 (defun muse-blosxom-update-page-date-alist ()
   "Add a date entry to `muse-blosxom-page-date-alist' for this page."
   ;; Make current file be relative to base directory
-  (let ((rel-file (file-relative-name
-                   (expand-file-name muse-publishing-current-file)
-                   (expand-file-name muse-blosxom-base-directory))))
+  (let ((rel-file
+         (concat
+          (file-name-as-directory
+           (or (muse-publishing-directive "category")
+               (file-relative-name
+                (file-name-directory
+                 (expand-file-name muse-publishing-current-file))
+                (file-truename muse-blosxom-base-directory))))
+          (file-name-nondirectory muse-publishing-current-file))))
     ;; Strip the file extension
     (when muse-ignored-extensions-regexp
       (setq rel-file (save-match-data
@@ -211,6 +217,7 @@ The page will be initialized with the current date and TITLE."
              "/" category)))
   (goto-char (point-min))
   (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
+          "\n#category " category
           "\n#title " title
           "\n\n")
   (forward-line 2))

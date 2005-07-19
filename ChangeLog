@@ -2,6 +2,35 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-19 03:07:59 GMT	Michael Olson <mwolson@gnu.org>	patch-157
+
+    Summary:
+      Misc. blosxom fixes, like category directive.
+    Revision:
+      muse--main--1.0--patch-157
+
+    * contrib/pyblosxom/getstamps.py: Add file extension.
+    
+    * contrib/pyblosxom/hardcodedates.py (get_all_timestamps): Omit file
+      extension.  This will allow Muse to specify it once a
+      timestamps-writing routine gets written.
+    
+    * lisp/muse-blosxom.el (muse-blosxom-update-page-date-alist): Pay
+      attention to the "category" directive, if it exists.  Use file-truename
+      instead of expand-file-name for base directory.
+    
+    * lisp/muse-blosxom.el (muse-blosxom-new-entry): Add #category directive
+      by default.
+    
+    * lisp/muse-project.el (muse-project): Add :timestamps to list of
+      available tags, even though it doesn't do anything yet.
+
+    modified files:
+     ChangeLog contrib/pyblosxom/getstamps.py
+     contrib/pyblosxom/hardcodedates.py lisp/muse-blosxom.el
+     lisp/muse-project.el
+
+
 2005-07-18 08:53:32 GMT	Michael Olson <mwolson@gnu.org>	patch-156
 
     Summary:

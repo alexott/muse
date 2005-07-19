@@ -181,6 +181,10 @@ Muse can make use of."
                                   (const :tag ":include" ":include")
                                   (regexp))
                             (list :inline t
+                                  :tag "Timestamps file"
+                                  (const :tag ":timestamps" ":timestamps")
+                                  (file))
+                            (list :inline t
                                   :tag "Path"
                                   (const :tag ":path" ":path")
                                   (string :tag "Path"))))))
