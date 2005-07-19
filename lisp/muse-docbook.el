@@ -220,14 +220,15 @@ match is found, `muse-docbook-charset-default' is used instead."
                             (string= (match-string 1) "/"))))))
       (insert "</para>"))
     (goto-char end))
-  (if (eobp)
-      (cond
-       ((bolp)
-        nil)
-       (t
-        (insert "\n")))
-    (unless (eq (char-after) ?\<)
-      (insert "<para>"))))
+  (cond
+   ((eobp)
+    (unless (bolp)
+      (insert "\n")))
+   ((eq (char-after) ?\<)
+    (when (looking-at "<\\(emphasis\\|systemitem\\|ulink\\|email\\)[ >]")
+      (insert "<para>")))
+   (t
+    (insert "<para>"))))
 
 (defun muse-docbook-markup-table ()
   (let* ((str (save-match-data

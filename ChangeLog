@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-19 05:50:25 GMT	Michael Olson <mwolson@gnu.org>	patch-159
+
+    Summary:
+      Handle a few more DocBook edge cases; all known DocBook issues are fixed.
+    Revision:
+      muse--main--1.0--patch-159
+
+    * examples/QuickStart: Add "Write me." to empty sections at end so that
+      they publish correctly with DocBook.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-paragraph): Handle case where
+      paragraph starts with emphasis, example, link, or email address.
+
+    modified files:
+     ChangeLog examples/QuickStart lisp/muse-docbook.el
+
+
 2005-07-19 05:34:28 GMT	Michael Olson <mwolson@gnu.org>	patch-158
 
     Summary:
