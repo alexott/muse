@@ -13,7 +13,7 @@ examples: $(EXAMPLES)
 	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish html $<
 
 %.pdf: %
-	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish pdf $<
+	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish info-pdf $<
 
 %.info: %
 	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish info $<

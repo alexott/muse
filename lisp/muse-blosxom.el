@@ -99,11 +99,14 @@
 
 ;; Gary Vaughan (gary AT gnu DOT org) is the original author of
 ;; `emacs-wiki-blosxom.el', which is the ancestor of this file.
-
+;;
 ;; Brad Collins (brad AT chenla DOT org) ported this file to Muse.
-
+;;
 ;; Michael Olson (mwolson AT gnu DOT org) further adapted this file to
 ;; Muse and continues to maintain it.
+;;
+;; Björn Lindström (bkhl AT elektrubadur DOT se) made many valuable
+;; suggestions.
 
 ;;; Code:
 

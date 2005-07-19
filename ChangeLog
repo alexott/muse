@@ -2,6 +2,45 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-19 07:24:38 GMT	Michael Olson <mwolson@gnu.org>	patch-160
+
+    Summary:
+      muse-texinfo fixes; use info-pdf to generate PDF doc for QuickStart.
+    Revision:
+      muse--main--1.0--patch-160
+
+    * Makefile.defs (VERSION): Prepare snapshot 3.01.arch.160.
+    
+    * debian/changelog: Ditto.
+    
+    * debian/control (Build-Depends-Indep): Add tetex-bin.
+    
+    * examples/Makefile (%.pdf): Use info-pdf, since it generates nicer
+      output for me.
+    
+    * examples/QuickStart: Remove stray <comment> now that the bug that made
+      it necessary is fixed.
+    
+    * lisp/muse-blosxom.el: Credit Björn Lindström for his excellent
+      suggestions.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-header, muse-texinfo-footer): Move
+      the contents from the footer to the header.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-table): Insert space before
+      each number, not after.
+    
+    * lisp/muse.el (muse-eval-lisp): Minor whitespace fix.
+    
+    * lisp/muse.el (muse-with-temp-buffer): Throw a backtrace if an error
+      happens when doing batch publishing.  Minor whitespace fix.
+
+    modified files:
+     ChangeLog Makefile.defs debian/changelog debian/control
+     examples/Makefile examples/QuickStart lisp/muse-blosxom.el
+     lisp/muse-texinfo.el lisp/muse.el
+
+
 2005-07-19 05:50:25 GMT	Michael Olson <mwolson@gnu.org>	patch-159
 
     Summary:

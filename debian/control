@@ -2,7 +2,7 @@ Source: muse-el
 Section: web
 Priority: optional
 Maintainer: Michael W. Olson (GNU address) <mwolson@gnu.org>
-Build-Depends-Indep: debhelper (>> 3.0.0), texinfo
+Build-Depends-Indep: debhelper (>> 3.0.0), texinfo, tetex-bin
 Standards-Version: 3.6.2
 
 Package: muse-el

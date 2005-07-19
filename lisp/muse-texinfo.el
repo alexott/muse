@@ -77,6 +77,8 @@
 @author <lisp>(muse-publishing-directive \"author\")</lisp>
 @end titlepage
 
+<lisp>(and muse-publish-generate-contents \"@contents\")</lisp>
+
 @node Top, Overview, , (dir)
 @top Overview
 @c Page published by Emacs Muse begins here\n\n"
@@ -88,7 +90,6 @@ It may contain <lisp> markup tags."
 
 (defcustom muse-texinfo-footer
   "\n@c Page published by Emacs Muse ends here
-<lisp>(and muse-publish-generate-contents \"@contents\")</lisp>
 @bye\n"
   "Text to append to a Muse page being published as Texinfo.
 This may be text or a filename.
@@ -178,9 +179,9 @@ differs little between the various styles."
                   (match-string 1)
                 (delete-region (match-beginning 0) (match-end 0))))
          (fields (split-string str "\\s-*|+\\s-*")))
-    (insert "@multitable @columnfractions ")
+    (insert "@multitable @columnfractions")
     (dotimes (field (length fields))
-      (insert (number-to-string (/ 1.0 (length fields))) " "))
+      (insert " " (number-to-string (/ 1.0 (length fields)))))
     (insert "\n@item " (mapconcat 'identity fields " @tab "))
     (insert "\n@end multitable")))
 

@@ -169,14 +169,10 @@ All this means is that certain extensions, like .gz, are removed."
        (if (fboundp 'display-warning)
            (display-warning 'muse
                             (format "%s: Error evaluating %s: %s"
-                                    (muse-page-name)
-                                    form
-                                    err)
+                                    (muse-page-name) form err)
                             :warning)
          (message "%s: Error evaluating %s: %s"
-                  (muse-page-name)
-                  form
-                  err))
+                  (muse-page-name) form err))
        "<!--INVALID LISP CODE-->"))))
 
 (defmacro muse-with-temp-buffer (&rest body)
@@ -190,15 +186,19 @@ Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
                (with-current-buffer ,temp-buffer
                  ,@body)
              (error
-              (if (fboundp 'display-warning)
-                  (display-warning 'muse
-                                   (format "%s: Error occurred: %s"
-                                           (muse-page-name)
-                                           err)
-                                   :warning)
-                (message "%s: Error occured: %s"
-                         (muse-page-name)
-                         err))))
+              (if (and (boundp 'muse-batch-publishing-p)
+                       muse-batch-publishing-p)
+                  (progn
+                    (message "%s: Error occured: %s"
+                             (muse-page-name) err)
+                    (backtrace))
+                (if (fboundp 'display-warning)
+                    (display-warning 'muse
+                                     (format "%s: Error occurred: %s"
+                                             (muse-page-name) err)
+                                     :warning)
+                  (message "%s: Error occured: %s"
+                           (muse-page-name) err)))))
          (when (buffer-live-p ,temp-buffer)
            (with-current-buffer ,temp-buffer
              (set-buffer-modified-p nil))
