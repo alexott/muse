@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-19 07:51:54 GMT	Michael Olson <mwolson@gnu.org>	patch-161
+
+    Summary:
+      muse-texinfo: Fix #2635 by adding `}' and `{' to specials list.
+    Revision:
+      muse--main--1.0--patch-161
+
+    * lisp/muse-texinfo.el (muse-texinfo-markup-specials): Add `{' and `}' to
+      list.  This should fix #2635.
+
+    modified files:
+     ChangeLog lisp/muse-texinfo.el
+
+
 2005-07-19 07:24:38 GMT	Michael Olson <mwolson@gnu.org>	patch-160
 
     Summary:

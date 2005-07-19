@@ -169,7 +169,9 @@ differs little between the various styles."
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-markup-specials
-  '((?@ . "@@"))
+  '((?@ . "@@")
+    (?{ . "@{")
+    (?} . "@}"))
   "A table of characters which must be represented specially."
   :type '(alist :key-type character :value-type string)
   :group 'muse-texinfo)
