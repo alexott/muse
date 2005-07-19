@@ -435,24 +435,17 @@ if not escaped."
       (save-match-data
         (while (setq pos (string-match (concat "[^-"
                                                muse-regexp-alnum
-                                               "/:._=@\\?~#]")
+                                               "/:._=@\\?~#]\"<>&;")
                                        str pos))
           (setq ch (aref str pos)
-                code (cond
-                      ((char-equal ch ?\&)
-                       "&amp;")
-                      ((char-equal ch ?\<)
-                       "&lt;")
-                      ((char-equal ch ?\>)
-                       "&gt;")
-                      (t (concat "&#"
+                code (concat "&#"
                                  (int-to-string
                                   (cond ((fboundp 'char-to-ucs)
                                          (char-to-ucs ch))
                                         ((fboundp 'char-to-int)
                                          (char-to-int ch))
                                         (t ch)))
-                                 ";")))
+                                 ";")
                 len (length code)
                 str (concat (substring str 0 pos)
                             code

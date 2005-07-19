@@ -52,11 +52,13 @@ See `muse-publish' for more information."
   :type 'hook
   :group 'muse-publish)
 
-(defcustom muse-publish-url-transforms '(muse-publish-prepare-url)
+(defcustom muse-publish-url-transforms '(muse-publish-escape-specials-in-string
+                                         muse-publish-prepare-url)
   "A list of functions used to prepare URLs for publication.
 Each is passed the URL and expects a URL to be returned."
   :type 'hook
-  :options '(muse-publish-prepare-url)
+  :options '(muse-publish-escape-specials-in-string
+             muse-publish-prepare-url)
   :group 'muse-publish)
 
 (defcustom muse-publish-report-threshhold 100000
@@ -629,11 +631,13 @@ the file is published no matter what."
             (apply (nth 3 tag-info) args))))))
   nil)
 
-(defun muse-publish-escape-specials (beg end)
+(defun muse-publish-escape-specials (beg end &optional ignore-read-only)
+  "Escape specials from BEG to END using style-specific :specials.
+If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
   (save-excursion
     (goto-char beg)
     (while (< (point) end)
-      (if (get-text-property (point) 'read-only)
+      (if (and (not ignore-read-only) (get-text-property (point) 'read-only))
           (forward-char 1)
         (let ((repl
                (or (assoc (char-after) (muse-style-element :specials))
@@ -683,7 +687,7 @@ the file is published no matter what."
             (insert open-tag)
             (setq beg (point)))
           (when mark-read-only
-            (muse-publish-escape-specials beg end)
+            (muse-publish-escape-specials beg end t)
             (muse-publish-mark-read-only (1- beg) (1+ end))))
       (backward-char))
     nil))
@@ -918,7 +922,7 @@ like read-only from being inadvertently deleted."
     (insert (format (muse-markup-text 'email-addr) addr addr))
     (muse-publish-mark-read-only beg (point))))
 
-(defun muse-publish-escape-specials-in-string (string)
+(defun muse-publish-escape-specials-in-string (string &rest ignored)
   "Escape specials in STRING using style-specific :specials."
   (save-excursion
     (apply (function concat)
@@ -1091,6 +1095,7 @@ like read-only from being inadvertently deleted."
     string))
 
 (defun muse-publish-prepare-url (target &rest ignored)
+  "Transform anchors and get published name, if TARGET is a page."
   (save-match-data
     (unless (or (string-match muse-url-regexp target)
                 (string-match muse-image-regexp target)

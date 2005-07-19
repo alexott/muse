@@ -36,6 +36,7 @@
 
 (require 'muse-publish)
 (require 'muse-regexps)
+(require 'muse-html)
 
 (defgroup muse-docbook nil
   "Options controlling the behavior of Muse DocBook XML publishing.
@@ -126,8 +127,8 @@ For more on the structure of this list, see
     (footnote-end    . "</para></footnote>")
     (begin-underline . "")
     (end-underline   . "")
-    (begin-literal   . "<filename>")
-    (end-literal     . "</filename>")
+    (begin-literal   . "<systemitem>")
+    (end-literal     . "</systemitem>")
     (begin-emph      . "<emphasis>")
     (end-emph        . "</emphasis>")
     (begin-more-emph . "<emphasis role=\"strong\">")
@@ -211,8 +212,12 @@ match is found, `muse-docbook-charset-default' is used instead."
     (goto-char (match-beginning 0))
     (when (save-excursion
             (save-match-data
-              (and (re-search-backward "<\\(/?\\)para[ >]" nil t)
-                   (not (string-equal (match-string 1) "/")))))
+              (and (re-search-backward "<\\(/?\\)\\(para\\|footnote\\)[ >]"
+                                       nil t)
+                   (or (and (string= (match-string 2) "para")
+                            (not (string= (match-string 1) "/")))
+                       (and (string= (match-string 2) "footnote")
+                            (string= (match-string 1) "/"))))))
       (insert "</para>"))
     (goto-char end))
   (if (eobp)
