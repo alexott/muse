@@ -2,6 +2,44 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-20 05:50:55 GMT	Michael Olson <mwolson@gnu.org>	patch-163
+
+    Summary:
+      muse-docbook: table and anchor fixes; many non-MULE XEmacs fixes.
+    Revision:
+      muse--main--1.0--patch-163
+
+    * lisp/muse-docbook.el: More suggestions from Dale Smith, and non-MULE
+      XEmacs fixes.
+      (muse-docbook-markup-regexps): Deal with new table algorithm.
+      (muse-docbook-transform-content-type, muse-docbook-encoding) 
+      (muse-docbook-finalize-buffer): Non-MULE XEmacs fix.
+      (muse-docbook-markup-table): Use a better table algorithm, based on the
+      one in muse-html.el.  Make sure a <tgroup> surrounds the body, head,
+      and foot of the table.  Use informaltable rather than table.
+      (muse-docbook-fixup-tables): New function that sorts all tables found
+      in the published document so that the order is head, foot, body.
+      (muse-docbook-markup-functions): Add anchor handler.
+      (muse-docbook-markup-paragraph): Allow anchors to occur at beginning of
+      paragraph.
+      (muse-docbook-markup-anchor, muse-docbook-insert-anchor): New functions
+      that insert an anchor at point.
+    
+    * lisp/muse-html.el (muse-html-transform-content-type)
+      (muse-html-encoding, muse-html-finalize-buffer): Non-MULE XEmacs fixes.
+    
+    * examples/QuickStart (Anchors and tagged links): Improve anchor example.
+    
+    * lisp/muse.el (muse-eval-lisp): XEmacs fix.
+    
+    * lisp/muse.el (muse-with-temp-buffer): XEmacs fix.  Include the body
+      that was evaluated in the output.
+
+    modified files:
+     ChangeLog examples/QuickStart lisp/muse-docbook.el
+     lisp/muse-html.el lisp/muse-latex.el lisp/muse.el
+
+
 2005-07-19 08:11:37 GMT	Michael Olson <mwolson@gnu.org>	patch-162
 
     Summary:

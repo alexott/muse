@@ -219,13 +219,15 @@ This will be used if no special characters are found."
   :group 'muse-latex)
 
 (defun muse-latexcjk-encoding ()
-  (muse-latexcjk-transform-content-type buffer-file-coding-system))
+  (when (boundp 'buffer-file-coding-system)
+    (muse-latexcjk-transform-content-type buffer-file-coding-system)))
 
 (defun muse-latexcjk-transform-content-type (content-type)
   "Using `muse-cjklatex-encoding-map', try and resolve an emacs coding
 system to an associated CJK coding system."
-  (let ((match (assoc (coding-system-base content-type)
-                      muse-latexcjk-encoding-map)))
+  (let ((match (and (fboundp 'coding-system-base)
+                    (assoc (coding-system-base content-type)
+                           muse-latexcjk-encoding-map))))
     (if match
         (cdr match)
       muse-latexcjk-encoding-default)))

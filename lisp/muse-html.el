@@ -368,8 +368,9 @@ Use the base name of the coding system (i.e. without the -unix)."
   "Using `muse-html-encoding-map', try and resolve an emacs coding
 system to an associated HTML coding system. If no match is found,
 `muse-html-charset-default' is used instead."
-  (let ((match (assoc (coding-system-base content-type)
-                      muse-html-encoding-map)))
+  (let ((match (and (fboundp 'coding-system-base)
+                    (assoc (coding-system-base content-type)
+                           muse-html-encoding-map))))
     (if match
         (cdr match)
       muse-html-charset-default)))
@@ -561,7 +562,8 @@ if not escaped."
   (if (stringp muse-html-meta-content-encoding)
       muse-html-meta-content-encoding
     (muse-html-transform-content-type
-     (or buffer-file-coding-system
+     (or (and (boundp 'buffer-file-coding-system)
+              buffer-file-coding-system)
          muse-html-encoding-default))))
 
 (defun muse-html-prepare-buffer ()
@@ -576,7 +578,8 @@ if not escaped."
   (when muse-publish-generate-contents
     (goto-char (car muse-publish-generate-contents))
     (muse-html-insert-contents (cdr muse-publish-generate-contents)))
-  (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
+  (when (and (boundp 'buffer-file-coding-system)
+             (memq buffer-file-coding-system '(no-conversion undecided-unix)))
     ;; make it agree with the default charset
     (setq buffer-file-coding-system muse-html-encoding-default)))
 

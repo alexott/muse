@@ -276,10 +276,12 @@ Triple bars ||| Separate footer fields
 
 ** Anchors and tagged links
 
-=#example= If you begin a line with "#anchor" -- where "anchor" can be
+#example If you begin a line with "#anchor" -- where "anchor" can be
 any word that doesn't contain whitespace -- it defines an anchor at
 that point into the document.  This point can be referenced using
 "page#anchor" as the target in a Muse link (see below).
+
+Click [[QuickStart#example][here]] to go back to the previous paragraph.
 
 ** URLs and E-mail addresses
 

@@ -170,7 +170,9 @@ All this means is that certain extensions, like .gz, are removed."
            (display-warning 'muse
                             (format "%s: Error evaluating %s: %s"
                                     (muse-page-name) form err)
-                            :warning)
+                            (if (featurep 'xemacs)
+                                'warning
+                              :warning))
          (message "%s: Error evaluating %s: %s"
                   (muse-page-name) form err))
        "<!--INVALID LISP CODE-->"))))
@@ -194,11 +196,14 @@ Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
                     (backtrace))
                 (if (fboundp 'display-warning)
                     (display-warning 'muse
-                                     (format "%s: Error occurred: %s"
-                                             (muse-page-name) err)
-                                     :warning)
-                  (message "%s: Error occured: %s"
-                           (muse-page-name) err)))))
+                                     (format "%s: Error occurred: %s\n\n%s"
+                                             (muse-page-name) err
+                                             (pp (quote ,body)))
+                                     (if (featurep 'xemacs)
+                                         'warning
+                                       :warning))
+                  (message "%s: Error occured: %s\n\n%s"
+                           (muse-page-name) err (pp (quote ,body)))))))
          (when (buffer-live-p ,temp-buffer)
            (with-current-buffer ,temp-buffer
              (set-buffer-modified-p nil))

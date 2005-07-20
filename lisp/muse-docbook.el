@@ -36,7 +36,6 @@
 
 (require 'muse-publish)
 (require 'muse-regexps)
-(require 'muse-html)
 
 (defgroup muse-docbook nil
   "Options controlling the behavior of Muse DocBook XML publishing.
@@ -77,8 +76,12 @@ This may be text or a filename."
 (defcustom muse-docbook-markup-regexps
   `(;; join together the parts of a list or table
     (10000 "</\\([oud]l\\)>\\s-*<\\1>\\s-*" 0 "")
-    (10100 "</tbody>\\s-*</table>\\s-*<table[^>]*>\\s-*<tbody>\\s-*" 0 "")
-    (10200 "</table>\\s-*<table[^>]*>\\s-*" 0 "")
+    (10100 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*"
+                    "</tgroup>\\s-*</informaltable>\\s-*"
+                    "<informaltable[^>]*>\\s-*<tgroup[^>]*>\\s-*"
+                    "<t\\1>\n") 0 "")
+    (10200 ,(concat "  </tgroup>\\s-*</informaltable>\\s-*"
+                    "<informaltable[^>]*>\\s-*<tgroup[^>]*>\n") 0 "")
 
     ;; Merge consecutive list tags
     (10300 ,(concat "</\\(itemized\\|ordered\\|variable\\)list>"
@@ -103,7 +106,8 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-functions
-  '((table . muse-docbook-markup-table))
+  '((anchor . muse-docbook-markup-anchor)
+    (table . muse-docbook-markup-table))
   "An alist of style types to custom functions for that kind of text.
 For more on the structure of this list, see
 `muse-publish-markup-functions'."
@@ -196,15 +200,17 @@ Use the base name of the coding system (i.e. without the -unix)."
   "Using `muse-docbook-encoding-map', try and resolve an emacs
 coding system to an associated DocBook XML coding system. If no
 match is found, `muse-docbook-charset-default' is used instead."
-  (let ((match (assoc (coding-system-base content-type)
-                      muse-docbook-encoding-map)))
+  (let ((match (and (fboundp 'coding-system-base)
+                    (assoc (coding-system-base content-type)
+                           muse-docbook-encoding-map))))
     (if match
         (cdr match)
       muse-docbook-charset-default)))
 
 (defun muse-docbook-encoding ()
   (muse-docbook-transform-content-type
-   (or buffer-file-coding-system
+   (or (and (boundp 'buffer-file-coding-system)
+            buffer-file-coding-system)
        muse-docbook-encoding-default)))
 
 (defun muse-docbook-markup-paragraph ()
@@ -225,33 +231,43 @@ match is found, `muse-docbook-charset-default' is used instead."
     (unless (bolp)
       (insert "\n")))
    ((eq (char-after) ?\<)
-    (when (looking-at "<\\(emphasis\\|systemitem\\|ulink\\|email\\)[ >]")
+    (when (looking-at (concat "<\\(emphasis\\|systemitem"
+                              "\\|ulink\\|anchor\\|email\\)[ >]"))
       (insert "<para>")))
    (t
     (insert "<para>"))))
 
+(defun muse-docbook-markup-anchor ()
+  (save-match-data
+    (muse-docbook-insert-anchor (match-string 1))) "")
+
+(defun muse-docbook-insert-anchor (anchor)
+  "Insert an anchor, either around the word at point, or within a tag."
+  (skip-chars-forward muse-regexp-space)
+  (when (looking-at "<\\([^ />]+\\)>")
+    (goto-char (match-end 0)))
+  (insert "<anchor id=\"" anchor "\" />"))
+
 (defun muse-docbook-markup-table ()
-  (let* ((str (save-match-data
-                (if (featurep 'xemacs)
-                    ;; more emacs divergence. :(
-                    (replace-in-string (match-string 1) " *|+ *$" "")
-                  (match-string 1))))
-         (fields (append (save-match-data
-                           (split-string str (concat "["
-                                                     muse-regexp-blank
-                                                     "]*|+["
-                                                     muse-regexp-blank
-                                                     "]*")))
-                         (list (match-string 4))))
-         (len (length (match-string 3)))
-         (row (cond ((= len 1) "tbody")
-                    ((= len 2) "thead")
-                    ((= len 3) "tfoot")))
-         (col "entry"))
-    (concat "<table>\n" "<" row ">\n" "<row>\n<" col ">"
-            (mapconcat 'identity fields (format "</%s><%s>" col col))
-            "</" col ">\n" "</row>\n" "</" row ">\n"
-            "</table>\n")))
+  (let* ((str (prog1
+                  (match-string 1)
+                (delete-region (match-beginning 0) (match-end 0))))
+         (fields (split-string str "\\s-*|+\\s-*"))
+         (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
+                    (length (match-string 1 str))))
+         (part (cond ((= type 1) "tbody")
+                     ((= type 2) "thead")
+                     ((= type 3) "tfoot"))))
+    (insert "<informaltable>\n"
+            "  <tgroup cols='" (number-to-string (length fields)) "'>\n"
+            "  <" part ">\n"
+            "    <row>\n")
+    (dolist (field fields)
+      (insert "      <entry>" field "</entry>\n"))
+    (insert "    </row>\n"
+            "  </" part ">\n"
+            "  </tgroup>\n"
+            "</informaltable>\n")))
 
 (defun muse-docbook-get-author (&optional author)
   "Split the AUTHOR directive into separate fields.
@@ -292,10 +308,49 @@ and anything after `Firstname' is optional."
       (goto-char (point-max))
       (insert "</section>"))))
 
+(defun muse-docbook-fixup-tables ()
+  "Sort table parts."
+  (goto-char (point-min))
+  (let (last)
+    (while (re-search-forward "^<informaltable>$" nil t)
+      (unless (get-text-property (point) 'read-only)
+        (forward-line 2)
+        (save-restriction
+          (let ((beg (point)))
+            (narrow-to-region beg (and (re-search-forward "^  </tgroup>$"
+                                                          nil t)
+                                       (match-beginning 0))))
+          (goto-char (point-min))
+          (sort-subr nil
+                     (function
+                      (lambda ()
+                        (if (re-search-forward
+                             "^\\s-*<t\\(head\\|body\\|foot\\)>$" nil t)
+                            (goto-char (match-beginning 0))
+                          (goto-char (point-max)))))
+                     (function
+                      (lambda ()
+                        (if (re-search-forward
+                             "^\\s-*</t\\(head\\|body\\|foot\\)>$" nil t)
+                            (goto-char (match-end 0))
+                          (goto-char (point-max)))))
+                     (function
+                      (lambda ()
+                        (looking-at "\\s-*<t\\(head\\|body\\|foot\\)>")
+                        (cond ((string= (match-string 1) "head") 1)
+                              ((string= (match-string 1) "foot") 2)
+                              (t 3))))))))))
+
+(defun muse-docbook-fixup-buffer ()
+  "Functions to call just before finalizing a DocBook document."
+  (muse-docbook-fixup-sections)
+  (muse-docbook-fixup-tables))
+
 (defun muse-docbook-finalize-buffer ()
-  (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
-    ;; make it agree with the default charset
-    (setq buffer-file-coding-system muse-docbook-encoding-default)))
+  (when (boundp 'buffer-file-coding-system)
+    (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
+      ;; make it agree with the default charset
+      (setq buffer-file-coding-system muse-docbook-encoding-default))))
 
 ;; Register the Muse DocBook XML Publisher
 
@@ -306,7 +361,7 @@ and anything after `Firstname' is optional."
                      :functions  'muse-docbook-markup-functions
                      :strings    'muse-docbook-markup-strings
                      :specials   'muse-docbook-markup-specials
-                     :before-end 'muse-docbook-fixup-sections
+                     :before-end 'muse-docbook-fixup-buffer
                      :after      'muse-docbook-finalize-buffer
                      :header     'muse-docbook-header
                      :footer     'muse-docbook-footer
