@@ -184,26 +184,29 @@ Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
   (let ((temp-buffer (make-symbol "temp-buffer")))
     `(let ((,temp-buffer (generate-new-buffer " *muse-temp*")))
        (unwind-protect
-           (condition-case err
+           (if debug-on-error
                (with-current-buffer ,temp-buffer
                  ,@body)
-             (error
-              (if (and (boundp 'muse-batch-publishing-p)
-                       muse-batch-publishing-p)
-                  (progn
-                    (message "%s: Error occured: %s"
-                             (muse-page-name) err)
-                    (backtrace))
-                (if (fboundp 'display-warning)
-                    (display-warning 'muse
-                                     (format "%s: Error occurred: %s\n\n%s"
-                                             (muse-page-name) err
-                                             (pp (quote ,body)))
-                                     (if (featurep 'xemacs)
-                                         'warning
-                                       :warning))
-                  (message "%s: Error occured: %s\n\n%s"
-                           (muse-page-name) err (pp (quote ,body)))))))
+             (condition-case err
+                 (with-current-buffer ,temp-buffer
+                   ,@body)
+               (error
+                (if (and (boundp 'muse-batch-publishing-p)
+                         muse-batch-publishing-p)
+                    (progn
+                      (message "%s: Error occured: %s"
+                               (muse-page-name) err)
+                      (backtrace))
+                  (if (fboundp 'display-warning)
+                      (display-warning 'muse
+                                       (format "%s: Error occurred: %s\n\n%s"
+                                               (muse-page-name) err
+                                               (pp (quote ,body)))
+                                       (if (featurep 'xemacs)
+                                           'warning
+                                         :warning))
+                    (message "%s: Error occured: %s\n\n%s"
+                             (muse-page-name) err (pp (quote ,body))))))))
          (when (buffer-live-p ,temp-buffer)
            (with-current-buffer ,temp-buffer
              (set-buffer-modified-p nil))

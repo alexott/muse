@@ -312,25 +312,26 @@ and anything after `Firstname' is optional."
                                                           nil t)
                                        (match-beginning 0))))
           (goto-char (point-min))
-          (sort-subr nil
-                     (function
-                      (lambda ()
-                        (if (re-search-forward
-                             "^\\s-*<t\\(head\\|body\\|foot\\)>$" nil t)
-                            (goto-char (match-beginning 0))
-                          (goto-char (point-max)))))
-                     (function
-                      (lambda ()
-                        (if (re-search-forward
-                             "^\\s-*</t\\(head\\|body\\|foot\\)>$" nil t)
-                            (goto-char (match-end 0))
-                          (goto-char (point-max)))))
-                     (function
-                      (lambda ()
-                        (looking-at "\\s-*<t\\(head\\|body\\|foot\\)>")
-                        (cond ((string= (match-string 1) "head") 1)
-                              ((string= (match-string 1) "foot") 2)
-                              (t 3))))))))))
+          (let ((inhibit-read-only t))
+            (sort-subr nil
+                       (function
+                        (lambda ()
+                          (if (re-search-forward
+                               "^\\s-*<t\\(head\\|body\\|foot\\)>$" nil t)
+                              (goto-char (match-beginning 0))
+                            (goto-char (point-max)))))
+                       (function
+                        (lambda ()
+                          (if (re-search-forward
+                               "^\\s-*</t\\(head\\|body\\|foot\\)>$" nil t)
+                              (goto-char (match-end 0))
+                            (goto-char (point-max)))))
+                       (function
+                        (lambda ()
+                          (looking-at "\\s-*<t\\(head\\|body\\|foot\\)>")
+                          (cond ((string= (match-string 1) "head") 1)
+                                ((string= (match-string 1) "foot") 2)
+                                (t 3)))))))))))
 
 (defun muse-docbook-finalize-buffer ()
   (when (boundp 'buffer-file-coding-system)

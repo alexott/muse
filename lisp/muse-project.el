@@ -510,12 +510,17 @@ The name of a project may be used for STYLES."
     (run-hook-with-args 'muse-before-project-publish-hook project)
     ;; publish all files in the project, for each style; the actual
     ;; publishing will only happen if the files are newer than the
-    ;; last published output
-    (let ((forced-files (muse-get-keyword :force-publish (cadr project))))
-      (dolist (pair (muse-project-file-alist project))
-        (when (muse-project-publish-file
-               (cdr pair) styles (or force (member (car pair) forced-files)))
-          (setq published t))))
+    ;; last published output, or if the file is listed in
+    ;; :force-publish.  Files in :force-publish will not trigger the
+    ;; "All pages need to be published" message.
+    (let ((forced-files (muse-get-keyword :force-publish (cadr project)))
+          (file-alist (muse-project-file-alist project)))
+      (dolist (pair file-alist)
+        (when (muse-project-publish-file (cdr pair) styles force)
+          (setq forced-files (delete (car pair) forced-files))
+          (setq published t)))
+      (dolist (file forced-files)
+        (muse-project-publish-file (cdr (assoc file file-alist)) styles t)))
     ;; run hook after publishing ends
     (run-hook-with-args 'muse-after-project-publish-hook project)
     ;; notify the user that everything is now done
