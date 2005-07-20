@@ -533,8 +533,7 @@ ignored."
             (if (string-match "#" link)
                 (setq link (substring link 0 (match-beginning 0))))
             (if (or (and (muse-project-of-file)
-                         (muse-project-page-file
-                          link-name muse-current-project t))
+                         (muse-project-page-file link muse-current-project t))
                     (file-exists-p link))
                 'muse-link-face
               (when explicit
