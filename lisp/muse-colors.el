@@ -220,7 +220,7 @@ whether progress messages should be displayed to the user."
             ;; or bad leader
             ;; or no '*' at end
             ;; or word constituent follows
-            (unless (or (> leader 3)
+            (unless (or (> leader 5)
                         (not (eq leader (- e2 b2)))
                         (eq (char-syntax (char-before b2)) ?\ )
                         (not (eq (char-after b2) ?*))
@@ -297,7 +297,7 @@ whether progress messages should be displayed to the user."
 
 (defcustom muse-colors-markup
   `(;; make emphasized text appear emphasized
-    ("\\*\\{1,4\\}" ?* muse-colors-emphasized)
+    ("\\*\\{1,5\\}" ?* muse-colors-emphasized)
 
     ;; make underlined text appear underlined
     (,(concat "_[^" muse-regexp-space "_]")
@@ -305,13 +305,17 @@ whether progress messages should be displayed to the user."
 
     ("^#title" ?\# muse-colors-title)
 
-    (muse-explicit-link-regexp ?\[ muse-colors-link)
+    (muse-explicit-link-regexp ?\[ muse-colors-explicit-link)
 
     ;; render in teletype and suppress further parsing
     (,(concat "=[^" muse-regexp-space "=>]") ?= muse-colors-verbatim)
 
     ;; highlight any markup tags encountered
     (muse-tag-regexp ?\< muse-colors-custom-tags)
+
+    ;; this has to come later since it doesn't have a special
+    ;; character in the second cell
+    (muse-url-regexp t muse-colors-implicit-link)
     )
   "Expressions to highlight an Emacs Muse buffer.
 These are arranged in a rather special fashion, so as to be as quick as
@@ -586,7 +590,8 @@ ignored."
               (when explicit
                 'muse-bad-link-face))))))))
 
-(defun muse-colors-link ()
+(defun muse-colors-explicit-link ()
+  "Color explicit links."
   (when (eq ?\[ (char-after (match-beginning 0)))
     ;; remove flyspell overlays
     (when (fboundp 'flyspell-unhighlight-at)
@@ -621,6 +626,22 @@ ignored."
        (muse-link-properties (muse-match-string-no-properties 0)
                              (muse-link-face link t)))
       (goto-char (match-end 0)))))
+
+(defun muse-colors-implicit-link ()
+  "Color implicit links."
+  ;; remove flyspell overlays
+  (when (fboundp 'flyspell-unhighlight-at)
+    (let ((cur (match-beginning 0)))
+      (while (> (match-end 0) cur)
+        (flyspell-unhighlight-at cur)
+        (setq cur (1+ cur)))))
+  (unless (eq (get-text-property (match-beginning 0) 'invisible) 'muse)
+    (let ((link (muse-match-string-no-properties 1))
+          (face (muse-link-face (match-string 1))))
+      (when face
+        (add-text-properties (match-beginning 1) (match-end 0)
+                             (muse-link-properties
+                              (muse-match-string-no-properties 1) face))))))
 
 (defun muse-colors-title ()
   (add-text-properties (+ 7 (match-beginning 0))

@@ -203,21 +203,6 @@ called manually."
 
 (eval-after-load "muse-colors"
   '(progn
-     (defun muse-wiki-colors-wikiword ()
-       "Color WikiWords."
-       ;; remove flyspell overlays
-       (when (fboundp 'flyspell-unhighlight-at)
-         (let ((cur (match-beginning 0)))
-           (while (> (match-end 0) cur)
-             (flyspell-unhighlight-at cur)
-             (setq cur (1+ cur)))))
-       (let ((link (muse-match-string-no-properties 1))
-             (face (muse-link-face (match-string 1))))
-         (when face
-           (add-text-properties (match-beginning 1) (match-end 0)
-                                (muse-link-properties
-                                 (muse-match-string-no-properties 1) face)))))
-
      (defun muse-wiki-colors-nop-tag (beg end)
        (add-text-properties beg (+ beg 5)
                             '(invisible muse intangible t)))
@@ -227,10 +212,10 @@ called manually."
                   t)
 
      (add-to-list 'muse-colors-markup
-                  '(muse-wiki-interwiki-regexp t muse-wiki-colors-wikiword)
+                  '(muse-wiki-interwiki-regexp t muse-colors-implicit-link)
                   t)
      (add-to-list 'muse-colors-markup
-                  '(muse-wiki-wikiword-regexp t muse-wiki-colors-wikiword)
+                  '(muse-wiki-wikiword-regexp t muse-colors-implicit-link)
                   t)
 
      (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
