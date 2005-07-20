@@ -681,7 +681,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
                         close-tag (muse-markup-text 'end-most-emph)))))))
     (if (and (not (get-text-property beg 'noemphasis))
              (setq loc (search-forward leader nil t))
-             (eq 0 (skip-syntax-forward "w" (1+ loc)))
+             (not (eq (char-syntax (char-after (1+ loc))) ?w))
              (not (eq (char-syntax (char-before (point))) ?\ ))
              (not (get-text-property (point) 'noemphasis)))
         (progn
