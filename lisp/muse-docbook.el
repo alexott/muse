@@ -127,6 +127,9 @@ For more on the structure of this list, see
     (subsection-end  . "</title>")
     (subsubsection   . "<section><title>")
     (subsubsection-end . "</title>")
+    (section-other   . "<section><title>")
+    (section-other-end . "</title>")
+    (section-close   . "</section>")
     (footnote        . "<footnote><para>")
     (footnote-end    . "</para></footnote>")
     (begin-underline . "")
@@ -296,18 +299,6 @@ and anything after `Firstname' is optional."
                      "</othername>"
                      "<surname>" last "</surname>"))))))
 
-(defun muse-docbook-fixup-sections ()
-  "Add </section> tags."
-  (goto-char (point-min))
-  (let (last)
-    (while (re-search-forward "\n*<section>" nil t)
-      (when last
-        (replace-match "\n</section>\n\n<section>"))
-      (setq last (match-beginning 0)))
-    (when last
-      (goto-char (point-max))
-      (insert "</section>"))))
-
 (defun muse-docbook-fixup-tables ()
   "Sort table parts."
   (goto-char (point-min))
@@ -341,11 +332,6 @@ and anything after `Firstname' is optional."
                               ((string= (match-string 1) "foot") 2)
                               (t 3))))))))))
 
-(defun muse-docbook-fixup-buffer ()
-  "Functions to call just before finalizing a DocBook document."
-  (muse-docbook-fixup-sections)
-  (muse-docbook-fixup-tables))
-
 (defun muse-docbook-finalize-buffer ()
   (when (boundp 'buffer-file-coding-system)
     (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
@@ -361,7 +347,7 @@ and anything after `Firstname' is optional."
                      :functions  'muse-docbook-markup-functions
                      :strings    'muse-docbook-markup-strings
                      :specials   'muse-docbook-markup-specials
-                     :before-end 'muse-docbook-fixup-buffer
+                     :before-end 'muse-docbook-fixup-tables
                      :after      'muse-docbook-finalize-buffer
                      :header     'muse-docbook-header
                      :footer     'muse-docbook-footer

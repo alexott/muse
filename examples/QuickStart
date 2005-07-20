@@ -304,8 +304,8 @@ link descriptions.  The syntax is:
 [[link target without description]]
 </example>
 
-Thus, Muse can be downloaded [[http://www.newartisans.com/johnw/Emacs/muse.tar.gz][here]], or at
-[[http://www.newartisans.com/johnw/Emacs/muse.tar.gz]].
+Thus, Muse can be downloaded [[http://download.gna.org/muse-el/][here]], or at
+[[http://download.gna.org/muse-el/]].
 
 ** Embedded lisp
 
@@ -345,17 +345,17 @@ whatever definitions exist in the base style.  However, some
 definitions only partially override.  Those which support partial
 overriding are:
 
-:functions ::
-  If a markup function is not found in the derived style's function
-  list, the base style's function list will be queried.
+ - =:functions= -- If a markup function is not found in the derived
+   style's function list, the base style's function list will be
+   queried.
 
-:strings ::
+ - =:strings=
 
-:before ::
+ - =:before=
 
-:before-end ::
+ - =:before-end=
 
-:after ::
+ - =:after=
 
 ** Overriding an existing style
 

@@ -162,6 +162,8 @@ For more on the structure of this list, see
     (subsection-end  . "}")
     (subsubsection   . "\\subsubsection{")
     (subsubsection-end . "}")
+    (section-other   . "\\paragraph{")
+    (section-other-end . "}")
     (footnote        . "\\footnote{")
     (footnote-end    . "{")
     (footnotemark    . "\\footnotemark[%d]")

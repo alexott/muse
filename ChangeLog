@@ -2,6 +2,51 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-20 07:41:28 GMT	Michael Olson <mwolson@gnu.org>	patch-164
+
+    Summary:
+      Permit infinitely-nested sections.
+    Revision:
+      muse--main--1.0--patch-164
+
+    * examples/QuickStart (Links): Use GNA link rather than johnw's site.
+      (Deriving from an existing style): Mark up as a list.
+    
+    * lisp/muse-colors.el (muse-colors-outline-faces-list, muse-make-faces):
+      Color an additional level of headings.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Add new
+      section-other, section-other-end, and section-close strings.
+      (muse-docbook-fixup-sections): Removed, since Muse now implements this
+      through the 'section-close string.
+    
+    * lisp/muse-html.el (muse-xhtml-markup-strings): Omit newline from
+      'begin-underline, since this messes up paragraph handling.  Use
+      <h5></h5> for 'section-other.
+    
+      (muse-html-fixup-tables): New function that sorts the table parts so
+      that order is head, foot, body.  Apparently XHTML needs this, and it
+      seems like a good general practice, so we do it for HTML as well.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Use \\paragraph{} for
+      'section-other.
+    
+    * lisp/muse-publish.el (muse-publish-section-close): New function that
+      determines where to put the section close given heading depth and
+      inserts it.
+      (muse-publish-markup-heading): Handle 'section-other and
+      'section-other-end.  Call `muse-publish-section-close' at end of
+      function.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Use @subsubheading
+      for 'section-other.
+
+    modified files:
+     ChangeLog examples/QuickStart lisp/muse-colors.el
+     lisp/muse-docbook.el lisp/muse-html.el lisp/muse-latex.el
+     lisp/muse-publish.el lisp/muse-texinfo.el
+
+
 2005-07-20 05:50:55 GMT	Michael Olson <mwolson@gnu.org>	patch-163
 
     Summary:

@@ -133,6 +133,7 @@ For more on the structure of this list, see
     (section         . "@chapter ")
     (subsection      . "@section ")
     (subsubsection   . "@subsection ")
+    (section-other   . "@subsubheading ")
     (footnote        . "@footnote{")
     (footnote-end    . "}")
     (begin-underline . "_")

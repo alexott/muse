@@ -69,17 +69,18 @@ this to nil."
 
 (defvar muse-colors-outline-faces-list
   (if (facep 'outline-1)
-      '(outline-1 outline-2 outline-3 outline-4)
+      '(outline-1 outline-2 outline-3 outline-4 outline-5)
     ;; These are supposed to be equivalent in coloring
     '(font-lock-function-name-face
       font-lock-variable-name-face
       font-lock-keyword-face
-      font-lock-builtin-face))
+      font-lock-builtin-face
+      font-lock-comment-face))
   "Outline faces to use when assigning Muse header faces.")
 
 (defun muse-make-faces ()
   (let (newsym)
-    (dolist (num '(1 2 3 4))
+    (dolist (num '(1 2 3 4 5))
       (setq newsym (intern (concat "muse-header-"
                                    (int-to-string num))))
       (cond
@@ -92,7 +93,7 @@ this to nil."
                        newsym)
           (eval `(defface ,newsym
                    '((t (:size
-                         ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt"))
+                         ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt" "11pt"))
                          :bold t)))
                    "Muse header face"
                    :group 'muse-colors))))

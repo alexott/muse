@@ -241,6 +241,8 @@ For more on the structure of this list, see
     (subsection-end  . "</h3>")
     (subsubsection   . "<h4>")
     (subsubsection-end . "</h4>")
+    (section-other   . "<h5>")
+    (section-other-end . "</h5>")
     (begin-underline . "<u>")
     (end-underline   . "</u>")
     (begin-literal   . "<code>")
@@ -282,7 +284,7 @@ differs little between the various styles."
     (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\" alt=\"\" /></a>")
     (rule            . "<hr />")
     (fn-sep          . "<hr />\n")
-    (begin-underline . "<span style=\"text-decoration: underline;\">\n")
+    (begin-underline . "<span style=\"text-decoration: underline;\">")
     (end-underline   . "</span>")
     (begin-center    . "<span style=\"text-align: center;\">\n")
     (end-verse-line  . "<br />")
@@ -574,6 +576,39 @@ if not escaped."
        (concat muse-html-meta-content-type "; charset="
                (muse-html-encoding))))
 
+(defun muse-html-fixup-tables ()
+  "Sort table parts."
+  (goto-char (point-min))
+  (let (last)
+    (while (re-search-forward "^<table[^>]*>$" nil t)
+      (unless (get-text-property (point) 'read-only)
+        (forward-line 1)
+        (save-restriction
+          (let ((beg (point)))
+            (narrow-to-region beg (and (re-search-forward "^</table>$"
+                                                          nil t)
+                                       (match-beginning 0))))
+          (goto-char (point-min))
+          (sort-subr nil
+                     (function
+                      (lambda ()
+                        (if (re-search-forward
+                             "^\\s-*<t\\(head\\|body\\|foot\\)>$" nil t)
+                            (goto-char (match-beginning 0))
+                          (goto-char (point-max)))))
+                     (function
+                      (lambda ()
+                        (if (re-search-forward
+                             "^\\s-*</t\\(head\\|body\\|foot\\)>$" nil t)
+                            (goto-char (match-end 0))
+                          (goto-char (point-max)))))
+                     (function
+                      (lambda ()
+                        (looking-at "\\s-*<t\\(head\\|body\\|foot\\)>")
+                        (cond ((string= (match-string 1) "head") 1)
+                              ((string= (match-string 1) "foot") 2)
+                              (t 3))))))))))
+
 (defun muse-html-finalize-buffer ()
   (when muse-publish-generate-contents
     (goto-char (car muse-publish-generate-contents))
@@ -592,6 +627,7 @@ if not escaped."
                      :tags      'muse-html-markup-tags
                      :specials  'muse-html-markup-specials
                      :before    'muse-html-prepare-buffer
+                     :before-end 'muse-html-fixup-tables
                      :after     'muse-html-finalize-buffer
                      :header    'muse-html-header
                      :footer    'muse-html-footer

@@ -581,6 +581,16 @@ the file is published no matter what."
 
 ;; Default publishing rules
 
+(defun muse-publish-section-close (depth)
+  "Seach forward for the closing tag of given DEPTH."
+  (save-excursion
+    (while (and (re-search-forward (concat "^\\*\\{1,"
+                                           (number-to-string depth) "\\}\\s-+")
+                                   nil 0)
+                (get-text-property (match-beginning 0) 'read-only)))
+    (forward-line 0)
+    (insert (muse-markup-text 'section-close) "\n")))
+
 (defun muse-publish-markup-directive (&optional name value)
   (unless name (setq name (match-string 1)))
   (unless value (setq value (match-string 2)))
@@ -715,15 +725,18 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
          (start (muse-markup-text
                  (cond ((= len 1) 'section)
                        ((= len 2) 'subsection)
-                       ((= len 3) 'subsubsection))))
+                       ((= len 3) 'subsubsection)
+                       (t 'section-other))))
          (end   (muse-markup-text
                  (cond ((= len 1) 'section-end)
                        ((= len 2) 'subsection-end)
-                       ((= len 3) 'subsubsection-end)))))
+                       ((= len 3) 'subsubsection-end)
+                       (t 'section-other-end)))))
     (delete-region (match-beginning 0) (match-end 0))
     (insert start)
     (end-of-line)
-    (if end (insert end))))
+    (if end (insert end))
+    (muse-publish-section-close len)))
 
 (defvar muse-publish-footnotes nil)
 
