@@ -2,6 +2,37 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-20 18:50:12 GMT	Michael Olson <mwolson@gnu.org>	patch-167
+
+    Summary:
+      Add coloring for example, verbatim, and =signs=; anchor fix.
+    Revision:
+      muse--main--1.0--patch-167
+
+    * lisp/muse-colors.el (muse-verbatim-face): New face that is used to
+      color <example>, <verbatim>, and =signs=.  Defaults to a shade of gray.
+      (muse-colors-verbatim): Use `muse-verbatim-face'.
+      (muse-colors-markup): Move =sign= interpreting down so it gets higher
+      priority.
+      (muse-colors-tags): Add verbatim and literal tags.
+      (muse-colors-example-tag): Use `remove-text-properties' instead of
+      `set-text-properties', since the latter does not work consistently.
+      (muse-colors-literal-tag): New function that strips all markup from the
+      region.
+      (muse-colors-link): Match against muse-explicit-link-regexp early on so
+      that we can work around an annoying XEmacs issue.
+    
+    * lisp/muse-publish.el (muse-publish-markup-word): Make =signs=
+      multi-line by default.
+    
+    * lisp/muse.el (muse-page-name): Handle case where we're given an empty
+      string.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-publish.el
+     lisp/muse.el
+
+
 2005-07-20 16:13:37 GMT	Michael Olson <mwolson@gnu.org>	patch-166
 
     Summary:

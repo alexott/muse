@@ -137,7 +137,7 @@ understand that it is part of a regexp."
   "Return the canonical form of a Muse page name.
 All this means is that certain extensions, like .gz, are removed."
   (save-match-data
-    (unless name
+    (unless (and name (not (string= name "")))
       (setq name (or (and (boundp 'muse-publishing-current-file)
                           muse-publishing-current-file)
                      buffer-file-name)))

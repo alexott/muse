@@ -136,6 +136,14 @@ this to nil."
   "Face for bad Muse cross-references."
   :group 'muse-colors)
 
+(defface muse-verbatim-face
+  '((((class color) (background light))
+     (:foreground "slate gray"))
+    (((class color) (background dark))
+     (:foreground "gray")))
+  "Face for verbatim text."
+  :group 'muse-colors)
+
 (defcustom muse-colors-buffer-hook nil
   "A hook run after a region is highlighted.
 Each function receives three arguments: BEG END VERBOSE.
@@ -254,27 +262,47 @@ whether progress messages should be displayed to the user."
                '(font-lock-multiline t)))))))))
 
 (defun muse-colors-verbatim ()
-  (skip-chars-forward (concat "^" muse-regexp-space "=>") end))
+  (let ((start (match-beginning 0))
+        multiline)
+    (unless (eq (get-text-property start 'invisible) 'muse)
+      ;; beginning of line or space or symbol
+      (when (or (= start (point-min))
+                (eq (char-syntax (char-before start)) ?\ )
+                (memq (char-before start)
+                      '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
+        (save-excursion
+          (skip-chars-forward "^=\n" end)
+          (when (eq (char-after) ?\n)
+            (setq multiline t)
+            (skip-chars-forward "^=" end))
+          ;; Abort if space exists just before end
+          ;; or no '=' at end
+          (unless (or (eq (char-syntax (char-before (point))) ?\ )
+                      (not (eq (char-after (point)) ?=)))
+            (add-text-properties start (1+ start) '(invisible muse))
+            (add-text-properties (1+ start) (point) '(face muse-verbatim-face))
+            (add-text-properties (point)
+                                 (min (1+ (point)) (point-max))
+                                 '(invisible muse))
+            (when multiline
+              (add-text-properties
+               start (min (1+ (point)) (point-max))
+               '(font-lock-multiline t)))))))))
 
 (defcustom muse-colors-markup
-  `(;; render in teletype and suppress further parsing
-    (,(concat "\\b=[^"
-              muse-regexp-space
-              "=>]")
-     ?= muse-colors-verbatim)
-
-    ;; make emphasized text appear emphasized
+  `(;; make emphasized text appear emphasized
     ("\\*\\{1,4\\}" ?* muse-colors-emphasized)
 
     ;; make underlined text appear underlined
-    (,(concat "_[^"
-              muse-regexp-blank
-              "_]")
+    (,(concat "_[^" muse-regexp-space "_]")
      ?_ muse-colors-underlined)
 
     ("^#title" ?\# muse-colors-title)
 
     (muse-explicit-link-regexp ?\[ muse-colors-link)
+
+    ;; render in teletype and suppress further parsing
+    (,(concat "=[^" muse-regexp-space "=>]") ?= muse-colors-verbatim)
 
     ;; highlight any markup tags encountered
     (muse-tag-regexp ?\< muse-colors-custom-tags)
@@ -400,7 +428,9 @@ of the functions listed in `muse-colors-markup'."
       (set-buffer-modified-p modified-p))))
 
 (defcustom muse-colors-tags
-  '(("example" t nil muse-colors-example-tag))
+  '(("example" t nil muse-colors-example-tag)
+    ("verbatim" t nil muse-colors-example-tag)
+    ("literal" t nil muse-colors-literal-tag))
   "A list of tag specifications for specially highlighting text.
 XML-style tags are the best way to add custom highlighting to Muse.
 This is easily accomplished by customizing this list of markup tags.
@@ -459,8 +489,19 @@ Functions should not modify the contents of the buffer."
             (apply (nth 3 tag-info) args)))))))
 
 (defun muse-colors-example-tag (beg end)
-  "Strip properties from stuff in example."
-  (set-text-properties beg end nil)
+  "Strip properties and colorize with `muse-verbatim-face'."
+  (remove-text-properties
+   beg end '(face nil font-lock-multiline nil
+                  invisible nil intangible nil display nil
+                  mouse-face nil keymap nil help-echo nil))
+  (add-text-properties beg end '(face muse-verbatim-face)))
+
+(defun muse-colors-literal-tag (beg end)
+  "Strip properties and mark as literal."
+  (remove-text-properties
+   beg end '(face nil font-lock-multiline nil
+                  invisible nil intangible nil display nil
+                  mouse-face nil keymap nil help-echo nil))
   (goto-char end))
 
 (defun muse-unhighlight-region (begin end &optional verbose)
@@ -547,11 +588,13 @@ ignored."
         (while (> (match-end 0) cur)
           (flyspell-unhighlight-at cur)
           (setq cur (1+ cur)))))
-    (let* (;; FIXME: link is not used
-           (link (muse-match-string-no-properties 2))
-           (desc (muse-match-string-no-properties 3))
+    (save-excursion
+      (goto-char (match-beginning 0))
+      (looking-at muse-explicit-link-regexp))
+    (let* ((link (match-string-no-properties 1))
+           (desc (muse-match-string-no-properties 2))
            (props (muse-link-properties
-                   desc (muse-link-face (match-string 2) t)))
+                   desc (muse-link-face link t)))
            (invis-props (append props (muse-link-properties desc))))
       (if desc
           (progn
@@ -559,19 +602,19 @@ ignored."
             ;; portion too, since emacs sometimes will position
             ;; the cursor on an intangible character
             (add-text-properties (match-beginning 0)
-                                 (match-beginning 3) invis-props)
-            (add-text-properties (match-beginning 3) (match-end 3) props)
-            (add-text-properties (match-end 3) (match-end 0) invis-props))
+                                 (match-beginning 2) invis-props)
+            (add-text-properties (match-beginning 2) (match-end 2) props)
+            (add-text-properties (match-end 2) (match-end 0) invis-props))
         (add-text-properties (match-beginning 0)
-                             (match-beginning 2) invis-props)
-        (add-text-properties (match-beginning 2) (match-end 0) props)
-        (add-text-properties (match-end 2) (match-end 0) invis-props)))
-    (goto-char (match-end 0))
-    (add-text-properties
-     (match-beginning 0) (match-end 0)
-     (muse-link-properties (muse-match-string-no-properties 0)
-                           (muse-link-face (match-string 2) t)))
-    (goto-char (match-end 0))))
+                             (match-beginning 1) invis-props)
+        (add-text-properties (match-beginning 1) (match-end 0) props)
+        (add-text-properties (match-end 1) (match-end 0) invis-props))
+      (goto-char (match-end 0))
+      (add-text-properties
+       (match-beginning 0) (match-end 0)
+       (muse-link-properties (muse-match-string-no-properties 0)
+                             (muse-link-face link t)))
+      (goto-char (match-end 0)))))
 
 (defun muse-colors-title ()
   (add-text-properties (+ 7 (match-beginning 0))

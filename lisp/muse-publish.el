@@ -661,10 +661,9 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
   (let* ((beg (match-beginning 2))
          (end (1- (match-end 2)))
          (leader (buffer-substring-no-properties beg end))
-         open-tag close-tag mark-read-only loc multi-line)
+         open-tag close-tag mark-read-only loc)
     (cond
      ((string= leader "_")
-      (setq multi-line t)
       (setq open-tag (muse-markup-text 'begin-underline)
             close-tag (muse-markup-text 'end-underline)))
      ((string= leader "=")
@@ -672,7 +671,6 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
             close-tag (muse-markup-text 'end-literal))
       (setq mark-read-only t))
      (t
-      (setq multi-line t)
       (let ((l (length leader)))
         (cond
          ((= l 1) (setq open-tag (muse-markup-text 'begin-emph)
@@ -685,8 +683,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
              (setq loc (search-forward leader nil t))
              (eq 0 (skip-syntax-forward "w" (1+ loc)))
              (not (eq (char-syntax (char-before (point))) ?\ ))
-             (not (get-text-property (point) 'noemphasis))
-             (or multi-line (= 1 (count-lines beg loc))))
+             (not (get-text-property (point) 'noemphasis)))
         (progn
           (replace-match "")
           (delete-region beg end)
