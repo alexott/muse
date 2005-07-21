@@ -72,7 +72,7 @@
   :type 'string
   :group 'muse-latex)
 
-(defcustom muse-latex-footer "\n\\end{document}"
+(defcustom muse-latex-footer "\n\\end{document}\n"
   "Footer used for publishing LaTeX files.  This may be text or a filename."
   :type 'string
   :group 'muse-latex)
@@ -103,7 +103,7 @@ filename."
 
 (defcustom muse-latexcjk-footer
   "\n\\end{CJK*}
-\\end{document}"
+\\end{document}\n"
   "Footer used for publishing LaTeX files (CJK).  This may be text or a
 filename."
   :type 'string
