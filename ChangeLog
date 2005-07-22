@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-22 04:55:52 GMT	Michael Olson <mwolson@gnu.org>	patch-171
+
+    Summary:
+      Add a few common revision control directories to the ignore list.
+    Revision:
+      muse--main--1.0--patch-171
+
+    * lisp/muse-project.el (muse-project-ignore-regexp): Add types of
+      directories to be ignored when building the file alist, such as those
+      used for CVS and Arch revision control data.
+
+    modified files:
+     ChangeLog lisp/muse-project.el
+
+
 2005-07-21 01:00:25 GMT	Michael Olson <mwolson@gnu.org>	patch-170
 
     Summary:

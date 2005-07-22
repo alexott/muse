@@ -207,7 +207,8 @@ when publishing files in that project."
   "This variable is automagically constructed as needed.")
 
 (defcustom muse-project-ignore-regexp
-  "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\)\\'"
+  (concat "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'"
+          "\\|/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|\\)\\(/\\|'\\)")
   "A regexp matching files to be ignored in Wiki directories."
   :type 'regexp
   :group 'muse-regexp)
