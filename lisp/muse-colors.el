@@ -504,7 +504,12 @@ Functions should not modify the contents of the buffer."
    beg end '(face nil font-lock-multiline nil
                   invisible nil intangible nil display nil
                   mouse-face nil keymap nil help-echo nil))
-  (add-text-properties beg end '(face muse-verbatim-face)))
+  (let ((multi (save-excursion
+                 (goto-char beg)
+                 (forward-line 1)
+                 (> end (point)))))
+    (add-text-properties beg end `(face muse-verbatim-face
+                                   font-lock-miltiline ,multi))))
 
 (defun muse-colors-literal-tag (beg end)
   "Strip properties and mark as literal."
@@ -512,6 +517,11 @@ Functions should not modify the contents of the buffer."
    beg end '(face nil font-lock-multiline nil
                   invisible nil intangible nil display nil
                   mouse-face nil keymap nil help-echo nil))
+  (let ((multi (save-excursion
+                 (goto-char beg)
+                 (forward-line 1)
+                 (> end (point)))))
+    (add-text-properties beg end `(font-lock-miltiline ,multi)))
   (goto-char end))
 
 (defun muse-unhighlight-region (begin end &optional verbose)

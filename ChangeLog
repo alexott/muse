@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-22 07:30:43 GMT	Michael Olson <mwolson@gnu.org>	patch-174
+
+    Summary:
+      Try to fix <example> region coloring problem.
+    Revision:
+      muse--main--1.0--patch-174
+
+    * lisp/muse-colors.el (muse-colors-example-tag, muse-colors-literal-tag):
+      If region is multiple lines, add '(font-lock-multiline t) to
+      properties.  This should fix an annoying <example> region issue.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el
+
+
 2005-07-22 07:19:30 GMT	Michael Olson <mwolson@gnu.org>	patch-173
 
     Summary:
