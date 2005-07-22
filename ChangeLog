@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-22 06:42:10 GMT	Michael Olson <mwolson@gnu.org>	patch-172
+
+    Summary:
+      Fix failure to publish emphasis properly.
+    Revision:
+      muse--main--1.0--patch-172
+
+    * lisp/muse-publish.el (muse-publish-markup-word): Darn off-by-one
+      errors.
+    
+    * experimental/muse-wiki-old.el: Removed, since I'm happy with the state
+      of muse-wiki.
+
+    removed files:
+     experimental/.arch-ids/muse-wiki-old.el.id
+     experimental/muse-wiki-old.el
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-07-22 04:55:52 GMT	Michael Olson <mwolson@gnu.org>	patch-171
 
     Summary:
