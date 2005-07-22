@@ -635,7 +635,9 @@ ignored."
       (while (> (match-end 0) cur)
         (flyspell-unhighlight-at cur)
         (setq cur (1+ cur)))))
-  (unless (eq (get-text-property (match-beginning 0) 'invisible) 'muse)
+  (unless (or (eq (get-text-property (match-beginning 0) 'invisible) 'muse)
+              (eq (char-before (match-beginning 0)) ?\")
+              (eq (char-after (match-end 0)) ?\"))
     (let ((link (muse-match-string-no-properties 1))
           (face (muse-link-face (match-string 1))))
       (when face

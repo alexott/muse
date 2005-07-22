@@ -979,7 +979,11 @@ like read-only from being inadvertently deleted."
     (setq link (if explicit
                    (muse-handle-explicit-link (match-string 1))
                  (muse-handle-implicit-link (match-string 0))))
-    (when link
+    (when (and link
+               (or explicit
+                   (not (or (eq (char-before (match-beginning 0)) ?\")
+                            (eq (char-after (match-end 0)) ?\")))))
+
       (muse-publish-insert-url link desc explicit))))
 
 (defun muse-publish-markup-url ()
