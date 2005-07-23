@@ -207,8 +207,8 @@ when publishing files in that project."
   "This variable is automagically constructed as needed.")
 
 (defcustom muse-project-ignore-regexp
-  (concat "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'"
-          "\\|/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|\\)\\(/\\|'\\)")
+  (concat "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'\\|"
+          "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\)\\(/\\|\\'\\)")
   "A regexp matching files to be ignored in Wiki directories."
   :type 'regexp
   :group 'muse-regexp)
@@ -336,12 +336,13 @@ If PATHNAME is nil, the current buffer's filename is used."
                        (and (boundp 'muse-publishing-current-file)
                             muse-publishing-current-file)
                        buffer-file-name))
-    (when pathname
-      (let* ((file (file-truename pathname))
-             (dir  (file-name-directory file))
-             (project-entry muse-project-alist)
-             found)
-        (save-match-data
+    (save-match-data
+      (when (and pathname
+                 (not (string-match muse-project-ignore-regexp pathname)))
+        (let* ((file (file-truename pathname))
+               (dir  (file-name-directory file))
+               (project-entry muse-project-alist)
+               found)
           (while (and project-entry (not found))
             (let ((pats (car (cdar project-entry))))
               (while (and pats (not found))
@@ -353,8 +354,8 @@ If PATHNAME is nil, the current buffer's filename is used."
                             (string-match truename file))
                         (setq found (car project-entry))))
                   (setq pats (cdr pats))))
-              (setq project-entry (cdr project-entry)))))
-        found))))
+              (setq project-entry (cdr project-entry))))
+          found)))))
 
 (defun muse-read-project (prompt &optional no-check-p no-assume)
   "Read a project name from the minibuffer, if it can't be figured

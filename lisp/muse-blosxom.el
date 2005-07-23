@@ -184,16 +184,17 @@ The base directory is specified by BASE, and defaults to
 
 Directories starting with \".\" will be ignored."
   (unless base (setq base muse-blosxom-base-directory))
-  (when (file-directory-p base)
+  (when (and (file-directory-p base)
+             (not (string-match muse-project-ignore-regexp base)))
     (let (list dir)
       (dolist (file (directory-files base t "^[^.]"))
-        (when (file-directory-p file)     ; must be a directory
+        (when (and (file-directory-p file)
+                   (not (string-match muse-project-ignore-regexp file)))
           (setq dir (file-name-nondirectory file))
-          (when dir
-            (push dir list)
-            (nconc list (mapcar #'(lambda (item)
-                                    (concat dir "/" item))
-                                (muse-blosxom-get-categories file))))))
+          (push dir list)
+          (nconc list (mapcar #'(lambda (item)
+                                  (concat dir "/" item))
+                              (muse-blosxom-get-categories file)))))
       list)))
 
 (defun muse-blosxom-title-to-file (title)

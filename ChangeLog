@@ -2,6 +2,35 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-23 01:29:29 GMT	Michael Olson <mwolson@gnu.org>	patch-176
+
+    Summary:
+      Include regexps from base styles.  Fix muse-project-ignore-regexp and use it more.
+    Revision:
+      muse--main--1.0--patch-176
+
+    * lisp/muse-blosxom.el (muse-blosxom-get-categories): Don't include
+      folders that match `muse-project-ignore-regexp'.
+    
+    * lisp/muse-project.el (muse-project-ignore-regexp): Correct an escape
+      omission.  Add ",.*" to list of bad directory parts.
+    
+    * lisp/muse-project.el (muse-project-of-file): Ignore PATHNAME if it
+      matches `muse-project-ignore-regexp'.
+    
+    * lisp/muse-publish.el: Install patch from Peter K. Lee.
+      (muse-style-elements-list): New function that returns a list of
+      references to ELEM in STYLE, including base styles.
+      (muse-publish-markup-region): Use muse-style-elements-list rather than
+      muse-style-elements when getting :regexps.
+    
+    * lisp/muse-publish.el (muse-style-element): Add docstring.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-blosxom.el lisp/muse-project.el
+     lisp/muse-publish.el
+
+
 2005-07-23 00:21:36 GMT	Michael Olson <mwolson@gnu.org>	patch-175
 
     Summary:

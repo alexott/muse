@@ -25,6 +25,9 @@
 
 ;; Yann Hodique (yann DOT hodique AT gmail DOT com) fixed an
 ;; unnecessary URL description transform in `muse-publish-url'.
+;;
+;; Peter K. Lee (saint AT corenova DOT com) provided the
+;; `muse-style-elements-list' function.
 
 ;;; Code:
 
@@ -338,7 +341,20 @@ contents were requested.")
         (symbol-value value)
       value)))
 
+(defun muse-style-elements-list (elem &optional style)
+  "Return a list all references to ELEM in STYLE, including base styles.
+If STYLE is not specified, use current style."
+  (let (base elements)
+    (while style
+      (setq style (muse-style style))
+      (setq elements (append elements
+                             (muse-get-keyword elem style)))
+      (setq style (muse-get-keyword :base style)))
+    elements))
+
 (defsubst muse-style-element (elem &optional style direct)
+  "Search for ELEM in STYLE, including base styles.
+If STYLE is not specified, use current style."
   (setq style (muse-style style))
   (let ((value (muse-get-keyword elem style direct)))
     (if value
@@ -458,7 +474,7 @@ contents were requested.")
     (muse-publish-markup
      title
      (sort (copy-alist (append muse-publish-markup-regexps
-                               (muse-style-element :regexps style)))
+                               (muse-style-elements-list :regexps style)))
            (function
             (lambda (l r)
               (< (car l) (car r))))))
