@@ -2,6 +2,53 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-23 00:21:36 GMT	Michael Olson <mwolson@gnu.org>	patch-175
+
+    Summary:
+      Initial implementation of muse-xml.el.  End of section edge case.
+    Revision:
+      muse--main--1.0--patch-175
+
+    * AUTHORS: Add Peter K. Lee.
+    
+    * Makefile (experimental): New target that builds experimental programs.
+      (distclean): Remove debian/dirs, a cruft file from the debian build
+      process.
+    
+    * examples/mwolson/muse-init.el: Update.
+    
+    * examples/mwolson/muse-init.el ("\C-cpL"): Use a better function that
+      prompts for the blog entry to visit.
+    
+    * experimental/Makefile: New file that causes experimental stuff to be
+      built.
+    
+    * experimental/muse-xml.el: New file that provides the experimental XML
+      publishing style.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-regexps): Re-order and fix
+      comment strings.
+    
+    * lisp/muse-html.el (muse-html-markup-regexps): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-section-close): Deal with edge case
+      involving end-of-file and paragraph detection.
+    
+    * lisp/muse-wiki.el: Minor header fix.
+    
+    * scripts/muse-build.el (load-path): Add "../experimental".
+
+    new files:
+     experimental/.arch-ids/Makefile.id
+     experimental/.arch-ids/muse-xml.el.id experimental/Makefile
+     experimental/muse-xml.el
+
+    modified files:
+     AUTHORS ChangeLog Makefile examples/mwolson/muse-init.el
+     lisp/muse-docbook.el lisp/muse-html.el lisp/muse-publish.el
+     lisp/muse-wiki.el scripts/muse-build.el
+
+
 2005-07-22 07:30:43 GMT	Michael Olson <mwolson@gnu.org>	patch-174
 
     Summary:

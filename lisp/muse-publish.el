@@ -583,13 +583,21 @@ the file is published no matter what."
 
 (defun muse-publish-section-close (depth)
   "Seach forward for the closing tag of given DEPTH."
-  (save-excursion
-    (while (and (re-search-forward (concat "^\\*\\{1,"
-                                           (number-to-string depth) "\\}\\s-+")
-                                   nil 0)
-                (get-text-property (match-beginning 0) 'read-only)))
-    (forward-line 0)
-    (insert (muse-markup-text 'section-close) "\n")))
+  (let (not-end)
+    (save-excursion
+      (while (and (setq not-end (re-search-forward
+                                 (concat "^\\*\\{1," (number-to-string depth)
+                                         "\\}\\s-+")
+                                 nil t))
+                  (get-text-property (match-beginning 0) 'read-only)))
+      (if not-end
+          (forward-line 0)
+        (goto-char (point-max)))
+      (cond ((not (eq (char-before) ?\n))
+             (insert "\n\n"))
+            ((not (eq (char-before (1- (point))) ?\n))
+             (insert "\n")))
+      (insert (muse-markup-text 'section-close) "\n"))))
 
 (defun muse-publish-markup-directive (&optional name value)
   (unless name (setq name (match-string 1)))

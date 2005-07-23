@@ -74,21 +74,20 @@ This may be text or a filename."
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-regexps
-  `(;; join together the parts of a list or table
-    (10000 "</\\([oud]l\\)>\\s-*<\\1>\\s-*" 0 "")
-    (10100 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*"
+  `(;; Join together the parts of a table
+    (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*"
                     "</tgroup>\\s-*</informaltable>\\s-*"
                     "<informaltable[^>]*>\\s-*<tgroup[^>]*>\\s-*"
                     "<t\\1>\n") 0 "")
-    (10200 ,(concat "  </tgroup>\\s-*</informaltable>\\s-*"
+    (10100 ,(concat "  </tgroup>\\s-*</informaltable>\\s-*"
                     "<informaltable[^>]*>\\s-*<tgroup[^>]*>\n") 0 "")
 
-    ;; Merge consecutive list tags
-    (10300 ,(concat "</\\(itemized\\|ordered\\|variable\\)list>"
+    ;; Join together the parts of a list
+    (10200 ,(concat "</\\(itemized\\|ordered\\|variable\\)list>"
                     "\\s-*<\\1list" "[^>]*>\\s-*") 0 "")
 
-    ;; beginning of doc, end of doc, or plain paragraph separator
-    (10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
+    ;; Beginning of doc, end of doc, or plain paragraph separator
+    (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
                     "\\(?:\n\\(["
                     muse-regexp-blank
                     "]*\n\\)+\\|\\`\\s-*\\|\\s-*\\'\\)"

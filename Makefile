@@ -1,9 +1,9 @@
-.PHONY: all lisp examples doc clean realclean distclean fullclean install test dist release debclean debrelease upload
+.PHONY: all lisp examples experimental doc clean realclean distclean fullclean install test dist release debclean debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
 
-SUBDIRS = lisp examples
+SUBDIRS = lisp examples experimental
 
 all: lisp muse.info
 
@@ -12,6 +12,9 @@ lisp:
 
 examples:
 	(cd examples && $(MAKE))
+
+experimental:
+	(cd experimental && $(MAKE))
 
 %.info: %.texi
 	makeinfo muse.texi
@@ -40,6 +43,7 @@ test:
 	(cd lisp && $(MAKE) test)
 
 distclean: realclean
+	-rm -f debian/dirs
 	test -d ../muse-$(VERSION) && rm -r ../muse-$(VERSION) || :
 
 dist: distclean

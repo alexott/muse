@@ -190,13 +190,15 @@ than the HTML table tag."
   :group 'muse-html)
 
 (defcustom muse-html-markup-regexps
-  `(;; join together the parts of a list or table
-    (10000 "</\\([oud]l\\)>\\s-*<\\1>\\s-*" 0 "")
-    (10100 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>\\s-*"
+  `(;; Join together the parts of a table
+    (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>\\s-*"
                     "<table[^>]*>\\s-*<t\\1>\n") 0 "")
-    (10200 "</table>\\s-*<table[^>]*>\n" 0 "")
+    (10100 "</table>\\s-*<table[^>]*>\n" 0 "")
 
-    ;; beginning of doc, end of doc, or plain paragraph separator
+    ;; Join together the parts of a list
+    (10200 "</\\([oud]l\\)>\\s-*<\\1>\\s-*" 0 "")
+
+    ;; Beginning of doc, end of doc, or plain paragraph separator
     (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
                     "\\(?:\n\\(["
                     muse-regexp-blank

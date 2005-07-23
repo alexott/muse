@@ -1,4 +1,5 @@
 (add-to-list 'load-path "../contrib")
+(add-to-list 'load-path "../experimental")
 (add-to-list 'load-path "../lisp")
 
 (defun muse-elint-files ()

@@ -18,6 +18,7 @@
 (require 'muse-colors)   ; load coloring/font-lock module
 (require 'muse-mode)     ; load authoring mode
 (require 'muse-blosxom)  ; load blosxom module
+(require 'muse-docbook)  ; load DocBook publishing style
 (require 'muse-html)     ; load (X)HTML publishing style
 (require 'muse-wiki)     ; load Wiki support
 ;;(require 'muse-message)  ; load message support (experimental)
@@ -44,12 +45,16 @@
 (setq muse-project-alist
       `(
         ("Website"
-         ("~/proj/wiki/web/" :default "WelcomePage")
+         ("~/proj/wiki/web/"
+          :force-publish ("WikiIndex")
+          :default "WelcomePage")
          (:base "my-xhtml"
                 :path "~/personal-site/site/web"))
 
         ("Projects"
-         ("~/proj/wiki/projects/" :default "WelcomePage")
+         ("~/proj/wiki/projects/"
+          :force-publish ("WikiIndex")
+          :default "WelcomePage")
          (:base "my-xhtml"
                 :path "~/personal-site/site/projects"))
 
@@ -151,7 +156,8 @@ If FILE is not specified, use the published version of the current file."
 (global-set-key "\C-cpL"
                 #'(lambda ()
                     (interactive)
-                    (find-file muse-blosxom-base-directory)))
+                    (let ((muse-current-project (muse-project "Blog")))
+                      (call-interactively 'muse-project-find-file))))
 (global-set-key "\C-cpx" 'my-muse-prepare-entry-for-xanga)
 
 ;;; Custom variables
@@ -168,7 +174,7 @@ If FILE is not specified, use the published version of the current file."
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
  '(muse-mode-auto-p nil)
- '(muse-mode-hook (quote (footnote-mode turn-on-auto-fill muse-wiki-update-custom-values)))
+ '(muse-mode-hook (quote (footnote-mode muse-wiki-update-custom-values)))
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
  '(muse-xhtml-header "~/personal-site/muse/generic-header.html"))
 (custom-set-faces
