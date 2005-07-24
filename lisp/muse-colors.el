@@ -423,15 +423,15 @@ of the functions listed in `muse-colors-markup'."
                   (case-fold-search nil)
                   markup-func)
               (goto-char beg)
-              (when (< beg end)
-                (while (re-search-forward muse-colors-regexp end t)
-                  (if verbose
-                      (message "Highlighting buffer...%d%%"
-                               (* (/ (float (- (point) beg)) len) 100)))
-                  (setq markup-func
-                        (aref muse-colors-vector
-                              (char-after (match-beginning 0))))
-                  (when markup-func (funcall markup-func))))
+              (while (and (< (point) end)
+                          (re-search-forward muse-colors-regexp end t))
+                (if verbose
+                    (message "Highlighting buffer...%d%%"
+                             (* (/ (float (- (point) beg)) len) 100)))
+                (setq markup-func
+                      (aref muse-colors-vector
+                            (char-after (match-beginning 0))))
+                (when markup-func (funcall markup-func)))
               (run-hook-with-args 'muse-colors-buffer-hook
                                   beg end verbose)
               (if verbose (message "Highlighting buffer...done")))))
@@ -440,6 +440,8 @@ of the functions listed in `muse-colors-markup'."
 (defcustom muse-colors-tags
   '(("example" t nil muse-colors-example-tag)
     ("verbatim" t nil muse-colors-example-tag)
+    ("code" t nil muse-colors-literal-tag)
+    ("lisp" t nil muse-colors-literal-tag)
     ("literal" t nil muse-colors-literal-tag))
   "A list of tag specifications for specially highlighting text.
 XML-style tags are the best way to add custom highlighting to Muse.
@@ -498,32 +500,6 @@ Functions should not modify the contents of the buffer."
                 (nconc args (list attrs)))
             (apply (nth 3 tag-info) args)))))))
 
-(defun muse-colors-example-tag (beg end)
-  "Strip properties and colorize with `muse-verbatim-face'."
-  (remove-text-properties
-   beg end '(face nil font-lock-multiline nil
-                  invisible nil intangible nil display nil
-                  mouse-face nil keymap nil help-echo nil))
-  (let ((multi (save-excursion
-                 (goto-char beg)
-                 (forward-line 1)
-                 (> end (point)))))
-    (add-text-properties beg end `(face muse-verbatim-face
-                                   font-lock-miltiline ,multi))))
-
-(defun muse-colors-literal-tag (beg end)
-  "Strip properties and mark as literal."
-  (remove-text-properties
-   beg end '(face nil font-lock-multiline nil
-                  invisible nil intangible nil display nil
-                  mouse-face nil keymap nil help-echo nil))
-  (let ((multi (save-excursion
-                 (goto-char beg)
-                 (forward-line 1)
-                 (> end (point)))))
-    (add-text-properties beg end `(font-lock-miltiline ,multi)))
-  (goto-char end))
-
 (defun muse-unhighlight-region (begin end &optional verbose)
   "Remove all visual highlights in the buffer (except font-lock)."
   (let ((buffer-undo-list t)
@@ -538,6 +514,25 @@ Functions should not modify the contents of the buffer."
                           invisible nil intangible nil display nil
                           mouse-face nil keymap nil help-echo nil))
       (set-buffer-modified-p modified-p))))
+
+(defun muse-colors-example-tag (beg end)
+  "Strip properties and colorize with `muse-verbatim-face'."
+  (muse-unhighlight-region beg end)
+  (let ((multi (save-excursion
+                 (goto-char beg)
+                 (forward-line 1)
+                 (> end (point)))))
+    (add-text-properties beg end `(face muse-verbatim-face
+                                   font-lock-multiline ,multi))))
+
+(defun muse-colors-literal-tag (beg end)
+  "Strip properties and mark as literal."
+  (muse-unhighlight-region beg end)
+  (let ((multi (save-excursion
+                 (goto-char beg)
+                 (forward-line 1)
+                 (> end (point)))))
+    (add-text-properties beg end `(font-lock-multiline ,multi))))
 
 (defvar muse-mode-local-map
   (let ((map (make-sparse-keymap)))
