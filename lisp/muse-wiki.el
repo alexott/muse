@@ -133,15 +133,13 @@ style and ignore the others."
                                 ;; buffer-file-name is not set!
                                 (concat default-directory (buffer-name)))
                             (cddr (muse-project-of-file))))))
-    (when remote-style
-      (let ((output
-             (file-relative-name (expand-file-name
-                                  page (muse-style-element :path remote-style))
-                                 (expand-file-name
-                                  (muse-style-element :path local-style)))))
-        (if muse-publishing-p
-            (muse-publish-output-file output nil remote-style)
-          output)))))
+    (if (and remote-style local-style muse-publishing-p)
+        (muse-publish-output-file
+         (file-relative-name (expand-file-name
+                              page (muse-style-element :path remote-style))
+                             (expand-file-name
+                              (muse-style-element :path local-style))))
+          page-path)))
 
 (defun muse-wiki-handle-interwiki (&optional string)
   "If STRING or point has an interwiki link, resolve it and

@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-24 21:01:02 GMT	Michael Olson <mwolson@gnu.org>	patch-179
+
+    Summary:
+      Make interwiki links work in a few more edge cases.
+    Revision:
+      muse--main--1.0--patch-179
+
+    * lisp/muse-project.el (muse-project-applicable-styles): Remove
+      assertion, now that I have a good idea of the edge cases involved.
+    
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): Handle case where
+      the current file is not part of any Muse project, allowing interwiki
+      links to be resolvable even then.  Don't return a relative path if we
+      are not publishing.  For visiting links, the best thing is just to
+      return the real path.
+
+    modified files:
+     ChangeLog lisp/muse-project.el lisp/muse-wiki.el
+
+
 2005-07-24 03:38:06 GMT	Michael Olson <mwolson@gnu.org>	patch-178
 
     Summary:

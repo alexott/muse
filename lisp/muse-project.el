@@ -435,21 +435,21 @@ first directory within the project's fileset is used."
 The name of a project may be used for STYLES."
   (when (stringp styles)
     (setq styles (cddr (muse-project styles))))
-  (muse-assert (and file styles))
-  (let (used-styles)
-    (dolist (style styles)
-      (let ((include-regexp (muse-style-element :include style))
-            (exclude-regexp (muse-style-element :exclude style)))
-        (when (and (or ignore-regexp
-                       (and (null include-regexp)
-                            (null exclude-regexp))
-                       (if include-regexp
-                           (string-match include-regexp file)
-                         (not (string-match exclude-regexp file))))
-                   (or (not (file-exists-p file))
-                       (not (muse-project-private-p file))))
-          (add-to-list 'used-styles style))))
-    used-styles))
+  (when (and file styles)
+    (let (used-styles)
+      (dolist (style styles)
+        (let ((include-regexp (muse-style-element :include style))
+              (exclude-regexp (muse-style-element :exclude style)))
+          (when (and (or ignore-regexp
+                         (and (null include-regexp)
+                              (null exclude-regexp))
+                         (if include-regexp
+                             (string-match include-regexp file)
+                           (not (string-match exclude-regexp file))))
+                     (or (not (file-exists-p file))
+                         (not (muse-project-private-p file))))
+            (add-to-list 'used-styles style))))
+      used-styles)))
 
 (defun muse-project-publish-file (file styles &optional force ignore-regexp)
   (setq styles (muse-project-applicable-styles file styles ignore-regexp))
