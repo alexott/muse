@@ -140,7 +140,8 @@ All this means is that certain extensions, like .gz, are removed."
     (unless (and name (not (string= name "")))
       (setq name (or (and (boundp 'muse-publishing-current-file)
                           muse-publishing-current-file)
-                     buffer-file-name)))
+                     buffer-file-name
+                     (concat default-directory (buffer-name)))))
     (if name
         (let ((page (file-name-nondirectory name)))
           (if (and muse-ignored-extensions-regexp

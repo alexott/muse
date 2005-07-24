@@ -613,7 +613,7 @@ the file is published no matter what."
              (insert "\n\n"))
             ((not (eq (char-before (1- (point))) ?\n))
              (insert "\n")))
-      (insert (muse-markup-text 'section-close) "\n"))))
+      (insert (muse-markup-text 'section-close depth) "\n"))))
 
 (defun muse-publish-markup-directive (&optional name value)
   (unless name (setq name (match-string 1)))
@@ -747,12 +747,14 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
                  (cond ((= len 1) 'section)
                        ((= len 2) 'subsection)
                        ((= len 3) 'subsubsection)
-                       (t 'section-other))))
+                       (t 'section-other))
+                 len))
          (end   (muse-markup-text
                  (cond ((= len 1) 'section-end)
                        ((= len 2) 'subsection-end)
                        ((= len 3) 'subsubsection-end)
-                       (t 'section-other-end)))))
+                       (t 'section-other-end))
+                 len)))
     (delete-region (match-beginning 0) (match-end 0))
     (insert start)
     (end-of-line)
@@ -1007,7 +1009,6 @@ like read-only from being inadvertently deleted."
                (or explicit
                    (not (or (eq (char-before (match-beginning 0)) ?\")
                             (eq (char-after (match-end 0)) ?\")))))
-
       (muse-publish-insert-url link desc explicit))))
 
 (defun muse-publish-markup-url ()

@@ -183,8 +183,8 @@ so only enable this if you don't use either of these."
          'muse-mode-completions)
     (set (make-variable-buffer-local 'pcomplete-parse-arguments-function)
          'muse-mode-current-word))
-    (when muse-mode-highlight-p
-      (muse-use-font-lock)))
+  (when muse-mode-highlight-p
+    (muse-use-font-lock)))
 
 (put 'muse-mode
      'flyspell-mode-predicate

@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-24 03:01:50 GMT	Michael Olson <mwolson@gnu.org>	patch-177
+
+    Summary:
+      muse-xml: Separate section from title.
+    Revision:
+      muse--main--1.0--patch-177
+
+    * experimental/muse-xml.el (muse-xml-markup-strings): Add "level"
+      attribute to sections.  Use separate <title> tag to handle the title of
+      a section.  Thanks to drkm for the suggestion.
+    
+    * lisp/muse-mode.el (muse-mode): Code indentation, no func change.
+    
+    * lisp/muse-publish.el (muse-publish-markup-heading)
+      (muse-publish-section-close): Pass level to markup strings for all
+      section-related tags.
+    
+    * lisp/muse.el (muse-page-name): Handle case where buffer-file-name is
+      not defined.
+
+    modified files:
+     ChangeLog experimental/muse-xml.el lisp/muse-mode.el
+     lisp/muse-publish.el lisp/muse.el
+
+
 2005-07-23 01:29:29 GMT	Michael Olson <mwolson@gnu.org>	patch-176
 
     Summary:
