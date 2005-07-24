@@ -139,7 +139,7 @@ style and ignore the others."
                               page (muse-style-element :path remote-style))
                              (expand-file-name
                               (muse-style-element :path local-style))))
-          page-path)))
+      (unless muse-publishing-p page-path))))
 
 (defun muse-wiki-handle-interwiki (&optional string)
   "If STRING or point has an interwiki link, resolve it and
