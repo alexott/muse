@@ -607,7 +607,7 @@ ignored."
     (save-excursion
       (goto-char (match-beginning 0))
       (looking-at muse-explicit-link-regexp))
-    (let* ((link (match-string-no-properties 1))
+    (let* ((link (muse-match-string-no-properties 1))
            (desc (muse-match-string-no-properties 2))
            (props (muse-link-properties
                    desc (muse-link-face link t)))
