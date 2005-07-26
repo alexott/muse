@@ -308,7 +308,7 @@ whether progress messages should be displayed to the user."
     (muse-explicit-link-regexp ?\[ muse-colors-explicit-link)
 
     ;; render in teletype and suppress further parsing
-    (,(concat "=[^" muse-regexp-space "=>]") ?= muse-colors-verbatim)
+    (,(concat "=[^" muse-regexp-space "=]") ?= muse-colors-verbatim)
 
     ;; highlight any markup tags encountered
     (muse-tag-regexp ?\< muse-colors-custom-tags)
