@@ -55,13 +55,23 @@ See `muse-publish' for more information."
   :type 'hook
   :group 'muse-publish)
 
-(defcustom muse-publish-url-transforms '(muse-publish-escape-specials-in-string
-                                         muse-publish-prepare-url)
+(defcustom muse-publish-url-transforms
+  '(muse-publish-escape-specials-in-string
+    muse-publish-prepare-url)
   "A list of functions used to prepare URLs for publication.
-Each is passed the URL and expects a URL to be returned."
+Each is passed the URL.  The transformed URL should be returned."
   :type 'hook
   :options '(muse-publish-escape-specials-in-string
              muse-publish-prepare-url)
+  :group 'muse-publish)
+
+(defcustom muse-publish-desc-transforms
+  '(muse-publish-escape-specials-in-string)
+  "A list of functions used to prepare URL desciptions for publication.
+Each is passed the description.  The modified description should
+be returned."
+  :type 'hook
+  :options '(muse-publish-escape-specials-in-string)
   :group 'muse-publish)
 
 (defcustom muse-publish-report-threshhold 100000
@@ -705,7 +715,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
                         close-tag (muse-markup-text 'end-most-emph)))))))
     (if (and (not (get-text-property beg 'noemphasis))
              (setq loc (search-forward leader nil t))
-             (not (eq (char-syntax (char-after loc)) ?w))
+             (or (eobp) (not (eq (char-syntax (char-after loc)) ?w)))
              (not (eq (char-syntax (char-before (point))) ?\ ))
              (not (get-text-property (point) 'noemphasis)))
         (progn
@@ -949,14 +959,13 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-markup-email ()
   (let* ((beg (match-end 1))
          (addr (buffer-substring-no-properties beg (match-end 0))))
-    (muse-with-temp-buffer
-      (insert addr)
-      (muse-publish-escape-specials (point-min) (point-max))
-      (setq addr (buffer-string)))
-    (goto-char beg)
-    (delete-region beg (match-end 0))
-    (insert (format (muse-markup-text 'email-addr) addr addr))
-    (muse-publish-mark-read-only beg (point))))
+    (when (not (or (eq (char-before (match-beginning 0)) ?\")
+                   (eq (char-after (match-end 0)) ?\")))
+      (muse-publish-escape-specials-in-string addr)
+      (goto-char beg)
+      (delete-region beg (match-end 0))
+      (insert (format (muse-markup-text 'email-addr) addr addr))
+      (muse-publish-mark-read-only beg (point)))))
 
 (defun muse-publish-escape-specials-in-string (string &rest ignored)
   "Escape specials in STRING using style-specific :specials."
@@ -977,7 +986,9 @@ like read-only from being inadvertently deleted."
   (let ((orig-url url))
     (dolist (transform muse-publish-url-transforms)
       (setq url (save-match-data (when url (funcall transform url explicit)))))
-    (setq desc (when desc (muse-publish-escape-specials-in-string desc)))
+    (dolist (transform muse-publish-desc-transforms)
+      (setq desc (save-match-data
+                   (when desc (funcall transform desc explicit)))))
     (if url
         (cond ((string-match muse-image-regexp url)
                (if desc
@@ -1016,7 +1027,9 @@ like read-only from being inadvertently deleted."
       (muse-publish-insert-url link desc explicit))))
 
 (defun muse-publish-markup-url ()
-  (muse-publish-insert-url (match-string 0)))
+  (when (not (or (eq (char-before (match-beginning 0)) ?\")
+                 (eq (char-after (match-end 0)) ?\")))
+    (muse-publish-insert-url (match-string 0))))
 
 ;; Default publishing tags
 

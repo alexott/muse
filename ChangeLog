@@ -2,6 +2,44 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-26 08:03:41 GMT	Michael Olson <mwolson@gnu.org>	patch-185
+
+    Summary:
+      Allow transform function for link descriptions.  Bare email and URL fixes.
+    Revision:
+      muse--main--1.0--patch-185
+
+    * lisp/muse-publish.el (muse-publish-url-transforms): Docfix.
+      (muse-publish-desc-transforms): New option that contains the functions
+      that will be called to transform a link description.
+      (muse-publish-markup-word): Handle Yet Another Edge Case.
+      (muse-publish-markup-email): Use
+      `muse-publish-escape-specials-in-string'.  Don't publish if we have a
+      double-quote on either side.
+      (muse-publish-url): Apply description transforms.
+      (muse-publish-markup-url): Don't publish if we have a double-quote on
+      either side.
+    
+    * lisp/muse-wiki.el (muse-wiki-update-wikiword-regexp)
+      (muse-wiki-wikiword-regexp, muse-wiki-use-wikiword): Minor docfixes.
+      (muse-wiki-interwiki-delimiter): New option that indicates the
+      interwiki delimiter to use.
+      (muse-wiki-interwiki-replacement): New option that indicates the
+      replacement
+      (muse-wiki-update-interwiki-regexp): Use muse-wiki-interwiki-delimiter.
+      (muse-wiki-publish-pretty-title): Deal with EXPLICIT argument so that
+      this can be added to muse-publish-desc-transforms.
+      (muse-wiki-publish-pretty-interwiki): New function that replaces the
+      interwiki delimiter with its replacement, but only when the given text
+      is not an explicit link.
+    
+    * lisp/muse.el (muse-update-file-extension): New function made from the
+      innards of the :set function in `muse-file-extension'.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-26 06:17:31 GMT	Michael Olson <mwolson@gnu.org>	patch-184
 
     Summary:
