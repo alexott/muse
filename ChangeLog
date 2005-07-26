@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-26 08:49:38 GMT	Michael Olson <mwolson@gnu.org>	patch-187
+
+    Summary:
+      Inter-project output name fix.
+    Revision:
+      muse--main--1.0--patch-187
+
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): I would've sworn
+      that I had fixed this before.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-07-26 08:40:11 GMT	Michael Olson <mwolson@gnu.org>	patch-186
 
     Summary:

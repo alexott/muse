@@ -152,7 +152,8 @@ style and ignore the others."
          (file-relative-name (expand-file-name
                               page (muse-style-element :path remote-style))
                              (expand-file-name
-                              (muse-style-element :path local-style))))
+                              (muse-style-element :path local-style)))
+         nil remote-style)
       (unless muse-publishing-p page-path))))
 
 (defun muse-wiki-handle-interwiki (&optional string)
