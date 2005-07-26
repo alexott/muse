@@ -10,7 +10,8 @@
 
 ;; Add to load path
 (when (fboundp 'debian-pkg-add-load-path-item)
-  (debian-pkg-add-load-path-item "/stuff/proj/emacs/muse/mwolson/lisp"))
+  (debian-pkg-add-load-path-item "/stuff/proj/emacs/muse/mwolson/lisp")
+  (debian-pkg-add-load-path-item "/stuff/proj/emacs/muse/mwolson/experimental"))
 
 ;; Initialize
 (require 'outline)       ; I like outline-style faces
@@ -21,6 +22,7 @@
 (require 'muse-docbook)  ; load DocBook publishing style
 (require 'muse-html)     ; load (X)HTML publishing style
 (require 'muse-wiki)     ; load Wiki support
+(require 'muse-xml)      ; load experimental XML support
 ;;(require 'muse-message)  ; load message support (experimental)
 
 ;; Setup projects
@@ -59,12 +61,12 @@
                 :path "~/personal-site/site/projects"))
 
         ("Blog"
-         (,@(muse-blosxom-project-alist-dirs "~/proj/wiki/blog")
+         (,@(muse-project-alist-dirs "~/proj/wiki/blog")
           :default "guestbook")
 
-         ,@(muse-blosxom-project-alist-entry "~/proj/wiki/blog"
-                                             "~/personal-site/site/blog"
-                                             "my-blosxom"))
+         ,@(muse-project-alist-styles "~/proj/wiki/blog"
+                                      "~/personal-site/site/blog"
+                                      "my-blosxom"))
 
         ("Plans"
          ("~/proj/wiki/plans/"
@@ -99,14 +101,14 @@
 If FILE is not specified, use the published version of the current file."
   (interactive
    (list
-    (expand-file-name (concat (muse-page-name) ".txt")
+    (expand-file-name (concat (muse-page-name) muse-blosxom-extension)
                       (muse-style-element
                        :path (car (muse-project-applicable-styles
                                    buffer-file-name
                                    (cddr (muse-project-of-file))))))))
   (save-match-data
-    (with-temp-buffer
-      (insert-file-contents file t)
+    (muse-with-temp-buffer
+      (insert-file-contents file)
       ;; Surround first line in <h3></h3>
       (goto-char (point-min))
       (insert "<h3>")
@@ -143,12 +145,10 @@ If FILE is not specified, use the published version of the current file."
         (replace-match "</p>"))
       ;; Make relative links work
       (goto-char (point-min))
-      (while (re-search-forward "href=\"/" nil t)
+      (while (re-search-forward "href=\"[/.]+" nil t)
         (replace-match "href=\"http://www.mwolson.org/" nil t))
       ;; Copy entry to clipboard
-      (clipboard-kill-ring-save (point-min) (point-max))
-      ;; Don't prompt me about killing the buffer
-      (set-buffer-modified-p nil))))
+      (clipboard-kill-ring-save (point-min) (point-max)))))
 
 ;;; Key customizations
 

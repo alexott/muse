@@ -128,10 +128,7 @@ style and ignore the others."
          (remote-style (when page-path (car (muse-project-applicable-styles
                                              page-path project))))
          (local-style (car (muse-project-applicable-styles
-                            (or muse-publishing-current-file buffer-file-name
-                                ;; astonishingly, sometimes even
-                                ;; buffer-file-name is not set!
-                                (concat default-directory (buffer-name)))
+                            (muse-current-file)
                             (cddr (muse-project-of-file))))))
     (if (and remote-style local-style muse-publishing-p)
         (muse-publish-output-file

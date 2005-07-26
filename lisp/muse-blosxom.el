@@ -59,11 +59,11 @@
 ;;
 ;; (setq muse-project-alist
 ;;       `(("blog"
-;;          (,@(muse-blosxom-project-alist-dirs "~/path/to/blog-entries")
+;;          (,@(muse-project-alist-dirs "~/path/to/blog-entries")
 ;;           :default "index")
-;;          ,@(muse-blosxom-project-alist-entry "~/path/to/blog-entries"
-;;                                              "~/public_html/blog"
-;;                                              "blosxom-xhtml")
+;;          ,@(muse-project-alist-styles "~/path/to/blog-entries"
+;;                                       "~/public_html/blog"
+;;                                       "blosxom-xhtml")
 ;;         )))
 ;;
 ;; Note that we need a backtick instead of a single quote on the
@@ -177,26 +177,6 @@ This is the top-level directory where your Muse blog entries may be found."
 
 ;; Enter a new blog entry
 
-(defun muse-blosxom-get-categories (&optional base)
-  "Retrieve all of the categories from a Blosxom project.
-The base directory is specified by BASE, and defaults to
-`muse-blosxom-base-directory'.
-
-Directories starting with \".\" will be ignored."
-  (unless base (setq base muse-blosxom-base-directory))
-  (when (and (file-directory-p base)
-             (not (string-match muse-project-ignore-regexp base)))
-    (let (list dir)
-      (dolist (file (directory-files base t "^[^.]"))
-        (when (and (file-directory-p file)
-                   (not (string-match muse-project-ignore-regexp file)))
-          (setq dir (file-name-nondirectory file))
-          (push dir list)
-          (nconc list (mapcar #'(lambda (item)
-                                  (concat dir "/" item))
-                              (muse-blosxom-get-categories file)))))
-      list)))
-
 (defun muse-blosxom-title-to-file (title)
   "Derive a file name from the given TITLE.
 
@@ -212,7 +192,8 @@ The page will be initialized with the current date and TITLE."
   (interactive
    (list
     (completing-read "Category: "
-                     (mapcar 'list (muse-blosxom-get-categories)))
+                     (mapcar 'list (muse-project-recurse-directory
+                                    muse-blosxom-base-directory)))
     (read-string "Title: ")))
   (let ((file (muse-blosxom-title-to-file title)))
     (muse-project-find-file
@@ -225,35 +206,6 @@ The page will be initialized with the current date and TITLE."
           "\n#title " title
           "\n\n")
   (forward-line 2))
-
-;; Make it easier to specify the muse-project-alist entry
-
-(defun muse-blosxom-project-alist-entry (entry-dir output-dir style)
-  "Return a list of styles to use when publishing a muse-blosxom project.
-ENTRY-DIR is where your Muse blog entries are kept.
-OUTPUT-DIR is where these entries are published.
-STYLE is the publishing style to use.
-
-For an example of the use of this function, see
-`examples/mwolson/muse-init.el' from the Muse distribution."
-  (cons `(:base ,style :path ,(expand-file-name output-dir)
-                :include ,(concat "/" (file-name-nondirectory entry-dir)
-                                  "/[^/]+$"))
-        (mapcar (lambda (dir);
-                  `(:base ,style
-                          :path ,(expand-file-name dir output-dir)
-                          :include ,(concat "/" dir "/")))
-                (muse-blosxom-get-categories entry-dir))))
-
-(defun muse-blosxom-project-alist-dirs (entry-dir)
-  "Return a list of directories to use when publishing a muse-blosxom project.
-ENTRY-DIR is where your Muse blog entries are kept.
-
-For an example of the use of this function, see
-`examples/mwolson/muse-init.el' from the Muse distribution."
-  (cons (expand-file-name entry-dir)
-        (mapcar (lambda (dir) (expand-file-name dir entry-dir))
-                (muse-blosxom-get-categories entry-dir))))
 
 ;; Register the Blosxom Publisher
 

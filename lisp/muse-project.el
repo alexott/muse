@@ -203,8 +203,7 @@ when publishing files in that project."
   :set 'muse-project-alist-set
   :group 'muse-project)
 
-(defvar muse-project-file-alist nil
-  "This variable is automagically constructed as needed.")
+;; Make it easier to specify a muse-project-alist entry
 
 (defcustom muse-project-ignore-regexp
   (concat "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'\\|"
@@ -212,6 +211,56 @@ when publishing files in that project."
   "A regexp matching files to be ignored in Wiki directories."
   :type 'regexp
   :group 'muse-regexp)
+
+(defun muse-project-recurse-directory (base)
+  "Recusively retrieve all of the directories underneath BASE.
+A list of these directories is returned.
+Directories starting with \".\" will be ignored, as well as those
+which match `muse-project-ignore-regexp'."
+  (when (and (file-directory-p base)
+             (not (string-match muse-project-ignore-regexp base)))
+    (let (list dir)
+      (dolist (file (directory-files base t "^[^.]"))
+        (when (and (file-directory-p file)
+                   (not (string-match muse-project-ignore-regexp file)))
+          (setq dir (file-name-nondirectory file))
+          (push dir list)
+          (nconc list (mapcar #'(lambda (item)
+                                  (concat dir "/" item))
+                              (muse-project-recurse-directory file)))))
+      list)))
+
+(defun muse-project-alist-styles (entry-dir output-dir style)
+  "Return a list of styles to use in a `muse-project-alist' entry.
+ENTRY-DIR is the top-level directory of the project.
+OUTPUT-DIR is where Muse files are published, keeping directory structure.
+STYLE is the publishing style to use.
+
+For an example of the use of this function, see
+`examples/mwolson/muse-init.el' from the Muse distribution."
+  (cons `(:base ,style :path ,(expand-file-name output-dir)
+                :include ,(concat "/" (file-name-nondirectory entry-dir)
+                                  "/[^/]+$"))
+        (mapcar (lambda (dir);
+                  `(:base ,style
+                          :path ,(expand-file-name dir output-dir)
+                          :include ,(concat "/" dir "/[^/]+$")))
+                (muse-project-recurse-directory entry-dir))))
+
+(defun muse-project-alist-dirs (entry-dir)
+  "Return a list of directories to use in a `muse-project-alist' entry.
+ENTRY-DIR is the top-level directory of the project.
+
+For an example of the use of this function, see
+`examples/mwolson/muse-init.el' from the Muse distribution."
+  (cons (expand-file-name entry-dir)
+        (mapcar (lambda (dir) (expand-file-name dir entry-dir))
+                (muse-project-recurse-directory entry-dir))))
+
+;; Constructing the file-alist
+
+(defvar muse-project-file-alist nil
+  "This variable is automagically constructed as needed.")
 
 (defvar muse-current-project nil
   "Project we are currently visiting.")
@@ -332,10 +381,7 @@ disk."
 If PATHNAME is nil, the current buffer's filename is used."
   (if (and (null pathname) muse-current-project)
       muse-current-project
-    (setq pathname (or pathname
-                       (and (boundp 'muse-publishing-current-file)
-                            muse-publishing-current-file)
-                       buffer-file-name))
+    (unless pathname (setq pathname (muse-current-file)))
     (save-match-data
       (when (and pathname
                  (not (string-match muse-project-ignore-regexp pathname)))

@@ -133,15 +133,19 @@ understand that it is part of a regexp."
 (eval-when-compile
   (defvar muse-publishing-current-file nil))
 
+(defun muse-current-file ()
+  "Return the name of the currently visited or published file."
+  (or (and (boundp 'muse-publishing-current-file)
+           muse-publishing-current-file)
+      (buffer-file-name)
+      (concat default-directory (buffer-name))))
+
 (defun muse-page-name (&optional name)
   "Return the canonical form of a Muse page name.
 All this means is that certain extensions, like .gz, are removed."
   (save-match-data
     (unless (and name (not (string= name "")))
-      (setq name (or (and (boundp 'muse-publishing-current-file)
-                          muse-publishing-current-file)
-                     buffer-file-name
-                     (concat default-directory (buffer-name)))))
+      (setq name (muse-current-file)))
     (if name
         (let ((page (file-name-nondirectory name)))
           (if (and muse-ignored-extensions-regexp

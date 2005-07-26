@@ -2,6 +2,44 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-26 04:30:52 GMT	Michael Olson <mwolson@gnu.org>	patch-183
+
+    Summary:
+      Generalize some blosxom helper functions.
+    Revision:
+      muse--main--1.0--patch-183
+
+    * examples/mwolson/muse-init.el (muse-project-alist): Adapt to new
+      generalized helper functions.
+      (my-muse-prepare-entry-for-xanga): Use muse-blosxom-extension rather
+      than hard-coding it.  Use muse-with-temp-buffer.  Handle all kinds of
+      relative links.
+    
+    * lisp/muse-blosxom.el: Update example in header.
+      (muse-blosxom-new-entry): Use new names for helper functions.
+      (muse-blosxom-get-categories, muse-blosxom-project-alist-entry)
+      (muse-blosxom-project-alist-dirs): Move to muse-project.el.
+    
+    * lisp/muse-project.el (muse-project-recurse-directory): Renamed from
+      `muse-blosxom-project-get-categories'.
+      (muse-project-alist-styles): Renamed from
+      `muse-blosxom-project-alist-entry'.
+      (muse-project-alist-dirs): Renamed from
+      `muse-blosxom-project-alist-dirs'.
+      (muse-project-of-file): Use `muse-current-file'.
+    
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): Use
+      `muse-current-file'.
+    
+    * lisp/muse.el (muse-current-file): New function that returns the name of
+      the currently visited or published file.
+      (muse-page-name): Use `muse-current-file'.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el lisp/muse-blosxom.el
+     lisp/muse-project.el lisp/muse-wiki.el lisp/muse.el
+
+
 2005-07-26 03:47:53 GMT	Michael Olson <mwolson@gnu.org>	patch-182
 
     Summary:
