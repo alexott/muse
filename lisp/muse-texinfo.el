@@ -113,7 +113,8 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-markup-functions
-  '((table . muse-texinfo-markup-table))
+  '((anchor . muse-texinfo-markup-anchor)
+    (table . muse-texinfo-markup-table))
   "An alist of style types to custom functions for that kind of text.
 For more on the structure of this list, see
 `muse-publish-markup-functions'."
@@ -125,6 +126,7 @@ For more on the structure of this list, see
     (image-link      . "@image{%s}")
     (url-with-image  . "@uref{%s, %s}")
     (url-link        . "@uref{%s, %s}")
+    (internal-link   . "@ref{%s, %s}")
     (email-addr      . "@email{%s}")
     (emdash          . "---")
     (rule            . "@sp 1")
@@ -176,6 +178,18 @@ differs little between the various styles."
   "A table of characters which must be represented specially."
   :type '(alist :key-type character :value-type string)
   :group 'muse-texinfo)
+
+(defun muse-texinfo-insert-anchor (anchor)
+  "Insert an anchor, either before the next word, or within a tag."
+  (skip-chars-forward muse-regexp-space)
+  (when (looking-at "<\\([^ />]+\\)>")
+    (goto-char (match-end 0)))
+  (insert "@anchor{" anchor "}"))
+
+(defun muse-texinfo-markup-anchor ()
+  (save-match-data
+    (muse-texinfo-insert-anchor (match-string 1)))
+  "")
 
 (defun muse-texinfo-markup-table ()
   (let* ((str (prog1

@@ -231,6 +231,7 @@ For more on the structure of this list, see
     (image-link      . "<img src=\"%s\" alt=\"\">")
     (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\"></a>")
     (url-link        . "<a href=\"%s\">%s</a>")
+    (internal-link   . "<a href=\"#%s\">%s</a>")
     (email-addr      . "<a href=\"mailto:%s\">%s</a>")
     (emdash          . " &mdash; ")
     (rule            . "<hr>")
@@ -289,10 +290,10 @@ differs little between the various styles."
     (begin-underline . "<span style=\"text-decoration: underline;\">")
     (end-underline   . "</span>")
     (begin-center    . "<span style=\"text-align: center;\">\n")
+    (end-center      . "\n</span>")
     (end-verse-line  . "<br />")
     (last-stanza-end . "<br />")
-    (empty-verse-line . "<br />")
-    (end-center      . "\n</span>"))
+    (empty-verse-line . "<br />"))
   "Strings used for marking up text as XHTML.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles.
@@ -397,6 +398,10 @@ system to an associated HTML coding system. If no match is found,
       (forward-word 1))
     (insert "</a>\n")))
 
+(defun muse-html-markup-anchor ()
+  (save-match-data
+    (muse-html-insert-anchor (match-string 1))) "")
+
 (defun muse-html-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
     (goto-char (match-beginning 0))
@@ -426,10 +431,6 @@ system to an associated HTML coding system. If no match is found,
     (insert "<p class=\"quoted\">"))
    (t
     (insert "<p>"))))
-
-(defun muse-html-markup-anchor ()
-  (save-match-data
-    (muse-html-insert-anchor (match-string 1))) "")
 
 (defun muse-html-escape-string (str &rest ignored)
   "Convert to character entities any non-alphanumeric characters

@@ -1,0 +1,17 @@
+Emacs Muse NEWS -- history of user-visible changes.    -*- outline -*-
+
+* Changes in Muse 3.02
+
+** Insinuation with other modes
+
+*** Improve use of Muse with outline-minor-mode.
+
+*** 
+
+** Muse manual
+
+*** Fix problem with producing a PDF version of the manual.
+
+** HTML publishing
+
+*** Fix minor issue with anchors.

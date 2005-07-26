@@ -115,6 +115,7 @@ For more on the structure of this list, see
 
 (defcustom muse-docbook-markup-strings
   '((url-link        . "<ulink url=\"%s\">%s</ulink>")
+    (internal-link   . "<link linkend=\"%s\">%s</link>")
     (email-addr      . "<email>%s</email>")
     (emdash          . " &mdash; ")
     (rule            . "")
@@ -146,8 +147,8 @@ For more on the structure of this list, see
     (end-verse       . "</literallayout>")
     (begin-example   . "<programlisting>")
     (end-example     . "</programlisting>")
-    (begin-center    . "<note><para>\n")
-    (end-center      . "\n</para></note>")
+    (begin-center    . "<para role=\"centered\">\n")
+    (end-center      . "\n</para>")
     (begin-quote     . "<blockquote>\n")
     (end-quote       . "\n</blockquote>")
     (begin-uli       . "<itemizedlist mark=\"bullet\">\n<listitem><para>")
@@ -234,21 +235,22 @@ match is found, `muse-docbook-charset-default' is used instead."
       (insert "\n")))
    ((eq (char-after) ?\<)
     (when (looking-at (concat "<\\(emphasis\\|systemitem"
-                              "\\|ulink\\|anchor\\|email\\)[ >]"))
+                              "\\|u?link\\|anchor\\|email\\)[ >]"))
       (insert "<para>")))
    (t
     (insert "<para>"))))
 
-(defun muse-docbook-markup-anchor ()
-  (save-match-data
-    (muse-docbook-insert-anchor (match-string 1))) "")
-
 (defun muse-docbook-insert-anchor (anchor)
-  "Insert an anchor, either around the word at point, or within a tag."
+  "Insert an anchor, either before the next word, or within a tag."
   (skip-chars-forward muse-regexp-space)
   (when (looking-at "<\\([^ />]+\\)>")
     (goto-char (match-end 0)))
   (insert "<anchor id=\"" anchor "\" />"))
+
+(defun muse-docbook-markup-anchor ()
+  (save-match-data
+    (muse-docbook-insert-anchor (match-string 1)))
+  "")
 
 (defun muse-docbook-markup-table ()
   (let* ((str (prog1

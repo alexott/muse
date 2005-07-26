@@ -979,13 +979,17 @@ like read-only from being inadvertently deleted."
       (setq url (save-match-data (when url (funcall transform url explicit)))))
     (setq desc (when desc (muse-publish-escape-specials-in-string desc)))
     (if url
-        (if (string-match muse-image-regexp url)
-            (if desc
-                (muse-markup-text 'image-with-desc url desc)
-              (muse-markup-text 'image-link url))
-          (if (and desc (string-match muse-image-regexp desc))
-              (muse-markup-text 'url-with-image url desc)
-            (muse-markup-text 'url-link url (or desc orig-url))))
+        (cond ((string-match muse-image-regexp url)
+               (if desc
+                   (muse-markup-text 'image-with-desc url desc)
+                 (muse-markup-text 'image-link url)))
+              ((and desc (string-match muse-image-regexp desc))
+               (muse-markup-text 'url-with-image url desc))
+              ((eq (aref url 0) ?\#)
+               (muse-markup-text 'internal-link (substring url 1)
+                                 (or desc orig-url)))
+              (t
+               (muse-markup-text 'url-link url (or desc orig-url))))
       orig-url)))
 
 (defun muse-publish-insert-url (url &optional desc explicit)
@@ -1140,9 +1144,11 @@ like read-only from being inadvertently deleted."
                 (string-match muse-image-regexp target)
                 (string-match muse-file-regexp target))
       (setq target (if (string-match "#" target)
-                       (concat (muse-publish-output-name
-                                (substring target 0 (match-beginning 0)))
-                               "#" (substring target (match-end 0)))
+                       (if (eq (aref target 0) ?\#)
+                           target
+                         (concat (muse-publish-output-name
+                                  (substring target 0 (match-beginning 0)))
+                                 "#" (substring target (match-end 0))))
                      (muse-publish-output-name target)))))
   target)
 

@@ -135,7 +135,8 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-functions
-  '((table . muse-latex-markup-table))
+  '((anchor . muse-latex-markup-anchor)
+    (table . muse-latex-markup-table))
   "An alist of style types to custom functions for that kind of text.
 For more on the structure of this list, see
 `muse-publish-markup-functions'."
@@ -147,6 +148,7 @@ For more on the structure of this list, see
     (image-link      . "\\includegraphics[width=\\textwidth]{%s}")
     (url-with-image  . "%% %s\n\\includegraphics[width=\\textwidth]{%s}")
     (url-link        . "\\href{%s}{%s}")
+    (internal-link   . "\\hyperlink{%s}{%s}")
     (email-addr      . "\\verb|%s|")
     (emdash          . "---")
     (rule            . "\\bigskip")
@@ -239,6 +241,26 @@ system to an associated CJK coding system."
   "A table of characters which must be represented specially."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
+
+(defun muse-latex-insert-anchor (anchor)
+  "Insert an anchor, either around the word at point, or within a tag."
+  (skip-chars-forward muse-regexp-space)
+  (if (looking-at "<\\([^ />]+\\)>")
+      (let ((tag (match-string 1)))
+        (goto-char (match-end 0))
+        (insert "\\hypertarget{" anchor "}{")
+        (or (and (search-forward (format "</%s>" tag)
+                                 (muse-line-end-position) t)
+                 (goto-char (match-beginning 0)))
+            (forward-word 1))
+        (insert "}"))
+    (insert "\\hypertarget{" anchor "}{")
+    (forward-word 1)
+    (insert "}")))
+
+(defun muse-latex-markup-anchor ()
+  (save-match-data
+    (muse-latex-insert-anchor (match-string 1))) "")
 
 (defun muse-latex-markup-table ()
   (let* ((str (prog1

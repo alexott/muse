@@ -2,6 +2,53 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-26 06:17:31 GMT	Michael Olson <mwolson@gnu.org>	patch-184
+
+    Summary:
+      Handle anchors in all publishing styles, as well as linking to them.
+    Revision:
+      muse--main--1.0--patch-184
+
+    * lisp/muse-publish.el (muse-publish-url): Publish links to anchors as
+      'internal-link.
+      (muse-publish-prepare-url): Don't touch links to anchors.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Add handler for
+      'internal-link.  Treat centered text with
+      <para role="center">...</para>.
+      (muse-docbook-markup-paragraph): Slight regexp tweak.
+      (muse-docbook-insert-anchor): Docfix.
+      (muse-docbook-markup-anchor): Move lower in file.
+    
+    * lisp/muse-html.el (muse-html-markup-strings): Add handler for
+      'internal-link.
+      (muse-xhtml-markup-strings): Order list, no func change.
+      (muse-html-markup-anchor): Move up in file, no func change.
+    
+    * lisp/muse-latex.el (muse-latex-markup-functions): Add rule for
+      publishing anchors.
+      (muse-latex-markup-strings): Add handler for 'internal-link.
+      (muse-latex-insert-anchor, muse-latex-markup-anchor): New functions
+      that insert an anchor around the next word or inside of a tag.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-functions): Add rule for
+      publishing anchors.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Add handler for
+      'internal-link.
+      (muse-texinfo-insert-anchor, muse-texinfo-markup-anchor): New functions
+      that insert an anchor before the next word or within a tag.
+    
+    * NEWS: Initial attempt at documenting changes since 3.01.
+
+    new files:
+     .arch-ids/NEWS.id NEWS
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-latex.el lisp/muse-publish.el lisp/muse-texinfo.el
+
+
 2005-07-26 04:30:52 GMT	Michael Olson <mwolson@gnu.org>	patch-183
 
     Summary:
