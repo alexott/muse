@@ -17,10 +17,10 @@ experimental:
 	(cd experimental && $(MAKE))
 
 %.info: %.texi
-	makeinfo muse.texi
+	makeinfo $<
 
 %.html: %.texi
-	makeinfo --html --no-split muse.texi
+	makeinfo --html --no-split $<
 
 doc: muse.info muse.html
 
@@ -43,7 +43,7 @@ test:
 	(cd lisp && $(MAKE) test)
 
 distclean: realclean
-	-rm -f debian/dirs
+	-rm -f debian/dirs debian/files
 	test -d ../muse-$(VERSION) && rm -r ../muse-$(VERSION) || :
 
 dist: distclean

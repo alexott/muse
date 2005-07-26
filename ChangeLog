@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-26 03:47:53 GMT	Michael Olson <mwolson@gnu.org>	patch-182
+
+    Summary:
+      muse-xml: definition lists, muse-docbook: center.
+    Revision:
+      muse--main--1.0--patch-182
+
+    * Makefile (%.info, %.html): Use general argument in rule.
+      (distclean): Add another cruft file.
+    
+    * experimental/muse-xml.el (muse-xml-markup-strings): Use <list
+      type="definition"> for definition lists.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Replace <center>
+      with <note>, since it's the closest thing I could find.
+
+    modified files:
+     ChangeLog Makefile experimental/muse-xml.el
+     lisp/muse-docbook.el
+
+
 2005-07-24 22:46:22 GMT	Michael Olson <mwolson@gnu.org>	patch-181
 
     Summary:

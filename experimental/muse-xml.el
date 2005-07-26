@@ -153,9 +153,9 @@ For more on the structure of this list, see
     (end-uli         . "</item>\n</list>")
     (begin-oli       . "<list type=\"ordered\">\n<item>")
     (end-oli         . "</item>\n</list>")
-    (begin-ddt       . "<dl>\n<dt>")
-    (start-dde       . "</dt>\n<dd>")
-    (end-ddt         . "</dd>\n</dl>"))
+    (begin-ddt       . "<list type=\"definition\">\n<item><term>")
+    (start-dde       . "</term>\n<definition>")
+    (end-ddt         . "</definition>\n</item>\n</list>"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
