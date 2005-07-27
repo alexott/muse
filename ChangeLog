@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-27 07:43:53 GMT	Michael Olson <mwolson@gnu.org>	patch-189
+
+    Summary:
+      Release 3.01.91 (3.02 RC2).
+    Revision:
+      muse--main--1.0--patch-189
+
+    * lisp/muse.el (muse-version): Release 3.01.91 (3.02 RC2).
+
+    modified files:
+     ChangeLog Makefile.defs lisp/muse.el muse.texi
+
+
 2005-07-27 07:40:03 GMT	Michael Olson <mwolson@gnu.org>	patch-188
 
     Summary:

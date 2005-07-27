@@ -20,4 +20,4 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 #INSTALLINFO = install-info --section "Emacs" "emacs" --info-dir=$(INFODIR)
 
 # Useful only for the maintainer
-VERSION  = 3.01.arch.188
+VERSION  = 3.01.91
