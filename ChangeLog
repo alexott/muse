@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-07-27 07:40:03 GMT	Michael Olson <mwolson@gnu.org>	patch-188
+
+    Summary:
+      Escape email address and URL always.
+    Revision:
+      muse--main--1.0--patch-188
+
+    * lisp/muse-publish.el (muse-publish-markup-email): Move lower.  Always
+      escape and publish email address as read-only, even when it's not
+      marked up.
+      (muse-publish-markup-url): Ditto for URL.
+
+    modified files:
+     ChangeLog Makefile.defs debian/changelog lisp/muse-publish.el
+
+
 2005-07-26 08:49:38 GMT	Michael Olson <mwolson@gnu.org>	patch-187
 
     Summary:

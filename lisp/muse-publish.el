@@ -956,17 +956,6 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-markup-table ()
   "Style does not support tables.")
 
-(defun muse-publish-markup-email ()
-  (let* ((beg (match-end 1))
-         (addr (buffer-substring-no-properties beg (match-end 0))))
-    (when (not (or (eq (char-before (match-beginning 0)) ?\")
-                   (eq (char-after (match-end 0)) ?\")))
-      (muse-publish-escape-specials-in-string addr)
-      (goto-char beg)
-      (delete-region beg (match-end 0))
-      (insert (format (muse-markup-text 'email-addr) addr addr))
-      (muse-publish-mark-read-only beg (point)))))
-
 (defun muse-publish-escape-specials-in-string (string &rest ignored)
   "Escape specials in STRING using style-specific :specials."
   (save-excursion
@@ -980,6 +969,18 @@ like read-only from being inadvertently deleted."
                     (char-to-string ch)
                   (cdr repl))))
             (append string nil)))))
+
+(defun muse-publish-markup-email ()
+  (let* ((beg (match-end 1))
+         (addr (buffer-substring-no-properties beg (match-end 0))))
+    (setq addr (muse-publish-escape-specials-in-string addr))
+    (goto-char beg)
+    (delete-region beg (match-end 0))
+    (if (or (eq (char-before (match-beginning 0)) ?\")
+            (eq (char-after (match-end 0)) ?\"))
+        (insert addr)
+      (insert (format (muse-markup-text 'email-addr) addr addr)))
+    (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
@@ -1027,9 +1028,14 @@ like read-only from being inadvertently deleted."
       (muse-publish-insert-url link desc explicit))))
 
 (defun muse-publish-markup-url ()
-  (when (not (or (eq (char-before (match-beginning 0)) ?\")
+  (if (not (or (eq (char-before (match-beginning 0)) ?\")
                  (eq (char-after (match-end 0)) ?\")))
-    (muse-publish-insert-url (match-string 0))))
+      (muse-publish-insert-url (match-string 0))
+    (let ((beg (match-beginning 0))
+          (url (match-string 0)))
+      (delete-region (match-beginning 0) (match-end 0))
+      (insert (muse-publish-escape-specials-in-string url))
+      (muse-publish-mark-read-only beg (point)))))
 
 ;; Default publishing tags
 
