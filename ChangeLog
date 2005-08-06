@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-06 17:39:45 GMT	Michael Olson <mwolson@gnu.org>	patch-191
+
+    Summary:
+      Makefile: Remove stale Debian packages for this version.
+    Revision:
+      muse--main--1.0--patch-191
+
+    * Makefile (debclean): Remove generated Debian packages for the current
+      version in parent directory.
+
+    modified files:
+     ChangeLog Makefile
+
+
 2005-08-03 04:34:50 GMT	Michael Olson <mwolson@gnu.org>	patch-190
 
     Summary:
