@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-08 22:58:24 GMT	Michael Olson <mwolson@gnu.org>	patch-192
+
+    Summary:
+      Fix failure to resolve interwiki link when clicking on it.
+    Revision:
+      muse--main--1.0--patch-192
+
+    * Makefile (debclean): Minor tweak.
+    
+    * lisp/muse-mode.el (muse-visit-link-default): Indentation fix.  No func
+      change.
+    
+    * lisp/muse-project.el (muse-project-find-file): Don't add file
+      extensions to a relative name.  If we're dealing with a file, open it
+      up without searching through the various projects for a path.  This
+      should fix the failure to resolve an interwiki link by clicking on it.
+
+    modified files:
+     ChangeLog Makefile lisp/muse-mode.el lisp/muse-project.el
+
+
 2005-08-06 17:39:45 GMT	Michael Olson <mwolson@gnu.org>	patch-191
 
     Summary:

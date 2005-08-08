@@ -57,8 +57,8 @@ release: dist
 	  zip -r muse-$(VERSION).zip muse-$(VERSION))
 
 debclean:
-	(cd ../../dist && rm -f muse-el_*)
-	(cd .. && rm muse-el_$(VERSION)*)
+	rm -f ../../dist/muse-el_*
+	rm -f ../muse-el_$(VERSION)*
 
 debrelease: dist debclean
 	test -d ../muse-el-$(VERSION) && rm -fr ../muse-el-$(VERSION) || :

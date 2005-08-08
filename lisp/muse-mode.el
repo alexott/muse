@@ -303,16 +303,16 @@ used by `muse-visit-link' if you have not specified :visit-link
 in `muse-project-alist'."
   (if (string-match muse-url-regexp link)
       (browse-url link)
-      (let ((project (muse-project-of-file)))
-        (if project
-            (muse-project-find-file link project
-                                    (and other-window
-                                         'find-file-other-window))
-          (if other-window
-              (find-file-other-window link)
-            (find-file link))))
-      (if anchor
-          (search-forward anchor nil t))))
+    (let ((project (muse-project-of-file)))
+      (if project
+          (muse-project-find-file link project
+                                  (and other-window
+                                       'find-file-other-window))
+        (if other-window
+            (find-file-other-window link)
+          (find-file link))))
+    (if anchor
+        (search-forward anchor nil t))))
 
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK."

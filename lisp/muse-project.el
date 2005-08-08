@@ -446,12 +446,10 @@ first directory within the project's fileset is used."
     (unless (interactive-p)
       (setq project (muse-project project)
             name (cons name (muse-project-page-file name project))))
-    ;; If we're given a relative name, open it as-is
+    ;; If we're given a relative or absolute filename, open it as-is
     (if (and (car name)
-             (save-match-data (string-match "\\.\\./" (car name))))
-        (setcdr name (if muse-file-extension
-                         (concat (car name) "." muse-file-extension)
-                       (car name)))
+             (save-match-data (string-match muse-file-regexp (car name))))
+        (setcdr name (car name))
       ;; At this point, name is (PAGE . FILE).
       (unless (cdr name)
         (let ((pats (cadr project)))
