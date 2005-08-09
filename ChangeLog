@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-09 03:26:50 GMT	Michael Olson <mwolson@gnu.org>	patch-193
+
+    Summary:
+      Compilation cleanups.
+    Revision:
+      muse--main--1.0--patch-193
+
+    * lisp/muse-mode.el (muse-mode): Use `make-local-variable' instead of
+      `make-variable-buffer-local' in order to silence compiler warnings.
+    
+    * lisp/muse.el: Add an eval-when-compile line to silence a compiler
+      warning.
+    
+    * scripts/muse-build.el (muse-elint-files): Automatically load every
+      elisp file rather than specifying each one.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse.el scripts/muse-build.el
+
+
 2005-08-08 22:58:24 GMT	Michael Olson <mwolson@gnu.org>	patch-192
 
     Summary:

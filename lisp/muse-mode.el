@@ -177,11 +177,11 @@ so only enable this if you don't use either of these."
                muse-regexp-blank "]*\\)*"))
   (when (featurep 'pcomplete)
     ;; If pcomplete is available, set it up
-    (set (make-variable-buffer-local 'pcomplete-default-completion-function)
+    (set (make-local-variable 'pcomplete-default-completion-function)
          'muse-mode-completions)
-    (set (make-variable-buffer-local 'pcomplete-command-completion-function)
+    (set (make-local-variable 'pcomplete-command-completion-function)
          'muse-mode-completions)
-    (set (make-variable-buffer-local 'pcomplete-parse-arguments-function)
+    (set (make-local-variable 'pcomplete-parse-arguments-function)
          'muse-mode-current-word))
   (when muse-mode-highlight-p
     (muse-use-font-lock)))
