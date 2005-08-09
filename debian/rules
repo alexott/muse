@@ -37,10 +37,8 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
-	rm -f muse.html
-	rm -f muse.info
 	# Add here commands to clean up after the build process.
-	-$(MAKE) clean
+	-$(MAKE) realclean
 
 	dh_clean
 

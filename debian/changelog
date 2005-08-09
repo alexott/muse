@@ -1,3 +1,12 @@
+muse-el (3.01.arch.195-1) unstable; urgency=low
+
+  * New Arch snapshot.
+  * debian/rules (clean): Call $(MAKE) realclean instead of $(MAKE) clean.
+  * Attempt to ensure that the full set of changes is generated.
+    Thanks to Romain Francoise for the advice.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Tue,  9 Aug 2005 16:40:40 -0500
+
 muse-el (3.01.arch.188-1) unstable; urgency=low
 
   * New Arch snapshot.
