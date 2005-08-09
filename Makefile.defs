@@ -22,3 +22,4 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 # Useful only for the maintainer
 VERSION    = 3.01.arch.195
 LASTUPLOAD = 0.0-1
+BUILDOPTS  =

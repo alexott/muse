@@ -67,7 +67,8 @@ debrelease: dist debclean
 	cp -r debian ../muse-el-$(VERSION)
 	-rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
 	(cd ../muse-el-$(VERSION) && \
-	  dpkg-buildpackage -v$(LASTUPLOAD) -us -uc -rfakeroot && \
+	  dpkg-buildpackage -v$(LASTUPLOAD) $(BUILDOPTS) \
+	    -us -uc -rfakeroot && \
 	  echo "Running lintian ..." && \
 	  lintian -i ../muse-el_$(VERSION)*.deb || : && \
 	  echo "Done running lintian." && \
