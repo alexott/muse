@@ -2,6 +2,18 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-09 04:01:52 GMT	Michael Olson <mwolson@gnu.org>	patch-194
+
+    Summary:
+      Makefile: Minor deletion cleanups.
+    Revision:
+      muse--main--1.0--patch-194
+
+
+    modified files:
+     ChangeLog Makefile
+
+
 2005-08-09 03:26:50 GMT	Michael Olson <mwolson@gnu.org>	patch-193
 
     Summary:

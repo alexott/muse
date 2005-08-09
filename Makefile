@@ -44,7 +44,7 @@ test:
 
 distclean: realclean
 	-rm -f debian/dirs debian/files
-	test -d ../muse-$(VERSION) && rm -r ../muse-$(VERSION) || :
+	-rm -fr ../muse-$(VERSION)
 
 dist: distclean
 	tla inventory -sB | tar -cf - --no-recursion -T- | \
@@ -57,15 +57,15 @@ release: dist
 	  zip -r muse-$(VERSION).zip muse-$(VERSION))
 
 debclean:
-	rm -f ../../dist/muse-el_*
-	rm -f ../muse-el_$(VERSION)*
+	-rm -f ../../dist/muse-el_*
+	-rm -f ../muse-el_$(VERSION)*
 
 debrelease: dist debclean
-	test -d ../muse-el-$(VERSION) && rm -fr ../muse-el-$(VERSION) || :
+	-rm -fr ../muse-el-$(VERSION)
 	mv ../muse-$(VERSION) ../muse-el-$(VERSION)
 	(cd .. && tar -czf muse-el_$(VERSION).orig.tar.gz muse-el-$(VERSION))
 	cp -r debian ../muse-el-$(VERSION)
-	rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
+	-rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
 	(cd ../muse-el-$(VERSION) && debuild -rfakeroot)
 	cp ../muse-el_$(VERSION)* ../../dist
 
