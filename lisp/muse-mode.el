@@ -169,12 +169,16 @@ so only enable this if you don't use either of these."
         (setq fill-nobreak-predicate 'muse-mode-fill-nobreak-p)
       (add-to-list 'fill-nobreak-predicate
                    'muse-mode-fill-nobreak-p)))
-  ;; Make adaptive fill work nicely with item lists
+  ;; Make fill work nicely with item lists
   (set (make-local-variable 'adaptive-fill-regexp)
-       (concat "[" muse-regexp-blank "]*\\(-+["
-               muse-regexp-blank
-               "]*\\|[0-9]+\\.["
-               muse-regexp-blank "]*\\)*"))
+       (concat "[" muse-regexp-blank "]+\\(-\\|[0-9]+\\.\\)["
+               muse-regexp-blank "]+\\|\\[[0-9]+\\]["
+               muse-regexp-blank "]*\\|["
+               muse-regexp-blank "]*"))
+  (set (make-local-variable 'paragraph-start)
+       (concat paragraph-start "\\|[" muse-regexp-blank
+               "]+\\(-\\|[0-9]+\\.\\)[" muse-regexp-blank
+               "]+\\|\\[[0-9]+\\][" muse-regexp-blank "]*"))
   (when (featurep 'pcomplete)
     ;; If pcomplete is available, set it up
     (set (make-local-variable 'pcomplete-default-completion-function)
