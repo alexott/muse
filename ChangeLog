@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-12 01:29:58 GMT	Michael Olson <mwolson@gnu.org>	patch-197
+
+    Summary:
+      QuickStart: Minor typo in anchor example.
+    Revision:
+      muse--main--1.0--patch-197
+
+    * examples/QuickStart (Anchors and tagged links): Link to an anchor only,
+      rather than a full URL.
+
+    modified files:
+     ChangeLog examples/QuickStart
+
+
 2005-08-09 23:15:10 GMT	Michael Olson <mwolson@gnu.org>	patch-196
 
     Summary:
