@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-13 00:25:54 GMT	Michael Olson <mwolson@gnu.org>	patch-199
+
+    Summary:
+      Minor fixups from Peter K. Lee.
+    Revision:
+      muse--main--1.0--patch-199
+
+    * experimental/muse-xml.el (muse-xml-fixup-tables): Be slightly less
+      restrictive with our end-of-table regexp.
+    
+    * lisp/muse-docbook.el (muse-docbook-fixup-tables): Look for tgroup
+      instead of start of table.  Be less restrictive with several of our
+      regexps.
+    
+    * lisp/muse-html.el: Patch from Peter K. Lee.
+      (muse-html-prepare-buffer): Work around edge case where the "charset="
+      part has already been appended to muse-html-meta-content-type.
+      (muse-html-fixup-tables): Be slightly less restrictive with our
+      end-of-table regexp.
+
+    modified files:
+     ChangeLog experimental/muse-xml.el lisp/muse-docbook.el
+     lisp/muse-html.el
+
+
 2005-08-12 20:36:10 GMT	Michael Olson <mwolson@gnu.org>	patch-198
 
     Summary:

@@ -277,7 +277,7 @@ match is found, `muse-xml-charset-default' is used instead."
         (forward-line 1)
         (save-restriction
           (let ((beg (point)))
-            (narrow-to-region beg (and (re-search-forward "^</table>$"
+            (narrow-to-region beg (and (re-search-forward "^</table>"
                                                           nil t)
                                        (match-beginning 0))))
           (goto-char (point-min))

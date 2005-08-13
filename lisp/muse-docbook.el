@@ -304,12 +304,12 @@ and anything after `Firstname' is optional."
   "Sort table parts."
   (goto-char (point-min))
   (let (last)
-    (while (re-search-forward "^<informaltable>$" nil t)
+    (while (re-search-forward "^ *<tgroup[^>]*>$" nil t)
       (unless (get-text-property (point) 'read-only)
-        (forward-line 2)
+        (forward-line 1)
         (save-restriction
           (let ((beg (point)))
-            (narrow-to-region beg (and (re-search-forward "^  </tgroup>$"
+            (narrow-to-region beg (and (re-search-forward "^ *</tgroup>"
                                                           nil t)
                                        (match-beginning 0))))
           (goto-char (point-min))

@@ -576,8 +576,11 @@ if not escaped."
        (cons 'muse-html-escape-string muse-publish-url-transforms))
   (make-local-variable 'muse-html-meta-http-equiv)
   (set (make-local-variable 'muse-html-meta-content-type)
-       (concat muse-html-meta-content-type "; charset="
-               (muse-html-encoding))))
+       (if (save-match-data
+             (string-match "charset=" muse-html-meta-content-type))
+           muse-html-meta-content-type
+         (concat muse-html-meta-content-type "; charset="
+                 (muse-html-encoding)))))
 
 (defun muse-html-fixup-tables ()
   "Sort table parts."
@@ -588,7 +591,7 @@ if not escaped."
         (forward-line 1)
         (save-restriction
           (let ((beg (point)))
-            (narrow-to-region beg (and (re-search-forward "^</table>$"
+            (narrow-to-region beg (and (re-search-forward "^</table>"
                                                           nil t)
                                        (match-beginning 0))))
           (goto-char (point-min))
