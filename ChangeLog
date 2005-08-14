@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-14 07:10:16 GMT	Michael Olson <mwolson@gnu.org>	patch-201
+
+    Summary:
+      Prepare initial upload for Debian project.
+    Revision:
+      muse--main--1.0--patch-201
+
+    * Makefile.defs (LASTUPLOAD): Mark as the previous Debian package
+      version, since we only want the last changelog entry to appear on the
+      initial Debian upload.
+    
+    * debian/changelog: New Debian package 3.01.arch.201-1.
+
+    modified files:
+     ChangeLog Makefile.defs debian/changelog
+
+
 2005-08-13 05:05:41 GMT	Michael Olson <mwolson@gnu.org>	patch-200
 
     Summary:
