@@ -1,3 +1,24 @@
+muse-el (3.01.arch.201-4) unstable; urgency=low
+
+  * Makefile: Correct a build issue involving revisions and accidentally
+    modifying the original tarball.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Thu, 18 Aug 2005 01:36:27 -0500
+
+muse-el (3.01.arch.201-3) unstable; urgency=low
+
+  * debian/control: Add emacs21 | emacsen to Build-Depends-Indep.  This
+    should fix a potential build failure.  We need a binary named `emacs'
+    at build time.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Sun, 14 Aug 2005 16:28:34 -0500
+
+muse-el (3.01.arch.201-2) unstable; urgency=low
+
+  * debian/control: Shorten description and make first line match the ITP.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Sun, 14 Aug 2005 13:45:49 -0500
+
 muse-el (3.01.arch.201-1) unstable; urgency=low
 
   * New Arch snapshot.

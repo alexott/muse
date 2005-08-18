@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-18 06:53:31 GMT	Michael Olson <mwolson@gnu.org>	patch-202
+
+    Summary:
+      Make building of Debian revisions work.
+    Revision:
+      muse--main--1.0--patch-202
+
+    * Makefile (distclean): Don't remove anything in debian/, since it will
+      never be necessary.
+      (debclean): Removed, since two different targets need slightly
+      different versions of this.  Even abstraction has its limits.
+      (debbuild): New target that takes care of performing the build itself.
+      (debrevision): New target that makes a revision build, where the
+      original tarball must not be modified.
+      (debrevision): Split out building stuff to debbuild target.
+    
+    * debian/changelog: Several revisions worth of Debian fun.
+    
+    * debian/control (Build-Depends-Indep): Add emacs21 | emacsen.
+      (Description): Make this match the ITP and shorten the text.
+
+    modified files:
+     ChangeLog Makefile Makefile.defs debian/changelog
+     debian/control
+
+
 2005-08-14 07:10:16 GMT	Michael Olson <mwolson@gnu.org>	patch-201
 
     Summary:

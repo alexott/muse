@@ -1,4 +1,4 @@
-.PHONY: all lisp examples experimental doc clean realclean distclean fullclean install test dist release debclean debrelease upload
+.PHONY: all lisp examples experimental doc clean realclean distclean fullclean install test dist release debbuild debrevision debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
@@ -43,7 +43,6 @@ test:
 	(cd lisp && $(MAKE) test)
 
 distclean: realclean
-	-rm -f debian/dirs debian/files
 	-rm -fr ../muse-$(VERSION)
 
 dist: distclean
@@ -56,16 +55,7 @@ release: dist
 	(cd .. && tar -czf muse-$(VERSION).tar.gz muse-$(VERSION) ; \
 	  zip -r muse-$(VERSION).zip muse-$(VERSION))
 
-debclean:
-	-rm -f ../../dist/muse-el_*
-	-rm -f ../muse-el_$(VERSION)*
-
-debrelease: dist debclean
-	-rm -fr ../muse-el-$(VERSION)
-	mv ../muse-$(VERSION) ../muse-el-$(VERSION)
-	(cd .. && tar -czf muse-el_$(VERSION).orig.tar.gz muse-el-$(VERSION))
-	cp -r debian ../muse-el-$(VERSION)
-	-rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
+debbuild:
 	(cd ../muse-el-$(VERSION) && \
 	  dpkg-buildpackage -v$(LASTUPLOAD) $(BUILDOPTS) \
 	    -us -uc -rfakeroot && \
@@ -74,6 +64,25 @@ debrelease: dist debclean
 	  echo "Done running lintian." && \
 	  debsign)
 	cp ../muse-el_$(VERSION)* ../../dist
+
+debrevision: dist
+	-rm -f ../../dist/muse-el_*
+	-rm -f ../muse-el_$(VERSION)-*
+	-rm -fr ../muse-el-$(VERSION)
+	mv ../muse-$(VERSION) ../muse-el-$(VERSION)
+	cp -r debian ../muse-el-$(VERSION)
+	-rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
+	$(MAKE) debbuild
+
+debrelease: dist
+	-rm -f ../../dist/muse-el_*
+	-rm -f ../muse-el_$(VERSION)*
+	-rm -fr ../muse-el-$(VERSION)
+	mv ../muse-$(VERSION) ../muse-el-$(VERSION)
+	(cd .. && tar -czf muse-el_$(VERSION).orig.tar.gz muse-el-$(VERSION))
+	cp -r debian ../muse-el-$(VERSION)
+	-rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
+	$(MAKE) debbuild
 
 upload: release
 	(cd .. && gpg --detach muse-$(VERSION).tar.gz && \
