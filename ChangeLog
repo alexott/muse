@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-19 16:24:08 GMT	Michael Olson <mwolson@gnu.org>	patch-203
+
+    Summary:
+      Add items through patch-149 to NEWS.
+    Revision:
+      muse--main--1.0--patch-203
+
+    * NEWS (progress): Catch up to patch-149.
+    
+    * lisp/muse-mode.el (muse-mode): Remove spurious comment.
+    
+    * lisp/muse-publish.el (muse-publish): Ditto.
+
+    modified files:
+     ChangeLog NEWS lisp/muse-mode.el lisp/muse-publish.el
+
+
 2005-08-18 06:53:31 GMT	Michael Olson <mwolson@gnu.org>	patch-202
 
     Summary:

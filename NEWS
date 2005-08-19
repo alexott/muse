@@ -1,17 +1,152 @@
 Emacs Muse NEWS -- history of user-visible changes.    -*- outline -*-
 
+progress: patch-149
+
 * Changes in Muse 3.02
+
+** New modules
+
+*** muse-wiki.el --- Provide automatic linking for WikiWords and
+InterWiki links.  These words are clickable and publish as links.
+Project names from `muse-project-alist' are available for InterWiki
+linking by default.  The list of InterWiki names and handlers may be
+customized through `muse-wiki-interwiki-alist'.
+
+WikiWords that do not correspond with real files will not be displayed
+as links nor published as links.  It is expected that this behavior
+will be made optional in future versions of Muse.
+
+**** This module includes a few helper functions that may be added to
+`muse-publish-desc-transforms' in order to modify link descriptions at
+publish time.
+
+ `muse-wiki-publish-pretty-title' causes words to be Title-cased,
+ignoring words like `the' and `at' which should not be changed.
+
+`muse-wiki-publish-pretty-interwiki' changes the delimiter
+of interwiki links according to the text of the
+`muse-wiki-interwiki-replacement' option.
+
+** Compatibility fixes
+
+*** Muse has been tested with XEmacs 21.4, both Mule and non-Mule versions.
+There are no known problems remaining.  To make things work by
+default, the iso-8859-1 charset is used as a default option in some
+places.
+
+** Configuration
+
+*** `muse-file-extension' -- New option that allows the file extension
+for Muse files to be specified.  For example, setting this to "muse"
+assumes that you have renamed your Muse files with a ".muse"
+extension.  Using this (and setting `muse-mode-auto-p' to nil) will
+prevent miscellaneous non-Muse files from being accidentally opened in
+Muse Mode.
+
+*** `muse-ignored-extensions' -- New option that determines which file
+extensions to omit from the ending of a Muse page name.
+
+*** `muse-ignored-extensions-regexp' -- This is no longer customizable.
+It will be automatically generated from `muse-file-extension' and
+`muse-ignored-extensions'.
+
+*** `muse-project-alist' -- The customize interface for this option has
+been greatly improved, and much effort has been spent in order to make
+this user-friendly.
+
+**** The `:force-publish' tag may be specified in `muse-project-alist'.
+This causes a particular list of files to be re-created every time the
+publishing process is invoked, even if they haven't been changed
+according to their timestamps.  One use for this is to keep an index
+of available pages by adding the following to a file in this list.
+
+<lisp>(muse-index-as-string t t t)</lisp>
+
+** Debian packaging
+
+*** Debian packages for Muse have entered Debian unstable, thanks
+to Romain Francoise, my sponsor.  Packages may be built by using `make
+debrelease', once the proper options in Makefile.defs are set.
+Revisions may be built using `make debrevision'.
+
+The manual and relevant documentation files have been included with
+the Debian package for Muse.
 
 ** Insinuation with other modes
 
-*** Improve use of Muse with outline-minor-mode.
+*** Allow use of Muse with outline-minor-mode.
 
-*** 
+*** Filling text does the right thing with list items.
+List items will no longer be concatenated when hitting M-q in the
+midst of consecutive list items.
+
+Links will never be split in the middle when using Fill.
+
+*** Some flyspell crash issues were addressed.
+Using intangible text can cause strange problems with flyspell mode.
+Hence, by default, the intangible property will be ignored.  A new
+option called `muse-mode-intangible-links' indicates whether this
+should be the case.
+
+*** Links will no longer be highlighted by flyspell.
+If you're using XEmacs or Emacs 22, flyspell will ignore links,
+including link text.  This keeps flyspell from making the links
+unclickable.  If you're using Emacs 21, flyspell will continue to
+interfere with links.  If you know how to fix this, please send a
+patch!
 
 ** Muse manual
 
 *** Fix problem with producing a PDF version of the manual.
 
+** Publishing
+
+*** The order of rules should be much improved.
+This means that emphasis characters like `*' and `_' will never be
+interpreted as such if they are within links.
+
+*** The user will be notified when `muse-publish-this-file' fails to
+publish the current file.  This happens when the timestamp of the
+current file indicates that it is up-to-date.
+
+*** Special characters are escaped in link descriptions and links on a
+more consistent basis.  What defines a "special character" varies
+according to the publishing style.
+
+*** Errors that occur during publish time will cause a warning to be
+displayed prominently, rather than being ignored.  It should no longer
+be possible to mess up a Muse source file by tweaking the Muse
+publishing process.
+
+*** Errors in <lisp> tags cause a warning to be displayed and
+return "<!--INVALID LISP CODE-->".  Muse will try to continue
+publishing the page.
+
+** DocBook publishing
+
+*** The markup has been comprehensively improved.
+Published documents will now pass validation tests.
+
+*** It is now possible to specify the encoding of DocBook documents.
+The default encoding is utf-8.
+
 ** HTML publishing
 
 *** Fix minor issue with anchors.
+
+*** Paragraph publishing will no longer insert <div> tags before images.
+This was causing too much hassle for some programs that were trying to
+extend Muse, like the Muse port of Planner.
+
+*** The `&', `<', and '>' characters will be escaped using their specific
+HTML escape codes, rather than with "&#NNN;".  This makes the
+published output display correctly in more web browsers.
+
+*** Use HTML 4.0 Transitional by default for `muse-html-header'.
+
+*** Include empty alt element in markup string for images that lack a
+description.
+
+** Journal publishing
+
+*** Use "div class=..." rather than "div id=..." for sections.

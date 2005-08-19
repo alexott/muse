@@ -41,8 +41,7 @@
 (require 'muse-regexps)
 
 (defgroup muse-publish nil
-  "Options controlling the general behavior of Muse publishing.
-See `muse-publish' for more information."
+  "Options controlling the general behavior of Muse publishing."
   :group 'muse)
 
 (defcustom muse-before-publish-hook nil
