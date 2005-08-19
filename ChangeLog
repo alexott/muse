@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-19 16:55:39 GMT	Michael Olson <mwolson@gnu.org>	patch-204
+
+    Summary:
+      muse-html: Add muse-xhtml-extension.
+    Revision:
+      muse--main--1.0--patch-204
+
+    * lisp/muse-html.el (muse-xhtml-extension): New option that specifies the
+      default file extension for publishing XHTML files.  Thanks to Trent
+      Buck for the suggestion.
+      ("xhtml"): Use it.
+
+    modified files:
+     ChangeLog lisp/muse-html.el
+
+
 2005-08-19 16:24:08 GMT	Michael Olson <mwolson@gnu.org>	patch-203
 
     Summary:

@@ -49,6 +49,11 @@ See `muse-html' for more information."
   :type 'string
   :group 'muse-html)
 
+(defcustom muse-xhtml-extension ".html"
+  "Default file extension for publishing XHTML files."
+  :type 'string
+  :group 'muse-html)
+
 (defcustom muse-html-style-sheet
   "<style type=\"text/css\">
 body {
@@ -641,6 +646,7 @@ if not escaped."
                      :browser   'muse-html-browse-file)
 
   (muse-derive-style "xhtml" "html"
+                     :suffix    'muse-xhtml-extension
                      :strings   'muse-xhtml-markup-strings
                      :header    'muse-xhtml-header
                      :footer    'muse-xhtml-footer))
