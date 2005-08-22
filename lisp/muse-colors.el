@@ -224,7 +224,8 @@ whether progress messages should be displayed to the user."
                         (not (eq leader (- e2 b2)))
                         (eq (char-syntax (char-before b2)) ?\ )
                         (not (eq (char-after b2) ?*))
-                        (eq (char-syntax (char-after (1+ b2))) ?w))
+                        (and (not (eobp))
+                             (eq (char-syntax (char-after (1+ b2))) ?w)))
               (add-text-properties beg e1 '(invisible muse))
               (add-text-properties
                e1 b2 (list 'face (cond ((= leader 1) 'italic)
@@ -254,7 +255,8 @@ whether progress messages should be displayed to the user."
           ;; or word constituent follows
           (unless (or (eq (char-syntax (char-before (point))) ?\ )
                       (not (eq (char-after (point)) ?_))
-                      (eq (char-syntax (char-after (1+ (point)))) ?w))
+                      (and (not (eobp))
+                           (eq (char-syntax (char-after (1+ (point)))) ?w)))
             (add-text-properties start (1+ start) '(invisible muse))
             (add-text-properties (1+ start) (point) '(face underline))
             (add-text-properties (point)
@@ -284,7 +286,8 @@ whether progress messages should be displayed to the user."
           ;; or word constituent follows
           (unless (or (eq (char-syntax (char-before (point))) ?\ )
                       (not (eq (char-after (point)) ?=))
-                      (eq (char-syntax (char-after (1+ (point)))) ?w))
+                      (and (not (eobp))
+                           (eq (char-syntax (char-after (1+ (point)))) ?w)))
             (add-text-properties start (1+ start) '(invisible muse))
             (add-text-properties (1+ start) (point) '(face muse-verbatim-face))
             (add-text-properties (point)

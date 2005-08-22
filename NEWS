@@ -1,6 +1,4 @@
-Emacs Muse NEWS -- history of user-visible changes.    -*- outline -*-
-
-progress: patch-149
+Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
 * Changes in Muse 3.02
 
@@ -20,11 +18,17 @@ will be made optional in future versions of Muse.
 `muse-publish-desc-transforms' in order to modify link descriptions at
 publish time.
 
- `muse-wiki-publish-pretty-title' causes words to be Title-cased,
+**** The concept of "implicit links" and "explicit links" has been
+introduced.  Explicit links are surrounded by brackets, i.e.
+[[http://blah.org][this is a explicit link]].  Implicit links are URLs
+and email addresses that are not surrounded by brackets: they will not
+be colorized or published if surrounded by double-quotes.
+
+***** `muse-wiki-publish-pretty-title' causes words to be Title-cased,
 ignoring words like `the' and `at' which should not be changed.
 
-`muse-wiki-publish-pretty-interwiki' changes the delimiter
-of interwiki links according to the text of the
+***** `muse-wiki-publish-pretty-interwiki' changes the delimiter of
+interwiki links according to the text of the
 `muse-wiki-interwiki-replacement' option.
 
 ** Compatibility fixes
@@ -54,7 +58,7 @@ It will be automatically generated from `muse-file-extension' and
 been greatly improved, and much effort has been spent in order to make
 this user-friendly.
 
-**** The `:force-publish' tag may be specified in `muse-project-alist'.
+*** The `:force-publish' tag may be specified in `muse-project-alist'.
 This causes a particular list of files to be re-created every time the
 publishing process is invoked, even if they haven't been changed
 according to their timestamps.  One use for this is to keep an index
@@ -62,25 +66,53 @@ of available pages by adding the following to a file in this list.
 
 <lisp>(muse-index-as-string t t t)</lisp>
 
+*** `muse-project-ignore-regexp' -- By default, version control directories
+are now included in this regexp so that they don't appear when you hit
+C-c C-f to browse files in a project.
+
+*** The `muse-project-alist-styles' and `muse-project-alist-dirs' functions
+may be used in `muse-project-alist' to recursively add styles and
+directory listings for a given directory.  The following is an
+example.  We use a backtick instead of a single quote to begin the
+list.
+
+(setq muse-project-alist
+      `(("Blog"
+         (,@(muse-project-alist-dirs "~/proj/wiki/blog")  ;; base dir
+          :default "guestbook")
+
+         ,@(muse-project-alist-styles "~/proj/wiki/blog"  ;; base dir
+                                      ;; output dir
+                                      "~/personal-site/site/blog"
+                                      ;; style
+                                      "my-blosxom"))))
+
+Note that if you use the customize interface for `muse-project-alist',
+you will still have to manually add information for any new
+sub-directories.
+
 ** Debian packaging
 
 *** Debian packages for Muse have entered Debian unstable, thanks
-to Romain Francoise, my sponsor.  Packages may be built by using `make
-debrelease', once the proper options in Makefile.defs are set.
-Revisions may be built using `make debrevision'.
+to Romain Francoise, my sponsor.
+
+It is possible to roll your own Muse packages if you want to do so.
+Packages may be built by using `make debrelease', once the proper
+options in Makefile.defs are set.  Revisions may be built using `make
+debrevision'.
 
 The manual and relevant documentation files have been included with
 the Debian package for Muse.
 
-** Insinuation with other modes
+** Muse Mode
 
 *** Allow use of Muse with outline-minor-mode.
 
-*** Filling text does the right thing with list items.
-List items will no longer be concatenated when hitting M-q in the
-midst of consecutive list items.
+*** Filling text does the right thing with list items and footnotes.
+List items and footnotes will no longer be concatenated when hitting
+M-q in the midst of consecutive items.
 
-Links will never be split in the middle when using Fill.
+*** Links will never be split in the middle when using Fill.
 
 *** Some flyspell crash issues were addressed.
 Using intangible text can cause strange problems with flyspell mode.
@@ -94,6 +126,15 @@ including link text.  This keeps flyspell from making the links
 unclickable.  If you're using Emacs 21, flyspell will continue to
 interfere with links.  If you know how to fix this, please send a
 patch!
+
+*** A few edge cases for emphasis and underlining have been addressed.
+
+*** <example>, <verbatim>, and =surrounded text= are now colored using
+the new face `muse-verbatim-face'.
+
+*** All marked up text properties, like emphasis and underlining,
+will be removed for the text between <example>, <verbatim>, <code>,
+<literal>, and <lisp> tags.
 
 ** Muse manual
 
@@ -122,13 +163,45 @@ publishing process.
 return "<!--INVALID LISP CODE-->".  Muse will try to continue
 publishing the page.
 
+*** An emdash ("--") can now be used after a list, as long as there is
+a blank line between the end of the list and the emdash.
+
+*** Every publishing style is now capable of specifying strings to use
+for sections beyond the third level.
+
+*** Every publishing style may specify an end-of-section string.
+This is used, for example, by the experimental XML style and the
+DocBook style.
+
+*** Every publishing style may specify a method of handling "internal
+link" markup.  An internal link is a link that refers to an anchor on
+the current page.
+
+** Blosxom publishing
+
+*** muse-blosxom-new-entry: A #category directive is added by default.
+Nothing is done with this yet, but it could be handy for tag-based
+(multiple category) blogging, once we figure out a good way to do that
+in both Muse and Pyblosxom.  Ideas are welcome, and patches even more
+so.
+
 ** DocBook publishing
 
 *** The markup has been comprehensively improved.
-Published documents will now pass validation tests.
+Published documents will now pass validation tests and look better in
+general.
 
 *** It is now possible to specify the encoding of DocBook documents.
 The default encoding is utf-8.
+
+*** Footnotes will be embedded into paragraphs, since this is
+The DocBook Way.
+
+*** Tables will be sorted by section.
+Headers first, then footers, then the rest of the table.
+
+*** Anchors are now handled correctly and publish to the best available
+form.  Links to anchors are published with the <link> tag.
 
 ** HTML publishing
 
@@ -147,6 +220,41 @@ published output display correctly in more web browsers.
 *** Include empty alt element in markup string for images that lack a
 description.
 
+*** Tables will be sorted by section.
+Headers first, then footers, then the rest of the table.
+
+*** `muse-xhtml-extension' -- The default extension for XHTML publishing.
+This is a new option.
+
 ** Journal publishing
 
 *** Use "div class=..." rather than "div id=..." for sections.
+
+** LaTeX publishing
+
+*** A newline will be appended to the default footer for the latex and
+latexpdf publishing styles.  This keeps the PDF-building process from
+failing due to lack of a newline at end of file.
+
+*** Anchors and links to them now work properly.
+
+** TexInfo publishing
+
+*** Fix a fatal error that occurs when publishing tables.
+
+*** Generate the contents in the header by default rather than the footer.
+This is the way that most TexInfo manuals do it.
+
+*** The info-pdf publishing style currently produces the best PDF output
+on the maintainer's machine, so it is now used to publish the PDF
+version of the Muse Manual.
+
+*** The characters `{' and `}' will be treated as special characters that
+need to be escaped at publish-time.
+
+*** Improve dots and enddots markup strings.
+
+*** Surround underlined text with "_" since TexInfo doesn't seem to have
+any better options for producing underlined text.
+
+*** Anchors and links to them now work properly.

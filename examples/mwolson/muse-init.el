@@ -81,6 +81,7 @@
 ;; Wiki settings
 (setq muse-wiki-interwiki-alist
       '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/plugwiki/")
+        ("PLUG" . "http://plug.student-orgs.purdue.edu/plugwiki/")
         ("TheEmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
         ("ArchWiki" . "http://wiki.gnuarch.org/")))
 
@@ -175,6 +176,8 @@ If FILE is not specified, use the published version of the current file."
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
  '(muse-mode-auto-p nil)
  '(muse-mode-hook (quote (footnote-mode muse-wiki-update-custom-values)))
+ '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki muse-publish-escape-specials-in-string)))
+ '(muse-wiki-publish-small-title-words (quote ("the" "and" "at" "on" "of" "for" "in" "an" "a" "page" "anime")))
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
  '(muse-xhtml-header "~/personal-site/muse/generic-header.html"))
 (custom-set-faces
