@@ -79,7 +79,11 @@ Rules for Using Markup
 * Verse::                       Indicating poetic stanzas.
 * Lists::                       Lists of items.
 * Tables::                      Generation of data tables.
-* Links::                       Hyperlinks and email addresses.
+* Explicit Links::              Hyperlinks and email addresses with
+                                  descriptions.
+* Implicit Links::              Bare URLs, WikiNames, and InterWiki
+                                  links.
+* Images::                      Publishing and displaying images.
 * Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
@@ -172,10 +176,11 @@ This mailing list also provides support for @command{Planner} and
 
 @cindex releases, Debian package
 @cindex Debian package for Muse
-Debian users can get Muse via apt-get.  The @file{muse} package will be
-made available at Michael Olson's Debian repository.  To make use of it,
-add the following line to your @file{/etc/apt/sources.list} file and run
-@code{apt-get install muse}.
+Debian users can get Muse via apt-get.  The @file{muse-el} package is
+available both at Michael Olson's Debian repository and the official
+Debian repository.  To make use of the former, add the following line to
+your @file{/etc/apt/sources.list} file and run @code{apt-get install
+muse}.
 
 @example
 deb http://www.mwolson.org/debian/ ./
@@ -435,7 +440,11 @@ than formatting.
 * Verse::                       Indicating poetic stanzas.
 * Lists::                       Lists of items.
 * Tables::                      Generation of data tables.
-* Links::                       Hyperlinks and email addresses.
+* Explicit Links::              Hyperlinks and email addresses with
+                                  descriptions.
+* Implicit Links::              Bare URLs, WikiNames, and InterWiki
+                                  links.
+* Images::                      Publishing and displaying images.
 * Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
@@ -480,12 +489,12 @@ HTML blocks into HTML output, for example.
 @cindex headings
 
 A heading becomes a chapter or section in printed output -- depending on
-the style.  To indicate a heading, start a new paragraph with one to
-three asterices, followed by a space and the heading title.  Then begin
+the style.  To indicate a heading, start a new paragraph with one or
+more asterices, followed by a space and the heading title.  Then begin
 another paragraph to enter the text for that section.
 
-Only 3 levels of headings will be published as headings.  A fourth level
-of headings will be marked up, but displayed as plain text.
+All levels of headings will be published.  Most publishing styles only
+distinguish the between the first 4 levels, however.
 
 @example
 * First level
@@ -493,6 +502,8 @@ of headings will be marked up, but displayed as plain text.
 ** Second level
 
 *** Third level
+
+**** Fourth level
 @end example
 
 @node Emphasizing Text, Footnotes, Headings, Markup Rules
@@ -518,7 +529,10 @@ _underlined_
 @cindex WYSIWYG
 While editing a Muse document in Muse mode, these forms of emphasis will
 be highlighted in a WYSIWYG manner.  Each of these forms may span
-multiple lines, with the exception of the verbatim and monospace form.
+multiple lines.
+
+Verbatim text will be colored as gray by default.  To change this,
+customize @code{muse-verbatim-face}.
 
 @node Footnotes, Verse, Emphasizing Text, Markup Rules
 @comment  node-name,  next,  previous,  up
@@ -559,10 +573,10 @@ A line of Emacs verse;
 </verse>
 @end example
 
+@cindex verses, multiple stanzas
 Multiple stanzas may be included in one set of @verb{|<verse>|} tags, as
 follows.
 
-@cindex verses, multiple stanzas
 @example
 <verse>
 A line of Emacs verse;
@@ -587,16 +601,16 @@ from the possibility of those characters occurring in a real sentence.
 These are rendered as a bullet list.
 
 @example
-  - bullet item one
-  - bullet item two
+ - bullet item one
+ - bullet item two
 @end example
 
 @cindex lists, enumerated
 An enumerated list follows.
 
 @example
-  1. Enum item one
-  2. Enum item two
+ 1. Enum item one
+ 2. Enum item two
 @end example
 
 @cindex lists, definitions
@@ -612,7 +626,7 @@ Term2 ::
   This is a second definition
 @end example
 
-@node Tables, Links, Lists, Markup Rules
+@node Tables, Explicit Links, Lists, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Generation of data tables
 @cindex tables
@@ -629,11 +643,14 @@ Only very simple tables are supported.  The syntax is as follows.
   Triple bars ||| Separate footer fields
 @end example
 
-@node Links, Horizontal Rules and Anchors, Tables, Markup Rules
-@comment  node-name,  next,  previous,  up
-@section Hyperlinks and email addresses
-@cindex links
+Some publishing styles require header fields to come first, then footer
+fields, and then the body fields.  You can use any order for these
+sections that you like, and Muse will re-order them for you at
+publish-time.
 
+@node Explicit Links, Implicit Links, Tables, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Hyperlinks and email addresses with descriptions
 @cindex links, explicit
 
 A hyperlink can reference a URL, or another page within a Muse
@@ -650,6 +667,50 @@ Thus, the current maintainer's homepage for Muse can be found
 @samp{[[http://www.mwolson.org/projects/MuseMode.html][here]]},
 or at @samp{[[http://www.mwolson.org/projects/MuseMode.html]]}.
 
+@node Implicit Links, Images, Explicit Links, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Bare URLs, WikiNames, and InterWiki links
+@cindex links, implicit
+@cindex links, raw
+@cindex URLs
+@cindex Email addresses
+
+A URL or email address encountered in the input text is published as a
+hyperlink.  These kind of links are called @dfn{implicit links} because
+they are not separated from the rest of the Muse document in any way.
+
+@cindex WikiNames
+If the @command{muse-wiki} module is loaded, another form of implicit
+link will be made available.  WikiNames, which are typed in camelcase,
+will be highlighted and published as links, provided that the file they
+refer to exists.
+
+@cindex InterWiki links
+@cindex inter-project links
+The @command{muse-wiki} module also allows for InterWiki links.  These
+are similar to WikiWords, but they specify both the project and page of
+a file.  The names of your project entries in @code{muse-project-alist}
+will be used as InterWiki names by default.  Several examples follow.
+
+@example
+Blog::DocumentingMuse
+Projects#MuseMode
+Website
+@end example
+
+In the first case, the interwiki delimiter is @samp{::}, @samp{Blog} is
+the project name, and @samp{DocumentingMuse} is the page name.  In the
+second example, @samp{#} is the interwiki delimiter.  If the name of a
+project occurs by itself in text, like the third case, it will be
+colorized and published as a link to the default page of the given
+project.
+
+Customization of interwiki links may be accomplished by editing the
+@code{muse-wiki-interwiki-alist} option.
+
+@node Images, Horizontal Rules and Anchors, Implicit Links, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Publishing and displaying images
 @cindex images
 @cindex links, with images
 @strong{Image links}
@@ -662,8 +723,9 @@ points to @url{http://www.mwolson.org/}.
 [[http://www.mwolson.org/][http://www.mwolson.org/static/logos/site-logo.png]]
 @end example
 
-@cindex images, local
 @cindex images, displaying
+@cindex images, inlined
+@cindex images, local
 If a link to a locally-available image is encountered in the link
 description, Muse mode will attempt to display it if your version of
 Emacs permits this.  The following example will display correctly and
@@ -678,17 +740,7 @@ exists in the @file{../pics/} directory.
 An image link is not required to have a description.  The link
 @samp{[[../myimage.png]]} will display and publish as expected.
 
-@cindex links, raw
-@cindex URLs
-@cindex Email addresses
-@cindex images, inlined
-@strong{Bare URLs and Email addresses}
-
-A URL or email address encountered in the input text is published as
-a hyperlink if the output style supports it.  If it is an image URL,
-it will be inlined if possible.
-
-@node Horizontal Rules and Anchors, Embedded Lisp, Links, Markup Rules
+@node Horizontal Rules and Anchors, Embedded Lisp, Images, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Inserting a horizontal line or anchor
 
