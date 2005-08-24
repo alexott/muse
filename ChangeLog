@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-24 03:45:13 GMT	Michael Olson <mwolson@gnu.org>	patch-207
+
+    Summary:
+      Document publishing directives.
+    Revision:
+      muse--main--1.0--patch-207
+
+    * muse.texi (Getting Started): Remove crufty sentence.
+      (Directives): New section that describes the likes of #title and
+      #author.
+
+    modified files:
+     ChangeLog muse.texi
+
+
 2005-08-23 04:36:54 GMT	Michael Olson <mwolson@gnu.org>	patch-206
 
     Summary:

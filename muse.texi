@@ -74,6 +74,8 @@ Rules for Using Markup
 
 * Paragraphs::                  Paragraphs: centering and quoting.
 * Headings::                    Levels of headings.
+* Directives::                  Directives at the beginning of a
+                                  document.
 * Emphasizing Text::            Bold, italicized, and underlined text.
 * Footnotes::                   Making notes to be shown at the end.
 * Verse::                       Indicating poetic stanzas.
@@ -342,8 +344,7 @@ If the currently opened file is part of a defined project in
 @code{muse-project-alist}, it may be published using @kbd{C-c C-p}.
 
 You should also type @kbd{M-x customize-group}, and give the name
-@samp{muse}.  Change it to suit your preferences.  Each of the
-options has its own documentation.
+@samp{muse}.  Each of the options has its own documentation.
 
 
 @node Projects, Keystroke Summary, Getting Started, Top
@@ -435,6 +436,8 @@ than formatting.
 @menu
 * Paragraphs::                  Paragraphs: centering and quoting.
 * Headings::                    Levels of headings.
+* Directives::                  Directives at the beginning of a
+                                  document.
 * Emphasizing Text::            Bold, italicized, and underlined text.
 * Footnotes::                   Making notes to be shown at the end.
 * Verse::                       Indicating poetic stanzas.
@@ -483,7 +486,7 @@ There is also the @verb{|<literal>|} tag, which causes a marked block to
 be entirely left alone.  This can be used for inserting a hand-coded
 HTML blocks into HTML output, for example.
 
-@node Headings, Emphasizing Text, Paragraphs, Markup Rules
+@node Headings, Directives, Paragraphs, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Levels of headings
 @cindex headings
@@ -506,7 +509,54 @@ distinguish the between the first 4 levels, however.
 **** Fourth level
 @end example
 
-@node Emphasizing Text, Footnotes, Headings, Markup Rules
+@node Directives, Emphasizing Text, Headings, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Directives at the beginning of a document
+@cindex directives
+
+Directives are lines beginning with the @samp{#} character that come
+before any paragraphs or sections in the document.  Directives are of
+the form ``#directive content of directive''.  You can use any
+combination of uppercase and lowercase letters for directives, even if
+the directive is not in the list below.
+
+The @code{muse-publishing-directive} function may be used in header and
+footer text to access directives.  For example, to access the
+@samp{#title} directive, use @code{(muse-publishing-directive "title")}.
+
+The following is a list of directives that Muse uses.
+
+@table @code
+@cindex #author
+@item #author
+The author of this document.
+
+If this is not specified, Muse will attempt to figure it out from the
+@code{user-full-name} variable.
+
+@cindex #date
+@item #date
+The date that the document was originally published.
+
+This is used by publishing styles that are able to embed the date
+information.
+
+@cindex #desc
+@item #desc
+A short description of this document.
+
+This is used by the @code{journal} publishing style to embed information
+inside of an RSS/RDF feed.
+
+@cindex #title
+@item #title
+The title of this document.
+
+If this is not specified, the name of the file is used.
+
+@end table
+
+@node Emphasizing Text, Footnotes, Directives, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Bold, italicized, and underlined text
 @cindex emphasizing text
