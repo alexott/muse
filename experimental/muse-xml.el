@@ -83,9 +83,9 @@ This may be text or a filename."
 
     ;; Beginning of doc, end of doc, or plain paragraph separator
     (10300 ,(concat "\\(\n</\\(blockquote\\|format\\)>\\)?"
-                    "\\(?:\n\\(["
+                    "\\(\\(\n\\(["
                     muse-regexp-blank
-                    "]*\n\\)+\\|\\`\\s-*\\|\\s-*\\'\\)"
+                    "]*\n\\)+\\)\\|\\`\\s-*\\|\\s-*\\'\\)"
                     "\\(<\\(blockquote\\|format type=\"center\"\\)>\n\\)?")
            0 muse-xml-markup-paragraph))
   "List of markup rules for publishing a Muse page to XML.

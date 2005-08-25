@@ -2,6 +2,36 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-25 05:44:56 GMT	Michael Olson <mwolson@gnu.org>	patch-208
+
+    Summary:
+      Fix problem with links at beginning of buf and paragraphs.
+    Revision:
+      muse--main--1.0--patch-208
+
+    * experimental/muse-xml.el (muse-xml-markup-regexps): Update to do what I
+      mean.
+    
+    * muse-docbook.el (muse-docbook-markup-regexps): Ditto.
+    
+    * muse-html.el (muse-html-markup-regexps): Ditto.
+    
+    * muse-publish.el (muse-publishing-last-position): New variable that
+      indicates our last buffer position while publishing the current rule.
+      Used to make sure the process doesn't get stalled.
+      (muse-publish-markup): Fix edge case where links at beginning of
+      buffer, with read-only text, would prevent the beginning of buffer from
+      being matched.
+      (muse-publish-markup-directive): Fix case where two directives of the
+      same size would prevent any following directives from being
+      interpreted.  We accomplish this by setting the last published position
+      to nil after each directive.
+
+    modified files:
+     ChangeLog experimental/muse-xml.el lisp/muse-docbook.el
+     lisp/muse-html.el lisp/muse-publish.el
+
+
 2005-08-24 03:45:13 GMT	Michael Olson <mwolson@gnu.org>	patch-207
 
     Summary:

@@ -317,6 +317,9 @@ in-between."
 If non-nil, it is a cons cell specifying (MARKER . DEPTH), to
 tell where the <contents> was seen, and to what depth the
 contents were requested.")
+(defvar muse-publishing-last-position nil
+  "Last position of the point when publishing.
+This is used to make sure that publishing doesn't get stalled.")
 
 ;; Functions for handling style information
 
@@ -417,7 +420,8 @@ If STYLE is not specified, use current style."
       (let ((regexp (nth 1 (car rules)))
             (group (nth 2 (car rules)))
             (repl (nth 3 (car rules)))
-            last-pos pos)
+            pos)
+        (setq muse-publishing-last-position nil)
         (if (symbolp regexp)
             (setq regexp (symbol-value regexp)))
         (if (and verbose (not muse-batch-publishing-p))
@@ -427,7 +431,8 @@ If STYLE is not specified, use current style."
           (if (and verbose (not muse-batch-publishing-p))
               (message "Publishing %s...%d%%" name
                        (* (/ (float (+ (point) base)) limit) 100)))
-          (unless (get-text-property (match-beginning group) 'read-only)
+          (unless (and (> (- (match-end 0) (match-beginning 0)) 0)
+                       (get-text-property (match-beginning group) 'read-only))
             (let* (func
                    (text (cond
                           ((and (symbolp repl)
@@ -440,11 +445,12 @@ If STYLE is not specified, use current style."
                           (t repl))))
               (if text
                   (replace-match text t))))
-          (if (and last-pos (= pos last-pos))
+          (if (and muse-publishing-last-position
+                   (= pos muse-publishing-last-position))
               (if (eobp)
                   (setq regexp nil)
                 (forward-char 1)))
-          (setq last-pos pos)))
+          (setq muse-publishing-last-position pos)))
       (setq rules (cdr rules)
             base (+ base (point-max))))
     (if (and verbose (not muse-batch-publishing-p))
@@ -633,6 +639,9 @@ the file is published no matter what."
       (setq muse-publishing-directives
             (cons (cons name value)
                   muse-publishing-directives))))
+  ;; Make sure we don't ever try to move the point forward (past the
+  ;; beginning of buffer) while we're still searching for directives.
+  (setq muse-publishing-last-position nil)
   (delete-region (match-beginning 0) (match-end 0)))
 
 (defun muse-publish-markup-anchor () "")
