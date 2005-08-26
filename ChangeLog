@@ -2,6 +2,35 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-26 14:48:08 GMT	Michael Olson <mwolson@gnu.org>	patch-209
+
+    Summary:
+      Don't prompt unnecessarily when doing C-c C-t in a Muse project file.
+    Revision:
+      muse--main--1.0--patch-209
+
+    * lisp/muse-publish.el (muse-publish-get-output-dir): Use
+      `muse-read-directory-name' instead of `read-file-name'.  Now Muse won't
+      offer the style and directory prompt when you hit C-c C-t in a file
+      belonging to a defined Muse project.  Otherwise prompt.  Thanks to Yann
+      Hodique for the fix.
+    
+    * lisp/muse.el (muse-read-directory-name): New function that defines a
+      fallback version of `read-directory-name', since Emacs21 doesn't have
+      it.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el lisp/muse.el
+
+    new patches:
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-34
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-35
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-36
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-37
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-38
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-39
+
+
 2005-08-25 05:44:56 GMT	Michael Olson <mwolson@gnu.org>	patch-208
 
     Summary:

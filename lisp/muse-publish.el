@@ -537,7 +537,7 @@ If STYLE is not specified, use current style."
 (defsubst muse-publish-get-output-dir (style)
   (let ((default-directory (or (muse-style-element :path style)
                                default-directory)))
-    (read-file-name "Publish to directory: " nil default-directory)))
+    (muse-read-directory-name "Publish to directory: " nil default-directory)))
 
 (defsubst muse-publish-get-info ()
   (let ((style (muse-publish-get-style)))

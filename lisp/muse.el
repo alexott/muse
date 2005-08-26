@@ -320,6 +320,17 @@ that can be added."
     (setq buffer-invisibility-spec
           (cons element buffer-invisibility-spec))))
 
+(defun muse-read-directory-name (prompt &optional dir default-dirname mustmatch initial)
+  "Read directory name - see `read-file-name' for details."
+  (if (fboundp 'read-directory-name)
+      (read-directory-name prompt dir default-dirname mustmatch initial)
+    (unless dir
+      (setq dir default-directory))
+    (read-file-name prompt dir (or default-dirname
+                                   (if initial (expand-file-name initial dir)
+                                     dir))
+                    mustmatch initial)))
+
 ;; Widget compatibility functions
 
 (defun muse-widget-type-value-create (widget)
