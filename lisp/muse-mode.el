@@ -163,8 +163,8 @@ so only enable this if you don't use either of these."
   (when (boundp 'fill-nobreak-predicate)
     (make-local-variable 'fill-nobreak-predicate)
     ;; Work around annoying inconsistency in fill handling between
-    ;; Emacs CVS and all other Emacs types.
-    (if (not (muse-extreg-usable-p))
+    ;; Emacs 21 and 22.
+    (if (< emacs-major-version 22)
         (setq fill-nobreak-predicate 'muse-mode-fill-nobreak-p)
       (add-to-list 'fill-nobreak-predicate
                    'muse-mode-fill-nobreak-p)))

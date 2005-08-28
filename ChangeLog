@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-28 23:59:03 GMT	Michael Olson <mwolson@gnu.org>	patch-211
+
+    Summary:
+      Fix paragraph-filling breakage in Emacs21.
+    Revision:
+      muse--main--1.0--patch-211
+
+    * lisp/muse-mode.el (muse-mode): Check explicitly for Emacs21 rather than
+      relying on muse-extreg-usable-p.  Thanks to Sergey Vlasov for the bug
+      report.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-08-27 02:25:35 GMT	Michael Olson <mwolson@gnu.org>	patch-210
 
     Summary:
