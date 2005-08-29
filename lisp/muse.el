@@ -48,10 +48,13 @@
 (defvar muse-version "3.01.91 (3.02 RC2)"
   "The version of Muse currently loaded")
 
-(defun muse-version ()
-  "Display the version of Muse that is currently loaded."
-  (interactive)
-  (message muse-version))
+(defun muse-version (&optional insert)
+  "Display the version of Muse that is currently loaded.
+If INSERT is non-nil, insert the text instead of displaying it."
+  (interactive "P")
+  (if insert
+      (insert muse-version)
+    (message muse-version)))
 
 (defgroup muse nil
   "Options controlling the behavior of Muse.

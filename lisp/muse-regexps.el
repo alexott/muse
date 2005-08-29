@@ -42,16 +42,23 @@
   "Indicate whether to use extended character classes like [:space:].
 If 'undecided, Muse will use them if your emacs is known to support them.
 
-Emacs 22 and Emacs 21.3.50 are known to support them, XEmacs does
-not support them
+Emacs 22 and Emacs 21.3.50 are known to support them.  XEmacs
+does not support them.
 
-Emacs 21.2 or higher might support them, but the maintainer is
-uncertain, so by default extended regexps are not used with these
-versions of Emacs."
+Emacs 21.2 or higher support them, but with enough annoying edge
+cases that the sanest default is to leave them disabled."
   :type '(choice (const :tag "Yes" t)
                  (const :tag "No" nil)
                  (const :tag "Let Muse decide" undecided))
   :group 'muse-regexp)
+
+(defvar muse-regexp-emacs-revision
+  (and (save-match-data
+         (string-match "^[0-9]+\\.[0-9]+\\.\\([0-9]+\\)"
+                       emacs-version))
+       (match-string 1 emacs-version)
+       (string-to-number (match-string 1 emacs-version)))
+  "The revision number of this version of Emacs.")
 
 (defun muse-extreg-usable-p ()
   "Return non-nil if extended character classes can be used,
@@ -65,9 +72,13 @@ options."
    ((eq muse-regexp-use-character-classes nil)
     nil)
    ((featurep 'xemacs) nil)             ; unusable on XEmacs
-   ((> emacs-major-version 21) t)
+   ((> emacs-major-version 21) t)       ; usable if > 21
    ((< emacs-major-version 21) nil)
-   ((> emacs-minor-version 2) t)
+   ((< emacs-minor-version 3) nil)
+   ;; don't use if version is of format 21.x
+   ((null muse-regexp-emacs-revision) nil)
+   ;; only trust 21.3.50 or higher
+   ((>= muse-regexp-emacs-revision 50) t)
    (t nil)))
 
 (defcustom muse-regexp-blank

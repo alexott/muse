@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-29 06:04:51 GMT	Michael Olson <mwolson@gnu.org>	patch-212
+
+    Summary:
+      Reinstate former extended character class rules.
+    Revision:
+      muse--main--1.0--patch-212
+
+    * lisp/muse-regexps.el (muse-regexp-use-character-classes): Looks like
+      extended regexps really don't work well on Emacs 21.2 or 21.3, so
+      document that.
+      (muse-regexp-emacs-revision): New variable that indicates the revision
+      number of this version of Emacs.
+      (muse-extreg-usable-p): Reinstate old rules -- Emacs 21.2 and 21.3
+      aren't working well enough with extended character classes in regexps.
+    
+    * lisp/muse.el (muse-version): If INSERT option is given, insert the text
+      instead of just displaying it.
+
+    modified files:
+     ChangeLog lisp/muse-regexps.el lisp/muse.el
+
+
 2005-08-28 23:59:03 GMT	Michael Olson <mwolson@gnu.org>	patch-211
 
     Summary:
