@@ -557,6 +557,20 @@ If STYLE is not specified, use current style."
     (concat (file-name-directory file)
             (muse-publish-output-name file style))))
 
+(defsubst muse-publish-link-name (&optional file style)
+  (setq style (muse-style style))
+  (concat (muse-style-element :prefix style)
+          (muse-page-name file)
+          (or (muse-style-element :link-suffix style)
+              (muse-style-element :suffix style))))
+
+(defsubst muse-publish-link-file (file &optional output-dir style)
+  (setq style (muse-style style))
+  (if output-dir
+      (expand-file-name (muse-publish-link-name file style) output-dir)
+    (concat (file-name-directory file)
+            (muse-publish-link-name file style))))
+
 (defun muse-publish-file (file style &optional output-dir force)
   "Publish the given file in list FILES.
 If the argument FORCE is nil, each file is only published if it is
@@ -1173,10 +1187,10 @@ like read-only from being inadvertently deleted."
       (setq target (if (string-match "#" target)
                        (if (eq (aref target 0) ?\#)
                            target
-                         (concat (muse-publish-output-name
+                         (concat (muse-publish-link-name
                                   (substring target 0 (match-beginning 0)))
                                  "#" (substring target (match-end 0))))
-                     (muse-publish-output-name target)))))
+                     (muse-publish-link-name target)))))
   target)
 
 (provide 'muse-publish)

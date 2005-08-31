@@ -212,12 +212,14 @@ The page will be initialized with the current date and TITLE."
 (unless (assoc "blosxom-html" muse-publishing-styles)
   (muse-derive-style "blosxom-html" "html"
                      :suffix    'muse-blosxom-extension
+                     :link-suffix 'muse-html-extension
                      :header    'muse-blosxom-header
                      :footer    'muse-blosxom-footer
                      :after     'muse-blosxom-update-page-date-alist)
 
   (muse-derive-style "blosxom-xhtml" "xhtml"
                      :suffix    'muse-blosxom-extension
+                     :link-suffix 'muse-xhtml-extension
                      :header    'muse-blosxom-header
                      :footer    'muse-blosxom-footer
                      :after     'muse-blosxom-update-page-date-alist))

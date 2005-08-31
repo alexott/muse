@@ -2,6 +2,43 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-08-31 03:48:28 GMT	Michael Olson <mwolson@gnu.org>	patch-214
+
+    Summary:
+      Introduce :link-suffix. muse-wiki: Don't mangle acronyms in titles.
+    Revision:
+      muse--main--1.0--patch-214
+
+    * examples/mwolson/muse-init.el: Update.
+    
+    * muse-blosxom.el ("blosxom-html", "blosxom-xhtml"): Use :link-suffix to
+      ensure that links to other pages in this project are given the proper
+      extension.
+    
+    * muse-latex.el ("pdf", "pdfcjk"): Ditto.
+    
+    * muse-journal.el (muse-journal-rdf-header): Use muse-publish-link-name
+      instead of muse-publish-output-name.
+    
+    * muse-publish.el (muse-publish-link-name, muse-publish-link-file): New
+      functions that consult the :link-suffix when returning the name of the
+      link (or the complete file name for the latter function).  If
+      :link-suffix does not exist, use :suffix.  This should help Muse be
+      able to handle some more usage scenarios.
+      (muse-publish-prepare-url): Use muse-publish-link-name instead of
+      muse-publish-output-name.
+    
+    * muse-wiki.el (muse-wiki-resolve-project-page): Use
+      muse-publish-link-file instead of muse-publish-output-file.
+      (muse-wiki-publish-pretty-title): Don't space-separate capitalized
+      letters.  The old behavior was not friendly to acronyms.
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el lisp/muse-blosxom.el
+     lisp/muse-journal.el lisp/muse-latex.el lisp/muse-publish.el
+     lisp/muse-wiki.el
+
+
 2005-08-29 06:14:35 GMT	Michael Olson <mwolson@gnu.org>	patch-213
 
     Summary:

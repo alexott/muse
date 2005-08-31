@@ -182,7 +182,7 @@ See `muse-publish-markup-tags' for more info."
          xmlns=\"http://purl.org/rss/1.0/\"
          xmlns:dc=\"http://purl.org/dc/elements/1.1/\">
   <channel rdf:about=\"<lisp>(concat (muse-style-element :base-url)
-                                     (muse-publish-output-name))</lisp>\">
+                                     (muse-publish-link-name))</lisp>\">
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
     <link><lisp>(concat (muse-style-element :base-url)
                        (concat (muse-page-name)

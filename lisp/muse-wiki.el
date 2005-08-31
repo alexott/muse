@@ -148,7 +148,7 @@ style and ignore the others."
                             (muse-current-file)
                             (cddr (muse-project-of-file))))))
     (if (and remote-style local-style muse-publishing-p)
-        (muse-publish-output-file
+        (muse-publish-link-file
          (file-relative-name (expand-file-name
                               page (muse-style-element :path remote-style))
                              (expand-file-name
@@ -205,8 +205,7 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
       title
     (save-match-data
       (let ((case-fold-search nil))
-        (while (string-match (concat "\\([" muse-regexp-upper
-                                     muse-regexp-lower
+        (while (string-match (concat "\\([" muse-regexp-lower
                                      "]\\)\\([" muse-regexp-upper
                                      "0-9]\\)")
                              title)

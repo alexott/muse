@@ -320,6 +320,7 @@ system to an associated CJK coding system."
   (muse-derive-style "pdf" "latex"
                      :final   'muse-latex-pdf-generate
                      :browser 'muse-latex-pdf-browse-file
+                     :link-suffix 'muse-latex-pdf-extension
                      :osuffix 'muse-latex-pdf-extension)
 
   (muse-derive-style "latexcjk" "latex"
@@ -329,6 +330,7 @@ system to an associated CJK coding system."
   (muse-derive-style "pdfcjk" "latexcjk"
                      :final   'muse-latex-pdf-generate
                      :browser 'muse-latex-pdf-browse-file
+                     :link-suffix 'muse-latex-pdf-extension
                      :osuffix 'muse-latex-pdf-extension))
 
 (provide 'muse-latex)

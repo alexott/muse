@@ -40,9 +40,6 @@
                      :footer "~/personal-site/muse/footer.html"))
 
 ;; Here is my master project listing.
-;;
-;; Note that I not do anything useful with the ProjectsWiki and
-;; WebWiki projects; only the BlogWiki project is published.
 
 (setq muse-project-alist
       `(
@@ -68,6 +65,13 @@
                                       "~/personal-site/site/blog"
                                       "my-blosxom"))
 
+        ("MyNotes"
+         ("~/proj/wiki/notes/"
+          :force-publish ("WikiIndex")
+          :default "WelcomePage")
+         (:base "my-xhtml"
+                :path "~/proj/notmine/notes-out"))
+
         ("Plans"
          ("~/proj/wiki/plans/"
           :default "TaskPool"
@@ -86,6 +90,12 @@
         ("ArchWiki" . "http://wiki.gnuarch.org/")))
 
 ;;; Functions
+
+;; Switch to the given project and prompt for a file
+(defun my-muse-project-find-file (project)
+  (interactive)
+  (let ((muse-current-project (muse-project project)))
+    (call-interactively 'muse-project-find-file)))
 
 ;; Make the current file display correctly in Xanga
 
@@ -154,11 +164,14 @@ If FILE is not specified, use the published version of the current file."
 ;;; Key customizations
 
 (global-set-key "\C-cpl" 'muse-blosxom-new-entry)
-(global-set-key "\C-cpL"
-                #'(lambda ()
-                    (interactive)
-                    (let ((muse-current-project (muse-project "Blog")))
-                      (call-interactively 'muse-project-find-file))))
+(global-set-key "\C-cpL" #'(lambda () (interactive)
+                             (my-muse-project-find-file "Blog")))
+(global-set-key "\C-cpn" #'(lambda () (interactive)
+                             (my-muse-project-find-file "Notes")))
+(global-set-key "\C-cpr" #'(lambda () (interactive)
+                             (my-muse-project-find-file "Projects")))
+(global-set-key "\C-cpw" #'(lambda () (interactive)
+                             (my-muse-project-find-file "Website")))
 (global-set-key "\C-cpx" 'my-muse-prepare-entry-for-xanga)
 
 ;;; Custom variables
