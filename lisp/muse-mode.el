@@ -307,9 +307,16 @@ in `muse-project-alist'."
           (muse-project-find-file link project
                                   (and other-window
                                        'find-file-other-window))
-        (if other-window
-            (find-file-other-window link)
-          (find-file link))))
+        (let ((base-buffer (get-buffer link)))
+          (if other-window
+              ;; If file is temporary (no associated file), just switch
+              ;; to the buffer
+              (if (and base-buffer (not (buffer-file-name base-buffer)))
+                  (switch-to-buffer-other-window base-buffer)
+                (find-file-other-window link))
+            (if (and base-buffer (not (buffer-file-name base-buffer)))
+                (switch-to-buffer base-buffer)
+              (find-file link))))))
     (if anchor
         (search-forward anchor nil t))))
 

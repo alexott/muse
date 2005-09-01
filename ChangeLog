@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-01 13:42:15 GMT	Michael Olson <mwolson@gnu.org>	patch-216
+
+    Summary:
+      Allow links to temporary files to be visited.
+    Revision:
+      muse--main--1.0--patch-216
+
+    * lisp/muse-mode.el (muse-visit-link-default): Permit visiting of
+      temporary files.  These are buffers that do not have a corresponding
+      file.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-09-01 11:41:14 GMT	Michael Olson <mwolson@gnu.org>	patch-215
 
     Summary:
