@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-01 11:41:14 GMT	Michael Olson <mwolson@gnu.org>	patch-215
+
+    Summary:
+      Fix save-match-data gaffe.
+    Revision:
+      muse--main--1.0--patch-215
+
+    * lisp/muse-regexps.el (muse-regexp-emacs-revision): Move save-match-data
+      outside of `and' statement.
+
+    modified files:
+     ChangeLog lisp/muse-regexps.el
+
+
 2005-08-31 03:48:28 GMT	Michael Olson <mwolson@gnu.org>	patch-214
 
     Summary:

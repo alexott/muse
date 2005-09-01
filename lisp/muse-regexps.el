@@ -53,11 +53,11 @@ cases that the sanest default is to leave them disabled."
   :group 'muse-regexp)
 
 (defvar muse-regexp-emacs-revision
-  (and (save-match-data
-         (string-match "^[0-9]+\\.[0-9]+\\.\\([0-9]+\\)"
-                       emacs-version))
-       (match-string 1 emacs-version)
-       (string-to-number (match-string 1 emacs-version)))
+  (save-match-data
+    (and (string-match "^[0-9]+\\.[0-9]+\\.\\([0-9]+\\)"
+                       emacs-version)
+         (match-string 1 emacs-version)
+         (string-to-number (match-string 1 emacs-version))))
   "The revision number of this version of Emacs.")
 
 (defun muse-extreg-usable-p ()
