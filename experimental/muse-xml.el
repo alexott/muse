@@ -19,11 +19,24 @@
 
 ;;; Commentary:
 
+;; A Compact RelaxNG schema is available in `examples/muse.rnc'.  The
+;; current maintainer has no idea how to make use of it, except that
+;; it might come in handy with nxml-mode, xml.el, xml-parse.el, or
+;; XSLT.
+;;
+;; This file is currently in experimental state.  This means that the
+;; published output is subject to change.  This also means that you
+;; still have the opportunity to correct braindeaded publishing
+;; choices by sending email to the list :^) .
+
 ;;; Contributors:
 
 ;; Peter K. Lee (saint AT corenova DOT com) made the initial
 ;; implementation of planner-publish.el, which was heavily borrowed
 ;; from.
+;;
+;; Brad Collins (brad AT chenla DOT org) provided a Compact RelaxNG
+;; schema.
 
 ;;; Code:
 
@@ -72,10 +85,8 @@ This may be text or a filename."
 
 (defcustom muse-xml-markup-regexps
   `(;; Join together the parts of a table
-    (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*"
-                    "</tgroup>\\s-*</table>\\s-*"
-                    "<table[^>]*>\\s-*<tgroup[^>]*>\\s-*"
-                    "<t\\1>\n") 0 "")
+    (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>\\s-*"
+                    "<table[^>]*>\\s-*<t\\1>\n") 0 "")
     (10100 "</table>\\s-*<table[^>]*>\n" 0 "")
 
     ;; Join together the parts of a list
@@ -141,7 +152,11 @@ For more on the structure of this list, see
     (begin-most-emph . "<format type=\"emphasis\" level=\"3\">")
     (end-most-emph   . "</format>")
     (begin-verse     . "<verse>\n")
-    (verse-space     . "  ")
+    (begin-verse-line . "<line>")
+    (end-verse-line  . "</line>")
+    (empty-verse-line . "<line />")
+    (begin-last-stanza-line . "<line>")
+    (end-last-stanza-line . "</line>")
     (end-verse       . "</verse>")
     (begin-example   . "<example>")
     (end-example     . "</example>")

@@ -955,24 +955,33 @@ like read-only from being inadvertently deleted."
     (while (looking-at leader)
       (replace-match "")
       (muse-publish-markup-leading-space)
-      (end-of-line)
-      (cond
-       ((bolp)
-        (let ((text (muse-markup-text 'empty-verse-line)))
-          (if text (insert text))))
-       ((save-excursion
-          (save-match-data
-            (forward-line 1)
-            (or (looking-at (concat leader "["
-                                    muse-regexp-blank
-                                    "]*$"))
-                (not (looking-at leader)))))
-        (let ((text (muse-markup-text 'last-stanza-end)))
-          (if text (insert text))))
-       (t
-        (let ((text (muse-markup-text 'end-verse-line)))
-          (if text (insert text)))))
-      (forward-line 1)))
+      (let ((beg (point)))
+        (end-of-line)
+        (cond
+         ((bolp)
+          (let ((text (muse-markup-text 'empty-verse-line)))
+            (if text (insert text))))
+         ((save-excursion
+            (save-match-data
+              (forward-line 1)
+              (or (looking-at (concat leader "["
+                                      muse-regexp-blank
+                                      "]*$"))
+                  (not (looking-at leader)))))
+          (let ((begin-text (muse-markup-text 'begin-last-stanza-line))
+                (end-text (muse-markup-text 'end-last-stanza-line)))
+            (when end-text (insert end-text))
+            (goto-char beg)
+            (when begin-text (insert begin-text))
+            (end-of-line)))
+         (t
+          (let ((begin-text (muse-markup-text 'begin-verse-line))
+                (end-text (muse-markup-text 'end-verse-line)))
+            (when end-text (insert end-text))
+            (goto-char beg)
+            (when begin-text (insert begin-text))
+            (end-of-line))))
+        (forward-line 1))))
   (insert (muse-markup-text 'end-verse) ?\n))
 
 (defun muse-publish-markup-table ()

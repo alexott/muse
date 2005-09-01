@@ -302,20 +302,20 @@ used by `muse-visit-link' if you have not specified :visit-link
 in `muse-project-alist'."
   (if (string-match muse-url-regexp link)
       (browse-url link)
-    (let ((project (muse-project-of-file)))
-      (if project
-          (muse-project-find-file link project
-                                  (and other-window
-                                       'find-file-other-window))
-        (let ((base-buffer (get-buffer link)))
+    (let ((base-buffer (get-buffer link)))
+      (if (and base-buffer (not (buffer-file-name base-buffer)))
+          ;; If file is temporary (no associated file), just switch to
+          ;; the buffer
           (if other-window
-              ;; If file is temporary (no associated file), just switch
-              ;; to the buffer
-              (if (and base-buffer (not (buffer-file-name base-buffer)))
-                  (switch-to-buffer-other-window base-buffer)
-                (find-file-other-window link))
-            (if (and base-buffer (not (buffer-file-name base-buffer)))
-                (switch-to-buffer base-buffer)
+              (switch-to-buffer-other-window base-buffer)
+            (switch-to-buffer base-buffer))
+        (let ((project (muse-project-of-file)))
+          (if project
+              (muse-project-find-file link project
+                                      (and other-window
+                                           'find-file-other-window))
+            (if other-window
+                (find-file-other-window link)
               (find-file link))))))
     (if anchor
         (search-forward anchor nil t))))

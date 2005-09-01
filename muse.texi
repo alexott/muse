@@ -632,9 +632,8 @@ follows.
 A line of Emacs verse;
   forgive its being so terse.
 
-This a second stanza:
-Something longer should go here,
-But the author is out of ideas.
+In terms of terse verse,
+  you could do worse.
 </verse>
 @end example
 

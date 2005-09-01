@@ -2,6 +2,47 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-01 16:04:32 GMT	Michael Olson <mwolson@gnu.org>	patch-217
+
+    Summary:
+      Add schema for muse-xml, tweak verse formatting, fix goof from last patch.
+    Revision:
+      muse--main--1.0--patch-217
+
+    * AUTHORS: Note that Brad Collins authored examples/muse-rnc.
+    
+    * README (examples): Mention that other files are here as well.
+    
+    * examples/muse-rnc.el: New file that implements a RelaxNG Compact schema
+      for use with muse-xml.el.
+    
+    * muse-xml.el: Mention the newly-contributed schema from Brad, and that
+      muse-xml is in experimental status.
+      (muse-xml-markup-regexps): Correct table-munging regexp.
+      (muse-xml-markup-strings): Surround each verse line with <line></line>.
+      Empty lines are marked up as <line />.
+    
+    * muse-html.el (muse-html-markup-strings, muse-xhtml-markup-strings):
+      s/last-stanza-end/end-last-stanza-line/.
+    
+    * muse-mode.el (muse-visit-link-default): Make the temporary file
+      visiting work as expected.
+    
+    * muse-publish.el (muse-publish-markup-verse): Make use of
+      'begin-verse-line and 'begin-last-stanza-line.  Use
+      'end-last-stanza-line instead of 'last-stanza-end.
+    
+    * muse.texi (Verse): Be a bit more clever with our example.
+
+    new files:
+     examples/.arch-ids/muse.rnc.id examples/muse.rnc
+
+    modified files:
+     AUTHORS ChangeLog README experimental/muse-xml.el
+     lisp/muse-html.el lisp/muse-mode.el lisp/muse-publish.el
+     muse.texi
+
+
 2005-09-01 13:42:15 GMT	Michael Olson <mwolson@gnu.org>	patch-216
 
     Summary:

@@ -25,8 +25,9 @@ The manual (muse.texi) is in the top-level directory.
 contrib :: Files that are not a part of Muse proper, but are useful
            enough to be bundled with Muse.
 
-examples :: Example configuration files for use with Muse, as well as
-            a publishable quickstart guide.
+examples :: Example configuration files for use with Muse, a
+            publishable quickstart guide, and miscellaneous helper
+            stuff.
 
 experimental :: Source code that is not yet considered stable.
 

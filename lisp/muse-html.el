@@ -264,7 +264,7 @@ For more on the structure of this list, see
     (begin-verse     . "<p class=\"verse\">\n")
     (verse-space     . "&nbsp;&nbsp;")
     (end-verse-line  . "<br>")
-    (last-stanza-end . "<br>")
+    (end-last-stanza-line . "<br>")
     (empty-verse-line . "<br>")
     (end-verse       . "</p>")
     (begin-example   . "<pre class=\"example\">")
@@ -297,7 +297,7 @@ differs little between the various styles."
     (begin-center    . "<span style=\"text-align: center;\">\n")
     (end-center      . "\n</span>")
     (end-verse-line  . "<br />")
-    (last-stanza-end . "<br />")
+    (end-last-stanza-line . "<br />")
     (empty-verse-line . "<br />"))
   "Strings used for marking up text as XHTML.
 These cover the most basic kinds of markup, the handling of which
