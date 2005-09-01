@@ -62,7 +62,7 @@ See `muse-xml' for more information."
 (defcustom muse-xml-header
   "<?xml version=\"1.0\" encoding=\"<lisp>
   (muse-xml-encoding)</lisp>\"?>
-<page type=\"muse\">
+<MUSE>
   <pageinfo>
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
     <author><lisp>(muse-publishing-directive \"author\")</lisp></author>
