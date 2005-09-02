@@ -182,16 +182,6 @@ modify this."
   :type 'regexp
   :group 'muse-regexp)
 
-(defcustom muse-url-regexp
-  (concat "\\<\\(?:https?:/?/?\\|ftp:/?/?\\|gopher://\\|"
-          "telnet://\\|wais://\\|file:/\\|s?news:\\|"
-          "mailto:\\)"
-          "[^]" muse-regexp-space "\"'()<>[^`{}]*[^]"
-          muse-regexp-space "\"'()<>[^`{}.,;]+")
-  "A regexp used to match URLs within a Muse page."
-  :type 'regexp
-  :group 'muse-regexp)
-
 (defcustom muse-file-regexp
   "[/?]\\|\\.\\(html?\\|pdf\\|mp3\\|el\\|zip\\|txt\\|tar\\)\\(\\.\\(gz\\|bz2\\)\\)?\\'"
   "A link matching this regexp will be regarded as a link to a file."

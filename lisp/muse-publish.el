@@ -56,12 +56,14 @@
 
 (defcustom muse-publish-url-transforms
   '(muse-publish-escape-specials-in-string
-    muse-publish-prepare-url)
+    muse-publish-prepare-url
+    muse-resolve-url)
   "A list of functions used to prepare URLs for publication.
 Each is passed the URL.  The transformed URL should be returned."
   :type 'hook
   :options '(muse-publish-escape-specials-in-string
-             muse-publish-prepare-url)
+             muse-publish-prepare-url
+             muse-resolve-url)
   :group 'muse-publish)
 
 (defcustom muse-publish-desc-transforms
@@ -1060,7 +1062,7 @@ like read-only from being inadvertently deleted."
 
 (defun muse-publish-markup-url ()
   (if (not (or (eq (char-before (match-beginning 0)) ?\")
-                 (eq (char-after (match-end 0)) ?\")))
+               (eq (char-after (match-end 0)) ?\")))
       (muse-publish-insert-url (match-string 0))
     (let ((beg (match-beginning 0))
           (url (match-string 0)))

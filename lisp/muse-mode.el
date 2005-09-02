@@ -159,6 +159,7 @@ so only enable this if you don't use either of these."
   ;; them without using the customize interface.
   (muse-update-ignored-extensions-regexp 'muse-ignored-extensions
                                          muse-ignored-extensions)
+  (muse-update-url-regexp 'muse-url-protocols muse-url-protocols)
   ;; Make fill not split up links
   (when (boundp 'fill-nobreak-predicate)
     (make-local-variable 'fill-nobreak-predicate)
@@ -301,7 +302,7 @@ This is the default function to call when visiting links; it is
 used by `muse-visit-link' if you have not specified :visit-link
 in `muse-project-alist'."
   (if (string-match muse-url-regexp link)
-      (browse-url link)
+      (muse-browse-url link)
     (let ((base-buffer (get-buffer link)))
       (if (and base-buffer (not (buffer-file-name base-buffer)))
           ;; If file is temporary (no associated file), just switch to

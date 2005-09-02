@@ -126,6 +126,10 @@ understand that it is part of a regexp."
   :set 'muse-update-ignored-extensions-regexp
   :group 'muse)
 
+;; URL protocols
+
+(require 'muse-protocols)
+
 ;;; Return an list of known wiki names and the files they represent.
 
 (defsubst muse-delete-file-if-exists (file)
