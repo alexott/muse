@@ -319,7 +319,7 @@ in `muse-project-alist'."
                 (find-file-other-window link)
               (find-file link))))))
     (if anchor
-        (search-forward anchor nil t))))
+        (search-forward (concat anchor "\\b") nil t))))
 
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK."

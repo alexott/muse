@@ -87,9 +87,10 @@ the current window.
 
 RESOLVE-FUN should accept URL as an argument and return the final
 URL, or nil if no URL should be included."
-  :type '(repeat (cons (string :tag "Protocol")
-                       (group (function :tag "Browse")
-                              (function :tag "Resolve"))))
+  :type '(repeat (list :tag "Protocol"
+                       (string :tag "Regexp")
+                       (function :tag "Browse")
+                       (function :tag "Resolve")))
   :set 'muse-update-url-regexp
   :group 'muse)
 
@@ -123,7 +124,10 @@ If OTHER-WINDOW is non-nil, open in a different window."
     (let* ((proto (concat "\\`" (match-string 1 url)))
            (entry (muse-protocol-find proto muse-url-protocols)))
       (when entry
-        (setq url (funcall (car (cddr entry)) url)))))
+        (let ((func (car (cddr entry))))
+          (if func
+              (setq url (funcall func url))
+            (setq url nil))))))
   url)
 
 (defun muse-protocol-add (protocol browse-function resolve-function)

@@ -1035,7 +1035,7 @@ like read-only from being inadvertently deleted."
                                  (or desc orig-url)))
               (t
                (muse-markup-text 'url-link url (or desc orig-url))))
-      orig-url)))
+      desc)))
 
 (defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
