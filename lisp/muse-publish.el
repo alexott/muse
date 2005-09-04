@@ -1040,9 +1040,11 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
   (delete-region (match-beginning 0) (match-end 0))
-  (let ((beg (point)))
-    (insert (muse-publish-url url desc explicit))
-    (muse-publish-mark-read-only beg (point))))
+  (let ((beg (point))
+        (text (muse-publish-url url desc explicit)))
+    (when text
+      (insert text)
+      (muse-publish-mark-read-only beg (point)))))
 
 (defun muse-publish-markup-link ()
   (let (desc explicit link)
