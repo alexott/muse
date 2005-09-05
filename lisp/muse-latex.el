@@ -113,14 +113,11 @@ filename."
   `(;; numeric ranges
     (10000 "\\([0-9]+\\)-\\([0-9]+\\)" 0 "\\1--\\2")
 
-    ;; characters which need quoting
-    (10100 "\\([%$#_]\\)" 0 "\\\\\\1")
-
     ;; be careful of closing quote pairs
-    (10200 "\"'" 0 "\"\\\\-'")
+    (10100 "\"'" 0 "\"\\\\-'")
 
     ;; join together the parts of a list or table
-    (10300 ,(concat
+    (10200 ,(concat
              "\\\\end{\\(tabular\\|description\\|itemize\\|enumerate\\)}\n+"
              "\\\\begin{\\1}\\({[^\n}]+}\\)?\n+") 0 ""))
   "List of markup regexps for identifying regions in a Muse page.
@@ -173,8 +170,8 @@ For more on the structure of this list, see
     (footnotetext-end . "}")
     (begin-underline . "\\underline{")
     (end-underline   . "}")
-    (begin-literal   . "\\verb|")
-    (end-literal     . "|")
+    (begin-literal   . "\\texttt{")
+    (end-literal     . "}")
     (begin-emph      . "\\emph{")
     (end-emph        . "}")
     (begin-more-emph . "\\textbf{")
@@ -237,7 +234,14 @@ system to an associated CJK coding system."
       muse-latexcjk-encoding-default)))
 
 (defcustom muse-latex-markup-specials
-  '((?\\ . "\\\\"))
+  '((?\\ . "\\\\")
+    (?\$ . "\\$")
+    (?\% . "\\%")
+    (?\_ . "\\_")
+    (?\{ . "\\{")
+    (?\} . "\\}")
+    (?\& . "\\&")
+    (?\# . "\\#"))
   "A table of characters which must be represented specially."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)

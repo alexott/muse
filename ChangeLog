@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-05 16:49:35 GMT	Michael Olson <mwolson@gnu.org>	patch-226
+
+    Summary:
+      muse-latex: Handle special characters in a better way.
+    Revision:
+      muse--main--1.0--patch-226
+
+    * lisp/muse-latex.el (muse-latex-markup-regexps): Remove special
+      characters hack.
+      (muse-latex-markup-strings): Use \\texttt{...} for 'begin-literal and
+      'end-literal.  Thanks to Trent Buck for the suggestion.
+      (muse-latex-markup-specials): Move special characters here instead of
+      using the regexp.
+
+    modified files:
+     ChangeLog lisp/muse-latex.el
+
+
 2005-09-05 14:25:37 GMT	Michael Olson <mwolson@gnu.org>	patch-225
 
     Summary:
