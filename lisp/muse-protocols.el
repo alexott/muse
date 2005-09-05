@@ -110,6 +110,9 @@ URL, or nil if no URL should be included."
 If OTHER-WINDOW is non-nil, open in a different window."
   (interactive (list (read-string "URL: ")
                      current-prefix-arg))
+  ;; Strip text properties
+  (when (fboundp 'set-text-properties)
+    (set-text-properties 0 (length url) nil url))
   (when other-window
     (switch-to-buffer-other-window (current-buffer)))
   (when (string-match muse-url-regexp url)
