@@ -300,7 +300,7 @@ system to an associated CJK coding system."
    file output-path final-target "PDF"
    (function
     (lambda (file output-path)
-      (let ((command (format "cd %s; pdflatex %s"
+      (let ((command (format "cd \"%s\"; pdflatex \"%s\"; pdflatex \"%s\""
                              (file-name-directory output-path) file)))
         (shell-command command))))
    ".aux" ".toc" ".out" ".log"))
