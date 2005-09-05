@@ -442,8 +442,8 @@ of the functions listed in `muse-colors-markup'."
 
 (defcustom muse-colors-tags
   '(("example" t nil muse-colors-example-tag)
-    ("verbatim" t nil muse-colors-example-tag)
-    ("code" t nil muse-colors-literal-tag)
+    ("code" t nil muse-colors-example-tag)
+    ("verbatim" t nil muse-colors-literal-tag)
     ("lisp" t nil muse-colors-literal-tag)
     ("literal" t nil muse-colors-literal-tag))
   "A list of tag specifications for specially highlighting text.

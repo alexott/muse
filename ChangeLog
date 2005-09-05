@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-05 14:24:22 GMT	Michael Olson <mwolson@gnu.org>	patch-224
+
+    Summary:
+      Add <code> tag.
+    Revision:
+      muse--main--1.0--patch-224
+
+    * lisp/muse-colors.el (muse-colors-tags): Switch coloring of code and
+      verbatim.  Verbatim makes text literal and escaped, code makes text
+      teletype and escaped.
+    
+    * muse-publish.el (muse-publish-markup-tags): Add "code".
+      (muse-publish-code-tag): New function that publishes code the same way
+      as =teletyped= text.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-publish.el
+
+
 2005-09-05 13:24:19 GMT	Michael Olson <mwolson@gnu.org>	patch-223
 
     Summary:
