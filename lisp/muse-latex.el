@@ -301,7 +301,7 @@ system to an associated CJK coding system."
    (function
     (lambda (file output-path)
       (let ((command (format "cd \"%s\"; pdflatex \"%s\"; pdflatex \"%s\""
-                             (file-name-directory output-path) file)))
+                             (file-name-directory output-path) file file)))
         (shell-command command))))
    ".aux" ".toc" ".out" ".log"))
 
