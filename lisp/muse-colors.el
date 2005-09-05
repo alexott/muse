@@ -306,7 +306,7 @@ whether progress messages should be displayed to the user."
     (,(concat "_[^" muse-regexp-space "_]")
      ?_ muse-colors-underlined)
 
-    ("^#title" ?\# muse-colors-title)
+    ("^#title " ?\# muse-colors-title)
 
     (muse-explicit-link-regexp ?\[ muse-colors-explicit-link)
 

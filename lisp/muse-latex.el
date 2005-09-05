@@ -24,6 +24,9 @@
 ;;; Contributors:
 
 ;; Li Daobing (lidaobing AT gmail DOT com) provided CJK support.
+;;
+;; Trent Buck (trentbuck AT gmail DOT com) gave valuable advice for
+;; how to treat LaTeX specials and the like.
 
 ;;; Code:
 
@@ -235,9 +238,11 @@ system to an associated CJK coding system."
 
 (defcustom muse-latex-markup-specials
   '((?\\ . "\\\\")
+    (?\_ . "\\textunderscore{}")
+    (?\< . "\\textless{}")
+    (?\> . "\\textgreater{}")
     (?\$ . "\\$")
     (?\% . "\\%")
-    (?\_ . "\\_")
     (?\{ . "\\{")
     (?\} . "\\}")
     (?\& . "\\&")
