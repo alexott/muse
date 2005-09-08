@@ -31,6 +31,12 @@ ignoring words like `the' and `at' which should not be changed.
 interwiki links according to the text of the
 `muse-wiki-interwiki-replacement' option.
 
+*** muse-protocols.el --- URL protocols that Muse recognizes.
+This automatically-included module provides an easily customizable
+list of URL protocols, how to browse them, and how to resolve them for
+publishing.  Customize `muse-url-protocols' to add and remove
+protocols.
+
 ** Compatibility fixes
 
 *** Muse has been tested with XEmacs 21.4, both Mule and non-Mule versions.
@@ -136,9 +142,24 @@ the new face `muse-verbatim-face'.
 will be removed for the text between <example>, <verbatim>, <code>,
 <literal>, and <lisp> tags.
 
+*** Links to temporary files may be visited.
+A "temporary file" in this case is a buffer that is not associated
+with any file.  For some dynamic content import scripts with Planner,
+this is helpful.
+
+*** Typing "#title" should never crash Emacs anymore.
+
 ** Muse manual
 
 *** Fix problem with producing a PDF version of the manual.
+
+*** Document WikiNames.
+
+*** Bring up-to-date with latest features.
+
+*** New Directives section.
+This describes the use of #title and #author, as well as other
+directives that may be used.
 
 ** Publishing
 
@@ -166,6 +187,18 @@ publishing the page.
 *** An emdash ("--") can now be used after a list, as long as there is
 a blank line between the end of the list and the emdash.
 
+*** The <code> tag has been introduced.
+It does the same thing that =equal signs= do: escape specials and
+publish as teletype text.  Use it for short command snippets and the
+like.  <example> is a better choice for large blocks of code, since it
+preserves whitespace.
+
+*** An edge case involving links at the beginning of a paragraph
+has been addressed.
+
+*** An edge case involving consecutive directives of the same size
+has been addressed.
+
 *** Every publishing style is now capable of specifying strings to use
 for sections beyond the third level.
 
@@ -176,6 +209,15 @@ DocBook style.
 *** Every publishing style may specify a method of handling "internal
 link" markup.  An internal link is a link that refers to an anchor on
 the current page.
+
+*** Every publishing style may specify a link suffix to use.
+This allows the file extensions in links to other Muse files to be
+different from their actual extension.  Blosxom makes use of this
+(since its published files are .txt and the dynamically-generated
+output is .html), and it could come in handy for PHP stuff.
+
+If a link suffix is not specified via :link-suffix, the value of
+:suffix will be used.
 
 ** Blosxom publishing
 
@@ -237,6 +279,18 @@ latexpdf publishing styles.  This keeps the PDF-building process from
 failing due to lack of a newline at end of file.
 
 *** Anchors and links to them now work properly.
+
+*** When generating PDF files, call pdflatex twice.
+This should ensure that the table of contents gets generated, if one
+is due to be published.
+
+*** PDF files with spaces may be published.
+A bug preventing this has been fixed.
+
+*** Teletype text is now published using \\texttt{...}.
+
+*** An attempt has been made to escape special characters more
+consistently.
 
 ** TexInfo publishing
 

@@ -90,7 +90,8 @@ URL, or nil if no URL should be included."
   :type '(repeat (list :tag "Protocol"
                        (string :tag "Regexp")
                        (function :tag "Browse")
-                       (function :tag "Resolve")))
+                       (choice (function :tag "Resolve")
+                               (const :tag "Don't resolve" nil))))
   :set 'muse-update-url-regexp
   :group 'muse)
 
