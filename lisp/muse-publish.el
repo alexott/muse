@@ -714,7 +714,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
           (if (null repl)
               (forward-char 1)
             (delete-char 1)
-            (insert (cdr repl))))))))
+            (insert-before-markers (cdr repl))))))))
 
 (defun muse-publish-markup-word ()
   (let* ((beg (match-beginning 2))

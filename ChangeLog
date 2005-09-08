@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-08 16:50:53 GMT	Michael Olson <mwolson@gnu.org>	patch-229
+
+    Summary:
+      Fix publishing of stuff like <code><></code>.
+    Revision:
+      muse--main--1.0--patch-229
+
+    * lisp/muse-publish.el (muse-publish-escape-specials): Use
+      `insert-before-markers' rather than `insert'.  This should fix strange
+      edge cases like <code><></code>.  Thanks to Trent Buck for the report.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-09-08 16:24:11 GMT	Michael Olson <mwolson@gnu.org>	patch-228
 
     Summary:
