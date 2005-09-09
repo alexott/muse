@@ -110,6 +110,13 @@ Integrating Muse and pyblosxom.cgi
 * Blosxom Entries::             Format of a Blosxom entry and automation.
 * Blosxom Options::             Blosxom styles and options provided.
 
+Common functionality shared by styles
+
+* Markup Functions::            Specifying functions to marking up text.
+* Markup Regexps::              Markup rules for publishing.
+* Markup Strings::              Strings specific to a publishing style.
+* Markup Tags::                 Tag specifications for special markup.
+
 @end detailmenu
 @end menu
 
@@ -268,7 +275,7 @@ updated at the same time as the Arch repository.
 
 Muse may be compiled and installed on your machine.
 
-@emph{Compilation}
+@subsubheading Compilation
 
 This is an optional step, since Emacs Lisp source code does not
 necessarily have to be byte-compiled.  It will yield a speed increase,
@@ -292,7 +299,7 @@ SITEFLAG = -no-site-file
 Running @code{make} should compile the Muse source files in the
 @file{lisp} directory.
 
-@emph{Installation}
+@subsubheading Installation
 
 Muse may be installed into your file hierarchy by doing the following.
 
@@ -650,16 +657,16 @@ from the possibility of those characters occurring in a real sentence.
 These are rendered as a bullet list.
 
 @example
- - bullet item one
- - bullet item two
+- bullet item one
+- bullet item two
 @end example
 
 @cindex lists, enumerated
 An enumerated list follows.
 
 @example
- 1. Enum item one
- 2. Enum item two
+1. Enum item one
+2. Enum item two
 @end example
 
 @cindex lists, definitions
@@ -684,12 +691,12 @@ Term2 ::
 Only very simple tables are supported.  The syntax is as follows.
 
 @example
-  Double bars  || Separate header fields
+Double bars  || Separate header fields
 
-  Single bars   | Separate body fields
-  Here are more | body fields
+Single bars   | Separate body fields
+Here are more | body fields
 
-  Triple bars ||| Separate footer fields
+Triple bars ||| Separate footer fields
 @end example
 
 Some publishing styles require header fields to come first, then footer
@@ -952,7 +959,7 @@ title and date directives will be inserted automatically.
 The following styles and options are available in the Blosxom publishing
 style.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -966,7 +973,7 @@ Publish Blosxom entries in XHTML form.
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 @table @code
 
@@ -1006,7 +1013,7 @@ You will need to call the @code{muse-book-publish-project} function in
 order to publish this style.  An example of this may be found in John
 Wiegley's configuration file at @file{examples/johnw/muse-johnw.el}.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -1022,7 +1029,7 @@ the normal PDF publishing mode.
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 @table @code
 
@@ -1050,7 +1057,7 @@ This may be text or a filename.
 
 This publishing style is used to generate DocBook XML files.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -1059,7 +1066,7 @@ This publishing style is used to generate DocBook XML files.
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 @table @code
 
@@ -1076,13 +1083,13 @@ Footer used for publishing DocBook XML files.
 
 This may be text or a filename.
 
-@item muse-docbook-publishing-regexps
+@item muse-docbook-markup-regexps
 List of markup rules for publishing a Muse page to DocBook XML.
 
-@item muse-docbook-markup-function
+@item muse-docbook-markup-functions
 An alist of style types to custom functions for that kind of text.
 
-@item muse-docbook-publishing-strings
+@item muse-docbook-markup-strings
 Strings used for marking up text.
 
 These cover the most basic kinds of markup, the handling of which
@@ -1090,6 +1097,18 @@ differs little between the various styles.
 
 @item muse-docbook-markup-specials
 A table of characters which must be represented specially.
+
+@item muse-docbook-encoding-default
+The default Emacs buffer encoding to use in published files.
+This will be used if no special characters are found.
+
+@item muse-docbook-charset-default
+The default DocBook XML charset to use if no translation is
+found in @code{muse-docbook-encoding-map}.
+
+@item muse-docbook-encoding-map
+An alist mapping emacs coding systems to appropriate DocBook charsets.
+Use the base name of the coding system (i.e. without the -unix).
 
 @end table
 
@@ -1099,7 +1118,7 @@ A table of characters which must be represented specially.
 
 This publishing style is capable of producing HTML or XHTML documents.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -1112,7 +1131,7 @@ Supports publishing to XHTML 1.0 and XHTML 1.1, Strict or Transitional.
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 If an HTML option does not have a corresponding XHTML option, it will
 be used for both of these publishing styles.
@@ -1121,6 +1140,9 @@ be used for both of these publishing styles.
 
 @item muse-html-extension
 Default file extension for publishing HTML files.
+
+@item muse-xhtml-extension
+Default file extension for publishing XHTML files.
 
 @item muse-html-style-sheet
 Store your stylesheet definitions here.
@@ -1234,41 +1256,41 @@ publishing to HTML, it assumes the form of a web log, or blog.
 The input format for each entry is as follows.
 
 @example
-  * 20040317: Title of entry
+* 20040317: Title of entry
 
-  Text for the entry.
+text for the entry.
 
-  <qotd>
-  "You know who you are. It comes down to a simple gut check: You
-  either love what you do or you don't. Period." -- P. Bronson
-  </qotd>
+<qotd>
+"You know who you are. It comes down to a simple gut check: You
+either love what you do or you don't. Period." -- P. Bronson
+</qotd>
 @end example
 
 The "qotd", or Quote of the Day, is entirely optional.  When generated
 to HTML, this entry is rendered as the following.
 
 @example
-  <div class="entry">
-    <div class="entry-qotd">
-      <h3>Quote of the Day:</h3>
-      <p>"You know who you are. It comes down to a simple gut
-        check: You either love what you do or you don't. Period."
-        -- P. Bronson</p>
+<div class="entry">
+  <div class="entry-qotd">
+    <h3>Quote of the Day:</h3>
+    <p>"You know who you are. It comes down to a simple gut
+      check: You either love what you do or you don't. Period."
+      -- P. Bronson</p>
+  </div>
+  <div class="entry-body">
+    <div class="entry-head">
+      <div class="entry-date">
+        <span class="date">March 17, 2004</span>
+      </div>
+      <div class="entry-title">
+        <h2>Title of entry</h2>
+      </div>
     </div>
-    <div class="entry-body">
-      <div class="entry-head">
-        <div class="entry-date">
-          <span class="date">March 17, 2004</span>
-        </div>
-        <div class="entry-title">
-          <h2>Title of entry</h2>
-        </div>
-      </div>
-      <div class="entry-text">
-        <p>Text for the entry.</p>
-      </div>
+    <div class="entry-text">
+      <p>Text for the entry.</p>
     </div>
   </div>
+</div>
 @end example
 
 The plurality of "div" tags makes it possible to display the entries in
@@ -1279,7 +1301,7 @@ with the "rdf" style.  It uses the first two sentences of the first
 paragraph of each entry as its "description", and auto-generates tags
 for linking to the various entries.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -1319,7 +1341,7 @@ Publish journal entries as an RSS file (RSS 2.0).
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 @table @code
 
@@ -1435,7 +1457,7 @@ If you wish to publish PDF documents, you will need to have a good TeX
 installation.  For Debian, this can be accomplished by installing the
 ``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts are also a must.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -1459,7 +1481,7 @@ LaTeX document conversion tool.
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 @table @code
 
@@ -1562,7 +1584,7 @@ John Wiegley uses this module for publishing all of the poems on his
 website, which are at
 @uref{http://www.newartisans.com/johnw/poems.html}.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -1584,7 +1606,7 @@ Publish a book of poems to a PDF document.
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 @table @code
 
@@ -1628,7 +1650,7 @@ differs little between the various styles.
 
 Rules for publishing a Muse file as a Texinfo article.
 
-@emph{Styles provided}
+@subsubheading Styles provided
 
 @table @code
 
@@ -1646,7 +1668,7 @@ Publish a file in PDF form.
 
 @end table
 
-@emph{Options provided}
+@subsubheading Options provided
 
 @table @code
 
@@ -1702,11 +1724,21 @@ A table of characters which must be represented specially.
 @section Common functionality shared by styles
 @cindex publishing styles, common
 
-@table @code
+@menu
+* Markup Functions::            Specifying functions to marking up text.
+* Markup Regexps::              Markup rules for publishing.
+* Markup Strings::              Strings specific to a publishing style.
+* Markup Tags::                 Tag specifications for special markup.
+@end menu
 
+@node Markup Functions, Markup Regexps, , Common Elements
+@comment  node-name,  next,  previous,  up
+@subsection Specifying functions to mark up text
 @cindex publishing, markup functions
+
 @anchor{muse-publish-markup-functions}
-@item muse-publish-markup-functions
+@code{muse-publish-markup-functions}
+
 An alist of style types to custom functions for that kind of text.
 
 This is used by publishing styles to attempt to minimize the amount of
@@ -1716,7 +1748,7 @@ rules for the most common types of markup.
 Each member of the list is of the following form.
 
 @example
-  (SYMBOL FUNCTION)
+(SYMBOL FUNCTION)
 @end example
 
 @itemize @bullet
@@ -1729,9 +1761,18 @@ Function to use to mark up this kind of rule if no suitable function is
 found through the @option{:functions} tag of the current style.
 @end itemize
 
+@c PRE302: Possible entries go here
+@c PRE302: Explain :functions
+
+@node Markup Regexps, Markup Strings, Markup Functions, Common Elements
+@comment  node-name,  next,  previous,  up
+@subsection Markup rules for publishing
 @cindex publishing, markup regexps
+@cindex publishing, rules
+
 @anchor{muse-publish-markup-regexps}
-@item muse-publish-markup-regexps
+@code{muse-publish-markup-regexps}
+
 List of markup rules for publishing a page with Muse.
 
 The rules given in this variable are invoked first, followed by whatever
@@ -1741,7 +1782,7 @@ Each member of the list is either a function, or a list of the following
 form.
 
 @example
-  (REGEXP/SYMBOL TEXT-BEGIN-GROUP REPLACEMENT-TEXT/FUNCTION/SYMBOL)
+(REGEXP/SYMBOL TEXT-BEGIN-GROUP REPLACEMENT-TEXT/FUNCTION/SYMBOL)
 @end example
 
 @itemize @bullet
@@ -1766,9 +1807,24 @@ the regular expressions can be a tricky business.  Note that case
 is never ignored.  `case-fold-search' is always bound to nil
 while processing the markup rules.
 
+@c PRE302: General publishing order goes here
+@c PRE302: Explain :regexps and inheritance
+
+@node Markup Strings, Markup Tags, Markup Regexps, Common Elements
+@comment  node-name,  next,  previous,  up
+@subsection Strings specific to a publishing style
+@cindex publishing, markup strings
+
+@c PRE302: description of :strings goes here
+
+@node Markup Tags, , Markup Strings, Common Elements
+@comment  node-name,  next,  previous,  up
+@subsection Tag specifications for special markup
 @cindex publishing, markup tags
+
 @anchor{muse-publish-markup-tags}
-@item muse-publish-markup-tags
+@code{muse-publish-markup-tags}
+
 A list of tag specifications, for specially marking up text.
 
 XML-style tags are the best way to add custom markup to Muse.  This is
@@ -1791,7 +1847,7 @@ where tag markup will resume.
 These tag rules are processed once at the beginning of markup, and once
 at the end, to catch any tags which may have been inserted in-between.
 
-@end table
+@c PRE302: Explain :tags
 
 @node Deriving Styles, , Common Elements, Publishing Styles
 @comment  node-name,  next,  previous,  up
@@ -1815,6 +1871,8 @@ partially override.  The following parameters support partial
 overriding.
 
 @table @option
+
+@c PRE302: Explain all of these
 
 @item :functions
 If a markup function is not found in the derived style's function list,

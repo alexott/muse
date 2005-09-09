@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-09 15:12:05 GMT	Michael Olson <mwolson@gnu.org>	patch-230
+
+    Summary:
+      Hack on documentation.  The release is in sight!
+    Revision:
+      muse--main--1.0--patch-230
+
+    * muse.texi: Use @subsubheading for all logical split headers rather than
+      @emph.  Move all examples against left margin.  Add comments to
+      indicate what still needs to be done.
+      (DocBook): Correct a few misspelled variable names and add some new
+      variables.
+      (Common Elements): Split this into 4 new subsections.
+
+    modified files:
+     ChangeLog muse.texi
+
+
 2005-09-08 16:50:53 GMT	Michael Olson <mwolson@gnu.org>	patch-229
 
     Summary:
