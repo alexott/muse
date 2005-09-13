@@ -1761,7 +1761,6 @@ Function to use to mark up this kind of rule if no suitable function is
 found through the @option{:functions} tag of the current style.
 @end itemize
 
-@c PRE302: Possible entries go here
 @c PRE302: Explain :functions
 
 @node Markup Regexps, Markup Strings, Markup Functions, Common Elements
@@ -1807,7 +1806,107 @@ the regular expressions can be a tricky business.  Note that case
 is never ignored.  `case-fold-search' is always bound to nil
 while processing the markup rules.
 
-@c PRE302: General publishing order goes here
+@subsubheading Publishing order
+
+This is the order that the publishing rules are consulted, by default.
+This may be changed by customizing @code{muse-publish-markup-regexps}.
+
+@table @code
+
+@item trailing and leading whitespace
+Remove trailing and leading whitespace from a file.
+
+@item directive
+@samp{#directive}
+
+This is only recognized at the beginning of a file.
+
+@item tag
+@samp{<tag>}
+
+@item comment
+@samp{; comment}
+
+@item anchor
+@samp{#anchor}
+
+@item explicit links
+Prevent emphasis characters in explicit links from being marked up.
+
+Don't actually publish them here, just add a special no-emphasis text
+property.
+
+@item word
+Whitespace-delimited word, possibly with emphasis characters
+
+This function is responsible for marking up emphasis and escaping some
+specials.
+
+@item emdash
+@samp{--}
+
+2-wide dash
+
+@item heading
+@samp{** Heading}
+
+Outline-mode style headings.
+
+@item enddots
+@samp{....}
+
+These are ellipses with a dot at end.
+
+@item dots
+@samp{...}
+
+Ellipses.
+
+@item rule
+@samp{----}
+
+Horizontal rule or section separator.
+
+@item fn-sep
+@samp{Footnotes:}
+
+beginning of footnotes section
+
+@item footnote
+@samp{[1]}
+
+Footnote definition or reference.  If at beginning of line, it is a
+definition.
+
+@item list
+@samp{ 1. }
+@samp{ - }
+@samp{term :: }
+
+Numbered list, item list, or term definition list.
+
+@item quote
+spaces before beginning of text
+
+Blockquotes.
+
+@item verse
+@samp{> verse text}
+
+@item table
+@samp{table | cells}
+
+@item link
+@samp{[[explicit][links]]}
+
+@item url
+@samp{http://example.com/}
+
+@item email
+@samp{bare-email@@example.com}
+
+@end table
+
 @c PRE302: Explain :regexps and inheritance
 
 @node Markup Strings, Markup Tags, Markup Regexps, Common Elements
