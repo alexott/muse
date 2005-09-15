@@ -175,6 +175,9 @@ so only enable this if you don't use either of these."
   (set (make-local-variable 'paragraph-start)
        (concat paragraph-start "\\|\\s-+\\(-\\|[0-9]+\\.\\)\\s-+"
                "\\|\\[[0-9]+\\]\\s-*"))
+  ;; Comment syntax is `; comment'
+  (set (make-local-variable 'comment-start)
+       "; ")
   (when (featurep 'pcomplete)
     ;; If pcomplete is available, set it up
     (set (make-local-variable 'pcomplete-default-completion-function)
