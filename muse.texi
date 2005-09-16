@@ -116,6 +116,7 @@ Common functionality shared by styles
 * Markup Regexps::              Markup rules for publishing.
 * Markup Strings::              Strings specific to a publishing style.
 * Markup Tags::                 Tag specifications for special markup.
+* Style Elements::              Parameters used for defining styles.
 
 @end detailmenu
 @end menu
@@ -191,9 +192,9 @@ Debian repository.  To make use of the former, add the following line to
 your @file{/etc/apt/sources.list} file and run @code{apt-get install
 muse}.
 
-@example
+@smallexample
 deb http://www.mwolson.org/debian/ ./
-@end example
+@end smallexample
 
 @cindex releases, from source
 Alternatively, you can download the latest release from
@@ -228,9 +229,9 @@ the following steps.
 @end itemize
 
 @item Register the archive.
-@example
+@smallexample
 tla register-archive -f http://www.mwolson.org/archives/2005
-@end example
+@end smallexample
 
 @item Download the Muse package.
 @example
@@ -775,9 +776,9 @@ Links to images may be used in either the target or the description, or
 both.  Thus, the following code will publish as a clickable image that
 points to @url{http://www.mwolson.org/}.
 
-@example
+@smallexample
 [[http://www.mwolson.org/][http://www.mwolson.org/static/logos/site-logo.png]]
-@end example
+@end smallexample
 
 @cindex images, displaying
 @cindex images, inlined
@@ -788,9 +789,9 @@ Emacs permits this.  The following example will display correctly and
 publish correctly if a @acronym{PNG} file called @file{TestLogo.png}
 exists in the @file{../pics/} directory.
 
-@example
+@smallexample
 [[TestPage][../pics/TestLogo.png]]
-@end example
+@end smallexample
 
 @cindex images, without a description
 An image link is not required to have a description.  The link
@@ -828,9 +829,9 @@ text.  With the @verb{|<lisp>|} tag, you may generated whatever output
 text you wish.  The inserted output will get marked up, if the
 @verb{|<lisp>|} tag appears within the main text of the document.
 
-@example
+@smallexample
 <lisp>(concat "This form gets " "inserted")</lisp>
-@end example
+@end smallexample
 
 @cindex lisp, and insert command
 Note that you should not use the @code{insert} command within a set of
@@ -935,9 +936,9 @@ blog entries are stored.
 Assign the @code{muse-blosxom-new-entry} function to a key sequence.  I
 use the following code to assign this function to @kbd{C-c p l'}.
 
-@example
+@smallexample
 (global-set-key "\C-cpl" 'muse-blosxom-new-entry)
-@end example
+@end smallexample
 
 @item
 You should create your directory structure ahead of time under your base
@@ -1729,6 +1730,7 @@ A table of characters which must be represented specially.
 * Markup Regexps::              Markup rules for publishing.
 * Markup Strings::              Strings specific to a publishing style.
 * Markup Tags::                 Tag specifications for special markup.
+* Style Elements::              Parameters used for defining styles.
 @end menu
 
 @node Markup Functions, Markup Regexps, , Common Elements
@@ -1747,9 +1749,9 @@ rules for the most common types of markup.
 
 Each member of the list is of the following form.
 
-@example
+@smallexample
 (SYMBOL FUNCTION)
-@end example
+@end smallexample
 
 @itemize @bullet
 @item SYMBOL
@@ -1760,8 +1762,6 @@ Describes the type of text to associate with this rule.
 Function to use to mark up this kind of rule if no suitable function is
 found through the @option{:functions} tag of the current style.
 @end itemize
-
-@c PRE302: Explain :functions
 
 @node Markup Regexps, Markup Strings, Markup Functions, Common Elements
 @comment  node-name,  next,  previous,  up
@@ -1780,9 +1780,9 @@ rules are specified by the current style.
 Each member of the list is either a function, or a list of the following
 form.
 
-@example
+@smallexample
 (REGEXP/SYMBOL TEXT-BEGIN-GROUP REPLACEMENT-TEXT/FUNCTION/SYMBOL)
-@end example
+@end smallexample
 
 @itemize @bullet
 @item REGEXP
@@ -1914,8 +1914,6 @@ Blockquotes.
 
 @end table
 
-@c PRE302: Explain :regexps and inheritance
-
 @node Markup Strings, Markup Tags, Markup Regexps, Common Elements
 @comment  node-name,  next,  previous,  up
 @subsection Strings specific to a publishing style
@@ -1923,7 +1921,7 @@ Blockquotes.
 
 @c PRE302: description of :strings goes here
 
-@node Markup Tags, , Markup Strings, Common Elements
+@node Markup Tags, Style Elements, Markup Strings, Common Elements
 @comment  node-name,  next,  previous,  up
 @subsection Tag specifications for special markup
 @cindex publishing, markup tags
@@ -1955,6 +1953,100 @@ at the end, to catch any tags which may have been inserted in-between.
 
 @c PRE302: Explain :tags
 
+@node Style Elements, , Markup Tags, Common Elements
+@comment  node-name,  next,  previous,  up
+@subsection Parameters used for defining styles
+@cindex publishing, style elements
+
+Style elements are tags that define a style.  Use
+@code{muse-define-style} to create a new style.
+
+@smallexample
+(muse-define-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
+@end smallexample
+
+@subsubheading Usable elements
+
+@table @option
+
+@item :suffix
+File extension to use for publishing files with this style.
+
+@item :link-suffix
+File extension to use for publishing links to Muse files with this
+style.
+
+@item :osuffix
+File extension to use for publishing second-stage files with this style.
+
+For example, PDF publishing generates a LaTeX file first, then a PDF
+from that LaTeX file.
+
+@item :regexps
+List of markup rules for publishing a page with Muse.
+@xref{muse-publish-markup-regexps}.
+
+@item :functions
+An alist of style types to custom functions for that kind of text.
+@xref{muse-publish-markup-functions}.
+
+@item :strings
+Strings used for marking up text with this style.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@item :tags
+A list of tag specifications, used for handling extra tags.
+@xref{muse-publish-markup-tags}.
+
+@item :specials
+A table of characters which must be represented specially.
+
+@item :before
+A function that is to be executed on the newly-created publishing buffer
+(or the current region) before any publishing occurs.
+
+This is used to set extra parameters that direct the publishing process.
+
+@item :before-end
+A function that is to be executed on the publishing buffer (or the
+current region) immediately after applying all of the markup regexps.
+
+This is used to fix the order of table elements (header, footer, body)
+in XML-ish styles.
+
+@item :after
+A function that is to be executed on the publishing buffer after
+:before-end, and immediately after inserting the header and footer.
+
+This is used for generating the table of contents as well as setting the
+file coding system.
+
+@item :final
+A function that is to be executed after saving the published file, but
+while still in its buffer.
+
+This is used for generating second-stage documents like PDF files from
+just-published LaTeX files.
+
+@item :header
+Header used for publishing files of this style.
+
+This may be text or a filename.  It is inserted at the beginning of a
+file, after evaluating the publishing markup.
+
+@item :footer
+Footer used for publishing files of this style.
+
+This may be text or a filename.  It is inserted at the end of a file,
+after evaluating the publishing markup.
+
+@item :browser
+The function used to browse the published result of files of this style.
+
+@end table
+
 @node Deriving Styles, , Common Elements, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Deriving a new style from an existing one
@@ -1964,9 +2056,9 @@ To create a new style from an existing one, use @code{muse-derive-style}
 as follows.  This is a good way to fix something you don't like about a
 particular publishing style, or to personalize it.
 
-@example
+@smallexample
 (muse-derive-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
-@end example
+@end smallexample
 
 The derived name is a string defining the new style, such as "my-html".
 The base name must identify an existing style, such as "html" -- if you
@@ -1976,26 +2068,20 @@ definitions exist in the base style.  However, some definitions only
 partially override.  The following parameters support partial
 overriding.
 
-@table @option
+@xref{Style Elements}, for a complete list of all parameters.
 
-@c PRE302: Explain all of these
+@table @option
 
 @item :functions
 If a markup function is not found in the derived style's function list,
 the base style's function list will be queried.
 
+@item :regexps
+All regexps in the current style and the base style(s) will be used.
+
 @item :strings
 If a markup string is not found in the derived style's string list, the
 base style's string list will be queried.
-
-@item :before
-If this option is specified, it will be consulted rather than the
-corresponding value in the derived style.  This applies to the following
-options as well.
-
-@item :before-end
-
-@item :after
 
 @end table
 
