@@ -1,3 +1,9 @@
+muse-el (3.02-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Fri, 16 Sep 2005 01:58:36 -0500
+
 muse-el (3.01.arch.201-4) unstable; urgency=low
 
   * Makefile: Correct a build issue involving revisions and accidentally
