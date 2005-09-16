@@ -2,6 +2,41 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-16 06:57:44 GMT	Michael Olson <mwolson@gnu.org>	patch-236
+
+    Summary:
+      Prepare for release.
+    Revision:
+      muse--main--1.0--patch-236
+
+    * lisp/muse.el (muse-version): Increment to 3.02.
+    
+    * *.el: Fix first header line.
+    
+    * examples/mwolson/muse-init.el: Sync with my config.
+      (my-muse-pdf-make-links-absolute): New function that makes relative
+      links absolute in a hard-coded way.
+      (my-muse-pdf-prepare-buffer): Add `my-muse-pdf-make-links-absolute' to
+      publishing transforms.
+    
+    * NEWS: Update.
+
+    new files:
+     experimental/.arch-ids/muse-cite.el.id
+     experimental/muse-cite.el
+
+    modified files:
+     ChangeLog Makefile.defs NEWS examples/mwolson/muse-init.el
+     experimental/muse-message.el experimental/muse-xml.el
+     lisp/muse-blosxom.el lisp/muse-book.el lisp/muse-colors.el
+     lisp/muse-convert.el lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-http.el lisp/muse-journal.el lisp/muse-latex.el
+     lisp/muse-mode.el lisp/muse-poem.el lisp/muse-project.el
+     lisp/muse-protocols.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-texinfo.el lisp/muse-wiki.el
+     lisp/muse.el muse.texi
+
+
 2005-09-16 06:33:11 GMT	Michael Olson <mwolson@gnu.org>	patch-235
 
     Summary:

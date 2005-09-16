@@ -1,4 +1,4 @@
-;;; muse-protocols.el --- URL protocols that Muse recognizes.
+;;; muse-protocols.el --- URL protocols that Muse recognizes
 
 ;; Copyright (C) 2005  Free Software Foundation, Inc.
 

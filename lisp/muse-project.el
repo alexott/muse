@@ -1,4 +1,4 @@
-;;; muse-project.el --- Handle Muse projects.
+;;; muse-project.el --- handle Muse projects
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

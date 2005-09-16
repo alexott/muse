@@ -1,4 +1,4 @@
-;;; muse-journal.el --- Keep and publish a journal.
+;;; muse-journal.el --- keep and publish a journal
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

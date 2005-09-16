@@ -1,4 +1,4 @@
-;;; muse-xml.el --- Publish XML files.
+;;; muse-xml.el --- publish XML files
 
 ;; Copyright (C) 2005  Free Software Foundation, Inc.
 

@@ -21,6 +21,7 @@
 (require 'muse-blosxom)  ; load blosxom module
 (require 'muse-docbook)  ; load DocBook publishing style
 (require 'muse-html)     ; load (X)HTML publishing style
+(require 'muse-texinfo)  ; load Info/PDF publishing styles
 (require 'muse-wiki)     ; load Wiki support
 (require 'muse-xml)      ; load experimental XML support
 ;;(require 'muse-message)  ; load message support (experimental)
@@ -34,6 +35,9 @@
 (unless (assoc "my-blosxom" muse-publishing-styles)
   (muse-derive-style "my-blosxom" "blosxom-xhtml"
                      :final 'my-muse-blosxom-finalize)
+
+  (muse-derive-style "my-pdf" "pdf"
+                     :before 'my-muse-pdf-prepare-buffer)
 
   (muse-derive-style "my-xhtml" "xhtml"
                      :header "~/personal-site/muse/header.html"
@@ -70,7 +74,7 @@
           :force-publish ("WikiIndex")
           :default "WelcomePage")
          (:base "my-xhtml"
-                :path "~/proj/notmine/notes-out"))
+                :path "~/personal-site/site/notes"))
 
         ("Plans"
          ("~/proj/wiki/plans/"
@@ -90,6 +94,21 @@
         ("ArchWiki" . "http://wiki.gnuarch.org/")))
 
 ;;; Functions
+
+;; Turn relative links into absolute ones
+(defun my-muse-pdf-make-links-absolute (str &rest ignored)
+  "Make relative links absolute."
+  (when str
+    (save-match-data
+      (if (string-match "\\`[/.]+" str)
+          (replace-match "http://www.mwolson.org/" nil t str)
+        str))))
+
+;; Make sure my interproject links become absolute when published in
+;; PDFs
+(defun my-muse-pdf-prepare-buffer ()
+  (set (make-local-variable 'muse-publish-url-transforms)
+       (cons 'my-muse-pdf-make-links-absolute muse-publish-url-transforms)))
 
 ;; Switch to the given project and prompt for a file
 (defun my-muse-project-find-file (project)
@@ -167,7 +186,7 @@ If FILE is not specified, use the published version of the current file."
 (global-set-key "\C-cpL" #'(lambda () (interactive)
                              (my-muse-project-find-file "Blog")))
 (global-set-key "\C-cpn" #'(lambda () (interactive)
-                             (my-muse-project-find-file "Notes")))
+                             (my-muse-project-find-file "MyNotes")))
 (global-set-key "\C-cpr" #'(lambda () (interactive)
                              (my-muse-project-find-file "Projects")))
 (global-set-key "\C-cpw" #'(lambda () (interactive)
@@ -178,7 +197,6 @@ If FILE is not specified, use the published version of the current file."
 
 (custom-set-variables
  '(muse-blosxom-base-directory "~/proj/wiki/blog/")
- '(muse-blosxom-publishing-directory "~/personal-site/site/blog")
  '(muse-colors-autogen-headings (quote outline))
  '(muse-file-extension "muse")
  '(muse-html-charset-default "utf-8")

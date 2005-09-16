@@ -1,4 +1,4 @@
-;;; muse-texinfo.el --- Publish entries to Texinfo format or PDF.
+;;; muse-texinfo.el --- publish entries to Texinfo format or PDF
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

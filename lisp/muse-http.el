@@ -1,4 +1,4 @@
-;;; muse-http.el --- Publish HTML files over HTTP.
+;;; muse-http.el --- publish HTML files over HTTP
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

@@ -1,4 +1,4 @@
-;;; muse-html.el --- Publish to HTML and XHTML.
+;;; muse-html.el --- publish to HTML and XHTML
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

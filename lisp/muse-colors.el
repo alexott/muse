@@ -1,4 +1,4 @@
-;;; muse-colors.el --- Coloring and highlighting used by Muse
+;;; muse-colors.el --- coloring and highlighting used by Muse
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

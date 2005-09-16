@@ -1,4 +1,4 @@
-;;; muse-latex.el --- Publish entries in LaTex or PDF format.
+;;; muse-latex.el --- publish entries in LaTex or PDF format
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

@@ -1,4 +1,4 @@
-;;; muse-poem.el --- Publish a poem to LaTex or PDF.
+;;; muse-poem.el --- publish a poem to LaTex or PDF
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

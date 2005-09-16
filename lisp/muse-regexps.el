@@ -1,4 +1,4 @@
-;;; muse-regexps.el --- Define regexps used by Muse.
+;;; muse-regexps.el --- define regexps used by Muse
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

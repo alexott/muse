@@ -1,4 +1,4 @@
-;;; muse-convert.el --- Convert a LaTex file into a Muse file.
+;;; muse-convert.el --- convert a LaTex file into a Muse file
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

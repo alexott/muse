@@ -1,4 +1,4 @@
-;;; muse-blosxom.el --- Publish a document tree for serving by (py)Blosxom
+;;; muse-blosxom.el --- publish a document tree for serving by (py)Blosxom
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

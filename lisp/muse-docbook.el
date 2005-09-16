@@ -1,4 +1,4 @@
-;;; muse-docbook.el --- Publish DocBook files.
+;;; muse-docbook.el --- publish DocBook files
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

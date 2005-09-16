@@ -1,4 +1,4 @@
-;;; muse-message.el --- Publish a file as an email message.
+;;; muse-message.el --- publish a file as an email message
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

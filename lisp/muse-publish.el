@@ -1,4 +1,4 @@
-;;; muse-publish.el --- Base publishing implementation.
+;;; muse-publish.el --- base publishing implementation
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

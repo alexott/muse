@@ -1,4 +1,4 @@
-;;; muse-mode.el --- Mode for editing Muse files; has font-lock support.
+;;; muse-mode.el --- mode for editing Muse files; has font-lock support
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 

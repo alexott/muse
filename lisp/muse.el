@@ -1,11 +1,11 @@
-;;; muse.el --- An authoring and publishing tool for Emacs.
+;;; muse.el --- an authoring and publishing tool for Emacs
 
 ;; Copyright (C) 2004 Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.01.91 (3.02 RC2)
-;; Date: Thu 15-Jun-2005
+;; Version: 3.02
+;; Date: Thu 16-Sep-2005
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
@@ -38,14 +38,14 @@
 ;; Texinfo, etc.
 
 ;; The markup rules used by Muse are intended to be very friendly to
-;; people familiar with Emacs.  See the included QuickStart file in
-;; the `examples' directory for more information.
+;; people familiar with Emacs.  See the included manual for more
+;; information.
 
 ;;; Contributors:
 
 ;;; Code:
 
-(defvar muse-version "3.01.91 (3.02 RC2)"
+(defvar muse-version "3.02"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)

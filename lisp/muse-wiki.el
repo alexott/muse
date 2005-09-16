@@ -1,4 +1,4 @@
-;;; muse-wiki.el --- wiki features for muse
+;;; muse-wiki.el --- wiki features for Muse
 
 ;; Copyright (C) 2005  Free Software Foundation, Inc.
 

@@ -157,9 +157,14 @@ this is helpful.
 
 *** Bring up-to-date with latest features.
 
+*** Massively update Common Elements section.
+
 *** New Directives section.
 This describes the use of #title and #author, as well as other
 directives that may be used.
+
+*** New Comments section.
+Describes the use of "; comment text".
 
 ** Publishing
 

@@ -1,4 +1,4 @@
-;;; muse-book.el --- Publish entries into a compilation.
+;;; muse-book.el --- publish entries into a compilation
 
 ;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 
