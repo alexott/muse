@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-16 06:33:11 GMT	Michael Olson <mwolson@gnu.org>	patch-235
+
+    Summary:
+      Finish documentation.
+    Revision:
+      muse--main--1.0--patch-235
+
+    * muse.texi (Comments): New node that describes the syntax of comments.
+      (Markup Strings): Describe all markup strings.
+
+    modified files:
+     ChangeLog muse.texi
+
+
 2005-09-16 05:02:45 GMT	Michael Olson <mwolson@gnu.org>	patch-234
 
     Summary:

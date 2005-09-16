@@ -89,6 +89,7 @@ Rules for Using Markup
 * Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
+* Comments::                    Lines to omit from published output.
 
 Publishing Various Types of Documents
 
@@ -459,6 +460,7 @@ than formatting.
 * Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
+* Comments::                    Lines to omit from published output.
 @end menu
 
 @node Paragraphs, Headings, Markup Rules, Markup Rules
@@ -818,7 +820,7 @@ that doesn't contain whitespace -- it defines an anchor at that point
 into the document.  This point can be referenced using "page#anchor" as
 the target in a Muse link.
 
-@node Embedded Lisp, , Horizontal Rules and Anchors, Markup Rules
+@node Embedded Lisp, Comments, Horizontal Rules and Anchors, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Evaluating Emacs Lisp code in documents for extensibility
 @cindex lisp, embedded
@@ -837,6 +839,22 @@ text you wish.  The inserted output will get marked up, if the
 Note that you should not use the @code{insert} command within a set of
 @verb{|<lisp>|} tags, since the return value from the @verb{|<lisp>|}
 tags will be automatically inserted into the document.
+
+@node Comments, , Embedded Lisp, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Lines to omit from published output
+@cindex comments
+@cindex publishing, omitting lines
+
+Use the following syntax to indicate a comment.  Comments will not be
+published.
+
+@smallexample
+; Comment text goes here.
+@end smallexample
+
+That is, only a semi-colon at the beginning of a line, followed by a
+literal space, will cause that line to be treated as a comment.
 
 @node Publishing Styles, Getting Help and Reporting Bugs, Markup Rules, Top
 @comment  node-name,  next,  previous,  up
@@ -1919,7 +1937,230 @@ Blockquotes.
 @subsection Strings specific to a publishing style
 @cindex publishing, markup strings
 
-@c PRE302: description of :strings goes here
+@dfn{Markup strings} are strings used for marking up text for a
+particular style.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@subsubheading Available markup strings
+
+@table @code
+
+@item image-with-desc
+An image and a description.
+
+Argument 1: image.  Argument 2: description.
+
+@item image-link
+A link to an image.
+
+Argument 1: image link.
+
+@item url-with-image
+A URL with an image.
+
+Argument 1: link.  Argument 2: image.
+
+@item url-link
+A link with a description.
+
+Argument 1: link.  Argument 2: description if one exists, or the
+original link otherwise.
+
+@item internal-link
+A link that refers to an internal anchor.
+
+Argument 1: internal link.  Argument 2: description if one exists, or
+the original link otherwise.
+
+@item email-addr
+A link to an email address.
+
+Argument 1: email address.  Argument 2: email address.
+
+@item emdash
+A 2-length dash.
+
+@item rule
+A horizontal line or space.
+
+@item footnote
+Beginning of footnote.
+
+@item footnote-end
+End of footnote.
+
+@item footnotemark
+Mark a reference for the current footnote.
+
+Argument 1: number of this footnote.
+
+@item footnotetext
+Indicate the text of the current footnote.
+
+Argument 1: number of this footnote.
+
+@item footnotetext-end
+End of a footnote text line.
+
+@item fn-sep
+Text used to replace ``Footnotes:'' line.
+
+@item enddots
+4 dots.
+
+@item dots
+3 dots.
+
+@item part
+Beginning of a part indicator line.  This is used by book publishing.
+
+@item part-end
+End of a part indicator line.  This is used by book publishing.
+
+@item chapter
+Beginning of a chapter indicator line.  This is used by book publishing.
+
+@item chapter-end
+End of a chapter indicator line.  This is used by book publishing.
+
+@item section
+Beginning of level 1 section indicator line.
+
+Argument 1: level of section; always 1.
+
+@item section-end
+End of level 1 section indicator line.
+
+Argument 1: level of section; always 1.
+
+@item subsection
+Beginning of level 2 section indicator line.
+
+Argument 1: level of section; always 2.
+
+@item subsection-end
+End of level 2 section indicator line.
+
+Argument 1: level of section; always 2.
+
+@item subsubsection
+Beginning of level 3 section indicator line.
+
+Argument 1: level of section; always 3.
+
+@item subsubsection-end
+End of level 3 section indicator line.
+
+Argument 1: level of section; always 3.
+
+@item section-other
+Beginning of section indicator line, where level is greater than 3.
+
+Argument 1: level of section.
+
+@item section-other-end
+Beginning of section indicator line, where level is greater than 3.
+
+Argument 1: level of section.
+
+@item begin-underline
+Beginning of underlined text.
+
+@item end-underline
+End of underlined text.
+
+@item begin-literal
+Beginning of verbatim text.  This includes @verb{|<code>|} tags and
+=teletype text=.
+
+@item end-literal
+End of verbatim text.  This includes @verb{|<code>|} tags and =teletype
+text=.
+
+@item begin-emph
+Beginning of the first level of emphasized text.
+
+@item end-emph
+End of the first level of emphasized text.
+
+@item begin-more-emph
+Beginning of the second level of emphasized text.
+
+@item end-more-emph
+End of the second level of emphasized text.
+
+@item begin-most-emph
+Beginning of the third (and final) level of emphasized text.
+
+@item end-most-emph
+End of the third (and final) level of emphasized text.
+
+@item begin-verse
+Beginning of verse text.
+
+@item verse-space
+String used to each space that is further indented than the beginning of
+the verse.
+
+@item begin-verse-line
+Beginning of a line of verse.
+
+@item empty-verse-line
+End of a line of verse.
+
+@item begin-last-stanza-line
+Beginning of the last line of a verse stanza.
+
+@item end-last-stanza-line
+End of the last line of a verse stanza.
+
+@item end-verse
+End of verse text.
+
+@item begin-example
+Beginning of an example region.  To make use of this, an
+@samp{<example>} tag is needed.
+
+@item end-example
+End of an example region.  To make use of this, an @samp{</example>} tag
+is needed.
+
+@item begin-center
+Begin a centered line.
+
+@item end-center
+End a centered line.
+
+@item begin-quote
+Begin a quoted region.
+
+@item end-quote
+End a quoted region.
+
+@item begin-uli
+Begin an unordered list.
+
+@item end-uli
+End an unordered list.
+
+@item begin-oli
+Begin an ordered list.
+
+@item end-oli
+End an ordered list.
+
+@item begin-ddt
+Begin a definition list.
+
+@item start-dde
+Begin a term in a definition list.
+
+@item end-ddt
+End a definition list.
+
+@end table
 
 @node Markup Tags, Style Elements, Markup Strings, Common Elements
 @comment  node-name,  next,  previous,  up
@@ -1950,8 +2191,6 @@ where tag markup will resume.
 
 These tag rules are processed once at the beginning of markup, and once
 at the end, to catch any tags which may have been inserted in-between.
-
-@c PRE302: Explain :tags
 
 @node Style Elements, , Markup Tags, Common Elements
 @comment  node-name,  next,  previous,  up
