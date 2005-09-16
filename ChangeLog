@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-16 04:05:19 GMT	Michael Olson <mwolson@gnu.org>	patch-233
+
+    Summary:
+      Make documentation separately installable.
+    Revision:
+      muse--main--1.0--patch-233
+
+    * Makefile (install): Split into install-bin and install-info.
+    
+    * muse.texi (Markup Regexps): Fix display bug.
+
+    modified files:
+     ChangeLog Makefile muse.texi
+
+
 2005-09-15 03:52:01 GMT	Michael Olson <mwolson@gnu.org>	patch-232
 
     Summary:

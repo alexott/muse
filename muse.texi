@@ -1879,9 +1879,16 @@ Footnote definition or reference.  If at beginning of line, it is a
 definition.
 
 @item list
+@itemize @bullet
+@item
 @samp{ 1. }
+
+@item
 @samp{ - }
+
+@item
 @samp{term :: }
+@end itemize
 
 Numbered list, item list, or term definition list.
 

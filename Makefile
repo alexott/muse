@@ -1,4 +1,4 @@
-.PHONY: all lisp examples experimental doc clean realclean distclean fullclean install test dist release debbuild debrevision debrelease upload
+.PHONY: all lisp examples experimental doc clean realclean distclean fullclean install-info install-bin install test dist release debbuild debrevision debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
@@ -33,11 +33,15 @@ realclean fullclean: clean
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) distclean); done
 
-install: lisp muse.info
-	(cd lisp && $(MAKE) install)
-	install -d $(INFODIR)
+install-info: muse.info
+	[ -d $(INFODIR) ] || install -d $(INFODIR)
 	install -m 0644 muse.info $(INFODIR)/muse
 	$(INSTALLINFO) $(INFODIR)/muse
+
+install-bin: lisp
+	(cd lisp && $(MAKE) install)
+
+install: install-bin install-info
 
 test: 
 	(cd lisp && $(MAKE) test)
