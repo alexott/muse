@@ -79,10 +79,34 @@ This text may contain <lisp> markup tags.
 
 An example of using <link> is as follows.
 
-<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/default.css\">
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/default.css\">"
+  :type 'string
+  :group 'muse-html)
 
-If you are using XHTML, make sure to close the tag properly, as
-shown in the following example.
+(defcustom muse-xhtml-style-sheet
+  "<style type=\"text/css\">
+body {
+  background: white; color: black;
+  margin-left: 3%; margin-right: 7%;
+}
+
+p { margin-top: 1% }
+p.verse { margin-left: 3% }
+
+.example { margin-left: 3% }
+
+h2 {
+  margin-top: 25px;
+  margin-bottom: 0px;
+}
+h3 { margin-bottom: 0px; }
+    </style>"
+  "Store your stylesheet definitions here.
+This is used in `muse-xhtml-header'.
+You can put raw CSS in here or a <link> tag to an external stylesheet.
+This text may contain <lisp> markup tags.
+
+An example of using <link> is as follows.
 
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/default.css\" />"
   :type 'string
@@ -146,7 +170,7 @@ shown in the following example.
         (when maintainer
           (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\" />\")))
     </lisp>
-    <lisp>muse-html-style-sheet</lisp>
+    <lisp>muse-xhtml-style-sheet</lisp>
   </head>
   <body>
     <h1><lisp>
