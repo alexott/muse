@@ -193,9 +193,9 @@ Debian repository.  To make use of the former, add the following line to
 your @file{/etc/apt/sources.list} file and run @code{apt-get install
 muse}.
 
-@smallexample
+@example
 deb http://www.mwolson.org/debian/ ./
-@end smallexample
+@end example
 
 @cindex releases, from source
 Alternatively, you can download the latest release from
@@ -230,9 +230,9 @@ the following steps.
 @end itemize
 
 @item Register the archive.
-@smallexample
+@example
 tla register-archive -f http://www.mwolson.org/archives/2005
-@end smallexample
+@end example
 
 @item Download the Muse package.
 @example
@@ -778,9 +778,9 @@ Links to images may be used in either the target or the description, or
 both.  Thus, the following code will publish as a clickable image that
 points to @url{http://www.mwolson.org/}.
 
-@smallexample
+@example
 [[http://www.mwolson.org/][http://www.mwolson.org/static/logos/site-logo.png]]
-@end smallexample
+@end example
 
 @cindex images, displaying
 @cindex images, inlined
@@ -791,9 +791,9 @@ Emacs permits this.  The following example will display correctly and
 publish correctly if a @acronym{PNG} file called @file{TestLogo.png}
 exists in the @file{../pics/} directory.
 
-@smallexample
+@example
 [[TestPage][../pics/TestLogo.png]]
-@end smallexample
+@end example
 
 @cindex images, without a description
 An image link is not required to have a description.  The link
@@ -831,9 +831,9 @@ text.  With the @verb{|<lisp>|} tag, you may generated whatever output
 text you wish.  The inserted output will get marked up, if the
 @verb{|<lisp>|} tag appears within the main text of the document.
 
-@smallexample
+@example
 <lisp>(concat "This form gets " "inserted")</lisp>
-@end smallexample
+@end example
 
 @cindex lisp, and insert command
 Note that you should not use the @code{insert} command within a set of
@@ -849,9 +849,9 @@ tags will be automatically inserted into the document.
 Use the following syntax to indicate a comment.  Comments will not be
 published.
 
-@smallexample
+@example
 ; Comment text goes here.
-@end smallexample
+@end example
 
 That is, only a semi-colon at the beginning of a line, followed by a
 literal space, will cause that line to be treated as a comment.
@@ -954,9 +954,9 @@ blog entries are stored.
 Assign the @code{muse-blosxom-new-entry} function to a key sequence.  I
 use the following code to assign this function to @kbd{C-c p l'}.
 
-@smallexample
+@example
 (global-set-key "\C-cpl" 'muse-blosxom-new-entry)
-@end smallexample
+@end example
 
 @item
 You should create your directory structure ahead of time under your base
@@ -1767,9 +1767,9 @@ rules for the most common types of markup.
 
 Each member of the list is of the following form.
 
-@smallexample
+@example
 (SYMBOL FUNCTION)
-@end smallexample
+@end example
 
 @itemize @bullet
 @item SYMBOL
@@ -1798,9 +1798,9 @@ rules are specified by the current style.
 Each member of the list is either a function, or a list of the following
 form.
 
-@smallexample
+@example
 (REGEXP/SYMBOL TEXT-BEGIN-GROUP REPLACEMENT-TEXT/FUNCTION/SYMBOL)
-@end smallexample
+@end example
 
 @itemize @bullet
 @item REGEXP
@@ -2200,9 +2200,9 @@ at the end, to catch any tags which may have been inserted in-between.
 Style elements are tags that define a style.  Use
 @code{muse-define-style} to create a new style.
 
-@smallexample
+@example
 (muse-define-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
-@end smallexample
+@end example
 
 @subsubheading Usable elements
 
@@ -2295,9 +2295,9 @@ To create a new style from an existing one, use @code{muse-derive-style}
 as follows.  This is a good way to fix something you don't like about a
 particular publishing style, or to personalize it.
 
-@smallexample
+@example
 (muse-derive-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
-@end smallexample
+@end example
 
 The derived name is a string defining the new style, such as "my-html".
 The base name must identify an existing style, such as "html" -- if you
