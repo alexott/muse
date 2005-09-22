@@ -220,12 +220,22 @@ than the HTML table tag."
 
 (defcustom muse-html-markup-regexps
   `(;; Join together the parts of a table
-    (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>\\s-*"
+    (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>"
+                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
+                    "[" muse-regexp-blank "]*"
                     "<table[^>]*>\\s-*<t\\1>\n") 0 "")
-    (10100 "</table>\\s-*<table[^>]*>\n" 0 "")
+    (10100 ,(concat "</table>"
+                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
+                    "[" muse-regexp-blank "]*"
+                    "<table[^>]*>\n")
+           0 "")
 
     ;; Join together the parts of a list
-    (10200 "</\\([oud]l\\)>\\s-*<\\1>\\s-*" 0 "")
+    (10200 ,(concat "</\\([oud]l\\)>"
+                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
+                    "[" muse-regexp-blank "]*"
+                    "<\\1>\\s-*")
+           0 "")
 
     ;; Beginning of doc, end of doc, or plain paragraph separator
     (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"

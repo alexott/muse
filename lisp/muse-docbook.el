@@ -76,15 +76,24 @@ This may be text or a filename."
 (defcustom muse-docbook-markup-regexps
   `(;; Join together the parts of a table
     (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*"
-                    "</tgroup>\\s-*</informaltable>\\s-*"
+                    "</tgroup>\\s-*</informaltable>"
+                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
+                    "[" muse-regexp-blank "]*"
                     "<informaltable[^>]*>\\s-*<tgroup[^>]*>\\s-*"
-                    "<t\\1>\n") 0 "")
-    (10100 ,(concat "  </tgroup>\\s-*</informaltable>\\s-*"
-                    "<informaltable[^>]*>\\s-*<tgroup[^>]*>\n") 0 "")
+                    "<t\\1>\n")
+           0 "")
+    (10100 ,(concat "  </tgroup>\\s-*</informaltable>"
+                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
+                    "[" muse-regexp-blank "]*"
+                    "<informaltable[^>]*>\\s-*<tgroup[^>]*>\n")
+           0 "")
 
     ;; Join together the parts of a list
     (10200 ,(concat "</\\(itemized\\|ordered\\|variable\\)list>"
-                    "\\s-*<\\1list" "[^>]*>\\s-*") 0 "")
+                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
+                    "[" muse-regexp-blank "]*"
+                    "<\\1list" "[^>]*>\\s-*")
+           0 "")
 
     ;; Beginning of doc, end of doc, or plain paragraph separator
     (10300 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"

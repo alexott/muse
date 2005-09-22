@@ -98,9 +98,11 @@ It may contain <lisp> markup tags."
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-markup-regexps
-  '(;; join together the parts of a list or table
-    (10000
-     "@end \\(\\(multi\\)?table\\|itemize\\|enumerate\\)\n+@\\1.*\n+" 0 ""))
+  `(;; join together the parts of a list or table
+    (10000 ,(concat "@end \\(\\(multi\\)?table\\|itemize\\|enumerate\\)"
+                    "\n\\{1,2\\}"
+                    "@\\1.*\n+")
+           0 ""))
   "List of markup rules for publishing a Muse page to Texinfo.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice

@@ -121,7 +121,9 @@ filename."
 
     ;; join together the parts of a list or table
     (10200 ,(concat
-             "\\\\end{\\(tabular\\|description\\|itemize\\|enumerate\\)}\n+"
+             "\\\\end{\\(tabular\\|description\\|itemize\\|enumerate\\)}"
+             "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
+             "[" muse-regexp-blank "]*"
              "\\\\begin{\\1}\\({[^\n}]+}\\)?\n+") 0 ""))
   "List of markup regexps for identifying regions in a Muse page.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
