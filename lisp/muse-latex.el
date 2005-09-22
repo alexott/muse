@@ -240,6 +240,20 @@ system to an associated CJK coding system."
 
 (defcustom muse-latex-markup-specials
   '((?\\ . "\\\\")
+    (?\_ . "\\_")
+    (?\$ . "\\$")
+    (?\% . "\\%")
+    (?\{ . "\\{")
+    (?\} . "\\}")
+    (?\& . "\\&")
+    (?\# . "\\#"))
+  "A table of characters which must be represented specially.
+These are applied to URLs."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-latex)
+
+(defcustom muse-latex-markup-specials-entire-document
+  '((?\\ . "\\textbackslash{}")
     (?\_ . "\\textunderscore{}")
     (?\< . "\\textless{}")
     (?\> . "\\textgreater{}")
@@ -249,7 +263,21 @@ system to an associated CJK coding system."
     (?\} . "\\}")
     (?\& . "\\&")
     (?\# . "\\#"))
-  "A table of characters which must be represented specially."
+  "A table of characters which must be represented specially.
+These are applied to the entire document, sans already-escaped
+regions."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-latex)
+
+(defcustom muse-latex-markup-specials-verbatim
+  '((?\  . "\ ")
+    (?\t . "\ ")
+    (?\n . "\\\n")
+    (?\{ . "\\{")
+    (?\} . "\\}"))
+  "A table of characters which must be represented specially.
+These are applied to literal and end-literal sections and
+anything else that uses \\texttt{...}."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
 

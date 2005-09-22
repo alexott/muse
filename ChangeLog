@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-22 16:51:05 GMT	Michael Olson <mwolson@gnu.org>	patch-241
+
+    Summary:
+      muse-latex: Add a few escaping options that may be used in the future.
+    Revision:
+      muse--main--1.0--patch-241
+
+    * lisp/muse-latex.el: Note that we don't make use of these new options
+      yet.
+      (muse-latex-markup-specials): Move longer escapes out of here.
+      (muse-latex-markup-specials-entire-document): New option that specifies
+      the special characters to escape in the whole document after processing
+      markup rules.
+      (muse-latex-markup-specials-verbatim): New option that specifies the
+      special characters to escape in <example> tags and =literal text=.
+
+    modified files:
+     ChangeLog lisp/muse-latex.el
+
+
 2005-09-22 16:15:59 GMT	Michael Olson <mwolson@gnu.org>	patch-240
 
     Summary:
