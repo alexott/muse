@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-24 00:01:56 GMT	Michael Olson <mwolson@gnu.org>	patch-242
+
+    Summary:
+      Use modification time for date directive.
+    Revision:
+      muse--main--1.0--patch-242
+
+    * lisp/muse-publish.el (muse-publish-markup-buffer): Set the date
+      directive using the currently-publishing file's modification time,
+      rather than the current time.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-09-22 16:51:05 GMT	Michael Olson <mwolson@gnu.org>	patch-241
 
     Summary:
