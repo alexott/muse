@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-25 03:06:25 GMT	Michael Olson <mwolson@gnu.org>	patch-243
+
+    Summary:
+      Try to make link properties more sane.
+    Revision:
+      muse--main--1.0--patch-243
+
+    * lisp/muse-colors.el (muse-link-properties): Try to make link properties
+      a bit smarter.  It is hoped that this fixes several strange key
+      movement and link coloring issues.  Thanks to Sergey Vlasov for the
+      fix.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-colors.el
+
+
 2005-09-24 00:01:56 GMT	Michael Olson <mwolson@gnu.org>	patch-242
 
     Summary:
