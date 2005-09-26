@@ -52,9 +52,15 @@ Each function is passed the project object, a cons with the format
   :type 'hook
   :group 'muse-project)
 
+(defvar muse-project-alist-using-customize nil
+  "Used internally by Muse to indicate whether `muse-project-alist'
+has been modified via the customize interface.")
+(make-variable-buffer-local 'muse-project-alist-using-customize)
+
 (defun muse-project-alist-get (sym)
   "Turn `muse-project-alist' into something we can customize easily."
   (when (boundp sym)
+    (setq muse-project-alist-using-customize t)
     (let* ((val (copy-alist (symbol-value sym)))
            (head val))
       (while val
@@ -90,39 +96,44 @@ Each function is passed the project object, a cons with the format
   "Turn customized version of `muse-project-alist' into something
 Muse can make use of."
   (set sym val)
-  (while val
-    (let ((head (car (cdar val)))
-          res)
-      ;; Turn cons cells into flat list, string->symbol
-      (while head
-        (cond ((stringp (car head))
-               (add-to-list 'res (car head) t))
-              ((consp (car head))
-               (add-to-list 'res (intern (caar head)) t)
-               (add-to-list 'res (car (cdar head)) t)))
-        (setq head (cdr head)))
-      (setcdr (car val) (cons res (cdr (cdar val)))))
-    (let ((styles (cdar val)))
-      ;; String->symbol in every style
-      (while (cdr styles)
-        (let ((head (cadr styles))
-              res)
-          (while (consp head)
-            (setq res (plist-put res (intern (car head))
-                                 (cadr head)))
-            (setq head (cddr head)))
-          (setcdr styles (cons res (cddr styles))))
-        (setq styles (cdr styles))))
-    (setq val (cdr val))))
+  (when muse-project-alist-using-customize
+    ;; Make sure the unescaped version is written to .emacs
+    (put sym 'saved-value (list (custom-quote val)))
+    ;; Perform unescaping
+    (while val
+      (let ((head (car (cdar val)))
+            res)
+        ;; Turn cons cells into flat list, string->symbol
+        (while head
+          (cond ((stringp (car head))
+                 (add-to-list 'res (car head) t))
+                ((consp (car head))
+                 (add-to-list 'res (intern (caar head)) t)
+                 (add-to-list 'res (car (cdar head)) t)))
+          (setq head (cdr head)))
+        (setcdr (car val) (cons res (cdr (cdar val)))))
+      (let ((styles (cdar val)))
+        ;; String->symbol in every style
+        (while (cdr styles)
+          (let ((head (cadr styles))
+                res)
+            (while (consp head)
+              (setq res (plist-put res (intern (car head))
+                                   (cadr head)))
+              (setq head (cddr head)))
+            (setcdr styles (cons res (cddr styles))))
+          (setq styles (cdr styles))))
+      (setq val (cdr val)))))
 
 (define-widget 'muse-project 'default
   "A widget that defines a Muse project."
   :format "\n%v"
   :value-create 'muse-widget-type-value-create
   :value-get 'muse-widget-child-value-get
+  :value-delete 'ignore
   :match 'muse-widget-type-match
   :type '(cons :format "    %v"
-          (repeat :tag "Settings" :format "%{%t%}:\n%v%i\n\n"
+               (repeat :tag "Settings" :format "%{%t%}:\n%v%i\n\n"
                        (choice
                         (string :tag "Directory")
                         (list :tag "Book function"

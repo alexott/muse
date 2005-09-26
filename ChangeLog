@@ -2,6 +2,29 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-26 21:23:49 GMT	Michael Olson <mwolson@gnu.org>	patch-244
+
+    Summary:
+      Fix customization bugs concerning muse-project-alist.
+    Revision:
+      muse--main--1.0--patch-244
+
+    * examples/johnw/muse-johnw.el: Update with latest version from John.
+    
+    * muse-project.el (muse-project-alist-using-customize): New variable that
+      indicates whether or not we just used customize to modify the value of
+      muse-project-alist.
+      (muse-project-alist-get): Set muse-project-alist-using-customize.
+      (muse-project-alist-set): Only try to unescape muse-project-alist if
+      muse-project-alist-using-customize is set.  Make sure that the value we
+      save to .emacs is unescaped.
+      (muse-project): Add definition for :value-delete so that we can work
+      around an Emacs21 and XEmacs21 annoyance.
+
+    modified files:
+     ChangeLog examples/johnw/muse-johnw.el lisp/muse-project.el
+
+
 2005-09-25 03:06:25 GMT	Michael Olson <mwolson@gnu.org>	patch-243
 
     Summary:
