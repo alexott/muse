@@ -1,0 +1,17 @@
+muse-el (3.02.01-1) unstable; urgency=low
+
+`muse-project-alist' -- This variable should now save customizations
+to the correct form in the .emacs file.  Before, it was saving an
+intermediate form of the variable.
+
+If you have used the customize interface in the previous release of
+Muse to set `muse-project-alist', please do the following to import
+your settings.
+
+ - Open your .emacs file.
+ - Move the point to where `muse-project-alist' is set.
+ - Type `M-: (setq muse-project-alist-using-customize t) RET'.
+ - Type `C-M-x'.
+ - Type `M-x customize-save-variable RET muse-project-alist RET'.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Mon, 26 Sep 2005 17:00:46 -0500

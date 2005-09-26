@@ -1,3 +1,11 @@
+muse-el (3.02.01-1) unstable; urgency=low
+
+  * New upstream release.
+  * If you have used the customize interface to save `muse-project-alist',
+    you will need to follow the instructions in NEWS.Debian.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Mon, 26 Sep 2005 17:00:46 -0500
+
 muse-el (3.02-1) unstable; urgency=medium
 
   * New upstream release.

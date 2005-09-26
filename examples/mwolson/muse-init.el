@@ -63,7 +63,7 @@
 
         ("Blog"
          (,@(muse-project-alist-dirs "~/proj/wiki/blog")
-          :default "guestbook")
+          :default "index")
 
          ,@(muse-project-alist-styles "~/proj/wiki/blog"
                                       "~/personal-site/site/blog"
@@ -89,9 +89,11 @@
 ;; Wiki settings
 (setq muse-wiki-interwiki-alist
       '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/plugwiki/")
-        ("PLUG" . "http://plug.student-orgs.purdue.edu/plugwiki/")
         ("TheEmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
-        ("ArchWiki" . "http://wiki.gnuarch.org/")))
+        ("ArchWiki" . "http://wiki.gnuarch.org/")
+        ;; abbreviations
+        ("CERIAS" . "http://www.cerias.purdue.edu/")
+        ("PLUG" . "http://plug.student-orgs.purdue.edu/plugwiki/")))
 
 ;;; Functions
 
@@ -187,6 +189,8 @@ If FILE is not specified, use the published version of the current file."
                              (my-muse-project-find-file "Blog")))
 (global-set-key "\C-cpn" #'(lambda () (interactive)
                              (my-muse-project-find-file "MyNotes")))
+(global-set-key "\C-cpp" #'(lambda () (interactive)
+                             (my-muse-project-find-file "Plans")))
 (global-set-key "\C-cpr" #'(lambda () (interactive)
                              (my-muse-project-find-file "Projects")))
 (global-set-key "\C-cpw" #'(lambda () (interactive)
