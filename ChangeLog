@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-09-27 00:15:05 GMT	Michael Olson <mwolson@gnu.org>	patch-246
+
+    Summary:
+      Figure out syntax of :set.
+    Revision:
+      muse--main--1.0--patch-246
+
+    * lisp/muse-project.el (muse-project): Make the :set option inline to
+      match the actual syntax that Muse recognizes.
+    
+    * muse.texi (Projects): Note that I need to work on this section.
+
+    modified files:
+     ChangeLog lisp/muse-project.el muse.texi
+
+
 2005-09-26 22:31:57 GMT	Michael Olson <mwolson@gnu.org>	patch-245
 
     Summary:

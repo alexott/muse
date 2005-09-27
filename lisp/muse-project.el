@@ -167,7 +167,8 @@ Muse can make use of."
                               (const t))
                         (list :tag "Set variables"
                               (const :tag ":set" ":set")
-                              (repeat (list (symbol :tag "Variable")
+                              (repeat (list :inline t
+                                            (symbol :tag "Variable")
                                             (sexp :tag "Setting"))))
                         (list :tag "Visit links using"
                               (const :tag ":visit-link" ":visit-link")
