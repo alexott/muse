@@ -5,7 +5,7 @@
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
 ;; Version: 3.02.01
-;; Date: Thu 26-Sep-2005
+;; Date: Thu 26-Oct-2005
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)

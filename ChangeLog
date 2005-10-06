@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-06 19:40:37 GMT	Michael Olson <mwolson@gnu.org>	patch-247
+
+    Summary:
+      muse-groff.el: New publishing styles groff and groff-pdf.
+    Revision:
+      muse--main--1.0--patch-247
+
+    * AUTHORS: Add AJK.
+    
+    * lisp/muse.el: Use the correct month name for this release.  Oops.
+    
+    * muse.texi (Directives): The behavior for #date changed in 3.02.01.
+    
+    * experimental/muse-groff.el: New file containing the groff and groff-pdf
+      publishing styles.
+
+    new files:
+     experimental/.arch-ids/muse-groff.el.id
+     experimental/muse-groff.el
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse.el muse.texi
+
+
 2005-09-27 00:15:05 GMT	Michael Olson <mwolson@gnu.org>	patch-246
 
     Summary:

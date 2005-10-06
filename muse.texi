@@ -548,7 +548,7 @@ If this is not specified, Muse will attempt to figure it out from the
 
 @cindex #date
 @item #date
-The date that the document was originally published.
+The date that the document was last modified.
 
 This is used by publishing styles that are able to embed the date
 information.
