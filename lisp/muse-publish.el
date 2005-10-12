@@ -310,9 +310,13 @@ in-between."
   "Set to t while a page is being published.")
 (defvar muse-batch-publishing-p nil
   "Set to t while a page is being batch published.")
-(defvar muse-publishing-styles nil)
-(defvar muse-publishing-current-file nil)
-(defvar muse-publishing-current-style nil)
+(defvar muse-publishing-styles nil
+  "The publishing styles that Muse recognizes.
+This is automatically generated when loading publishing styles.")
+(defvar muse-publishing-current-file nil
+  "The file that is currently being published.")
+(defvar muse-publishing-current-style nil
+  "The style of the file that is currently being published.")
 (defvar muse-publishing-directives nil
   "An alist of publishing directives from the top of a file.")
 (defvar muse-publish-generate-contents nil
