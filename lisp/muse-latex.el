@@ -282,20 +282,22 @@ anything else that uses \\texttt{...}."
   :group 'muse-latex)
 
 (defun muse-latex-insert-anchor (anchor)
-  "Insert an anchor, either around the word at point, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (if (looking-at "<\\([^ />]+\\)>")
-      (let ((tag (match-string 1)))
-        (goto-char (match-end 0))
-        (insert "\\hypertarget{" anchor "}{")
-        (or (and (search-forward (format "</%s>" tag)
-                                 (muse-line-end-position) t)
-                 (goto-char (match-beginning 0)))
-            (forward-word 1))
-        (insert "}"))
-    (insert "\\hypertarget{" anchor "}{")
-    (forward-word 1)
-    (insert "}")))
+  "Insert an anchor, either around the word at point, or within a tag.
+If the anchor occurs at the end of a line, ignore it."
+  (unless (bolp)      ; point is placed after newline if anchor at end
+    (skip-chars-forward muse-regexp-space)
+    (if (looking-at "<\\([^ />]+\\)>")
+        (let ((tag (match-string 1)))
+          (goto-char (match-end 0))
+          (insert "\\hypertarget{" anchor "}{")
+          (or (and (search-forward (format "</%s>" tag)
+                                   (muse-line-end-position) t)
+                   (goto-char (match-beginning 0)))
+              (forward-word 1))
+          (insert "}"))
+      (insert "\\hypertarget{" anchor "}{")
+      (forward-word 1)
+      (insert "}"))))
 
 (defun muse-latex-markup-anchor ()
   (save-match-data

@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-13 03:38:30 GMT	Michael Olson <mwolson@gnu.org>	patch-249
+
+    Summary:
+      muse-latex: Ignore anchor if it occurs at end of line.
+    Revision:
+      muse--main--1.0--patch-249
+
+    * lisp/muse-latex.el (muse-latex-insert-anchor): If the anchor occurs at
+      the end of a line, ignore it.  Thanks to Na Li for the suggestion.
+
+    modified files:
+     ChangeLog experimental/muse-xml.el lisp/muse-latex.el
+
+
 2005-10-12 15:57:20 GMT	Michael Olson <mwolson@gnu.org>	patch-248
 
     Summary:
