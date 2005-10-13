@@ -40,8 +40,7 @@
 (require 'muse-regexps)
 
 (defgroup muse-html nil
-  "Options controlling the behavior of Muse HTML publishing.
-See `muse-html' for more information."
+  "Options controlling the behavior of Muse HTML publishing."
   :group 'muse-publish)
 
 (defcustom muse-html-extension ".html"

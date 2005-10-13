@@ -2,6 +2,29 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-13 04:07:36 GMT	Michael Olson <mwolson@gnu.org>	patch-250
+
+    Summary:
+      muse-mathml: New experimental embedded MathML publisher.
+    Revision:
+      muse--main--1.0--patch-250
+
+    * lisp/muse-html.el (muse-html): Fix docstring.
+    
+    * experimental/muse-mathml.el: New file that implements a <math> tag.
+      With the help of an external program, this will translate LaTeX code
+      between <math> and </math> to embedded MathML.  A new style called
+      "mathml" is defined, which is derived from the XHTML style, but with a
+      more suitable header.
+
+    new files:
+     experimental/.arch-ids/muse-mathml.el.id
+     experimental/muse-mathml.el
+
+    modified files:
+     ChangeLog lisp/muse-html.el
+
+
 2005-10-13 03:38:30 GMT	Michael Olson <mwolson@gnu.org>	patch-249
 
     Summary:
