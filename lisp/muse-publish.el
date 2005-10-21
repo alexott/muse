@@ -97,7 +97,7 @@ be returned."
     (1350 "^;\\s-+\\(.+\\)" 0 comment)
 
     ;; define anchor points
-    (1400 "^#\\(\\S-+\\)\\s-*" 0 anchor)
+    (1400 "^\\W*#\\(\\S-+\\)\\s-*" 0 anchor)
 
     ;; prevent emphasis characters in explicit links from being marked
     (1500 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
