@@ -438,7 +438,8 @@ system to an associated HTML coding system. If no match is found,
 
 (defun muse-html-markup-anchor ()
   (save-match-data
-    (muse-html-insert-anchor (match-string 1))) "")
+    (muse-html-insert-anchor (match-string 2)))
+  (match-string 1))
 
 (defun muse-html-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))

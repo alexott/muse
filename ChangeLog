@@ -2,6 +2,42 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-21 15:26:51 GMT	Michael Olson <mwolson@gnu.org>	patch-253
+
+    Summary:
+      Anchor fixes; muse-latex: Use \label{} and \ref{} for anchors.
+    Revision:
+      muse--main--1.0--patch-253
+
+    * experimental/muse-xml.el (muse-xml-insert-anchor)
+      (muse-xml-markup-anchor): Make sure we don't blow away the text just
+      before an anchor.  On all types but texinfo, insert a newline
+      immediately after the anchor.
+    
+    * lisp/muse-docbook.el (muse-docbook-insert-anchor)
+      (muse-docbook-markup-anchor): Ditto.
+    
+    * lisp/muse-html.el (muse-html-insert-anchor)
+      (muse-html-markup-anchor): Ditto.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-insert-anchor)
+      (muse-texinfo-markup-anchor): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Make text before
+      the anchor the first match group.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Use \ref{} for
+      internal-link rather than \hyperlink{}.  Thanks to Jim Ottaway for the
+      suggestion.
+      (muse-latex-insert-anchor): Use a simpler routine that inserts
+      \label{}.
+
+    modified files:
+     ChangeLog experimental/muse-xml.el lisp/muse-docbook.el
+     lisp/muse-html.el lisp/muse-latex.el lisp/muse-publish.el
+     lisp/muse-texinfo.el
+
+
 2005-10-21 14:39:50 GMT	Michael Olson <mwolson@gnu.org>	patch-252
 
     Summary:

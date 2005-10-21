@@ -190,8 +190,8 @@ differs little between the various styles."
 
 (defun muse-texinfo-markup-anchor ()
   (save-match-data
-    (muse-texinfo-insert-anchor (match-string 1)))
-  "")
+    (muse-texinfo-insert-anchor (match-string 2)))
+  (match-string 1))
 
 (defun muse-texinfo-markup-table ()
   (let* ((str (prog1

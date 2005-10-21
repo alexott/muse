@@ -254,12 +254,12 @@ match is found, `muse-docbook-charset-default' is used instead."
   (skip-chars-forward muse-regexp-space)
   (when (looking-at "<\\([^ />]+\\)>")
     (goto-char (match-end 0)))
-  (insert "<anchor id=\"" anchor "\" />"))
+  (insert "<anchor id=\"" anchor "\" />\n"))
 
 (defun muse-docbook-markup-anchor ()
   (save-match-data
-    (muse-docbook-insert-anchor (match-string 1)))
-  "")
+    (muse-docbook-insert-anchor (match-string 2)))
+  (match-string 1))
 
 (defun muse-docbook-markup-table ()
   (let* ((str (prog1
