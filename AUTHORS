@@ -50,6 +50,10 @@ This is a listing of authors of software in the `contrib' directory.
 
 Nathan Kent Bullock: getstamps.py, hardcodedates.py (no license)
 
+Na Li: Contributor to muse-latex2png.el (1 line changed).
+
+Chris Lowis: Contributor to muse-latex2png.el (1 line changed).
+
 Eric Marsden: cgi.el (assigned past and future changes to FSF)
 
 Ganesh Swami: muse-latex2png.el (GPL, has not assigned changes)
