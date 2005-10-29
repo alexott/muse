@@ -63,7 +63,7 @@
   :require 'muse-colors
   :group 'muse-mode)
 
-(defcustom muse-mode-auto-p t
+(defcustom muse-mode-auto-p nil
   "If non-nil, automagically determine when Muse mode should be activated."
   :type 'boolean
   :set (function
