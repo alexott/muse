@@ -396,6 +396,11 @@ If STYLE is not specified, use current style."
         (apply 'format text args)
       (or text ""))))
 
+(defsubst muse-insert-markup (&rest args)
+  (let ((beg (point)))
+    (insert args)
+    (muse-publish-mark-read-only beg (point))))
+
 (defun muse-find-markup-tag (keyword tagname style)
   (let ((def (assoc tagname (muse-style-element keyword style))))
     (or def
@@ -652,7 +657,8 @@ the file is published no matter what."
              (insert "\n\n"))
             ((not (eq (char-before (1- (point))) ?\n))
              (insert "\n")))
-      (insert (muse-markup-text 'section-close depth) "\n"))))
+      (muse-insert-markup (muse-markup-text 'section-close depth))
+      (insert "\n"))))
 
 (defun muse-publish-markup-directive (&optional name value)
   (unless name (setq name (match-string 1)))
@@ -754,34 +760,34 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
           (replace-match "")
           (delete-region beg end)
           (setq end (point-marker))
-          (insert close-tag)
+          (muse-insert-markup close-tag)
           (save-excursion
             (goto-char beg)
-            (insert open-tag)
+            (muse-insert-markup open-tag)
             (setq beg (point)))
           (when mark-read-only
             (muse-publish-escape-specials beg end t)
-            (muse-publish-mark-read-only (1- beg) (1+ end))))
+            (muse-publish-mark-read-only beg end)))
       (backward-char))
     nil))
 
 (defun muse-publish-markup-emdash ()
   (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'emdash))
+  (muse-insert-markup (muse-markup-text 'emdash))
   (if (eq (char-after) ?\<)
       (insert ?\n)))
 
 (defun muse-publish-markup-enddots ()
   (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'enddots)))
+  (muse-insert-markup (muse-markup-text 'enddots)))
 
 (defun muse-publish-markup-dots ()
   (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'dots)))
+  (muse-insert-markup (muse-markup-text 'dots)))
 
 (defun muse-publish-markup-rule ()
   (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'rule)))
+  (muse-insert-markup (muse-markup-text 'rule)))
 
 (defun muse-publish-markup-heading ()
   (let* ((len (length (match-string 1)))
@@ -798,9 +804,10 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
                        (t 'section-other-end))
                  len)))
     (delete-region (match-beginning 0) (match-end 0))
-    (insert start)
+    (muse-insert-markup start)
     (end-of-line)
-    (if end (insert end))
+    (when end
+      (muse-insert-markup end))
     (muse-publish-section-close len)))
 
 (defvar muse-publish-footnotes nil)
@@ -852,17 +859,19 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
             (goto-char end)
             (skip-chars-forward "\n")
             (delete-region start (point)))))
-      (insert (or footnotemark footnote)))))
+      (muse-insert-markup (or footnotemark footnote)))))
 
 (defun muse-publish-markup-fn-sep ()
   (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'fn-sep)))
+  (muse-insert-markup (muse-markup-text 'fn-sep)))
 
 (defun muse-publish-surround-text (beg-tag end-tag move-func)
   (let ((beg (point)) end)
     (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg)
-    (insert "\n\n" beg-tag)
+    (insert "\n\n")
+    (setq beg (point))
+    (muse-insert-markup beg-tag)
     (funcall move-func)
     (setq end (point-marker))
     (goto-char beg)
@@ -874,7 +883,8 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
     (setq beg (point))
     (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg))
-  (insert end-tag "\n"))
+  (muse-insert-markup end-tag)
+  (insert "\n"))
 
 (defsubst muse-forward-paragraph (&optional pattern)
   (if (re-search-forward (if pattern
@@ -914,7 +924,7 @@ like read-only from being inadvertently deleted."
                                           "]+[0-9]+\\."))))))
      (t
       (goto-char (match-beginning 1))
-      (insert (muse-markup-text 'begin-ddt))
+      (muse-insert-markup (muse-markup-text 'begin-ddt))
       (save-match-data
         (save-excursion
           (forward-line 1)
@@ -932,9 +942,10 @@ like read-only from being inadvertently deleted."
                                          muse-regexp-space
                                          "]+")
                                  nil t)
-          (replace-match (muse-markup-text 'start-dde))))
+          (replace-match "")
+          (muse-insert-markup (muse-markup-text 'start-dde))))
       (muse-forward-paragraph)
-      (insert (muse-markup-text 'end-ddt) ?\n)))))
+      (muse-insert-markup (muse-markup-text 'end-ddt) ?\n)))))
 
 (defun muse-publish-markup-quote ()
   "Markup a list entry or quoted paragraph.
@@ -955,13 +966,13 @@ like read-only from being inadvertently deleted."
                (>= (setq count (skip-chars-forward " ")) 0))
       (delete-region (muse-line-beginning-position) (point))
       (while (> count 0)
-        (insert markup-space)
+        (muse-insert-markup markup-space)
         (setq count (- count 2))))))
 
 (defun muse-publish-markup-verse ()
   (let ((leader (match-string 0)))
     (goto-char (match-beginning 0))
-    (insert (muse-markup-text 'begin-verse))
+    (muse-insert-markup (muse-markup-text 'begin-verse))
     (while (looking-at leader)
       (replace-match "")
       (muse-publish-markup-leading-space)
@@ -970,7 +981,7 @@ like read-only from being inadvertently deleted."
         (cond
          ((bolp)
           (let ((text (muse-markup-text 'empty-verse-line)))
-            (if text (insert text))))
+            (if text (muse-insert-markup text))))
          ((save-excursion
             (save-match-data
               (forward-line 1)
@@ -980,19 +991,19 @@ like read-only from being inadvertently deleted."
                   (not (looking-at leader)))))
           (let ((begin-text (muse-markup-text 'begin-last-stanza-line))
                 (end-text (muse-markup-text 'end-last-stanza-line)))
-            (when end-text (insert end-text))
+            (when end-text (muse-insert-markup end-text))
             (goto-char beg)
-            (when begin-text (insert begin-text))
+            (when begin-text (muse-insert-markup begin-text))
             (end-of-line)))
          (t
           (let ((begin-text (muse-markup-text 'begin-verse-line))
                 (end-text (muse-markup-text 'end-verse-line)))
-            (when end-text (insert end-text))
+            (when end-text (muse-insert-markup end-text))
             (goto-char beg)
-            (when begin-text (insert begin-text))
+            (when begin-text (muse-insert-markup begin-text))
             (end-of-line))))
         (forward-line 1))))
-  (insert (muse-markup-text 'end-verse) ?\n))
+  (muse-insert-markup (muse-markup-text 'end-verse) ?\n))
 
 (defun muse-publish-markup-table ()
   "Style does not support tables.")

@@ -2,6 +2,38 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-29 19:53:49 GMT	Michael Olson <mwolson@gnu.org>	patch-258
+
+    Summary:
+      Pave the way for entire-document escaping of specials.
+    Revision:
+      muse--main--1.0--patch-258
+
+    * lisp/muse-mode.el (muse-mode): Silence compiler warning.
+    
+    * lisp/muse-publish.el (muse-insert-markup): New function that is used
+      for inserting markup text.  Currently, this inserts the text and adds
+      the read-only property.  This should permit us to deal with escaping
+      specials in the entire document, later on.
+      (muse-publish-section-close, muse-publish-markup-word)
+      (muse-publish-markup-emdash, muse-publish-markup-enddots)
+      (muse-publish-markup-dots, muse-publish-markup-rule)
+      (muse-publish-markup-heading, muse-publish-markup-footnote)
+      (muse-publish-markup-fn-sep, muse-publish-surround-text)
+      (muse-publish-markup-list, muse-publish-markup-leading-space)
+      (muse-publish-markup-verse): Use muse-insert-markup instead of
+      `insert'.  Don't use this on whitespace, just the markup text itself.
+    
+    * muse-book.el (muse-book-publish-chapter, muse-book-publish-project):
+      Ditto.
+    
+    * muse-journal.el (muse-journal-latex-qotd-tag): Ditto.
+
+    modified files:
+     ChangeLog lisp/muse-book.el lisp/muse-journal.el
+     lisp/muse-mode.el lisp/muse-publish.el
+
+
 2005-10-29 09:15:07 GMT	Michael Olson <mwolson@gnu.org>	patch-257
 
     Summary:

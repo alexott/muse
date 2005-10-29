@@ -499,9 +499,9 @@ For more on the structure of this list, see
 
 (defun muse-journal-latex-qotd-tag (beg end)
   (goto-char beg)
-  (insert (muse-markup-text 'begin-quote))
+  (muse-insert-markup (muse-markup-text 'begin-quote))
   (goto-char end)
-  (insert (muse-markup-text 'end-quote)))
+  (muse-insert-markup (muse-markup-text 'end-quote)))
 
 (defun muse-journal-rss-munge-buffer ()
   (goto-char (point-min))

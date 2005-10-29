@@ -175,13 +175,15 @@ so only enable this if you don't use either of these."
   (set (make-local-variable 'paragraph-start)
        (concat paragraph-start "\\|\\s-+\\(-\\|[0-9]+\\.\\)\\s-+"
                "\\|\\[[0-9]+\\]\\s-*"))
-  ;; If we're using Emacs21, this makes flyspell work like it should
-  (setq flyspell-generic-check-word-p 'muse-mode-flyspell-p)
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
        "; ")
+  ;; If we're using Emacs21, this makes flyspell work like it should
+  (when (boundp 'flyspell-generic-check-word-p)
+    (set (make-local-variable 'flyspell-generic-check-word-p)
+         'muse-mode-flyspell-p))
+  ;; If pcomplete is available, set it up
   (when (featurep 'pcomplete)
-    ;; If pcomplete is available, set it up
     (set (make-local-variable 'pcomplete-default-completion-function)
          'muse-mode-completions)
     (set (make-local-variable 'pcomplete-command-completion-function)
