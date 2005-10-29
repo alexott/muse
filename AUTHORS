@@ -25,14 +25,21 @@ Andrew J. Korty: Author of muse-groff.el
 
 Peter K. Lee: Contributor to muse-xml.el.
               11 lines changed in muse-publish.el.
-              (no assignment yet, asking for one)
+              (assignment pending)
+
+Jim Ottaway: Contributor,
+             muse-latex.el: 1 line changed
+             muse-mode.el: 7 lines changed
+             muse-wiki.el: 7 lines changed
+             (assignment pending)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
 
 Dale P. Smith: Contributor
                (disclaimed changes to Emacs)
 
-John Sullivan: Contributor -- documentation (employed by FSF)
+John Sullivan: Contributor -- documentation
+               (employed by FSF)
 
 Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               basis for muse-blosxom.el

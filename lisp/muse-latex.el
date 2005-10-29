@@ -169,7 +169,7 @@ For more on the structure of this list, see
     (section-other   . "\\paragraph{")
     (section-other-end . "}")
     (footnote        . "\\footnote{")
-    (footnote-end    . "{")
+    (footnote-end    . "}")
     (footnotemark    . "\\footnotemark[%d]")
     (footnotetext    . "\\footnotetext[%d]{")
     (footnotetext-end . "}")

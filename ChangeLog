@@ -2,6 +2,66 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-29 03:22:40 GMT	Michael Olson <mwolson@gnu.org>	patch-255
+
+    Summary:
+      Merged from jeho@jeho.org--2005 (patch 0-11)
+    Revision:
+      muse--main--1.0--patch-255
+
+    * AUTHORS: Update.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Use the proper
+      footnode-end mark.
+    
+    * lisp/muse-mode.el (muse-link-at-point): Avoid error with intangible
+      links.
+      (muse-visit-link-default): Save position before searching, in case the
+      search fails.  Use a regexp search.  Start from beginning of document.
+      Refine search regexp.
+    
+    * lisp/muse-wiki.el (muse-wiki-ignore-bare-project-names): New option
+      that indicated whether project names without a page specifier will be
+      considered links.
+      (muse-wiki-handle-interwiki): Consult
+      `muse-wiki-ignore-bare-project-names'.
+    
+    Patches applied:
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-6
+       muse-mode.el fix for muse-visit-link-default
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-7
+       muse-mode.el fix intangible problem in muse-link-at-point
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-8
+       muse-wiki: added option for not rendering bare project names as links
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-10
+       muse-mode.el: fix finding an anchor
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-11
+       muse-latex.el: fix footnote-end
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-latex.el lisp/muse-mode.el
+     lisp/muse-wiki.el
+
+    new patches:
+     jeho@jeho.org--2005/muse--jeho--1.0--base-0
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-1
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-2
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-3
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-4
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-5
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-6
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-7
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-8
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-9
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-10
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-11
+
+
 2005-10-28 17:05:42 GMT	Michael Olson <mwolson@gnu.org>	patch-254
 
     Summary:
