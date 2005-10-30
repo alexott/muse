@@ -131,6 +131,8 @@ For more on the structure of this list, see
     (internal-link   . "@ref{%s, %s}")
     (email-addr      . "@email{%s}")
     (emdash          . "---")
+    (comment-begin   . "@ignore\n")
+    (comment-end     . "\n@end ignore\n")
     (rule            . "@sp 1")
     (enddots         . "@enddots")
     (dots            . "@dots")

@@ -137,6 +137,8 @@ For more on the structure of this list, see
     (url-link        . "<link type=\"url\" href=\"%s\">%s</link>")
     (email-addr      . "<link type=\"email\" href=\"%s\">%s</link>")
     (emdash          . " &mdash; ")
+    (comment-begin   . "<!-- ")
+    (comment-end     . " -->")
     (rule            . "<hr>")
     (fn-sep          . "<hr>\n")
     (enddots         . "....")

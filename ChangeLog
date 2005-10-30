@@ -2,6 +2,43 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-30 20:02:19 GMT	Michael Olson <mwolson@gnu.org>	patch-261
+
+    Summary:
+      muse-latex2png: Put png files in correct place.  all: Introduce comment syntax.
+    Revision:
+      muse--main--1.0--patch-261
+
+    * experimental/muse-xml.el (muse-xml-markup-strings): Produce markup for
+      'comment-begin and 'comment-end.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Ditto.
+    
+    * lisp/muse-html.el (muse-html-markup-strings): Ditto.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Ditto.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Ditto.  Remove second
+      argument for "\ref", since it isn't valid LaTeX.
+    
+    * lisp/muse-latex2png.el (muse-publish-latex-tag): Use
+      muse-publishing-current-output-path rather than
+      muse-publishing-current-file.
+    
+    * lisp/muse-publish.el (muse-publishing-current-output-path): New
+      variable that determines where the current file is being published to.
+      (muse-publish-file): Set muse-publishing-current-output-path.
+      (muse-publish-comments-p): New option that determines whether comments
+      should be deleted or published.  Default is to delete.
+      (muse-publish-markup-comment, muse-publish-comment-tag): Use
+      muse-publish-comments-p.
+
+    modified files:
+     ChangeLog experimental/muse-xml.el lisp/muse-docbook.el
+     lisp/muse-html.el lisp/muse-latex.el lisp/muse-latex2png.el
+     lisp/muse-publish.el lisp/muse-texinfo.el
+
+
 2005-10-30 19:07:30 GMT	Michael Olson <mwolson@gnu.org>	patch-260
 
     Summary:

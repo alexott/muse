@@ -63,7 +63,7 @@ Old files with PREFIX in the name are deleted."
 (defun muse-publish-latex-tag (beg end attrs)
   (let ((end-marker (set-marker (make-marker) (1+ end)))
         (pubdir (concat (file-name-directory
-                         muse-publishing-current-file)
+                         muse-publishing-current-output-path)
                         "/latex/")))
     (save-restriction
       (narrow-to-region beg end)

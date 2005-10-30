@@ -61,6 +61,8 @@
 \\usepackage{hyperref}
 \\usepackage[pdftex]{graphicx}
 
+\\newcommand{\\comment}[1]{}
+
 \\begin{document}
 
 \\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
@@ -150,9 +152,11 @@ For more on the structure of this list, see
     (image-link      . "\\includegraphics[width=\\textwidth]{%s}")
     (url-with-image  . "%% %s\n\\includegraphics[width=\\textwidth]{%s}")
     (url-link        . "\\href{%s}{%s}")
-    (internal-link   . "\\ref{%s}{%s}")
+    (internal-link   . "\\ref{%s}")
     (email-addr      . "\\verb|%s|")
     (emdash          . "---")
+    (comment-begin   . "\\comment{")
+    (commend-end     . "}")
     (rule            . "\\bigskip")
     (enddots         . "\\ldots{}")
     (dots            . "\\dots{}")

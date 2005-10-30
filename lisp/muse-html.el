@@ -272,6 +272,8 @@ For more on the structure of this list, see
     (internal-link   . "<a href=\"#%s\">%s</a>")
     (email-addr      . "<a href=\"mailto:%s\">%s</a>")
     (emdash          . " &mdash; ")
+    (comment-begin   . "<!-- ")
+    (comment-end     . " -->")
     (rule            . "<hr>")
     (fn-sep          . "<hr>\n")
     (enddots         . "....")
