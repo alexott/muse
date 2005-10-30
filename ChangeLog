@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-30 18:40:56 GMT	Michael Olson <mwolson@gnu.org>	patch-259
+
+    Summary:
+      Move latex2png.el to lisp/, muse-latex: Emphasize table elements.
+    Revision:
+      muse--main--1.0--patch-259
+
+    * AUTHORS: Update.
+    
+    * lisp/muse-latex.el (muse-latex-markup-table): Implement underlining of
+      table headers and overlining table footers, as suggested by Trent Buck.
+    
+    * contrib/muse-latex2png.el: Move to the lisp/ directory -- the original
+      author has agreed to send in a copyright assignment form.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-latex.el lisp/muse-latex2png.el
+
+    renamed files:
+     contrib/.arch-ids/muse-latex2png.el.id
+       ==> lisp/.arch-ids/muse-latex2png.el.id
+     contrib/muse-latex2png.el
+       ==> lisp/muse-latex2png.el
+
+
 2005-10-29 19:53:49 GMT	Michael Olson <mwolson@gnu.org>	patch-258
 
     Summary:

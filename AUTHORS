@@ -8,6 +8,9 @@ John Wiegley: Original author
 
 Michael Olson: Current maintainer
 
+Trent Buck: Contributor,
+            muse-latex.el: 4 lines changed
+
 Sacha Chua: Contributor -- documentation
             (assigned past and future changes)
 
@@ -41,13 +44,18 @@ Dale P. Smith: Contributor
 John Sullivan: Contributor -- documentation
                (employed by FSF)
 
+Ganesh Swami: Original author of muse-latex2png.el
+              (assignment pending)
+
 Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               basis for muse-blosxom.el
               (assigned past and future changes)
 
-Sergey Vlasov: Contributor (3 lines changed in muse-colors.el)
+Sergey Vlasov: Contributor,
+               muse-colors.el: 3 lines changed
 
-Lan Yufeng: Contributor (1 line changed in muse-colors.el)
+Lan Yufeng: Contributor,
+            muse-colors.el: 1 line changed
 
 
 Contributed software
@@ -62,5 +70,3 @@ Na Li: Contributor to muse-latex2png.el (1 line changed).
 Chris Lowis: Contributor to muse-latex2png.el (1 line changed).
 
 Eric Marsden: cgi.el (assigned past and future changes to FSF)
-
-Ganesh Swami: muse-latex2png.el (GPL, has not assigned changes)
