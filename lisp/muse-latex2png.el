@@ -55,8 +55,7 @@ Old files with PREFIX in the name are deleted."
            (file-directory-p pubdir))
       (progn
         (let ((files (file-expand-wildcards (concat pubdir prefix "_*") t)))
-          (copy-file file (concat output-dir "/latex/"
-                                  (file-name-nondirectory file)) t)
+          (copy-file file (concat pubdir (file-name-nondirectory file)) t)
           (delete-file file)
           (concat "./latex/" (file-name-nondirectory file))))
     (message "The latex folder does not exist!")))

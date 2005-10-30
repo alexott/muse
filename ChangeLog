@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-30 19:07:30 GMT	Michael Olson <mwolson@gnu.org>	patch-260
+
+    Summary:
+      muse-latex2png: Fix compiler warning, muse-project: add with-muse-project.
+    Revision:
+      muse--main--1.0--patch-260
+
+    * AUTHORS: Bookkeeping.
+    
+    * lisp/muse-latex2png.el (latex2png-move2pubdir): Fix compiler warning.
+      `output-dir' is not defined, so let's just use pubdir.
+    
+    * lisp/muse-project.el (with-muse-project): New function courtesy of Jim
+      Ottaway.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-latex2png.el lisp/muse-project.el
+
+
 2005-10-30 18:40:56 GMT	Michael Olson <mwolson@gnu.org>	patch-259
 
     Summary:

@@ -57,6 +57,19 @@ Each function is passed the project object, a cons with the format
 has been modified via the customize interface.")
 (make-variable-buffer-local 'muse-project-alist-using-customize)
 
+(defmacro with-muse-project (project &rest body)
+  `(progn
+     (unless (muse-project ,project)
+       (error "Can't find project %s" ,project))
+     (with-temp-buffer
+       (muse-mode)
+       (setq muse-current-project (muse-project ,project))
+       (muse-project-set-variables)
+       ,@body)))
+
+(put 'with-muse-project 'lisp-indent-function 0)
+(put 'with-muse-project 'edebug-form-spec '(sexp body))
+
 (defun muse-project-alist-get (sym)
   "Turn `muse-project-alist' into something we can customize easily."
   (when (boundp sym)
