@@ -406,7 +406,7 @@ If STYLE is not specified, use current style."
 
 (defsubst muse-insert-markup (&rest args)
   (let ((beg (point)))
-    (insert args)
+    (apply 'insert args)
     (muse-publish-mark-read-only beg (point))))
 
 (defun muse-find-markup-tag (keyword tagname style)
