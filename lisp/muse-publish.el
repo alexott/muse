@@ -686,7 +686,7 @@ the file is published no matter what."
 (defun muse-publish-markup-anchor () "")
 
 (defun muse-publish-markup-comment ()
-  (if (null muse-publish-markup-comments-p)
+  (if (null muse-publish-comments-p)
       ""
     (goto-char (match-end 0))
     (muse-insert-markup (muse-markup-text 'comment-end))
@@ -1182,7 +1182,7 @@ like read-only from being inadvertently deleted."
     (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-comment-tag (beg end)
-  (if (null muse-publish-markup-comments-p)
+  (if (null muse-publish-comments-p)
       (delete-region beg end)
     (goto-char end)
     (muse-insert-markup (muse-markup-text 'comment-end))
