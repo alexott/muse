@@ -528,13 +528,16 @@ If STYLE is not specified, use current style."
                              "%B %e, %Y"
                              (nth 5 (file-attributes
                                      muse-publishing-current-file))))))
-        (muse-publishing-p t))
+        (muse-publishing-p t)
+        (inhibit-read-only t))
     (run-hooks 'muse-before-publish-hook)
     (muse-publish-markup-region (point-min) (point-max) title style)
     (goto-char (point-min))
-    (if style-header (muse-insert-file-or-string style-header title))
+    (when style-header
+      (muse-insert-file-or-string style-header title))
     (goto-char (point-max))
-    (if style-footer (muse-insert-file-or-string style-footer title))
+    (when style-footer
+      (muse-insert-file-or-string style-footer title))
     (muse-style-run-hooks :after style)
     (run-hooks 'muse-after-publish-hook)))
 
