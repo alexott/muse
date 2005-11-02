@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-02 03:56:03 GMT	Michael Olson <mwolson@gnu.org>	patch-265
+
+    Summary:
+      Temporary workaround to make lists work properly again.
+    Revision:
+      muse--main--1.0--patch-265
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Don't add read-only
+      properties to lists, since we need to be able to reduce them in later
+      publishing rules for muse-html.  I'd really like to change the way
+      lists are marked up so as to obviate the need for this.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-11-01 21:42:57 GMT	Michael Olson <mwolson@gnu.org>	patch-264
 
     Summary:

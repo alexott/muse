@@ -892,7 +892,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
     (delete-region (point) beg)
     (insert "\n\n")
     (setq beg (point))
-    (muse-insert-markup beg-tag)
+    (insert beg-tag)
     (funcall move-func)
     (setq end (point-marker))
     (goto-char beg)
@@ -904,7 +904,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
     (setq beg (point))
     (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg))
-  (muse-insert-markup end-tag)
+  (insert end-tag)
   (insert "\n"))
 
 (defsubst muse-forward-paragraph (&optional pattern)
