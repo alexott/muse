@@ -339,9 +339,15 @@ anything else that uses \\texttt{...}."
    file output-path final-target "PDF"
    (function
     (lambda (file output-path)
-      (let ((command (format "cd \"%s\"; pdflatex \"%s\"; pdflatex \"%s\""
-                             (file-name-directory output-path) file file)))
-        (shell-command command))))
+      (let ((command (format "cd \"%s\"; pdflatex \"%s\""
+                             (file-name-directory output-path) file))
+            (times 0)
+            result)
+        (while (and (< times 3)
+                    (or (not (numberp result))
+                        (not (eq result 0))))
+          (setq result (shell-command command)
+                times (1+ times))))))
    ".aux" ".toc" ".out" ".log"))
 
 (unless (assoc "latex" muse-publishing-styles)
