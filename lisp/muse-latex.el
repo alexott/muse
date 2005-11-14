@@ -343,11 +343,19 @@ anything else that uses \\texttt{...}."
                              (file-name-directory output-path) file))
             (times 0)
             result)
+        ;; XEmacs can sometimes return a non-number result.  We'll err
+        ;; on the side of caution by continuing to attempt to generate
+        ;; the PDF if this happens and treat the final result as
+        ;; successful.
         (while (and (< times 3)
                     (or (not (numberp result))
                         (not (eq result 0))))
           (setq result (shell-command command)
-                times (1+ times))))))
+                times (1+ times)))
+        (if (or (not (numberp result))
+                (eq result 0))
+            t
+          nil))))
    ".aux" ".toc" ".out" ".log"))
 
 (unless (assoc "latex" muse-publishing-styles)
