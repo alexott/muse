@@ -94,7 +94,7 @@ If non-nil, publish comments using the markup of the current style."
     (1100 ,(concat "[" muse-regexp-blank "]+$") 0 "")
 
     ;; Handle any leading #directives
-    (1200 "\\`#\\([a-zA-Z]+\\)\\s-+\\(.+\\)\n+" 0 directive)
+    (1200 "\\`#\\([a-zA-Z-]+\\)\\s-+\\(.+\\)\n+" 0 directive)
 
     ;; markup tags
     (1300 muse-tag-regexp 0 tag)
