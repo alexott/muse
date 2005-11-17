@@ -257,7 +257,6 @@ system to an associated CJK coding system."
 
 (defcustom muse-latex-markup-texttt-specials
   '((?\n . "\\\n")
-    (?\\ . "\\textbackslash{}")
     (?_  . "\\textunderscore{}")
     (?\< . "\\textless{}")
     (?\> . "\\textgreater{}")
