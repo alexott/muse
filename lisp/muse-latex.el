@@ -119,7 +119,7 @@ filename."
     (10000 "\\([0-9]+\\)-\\([0-9]+\\)" 0 "\\1--\\2")
 
     ;; characters which need quoting
-    (10010 "\\([$#%&]\\)" 0 "\\\\\\1")
+    (10010 "\\([$#%]\\)" 0 "\\\\\\1")
     (10020 "_" 0 "\\\\textunderscore{}")
     (10030 "<" 0 "\\\\textless{}")
     (10040 ">" 0 "\\\\textgreater{}")
@@ -256,9 +256,18 @@ system to an associated CJK coding system."
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-texttt-specials
-  '((?^ . "\\^{}")
+  '((?\n . "\\\n")
+    (?\\ . "\\textbackslash{}")
+    (?_  . "\\textunderscore{}")
+    (?\< . "\\textless{}")
+    (?\> . "\\textgreater{}")
+    (?^  . "\\^{}")
+    (?\$ . "\\$")
+    (?\% . "\\%")
     (?\{ . "\\{")
-    (?\} . "\\}"))
+    (?\} . "\\}")
+    (?\& . "\\&")
+    (?\# . "\\#"))
   "A table of characters which must be represented specially.
 This applies to text in \\texttt{} regions."
   :type '(alist :key-type character :value-type string)
