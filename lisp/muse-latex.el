@@ -273,7 +273,8 @@ If the anchor occurs at the end of a line, ignore it."
 
 (defun muse-latex-markup-anchor ()
   (save-match-data
-    (muse-latex-insert-anchor (match-string 1))) "")
+    (muse-latex-insert-anchor (match-string 1)))
+  (match-string 1))
 
 (defun muse-latex-markup-table ()
   (let* ((str (prog1
