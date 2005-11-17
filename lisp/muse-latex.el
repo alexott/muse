@@ -281,12 +281,16 @@ If the anchor occurs at the end of a line, ignore it."
                   (match-string 1)
                 (delete-region (match-beginning 0) (match-end 0))))
          (fields (split-string str "\\s-*|+\\s-*"))
-         ;; FIXME: `type' isn't used
          (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
                     (length (match-string 1 str)))))
     (insert "\\begin{tabular}{" (make-string (length fields) ?l) "}\n")
+    (when (= type 3)
+      (insert "\\hline\n"))
     (insert (mapconcat 'identity fields " & "))
-    (insert " \\\\\n\\end{tabular}")))
+    (insert " \\\\\n")
+    (when (= type 2)
+      (insert "\\hline\n"))
+    (insert "\\end{tabular}")))
 
 (defun muse-latex-fixup-dquotes ()
   "Fixup double quotes."
