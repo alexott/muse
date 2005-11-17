@@ -35,6 +35,9 @@
 ;; Lan Yufeng (nlany DOT web AT gmail DOT com) found an error where
 ;; headings were being given the wrong face, contributing a patch to
 ;; fix this.
+;;
+;; Sergey Vlasov (vsu AT altlinux DOT ru) fixed an issue with coloring
+;; links that are in consecutive lines.
 
 ;;; Code:
 
@@ -565,12 +568,9 @@ Functions should not modify the contents of the buffer."
 
 (defsubst muse-link-properties (help-str &optional face)
   (append (if face
-              (list 'face face 'rear-nonsticky t
-                    muse-keymap-property muse-mode-local-map)
-            (list 'invisible 'muse 'intangible t 'rear-nonsticky t
-                  muse-keymap-property muse-mode-local-map))
-          (list 'mouse-face 'highlight
-                'help-echo help-str
+              (list 'face face 'mouse-face 'highlight)
+            (list 'invisible 'muse 'intangible t))
+          (list 'help-echo help-str 'rear-nonsticky t
                 muse-keymap-property muse-mode-local-map)))
 
 (defun muse-link-face (link-name &optional explicit)

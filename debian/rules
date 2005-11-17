@@ -57,6 +57,7 @@ install: build
 
 	# Other documentation
 	install -m 0644 AUTHORS ${PKGDIR}${DOCDIR}/AUTHORS
+	install -m 0644 debian/NEWS ${PKGDIR}${DOCDIR}/NEWS.Debian
 	install -m 0644 README ${PKGDIR}${DOCDIR}/README
 	install -m 0644 ChangeLog ${PKGDIR}${DOCDIR}/changelog
 	cat ChangeLog.2004 >> ${PKGDIR}${DOCDIR}/changelog

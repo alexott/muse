@@ -14,7 +14,7 @@ Sacha Chua: Contributor -- documentation
 Brad Collins: Contributor, author of examples/muse.rnc schema
               (assigned past and future changes)
 
-Li Daobing: Contributor
+Li Daobing: Contributor, author of muse-mathml.el
             (assigned past and future changes)
 
 Yann Hodique: Contributor, author of muse-wiki.el
@@ -22,18 +22,27 @@ Yann Hodique: Contributor, author of muse-wiki.el
 
 Peter K. Lee: Contributor to muse-xml.el.
               11 lines changed in muse-publish.el.
-              (no assignment yet, asking for one)
+              (assignment pending)
+
+Jim Ottaway: Contributor,
+             muse-latex.el: 1 line changed
+             muse-mode.el: 7 lines changed
+             muse-wiki.el: 7 lines changed
+             (assignment pending)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
 
 Dale P. Smith: Contributor
                (disclaimed changes to Emacs)
 
-John Sullivan: Contributor -- documentation (employed by FSF)
+John Sullivan: Contributor -- documentation
+               (employed by FSF)
 
 Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               basis for muse-blosxom.el
               (assigned past and future changes)
+
+Sergey Vlasov: Contributor (3 lines changed in muse-colors.el)
 
 Lan Yufeng: Contributor (1 line changed in muse-colors.el)
 

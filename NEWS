@@ -1,5 +1,47 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.02.01
+
+** Configuration
+
+*** `muse-project-alist' -- This variable should now save customizations
+to the correct form in the .emacs file.  Before, it was saving an
+intermediate form of the variable.
+
+If you have used the customize interface in the previous release of
+Muse to set `muse-project-alist', please do the following to import
+your settings.
+
+ - Open your .emacs file.
+ - Move the point to where `muse-project-alist' is set.
+ - Type `M-: (setq muse-project-alist-using-customize t) RET'.
+ - Type `C-M-x'.
+ - Type `M-x customize-save-variable RET muse-project-alist RET'.
+
+*** `muse-project-alist' -- A bug involving the deleting of items
+using Emacs21 and XEmacs21 has been fixed.
+
+** Muse Mode
+
+*** Links should no longer prevent moving the point, and help text for
+links should no longer cause errors to occur.
+
+** Publishing
+
+*** If 2 or more blank lines separate list or table items, each item
+will be published in a separate list or table.
+
+*** The #date directive is now populated by default with the last
+modified time of each file, rather than the current time of day.  To
+use this value, add '<lisp>(muse-publishing-directive "date")<lisp>'
+to your header or footer.
+
+** HTML publishing
+
+*** `muse-xhtml-style-sheet' -- New option that indicates the style
+settings to use for XHTML documents.  This may be either a filename or
+a string of stylesheet settings.
+
 * Changes in Muse 3.02
 
 ** New modules

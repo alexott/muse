@@ -97,7 +97,7 @@ be returned."
     (1350 "^;\\s-+\\(.+\\)" 0 comment)
 
     ;; define anchor points
-    (1400 "^#\\(\\S-+\\)\\s-*" 0 anchor)
+    (1400 "^\\W*#\\(\\S-+\\)\\s-*" 0 anchor)
 
     ;; prevent emphasis characters in explicit links from being marked
     (1500 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
@@ -507,7 +507,10 @@ If STYLE is not specified, use current style."
         (muse-publishing-directives
          (list (cons "title" title)
                (cons "author" (user-full-name))
-               (cons "date" (format-time-string "%B %e, %Y"))))
+               (cons "date" (format-time-string
+                             "%B %e, %Y"
+                             (nth 5 (file-attributes
+                                     muse-publishing-current-file))))))
         (muse-publishing-p t))
     (run-hooks 'muse-before-publish-hook)
     (muse-publish-markup-region (point-min) (point-max) title style)

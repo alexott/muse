@@ -12,7 +12,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for the Emacs Muse version 3.02.
+This manual is for the Emacs Muse version 3.02.01.
 
 Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
@@ -383,6 +383,8 @@ output as HTML to the directory @file{~/public_html}, and as PDF to
 the directory @file{~/public_html/pdf}.  Within any project page, you
 may create a link to other pages using the syntax @samp{[[pagename]]}.
 
+@c PRE3_03: Give more examples
+@c PRE3_03: Describe :set and other options fully
 
 @node Keystroke Summary, Markup Rules, Projects, Top
 @comment  node-name,  next,  previous,  up

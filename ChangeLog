@@ -2,6 +2,238 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-10-29 09:15:07 GMT	Michael Olson <mwolson@gnu.org>	patch-257
+
+    Summary:
+      By default, use ".muse" extension and do not detect by pathname.
+    Revision:
+      muse--main--1.0--patch-257
+
+    * lisp/muse-mode.el (muse-mode-auto-p): Default to nil.
+      (muse-file-extension): Default to "muse".  This has the effect of
+      making Emacs associate the ".muse" extension with muse-mode, without
+      trying to figure things out from the path to the file.  The former
+      method is usually considered to be best, so we'll go with it.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse.el
+
+
+2005-10-29 07:10:16 GMT	Michael Olson <mwolson@gnu.org>	patch-256
+
+    Summary:
+      Emacs 21 flyspell fix.
+    Revision:
+      muse--main--1.0--patch-256
+
+    * lisp/muse-mode.el (muse-mode): I finally figured out how to get
+      flyspell to pay attention to my muse-mode-flyspell-p constraints, which
+      means that the version of flyspell that comes with Emacs21 will no
+      longer mess up links.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
+2005-10-29 03:22:40 GMT	Michael Olson <mwolson@gnu.org>	patch-255
+
+    Summary:
+      Merged from jeho@jeho.org--2005 (patch 0-11)
+    Revision:
+      muse--main--1.0--patch-255
+
+    * AUTHORS: Update.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Use the proper
+      footnode-end mark.
+    
+    * lisp/muse-mode.el (muse-link-at-point): Avoid error with intangible
+      links.
+      (muse-visit-link-default): Save position before searching, in case the
+      search fails.  Use a regexp search.  Start from beginning of document.
+      Refine search regexp.
+    
+    * lisp/muse-wiki.el (muse-wiki-ignore-bare-project-names): New option
+      that indicated whether project names without a page specifier will be
+      considered links.
+      (muse-wiki-handle-interwiki): Consult
+      `muse-wiki-ignore-bare-project-names'.
+    
+    Patches applied:
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-6
+       muse-mode.el fix for muse-visit-link-default
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-7
+       muse-mode.el fix intangible problem in muse-link-at-point
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-8
+       muse-wiki: added option for not rendering bare project names as links
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-10
+       muse-mode.el: fix finding an anchor
+    
+     * jeho@jeho.org--2005/muse--jeho--1.0--patch-11
+       muse-latex.el: fix footnote-end
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-latex.el lisp/muse-mode.el
+     lisp/muse-wiki.el
+
+    new patches:
+     jeho@jeho.org--2005/muse--jeho--1.0--base-0
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-1
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-2
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-3
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-4
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-5
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-6
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-7
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-8
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-9
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-10
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-11
+
+
+2005-10-21 14:39:50 GMT	Michael Olson <mwolson@gnu.org>	patch-252
+
+    Summary:
+      Allow anchors to occur near (rather than at) the beginning of line.
+    Revision:
+      muse--main--1.0--patch-252
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Allow non-word
+      characters before anchor, like " - ".  Thanks to Phillip Lord for the
+      suggestion.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
+2005-10-13 04:20:29 GMT	Michael Olson <mwolson@gnu.org>	patch-251
+
+    Summary:
+      Minor bookkeeping update.
+    Revision:
+      muse--main--1.0--patch-251
+
+    * AUTHORS: Update information.
+
+    modified files:
+     AUTHORS ChangeLog
+
+
+2005-10-13 03:38:30 GMT	Michael Olson <mwolson@gnu.org>	patch-249
+
+    Summary:
+      muse-latex: Ignore anchor if it occurs at end of line.
+    Revision:
+      muse--main--1.0--patch-249
+
+    * lisp/muse-latex.el (muse-latex-insert-anchor): If the anchor occurs at
+      the end of a line, ignore it.  Thanks to Na Li for the suggestion.
+
+    modified files:
+     ChangeLog experimental/muse-xml.el lisp/muse-latex.el
+
+
+2005-09-27 00:15:05 GMT	Michael Olson <mwolson@gnu.org>	patch-246
+
+    Summary:
+      Figure out syntax of :set.
+    Revision:
+      muse--main--1.0--patch-246
+
+    * lisp/muse-project.el (muse-project): Make the :set option inline to
+      match the actual syntax that Muse recognizes.
+    
+    * muse.texi (Projects): Note that I need to work on this section.
+
+    modified files:
+     ChangeLog lisp/muse-project.el muse.texi
+
+
+2005-09-26 22:31:57 GMT	Michael Olson <mwolson@gnu.org>	patch-245
+
+    Summary:
+      Release Emacs Muse 3.02.01.
+    Revision:
+      muse--main--1.0--patch-245
+
+    * NEWS: Update entries for Muse 3.02.01.
+    
+    * debian/rules: Install NEWS.Debian.
+    
+    * debian/NEWS: New file that contains Debian-related news items.
+    
+    * examples/mwolson/muse-init.el: Update with my latest changes.
+    
+    * examples/mwolson/templates/footer.html: Use
+      `muse-publishing-directive'.
+
+    new files:
+     debian/.arch-ids/NEWS.id debian/NEWS
+
+    modified files:
+     ChangeLog Makefile.defs NEWS debian/changelog debian/rules
+     examples/mwolson/muse-init.el
+     examples/mwolson/templates/footer.html lisp/muse.el muse.texi
+
+
+2005-09-26 21:23:49 GMT	Michael Olson <mwolson@gnu.org>	patch-244
+
+    Summary:
+      Fix customization bugs concerning muse-project-alist.
+    Revision:
+      muse--main--1.0--patch-244
+
+    * examples/johnw/muse-johnw.el: Update with latest version from John.
+    
+    * muse-project.el (muse-project-alist-using-customize): New variable that
+      indicates whether or not we just used customize to modify the value of
+      muse-project-alist.
+      (muse-project-alist-get): Set muse-project-alist-using-customize.
+      (muse-project-alist-set): Only try to unescape muse-project-alist if
+      muse-project-alist-using-customize is set.  Make sure that the value we
+      save to .emacs is unescaped.
+      (muse-project): Add definition for :value-delete so that we can work
+      around an Emacs21 and XEmacs21 annoyance.
+
+    modified files:
+     ChangeLog examples/johnw/muse-johnw.el lisp/muse-project.el
+
+
+2005-09-25 03:06:25 GMT	Michael Olson <mwolson@gnu.org>	patch-243
+
+    Summary:
+      Try to make link properties more sane.
+    Revision:
+      muse--main--1.0--patch-243
+
+    * lisp/muse-colors.el (muse-link-properties): Try to make link properties
+      a bit smarter.  It is hoped that this fixes several strange key
+      movement and link coloring issues.  Thanks to Sergey Vlasov for the
+      fix.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-colors.el
+
+
+2005-09-24 00:01:56 GMT	Michael Olson <mwolson@gnu.org>	patch-242
+
+    Summary:
+      Use modification time for date directive.
+    Revision:
+      muse--main--1.0--patch-242
+
+    * lisp/muse-publish.el (muse-publish-markup-buffer): Set the date
+      directive using the currently-publishing file's modification time,
+      rather than the current time.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-09-22 16:15:59 GMT	Michael Olson <mwolson@gnu.org>	patch-240
 
     Summary:

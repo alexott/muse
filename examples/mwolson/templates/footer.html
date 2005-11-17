@@ -81,11 +81,7 @@
           </td>
           <td align="right">
             <span class="footdate">
-            Updated
-              <lisp>(format-time-string
-                      "%Y-%m-%d"
-                      (nth 5 (file-attributes muse-publishing-current-file)))
-              </lisp>
+            Updated <lisp>(muse-publishing-directive "date")</lisp>
             </span>
           </td>
         </tr>

@@ -63,7 +63,7 @@
   :require 'muse-colors
   :group 'muse-mode)
 
-(defcustom muse-mode-auto-p t
+(defcustom muse-mode-auto-p nil
   "If non-nil, automagically determine when Muse mode should be activated."
   :type 'boolean
   :set (function
@@ -175,6 +175,8 @@ so only enable this if you don't use either of these."
   (set (make-local-variable 'paragraph-start)
        (concat paragraph-start "\\|\\s-+\\(-\\|[0-9]+\\.\\)\\s-+"
                "\\|\\[[0-9]+\\]\\s-*"))
+  ;; If we're using Emacs21, this makes flyspell work like it should
+  (setq flyspell-generic-check-word-p 'muse-mode-flyspell-p)
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
        "; ")
@@ -250,6 +252,7 @@ This is used to keep links from being improperly colorized by flyspell."
 (defun muse-link-at-point (&optional pos)
   "Return link text if a URL or link is at point."
   (let ((case-fold-search nil)
+        (inhibit-point-motion-hooks t)
         (here (or pos (point))))
     (when (or (null pos)
               (and (char-after pos)
@@ -322,7 +325,12 @@ in `muse-project-alist'."
                 (find-file-other-window link)
               (find-file link))))))
     (if anchor
-        (search-forward (concat anchor "\\b") nil t))))
+        (let ((pos (point)))
+          (goto-char (point-min))
+          (unless (re-search-forward (concat "^\\W*" (regexp-quote anchor)
+                                             "\\b")
+                                     nil t)
+            (goto-char pos))))))
 
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK."
