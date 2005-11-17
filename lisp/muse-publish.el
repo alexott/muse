@@ -676,10 +676,10 @@ the file is published no matter what."
   (if (null muse-publish-comments-p)
       ""
     (goto-char (match-end 0))
-    (muse-insert-markup (muse-markup-text 'comment-end))
+    (insert (muse-markup-text 'comment-end))
     (muse-publish-mark-read-only (match-beginning 1) (match-end 1))
     (goto-char (match-beginning 1))
-    (muse-insert-markup (muse-markup-text 'comment-begin))
+    (insert (muse-markup-text 'comment-begin))
     (delete-region (match-beginning 0) (1- (match-beginning 1)))))
 
 (defun muse-publish-markup-tag ()
@@ -1167,9 +1167,9 @@ like read-only from being inadvertently deleted."
   (if (null muse-publish-comments-p)
       (delete-region beg end)
     (goto-char end)
-    (muse-insert-markup (muse-markup-text 'comment-end))
+    (insert (muse-markup-text 'comment-end))
     (goto-char beg)
-    (muse-insert-markup (muse-markup-text 'comment-begin))))
+    (insert (muse-markup-text 'comment-begin))))
 
 ;; Miscellaneous helper functions
 
