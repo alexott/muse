@@ -75,6 +75,12 @@ be returned."
   :options '(muse-publish-escape-specials-in-string)
   :group 'muse-publish)
 
+(defcustom muse-publish-comments-p nil
+  "If nil, remove comments before publishing.
+If non-nil, publish comments using the markup of the current style."
+  :type 'boolean
+  :group 'muse-publish)
+
 (defcustom muse-publish-report-threshhold 100000
   "If a file is this size or larger, report publishing progress."
   :type 'integer
@@ -665,7 +671,16 @@ the file is published no matter what."
   (delete-region (match-beginning 0) (match-end 0)))
 
 (defun muse-publish-markup-anchor () "")
-(defun muse-publish-markup-comment () "")
+
+(defun muse-publish-markup-comment ()
+  (if (null muse-publish-markup-comments-p)
+      ""
+    (goto-char (match-end 0))
+    (muse-insert-markup (muse-markup-text 'comment-end))
+    (muse-publish-mark-read-only (match-beginning 1) (match-end 1))
+    (goto-char (match-beginning 1))
+    (muse-insert-markup (muse-markup-text 'comment-begin))
+    (delete-region (match-beginning 0) (1- (match-beginning 1)))))
 
 (defun muse-publish-markup-tag ()
   (let ((tag-info (muse-markup-tag-info (match-string 1))))
@@ -1149,7 +1164,12 @@ like read-only from being inadvertently deleted."
     (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-comment-tag (beg end)
-  (delete-region beg end))
+  (if (null muse-publish-markup-comments-p)
+      (delete-region beg end)
+    (goto-char end)
+    (muse-insert-markup (muse-markup-text 'comment-end))
+    (goto-char beg)
+    (muse-insert-markup (muse-markup-text 'comment-begin))))
 
 ;; Miscellaneous helper functions
 

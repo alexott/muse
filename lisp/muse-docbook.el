@@ -127,6 +127,8 @@ For more on the structure of this list, see
     (internal-link   . "<link linkend=\"%s\">%s</link>")
     (email-addr      . "<email>%s</email>")
     (emdash          . " &mdash; ")
+    (comment-begin   . "<!-- ")
+    (comment-end     . " -->")
     (rule            . "")
     (enddots         . "....")
     (dots            . "...")
