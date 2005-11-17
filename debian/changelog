@@ -1,3 +1,10 @@
+muse-el (3.02.01.arch.265-1) unstable; urgency=low
+
+  * New Arch snapshot.
+  * debian/rules: Update dh_compat to v5.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Sun,  6 Nov 2005 19:08:38 -0500
+
 muse-el (3.02.01-1) unstable; urgency=low
 
   * New upstream release.

@@ -2,6 +2,64 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-16 23:56:20 GMT	Michael Olson <mwolson@gnu.org>	patch-268
+
+    Summary:
+      Allow "-" in publishing directives.
+    Revision:
+      muse--main--1.0--patch-268
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Allow "-" in
+      publishing directives.  Thanks to Jim Ottaway for the suggestion.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
+2005-11-14 20:28:47 GMT	Michael Olson <mwolson@gnu.org>	patch-267
+
+    Summary:
+      muse-latex: Fix "generation of PDF failed" message.
+    Revision:
+      muse--main--1.0--patch-267
+
+    * lisp/muse-latex.el (muse-latex-pdf-generate): Make sure that we return
+      t or nil depending on whether the publishing attempt was successful.
+
+    modified files:
+     ChangeLog lisp/muse-latex.el
+
+
+2005-11-10 01:26:15 GMT	Michael Olson <mwolson@gnu.org>	patch-266
+
+    Summary:
+      Call pdflatex a reasonable number of times.
+    Revision:
+      muse--main--1.0--patch-266
+
+    * lisp/muse-latex.el (muse-latex-pdf-generate): Call pdflatex up to 3
+      times, depending on what return value we get.  Thanks to John Wiegley
+      for the heads up.
+
+    modified files:
+     ChangeLog Makefile.defs debian/changelog debian/rules
+     lisp/muse-latex.el
+
+
+2005-10-31 20:38:52 GMT	Michael Olson <mwolson@gnu.org>	patch-263
+
+    Summary:
+      Fix mistyping of new option name.
+    Revision:
+      muse--main--1.0--patch-263
+
+    * lisp/muse-publish.el (muse-publish-markup-comment)
+      (muse-publish-comment-tag): s/markup-//g.  Fix mistyping of new option.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-10-29 09:15:07 GMT	Michael Olson <mwolson@gnu.org>	patch-257
 
     Summary:
