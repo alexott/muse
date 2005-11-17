@@ -118,6 +118,13 @@ filename."
   `(;; numeric ranges
     (10000 "\\([0-9]+\\)-\\([0-9]+\\)" 0 "\\1--\\2")
 
+    ;; characters which need quoting
+    (10010 "\\([$#%&]\\)" 0 "\\\\\\1")
+    (10020 "_" 0 "\\\\textunderscore{}")
+    (10030 "<" 0 "\\\\textless{}")
+    (10040 ">" 0 "\\\\textgreater{}")
+    (10050 "\\^" 0 "\\\\^{}")
+
     ;; be careful of closing quote pairs
     (10100 "\"'" 0 "\"\\\\-'")
 
@@ -243,17 +250,17 @@ system to an associated CJK coding system."
       muse-latexcjk-encoding-default)))
 
 (defcustom muse-latex-markup-specials
-  '((?\\ . "\\\\")
-    (?\_ . "\\textunderscore{}")
-    (?\< . "\\textless{}")
-    (?\> . "\\textgreater{}")
-    (?\$ . "\\$")
-    (?\% . "\\%")
-    (?\{ . "\\{")
-    (?\} . "\\}")
-    (?\& . "\\&")
-    (?\# . "\\#"))
+  '((?\\ . "\\\\"))
   "A table of characters which must be represented specially."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-latex)
+
+(defcustom muse-latex-markup-texttt-specials
+  '((?^ . "\\^{}")
+    (?\{ . "\\{")
+    (?\} . "\\}"))
+  "A table of characters which must be represented specially.
+This applies to text in \\texttt{} regions."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
 
@@ -310,9 +317,28 @@ If the anchor occurs at the end of a line, ignore it."
           (replace-match "''")
           (setq open t))))))
 
+(defun muse-latex-fixup-texttt ()
+  "Escape extra characters in texttt sections."
+  (let ((inhibit-read-only t)
+        beg end)
+    (while (and (< (point) (point-max))
+                (setq beg (search-forward "\\texttt{" nil t)))
+      (goto-char (next-single-property-change (point) 'read-only))
+      (backward-char)
+      (setq end (point-marker))
+      (goto-char beg)
+      (while (< (point) end)
+        (let ((repl (assoc (char-after) muse-latex-markup-texttt-specials)))
+          (if (null repl)
+              (forward-char 1)
+            (delete-char 1)
+            (insert-before-markers (cdr repl))))))))
+
 (defun muse-latex-finalize-buffer ()
   (goto-char (point-min))
-  (muse-latex-fixup-dquotes))
+  (muse-latex-fixup-dquotes)
+  (goto-char (point-min))
+  (muse-latex-fixup-texttt))
 
 (defun muse-latex-pdf-browse-file (file)
   (shell-command (concat "open " file)))
