@@ -783,16 +783,19 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
       (insert ?\n)))
 
 (defun muse-publish-markup-enddots ()
-  (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'enddots)))
+  (unless (get-text-property (match-beginning 0) 'noemphasis)
+    (delete-region (match-beginning 0) (match-end 0))
+    (insert (muse-markup-text 'enddots))))
 
 (defun muse-publish-markup-dots ()
-  (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'dots)))
+  (unless (get-text-property (match-beginning 0) 'noemphasis)
+    (delete-region (match-beginning 0) (match-end 0))
+    (insert (muse-markup-text 'dots))))
 
 (defun muse-publish-markup-rule ()
-  (delete-region (match-beginning 0) (match-end 0))
-  (insert (muse-markup-text 'rule)))
+  (unless (get-text-property (match-beginning 0) 'noemphasis)
+    (delete-region (match-beginning 0) (match-end 0))
+    (insert (muse-markup-text 'rule))))
 
 (defun muse-publish-markup-heading ()
   (let* ((len (length (match-string 1)))
