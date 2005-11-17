@@ -23,8 +23,9 @@ Li Daobing: Contributor, author of muse-mathml.el
 Yann Hodique: Contributor, author of muse-wiki.el
               (assigned past and future changes)
 
-Peter K. Lee: Contributor to muse-xml.el.
-              11 lines changed in muse-publish.el.
+Peter K. Lee: Contributor,
+              muse-xml.el: Ideas and markup strings taken.
+              muse-publish.el: 11 lines changed.
               (assignment pending)
 
 Jim Ottaway: Contributor,
