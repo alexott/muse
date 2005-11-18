@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-18 23:56:22 GMT	Michael Olson <mwolson@gnu.org>	patch-272
+
+    Summary:
+      muse-texinfo: Correct markup strings for dots, enddots, center.
+    Revision:
+      muse--main--1.0--patch-272
+
+    * AUTHORS: Bookkeeping
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Apply patch from
+      Jim Ottaway that produces correct output for dots, enddots, and
+      centered text.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-texinfo.el
+
+
 2005-11-18 17:18:40 GMT	Michael Olson <mwolson@gnu.org>	patch-271
 
     Summary:
