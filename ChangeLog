@@ -2,6 +2,41 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-18 17:18:40 GMT	Michael Olson <mwolson@gnu.org>	patch-271
+
+    Summary:
+      Sync with davidsmith@acm.org--2005 (patch 0), davidsmith@acm.org--main (patch 0-2), hodique@lifl.fr--2005 (patch 40-45), mwolson@gnu.org--2005 (patch 0-8)
+    Revision:
+      muse--main--1.0--patch-271
+
+    Mark several revisions as "included".  No actual changes were made to the
+    source.
+
+    modified files:
+     ChangeLog
+
+    new patches:
+     davidsmith@acm.org--2005/muse--devo--1.0--base-0
+     davidsmith@acm.org--main/muse--devo--1.0--base-0
+     davidsmith@acm.org--main/muse--devo--1.0--patch-1
+     davidsmith@acm.org--main/muse--devo--1.0--patch-2
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-40
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-41
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-42
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-43
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-44
+     hodique@lifl.fr--2005/muse--yh--1.0--patch-45
+     mwolson@gnu.org--2005/muse--rel--3.02--base-0
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-1
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-2
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-3
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-4
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-5
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-6
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-7
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-8
+
+
 2005-11-18 17:14:38 GMT	Michael Olson <mwolson@gnu.org>	patch-270
 
     Summary:
