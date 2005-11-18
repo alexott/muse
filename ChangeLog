@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-18 17:14:38 GMT	Michael Olson <mwolson@gnu.org>	patch-270
+
+    Summary:
+      muse-groff: Provide groff-pdf style rather than pdf.
+    Revision:
+      muse--main--1.0--patch-270
+
+    * experimental/muse-groff.el: Remove, since the original author keeps his
+      version in the lisp/ directory, and it's reasonably stable by now.
+    
+    * lisp/muse-groff.el: Detabify source.
+      ("groff-pdf"): Rename the "pdf" publishing style to "groff-pdf" to
+      avoid a conflict with the latex-based pdf style.
+
+    removed files:
+     experimental/.arch-ids/muse-groff.el.id
+     experimental/muse-groff.el
+
+    modified files:
+     ChangeLog lisp/muse-groff.el
+
+
 2005-11-18 17:07:51 GMT	Michael Olson <mwolson@gnu.org>	patch-269
 
     Summary:

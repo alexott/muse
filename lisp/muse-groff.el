@@ -43,19 +43,19 @@
 
 (defcustom muse-groff-markup-regexps
   `((10400 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?\n"
-		    "\\(["
+                    "\\(["
                     muse-regexp-blank
                     "]*\n\\)+\\(<\\(blockquote\\|center\\)>\n\\)?")
            0 muse-groff-markup-paragraph))
 "List of markup regexps for identifying regions in a Muse page.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
-		  (list :tag "Markup rule"
-			integer
-			(choice regexp symbol)
-			integer
-			(choice string function symbol))
-		  function))
+                  (list :tag "Markup rule"
+                        integer
+                        (choice regexp symbol)
+                        integer
+                        (choice string function symbol))
+                  function))
   :group 'muse-groff)
 
 (defcustom muse-groff-markup-functions
@@ -70,9 +70,9 @@ For more on the structure of this list, see
   '()
   "A list of tag specifications, for specially marking up GROFF."
   :type '(repeat (list (string :tag "Markup tag")
-		       (boolean :tag "Expect closing tag" :value t)
-		       (boolean :tag "Parse attributes" :value nil)
-		       function))
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       function))
   :group 'muse-groff)
 
 (defcustom muse-groff-markup-strings
@@ -150,11 +150,11 @@ differs little between the various styles."
 
 ;; (defun muse-latex-markup-table ()
 ;;   (let* ((str (prog1
-;; 		  (match-string 1)
-;; 		(delete-region (match-beginning 0) (match-end 0))))
-;; 	 (fields (split-string str "\\s-*|+\\s-*"))
-;; 	 (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
-;; 		    (length (match-string 1 str)))))
+;;                (match-string 1)
+;;              (delete-region (match-beginning 0) (match-end 0))))
+;;       (fields (split-string str "\\s-*|+\\s-*"))
+;;       (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
+;;                  (length (match-string 1 str)))))
 ;;     (insert "\\begin{tabular}{" (make-string (length fields) ?l) "}\n")
 ;;     (insert (mapconcat 'identity fields " & "))
 ;;     (insert " \\\\\n\\end{tabular}")))
@@ -182,14 +182,14 @@ command characters."
   (let ((open t))
     (while (search-forward "\"" nil t)
       (unless (get-text-property (match-beginning 0) 'read-only)
-	(if (and (bolp) (eq (char-before) ?\n))
-	    (setq open t))
-	(if open
-	    (progn
-	      (replace-match "``")
-	      (setq open nil))
-	  (replace-match "''")
-	  (setq open t))))))
+        (if (and (bolp) (eq (char-before) ?\n))
+            (setq open t))
+        (if open
+            (progn
+              (replace-match "``")
+              (setq open nil))
+          (replace-match "''")
+          (setq open t))))))
 
 (defun muse-groff-prepare-buffer ()
   (goto-char (point-min))
@@ -215,28 +215,32 @@ command characters."
               (file-name-sans-extension file)
               muse-groff-extension
               (file-name-directory output-path))))
-	(shell-command command))))
+        (shell-command command))))
    ".ps"))
 
 (unless (assoc "groff" muse-publishing-styles)
   (muse-define-style "groff"
-		     :suffix    'muse-groff-extension
-		     :regexps   'muse-groff-markup-regexps
+                     :suffix    'muse-groff-extension
+                     :regexps   'muse-groff-markup-regexps
 ;;;		     :functions 'muse-groff-markup-functions
-		     :strings   'muse-groff-markup-strings
+                     :strings   'muse-groff-markup-strings
                      :tags      'muse-groff-markup-tags
-		     :specials  'muse-groff-markup-specials
-		     :before    'muse-groff-prepare-buffer
-		     :after     'muse-groff-finalize-buffer
-		     :header    'muse-groff-header
-		     :footer    'muse-groff-footer
-		     :browser   'find-file)
+                     :specials  'muse-groff-markup-specials
+                     :before    'muse-groff-prepare-buffer
+                     :after     'muse-groff-finalize-buffer
+                     :header    'muse-groff-header
+                     :footer    'muse-groff-footer
+                     :browser   'find-file)
 
-  (muse-derive-style "pdf" "groff"
-		     :final   'muse-groff-pdf-generate
-		     :browser 'muse-groff-pdf-browse-file
-		     :osuffix 'muse-groff-pdf-extension))
+  (muse-derive-style "groff-pdf" "groff"
+                     :final   'muse-groff-pdf-generate
+                     :browser 'muse-groff-pdf-browse-file
+                     :osuffix 'muse-groff-pdf-extension))
 
 (provide 'muse-groff)
 
 ;;; muse-groff.el ends here
+;;
+;; Local Variables:
+;; indent-tabs-mode: nil
+;; End:
