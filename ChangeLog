@@ -2,6 +2,64 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-18 17:07:51 GMT	Michael Olson <mwolson@gnu.org>	patch-269
+
+    Summary:
+      Merged from ajk@iu.edu--2005 (patch 0-9)
+    Revision:
+      muse--main--1.0--patch-269
+
+    Patches applied:
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--base-0
+       tag of mwolson@gnu.org--2005/muse--main--1.0--patch-82
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-1
+       Publish PDF using GROFF with mom macros.
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-2
+       Kinda works, still need tables and a bunch of other stuff.
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-3
+       Remove extra newlines from QUOTE calls.
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-4
+       mom -> groff
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-5
+       - fix syntax of definition of muse-groff-markup-strings
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-6
+       Use \z to keep leading space that will result from .URL...
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-7
+       Don't use .blm (blank line == paragraph break).  Hopefu...
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-8
+       Use markup-strings for <example>.
+    
+     * ajk@iu.edu--2005/muse--ajk--1.0--patch-9
+       Catch up with mwolson
+
+    new files:
+     lisp/.arch-ids/muse-groff.el.id lisp/muse-groff.el
+
+    modified files:
+     ChangeLog
+
+    new patches:
+     ajk@iu.edu--2005/muse--ajk--1.0--base-0
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-1
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-2
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-3
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-4
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-5
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-6
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-7
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-8
+     ajk@iu.edu--2005/muse--ajk--1.0--patch-9
+
+
 2005-11-16 23:56:20 GMT	Michael Olson <mwolson@gnu.org>	patch-268
 
     Summary:
