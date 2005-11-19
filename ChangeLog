@@ -2,6 +2,51 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-19 23:02:20 GMT	Michael Olson <mwolson@gnu.org>	patch-274
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 11, 13-15, 17-19)
+    Revision:
+      muse--main--1.0--patch-274
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-11
+       Don't interpret enddots, dots, and rule inside of links.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-13
+       Allow bad WikiWords to be colorized, by popular request.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-14
+       Be more fault-tolerant about muse-file-extension.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-15
+       Prepare debian files for new minor release.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-17
+       Update NEWS.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-18
+       NEWS: Add migration note.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-19
+       Merged from mwolson@gnu.org--2005 (patch 272-273)
+
+    modified files:
+     ChangeLog Makefile.defs NEWS debian/NEWS debian/changelog
+     debian/control debian/rules lisp/muse-colors.el
+     lisp/muse-project.el lisp/muse-publish.el lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-11
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-13
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-14
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-15
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-17
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-18
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-19
+
+
 2005-11-19 00:01:26 GMT	Michael Olson <mwolson@gnu.org>	patch-273
 
     Summary:

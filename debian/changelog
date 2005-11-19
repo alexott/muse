@@ -1,3 +1,12 @@
+muse-el (3.02.02-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/rules: Change dh_compat to v4, since the new version of
+    debhelper won't hit testing for a while, apparently.
+  * debian/control: Bump build-depends to debhelper 4.0.0.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Sat, 19 Nov 2005 00:50:30 -0500
+
 muse-el (3.02.01.arch.265-1) unstable; urgency=low
 
   * New Arch snapshot.

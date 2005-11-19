@@ -326,7 +326,8 @@ For an example of the use of this function, see
     (cond
      ((file-directory-p path)
       (dolist (file (directory-files
-                     path t (when muse-file-extension
+                     path t (when (and muse-file-extension
+                                       (not (string= muse-file-extension "")))
                               (concat "." muse-file-extension "\\'"))))
         (unless (or (string-match muse-project-ignore-regexp file)
                     (file-directory-p file))
@@ -486,7 +487,8 @@ first directory within the project's fileset is used."
                 (setq pats (cdr pats))))))
         (when directory
           (let ((filename (expand-file-name
-                           (if muse-file-extension
+                           (if (and muse-file-extension
+                                    (not (string= muse-file-extension "")))
                                (concat (car name) "." muse-file-extension)
                              (car name))
                            directory)))

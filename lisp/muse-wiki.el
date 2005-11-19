@@ -63,6 +63,11 @@
   :type 'boolean
   :group 'muse-wiki)
 
+(defcustom muse-wiki-allow-nonexistent-wikiword nil
+  "Whether to color bare WikiNames that don't have an existing file."
+  :type 'boolean
+  :group 'muse-wiki)
+
 (defcustom muse-wiki-ignore-bare-project-names nil
   "Determine whether project names without a page specifer are links.
 If non-nil, project names without a page specifier will not be
@@ -156,14 +161,24 @@ style and ignore the others."
          (local-style (car (muse-project-applicable-styles
                             (muse-current-file)
                             (cddr (muse-project-of-file))))))
-    (if (and remote-style local-style muse-publishing-p)
-        (muse-publish-link-file
-         (file-relative-name (expand-file-name
-                              page (muse-style-element :path remote-style))
-                             (expand-file-name
-                              (muse-style-element :path local-style)))
-         nil remote-style)
-      (unless muse-publishing-p page-path))))
+    (cond ((and remote-style local-style muse-publishing-p)
+           (muse-publish-link-file
+            (file-relative-name (expand-file-name
+                                 page (muse-style-element :path remote-style))
+                                (expand-file-name
+                                 (muse-style-element :path local-style)))
+            nil remote-style))
+          ((not muse-publishing-p)
+           (if page-path
+               page-path
+             (when muse-wiki-allow-nonexistent-wikiword
+               ;; make a path to a nonexistent file in project
+               (setq page-path (expand-file-name
+                                page (car (cadr (muse-project project)))))
+               (if (and muse-file-extension
+                        (not (string= muse-file-extension "")))
+                   (concat page-path "." muse-file-extension)
+                 page-path)))))))
 
 (defun muse-wiki-handle-interwiki (&optional string)
   "If STRING or point has an interwiki link, resolve it and
@@ -190,7 +205,8 @@ Match 1 is set to the WikiWord."
              (if string
                  (string-match muse-wiki-wikiword-regexp string)
                (looking-at muse-wiki-wikiword-regexp))
-             (or (and (muse-project-of-file)
+             (or muse-wiki-allow-nonexistent-wikiword
+                 (and (muse-project-of-file)
                       (muse-project-page-file
                        (match-string 1 string) muse-current-project t))
                  (file-exists-p (match-string 1 string))))

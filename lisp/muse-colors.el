@@ -583,20 +583,23 @@ ignored."
                     (muse-handle-explicit-link link-name)
                   (muse-handle-implicit-link link-name))))
       (when link
-        (if (or (not explicit)
-                (string-match muse-file-regexp link)
-                (string-match muse-url-regexp link))
-            'muse-link-face
-          (if (not (featurep 'muse-project))
-              'muse-link-face
-            (if (string-match "#" link)
-                (setq link (substring link 0 (match-beginning 0))))
-            (if (or (and (muse-project-of-file)
-                         (muse-project-page-file link muse-current-project t))
-                    (file-exists-p link))
-                'muse-link-face
-              (when explicit
-                'muse-bad-link-face))))))))
+        (cond ((string-match muse-url-regexp link)
+               'muse-link-face)
+              ((string-match muse-file-regexp link)
+               (if (file-exists-p link)
+                   'muse-link-face
+                 'muse-bad-link-face))
+              ((not (featurep 'muse-project))
+               'muse-link-face)
+              (t
+               (if (string-match "#" link)
+                   (setq link (substring link 0 (match-beginning 0))))
+               (if (or (and (muse-project-of-file)
+                            (muse-project-page-file
+                             link muse-current-project t))
+                       (file-exists-p link))
+                   'muse-link-face
+                 'muse-bad-link-face)))))))
 
 (defun muse-colors-explicit-link ()
   "Color explicit links."

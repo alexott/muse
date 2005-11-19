@@ -1,5 +1,81 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.02.02
+
+** Configuration
+
+*** A bug with customizing `muse-project-alist' has been fixed.
+
+*** We use a file extension for Muse files by default.
+To obtain the old behavior, set `muse-file-extension' to nil and
+`muse-mode-auto-p' to t.
+
+To go along with the new behavior, be sure to rename all of your Muse
+files to have a ".muse" extension.
+
+*** New option: `muse-wiki-ignore-bare-project-names'.
+This causes Muse to ignore bare project names if specified.  The
+default is to turn bare project names into links.
+
+*** New option: `muse-publish-comments-p'.
+This causes Muse to publish comments as markup.  The default is to
+remove comments before publishing rather than trying to mark them up.
+
+*** New option: `muse-wiki-allow-nonexistent-wikiword'.
+Enabling this will cause WikiWords with no corresponding file to be
+colored as bad links.  The default is not to color them and turn them
+into links.
+
+** Muse Mode
+
+*** An error with intangible links has been fixed.
+
+*** Visiting a page with an anchor works better than before.
+
+*** Flyspell behaves better with Emacs21 than before.
+
+*** Links to nonexistent files will be colored red by default.
+This happened previously, but the algorithm was buggy and didn't cover
+implicit links.
+
+** Programming
+
+*** A convenience macro called `with-muse-project' has been added.
+This allows a code block to be executed after changing the current
+Muse project.  It is analogous to emacs-wiki's
+`with-emacs-wiki-project' function.
+
+** Publishing
+
+*** An issue involving anchors at the end of a line has been
+addressed.
+
+*** Non-word characters are now allowed before an anchor.
+
+*** Comments may now be published, if desired.
+This behavior may be controlled with the `muse-publish-comments-p'
+option.  The default is to remove comments before publishing rather
+than trying to mark them up.
+
+*** Publishing directives may now include a dash character.
+
+** LaTeX publishing
+
+*** A bug with footmarks has been addressed.
+
+*** Table headers are underlined and table footers are overlined.
+
+*** PDF publishing will cause pdflatex to be called as needed.
+The previous behavior was to always call pdflatex twice.  Currently,
+if pdflatex succeeds, it will not be called again.  Otherwise, call it
+up to three times.
+
+*** Escaping of special characters should be drastically improved.
+An attempt has been made to get escaping done right in most contexts.
+The only quirk is that you must surround dollar signs with equal signs
+to ensure escaping.  This makes publishing PDF documents much more
+useful.
+
 * Changes in Muse 3.02.01
 
 ** Configuration
