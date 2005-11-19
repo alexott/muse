@@ -74,6 +74,8 @@
           :force-publish ("WikiIndex")
           :default "WelcomePage")
          (:base "my-xhtml"
+                :path "~/personal-site/site/notes")
+         (:base "my-pdf"
                 :path "~/personal-site/site/notes"))
 
         ("Plans"
@@ -81,8 +83,7 @@
           :default "TaskPool"
           :major-mode planner-mode
           :visit-link planner-visit-link)
-
-         (:base "xhtml"
+         (:base "planner-xhtml"
                 :path "~/proj/notmine/planner-out"))
         ))
 
@@ -209,7 +210,9 @@ If FILE is not specified, use the published version of the current file."
  '(muse-html-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/common.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
- '(muse-mode-auto-p nil)
+ '(muse-latex-header "~/personal-site/muse/header.tex")
+ '(muse-mode-auto-p nil nil (muse-project))
+ '(muse-mode-highlight-p t nil (muse-colors))
  '(muse-mode-hook (quote (footnote-mode muse-wiki-update-custom-values)))
  '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki muse-publish-escape-specials-in-string)))
  '(muse-wiki-publish-small-title-words (quote ("the" "and" "at" "on" "of" "for" "in" "an" "a" "page" "anime")))

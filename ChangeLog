@@ -2,6 +2,38 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-19 23:06:24 GMT	Michael Olson <mwolson@gnu.org>	patch-275
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 20-22)
+    Revision:
+      muse--main--1.0--patch-275
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-20
+       Update NEWS.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-21
+       Update examples.
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-22
+       Release Emacs Muse 3.02.02.
+
+    new files:
+     examples/mwolson/templates/.arch-ids/header.tex.id
+     examples/mwolson/templates/header.tex
+
+    modified files:
+     ChangeLog NEWS examples/mwolson/muse-init.el
+     examples/mwolson/templates/header.html lisp/muse.el muse.texi
+
+    new patches:
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-20
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-21
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-22
+
+
 2005-11-19 23:02:20 GMT	Michael Olson <mwolson@gnu.org>	patch-274
 
     Summary:
