@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-11-19 05:46:05 GMT	Michael Olson <mwolson@gnu.org>	patch-17
+
+    Summary:
+      Update NEWS.
+    Revision:
+      muse--rel--3.02--patch-17
+
+    * NEWS: Update for 3.02.02.
+
+    modified files:
+     ChangeLog NEWS
+     {arch}/muse/muse--rel/muse--rel--3.02/mwolson@gnu.org--2005/patch-log/patch-13
+
+
 2005-11-19 05:08:09 GMT	Michael Olson <mwolson@gnu.org>	patch-16
 
     Summary:
@@ -61,7 +75,7 @@
       colored as bad links if they don't correspond with a real file.  Make
       the code more straightforward.
     
-    * lisp/muse-wiki.el (muse-wiki-ignore-bare-project-names): New option
+    * lisp/muse-wiki.el (muse-wiki-allow-nonexistent-wikiword): New option
       that determines whether to colorize nonexistent WikiWords.  The default
       is nil, which means "don't colorize".
       (muse-wiki-resolve-project-page, muse-wiki-handle-wikiword): Adapt for
