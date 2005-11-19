@@ -2,6 +2,37 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-19 00:01:26 GMT	Michael Olson <mwolson@gnu.org>	patch-273
+
+    Summary:
+      muse-latex: Make footnotes look a bit more natural for LaTeX users.
+    Revision:
+      muse--main--1.0--patch-273
+
+    * lisp/muse-latex.el (muse-latex-markup-strings): Remove markup strings
+      for footnotemark and footnotetext-end, as recommended by Jim Ottaway.
+
+    modified files:
+     ChangeLog lisp/muse-latex.el
+
+
+2005-11-18 23:56:22 GMT	Michael Olson <mwolson@gnu.org>	patch-272
+
+    Summary:
+      muse-texinfo: Correct markup strings for dots, enddots, center.
+    Revision:
+      muse--main--1.0--patch-272
+
+    * AUTHORS: Bookkeeping
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Apply patch from
+      Jim Ottaway that produces correct output for dots, enddots, and
+      centered text.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-texinfo.el
+
+
 2005-11-16 23:56:20 GMT	Michael Olson <mwolson@gnu.org>	patch-268
 
     Summary:

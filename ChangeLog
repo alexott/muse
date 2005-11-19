@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-11-19 06:08:20 GMT	Michael Olson <mwolson@gnu.org>	patch-19
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 272-273)
+    Revision:
+      muse--rel--3.02--patch-19
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-272
+       muse-texinfo: Correct markup strings for dots, enddots, center.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-273
+       muse-latex: Make footnotes look a bit more natural for LaTeX users.
+
+    modified files:
+     AUTHORS ChangeLog ChangeLog.main lisp/muse-latex.el
+     lisp/muse-texinfo.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-272
+     mwolson@gnu.org--2005/muse--main--1.0--patch-273
+
+
 2005-11-19 05:51:32 GMT	Michael Olson <mwolson@gnu.org>	patch-18
 
     Summary:

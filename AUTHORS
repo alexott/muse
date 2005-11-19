@@ -9,7 +9,7 @@ John Wiegley: Original author
 Michael Olson: Current maintainer
 
 Trent Buck: Contributor,
-            muse-latex.el: 4 lines changed
+            muse-latex.el: 4 lines changed.
 
 Sacha Chua: Contributor -- documentation
             (assigned past and future changes)
@@ -29,9 +29,10 @@ Peter K. Lee: Contributor,
               (assignment pending)
 
 Jim Ottaway: Contributor,
-             muse-latex.el: 1 line changed
-             muse-mode.el: 7 lines changed
-             muse-wiki.el: 7 lines changed
+             muse-latex.el: 1 line changed.
+             muse-mode.el: 7 lines changed.
+             muse-texinfo.el: 4 lines changed.
+             muse-wiki.el: 7 lines changed.
              (assignment pending)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
@@ -50,10 +51,10 @@ Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               (assigned past and future changes)
 
 Sergey Vlasov: Contributor,
-               muse-colors.el: 3 lines changed
+               muse-colors.el: 3 lines changed.
 
 Lan Yufeng: Contributor,
-            muse-colors.el: 1 line changed
+            muse-colors.el: 1 line changed.
 
 
 Contributed software
