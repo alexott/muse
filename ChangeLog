@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-11-19 05:51:32 GMT	Michael Olson <mwolson@gnu.org>	patch-18
+
+    Summary:
+      NEWS: Add migration note.
+    Revision:
+      muse--rel--3.02--patch-18
+
+    * NEWS: Explain how to migrate to the new file extension behavior.
+    
+    * debian/NEWS: Add item about file extension.
+
+    modified files:
+     ChangeLog NEWS debian/NEWS debian/changelog
+
+
 2005-11-19 05:46:05 GMT	Michael Olson <mwolson@gnu.org>	patch-17
 
     Summary:

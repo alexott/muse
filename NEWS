@@ -10,6 +10,9 @@ Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 To obtain the old behavior, set `muse-file-extension' to nil and
 `muse-mode-auto-p' to t.
 
+To go along with the new behavior, be sure to rename all of your Muse
+files to have a ".muse" extension.
+
 *** New option: `muse-wiki-ignore-bare-project-names'.
 This causes Muse to ignore bare project names if specified.  The
 default is to turn bare project names into links.
