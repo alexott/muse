@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-11-19 06:13:52 GMT	Michael Olson <mwolson@gnu.org>	patch-20
+
+    Summary:
+      Update NEWS.
+    Revision:
+      muse--rel--3.02--patch-20
+
+    * NEWS: Update for recent patches.
+
+    modified files:
+     ChangeLog NEWS
+
+
 2005-11-19 06:08:20 GMT	Michael Olson <mwolson@gnu.org>	patch-19
 
     Summary:

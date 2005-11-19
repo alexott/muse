@@ -61,7 +61,9 @@ than trying to mark them up.
 
 ** LaTeX publishing
 
-*** A bug with footmarks has been addressed.
+*** A bug with footnotes has been addressed.
+An attempt has been made to make generated footnote markup look more
+"natural" to experienced LaTeX users.
 
 *** Table headers are underlined and table footers are overlined.
 
@@ -75,6 +77,10 @@ An attempt has been made to get escaping done right in most contexts.
 The only quirk is that you must surround dollar signs with equal signs
 to ensure escaping.  This makes publishing PDF documents much more
 useful.
+
+** TexInfo publishing
+
+*** An attempt was made to hone some of the markup.
 
 * Changes in Muse 3.02.01
 
