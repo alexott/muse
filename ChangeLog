@@ -2,6 +2,29 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-11-19 06:50:45 GMT	Michael Olson <mwolson@gnu.org>	patch-21
+
+    Summary:
+      Update examples.
+    Revision:
+      muse--rel--3.02--patch-21
+
+    * examples/mwolson/muse-init.el: Update.
+    
+    * examples/mwolson/header.html: Update.
+    
+    * examples/mwolson/header.tex: New file that contains my custom LaTeX
+      header.
+
+    new files:
+     examples/mwolson/templates/.arch-ids/header.tex.id
+     examples/mwolson/templates/header.tex
+
+    modified files:
+     ChangeLog examples/mwolson/muse-init.el
+     examples/mwolson/templates/header.html
+
+
 2005-11-19 06:13:52 GMT	Michael Olson <mwolson@gnu.org>	patch-20
 
     Summary:

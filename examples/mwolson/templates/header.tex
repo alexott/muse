@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage[pdftex]{graphicx}
+
+\newcommand{\comment}[1]{}
+
+<lisp>(when (muse-publishing-directive "latex-block-paragraphs")
+"\\renewcommand{\\familydefault}{\\sfdefault} \\sf
+\\setlength{\\parindent}{0pt}
+\\setlength{\\parskip}{4pt}")
+</lisp>
+
+\begin{document}
+
+\title{<lisp>(muse-publishing-directive "title")</lisp>}
+\author{<lisp>(muse-publishing-directive "author")</lisp>}
+\date{<lisp>(muse-publishing-directive "date")</lisp>}
+
+\maketitle
+
+<lisp>(and muse-publish-generate-contents
+           "\\tableofcontents
+\\newpage")</lisp>
+
