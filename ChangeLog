@@ -2,6 +2,18 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-11-19 06:53:55 GMT	Michael Olson <mwolson@gnu.org>	patch-22
+
+    Summary:
+      Release Emacs Muse 3.02.02.
+    Revision:
+      muse--rel--3.02--patch-22
+
+
+    modified files:
+     ChangeLog lisp/muse.el muse.texi
+
+
 2005-11-19 06:50:45 GMT	Michael Olson <mwolson@gnu.org>	patch-21
 
     Summary:
