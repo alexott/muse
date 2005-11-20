@@ -281,6 +281,9 @@ This is used to keep links from being improperly colorized by flyspell."
 
 (defun muse-make-link (link &optional name)
   "Return a link to LINK with NAME as the text."
+  (when (string-match muse-explicit-link-regexp link)
+    (unless name (setq name (match-string 2 link)))
+    (setq link (match-string 1 link)))
   (if (and name
            link
            (not (string= name ""))
