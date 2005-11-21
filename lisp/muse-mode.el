@@ -305,7 +305,7 @@ Do not rename the page originally referred to."
        t t)
     (error "There is no valid link at point")))
 
-(defun muse-visit-link-default (link &optional other-window anchor)
+(defun muse-visit-link-default (link &optional other-window)
   "Visit the URL or link named by LINK.
 If ANCHOR is specified, search for it after opening LINK.
 
@@ -314,7 +314,12 @@ used by `muse-visit-link' if you have not specified :visit-link
 in `muse-project-alist'."
   (if (string-match muse-url-regexp link)
       (muse-browse-url link)
-    (let ((base-buffer (get-buffer link)))
+    (let (anchor
+          base-buffer)
+      (when (string-match "#" link)
+        (setq anchor (substring link (match-beginning 0))
+              link (substring link 0 (match-beginning 0))))
+      (setq base-buffer (get-buffer link))
       (if (and base-buffer (not (buffer-file-name base-buffer)))
           ;; If file is temporary (no associated file), just switch to
           ;; the buffer
@@ -328,14 +333,14 @@ in `muse-project-alist'."
                                            'find-file-other-window))
             (if other-window
                 (find-file-other-window link)
-              (find-file link))))))
-    (if anchor
+              (find-file link)))))
+      (when anchor
         (let ((pos (point)))
           (goto-char (point-min))
           (unless (re-search-forward (concat "^\\W*" (regexp-quote anchor)
                                              "\\b")
                                      nil t)
-            (goto-char pos))))))
+            (goto-char pos)))))))
 
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK."
@@ -344,10 +349,7 @@ in `muse-project-alist'."
         anchor)
     (if visit-link-function
         (funcall visit-link-function link other-window)
-      (if (string-match "#" link)
-          (setq anchor (substring link (match-beginning 0))
-                link (substring link 0 (match-beginning 0))))
-      (muse-visit-link-default link other-window anchor))))
+      (muse-visit-link-default link other-window))))
 
 (defun muse-browse-result (style &optional other-window)
   "Visit the current page's published result."
