@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-11-21 15:34:27 GMT	Michael Olson <mwolson@gnu.org>	patch-24
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 276)
+    Revision:
+      muse--rel--3.02--patch-24
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-276
+       Deal with case when muse-make-link is passed an explicit link.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-mode.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-276
+
+
 2005-11-21 15:22:39 GMT	Michael Olson <mwolson@gnu.org>	patch-23
 
     Summary:

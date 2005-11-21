@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-20 22:22:10 GMT	Michael Olson <mwolson@gnu.org>	patch-276
+
+    Summary:
+      Deal with case when muse-make-link is passed an explicit link.
+    Revision:
+      muse--main--1.0--patch-276
+
+    * lisp/muse-mode.el (muse-make-link): Apply patch from Sacha that deals
+      with case when we are passed an explicit-style link.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-11-19 00:01:26 GMT	Michael Olson <mwolson@gnu.org>	patch-273
 
     Summary:
