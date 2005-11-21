@@ -37,12 +37,8 @@ Na Li:       Contributor,
 Chris Lowis: Contributor,
              muse-latex2png.el: 1 line changed.
 
-Jim Ottaway: Contributor,
-             muse-latex.el: 1 line changed.
-             muse-mode.el: 7 lines changed.
-             muse-texinfo.el: 4 lines changed.
-             muse-wiki.el: 7 lines changed.
-             (assignment pending)
+Jim Ottaway: Contributor
+             (assigned past and future changes)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
 
