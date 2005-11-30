@@ -54,10 +54,9 @@ Old files with PREFIX in the name are deleted."
   (if (and (file-exists-p file)
            (file-directory-p pubdir))
       (progn
-        (let ((files (file-expand-wildcards (concat pubdir prefix "_*") t)))
-          (copy-file file (concat pubdir (file-name-nondirectory file)) t)
-          (delete-file file)
-          (concat "./latex/" (file-name-nondirectory file))))
+        (copy-file file (concat pubdir (file-name-nondirectory file)) t)
+        (delete-file file)
+        (concat "./latex/" (file-name-nondirectory file)))
     (message "The latex folder does not exist!")))
 
 (defun muse-publish-latex-tag (beg end attrs)
@@ -94,8 +93,10 @@ Old files with PREFIX in the name are deleted."
   (if (null preamble)
       (setq preamble " "))
 
-  (let ((texfile (concat temporary-file-directory prefix
-                         "_"  (format "%d" (abs (sxhash math)))))
+  (let ((texfile (concat (or (and (boundp 'temporary-file-directory)
+                                  temporary-file-directory)
+                             temp-directory)
+                         prefix "_"  (format "%d" (abs (sxhash math)))))
         (oldcddir default-directory))
     (with-temp-file (concat texfile ".tex")
       (insert (concat "\\documentclass{article}

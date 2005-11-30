@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-11-30 23:00:34 GMT	Michael Olson <mwolson@gnu.org>	patch-280
+
+    Summary:
+      muse-latex2png: XEmacs compatibility.
+    Revision:
+      muse--main--1.0--patch-280
+
+    * lisp/muse-latex2png.el (latex2png-move2pubdir): Remove use of
+      file-expand-wildcards, since it was a no-op.
+      (latex2png): Fall back to a temporary directory variable that works
+      with XEmacs.  Thanks to Neilen Marais for the report and suggested fix.
+
+    modified files:
+     ChangeLog lisp/muse-latex2png.el
+
+
 2005-11-21 21:14:20 GMT	Michael Olson <mwolson@gnu.org>	patch-279
 
     Summary:
