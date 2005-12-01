@@ -318,22 +318,27 @@ in `muse-project-alist'."
           base-buffer)
       (when (string-match "#" link)
         (setq anchor (substring link (match-beginning 0))
-              link (substring link 0 (match-beginning 0))))
-      (setq base-buffer (get-buffer link))
-      (if (and base-buffer (not (buffer-file-name base-buffer)))
-          ;; If file is temporary (no associated file), just switch to
-          ;; the buffer
-          (if other-window
-              (switch-to-buffer-other-window base-buffer)
-            (switch-to-buffer base-buffer))
-        (let ((project (muse-project-of-file)))
-          (if project
-              (muse-project-find-file link project
-                                      (and other-window
-                                           'find-file-other-window))
+              link (if (= (match-beginning 0) 0)
+                       ;; If there is an anchor but no link, default
+                       ;; to the current page.
+                       nil
+                     (substring link 0 (match-beginning 0)))))
+      (when link
+        (setq base-buffer (get-buffer link))
+        (if (and base-buffer (not (buffer-file-name base-buffer)))
+            ;; If file is temporary (no associated file), just switch to
+            ;; the buffer
             (if other-window
-                (find-file-other-window link)
-              (find-file link)))))
+                (switch-to-buffer-other-window base-buffer)
+              (switch-to-buffer base-buffer))
+          (let ((project (muse-project-of-file)))
+            (if project
+                (muse-project-find-file link project
+                                        (and other-window
+                                             'find-file-other-window))
+              (if other-window
+                  (find-file-other-window link)
+                (find-file link))))))
       (when anchor
         (let ((pos (point)))
           (goto-char (point-min))
@@ -345,8 +350,7 @@ in `muse-project-alist'."
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK."
   (let ((visit-link-function
-         (muse-get-keyword :visit-link (cadr (muse-project-of-file)) t))
-        anchor)
+         (muse-get-keyword :visit-link (cadr (muse-project-of-file)) t)))
     (if visit-link-function
         (funcall visit-link-function link other-window)
       (muse-visit-link-default link other-window))))

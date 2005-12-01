@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-01 01:32:29 GMT	Michael Olson <mwolson@gnu.org>	patch-282
+
+    Summary:
+      muse-mode: Handle case where we visit an anchor-only link.
+    Revision:
+      muse--main--1.0--patch-282
+
+    * lisp/muse-mode.el (muse-visit-link-default): Handle case where the link
+      consists of only an anchor.  Thanks to Jim Ottaway for the patch.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-12-01 01:08:13 GMT	Michael Olson <mwolson@gnu.org>	patch-281
 
     Summary:
