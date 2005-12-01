@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-01 01:08:13 GMT	Michael Olson <mwolson@gnu.org>	patch-281
+
+    Summary:
+      muse-colors: Add faces for all 3 levels of emphasis.
+    Revision:
+      muse--main--1.0--patch-281
+
+    * lisp/muse-colors.el (muse-emphasis-1, muse-emphasis-2)
+      (muse-emphasis-3): New faces that represent italic, bold, and bold
+      italic emphasis, respectively.
+      (muse-colors-emphasized): Use new faces.  Thanks to Phillip Lord for
+      the suggestion and the initial code. 
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-colors.el
+
+
 2005-11-30 23:00:34 GMT	Michael Olson <mwolson@gnu.org>	patch-280
 
     Summary:
