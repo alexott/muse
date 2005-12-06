@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-06 16:54:40 GMT	Michael Olson <mwolson@gnu.org>	patch-283
+
+    Summary:
+      muse-mode: Minor fix.
+    Revision:
+      muse--main--1.0--patch-283
+
+    * lisp/muse-mode.el (muse-current-word): Switch order of save-restriction
+      and save-excursion as recommended by Emacs documentation.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-12-01 01:32:29 GMT	Michael Olson <mwolson@gnu.org>	patch-282
 
     Summary:

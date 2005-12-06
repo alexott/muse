@@ -242,8 +242,8 @@ This is used to keep links from being improperly colorized by flyspell."
 
 (defun muse-current-word ()
   (let ((end (point)))
-    (save-restriction
-      (save-excursion
+    (save-excursion
+      (save-restriction
         (skip-chars-backward (concat "^\\["
                                      muse-regexp-space))
         (narrow-to-region (point) end))
