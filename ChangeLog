@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-11 03:39:22 GMT	Michael Olson <mwolson@gnu.org>	patch-287
+
+    Summary:
+      muse-registry.el: Fix compiler warnings.
+    Revision:
+      muse--main--1.0--patch-287
+
+    * lisp/muse-registry.el: Fix compiler warnings.  Remove dependency on
+      cl.el.
+
+    modified files:
+     ChangeLog lisp/muse-registry.el
+
+
 2005-12-11 03:21:14 GMT	Michael Olson <mwolson@gnu.org>	patch-286
 
     Summary:

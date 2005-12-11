@@ -82,13 +82,11 @@
 
 ;;; Code:
 
-(provide 'muse-registry)
-
 ;;;_* Prerequisites
 
-;;(require 'cl)
 (require 'muse)
-(require 'planner)
+(require 'muse-mode)
+(require 'muse-project)
 
 ;;;_* Options
 
@@ -121,7 +119,9 @@
 
 (defcustom muse-registry-ignore-keywords
   '("E-Mail" "from" "www")
-  "A list of ignored keywords.")
+  "A list of ignored keywords."
+  :type '(repeat string)
+  :group 'muse-registry)
 
 (defcustom muse-registry-show-level 0
   "Level for `muse-registry-show'.
@@ -184,41 +184,39 @@ If FROM-SCRATCH is non-nil, make the registry from scratch."
   "Call `muse-registry-update' after saving in muse/planner modes.
 Use with caution.  This could slow down things a bit."
   (interactive)
-  (add-hook 'planner-mode-hook
-            (lambda nil
-              (make-local-hook 'after-save-hook)
-              (add-hook 'after-save-hook 'muse-registry-update t t)))
+  (when (boundp 'planner-mode-hook)
+    (add-hook 'planner-mode-hook
+              (lambda nil
+                (add-hook 'after-save-hook 'muse-registry-update t t))))
   (add-hook 'muse-mode-hook
             (lambda nil
-              (make-local-hook 'after-save-hook)
               (add-hook 'after-save-hook 'muse-registry-update t t))))
 
 (defun muse-registry-show (&optional level)
   "Show entries at LEVEL.
 See `muse-registry-show-level' for details."
   (interactive "p")
-  (let ((annot (run-hook-with-args-until-success
-                'planner-annotation-functions))
+  (let ((annot (and (boundp 'planner-annotation-functions)
+                    (run-hook-with-args-until-success
+                     'planner-annotation-functions)))
         (level (or level muse-registry-show-level)))
     (if (not annot)
         (message "Annotation is not supported for this buffer")
-      (progn
-        (let ((entries (muse-registry-get-entries annot level)))
-          (if (not entries)
-              (message
-               (format "No match (level %d) for \"%s\"" level
-                       (progn (string-match
-                               muse-registry-url-or-link-regexp annot)
-                              (match-string 5 annot))))
-            (progn
-              (delete-other-windows)
-              (switch-to-buffer-other-window
-               (set-buffer (get-buffer-create "*Muse registry*")))
-              (erase-buffer)
-              (mapc (lambda (elem)
-                      (mapc (lambda (entry) (insert entry)) elem)
-                      (when elem (insert "\n"))) entries)
-              (muse-mode))))))))
+      (let ((entries (muse-registry-get-entries annot level)))
+        (if (not entries)
+            (message
+             (format "No match (level %d) for \"%s\"" level
+                     (progn (string-match
+                             muse-registry-url-or-link-regexp annot)
+                            (match-string 5 annot))))
+          (delete-other-windows)
+          (switch-to-buffer-other-window
+           (set-buffer (get-buffer-create "*Muse registry*")))
+          (erase-buffer)
+          (mapc (lambda (elem)
+                  (mapc (lambda (entry) (insert entry)) elem)
+                  (when elem (insert "\n"))) entries)
+          (muse-mode))))))
 
 (defun muse-registry-create nil
   "Create `muse-registry-file'."
@@ -244,10 +242,10 @@ See `muse-registry-show-level' for details."
 (defun muse-registry-entry-output (entry)
   "Make an output string for ENTRY."
   (concat " - [[pos://" (car entry)
-          "#" (second entry) "]["
+          "#" (nth 1 entry) "]["
           (muse-registry-get-project-name (car entry))
           ": " (file-name-nondirectory (car entry))
-          "]] - [[" (third entry) "][" (fourth entry) "]]\n"))
+          "]] - [[" (nth 2 entry) "][" (nth 3 entry) "]]\n"))
 
 (defun muse-registry-get-project-name (file)
   "Get project name for FILE."
@@ -292,9 +290,9 @@ See `muse-registry-show-level' for details."
     (while muse-directories
       (when (setq muse-directory (pop muse-directories))
         (mapcar (lambda (file)
-                  (unless (or (string-match "d" (tenth file))
+                  (unless (or (string-match "d" (nth 9 file))
                               (string-match muse-project-ignore-regexp
-                                            (first file)))
+                                            (car file)))
                     (mapc (lambda (elem)
                             (add-to-list 'muse-registry-alist elem))
                           (muse-registry-new-entries (car file)))))
@@ -333,13 +331,13 @@ LEVEL is set interactively or  set to `muse-registry-show-level'."
            exact-match descriptive fuzzy)
       (dolist (entry muse-registry-alist)
         (let* ((output (muse-registry-entry-output entry))
-               (keyword (fifth entry))
-               (ln-keyword (sixth entry)))
+               (keyword (nth 4 entry))
+               (ln-keyword (nth 5 entry)))
           ;; exact matching
-          (when (equal (third entry) link)
+          (when (equal (nth 2 entry) link)
             (add-to-list 'exact-match output))
           ;; descriptive matching
-          (when (and (> level 0) (equal (fourth entry) desc))
+          (when (and (> level 0) (equal (nth 3 entry) desc))
             (unless (member output exact-match)
               (add-to-list 'descriptive output)))
           ;; fuzzy matching
@@ -384,6 +382,8 @@ LEVEL is set interactively or  set to `muse-registry-show-level'."
     (setq kw (nthcdr (- (length kw)
                         muse-registry-max-number-of-keywords) kw))
     (mapconcat (lambda (e) e) kw ".*")))
+
+(provide 'muse-registry)
 
 ;;; muse-registry.el ends here
 ;;
