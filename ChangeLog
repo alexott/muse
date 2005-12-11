@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-11 00:33:48 GMT	Michael Olson <mwolson@gnu.org>	patch-285
+
+    Summary:
+      Merged from muse--rel--3.02 (patch 25)
+    Revision:
+      muse--main--1.0--patch-285
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-25
+       muse-latex: Get table of contents to publish correctly.
+
+    modified files:
+     ChangeLog lisp/muse-latex.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-25
+
+
 2005-12-06 16:57:48 GMT	Michael Olson <mwolson@gnu.org>	patch-284
 
     Summary:
