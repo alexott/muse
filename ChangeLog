@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-11 03:21:14 GMT	Michael Olson <mwolson@gnu.org>	patch-286
+
+    Summary:
+      muse-wiki: First try at implementing WikiName separator.
+    Revision:
+      muse--main--1.0--patch-286
+
+    * lisp/muse-wiki.el: Implement WikiName separator support via "''''"
+      markup, for when you want to add a suffix to a WikiName.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-12-11 00:33:48 GMT	Michael Olson <mwolson@gnu.org>	patch-285
 
     Summary:
