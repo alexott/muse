@@ -362,9 +362,13 @@ If the anchor occurs at the end of a line, ignore it."
         ;; on the side of caution by continuing to attempt to generate
         ;; the PDF if this happens and treat the final result as
         ;; successful.
-        (while (and (< times 3)
+        (while (and (< times 2)
                     (or (not (numberp result))
-                        (not (eq result 0))))
+                        (not (eq result 0))
+                        ;; table of contents takes 2 passes
+                        (file-readable-p
+                         (muse-replace-regexp-in-string
+                          "\\.tex\\'" ".toc" file t t))))
           (setq result (shell-command command)
                 times (1+ times)))
         (if (or (not (numberp result))

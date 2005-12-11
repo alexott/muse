@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-11 00:22:15 GMT	Michael Olson <mwolson@gnu.org>	patch-25
+
+    Summary:
+      muse-latex: Get table of contents to publish correctly.
+    Revision:
+      muse--rel--3.02--patch-25
+
+    * lisp/muse-latex.el (muse-latex-pdf-generate): Handle case where we need
+      2 passes to publish a table of contents.  I thought that pdflatex would
+      return an error code in this case, but no such luck.
+
+    modified files:
+     ChangeLog lisp/muse-latex.el
+
+
 2005-11-21 15:34:27 GMT	Michael Olson <mwolson@gnu.org>	patch-24
 
     Summary:
