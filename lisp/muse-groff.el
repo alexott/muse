@@ -167,7 +167,8 @@ command characters."
 
 (defun muse-groff-concat-lists ()
   "Join like lists."
-  (let (arg begin)
+  (let ((type "")
+        arg begin)
     (while (re-search-forward "^\.LIST[ \t]+\\(.*\\)\n" nil t)
       (setq arg (match-string 1))
       (if (string= arg "OFF")
