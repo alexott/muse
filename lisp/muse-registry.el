@@ -138,7 +138,8 @@
 
 (defconst muse-registry-url-regexp
   (concat "\\(" (mapconcat 'car muse-url-protocols "\\|") "\\)"
-          "[^][[:space:]\"'()^`{}]*[^][[:space:]\"'()^`{}.,;\n]+")
+          "[^][" muse-regexp-space "\"'()^`{}]*[^][" muse-regexp-space
+          "\"'()^`{}.,;\n]+")
   "A regexp that matches muse URL links.")
 
 (defconst muse-registry-link-regexp
@@ -251,7 +252,7 @@ See `muse-registry-show-level' for details."
   "Get project name for FILE."
   (let ((file1 (directory-file-name
                 (file-name-directory file))))
-    (replace-regexp-in-string "/?[^/]+/" "" file1)))
+    (muse-replace-regexp-in-string "/?[^/]+/" "" file1 t t)))
 
 (defun muse-registry-read-registry nil
   "Set `muse-registry-alist' from `muse-registry-file'."
@@ -290,13 +291,13 @@ See `muse-registry-show-level' for details."
     (while muse-directories
       (when (setq muse-directory (pop muse-directories))
         (mapcar (lambda (file)
-                  (unless (or (string-match "d" (nth 9 file))
+                  (unless (or (file-directory-p file)
                               (string-match muse-project-ignore-regexp
-                                            (car file)))
+                                            file))
                     (mapc (lambda (elem)
                             (add-to-list 'muse-registry-alist elem))
-                          (muse-registry-new-entries (car file)))))
-                (directory-files-and-attributes muse-directory t)))))
+                          (muse-registry-new-entries file))))
+                (directory-files muse-directory t)))))
   (muse-registry-create))
 
 (defun muse-registry-new-entries (file)
@@ -307,9 +308,9 @@ See `muse-registry-show-level' for details."
       (goto-char (point-min))
       (while (re-search-forward muse-registry-url-or-link-regexp nil t)
         (let* ((point (number-to-string (match-beginning 0)))
-               (link (or (match-string-no-properties 3)
-                         (match-string-no-properties 1)))
-               (desc (or (match-string-no-properties 5)
+               (link (or (muse-match-string-no-properties 3)
+                         (muse-match-string-no-properties 1)))
+               (desc (or (muse-match-string-no-properties 5)
                          (progn (string-match
                                  muse-registry-url-regexp link)
                                 (substring

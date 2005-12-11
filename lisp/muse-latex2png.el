@@ -93,10 +93,12 @@ Old files with PREFIX in the name are deleted."
   (if (null preamble)
       (setq preamble " "))
 
-  (let ((texfile (concat (or (and (boundp 'temporary-file-directory)
-                                  temporary-file-directory)
-                             temp-directory)
-                         prefix "_"  (format "%d" (abs (sxhash math)))))
+  (let ((texfile (expand-file-name
+                  (concat prefix "_"  (format "%d" (abs (sxhash math))))
+                  (cond ((boundp 'temporary-file-directory)
+                         temporary-file-directory)
+                        ((fboundp 'temp-directory)
+                         (temp-directory)))))
         (oldcddir default-directory))
     (with-temp-file (concat texfile ".tex")
       (insert (concat "\\documentclass{article}
