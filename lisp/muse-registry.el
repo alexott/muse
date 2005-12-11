@@ -214,9 +214,10 @@ See `muse-registry-show-level' for details."
           (switch-to-buffer-other-window
            (set-buffer (get-buffer-create "*Muse registry*")))
           (erase-buffer)
-          (mapc (lambda (elem)
-                  (mapc (lambda (entry) (insert entry)) elem)
-                  (when elem (insert "\n"))) entries)
+          (dolist (elem entries)
+            (dolist (entry elem)
+              (insert entry))
+            (when elem (insert "\n")))
           (muse-mode))))))
 
 (defun muse-registry-create nil
@@ -273,10 +274,8 @@ See `muse-registry-show-level' for details."
     (goto-char (point-min))
     (re-search-forward "^(\"" nil t)
     (goto-char (match-beginning 0))
-    (mapc (lambda (elem)
-            (insert
-             (with-output-to-string (prin1 elem)) "\n"))
-          new-entries)
+    (dolist (elem new-entries)
+      (insert (with-output-to-string (prin1 elem)) "\n"))
     (save-buffer)
     (kill-buffer (current-buffer)))
     (message (format "Muse registry updated for URLs in %s"
@@ -294,9 +293,8 @@ See `muse-registry-show-level' for details."
                   (unless (or (file-directory-p file)
                               (string-match muse-project-ignore-regexp
                                             file))
-                    (mapc (lambda (elem)
-                            (add-to-list 'muse-registry-alist elem))
-                          (muse-registry-new-entries file))))
+                    (dolist (elem (muse-registry-new-entries file))
+                      (add-to-list 'muse-registry-alist elem))))
                 (directory-files muse-directory t)))))
   (muse-registry-create))
 

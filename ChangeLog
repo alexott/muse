@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-11 06:24:18 GMT	Michael Olson <mwolson@gnu.org>	patch-289
+
+    Summary:
+      muse-registry: Attempt to increase Emacs20 compatibility.
+    Revision:
+      muse--main--1.0--patch-289
+
+    * lisp/muse-registry.el (muse-registry-show)
+      (muse-registry-update-registry, muse-registry-make-new-registry): Use
+      dolist instead of mapc for nomimal support of Emacs20, since Planner
+      tries to support it.
+
+    modified files:
+     ChangeLog lisp/muse-registry.el
+
+
 2005-12-11 06:17:25 GMT	Michael Olson <mwolson@gnu.org>	patch-288
 
     Summary:
