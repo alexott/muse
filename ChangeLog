@@ -2,6 +2,38 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-11 00:31:46 GMT	Michael Olson <mwolson@gnu.org>	patch-26
+
+    Summary:
+      Merged from muse--main--1.0 (patch 278, 281-283)
+    Revision:
+      muse--rel--3.02--patch-26
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-278
+       Don't split anchors in URLs.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-281
+       muse-colors: Add faces for all 3 levels of emphasis.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-282
+       muse-mode: Handle case where we visit an anchor-only link.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-283
+       muse-mode: Minor fix.
+
+    modified files:
+     AUTHORS ChangeLog ChangeLog.main lisp/muse-colors.el
+     lisp/muse-mode.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-278
+     mwolson@gnu.org--2005/muse--main--1.0--patch-281
+     mwolson@gnu.org--2005/muse--main--1.0--patch-282
+     mwolson@gnu.org--2005/muse--main--1.0--patch-283
+
+
 2005-12-11 00:22:15 GMT	Michael Olson <mwolson@gnu.org>	patch-25
 
     Summary:

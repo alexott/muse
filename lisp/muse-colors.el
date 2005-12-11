@@ -147,6 +147,27 @@ this to nil."
   "Face for verbatim text."
   :group 'muse-colors)
 
+(if (featurep 'xemacs)
+    (progn
+      (copy-face 'italic 'muse-emphasis-1)
+      (copy-face 'bold 'muse-emphasis-2)
+      (copy-face 'bold-italic 'muse-emphasis-3))
+
+  (defface muse-emphasis-1
+    '((t (:italic t)))
+    "Face for italic emphasized text."
+    :group 'muse-colors)
+
+  (defface muse-emphasis-2
+    '((t (:bold t)))
+    "Face for bold emphasized text."
+    :group 'muse-colors)
+
+  (defface muse-emphasis-3
+    '((t (:bold t :italic t)))
+    "Face for bold italic emphasized text."
+    :group 'muse-colors))
+
 (defcustom muse-colors-buffer-hook nil
   "A hook run after a region is highlighted.
 Each function receives three arguments: BEG END VERBOSE.
@@ -231,9 +252,9 @@ whether progress messages should be displayed to the user."
                              (eq (char-syntax (char-after (1+ b2))) ?w)))
               (add-text-properties beg e1 '(invisible muse))
               (add-text-properties
-               e1 b2 (list 'face (cond ((= leader 1) 'italic)
-                                       ((= leader 2) 'bold)
-                                       ((= leader 3) 'bold-italic))))
+               e1 b2 (list 'face (cond ((= leader 1) 'muse-emphasis-1)
+                                       ((= leader 2) 'muse-emphasis-2)
+                                       ((= leader 3) 'muse-emphasis-3))))
               (add-text-properties b2 e2 '(invisible muse))
               (when multiline
                 (add-text-properties

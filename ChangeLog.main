@@ -2,6 +2,67 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-06 16:54:40 GMT	Michael Olson <mwolson@gnu.org>	patch-283
+
+    Summary:
+      muse-mode: Minor fix.
+    Revision:
+      muse--main--1.0--patch-283
+
+    * lisp/muse-mode.el (muse-current-word): Switch order of save-restriction
+      and save-excursion as recommended by Emacs documentation.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
+2005-12-01 01:32:29 GMT	Michael Olson <mwolson@gnu.org>	patch-282
+
+    Summary:
+      muse-mode: Handle case where we visit an anchor-only link.
+    Revision:
+      muse--main--1.0--patch-282
+
+    * lisp/muse-mode.el (muse-visit-link-default): Handle case where the link
+      consists of only an anchor.  Thanks to Jim Ottaway for the patch.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
+2005-12-01 01:08:13 GMT	Michael Olson <mwolson@gnu.org>	patch-281
+
+    Summary:
+      muse-colors: Add faces for all 3 levels of emphasis.
+    Revision:
+      muse--main--1.0--patch-281
+
+    * lisp/muse-colors.el (muse-emphasis-1, muse-emphasis-2)
+      (muse-emphasis-3): New faces that represent italic, bold, and bold
+      italic emphasis, respectively.
+      (muse-colors-emphasized): Use new faces.  Thanks to Phillip Lord for
+      the suggestion and the initial code. 
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-colors.el
+
+
+2005-11-21 21:11:14 GMT	Michael Olson <mwolson@gnu.org>	patch-278
+
+    Summary:
+      Don't split anchors in URLs.
+    Revision:
+      muse--main--1.0--patch-278
+
+    * lisp/muse-mode.el (muse-visit-link-default): Install patch from Jim
+      Ottaway.  Remove ANCHOR parameter.  Compute the anchor ourselves.  Make
+      sure that we handle URLs before trying to split the anchor.
+      (muse-visit-link): Don't compute the anchor.  Let the callee do that.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-11-20 22:22:10 GMT	Michael Olson <mwolson@gnu.org>	patch-276
 
     Summary:
