@@ -231,7 +231,7 @@ when publishing files in that project."
 ;; Make it easier to specify a muse-project-alist entry
 
 (defcustom muse-project-ignore-regexp
-  (concat "\\`\\(\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'\\|"
+  (concat "\\`\\(.*\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'\\|"
           "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\)\\(/\\|\\'\\)")
   "A regexp matching files to be ignored in Wiki directories."
   :type 'regexp

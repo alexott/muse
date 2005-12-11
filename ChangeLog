@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-11 07:06:34 GMT	Michael Olson <mwolson@gnu.org>	patch-291
+
+    Summary:
+      Merged from muse--rel--3.02 (patch 27)
+    Revision:
+      muse--main--1.0--patch-291
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--rel--3.02--patch-27
+       muse-project: Prevent auto-save files from being included.
+
+    modified files:
+     ChangeLog lisp/muse-project.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-27
+
+
 2005-12-11 06:27:40 GMT	Michael Olson <mwolson@gnu.org>	patch-290
 
     Summary:
