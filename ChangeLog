@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-13 00:02:27 GMT	Michael Olson <mwolson@gnu.org>	patch-28
+
+    Summary:
+      muse-project: Deal with edge case.
+    Revision:
+      muse--rel--3.02--patch-28
+
+    * lisp/muse-project.el (muse-project-file-alist): Try to fix edge case
+      where file-name-directory returns nil, resulting in an error.  Thanks
+      to Paul Lussier for the report.
+
+    modified files:
+     ChangeLog lisp/muse-project.el
+
+
 2005-12-11 07:04:56 GMT	Michael Olson <mwolson@gnu.org>	patch-27
 
     Summary:
