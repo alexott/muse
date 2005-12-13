@@ -404,7 +404,7 @@ If STYLE is not specified, use current style."
         (apply 'format text args)
       (or text ""))))
 
-(defsubst muse-insert-markup (&rest args)
+(defun muse-insert-markup (&rest args)
   (let ((beg (point)))
     (apply 'insert args)
     (muse-publish-mark-read-only beg (point))))
