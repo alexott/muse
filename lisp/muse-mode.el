@@ -178,6 +178,8 @@ so only enable this if you don't use either of these."
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
        "; ")
+  (set (make-local-variable 'comment-start-skip)
+       "^;\\s-+")
   ;; If we're using Emacs21, this makes flyspell work like it should
   (when (boundp 'flyspell-generic-check-word-p)
     (set (make-local-variable 'flyspell-generic-check-word-p)
