@@ -364,17 +364,19 @@ disk."
         (while pats
           (if (symbolp (car pats))
               (setq pats (cddr pats))
-            (let ((dir (or (and (file-directory-p (car pats)) (car pats))
-                           (and (not (file-readable-p (car pats)))
-                                (file-directory-p
-                                 (file-name-directory (car pats)))
-                                (file-name-directory (car pats))))))
-              (if dir
-                  (let ((mod-time (nth 5 (file-attributes dir))))
-                    (if (or (null last-mod)
+            (let* ((fnd (file-name-directory (car pats)))
+                   (dir (cond ((file-directory-p (car pats))
+                               (car pats))
+                              ((and (not (file-readable-p (car pats)))
+                                    fnd
+                                    (file-directory-p fnd))
+                               fnd))))
+              (when dir
+                (let ((mod-time (nth 5 (file-attributes dir))))
+                  (when (or (null last-mod)
                             (and mod-time
                                  (muse-time-less-p last-mod mod-time)))
-                        (setq last-mod mod-time)))))
+                    (setq last-mod mod-time)))))
             (setq pats (cdr pats))))))
     ;; Either return the currently known list, or read it again from
     ;; disk
