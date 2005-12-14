@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-14 00:55:15 GMT	Michael Olson <mwolson@gnu.org>	patch-30
+
+    Summary:
+      Merged from muse--main--1.0 (patch 295)
+    Revision:
+      muse--rel--3.02--patch-30
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-295
+       muse-wiki: Fix an error that occurs when muse-colors is not loaded.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-295
+
+
 2005-12-13 04:46:53 GMT	Michael Olson <mwolson@gnu.org>	patch-29
 
     Summary:

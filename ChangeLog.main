@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-14 00:54:02 GMT	Michael Olson <mwolson@gnu.org>	patch-295
+
+    Summary:
+      muse-wiki: Fix an error that occurs when muse-colors is not loaded.
+    Revision:
+      muse--main--1.0--patch-295
+
+    * lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Try to fix an
+      error when muse-colors is not loaded.  Thanks to Stefan van der Walt
+      for the report.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-12-06 16:54:40 GMT	Michael Olson <mwolson@gnu.org>	patch-283
 
     Summary:
