@@ -41,8 +41,8 @@
 (defun muse-wiki-update-wikiword-regexp (sym val)
   "Update everything related to `muse-wiki-wikiword-regexp'."
   (set sym val)
-  (if (featurep 'muse-colors)
-      (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
+  (when (featurep 'muse-colors)
+    (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
 
 (defcustom muse-wiki-hide-nop-tag t
   "If non-nil, hide <nop> tags when coloring a Muse buffer."
@@ -106,7 +106,8 @@ and `muse-project-alist'."
                 (when value (concat "\\|" (mapconcat 'car value "\\|")))
                 "\\)\\(?:\\(?:" muse-wiki-interwiki-delimiter
                 "\\)\\(\\sw+\\)\\)?\\>"))
-  (muse-configure-highlighting 'muse-colors-markup muse-colors-markup))
+  (when (featurep 'muse-colors)
+    (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
 
 (defcustom muse-wiki-interwiki-alist
   '(("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/"))
