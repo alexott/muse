@@ -2,6 +2,29 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-14 01:01:09 GMT	Michael Olson <mwolson@gnu.org>	patch-31
+
+    Summary:
+      Merged from muse--main--1.0 (patch 286, 296)
+    Revision:
+      muse--rel--3.02--patch-31
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-286
+       muse-wiki: First try at implementing WikiName separator.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-296
+       muse-wiki: WikiWord suffix fix.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-286
+     mwolson@gnu.org--2005/muse--main--1.0--patch-296
+
+
 2005-12-14 00:55:15 GMT	Michael Olson <mwolson@gnu.org>	patch-30
 
     Summary:

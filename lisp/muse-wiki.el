@@ -52,7 +52,7 @@
 (defcustom muse-wiki-wikiword-regexp
   (concat "\\<\\(\\(?:[" muse-regexp-upper
           "]+[" muse-regexp-lower "]+\\)\\(?:["
-          muse-regexp-upper "]+[" muse-regexp-lower "]+\\)+\\)\\>")
+          muse-regexp-upper "]+[" muse-regexp-lower "]+\\)+\\)")
   "Regexp used to match WikiWords."
   :type 'regexp
   :group 'muse-wiki
@@ -263,6 +263,9 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
      (defun muse-wiki-colors-nop-tag (beg end)
        (add-text-properties beg (+ beg 5)
                             '(invisible muse intangible t)))
+     (defun muse-colors-wikiword-separate ()
+       (add-text-properties (match-beginning 0) (match-end 0)
+                            '(invisible muse intangible t)))
 
      (add-to-list 'muse-colors-tags
                   '("nop" nil nil muse-wiki-colors-nop-tag)
@@ -274,6 +277,9 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
      (add-to-list 'muse-colors-markup
                   '(muse-wiki-wikiword-regexp t muse-colors-implicit-link)
                   t)
+     (add-to-list 'muse-colors-markup
+                  '("''''" ?\' muse-colors-wikiword-separate)
+                  nil)
 
      (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
 
@@ -286,6 +292,9 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
                   t)
      (add-to-list 'muse-publish-markup-regexps
                   '(3200 muse-wiki-wikiword-regexp 0 link)
+                  t)
+     (add-to-list 'muse-publish-markup-regexps
+                  '(3300 "''''" 0 "")
                   t)
 
      (custom-add-option 'muse-publish-desc-transforms

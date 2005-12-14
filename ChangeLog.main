@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-14 00:57:11 GMT	Michael Olson <mwolson@gnu.org>	patch-296
+
+    Summary:
+      muse-wiki: WikiWord suffix fix.
+    Revision:
+      muse--main--1.0--patch-296
+
+    * lisp/muse-wiki.el (muse-wiki-wikiword-regexp): Don't require there to
+      be nothing at the end.  This allows us to separate WikiWords with
+      "''''" to indicate suffixes.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2005-12-14 00:54:02 GMT	Michael Olson <mwolson@gnu.org>	patch-295
 
     Summary:
@@ -12,6 +27,20 @@
     * lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Try to fix an
       error when muse-colors is not loaded.  Thanks to Stefan van der Walt
       for the report.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
+2005-12-11 03:21:14 GMT	Michael Olson <mwolson@gnu.org>	patch-286
+
+    Summary:
+      muse-wiki: First try at implementing WikiName separator.
+    Revision:
+      muse--main--1.0--patch-286
+
+    * lisp/muse-wiki.el: Implement WikiName separator support via "''''"
+      markup, for when you want to add a suffix to a WikiName.
 
     modified files:
      ChangeLog lisp/muse-wiki.el
