@@ -2,6 +2,18 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-15 23:09:32 GMT	Michael Olson <mwolson@gnu.org>	patch-297
+
+    Summary:
+      Change mode of muse-protocols to 644.
+    Revision:
+      muse--main--1.0--patch-297
+
+
+    modified files:
+     ChangeLog lisp/muse-protocols.el
+
+
 2005-12-14 00:57:11 GMT	Michael Olson <mwolson@gnu.org>	patch-296
 
     Summary:
