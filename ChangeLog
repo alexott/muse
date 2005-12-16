@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-16 16:44:02 GMT	Michael Olson <mwolson@gnu.org>	patch-33
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 298)
+    Revision:
+      muse--rel--3.02--patch-33
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-298
+       muse-mode: Make muse-edit-link-at-point work.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-mode.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-298
+
+
 2005-12-15 23:10:21 GMT	Michael Olson <mwolson@gnu.org>	patch-32
 
     Summary:
