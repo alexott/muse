@@ -597,6 +597,7 @@ If STYLE is not specified, use current style."
     (concat (file-name-directory file)
             (muse-publish-link-name file style))))
 
+;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
   "Publish the given file in list FILES.
 If the argument FORCE is nil, each file is only published if it is
@@ -626,6 +627,7 @@ the file is published no matter what."
         (muse-style-run-hooks :final style file output-path target))
       t)))
 
+;;;###autoload
 (defun muse-publish-this-file (style output-dir &optional force)
   "Publish the page in the current file."
   (interactive (muse-publish-get-info))

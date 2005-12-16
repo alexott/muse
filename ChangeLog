@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-16 17:06:06 GMT	Michael Olson <mwolson@gnu.org>	patch-299
+
+    Summary:
+      Add autoload cookies.
+    Revision:
+      muse--main--1.0--patch-299
+
+    Add autoload cookies to several functions.
+
+    modified files:
+     ChangeLog lisp/muse-blosxom.el lisp/muse-mode.el
+     lisp/muse-project.el lisp/muse-protocols.el
+     lisp/muse-publish.el
+
+
 2005-12-16 16:42:46 GMT	Michael Olson <mwolson@gnu.org>	patch-298
 
     Summary:
