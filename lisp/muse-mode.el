@@ -299,11 +299,12 @@ Do not rename the page originally referred to."
   (interactive)
   (if (muse-link-at-point)
       (replace-match
-       (muse-make-link
-        (read-string "Link: "
-                     (muse-match-string-no-properties 1))
-        (read-string "Text: "
-                     (muse-match-string-no-properties 2)))
+       (save-match-data
+         (muse-make-link
+          (read-string "Link: "
+                       (muse-match-string-no-properties 1))
+          (read-string "Text: "
+                       (muse-match-string-no-properties 2))))
        t t)
     (error "There is no valid link at point")))
 

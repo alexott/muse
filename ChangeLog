@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-16 16:42:46 GMT	Michael Olson <mwolson@gnu.org>	patch-298
+
+    Summary:
+      muse-mode: Make muse-edit-link-at-point work.
+    Revision:
+      muse--main--1.0--patch-298
+
+    * lisp/muse-mode.el (muse-edit-link-at-point): Save match data so that
+      this function works.  Before, it would remove an arbitrary chunk of the
+      top of the buffer.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el
+
+
 2005-12-15 23:09:32 GMT	Michael Olson <mwolson@gnu.org>	patch-297
 
     Summary:
