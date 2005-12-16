@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-16 21:30:52 GMT	Michael Olson <mwolson@gnu.org>	patch-34
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 302)
+    Revision:
+      muse--rel--3.02--patch-34
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-302
+       muse-html: Fix regexp error.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-html.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-302
+
+
 2005-12-16 16:44:02 GMT	Michael Olson <mwolson@gnu.org>	patch-33
 
     Summary:

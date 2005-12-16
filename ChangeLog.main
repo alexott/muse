@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-16 21:29:58 GMT	Michael Olson <mwolson@gnu.org>	patch-302
+
+    Summary:
+      muse-html: Fix regexp error.
+    Revision:
+      muse--main--1.0--patch-302
+
+    * lisp/muse-html.el (muse-html-escape-string): Fix error in regexp
+      string.
+
+    modified files:
+     ChangeLog lisp/muse-html.el
+
+
 2005-12-16 16:42:46 GMT	Michael Olson <mwolson@gnu.org>	patch-298
 
     Summary:
