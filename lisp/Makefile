@@ -4,7 +4,7 @@
 include ../Makefile.defs
 
 EL  = $(filter-out muse-autoloads.el,$(wildcard *.el))
-ELC = $(patsubst %.el,%.elc,$(wildcard *.el))
+ELC = $(patsubst %.el,%.elc,$(EL))
 
 all: autoloads lisp
 

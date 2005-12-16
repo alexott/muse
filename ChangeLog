@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-16 21:28:45 GMT	Michael Olson <mwolson@gnu.org>	patch-301
+
+    Summary:
+      Makefile: Minor tweak.
+    Revision:
+      muse--main--1.0--patch-301
+
+    * lisp/Makefile (ELC): Base this on $(EL).  This should keep
+      muse-autoloads.elc from being added to the list -- it won't be compiled
+      anyway.
+
+    modified files:
+     ChangeLog lisp/Makefile
+
+
 2005-12-16 19:21:06 GMT	Michael Olson <mwolson@gnu.org>	patch-300
 
     Summary:
