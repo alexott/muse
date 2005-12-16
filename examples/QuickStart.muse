@@ -184,7 +184,7 @@ The above is rendered as:
 > A line of Emacs verse;
 >   forgive its being so terse.
 
-You can also use the =<literal><verse></literal>= tag, if you prefer:
+You can also use the =<verse>= tag, if you prefer:
 
 <example>
 <verse>
@@ -195,13 +195,13 @@ A line of Emacs verse;
 
 ** Literal paragraphs
 
-The =<literal><example></literal>= tag is used for examples, where
-whitespace should be preserved, the text rendered in monospace, and
-any characters special to the output style escaped.
+The =<example>= tag is used for examples, where whitespace should be
+preserved, the text rendered in monospace, and any characters special
+to the output style escaped.
 
-There is also the =<literal><literal></literal>= tag, which causes a
-marked block to be entirely left alone.  This can be used for
-inserting a hand-coded HTML blocks into HTML output, for example.
+There is also the =<literal>= tag, which causes a marked block to be
+entirely left alone.  This can be used for inserting a hand-coded HTML
+blocks into HTML output, for example.
 
 ** Lists
 
@@ -309,13 +309,11 @@ Thus, Muse can be downloaded [[http://download.gna.org/muse-el/][here]], or at
 
 ** Embedded lisp
 
-Arbitrary kinds of markup can be achieved using the
-=<literal><lisp></literal>= tag, which is the only Muse tag supported
-in a style's header and footer text.  With the
-=<literal><lisp></literal>= tag, you may generated whatever output
-text you wish.  The inserted output will get marked up, if the
-=<literal><lisp></literal>= tag appears within the main text of the
-document.
+Arbitrary kinds of markup can be achieved using the =<lisp>= tag,
+which is the only Muse tag supported in a style's header and footer
+text.  With the =<lisp>= tag, you may generated whatever output text
+you wish.  The inserted output will get marked up, if the =<lisp>= tag
+appears within the main text of the document.
 
 <example>
 <lisp>(concat "This form gets " "inserted")</lisp>

@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-16 23:37:24 GMT	Michael Olson <mwolson@gnu.org>	patch-304
+
+    Summary:
+      QuickStart: Correct old syntax.
+    Revision:
+      muse--main--1.0--patch-304
+
+    * examples/QuickStart.muse: Don't wrap the literal tag around other tags.
+      Just use equal sign escaping.
+
+    modified files:
+     ChangeLog examples/QuickStart.muse
+
+
 2005-12-16 23:19:09 GMT	Michael Olson <mwolson@gnu.org>	patch-303
 
     Summary:
