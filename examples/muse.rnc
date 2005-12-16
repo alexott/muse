@@ -1,7 +1,7 @@
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace rng = "http://relaxng.org/ns/structure/1.0"
 
-#   Muse-Mode RELAX NG Schema ver. alpha 0.1 
+#   Muse-Mode RELAX NG Schema v. 0.2
 #   Copyright (C) 2005  Free Software Foundation, Inc.
 
 #   This is free software; you can redistribute it and/or modify it
@@ -22,30 +22,44 @@ namespace rng = "http://relaxng.org/ns/structure/1.0"
 #   DTD format and XML Schema language using free tools.
 
 #   Emacs users are encouraged to use James Clarke's nxml-mode for
-#   editing editing and validating XML files.  If you are in nxml-mode
-#   use the command C-c C-s to point to this schema file, say yes if
-#   you are asked if you want to copy the file to your location, and
-#   then C-c C-a can be used to reload the schema if you make changes
+#   editing and validating XML files.  If you are in nxml-mode use the
+#   command C-c C-s C-f to point to this schema file, say yes if you
+#   are asked if you want to copy the file to your location, and then
+#   C-c C-s C-a can be used to reload the schema if you make changes
 #   to the file.
 
 # Contributors:
-# 
+#
 # Brad Collins (brad AT chenla DOT org) wrote the initial file.
+#
+# Michael Olson (mwolson AT gnu DOT org) made it work with Muse's
+# QuickStart document.
 
-start = page
+start = MUSE
 
    ## root element
-page = 
-   element page { 
+MUSE =
+   element MUSE {
       muse.attribute.type
       & muse.element.pageinfo?
-      & muse.element.section*  }
+      & muse.element.section*
+      & muse.element.p*
+      & muse.attribute.blockquote*
+      & muse.element.table*
+      & muse.element.list*
+      & muse.element.hr*
+      & muse.element.image*
+      & muse.element.example*
+      & muse.element.format*  # for centering paragraphs
+      & muse.element.verse*
+  }
+
 # ------------------------------------------------
 #  Pageinfo elements
 # ------------------------------------------------
-    ## pageinfo element used for metadata 
+    ## pageinfo element used for metadata
     ## for the page
-muse.element.pageinfo = element pageinfo { 
+muse.element.pageinfo = element pageinfo {
    muse.element.title?
    & muse.element.author?
    & muse.element.maintainer?
@@ -67,7 +81,7 @@ muse.element.pubdate = element pubdate { text }?
 #  Block elements
 # ------------------------------------------------
 
-muse.element.section = element section { 
+muse.element.section = element section {
    muse.attribute.type?
    & muse.attribute.level?
    & muse.element.section*
@@ -84,13 +98,14 @@ muse.element.section = element section {
    & text }?
 
   ## blockquote element
-muse.attribute.blockquote = element blockquote { 
+muse.attribute.blockquote = element blockquote {
    muse.element.title?
    & muse.element.p* }?
 
    ## paragraph element
-muse.element.p = element p { 
-   muse.element.format*
+muse.element.p = element p {
+   muse.element.code*
+   & muse.element.format*
    & muse.element.image*
    & muse.element.link*
    & muse.element.image*
@@ -101,20 +116,33 @@ muse.element.p = element p {
    ## example element
 muse.element.example = element example { text }?
 
-   ## verse element
-muse.element.verse = element verse { text }?
+  ## verse element
+muse.element.verse = element verse {
+   muse.element.line* }?
+
+  ## verse line element
+muse.element.line = element line {
+   muse.element.code*
+   & muse.element.format*
+   & muse.element.image*
+   & muse.element.link*
+   & muse.element.image*
+   & muse.element.anchor*
+   & muse.element.footnote*
+   & text }?
 
 # ------------------------------------------------
 #  Unordered list elements
 # ------------------------------------------------
 
-muse.element.list = element list { 
+muse.element.list = element list {
    muse.attribute.type?
    & muse.element.item* }?
 
-muse.element.item = element item { 
+muse.element.item = element item {
    muse.element.term?
    & muse.element.definition?
+   & muse.element.code*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
@@ -125,16 +153,18 @@ muse.element.item = element item {
 #  Definition list elements
 # ------------------------------------------------
 
-muse.element.term = element term { 
-   muse.element.format*
+muse.element.term = element term {
+   muse.element.code*
+   & muse.element.format*
    & muse.element.image*
    & muse.element.link*
    & muse.element.image*
    & text }?
 
    ## def
-muse.element.definition = element definition { 
-   muse.element.format*
+muse.element.definition = element definition {
+   muse.element.code*
+   & muse.element.format*
    & muse.element.image*
    & muse.element.link*
    & muse.element.image*
@@ -145,12 +175,16 @@ muse.element.definition = element definition {
 # ------------------------------------------------
 
   ## format element
-  ## used for 
-muse.element.format = element format { 
+  ## used for emphasis, underlining, and centering paragraphs
+muse.element.format = element format {
    muse.attribute.type?
    & muse.attribute.level?
    & muse.element.p?
    & text }?
+
+  ## code element
+  ## used for small pieces of monospace text, like commands
+muse.element.code = element code { text }?
 
 muse.element.image = element image { muse.attribute.href? }?
 
@@ -162,7 +196,7 @@ muse.element.footnote = element footnote { text }?
 
    ## anchor element
 muse.element.anchor = element anchor { muse.attribute.id }?
-  
+
    ## link element
 muse.element.link = element link {
    muse.attribute.type?
@@ -190,9 +224,9 @@ muse.attribute.id = attribute id { text }?
 # ------------------------------------------------
 
   ## table element
-muse.element.table = element table { 
-   muse.element.tbody* 
-   & muse.element.thead* 
+muse.element.table = element table {
+   muse.element.tbody*
+   & muse.element.thead*
    & muse.element.tfoot* }?
 
   ## table body element
@@ -205,12 +239,12 @@ muse.element.thead = element thead { muse.element.tr* }?
 muse.element.tfoot = element tfoot { muse.element.tr* }?
 
   ## table row element
-muse.element.tr = element tr { 
-   muse.element.td* 
+muse.element.tr = element tr {
+   muse.element.td*
  & muse.element.th*}?
 
   ## td element
 muse.element.td = element td { text }?
 
-  ## th element 
+  ## th element
 muse.element.th = element th { text }?

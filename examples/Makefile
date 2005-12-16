@@ -9,17 +9,17 @@ all: examples
 
 examples: $(EXAMPLES)
 
-%.html: %
+%.html: %.muse
 	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish html $<
 
-%.pdf: %
+%.pdf: %.muse
 	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish info-pdf $<
 
-%.info: %
+%.info: %.muse
 	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish info $<
 
 clean:
 	-rm -f missfont.log
 
 realclean distclean fullclean: clean
-	-rm -f QuickStart.* 
+	-rm -f $(EXAMPLES)

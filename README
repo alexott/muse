@@ -127,7 +127,7 @@ If you do not have a working LaTeX installation with the proper fonts,
 the PDF file will not be successfully generated.
 
 To see the document that is interpreted in order to generate these
-files, take a look at `examples/QuickStart'.
+files, take a look at `examples/QuickStart.muse'.
 
 To view the generated Info document from within Emacs, try the
 following.
