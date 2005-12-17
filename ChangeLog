@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-17 17:14:51 GMT	Michael Olson <mwolson@gnu.org>	patch-36
+
+    Summary:
+      Release Emacs Muse 3.02.5.
+    Revision:
+      muse--rel--3.02--patch-36
+
+    * NEWS: Add items for 3.02.5 release.
+    
+    * muse.el: Release Muse 3.02.5.
+
+    modified files:
+     ChangeLog Makefile.defs NEWS debian/changelog lisp/muse.el
+     muse.texi
+
+
 2005-12-17 02:08:46 GMT	Michael Olson <mwolson@gnu.org>	patch-35
 
     Summary:

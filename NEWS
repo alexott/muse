@@ -1,5 +1,43 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.02.5
+
+** LaTeX
+
+*** Use a better algorithm for determining how many times we need to
+call pdflatex for publishing.  Anything with a Table of Contents needs
+2 passes.
+
+** Muse Mode
+
+*** The 3 levels of emphasis now have corresponding muse-emphasis-N faces.
+This permits the user to customize them, which may be useful if a font
+does not have italic and/or bold versions.
+
+*** Visiting pages with anchors works better.
+
+*** Fix fill bug with semicolons in the middle of paragraphs.
+
+*** Fix a bug with editing the link at point.
+
+*** Fix a display bug with text like =<verbatim><example></verbatim>=.
+
+** Project settings
+
+*** Fix an edge case that yielded a stringp: nil error.
+
+*** Prevent auto-save files from being recognized as Muse files.
+
+** Wiki
+
+*** By default, WikiWords can have consecutive capital letters.
+
+*** Fix an error that occurs when muse-colors is not loaded.
+
+*** It is now possible to specify a suffix for WikiWord links.
+For example: WikiName''''s.  The WikiName part will be displayed and
+colored as a link, but the "s" will be left alone.
+
 * Changes in Muse 3.02.02
 
 ** Configuration

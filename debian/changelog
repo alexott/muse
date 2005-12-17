@@ -1,3 +1,9 @@
+muse-el (3.02.5-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Sat, 17 Dec 2005 12:11:27 -0500
+
 muse-el (3.02.02-1) unstable; urgency=low
 
   * New upstream release.
