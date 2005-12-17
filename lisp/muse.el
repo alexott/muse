@@ -4,14 +4,14 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.02.02
-;; Date: Sat 19-Nov-2005
+;; Version: 3.02.5
+;; Date: Sat 17-Dec-2005
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
 ;; Description: An authoring and publishing tool for Emacs
 ;; URL: http://www.mwolson.org/projects/MuseMode.html
-;; Compatibility: Emacs21
+;; Compatibility: Emacs21 XEmacs21 Emacs22
 
 ;; This file is not part of GNU Emacs.
 
@@ -45,7 +45,7 @@
 
 ;;; Code:
 
-(defvar muse-version "3.02.02"
+(defvar muse-version "3.02.5"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)
