@@ -40,11 +40,10 @@ start = MUSE
    ## root element
 MUSE =
    element MUSE {
-      muse.attribute.type
-      & muse.element.pageinfo?
+      muse.element.pageinfo?
       & muse.element.section*
       & muse.element.p*
-      & muse.attribute.blockquote*
+      & muse.element.blockquote*
       & muse.element.table*
       & muse.element.list*
       & muse.element.hr*
@@ -87,7 +86,7 @@ muse.element.section = element section {
    & muse.element.section*
    & muse.element.title*
    & muse.element.p*
-   & muse.attribute.blockquote*
+   & muse.element.blockquote*
    & muse.element.table*
    & muse.element.list*
    & muse.element.hr*
@@ -98,7 +97,7 @@ muse.element.section = element section {
    & text }?
 
   ## blockquote element
-muse.attribute.blockquote = element blockquote {
+muse.element.blockquote = element blockquote {
    muse.element.title?
    & muse.element.p* }?
 

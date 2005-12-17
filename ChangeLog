@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-17 01:19:30 GMT	Michael Olson <mwolson@gnu.org>	patch-305
+
+    Summary:
+      Revert QuickStart changes, hack more on muse.rnc.
+    Revision:
+      muse--main--1.0--patch-305
+
+    * examples/QuickStart.muse: Revert previous changes; they cause
+      publishing to fail.  Hrm.  Guess I'll have to fix the display issue
+      with <literal> tags then.
+    
+    * muse.rnc: Put blockquote in the muse.element namespace, since it's not
+      an attribute.
+
+    modified files:
+     ChangeLog examples/QuickStart.muse examples/muse.rnc
+
+
 2005-12-16 23:37:24 GMT	Michael Olson <mwolson@gnu.org>	patch-304
 
     Summary:
