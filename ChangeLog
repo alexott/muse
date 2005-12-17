@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-17 02:08:46 GMT	Michael Olson <mwolson@gnu.org>	patch-35
+
+    Summary:
+      muse-colors: Fix QuickStart display bug.
+    Revision:
+      muse--rel--3.02--patch-35
+
+    * lisp/muse-colors.el (muse-colors-verbatim): Move past last delimiting
+      equal sign, since we don't need to look at the area in-between.  This
+      fixes a display bug involving =<verbatim><example></verbatim>=.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el
+
+
 2005-12-16 21:30:52 GMT	Michael Olson <mwolson@gnu.org>	patch-34
 
     Summary:
