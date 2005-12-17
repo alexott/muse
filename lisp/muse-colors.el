@@ -300,7 +300,7 @@ whether progress messages should be displayed to the user."
                 (eq (char-syntax (char-before start)) ?\ )
                 (memq (char-before start)
                       '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
-        (save-excursion
+        (let ((pos (point)))
           (skip-chars-forward "^=\n" end)
           (when (eq (char-after) ?\n)
             (setq multiline t)
@@ -312,6 +312,7 @@ whether progress messages should be displayed to the user."
                       (not (eq (char-after (point)) ?=))
                       (and (not (eobp))
                            (eq (char-syntax (char-after (1+ (point)))) ?w)))
+            (setq pos (min (1+ (point)) (point-max)))
             (add-text-properties start (1+ start) '(invisible muse))
             (add-text-properties (1+ start) (point) '(face muse-verbatim-face))
             (add-text-properties (point)
@@ -320,7 +321,8 @@ whether progress messages should be displayed to the user."
             (when multiline
               (add-text-properties
                start (min (1+ (point)) (point-max))
-               '(font-lock-multiline t)))))))))
+               '(font-lock-multiline t))))
+          (goto-char pos))))))
 
 (defcustom muse-colors-markup
   `(;; make emphasized text appear emphasized
