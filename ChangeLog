@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-21 02:44:22 GMT	Michael Olson <mwolson@gnu.org>	patch-37
+
+    Summary:
+      Make error messages during publishing more friendly.
+    Revision:
+      muse--rel--3.02--patch-37
+
+    * lisp/muse-mode.el (muse-index-as-string): Use with-temp-buffer instead
+      of muse-with-temp-buffer since we aren't inserting text from another
+      file.
+    
+    * lisp/muse.el (muse-with-temp-buffer): Note in the documentation that
+      this is meant to be used with the insert-file-contents function, in
+      order to keep weird side effects from happening.  Make the displayed
+      message more friendly when debug-on-error is nil, and suggest what to
+      do in order to get a full backtrace.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse.el
+
+
 2005-12-17 17:14:51 GMT	Michael Olson <mwolson@gnu.org>	patch-36
 
     Summary:

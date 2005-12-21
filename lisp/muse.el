@@ -198,7 +198,8 @@ All this means is that certain extensions, like .gz, are removed."
 (defmacro muse-with-temp-buffer (&rest body)
   "Create a temporary buffer, and evaluate BODY there like `progn'.
 See also `with-temp-file' and `with-output-to-string'.
-Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
+Unlike `with-temp-buffer', this will never attempt to save the temp buffer.
+It is meant to be used along with `insert-file-contents'."
   (let ((temp-buffer (make-symbol "temp-buffer")))
     `(let ((,temp-buffer (generate-new-buffer " *muse-temp*")))
        (unwind-protect
@@ -209,22 +210,26 @@ Unlike `with-temp-buffer', this will never attempt to save the temp buffer."
                  (with-current-buffer ,temp-buffer
                    ,@body)
                (error
-                (if (and (boundp 'muse-batch-publishing-p)
-                         muse-batch-publishing-p)
-                    (progn
-                      (message "%s: Error occured: %s"
-                               (muse-page-name) err)
-                      (backtrace))
-                  (if (fboundp 'display-warning)
-                      (display-warning 'muse
-                                       (format "%s: Error occurred: %s\n\n%s"
-                                               (muse-page-name) err
-                                               (pp (quote ,body)))
-                                       (if (featurep 'xemacs)
-                                           'warning
-                                         :warning))
-                    (message "%s: Error occured: %s\n\n%s"
-                             (muse-page-name) err (pp (quote ,body))))))))
+                (cond
+                 ((and (boundp 'muse-batch-publishing-p)
+                       muse-batch-publishing-p)
+                  (message "%s: Error occured: %s"
+                           (muse-page-name) err)
+                  (backtrace))
+                 ((fboundp 'display-warning)
+                  (display-warning
+                   'muse (format (concat "An error occurred while publishing"
+                                         " %s: %s\n\nSet debug-on-error to"
+                                         " `t' if you would like a backtrace.")
+                                 (muse-page-name) err)
+                   (if (featurep 'xemacs)
+                       'warning
+                     :warning)))
+                 (t
+                  (message (concat "An error occurred while publishing"
+                                   " %s: %s\n\nSet debug-on-error to"
+                                   " `t' if you would like a backtrace.")
+                           (muse-page-name) err))))))
          (when (buffer-live-p ,temp-buffer)
            (with-current-buffer ,temp-buffer
              (set-buffer-modified-p nil))
