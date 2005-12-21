@@ -840,8 +840,12 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
 
 (defun muse-publish-markup-footnote ()
   "Scan ahead and snarf up the footnote body"
-  (if (= (muse-line-beginning-position) (match-beginning 0))
-      ""
+  (cond
+   ((get-text-property (match-beginning 0) 'noemphasis)
+    nil)
+   ((= (muse-line-beginning-position) (match-beginning 0))
+    "")
+   (t
     (let ((footnote (save-match-data
                       (string-to-number (match-string 1))))
           footnotemark)
@@ -885,7 +889,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
             (goto-char end)
             (skip-chars-forward "\n")
             (delete-region start (point)))))
-      (muse-insert-markup (or footnotemark footnote)))))
+      (muse-insert-markup (or footnotemark footnote))))))
 
 (defun muse-publish-markup-fn-sep ()
   (delete-region (match-beginning 0) (match-end 0))

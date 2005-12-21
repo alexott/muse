@@ -502,8 +502,12 @@ if not escaped."
         str))))
 
 (defun muse-html-markup-footnote ()
-  (if (/= (muse-line-beginning-position) (match-beginning 0))
-      "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">\\1</a></sup>"
+  (cond
+   ((get-text-property (match-beginning 0) 'noemphasis)
+    nil)
+   ((= (muse-line-beginning-position) (match-beginning 0))
+    "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">\\1</a></sup>")
+   (t
     (prog1
         "<p class=\"footnote\"><a name=\"fn.\\1\" href=\"#fnr.\\1\">\\1.</a>"
       (save-excursion
@@ -517,7 +521,7 @@ if not escaped."
                                               muse-regexp-blank
                                               "]+\\([^\n]\\)")
                                       end t)
-              (replace-match "\\1" t))))))))
+              (replace-match "\\1" t)))))))))
 
 (defun muse-html-markup-table ()
   (let* ((str (prog1
