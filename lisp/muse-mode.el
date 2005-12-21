@@ -505,7 +505,7 @@ If EXCLUDE-CURRENT is non-nil, exclude the current file from the output."
                         (string-lessp (car l) (car r)))))))
     (when (and exclude-current (muse-page-name))
       (setq files (delete (assoc (muse-page-name) files) files)))
-    (muse-with-temp-buffer
+    (with-temp-buffer
       (while files
         (unless (and exclude-private
                      (muse-project-private-p (cdar files)))
