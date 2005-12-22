@@ -55,24 +55,20 @@
   :group 'muse-publish)
 
 (defcustom muse-publish-url-transforms
-  '(muse-publish-escape-specials-in-string
-    muse-publish-prepare-url
+  '(muse-publish-prepare-url
     muse-resolve-url)
   "A list of functions used to prepare URLs for publication.
 Each is passed the URL.  The transformed URL should be returned."
   :type 'hook
-  :options '(muse-publish-escape-specials-in-string
-             muse-publish-prepare-url
+  :options '(muse-publish-prepare-url
              muse-resolve-url)
   :group 'muse-publish)
 
-(defcustom muse-publish-desc-transforms
-  '(muse-publish-escape-specials-in-string)
+(defcustom muse-publish-desc-transforms nil
   "A list of functions used to prepare URL desciptions for publication.
 Each is passed the description.  The modified description should
 be returned."
   :type 'hook
-  :options '(muse-publish-escape-specials-in-string)
   :group 'muse-publish)
 
 (defcustom muse-publish-comments-p nil
@@ -736,17 +732,21 @@ the file is published no matter what."
             (apply (nth 3 tag-info) args))))))
   nil)
 
-(defun muse-publish-escape-specials (beg end &optional ignore-read-only)
+(defun muse-publish-escape-specials (beg end &optional ignore-read-only context)
   "Escape specials from BEG to END using style-specific :specials.
-If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
+If IGNORE-READ-ONLY is non-nil, ignore the read-only property.
+CONTEXT is used to figure out what kind of specials to escape."
   (save-excursion
     (goto-char beg)
     (while (< (point) end)
       (if (and (not ignore-read-only) (get-text-property (point) 'read-only))
           (forward-char 1)
-        (let ((repl
-               (or (assoc (char-after) (muse-style-element :specials))
-                   (assoc (char-after) muse-publish-markup-specials))))
+        (let ((specials (muse-style-element :specials))
+              repl)
+          (when (functionp specials)
+            (setq specials (funcall specials context)))
+          (setq repl (or (assoc (char-after) specials)
+                         (assoc (char-after) muse-publish-markup-specials)))
           (if (null repl)
               (forward-char 1)
             (delete-char 1)
@@ -756,25 +756,30 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
   (let* ((beg (match-beginning 2))
          (end (1- (match-end 2)))
          (leader (buffer-substring-no-properties beg end))
-         open-tag close-tag mark-read-only loc)
+         open-tag close-tag mark-read-only loc context)
     (cond
      ((string= leader "_")
-      (setq open-tag (muse-markup-text 'begin-underline)
+      (setq context 'underline
+            open-tag (muse-markup-text 'begin-underline)
             close-tag (muse-markup-text 'end-underline)))
      ((string= leader "=")
-      (setq open-tag (muse-markup-text 'begin-literal)
+      (setq context 'literal
+            open-tag (muse-markup-text 'begin-literal)
             close-tag (muse-markup-text 'end-literal))
       (setq mark-read-only t))
      (t
       (let ((l (length leader)))
+        (setq context 'emphasis)
         (cond
          ((= l 1) (setq open-tag (muse-markup-text 'begin-emph)
                         close-tag (muse-markup-text 'end-emph)))
          ((= l 2) (setq open-tag (muse-markup-text 'begin-more-emph)
                         close-tag (muse-markup-text 'end-more-emph)))
          ((= l 3) (setq open-tag (muse-markup-text 'begin-most-emph)
-                        close-tag (muse-markup-text 'end-most-emph)))))))
-    (if (and (not (get-text-property beg 'noemphasis))
+                        close-tag (muse-markup-text 'end-most-emph)))
+         (t (setq context nil))))))
+    (if (and context
+             (not (get-text-property beg 'noemphasis))
              (setq loc (search-forward leader nil t))
              (or (eobp) (not (eq (char-syntax (char-after loc)) ?w)))
              (not (eq (char-syntax (char-before (point))) ?\ ))
@@ -789,7 +794,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
             (muse-insert-markup open-tag)
             (setq beg (point)))
           (when mark-read-only
-            (muse-publish-escape-specials beg end t)
+            (muse-publish-escape-specials beg end t context)
             (muse-publish-mark-read-only beg end)))
       (backward-char))
     nil))
@@ -1038,15 +1043,19 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-markup-table ()
   "Style does not support tables.")
 
-(defun muse-publish-escape-specials-in-string (string &rest ignored)
-  "Escape specials in STRING using style-specific :specials."
+(defun muse-publish-escape-specials-in-string (string &optional context)
+  "Escape specials in STRING using style-specific :specials.
+CONTEXT is used to figure out what kind of specials to escape."
   (save-excursion
     (apply (function concat)
            (mapcar
             (lambda (ch)
-              (let ((repl
-                     (or (assoc ch (muse-style-element :specials))
-                         (assoc ch muse-publish-markup-specials))))
+              (let ((specials (muse-style-element :specials))
+                    repl)
+                (when (functionp specials)
+                  (setq specials (funcall specials context)))
+                (setq repl (or (assoc ch specials)
+                               (assoc ch muse-publish-markup-specials)))
                 (if (null repl)
                     (char-to-string ch)
                   (cdr repl))))
@@ -1055,7 +1064,7 @@ like read-only from being inadvertently deleted."
 (defun muse-publish-markup-email ()
   (let* ((beg (match-end 1))
          (addr (buffer-substring-no-properties beg (match-end 0))))
-    (setq addr (muse-publish-escape-specials-in-string addr))
+    (setq addr (muse-publish-escape-specials-in-string addr 'email))
     (goto-char beg)
     (delete-region beg (match-end 0))
     (if (or (eq (char-before (match-beginning 0)) ?\")
@@ -1072,19 +1081,23 @@ like read-only from being inadvertently deleted."
     (dolist (transform muse-publish-desc-transforms)
       (setq desc (save-match-data
                    (when desc (funcall transform desc explicit)))))
-    (if url
-        (cond ((string-match muse-image-regexp url)
-               (if desc
-                   (muse-markup-text 'image-with-desc url desc)
-                 (muse-markup-text 'image-link url)))
-              ((and desc (string-match muse-image-regexp desc))
-               (muse-markup-text 'url-with-image url desc))
-              ((eq (aref url 0) ?\#)
-               (muse-markup-text 'internal-link (substring url 1)
-                                 (or desc orig-url)))
+    (when url
+      (setq url (muse-publish-escape-specials-in-string url 'url)))
+    (when desc
+      (setq desc (muse-publish-escape-specials-in-string desc 'url-desc)))
+    (cond ((null url)
+           desc)
+          ((string-match muse-image-regexp url)
+           (if desc
+               (muse-markup-text 'image-with-desc url desc)
+             (muse-markup-text 'image-link url)))
+          ((and desc (string-match muse-image-regexp desc))
+           (muse-markup-text 'url-with-image url desc))
+          ((eq (aref url 0) ?\#)
+           (muse-markup-text 'internal-link (substring url 1)
+                             (or desc orig-url)))
               (t
-               (muse-markup-text 'url-link url (or desc orig-url))))
-      desc)))
+               (muse-markup-text 'url-link url (or desc orig-url))))))
 
 (defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
@@ -1118,7 +1131,7 @@ like read-only from being inadvertently deleted."
     (let ((beg (match-beginning 0))
           (url (match-string 0)))
       (delete-region (match-beginning 0) (match-end 0))
-      (insert (muse-publish-escape-specials-in-string url))
+      (insert (muse-publish-escape-specials-in-string url 'url))
       (muse-publish-mark-read-only beg (point)))))
 
 ;; Default publishing tags
@@ -1151,7 +1164,7 @@ like read-only from being inadvertently deleted."
   nil)
 
 (defun muse-publish-code-tag (beg end)
-  (muse-publish-escape-specials beg end)
+  (muse-publish-escape-specials beg end nil 'code)
   (goto-char beg)
   (insert (muse-markup-text 'begin-literal))
   (goto-char end)
@@ -1159,7 +1172,7 @@ like read-only from being inadvertently deleted."
   (muse-publish-mark-read-only beg (point)))
 
 (defun muse-publish-example-tag (beg end)
-  (muse-publish-escape-specials beg end)
+  (muse-publish-escape-specials beg end nil 'example)
   (goto-char beg)
   (insert (muse-markup-text 'begin-example))
   (goto-char end)
@@ -1167,7 +1180,7 @@ like read-only from being inadvertently deleted."
   (muse-publish-mark-read-only beg (point)))
 
 (defun muse-publish-verbatim-tag (beg end)
-  (muse-publish-escape-specials beg end)
+  (muse-publish-escape-specials beg end 'verbatim)
   (muse-publish-mark-read-only beg end))
 
 (defalias 'muse-publish-class-tag 'ignore)

@@ -2,6 +2,37 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-22 04:12:00 GMT	Michael Olson <mwolson@gnu.org>	patch-310
+
+    Summary:
+      Begin implementing context-specific handling of special characters.
+    Revision:
+      muse--main--1.0--patch-310
+
+    * lisp/muse-publish.el (muse-publish-url-transforms)
+      (muse-publish-desc-transforms): Remove
+      muse-publish-escape-specials-in-string, since we will explicitly call
+      this with the proper parameters later on.
+      (muse-publish-escape-specials, muse-publish-escape-specials-in-string):
+      Add new optional CONTEXT argument that specifies further information to
+      use when obtaining the specials that will be applied to the text.  If
+      someone specifies a function instead of an alist for the style's
+      specials, call it and pass CONTEXT.
+      (muse-publish-markup-word): Indicate the context when escaping
+      specials.  Make sure we have a context before continuing the publishing
+      of the word.
+      (muse-publish-markup-email, muse-publish-markup-url)
+      (muse-publish-code-tag, muse-publish-example-tag)
+      (muse-publish-verbatim-tag): Indicate the context when escaping
+      specials.
+      (muse-publish-url): Explicitly escape specials, rather than expecting
+      it to be done in a user-customizable hook.  Use different contexts for
+      url and description.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-12-21 02:44:57 GMT	Michael Olson <mwolson@gnu.org>	patch-309
 
     Summary:
