@@ -1125,8 +1125,7 @@ function for the list of available contexts."
   (let ((beg (point))
         (text (muse-publish-url url desc explicit)))
     (when text
-      (insert text)
-      (muse-publish-mark-read-only beg (point)))))
+      (muse-insert-markup text))))
 
 (defun muse-publish-markup-link ()
   (let (desc explicit link)
@@ -1151,8 +1150,7 @@ function for the list of available contexts."
     (let ((beg (match-beginning 0))
           (url (match-string 0)))
       (delete-region (match-beginning 0) (match-end 0))
-      (insert (muse-publish-escape-specials-in-string url 'url))
-      (muse-publish-mark-read-only beg (point)))))
+      (muse-insert-markup (muse-publish-escape-specials-in-string url 'url)))))
 
 ;; Default publishing tags
 
@@ -1200,7 +1198,7 @@ function for the list of available contexts."
   (muse-publish-mark-read-only beg (point)))
 
 (defun muse-publish-verbatim-tag (beg end)
-  (muse-publish-escape-specials beg end 'verbatim)
+  (muse-publish-escape-specials beg end nil 'verbatim)
   (muse-publish-mark-read-only beg end))
 
 (defalias 'muse-publish-class-tag 'ignore)
