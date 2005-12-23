@@ -54,10 +54,10 @@ be defined in your =.emacs= file:
 (require 'muse-project)
 
 (setq muse-project-alist
-      '(("website"			; my various writings
-	 ("~/Pages" :default "index")
-	 (:base "html" :path "~/public_html")
-	 (:base "pdf" :path "~/public_html/pdf"))))
+      '(("website"                      ; my various writings
+         ("~/Pages" :default "index")
+         (:base "html" :path "~/public_html")
+         (:base "pdf" :path "~/public_html/pdf"))))
 </example>
 
 The above defines a project named "website", whose files are located
@@ -95,7 +95,7 @@ A line that begins with six or more columns of whitespace (either tabs
 or spaces) indicates a centered paragraph.
 
 <comment>
-			   This is centered
+                           This is centered
 </comment>
 
   But if a line begins with whitespace, though less than six columns,
@@ -288,9 +288,8 @@ Click [[#example][here]] to go back to the previous paragraph.
 A URL or e-mail address encountered in the input text is published as
 a hyperlink if the output style supports it.  If it is an image URL,
 it will be inlined if possible.  For example, the latest Muse source
-can be downloaded at
-http://www.newartisans.com/johnw/Emacs/muse.tar.gz and mail may be
-sent to johnw@gnu.org
+can be downloaded at http://download.gna.org/muse-el and mail may be
+sent to mwolson@gnu.org.
 
 ** Links
 

@@ -509,7 +509,8 @@ If STYLE is not specified, use current style."
            (function
             (lambda (l r)
               (< (car l) (car r))))))
-    (muse-style-run-hooks :before-end style)))
+    (muse-style-run-hooks :before-end style)
+    (muse-publish-escape-specials (point-min) (point-max) nil 'document)))
 
 (defun muse-publish-markup-buffer (title style)
   "Apply the given STYLE's markup rules to the current buffer."
@@ -735,16 +736,29 @@ the file is published no matter what."
 (defun muse-publish-escape-specials (beg end &optional ignore-read-only context)
   "Escape specials from BEG to END using style-specific :specials.
 If IGNORE-READ-ONLY is non-nil, ignore the read-only property.
-CONTEXT is used to figure out what kind of specials to escape."
+CONTEXT is used to figure out what kind of specials to escape.
+
+The following contexts exist in Muse.
+'underline  _underlined text_
+'literal    =monospaced text= or <code>region</code> (monospaced, escaped)
+'emphasis   *emphasized text*
+'email      email@example.com
+'url        http://example.com
+'url-desc   [[...][description of an extended link]]
+'example    <example>region</example> (monospaced, block context, escaped)
+'verbatim   <verbatim>region</verbatim> (escaped)
+'document   normal text"
   (save-excursion
     (goto-char beg)
     (while (< (point) end)
       (if (and (not ignore-read-only) (get-text-property (point) 'read-only))
-          (forward-char 1)
-        (let ((specials (muse-style-element :specials))
+          (goto-char (next-single-property-change (point) 'read-only))
+        (let ((specials (muse-style-element :specials nil t))
               repl)
-          (when (functionp specials)
-            (setq specials (funcall specials context)))
+          (cond ((functionp specials)
+                 (setq specials (funcall specials context)))
+                ((symbolp specials)
+                 (setq specials (symbol-value specials))))
           (setq repl (or (assoc (char-after) specials)
                          (assoc (char-after) muse-publish-markup-specials)))
           (if (null repl)
@@ -808,17 +822,17 @@ CONTEXT is used to figure out what kind of specials to escape."
 (defun muse-publish-markup-enddots ()
   (unless (get-text-property (match-beginning 0) 'noemphasis)
     (delete-region (match-beginning 0) (match-end 0))
-    (insert (muse-markup-text 'enddots))))
+    (muse-insert-markup (muse-markup-text 'enddots))))
 
 (defun muse-publish-markup-dots ()
   (unless (get-text-property (match-beginning 0) 'noemphasis)
     (delete-region (match-beginning 0) (match-end 0))
-    (insert (muse-markup-text 'dots))))
+    (muse-insert-markup (muse-markup-text 'dots))))
 
 (defun muse-publish-markup-rule ()
   (unless (get-text-property (match-beginning 0) 'noemphasis)
     (delete-region (match-beginning 0) (match-end 0))
-    (insert (muse-markup-text 'rule))))
+    (muse-insert-markup (muse-markup-text 'rule))))
 
 (defun muse-publish-markup-heading ()
   (let* ((len (length (match-string 1)))
@@ -906,7 +920,7 @@ CONTEXT is used to figure out what kind of specials to escape."
     (delete-region (point) beg)
     (insert "\n\n")
     (setq beg (point))
-    (insert beg-tag)
+    (muse-insert-markup beg-tag)
     (funcall move-func)
     (setq end (point-marker))
     (goto-char beg)
@@ -918,7 +932,7 @@ CONTEXT is used to figure out what kind of specials to escape."
     (setq beg (point))
     (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg))
-  (insert end-tag)
+  (muse-insert-markup end-tag)
   (insert "\n"))
 
 (defsubst muse-forward-paragraph (&optional pattern)
@@ -994,15 +1008,14 @@ like read-only from being inadvertently deleted."
                                 (muse-markup-text end-elem)
                                 'muse-forward-paragraph)))
 
-(defun muse-publish-markup-leading-space ()
-  (let ((markup-space (muse-markup-text 'verse-space))
-        count)
+(defun muse-publish-markup-leading-space (markup-space multiple)
+  (let (count)
     (when (and markup-space
                (>= (setq count (skip-chars-forward " ")) 0))
       (delete-region (muse-line-beginning-position) (point))
       (while (> count 0)
         (muse-insert-markup markup-space)
-        (setq count (- count 2))))))
+        (setq count (- count multiple))))))
 
 (defun muse-publish-markup-verse ()
   (let ((leader (match-string 0)))
@@ -1010,13 +1023,13 @@ like read-only from being inadvertently deleted."
     (muse-insert-markup (muse-markup-text 'begin-verse))
     (while (looking-at leader)
       (replace-match "")
-      (muse-publish-markup-leading-space)
+      (muse-publish-markup-leading-space (muse-markup-text 'verse-space) 2)
       (let ((beg (point)))
         (end-of-line)
         (cond
          ((bolp)
           (let ((text (muse-markup-text 'empty-verse-line)))
-            (if text (muse-insert-markup text))))
+            (when text (muse-insert-markup text))))
          ((save-excursion
             (save-match-data
               (forward-line 1)
@@ -1045,15 +1058,20 @@ like read-only from being inadvertently deleted."
 
 (defun muse-publish-escape-specials-in-string (string &optional context)
   "Escape specials in STRING using style-specific :specials.
-CONTEXT is used to figure out what kind of specials to escape."
+CONTEXT is used to figure out what kind of specials to escape.
+
+See the documentation of the `muse-publish-escape-specials'
+function for the list of available contexts."
   (save-excursion
     (apply (function concat)
            (mapcar
             (lambda (ch)
-              (let ((specials (muse-style-element :specials))
+              (let ((specials (muse-style-element :specials nil t))
                     repl)
-                (when (functionp specials)
-                  (setq specials (funcall specials context)))
+                (cond ((functionp specials)
+                       (setq specials (funcall specials context)))
+                      ((symbolp specials)
+                       (setq specials (symbol-value specials))))
                 (setq repl (or (assoc ch specials)
                                (assoc ch muse-publish-markup-specials)))
                 (if (null repl)
@@ -1085,6 +1103,8 @@ CONTEXT is used to figure out what kind of specials to escape."
       (setq url (muse-publish-escape-specials-in-string url 'url)))
     (when desc
       (setq desc (muse-publish-escape-specials-in-string desc 'url-desc)))
+    (setq orig-url
+          (muse-publish-escape-specials-in-string orig-url 'url-desc))
     (cond ((null url)
            desc)
           ((string-match muse-image-regexp url)
@@ -1096,8 +1116,8 @@ CONTEXT is used to figure out what kind of specials to escape."
           ((eq (aref url 0) ?\#)
            (muse-markup-text 'internal-link (substring url 1)
                              (or desc orig-url)))
-              (t
-               (muse-markup-text 'url-link url (or desc orig-url))))))
+          (t
+           (muse-markup-text 'url-link url (or desc orig-url))))))
 
 (defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
@@ -1164,7 +1184,7 @@ CONTEXT is used to figure out what kind of specials to escape."
   nil)
 
 (defun muse-publish-code-tag (beg end)
-  (muse-publish-escape-specials beg end nil 'code)
+  (muse-publish-escape-specials beg end nil 'literal)
   (goto-char beg)
   (insert (muse-markup-text 'begin-literal))
   (goto-char end)

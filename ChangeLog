@@ -2,6 +2,48 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-23 05:27:53 GMT	Michael Olson <mwolson@gnu.org>	patch-312
+
+    Summary:
+      Get practically-perfect LaTeX special escaping.
+    Revision:
+      muse--main--1.0--patch-312
+
+    * examples/QuickStart.muse: Detabify, change URLs.
+    
+    * lisp/muse-latex.el (muse-latex-markup-specials-document): New option
+      that indicates the specials characters to escape in the whole document.
+      (muse-latex-markup-specials-example): New option that indicates the
+      specials to escape in <example> regions.
+      (muse-latex-markup-specials-literal): New option that indicates the
+      specials to escape in =monospaced text= and <code> regions.
+      (muse-latex-markup-specials-url): New option that indicates the
+      specials to escape in URLs.
+      (muse-latex-decide-specials): Determine which specials to use depending
+      on context.
+      (muse-latex-insert-anchor): Use muse-insert-markup.
+    
+    * lisp/muse-publish.el (muse-publish-markup-region): Escape specials in
+      the entire document.
+      (muse-publish-escape-specials, muse-publish-escape-specials-in-string):
+      List all contexts in documentation.  Skip past entire read-only regions
+      for a speed improvement.  We'll need this now that we're using it on
+      the whole document.  Fix a bug in retrieving specials.
+      (muse-publish-markup-enddots, muse-publish-markup-dots)
+      (muse-publish-markup-rule, muse-publish-surround-text): Use
+      muse-insert-markup.
+      (muse-publish-markup-leading-space): Take 2 more arguments for easy
+      generalization.
+      (muse-publish-markup-verse): Pass more arguments to
+      muse-publish-markup-leading-space.
+      (muse-publish-url): Fix a specials bug with bare links.
+      (muse-publish-code-tag): Use 'literal context here.
+
+    modified files:
+     ChangeLog examples/QuickStart.muse lisp/muse-latex.el
+     lisp/muse-publish.el
+
+
 2005-12-23 01:42:39 GMT	Michael Olson <mwolson@gnu.org>	patch-311
 
     Summary:

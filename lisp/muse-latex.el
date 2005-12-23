@@ -240,25 +240,13 @@ system to an associated CJK coding system."
         (cdr match)
       muse-latexcjk-encoding-default)))
 
-(defcustom muse-latex-markup-specials
-  '((?\\ . "\\\\")
-    (?\_ . "\\_")
-    (?\$ . "\\$")
-    (?\% . "\\%")
-    (?\{ . "\\{")
-    (?\} . "\\}")
-    (?\& . "\\&")
-    (?\# . "\\#"))
-  "A table of characters which must be represented specially.
-These are applied to URLs."
-  :type '(alist :key-type character :value-type string)
-  :group 'muse-latex)
-
-(defcustom muse-latex-markup-specials-entire-document
+(defcustom muse-latex-markup-specials-document
   '((?\\ . "\\textbackslash{}")
     (?\_ . "\\textunderscore{}")
     (?\< . "\\textless{}")
     (?\> . "\\textgreater{}")
+    (?^  . "\\^{}")
+    (?\~ . "\\~{}")
     (?\$ . "\\$")
     (?\% . "\\%")
     (?\{ . "\\{")
@@ -271,24 +259,65 @@ regions."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
 
-(defcustom muse-latex-markup-specials-verbatim
-  '((?\  . "\ ")
-    (?\t . "\ ")
-    (?\n . "\\\n")
-    (?\{ . "\\{")
-    (?\} . "\\}"))
+(defcustom muse-latex-markup-specials-example
+  '((?\\ . "\\\\"))
   "A table of characters which must be represented specially.
-These are applied to literal and end-literal sections and
-anything else that uses \\texttt{...}."
+These are applied to <example>regions</example>."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
 
-(defun muse-latex-insert-anchor (anchor)
+(defcustom muse-latex-markup-specials-literal
+  '((?\n . "\\\n")
+    (?_  . "\\textunderscore{}")
+    (?\< . "\\textless{}")
+    (?\> . "\\textgreater{}")
+    (?^  . "\\^{}")
+    (?\~ . "\\~{}")
+    (?\$ . "\\$")
+    (?\% . "\\%")
+    (?\{ . "\\{")
+    (?\} . "\\}")
+    (?\& . "\\&")
+    (?\# . "\\#"))
+  "A table of characters which must be represented specially.
+This applies to =monospaced text= and <code>regions</code>."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-latex)
+
+(defcustom muse-latex-markup-specials-url
+  '((?\\ . "\\\\")
+    (?\_ . "\\_")
+    (?\< . "\\<")
+    (?\> . "\\>")
+    (?\$ . "\\$")
+    (?\% . "\\%")
+    (?\{ . "\\{")
+    (?\} . "\\}")
+    (?\& . "\\&")
+    (?\# . "\\#"))
+  "A table of characters which must be represented specially.
+These are applied to URLs."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-latex)
+
+(defun muse-latex-decide-specials (context)
+  "Determine the specials to escape, depending on CONTEXT."
+  (cond ((memq context '(underline emphasis document url-desc verbatim))
+         muse-latex-markup-specials-document)
+        ((memq context '(email url))
+         muse-latex-markup-specials-url)
+        ((eq context 'literal)
+         muse-latex-markup-specials-literal)
+        ((eq context 'example)
+         muse-latex-markup-specials-example)
+        (t (error "Invalid context '%s' in muse-latex" context))))
+
+(defun muse-latex-insert-anchor (anchor &rest blah)
   "Insert an anchor, either around the word at point, or within a tag."
   (skip-chars-forward muse-regexp-space)
   (when (looking-at "<\\([^ />]+\\)>")
     (goto-char (match-end 0)))
-  (insert "\\label{" anchor "}\n"))
+  (muse-insert-markup "\\label{" anchor "}\n"))
 
 (defun muse-latex-markup-anchor ()
   (save-match-data
@@ -366,7 +395,7 @@ anything else that uses \\texttt{...}."
                      :regexps   'muse-latex-markup-regexps
                      :functions 'muse-latex-markup-functions
                      :strings   'muse-latex-markup-strings
-                     :specials  'muse-latex-markup-specials
+                     :specials  'muse-latex-decide-specials
                      :after     'muse-latex-finalize-buffer
                      :header    'muse-latex-header
                      :footer    'muse-latex-footer
