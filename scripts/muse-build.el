@@ -42,6 +42,7 @@
   (defvar command-line-args-left)
   (defvar generated-autoload-file)
   (require 'autoload)
+  (setq backup-inhibited t)
   (setq generated-autoload-file (expand-file-name "muse-autoloads.el"))
   (setq command-line-args-left (mapcar #'expand-file-name
                                        command-line-args-left))
