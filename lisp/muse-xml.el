@@ -173,6 +173,8 @@ For more on the structure of this list, see
     (begin-ddt       . "<list type=\"definition\">\n<item><term>")
     (start-dde       . "</term>\n<definition>")
     (end-ddt         . "</definition>\n</item>\n</list>")
+    (begin-anchor    . "<anchor id=\"")
+    (end-anchor      . "\" />\n")
     (begin-table     . "<table%s>\n")
     (end-table       . "</table>\n")
     (begin-table-row . "    <tr>\n")
@@ -233,18 +235,6 @@ found in `muse-xml-encoding-map'."
       (muse-insert-markup "<p>")))
    (t
     (muse-insert-markup "<p>"))))
-
-(defun muse-xml-insert-anchor (anchor)
-  "Insert an anchor, either around the word at point, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (when (looking-at "<\\([^ />\n]+\\)>")
-    (goto-char (match-end 0)))
-  (muse-insert-markup "<anchor id=\"" anchor "\" />\n"))
-
-(defun muse-xml-markup-anchor ()
-  (save-match-data
-    (muse-xml-insert-anchor (match-string 2)))
-  (match-string 1))
 
 (defun muse-xml-finalize-buffer ()
   (when (boundp 'buffer-file-coding-system)

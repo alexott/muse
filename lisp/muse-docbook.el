@@ -101,7 +101,7 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-functions
-  '((anchor . muse-docbook-markup-anchor)
+  '((anchor . muse-xml-markup-anchor)
     (table . muse-xml-markup-table))
   "An alist of style types to custom functions for that kind of text.
 For more on the structure of this list, see
@@ -156,6 +156,8 @@ For more on the structure of this list, see
     (begin-ddt       . "<variablelist>\n<varlistentry>\n<term>")
     (start-dde       . "</term>\n<listitem><para>")
     (end-ddt         . "</para></listitem>\n</varlistentry>\n</variablelist>")
+    (begin-anchor    . "<anchor id=\"")
+    (end-anchor      . "\" />\n")
     (begin-table     . "<informaltable>\n")
     (end-table       . "</informaltable>\n")
     (begin-table-group . "  <tgroup cols='%s'>\n")
@@ -221,18 +223,6 @@ found in `muse-docbook-encoding-map'."
       (muse-insert-markup "<para>")))
    (t
     (muse-insert-markup "<para>"))))
-
-(defun muse-docbook-insert-anchor (anchor)
-  "Insert an anchor, either before the next word, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (when (looking-at "<\\([^ />]+\\)>")
-    (goto-char (match-end 0)))
-  (muse-insert-markup "<anchor id=\"" anchor "\" />\n"))
-
-(defun muse-docbook-markup-anchor ()
-  (save-match-data
-    (muse-docbook-insert-anchor (match-string 2)))
-  (match-string 1))
 
 (defun muse-docbook-get-author (&optional author)
   "Split the AUTHOR directive into separate fields.

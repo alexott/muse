@@ -105,15 +105,11 @@ If non-nil, publish comments using the markup of the current style."
     (1500 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
 
     ;; emphasized or literal text
-    (1600 ,(concat "\\(^\\|[-["
-                   muse-regexp-space
-                   "<('`\"]\\)\\(=[^="
-                   muse-regexp-space
-                   "]\\|_[^_"
-                   muse-regexp-space
-                   "]\\|\\*+[^*"
-                   muse-regexp-space
-                   "]\\)")
+    (1600 ,(concat "\\(^\\|[-[" muse-regexp-blank
+                   "<('`\"\n]\\)\\(=[^=" muse-regexp-blank
+                   "\n]\\|_[^_" muse-regexp-blank
+                   "\n]\\|\\*+[^*" muse-regexp-blank
+                   "\n]\\)")
           2 word)
 
     ;; headings, outline-mode style
@@ -668,7 +664,16 @@ the file is published no matter what."
   (setq muse-publishing-last-position nil)
   (delete-region (match-beginning 0) (match-end 0)))
 
-(defun muse-publish-markup-anchor () "")
+(defun muse-publish-markup-anchor ()
+  (let ((anchor (match-string 2))
+        (begin-text (muse-markup-text 'begin-anchor))
+        (end-text (muse-markup-text 'end-anchor)))
+    (unless (and (string= begin-text "")
+                 (string= end-text ""))
+      (save-match-data
+        (skip-chars-forward (concat muse-regexp-blank "\n"))
+        (muse-insert-markup begin-text anchor end-text)))
+    (match-string 1)))
 
 (defun muse-publish-markup-comment ()
   (if (null muse-publish-comments-p)
@@ -691,8 +696,8 @@ the file is published no matter what."
           (let ((attrstr (match-string 2)))
             (while (and attrstr
                         (string-match (concat "\\([^"
-                                              muse-regexp-space
-                                              "=]+\\)\\(=\"\\"
+                                              muse-regexp-blank
+                                              "=\n]+\\)\\(=\"\\"
                                               "([^\"]+\\)\"\\)?")
                                       attrstr))
               (let ((attr (cons (downcase
@@ -898,7 +903,7 @@ The following contexts exist in Muse.
 
 (defun muse-publish-surround-text (beg-tag end-tag move-func)
   (let ((beg (point)) end)
-    (skip-chars-backward muse-regexp-space)
+    (skip-chars-backward (concat muse-regexp-blank "\n"))
     (delete-region (point) beg)
     (insert "\n\n")
     (setq beg (point))
@@ -912,7 +917,7 @@ The following contexts exist in Muse.
       (forward-line 1))
     (goto-char end)
     (setq beg (point))
-    (skip-chars-backward muse-regexp-space)
+    (skip-chars-backward (concat muse-regexp-blank "\n"))
     (delete-region (point) beg))
   (muse-insert-markup end-tag)
   (insert "\n"))
@@ -959,19 +964,13 @@ like read-only from being inadvertently deleted."
       (save-match-data
         (save-excursion
           (forward-line 1)
-          (while (looking-at (concat "^\\(["
-                                     muse-regexp-blank
-                                     "]*\\)[^"
-                                     muse-regexp-space
-                                     "]"))
+          (while (looking-at (concat "^\\([" muse-regexp-blank
+                                     "]*\\)[^" muse-regexp-blank "\n]"))
             (delete-region (match-beginning 1) (match-end 1))
             (forward-line 1))))
       (save-match-data
-        (when (re-search-forward (concat "["
-                                         muse-regexp-space
-                                         "]+::["
-                                         muse-regexp-space
-                                         "]+")
+        (when (re-search-forward (concat "[" muse-regexp-blank "\n]+::["
+                                         muse-regexp-blank "\n]+")
                                  nil t)
           (replace-match "")
           (muse-insert-markup (muse-markup-text 'start-dde))))

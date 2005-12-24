@@ -132,8 +132,7 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-functions
-  '((anchor . muse-latex-markup-anchor)
-    (table . muse-latex-markup-table))
+  '((table . muse-latex-markup-table))
   "An alist of style types to custom functions for that kind of text.
 For more on the structure of this list, see
 `muse-publish-markup-functions'."
@@ -194,7 +193,9 @@ For more on the structure of this list, see
     (end-oli         . "\n\\end{enumerate}")
     (begin-ddt       . "\\begin{description}\n\\item[")
     (start-dde       . "] ")
-    (end-ddt         . "\\end{description}"))
+    (end-ddt         . "\\end{description}")
+    (begin-anchor    . "\\label{")
+    (end-anchor      . "}\n"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
@@ -304,18 +305,6 @@ These are applied to URLs."
         ((eq context 'example)
          muse-latex-markup-specials-example)
         (t (error "Invalid context '%s' in muse-latex" context))))
-
-(defun muse-latex-insert-anchor (anchor &rest blah)
-  "Insert an anchor, either around the word at point, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (when (looking-at "<\\([^ />\n]+\\)>")
-    (goto-char (match-end 0)))
-  (muse-insert-markup "\\label{" anchor "}\n"))
-
-(defun muse-latex-markup-anchor ()
-  (save-match-data
-    (muse-latex-insert-anchor (match-string 2)))
-  (match-string 1))
 
 (defun muse-latex-markup-table ()
   (let* ((table-info (muse-publish-table-fields (match-beginning 0)

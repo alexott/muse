@@ -87,6 +87,17 @@ if not escaped."
                 pos (+ len pos)))
         str))))
 
+(defun muse-xml-markup-anchor ()
+  (let ((anchor (match-string 2)))
+    (save-match-data
+      (skip-chars-forward (concat muse-regexp-blank "\n"))
+      (when (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
+        (goto-char (match-end 0)))
+      (muse-insert-markup (muse-markup-text 'begin-anchor)
+                          anchor
+                          (muse-markup-text 'end-anchor))))
+  (match-string 1))
+
 (defun muse-xml-sort-table (table)
   "Sort the given table structure so that it validates properly."
   ;; Note that the decision matrix must have a nil diagonal, or else
@@ -106,7 +117,7 @@ if not escaped."
          (field-list (muse-xml-sort-table (cdr table-info)))
          last-part)
     (muse-insert-markup (muse-markup-text 'begin-table attributes))
-    (muse-insert-markup (muse-markup-text 'begin-table-group))
+    (muse-insert-markup (muse-markup-text 'begin-table-group row-len))
     (dolist (fields field-list)
       (let* ((type (car fields))
              (part (cond ((= type 1) "tbody")

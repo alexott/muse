@@ -193,7 +193,7 @@ All this means is that certain extensions, like .gz, are removed."
                               :warning))
          (message "%s: Error evaluating %s: %s"
                   (muse-page-name) form err))
-       "<!--INVALID LISP CODE-->"))))
+       "; INVALID LISP CODE"))))
 
 (defmacro muse-with-temp-buffer (&rest body)
   "Create a temporary buffer, and evaluate BODY there like `progn'.

@@ -384,8 +384,8 @@ This will be used if no special characters are found."
 
 (defun muse-html-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (if (looking-at "<\\([^ />\n]+\\)>")
+  (skip-chars-forward (concat muse-regexp-blank "\n"))
+  (if (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
       (let ((tag (match-string 1)))
         (goto-char (match-end 0))
         (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
@@ -441,7 +441,9 @@ This will be used if no special characters are found."
     nil)
    ((= (muse-line-beginning-position) (match-beginning 0))
     (prog1
-        "<p class=\"footnote\"><a name=\"fn.\\1\" href=\"#fnr.\\1\">\\1.</a>"
+        (muse-insert-markup "<p class=\"footnote\">"
+                            "<a name=\"fn.\\1\" href=\"#fnr.\\1\">"
+                            "\\1.</a>")
       (save-excursion
         (save-match-data
           (let* ((beg (goto-char (match-end 0)))
@@ -453,8 +455,11 @@ This will be used if no special characters are found."
                                               muse-regexp-blank
                                               "]+\\([^\n]\\)")
                                       end t)
-              (replace-match "\\1" t)))))))
-   (t "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">\\1</a></sup>")))
+              (replace-match "\\1" t)))))
+      (replace-match "")))
+   (t (muse-insert-markup "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">"
+                          "\\1</a></sup>")
+      (replace-match ""))))
 
 (defun muse-html-markup-table ()
   (muse-xml-markup-table muse-html-table-attributes))

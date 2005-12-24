@@ -115,8 +115,7 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-markup-functions
-  '((anchor . muse-texinfo-markup-anchor)
-    (table . muse-texinfo-markup-table))
+  '((table . muse-texinfo-markup-table))
   "An alist of style types to custom functions for that kind of text.
 For more on the structure of this list, see
 `muse-publish-markup-functions'."
@@ -168,7 +167,9 @@ For more on the structure of this list, see
     (end-oli         . "\n@end enumerate")
     (begin-ddt       . "@table @strong\n@item ")
     (start-dde       . "\n")
-    (end-ddt         . "\n@end table"))
+    (end-ddt         . "\n@end table")
+    (begin-anchor    . "@anchor{")
+    (end-anchor      . "} "))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
@@ -182,18 +183,6 @@ differs little between the various styles."
   "A table of characters which must be represented specially."
   :type '(alist :key-type character :value-type string)
   :group 'muse-texinfo)
-
-(defun muse-texinfo-insert-anchor (anchor)
-  "Insert an anchor, either before the next word, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (when (looking-at "<\\([^ />]+\\)>")
-    (goto-char (match-end 0)))
-  (muse-insert-markup "@anchor{" anchor "}"))
-
-(defun muse-texinfo-markup-anchor ()
-  (save-match-data
-    (muse-texinfo-insert-anchor (match-string 2)))
-  (match-string 1))
 
 (defun muse-texinfo-markup-table ()
   (let* ((table-info (muse-publish-table-fields (match-beginning 0)
