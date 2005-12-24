@@ -138,13 +138,13 @@
 
 (defconst muse-registry-url-regexp
   (concat "\\(" (mapconcat 'car muse-url-protocols "\\|") "\\)"
-          "[^][" muse-regexp-space "\"'()^`{}]*[^][" muse-regexp-space
+          "[^][" muse-regexp-space "\"'()^`{}\n]*[^][" muse-regexp-space
           "\"'()^`{}.,;\n]+")
   "A regexp that matches muse URL links.")
 
 (defconst muse-registry-link-regexp
   (concat "\\[\\[\\(" muse-registry-url-regexp
-          "\\)\\]\\[\\([^][]+\\)\\]\\]")
+          "\\)\\]\\[\\([^][\n]+\\)\\]\\]")
   "A regexp that matches muse explicit links.")
 
 (defconst muse-registry-url-or-link-regexp

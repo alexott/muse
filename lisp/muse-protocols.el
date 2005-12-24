@@ -164,13 +164,13 @@ publishing or returns nil if not linked."
   "If this in an Info URL, jump to it."
   (require 'info)
   (cond
-   ((string-match "\\`info://\\([^#]+\\)#\\(.+\\)" url)
+   ((string-match "\\`info://\\([^#\n]+\\)#\\(.+\\)" url)
     (Info-find-node (match-string 1 url)
                     (match-string 2 url)))
-   ((string-match "\\`info://\\([^#]+\\)" url)
+   ((string-match "\\`info://\\([^#\n]+\\)" url)
     (Info-find-node (match-string 1 url)
                     "Top"))
-   ((string-match "\\`info://(\\([^)]+\\))\\(.+\\)" url)
+   ((string-match "\\`info://(\\([^)\n]+\\))\\(.+\\)" url)
     (Info-find-node (match-string 1 url) (match-string 2 url)))
    ((string-match "\\`info://\\(.+\\)" url)
     (Info-find-node (match-string 1 url) "Top"))))

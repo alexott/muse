@@ -151,9 +151,22 @@ the time."
   :options '("[:upper:]" "A-Z")
   :group 'muse-regexp)
 
+(defcustom muse-table-field-regexp
+  (concat "[" muse-regexp-blank "]+\\(|+\\)[" muse-regexp-blank "]+")
+  "Regexp used to match table separators when publishing."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-table-line-regexp
+  (concat "^[" muse-regexp-blank "]*[^|\n]+" muse-table-field-regexp
+          "[^|\n].*")
+  "Regexp used to match a table line when publishing."
+  :type 'regexp
+  :group 'muse-regexp)
+
 (defcustom muse-tag-regexp
   (concat "<\\([^/" muse-regexp-space "][^" muse-regexp-space
-          "</>]*\\)\\(\\s-+[^<>]+[^</>]\\)?\\(/\\)?>")
+          "</>]*\\)\\(\\s-+[^<>\n]+[^</>\n]\\)?\\(/\\)?>")
   "A regexp used to find XML-style tags within a buffer when publishing.
 Group 1 should be the tag name, group 2 the properties, and group
 3 the optional immediate ending slash."

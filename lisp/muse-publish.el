@@ -105,16 +105,15 @@ If non-nil, publish comments using the markup of the current style."
     (1500 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
 
     ;; emphasized or literal text
-    (1600 ,(concat
-            "\\(^\\|[-["
-            muse-regexp-space
-            "<('`\"]\\)\\(=[^="
-            muse-regexp-space
-            "]\\|_[^_"
-            muse-regexp-space
-            "]\\|\\*+[^*"
-            muse-regexp-space
-            "]\\)")
+    (1600 ,(concat "\\(^\\|[-["
+                   muse-regexp-space
+                   "<('`\"]\\)\\(=[^="
+                   muse-regexp-space
+                   "]\\|_[^_"
+                   muse-regexp-space
+                   "]\\|\\*+[^*"
+                   muse-regexp-space
+                   "]\\)")
           2 word)
 
     ;; headings, outline-mode style
@@ -151,41 +150,25 @@ If non-nil, publish comments using the markup of the current style."
                    "]+::\n?\\)")
           1 list)
 
-    (2300 ,(concat "^\\(\\(?:.+?\\)["
-                   muse-regexp-blank
-                   "]+::\n?\\)")
+    (2300 ,(concat "^\\(\\(?:.+?\\)[" muse-regexp-blank "]+::\n?\\)")
           0 list)
 
-    (2400 ,(concat "^\\(["
-                   muse-regexp-blank
-                   "]+\\)")
-          0 quote)
+    (2400 ,(concat "^\\([" muse-regexp-blank "]+\\)") 0 quote)
 
-    (2500 ,(concat "\\(^\\|["
-                   muse-regexp-blank
-                   "]+\\)--\\($\\|["
-                   muse-regexp-blank
-                   "]+\\)")
+    (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]+\\)--\\($\\|["
+                   muse-regexp-blank "]+\\)")
           0 emdash)
 
     ;; "verse" text is indicated the same way as a quoted e-mail
     ;; response: "> text", where text may contain initial whitespace
     ;; (see below).
-    (2600 ,(concat "^["
-                   muse-regexp-blank
-                   "]*> ")
-          0 verse)
+    (2600 ,(concat "^[" muse-regexp-blank "]*> ") 0 verse)
 
     ;; simple table markup is supported, nothing fancy.  use | to
     ;; separate cells, || to separate header cells, and ||| for footer
     ;; cells
-    (2700 ,(concat "^["
-                   muse-regexp-blank
-                   "]*\\(.+?\\(["
-                   muse-regexp-blank
-                   "]+|+["
-                   muse-regexp-blank
-                   "]+.+?\\)\\)$")
+    (2700 ,(concat "\\(" muse-table-line-regexp "\n"
+                   "\\(" muse-regexp-blank "*\n\\)?\\)+")
           0 table)
 
     ;; replace links in the buffer (links to other pages)
@@ -596,7 +579,7 @@ If STYLE is not specified, use current style."
 
 ;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
-  "Publish the given file in list FILES.
+  "Publish the given FILE in a particular STYLE to OUTPUT-DIR.
 If the argument FORCE is nil, each file is only published if it is
 newer than the published version.  If the argument FORCE is non-nil,
 the file is published no matter what."
@@ -879,10 +862,9 @@ The following contexts exist in Muse.
                           (goto-char (point-max))
                           (skip-chars-backward "\n")
                           (point-marker)))))
-            (while (re-search-forward (concat "^["
-                                              muse-regexp-blank
-                                              "]+\\([^\n]\\)")
-                                      end t)
+            (while (re-search-forward
+                    (concat "^[" muse-regexp-blank "]+\\([^\n]\\)")
+                    end t)
               (replace-match "\\1" t))
             (let ((footnotemark-cmd (muse-markup-text 'footnotemark))
                   (footnotemark-end-cmd (muse-markup-text 'footnotemark-end)))
@@ -1052,6 +1034,34 @@ like read-only from being inadvertently deleted."
             (end-of-line))))
         (forward-line 1))))
   (muse-insert-markup (muse-markup-text 'end-verse) ?\n))
+
+(defun muse-publish-table-fields (beg end)
+  "Parse given region as a table, returning a cons cell.
+The car is the length of the longest row.
+
+The cdr is a list of the fields of the table, with the first
+element indicating the type of the row:
+  1: body, 2: header, 3: footer.
+
+The existing region will be removed."
+  (let ((longest 0)
+        (left 0)
+        fields field-list)
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (= left 0)
+        (when (looking-at muse-table-line-regexp)
+          (setq fields (cons (length (match-string 1))
+                             (split-string (match-string 0)
+                                           muse-table-field-regexp))
+                field-list (cons fields field-list)
+                longest (max (length fields) longest)))
+        (setq left (forward-line 1))))
+    (delete-region beg end)
+    (if (= longest 0)
+        (cons 0 nil)
+      (cons (1- longest) (nreverse field-list)))))
 
 (defun muse-publish-markup-table ()
   "Style does not support tables.")

@@ -119,14 +119,7 @@ filename."
     (10000 "\\([0-9]+\\)-\\([0-9]+\\)" 0 "\\1--\\2")
 
     ;; be careful of closing quote pairs
-    (10100 "\"'" 0 "\"\\\\-'")
-
-    ;; join together the parts of a list or table
-    (10200 ,(concat
-             "\\\\end{\\(tabular\\|description\\|itemize\\|enumerate\\)}"
-             "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
-             "[" muse-regexp-blank "]*"
-             "\\\\begin{\\1}\\({[^\n}]+}\\)?\n+") 0 ""))
+    (10100 "\"'" 0 "\"\\\\-'"))
   "List of markup regexps for identifying regions in a Muse page.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -315,7 +308,7 @@ These are applied to URLs."
 (defun muse-latex-insert-anchor (anchor &rest blah)
   "Insert an anchor, either around the word at point, or within a tag."
   (skip-chars-forward muse-regexp-space)
-  (when (looking-at "<\\([^ />]+\\)>")
+  (when (looking-at "<\\([^ />\n]+\\)>")
     (goto-char (match-end 0)))
   (muse-insert-markup "\\label{" anchor "}\n"))
 
@@ -325,24 +318,24 @@ These are applied to URLs."
   (match-string 1))
 
 (defun muse-latex-markup-table ()
-  (let* ((str (prog1
-                  (match-string 1)
-                (delete-region (match-beginning 0) (match-end 0))))
-         (fields (split-string str "\\s-*|+\\s-*"))
-         (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
-                    (length (match-string 1 str)))))
-    (muse-insert-markup "\\begin{tabular}{" (make-string (length fields) ?l)
-                        "}\n")
-    (when (= type 3)
-      (muse-insert-markup "\\hline\n"))
-    (insert (car fields))
-    (setq fields (cdr fields))
-    (dolist (field fields)
-      (muse-insert-markup " & ")
-      (insert field))
-    (muse-insert-markup " \\\\\n")
-    (when (= type 2)
-      (muse-insert-markup "\\hline\n"))
+  (let* ((table-info (muse-publish-table-fields (match-beginning 0)
+                                                (match-end 0)))
+         (row-len (car table-info))
+         (field-list (cdr table-info)))
+    (muse-insert-markup "\\begin{tabular}{" (make-string row-len ?l) "}\n")
+    (dolist (fields field-list)
+      (let ((type (car fields)))
+        (setq fields (cdr fields))
+        (when (= type 3)
+          (muse-insert-markup "\\hline\n"))
+        (insert (car fields))
+        (setq fields (cdr fields))
+        (dolist (field fields)
+          (muse-insert-markup " & ")
+          (insert field))
+        (muse-insert-markup " \\\\\n")
+        (when (= type 2)
+          (muse-insert-markup "\\hline\n"))))
     (muse-insert-markup "\\end{tabular}")))
 
 (defun muse-latex-fixup-dquotes ()

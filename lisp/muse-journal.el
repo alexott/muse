@@ -101,7 +101,7 @@ and group 3 is the optional heading for the entry."
   :group 'muse-journal)
 
 (defcustom muse-journal-html-heading-regexp
-  (concat "^<h2[^>]*>" muse-journal-heading-regexp "</h2>$")
+  (concat "^<h2[^>\n]*>" muse-journal-heading-regexp "</h2>$")
   "A regexp that matches a journal heading from an HTML document.
 Paren group 1 is the ISO date, group 2 is the optional category,
 and group 3 is the optional heading for the entry."

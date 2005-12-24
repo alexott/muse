@@ -2,6 +2,64 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-24 20:01:37 GMT	Michael Olson <mwolson@gnu.org>	patch-314
+
+    Summary:
+      Implement a nicer way of publishing tables.  Fix some regexps.
+    Revision:
+      muse--main--1.0--patch-314
+
+    * lisp/muse-html.el (muse-html-markup-footnote): Fix logic error.  I
+      thought "/=" was a typo, but it really meant "!=".  Odd.  Let's avoid
+      that so that people familiar with C derivatives won't be confused :^) .
+      (muse-html-insert-anchor, muse-html-markup-paragraph): Fix regexp.  We
+      have to make sure to add "\n" to most negated sets if we don't want
+      them to span multiple lines.
+      (muse-html-escape-string): Move to muse-xml-common.el.
+      (muse-html-prepare-buffer): Use muse-xml-escape-string.
+    
+    * lisp/muse-journal.el (muse-journal-html-heading-regexp): Fix.
+    
+    * lisp/muse-latex.el (muse-latex-markup-regexps): Remove the kludgy
+      table-joining regexp.
+      (muse-latex-markup-table): Call muse-publish-table-fields to get a
+      table structure that we can work with.  Now we can publish the entire
+      table at once.
+    
+    * lisp/muse-protocols.el (muse-browse-url-info): Fix regexps.
+    
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Compact some
+      regexps.  Use a table-matching regexp that matches the entire region of
+      a table, rather than just one line.
+      (muse-publish-file): Docfix.
+      (muse-publish-markup-footnote): Compact regexp.
+      (muse-publish-table-fields): New function that snarfs the given region
+      and returns a table structure.
+    
+    * lisp/muse-regexps.el (muse-table-field-regexp): New regexp that matches
+      the field separator for tables.
+      (muse-table-line-regexp): New regexp that matches a table line.
+      (muse-tag-regexp): Fix regexp.
+    
+    * lisp/muse-registry.el (muse-registry-url-regexp)
+      (muse-registry-link-regexp): Fix.
+    
+    * lisp/muse-xml.el (muse-xml-insert-anchor): Fix regexp.
+    
+    * lisp/muse-xml-common.el: New file containing routines that are commonly
+      used by XML-ish publishing styles.
+      (muse-xml-sort-table): New function that sorts a table structure so
+      that it validates properly.  We don't use it yet, but we will.
+
+    new files:
+     lisp/.arch-ids/muse-xml-common.el.id lisp/muse-xml-common.el
+
+    modified files:
+     ChangeLog lisp/muse-html.el lisp/muse-journal.el
+     lisp/muse-latex.el lisp/muse-protocols.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-registry.el lisp/muse-xml.el
+
+
 2005-12-23 06:18:46 GMT	Michael Olson <mwolson@gnu.org>	patch-313
 
     Summary:

@@ -38,6 +38,7 @@
 
 (require 'muse-publish)
 (require 'muse-regexps)
+(require 'muse-xml-common)
 
 (defgroup muse-html nil
   "Options controlling the behavior of Muse HTML publishing."
@@ -423,7 +424,7 @@ system to an associated HTML coding system. If no match is found,
 (defun muse-html-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
   (skip-chars-forward muse-regexp-space)
-  (if (looking-at "<\\([^ />]+\\)>")
+  (if (looking-at "<\\([^ />\n]+\\)>")
       (let ((tag (match-string 1)))
         (goto-char (match-end 0))
         (insert "<a name=\"" anchor "\" id=\"" anchor "\">")
@@ -461,7 +462,7 @@ system to an associated HTML coding system. If no match is found,
      ((looking-at "<\\(em\\|strong\\|code\\|span\\)[ >]")
       (insert "<p>"))
      ((looking-at "<a ")
-      (if (looking-at "<a[^>]+><img")
+      (if (looking-at "<a[^>\n]+><img")
           (insert "<p class=\"image-link\">")
         (insert "<p>")))
      ((looking-at "<img[ >]")
@@ -473,41 +474,11 @@ system to an associated HTML coding system. If no match is found,
    (t
     (insert "<p>"))))
 
-(defun muse-html-escape-string (str &rest ignored)
-  "Convert to character entities any non-alphanumeric characters
-outside a few punctuation symbols, that risk being misinterpreted
-if not escaped."
-  (when str
-    (let (pos code len ch)
-      (save-match-data
-        (while (setq pos (string-match (concat "[^-"
-                                               muse-regexp-alnum
-                                               "/:._=@\\?~#\"<>&;]")
-                                       str pos))
-          (setq ch (aref str pos)
-                code (concat "&#"
-                                 (int-to-string
-                                  (cond ((fboundp 'char-to-ucs)
-                                         (char-to-ucs ch))
-                                        ((fboundp 'char-to-int)
-                                         (char-to-int ch))
-                                        (t ch)))
-                                 ";")
-                len (length code)
-                str (concat (substring str 0 pos)
-                            code
-                            (when (< pos (length str))
-                              (substring str (1+ pos) nil)))
-                pos (+ len pos)))
-        str))))
-
 (defun muse-html-markup-footnote ()
   (cond
    ((get-text-property (match-beginning 0) 'noemphasis)
     nil)
    ((= (muse-line-beginning-position) (match-beginning 0))
-    "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">\\1</a></sup>")
-   (t
     (prog1
         "<p class=\"footnote\"><a name=\"fn.\\1\" href=\"#fnr.\\1\">\\1.</a>"
       (save-excursion
@@ -521,7 +492,8 @@ if not escaped."
                                               muse-regexp-blank
                                               "]+\\([^\n]\\)")
                                       end t)
-              (replace-match "\\1" t)))))))))
+              (replace-match "\\1" t)))))))
+   (t "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">\\1</a></sup>")))
 
 (defun muse-html-markup-table ()
   (let* ((str (prog1
@@ -618,7 +590,7 @@ if not escaped."
 
 (defun muse-html-prepare-buffer ()
   (set (make-local-variable 'muse-publish-url-transforms)
-       (cons 'muse-html-escape-string muse-publish-url-transforms))
+       (cons 'muse-xml-escape-string muse-publish-url-transforms))
   (make-local-variable 'muse-html-meta-http-equiv)
   (set (make-local-variable 'muse-html-meta-content-type)
        (if (save-match-data
