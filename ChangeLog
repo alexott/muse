@@ -2,6 +2,63 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-24 21:47:44 GMT	Michael Olson <mwolson@gnu.org>	patch-315
+
+    Summary:
+      Make all XML-based publishing styles do tables.  Needs testing.
+    Revision:
+      muse--main--1.0--patch-315
+
+    * lisp/muse-docbook.el (muse-docbook-markup-functions): Use
+      muse-xml-markup-table.
+      (muse-docbook-markup-regexps): Remove table kludges.
+      (muse-docbook-markup-strings): Add markup strings for tables.
+      (muse-docbook-encoding-map, muse-docbook-transform-content-type)
+      (muse-docbook-markup-table): Remove in favor of using the functions in
+      muse-xml-common.el.
+      (muse-docbook-encoding): Use muse-xml-transform-content-type.
+      (muse-docbook-markup-paragraph, muse-docbook-insert-anchor): Use
+      muse-insert-markup.
+      (muse-docbook-fixup-tables): Remove, since it isn't needed anymore.
+      (muse-docbook-prepare-buffer): New function that forces the escaping of
+      extra specials in URLs.
+    
+    * lisp/muse-html.el (muse-html-table-attributes): Add a leading space.
+      Fix documentation.
+      (muse-html-markup-regexps): Remove table kludges.
+      (muse-html-markup-strings): Add markup strings for tables.
+      (muse-html-encoding-map, muse-html-transform-content-type): Remove in
+      favor of the functions of muse-xml-common.el.
+      (muse-html-insert-anchor, muse-html-markup-paragraph)
+      (muse-html-class-tag): Use muse-insert-markup.
+      (muse-html-markup-table): Call muse-xml-markup-table to do most of the
+      work, passing attributes.
+      (muse-html-insert-contents): Use muse-insert-markup.  Bum it down a
+      bit.
+      (muse-html-encoding): Use muse-xml-transform-content-type.
+      (muse-html-fixup-tables): Remove.
+    
+    * lisp/muse-xml-common.el: Move a few functions and options here from
+      other publishing styles.  Make an initial attempt at an XML-based table
+      publishing routine that uses markup strings.  I'm not sure if it will
+      abstract easily enough to use with LaTeX, but that's not a huge
+      concern.
+    
+    * lisp/muse-xml.el (muse-xml-markup-regexps): Remove table kludges.
+      (muse-xml-markup-strings): Add table markup strings.  Omit table-group
+      markup since it's unnecessary sugar.
+      (muse-xml-encoding-map, muse-xml-transform-content-type)
+      (muse-xml-markup-table): Move to muse-xml-common.el.
+      (muse-xml-encoding): Pass default argument.
+      (muse-xml-markup-paragraph, muse-xml-insert-anchor): Use
+      muse-insert-markup.
+      (muse-xml-fixup-tables): Remove.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-xml-common.el lisp/muse-xml.el
+
+
 2005-12-24 20:01:37 GMT	Michael Olson <mwolson@gnu.org>	patch-314
 
     Summary:

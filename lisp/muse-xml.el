@@ -48,6 +48,7 @@
 
 (require 'muse-publish)
 (require 'muse-regexps)
+(require 'muse-xml-common)
 
 (defgroup muse-xml nil
   "Options controlling the behavior of Muse XML publishing.
@@ -84,27 +85,15 @@ This may be text or a filename."
   :group 'muse-xml)
 
 (defcustom muse-xml-markup-regexps
-  `(;; Join together the parts of a table
-    (10000 ,(concat "  </t\\(body\\|head\\|foot\\)>\\s-*</table>"
-                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
-                    "[" muse-regexp-blank "]*"
-                    "<table[^>]*>\\s-*<t\\1>\n")
-           0 "")
-    (10100 ,(concat "</table>"
-                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
-                    "[" muse-regexp-blank "]*"
-                    "<table[^>]*>\n")
-           0 "")
-
-    ;; Join together the parts of a list
-    (10200 ,(concat "</list>"
+  `(;; Join together the parts of a list
+    (10000 ,(concat "</list>"
                     "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
                     "[" muse-regexp-blank "]*"
                     "<list[^>]*>\\s-*")
            0 "")
 
     ;; Beginning of doc, end of doc, or plain paragraph separator
-    (10300 ,(concat "\\(\n</\\(blockquote\\|format\\)>\\)?"
+    (10100 ,(concat "\\(\n</\\(blockquote\\|format\\)>\\)?"
                     "\\(\\(\n\\(["
                     muse-regexp-blank
                     "]*\n\\)+\\)\\|\\`\\s-*\\|\\s-*\\'\\)"
@@ -183,7 +172,13 @@ For more on the structure of this list, see
     (end-oli         . "</item>\n</list>")
     (begin-ddt       . "<list type=\"definition\">\n<item><term>")
     (start-dde       . "</term>\n<definition>")
-    (end-ddt         . "</definition>\n</item>\n</list>"))
+    (end-ddt         . "</definition>\n</item>\n</list>")
+    (begin-table     . "<table%s>\n")
+    (end-table       . "</table>\n")
+    (begin-table-row . "    <tr>\n")
+    (end-table-row   . "    </tr>\n")
+    (begin-table-entry . "      <%s>")
+    (end-table-entry . "</%s>\n"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
@@ -211,36 +206,12 @@ found in `muse-xml-encoding-map'."
   :type 'string
   :group 'muse-xml)
 
-(defcustom muse-xml-encoding-map
-  '((iso-8859-1         . "iso-8859-1")
-    (iso-2022-jp        . "iso-2022-jp")
-    (utf-8              . "utf-8")
-    (japanese-iso-8bit  . "euc-jp")
-    (chinese-big5       . "big5")
-    (mule-utf-8         . "utf-8")
-    (chinese-iso-8bit   . "gb2312")
-    (chinese-gbk        . "gbk"))
-  "An alist mapping emacs coding systems to appropriate Xml charsets.
-Use the base name of the coding system (i.e. without the -unix)."
-  :type '(alist :key-type coding-system :value-type string)
-  :group 'muse-xml)
-
-(defun muse-xml-transform-content-type (content-type)
-  "Using `muse-xml-encoding-map', try and resolve an emacs
-coding system to an associated XML coding system. If no
-match is found, `muse-xml-charset-default' is used instead."
-  (let ((match (and (fboundp 'coding-system-base)
-                    (assoc (coding-system-base content-type)
-                           muse-xml-encoding-map))))
-    (if match
-        (cdr match)
-      muse-xml-charset-default)))
-
 (defun muse-xml-encoding ()
   (muse-xml-transform-content-type
    (or (and (boundp 'buffer-file-coding-system)
             buffer-file-coding-system)
-       muse-xml-encoding-default)))
+       muse-xml-encoding-default)
+   muse-xml-charset-default))
 
 (defun muse-xml-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
@@ -250,7 +221,7 @@ match is found, `muse-xml-charset-default' is used instead."
               (and (re-search-backward "<\\(/?\\)p[ >]"
                                        nil t)
                    (not (string-equal (match-string 1) "/")))))
-      (insert "</p>"))
+      (muse-insert-markup "</p>"))
     (goto-char end))
   (cond
    ((eobp)
@@ -259,77 +230,21 @@ match is found, `muse-xml-charset-default' is used instead."
    ((eq (char-after) ?\<)
     (when (looking-at (concat "<\\(format\\|code\\|link\\|image"
                               "\\|anchor\\|footnote\\)[ >]"))
-      (insert "<p>")))
+      (muse-insert-markup "<p>")))
    (t
-    (insert "<p>"))))
+    (muse-insert-markup "<p>"))))
 
 (defun muse-xml-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
   (skip-chars-forward muse-regexp-space)
   (when (looking-at "<\\([^ />\n]+\\)>")
     (goto-char (match-end 0)))
-  (insert "<anchor id=\"" anchor "\" />\n"))
+  (muse-insert-markup "<anchor id=\"" anchor "\" />\n"))
 
 (defun muse-xml-markup-anchor ()
   (save-match-data
     (muse-xml-insert-anchor (match-string 2)))
   (match-string 1))
-
-(defun muse-xml-markup-table ()
-  (let* ((str (prog1
-                  (match-string 1)
-                (delete-region (match-beginning 0) (match-end 0))))
-         (fields (split-string str "\\s-*|+\\s-*"))
-         (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
-                    (length (match-string 1 str))))
-         (part (cond ((= type 1) "tbody")
-                     ((= type 2) "thead")
-                     ((= type 3) "tfoot")))
-         (col (cond ((= type 1) "td")
-                    ((= type 2) "th")
-                    ((= type 3) "td"))))
-    (insert "<table>\n"
-            "  <" part ">\n"
-            "    <tr>\n")
-    (dolist (field fields)
-      (insert "      <" col ">" field "</" col ">\n"))
-    (insert "    </tr>\n"
-            "  </" part ">\n"
-            "</table>\n")))
-
-(defun muse-xml-fixup-tables ()
-  "Sort table parts."
-  (goto-char (point-min))
-  (let (last)
-    (while (re-search-forward "^<table[^>]*>$" nil t)
-      (unless (get-text-property (point) 'read-only)
-        (forward-line 1)
-        (save-restriction
-          (let ((beg (point)))
-            (narrow-to-region beg (and (re-search-forward "^</table>"
-                                                          nil t)
-                                       (match-beginning 0))))
-          (goto-char (point-min))
-          (let ((inhibit-read-only t))
-            (sort-subr nil
-                       (function
-                        (lambda ()
-                          (if (re-search-forward
-                               "^\\s-*<t\\(head\\|body\\|foot\\)>$" nil t)
-                              (goto-char (match-beginning 0))
-                            (goto-char (point-max)))))
-                       (function
-                        (lambda ()
-                          (if (re-search-forward
-                               "^\\s-*</t\\(head\\|body\\|foot\\)>$" nil t)
-                              (goto-char (match-end 0))
-                            (goto-char (point-max)))))
-                       (function
-                        (lambda ()
-                          (looking-at "\\s-*<t\\(head\\|body\\|foot\\)>")
-                          (cond ((string= (match-string 1) "head") 1)
-                                ((string= (match-string 1) "foot") 2)
-                                (t 3)))))))))))
 
 (defun muse-xml-finalize-buffer ()
   (when (boundp 'buffer-file-coding-system)
@@ -346,7 +261,7 @@ match is found, `muse-xml-charset-default' is used instead."
                      :functions  'muse-xml-markup-functions
                      :strings    'muse-xml-markup-strings
                      :specials   'muse-xml-markup-specials
-                     :before-end 'muse-xml-fixup-tables
+                     :before     'muse-xml-prepare-buffer
                      :after      'muse-xml-finalize-buffer
                      :header     'muse-xml-header
                      :footer     'muse-xml-footer

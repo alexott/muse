@@ -34,6 +34,31 @@
 (require 'muse-publish)
 (require 'muse-regexps)
 
+(defcustom muse-xml-encoding-map
+  '((iso-8859-1         . "iso-8859-1")
+    (iso-2022-jp        . "iso-2022-jp")
+    (utf-8              . "utf-8")
+    (japanese-iso-8bit  . "euc-jp")
+    (chinese-big5       . "big5")
+    (mule-utf-8         . "utf-8")
+    (chinese-iso-8bit   . "gb2312")
+    (chinese-gbk        . "gbk"))
+  "An alist mapping Emacs coding systems to appropriate XML charsets.
+Use the base name of the coding system (i.e. without the -unix)."
+  :type '(alist :key-type coding-system :value-type string)
+  :group 'muse-publish)
+
+(defun muse-xml-transform-content-type (content-type default)
+  "Using `muse-xml-encoding-map', try and resolve an Emacs coding
+system to an associated XML coding system.
+If no match is found, the DEFAULT charset is used instead."
+  (let ((match (and (fboundp 'coding-system-base)
+                    (assoc (coding-system-base content-type)
+                           muse-xml-encoding-map))))
+    (if match
+        (cdr match)
+      default)))
+
 (defun muse-xml-escape-string (str &rest ignored)
   "Convert to character entities any non-alphanumeric characters
 outside a few punctuation symbols, that risk being misinterpreted
@@ -73,6 +98,43 @@ if not escaped."
     (sort table #'(lambda (l r)
                     (nth (1- (car r))
                          (nth (1- (car l)) decisions))))))
+
+(defun muse-xml-markup-table (&optional attributes)
+  (let* ((table-info (muse-publish-table-fields (match-beginning 0)
+                                                (match-end 0)))
+         (row-len (car table-info))
+         (field-list (muse-xml-sort-table (cdr table-info)))
+         last-part)
+    (muse-insert-markup (muse-markup-text 'begin-table attributes))
+    (muse-insert-markup (muse-markup-text 'begin-table-group))
+    (dolist (fields field-list)
+      (let* ((type (car fields))
+             (part (cond ((= type 1) "tbody")
+                         ((= type 2) "thead")
+                         ((= type 3) "tfoot")))
+             (col (cond ((= type 1) "td")
+                        ((= type 2) "th")
+                        ((= type 3) "td"))))
+        (setq fields (cdr fields))
+        (unless (and last-part (string= part last-part))
+          (when last-part
+            (muse-insert-markup "  </" last-part ">\n"))
+          (muse-insert-markup "  <" part ">\n")
+          (setq last-part part))
+        (muse-insert-markup (muse-markup-text 'begin-table-row))
+        (dolist (field fields)
+          (muse-insert-markup (muse-markup-text 'begin-table-entry  col))
+          (insert field)
+          (muse-insert-markup (muse-markup-text 'end-table-entry  col)))
+        (muse-insert-markup (muse-markup-text 'end-table-row))))
+    (when last-part
+      (muse-insert-markup "  </" last-part ">\n"))
+    (muse-insert-markup (muse-markup-text 'end-table-group))
+    (muse-insert-markup (muse-markup-text 'end-table))))
+
+(defun muse-xml-prepare-buffer ()
+  (set (make-local-variable 'muse-publish-url-transforms)
+       (cons 'muse-xml-escape-string muse-publish-url-transforms)))
 
 (provide 'muse-xml-common)
 
