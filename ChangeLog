@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-24 22:07:28 GMT	Michael Olson <mwolson@gnu.org>	patch-316
+
+    Summary:
+      Adapt the remaining publishing styles.
+    Revision:
+      muse--main--1.0--patch-316
+
+    * lisp/muse-groff.el (muse-groff-markup-paragraph): Use
+      muse-insert-markup.
+    
+    * lisp/muse-latex2png.el (muse-publish-latex-tag): Use
+      muse-insert-markup.
+      (latex2png): Clean up the code a bit.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-insert-anchor): Use
+      muse-insert-markup.
+      (muse-texinfo-markup-table): Use the shiny new
+      muse-publish-table-fields function.
+
+    modified files:
+     ChangeLog lisp/muse-groff.el lisp/muse-latex2png.el
+     lisp/muse-texinfo.el
+
+
 2005-12-24 21:47:44 GMT	Michael Olson <mwolson@gnu.org>	patch-315
 
     Summary:

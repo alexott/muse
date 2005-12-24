@@ -146,18 +146,7 @@ differs little between the various styles."
     (goto-char (1+ (match-beginning 0)))
     (delete-region (point) end)
     (unless (looking-at "\.\\(\\(\\(SUB\\|PARA\\)?HEAD \\)\\|RULE$\\)")
-      (insert ".ALD .5v\n.PP\n.ne 2\n"))))
-
-;; (defun muse-latex-markup-table ()
-;;   (let* ((str (prog1
-;;                (match-string 1)
-;;              (delete-region (match-beginning 0) (match-end 0))))
-;;       (fields (split-string str "\\s-*|+\\s-*"))
-;;       (type (and (string-match "\\s-*\\(|+\\)\\s-*" str)
-;;                  (length (match-string 1 str)))))
-;;     (insert "\\begin{tabular}{" (make-string (length fields) ?l) "}\n")
-;;     (insert (mapconcat 'identity fields " & "))
-;;     (insert " \\\\\n\\end{tabular}")))
+      (muse-insert-markup ".ALD .5v\n.PP\n.ne 2\n"))))
 
 (defun muse-groff-protect-leading-chars ()
   "Protect leading periods and apostrophes from being interpreted as

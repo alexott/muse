@@ -66,7 +66,6 @@ Old files with PREFIX in the name are deleted."
                         "/latex/")))
     (save-restriction
       (narrow-to-region beg end)
-
       (let* ((text (buffer-substring-no-properties beg end))
              ;; the prefix given to the image file.
              (prefix (cdr (assoc "prefix" attrs)))
@@ -78,21 +77,21 @@ Old files with PREFIX in the name are deleted."
         (goto-char (point-min))
         (unless (file-directory-p pubdir)
           (make-directory pubdir))
-        (insert "<img src=\""
-                (latex2png-move2pubdir (latex2png text prefix preamble)
-                                       prefix pubdir)
-                "\" alt=\"latex2png equation\" "
-                (if display (concat "class=\"latex-inline\"")
-                  (concat "class=\"latex-display\""))
-                " />")
-        (insert "<!-- " text "-->")
+        (muse-insert-markup
+         "<img src=\""
+         (latex2png-move2pubdir (latex2png text prefix preamble)
+                                prefix pubdir)
+         "\" alt=\"latex2png equation\" "
+         (if display (concat "class=\"latex-inline\"")
+           (concat "class=\"latex-display\""))
+         " />")
+        (muse-insert-markup "<!-- " text "-->")
         (goto-char (point-max))))))
 
 (defun latex2png (math prefix preamble)
-  "Convert the $math into a png with a $prefix"
-  (if (null preamble)
-      (setq preamble " "))
-
+  "Convert the MATH code into a png with PREFIX."
+  (unless preamble
+    (setq preamble ""))
   (let ((texfile (expand-file-name
                   (concat prefix "_"  (format "%d" (abs (sxhash math))))
                   (cond ((boundp 'temporary-file-directory)
@@ -114,10 +113,8 @@ Old files with PREFIX in the name are deleted."
  math
 "}\n"
 "\n\\end{document}\n\n")))
-
     (cd "/tmp")
     (call-process "latex" nil nil nil texfile)
-
     (if (file-exists-p (concat texfile ".dvi"))
         (progn
           (shell-command-to-string
