@@ -217,8 +217,7 @@ as you wrap the region in <literal></literal>."
 
     ;; Beginning of doc, end of doc, or plain paragraph separator
     (10100 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
-                    "\\(\\(\n\\(["
-                    muse-regexp-blank
+                    "\\(\\(\n\\([" muse-regexp-blank
                     "]*\n\\)+\\)\\|\\`\\s-*\\|\\s-*\\'\\)"
                     "\\(<\\(blockquote\\|center\\)>\n\\)?")
            0 muse-html-markup-paragraph))
@@ -296,8 +295,6 @@ For more on the structure of this list, see
     (end-ddt         . "</dd>\n</dl>")
     (begin-table     . "<table%s>\n")
     (end-table       . "</table>\n")
-    (begin-table-group . "  <tgroup cols=\"%s\">\n")
-    (end-table-group . "  </tgroup>\n")
     (begin-table-row . "    <tr>\n")
     (end-table-row   . "    </tr>\n")
     (begin-table-entry . "      <%s>")
@@ -316,8 +313,8 @@ differs little between the various styles."
     (fn-sep          . "<hr />\n")
     (begin-underline . "<span style=\"text-decoration: underline;\">")
     (end-underline   . "</span>")
-    (begin-center    . "<span style=\"text-align: center;\">\n")
-    (end-center      . "\n</span>")
+    (begin-center    . "<p style=\"text-align: center;\">\n")
+    (end-center      . "\n</p>")
     (end-verse-line  . "<br />")
     (end-last-stanza-line . "<br />")
     (empty-verse-line . "<br />"))
@@ -382,28 +379,27 @@ This will be used if no special characters are found."
   :type 'string
   :group 'muse-html)
 
-(defun muse-html-insert-anchor (anchor)
-  "Insert an anchor, either around the word at point, or within a tag."
-  (skip-chars-forward (concat muse-regexp-blank "\n"))
-  (if (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
-      (let ((tag (match-string 1)))
-        (goto-char (match-end 0))
-        (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
-        (when muse-html-anchor-on-word
-          (or (and (search-forward (format "</%s>" tag)
-                                   (muse-line-end-position) t)
-                   (goto-char (match-beginning 0)))
-              (forward-word 1)))
-        (muse-insert-markup "</a>"))
-    (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
-    (when muse-html-anchor-on-word
-      (forward-word 1))
-    (muse-insert-markup "</a>\n")))
-
 (defun muse-html-markup-anchor ()
-  (save-match-data
-    (muse-html-insert-anchor (match-string 2)))
-  (match-string 1))
+  "Insert an anchor, either around the word at point, or within a tag."
+  (unless (get-text-property (match-end 1) 'noemphasis)
+    (let ((anchor (match-string 2)))
+      (save-match-data
+        (skip-chars-forward (concat muse-regexp-blank "\n"))
+        (if (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
+            (let ((tag (match-string 1)))
+              (goto-char (match-end 0))
+              (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
+              (when muse-html-anchor-on-word
+                (or (and (search-forward (format "</%s>" tag)
+                                         (muse-line-end-position) t)
+                         (goto-char (match-beginning 0)))
+                    (forward-word 1)))
+              (muse-insert-markup "</a>"))
+          (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
+          (when muse-html-anchor-on-word
+            (forward-word 1))
+          (muse-insert-markup "</a>\n"))))
+    (match-string 1)))
 
 (defun muse-html-markup-paragraph ()
   (let ((end (copy-marker (match-end 0) t)))
@@ -441,9 +437,11 @@ This will be used if no special characters are found."
     nil)
    ((= (muse-line-beginning-position) (match-beginning 0))
     (prog1
-        (muse-insert-markup "<p class=\"footnote\">"
-                            "<a name=\"fn.\\1\" href=\"#fnr.\\1\">"
-                            "\\1.</a>")
+        (let ((text (match-string 1)))
+          (muse-insert-markup
+           (concat "<p class=\"footnote\">"
+                   "<a name=\"fn." text "\" href=\"#fnr." text "\">"
+                   text ".</a>")))
       (save-excursion
         (save-match-data
           (let* ((beg (goto-char (match-end 0)))
@@ -457,8 +455,10 @@ This will be used if no special characters are found."
                                       end t)
               (replace-match "\\1" t)))))
       (replace-match "")))
-   (t (muse-insert-markup "<sup><a name=\"fnr.\\1\" href=\"#fn.\\1\">"
-                          "\\1</a></sup>")
+   (t (let ((text (match-string 1)))
+        (muse-insert-markup
+         (concat "<sup><a name=\"fnr." text "\" href=\"#fn." text "\">"
+                 text "</a></sup>")))
       (replace-match ""))))
 
 (defun muse-html-markup-table ()

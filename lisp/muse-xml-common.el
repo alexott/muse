@@ -88,15 +88,16 @@ if not escaped."
         str))))
 
 (defun muse-xml-markup-anchor ()
-  (let ((anchor (match-string 2)))
-    (save-match-data
-      (skip-chars-forward (concat muse-regexp-blank "\n"))
-      (when (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
-        (goto-char (match-end 0)))
-      (muse-insert-markup (muse-markup-text 'begin-anchor)
-                          anchor
-                          (muse-markup-text 'end-anchor))))
-  (match-string 1))
+  (unless (get-text-property (match-end 1) 'noemphasis)
+    (let ((anchor (match-string 2)))
+      (save-match-data
+        (skip-chars-forward (concat muse-regexp-blank "\n"))
+        (when (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
+          (goto-char (match-end 0)))
+        (muse-insert-markup (muse-markup-text 'begin-anchor)
+                            anchor
+                            (muse-markup-text 'end-anchor))))
+    (match-string 1)))
 
 (defun muse-xml-sort-table (table)
   "Sort the given table structure so that it validates properly."

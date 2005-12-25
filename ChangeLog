@@ -2,6 +2,37 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-25 03:15:36 GMT	Michael Olson <mwolson@gnu.org>	patch-318
+
+    Summary:
+      Fix a markup error involving links like [[#foo]].
+    Revision:
+      muse--main--1.0--patch-318
+
+    * examples/QuickStart.muse: Move <contents> higher.  Remove <comment>
+      tags around the centered text.
+    
+    * lisp/muse-html.el (muse-html-markup-regexps): Cosmetic change.
+      (muse-html-markup-strings): Remove table-group strings, since they
+      aren't valid (X)HTML like I had thought.  Change center to use <p>
+      rather than <span>.
+      (muse-html-insert-anchor): Remove.
+      (muse-html-markup-anchor): Respect the noemphasis property.  This fixes
+      a bug with links like [[#foo]].
+      (muse-html-markup-footnote): Insert the correct footnote number.
+    
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Make noemphasis
+      rule higher than anchor rule.
+      (muse-publish-markup-anchor): Respect the noemphasis property.
+    
+    * lisp/muse-xml-common.el (muse-xml-markup-anchor): Respect the
+      noemphasis property.
+
+    modified files:
+     ChangeLog examples/QuickStart.muse lisp/muse-html.el
+     lisp/muse-publish.el lisp/muse-xml-common.el
+
+
 2005-12-24 23:13:41 GMT	Michael Olson <mwolson@gnu.org>	patch-317
 
     Summary:

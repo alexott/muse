@@ -9,6 +9,8 @@ Muse consists of two main parts: an enhanced text-mode for authoring
 documents and navigating within Muse projects, and a set of publishing
 styles for generating different kinds of output.
 
+<contents>
+
 * About this document
 
 This document provides an example of Muse markup and also functions as
@@ -18,8 +20,6 @@ To see what it looks like when published, type =make examples=.  You
 will then get an Info document, an HTML document, and a PDF document
 (provided you have an implementation of LaTeX installed with the
 necessary fonts).
-
-<contents>
 
 * Getting Started
 
@@ -94,9 +94,7 @@ For example, the input text used for this section is:
 A line that begins with six or more columns of whitespace (either tabs
 or spaces) indicates a centered paragraph.
 
-<comment>
                            This is centered
-</comment>
 
   But if a line begins with whitespace, though less than six columns,
   it indicates a quoted paragraph.
