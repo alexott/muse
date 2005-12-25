@@ -55,13 +55,11 @@
   :group 'muse-publish)
 
 (defcustom muse-publish-url-transforms
-  '(muse-publish-prepare-url
-    muse-resolve-url)
+  '(muse-resolve-url)
   "A list of functions used to prepare URLs for publication.
 Each is passed the URL.  The transformed URL should be returned."
   :type 'hook
-  :options '(muse-publish-prepare-url
-             muse-resolve-url)
+  :options '(muse-resolve-url)
   :group 'muse-publish)
 
 (defcustom muse-publish-desc-transforms nil
@@ -373,10 +371,26 @@ If STYLE is not specified, use current style."
         (if base
             (muse-find-markup-element keyword ident base))))))
 
-(defsubst muse-markup-text (ident &rest args)
+(defun muse-markup-text (ident &rest args)
+  "Insert ARGS into the text markup associated with IDENT.
+If the markup text has sections like %N%, this will be replaced
+with the N-1th argument in ARGS.  After that, `format' is applied
+to the text with ARGS as parameters."
   (let ((text (muse-find-markup-element :strings ident (muse-style))))
     (if (and text args)
-        (apply 'format text args)
+        (progn
+          (let (start repl-text)
+            (while (setq start (string-match "%\\([1-9][0-9]*\\)%" text start))
+              ;; escape '%' in the argument text, since we will be
+              ;; using format on it
+              (setq repl-text (muse-replace-regexp-in-string
+                               "%" "%%"
+                               (nth (1- (string-to-number
+                                         (match-string 1 text))) args)
+                               t t)
+                    start (+ start (length repl-text))
+                    text (replace-match repl-text t t text))))
+          (apply 'format text args))
       (or text ""))))
 
 (defun muse-insert-markup (&rest args)
@@ -1098,39 +1112,69 @@ function for the list of available contexts."
       (insert (format (muse-markup-text 'email-addr) addr addr)))
     (muse-publish-mark-read-only beg (point))))
 
+(defun muse-publish-classify-url (target)
+  "Transform anchors and get published name, if TARGET is a page.
+The return value is a cons cell.  The car is the type of link,
+the cadr is the page name, and the cddr is the anchor."
+  (save-match-data
+    (cond ((or (null target) (string= target ""))
+           nil)
+          ((string-match muse-url-regexp target)
+           (cons 'url (cons target nil)))
+          ((string-match muse-image-regexp target)
+           (cons 'image (cons target nil)))
+          ((string-match muse-file-regexp target)
+           (cons 'file (cons target nil)))
+          ((string-match "#" target)
+           (if (eq (aref target 0) ?\#)
+              (cons 'anchor-ref (cons nil (substring target 1)))
+             (cons 'link-and-anchor
+                   (cons (muse-publish-link-name
+                          (substring target 0 (match-beginning 0)))
+                         (substring target (match-end 0))))))
+          (t
+           (cons 'link (cons (muse-publish-link-name target) nil))))))
+
 (defun muse-publish-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
-  (let ((orig-url url))
+  (let ((orig-url url)
+        type anchor)
     (dolist (transform muse-publish-url-transforms)
       (setq url (save-match-data (when url (funcall transform url explicit)))))
     (dolist (transform muse-publish-desc-transforms)
       (setq desc (save-match-data
                    (when desc (funcall transform desc explicit)))))
-    (when url
-      (setq url (muse-publish-escape-specials-in-string url 'url)))
     (when desc
       (setq desc (muse-publish-escape-specials-in-string desc 'url-desc)))
     (setq orig-url
           (muse-publish-escape-specials-in-string orig-url 'url-desc))
-    (cond ((null url)
+    (let ((target (muse-publish-classify-url url)))
+      (setq type (car target)
+            url (muse-publish-escape-specials-in-string (cadr target) 'url)
+            anchor (muse-publish-escape-specials-in-string
+                    (cddr target) 'url)))
+    (cond ((eq type 'anchor-ref)
+           (muse-markup-text 'anchor-ref anchor (or desc orig-url)))
+          ((string= url "")
            desc)
-          ((string-match muse-image-regexp url)
+          ((eq type 'image)
            (if desc
                (muse-markup-text 'image-with-desc url desc)
              (muse-markup-text 'image-link url)))
+          ((eq type 'link-and-anchor)
+           (muse-markup-text 'link-and-anchor url anchor
+                             (or desc orig-url)))
           ((and desc (string-match muse-image-regexp desc))
            (muse-markup-text 'url-with-image url desc))
-          ((eq (aref url 0) ?\#)
-           (muse-markup-text 'internal-link (substring url 1)
-                             (or desc orig-url)))
+          ((eq type 'link)
+           (muse-markup-text 'link url (or desc orig-url)))
           (t
-           (muse-markup-text 'url-link url (or desc orig-url))))))
+           (muse-markup-text 'url url (or desc orig-url))))))
 
 (defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
   (delete-region (match-beginning 0) (match-end 0))
-  (let ((beg (point))
-        (text (muse-publish-url url desc explicit)))
+  (let ((text (muse-publish-url url desc explicit)))
     (when text
       (muse-insert-markup text))))
 
@@ -1151,13 +1195,9 @@ function for the list of available contexts."
       (muse-publish-insert-url link desc explicit))))
 
 (defun muse-publish-markup-url ()
-  (if (not (or (eq (char-before (match-beginning 0)) ?\")
-               (eq (char-after (match-end 0)) ?\")))
-      (muse-publish-insert-url (match-string 0))
-    (let ((beg (match-beginning 0))
-          (url (match-string 0)))
-      (delete-region (match-beginning 0) (match-end 0))
-      (muse-insert-markup (muse-publish-escape-specials-in-string url 'url)))))
+  (unless (or (eq (char-before (match-beginning 0)) ?\")
+              (eq (char-after (match-end 0)) ?\"))
+    (muse-publish-insert-url (match-string 0))))
 
 ;; Default publishing tags
 
@@ -1290,21 +1330,6 @@ function for the list of available contexts."
                          '(rear-nonsticky (read-only) read-only t)
                          string)
     string))
-
-(defun muse-publish-prepare-url (target &rest ignored)
-  "Transform anchors and get published name, if TARGET is a page."
-  (save-match-data
-    (unless (or (string-match muse-url-regexp target)
-                (string-match muse-image-regexp target)
-                (string-match muse-file-regexp target))
-      (setq target (if (string-match "#" target)
-                       (if (eq (aref target 0) ?\#)
-                           target
-                         (concat (muse-publish-link-name
-                                  (substring target 0 (match-beginning 0)))
-                                 "#" (substring target (match-end 0))))
-                     (muse-publish-link-name target)))))
-  target)
 
 (provide 'muse-publish)
 

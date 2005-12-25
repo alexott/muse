@@ -317,8 +317,11 @@ If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
     (replace-regexp-in-string regexp replacement text fixedcase literal))
    ((fboundp 'replace-in-string)
     (replace-in-string text regexp replacement literal))
-   (t (while (string-match regexp text)
-        (setq text (replace-match replacement fixedcase literal text)))
+   (t (let ((repl-len (length replacement))
+            start)
+        (while (setq start (string-match regexp text start))
+          (setq start (+ start repl-len)
+                text (replace-match replacement fixedcase literal text))))
       text)))
 
 (defun muse-add-to-invisibility-spec (element)

@@ -2,6 +2,56 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-25 17:33:25 GMT	Michael Olson <mwolson@gnu.org>	patch-320
+
+    Summary:
+      Allow text like "%N%" in markup strings.
+    Revision:
+      muse--main--1.0--patch-320
+
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Rename
+      'internal-link to 'anchor-ref for clarity.  Split 'url-link into 'url
+      and 'link so that TeX-related publishing styles can more handle links
+      to other Muse documents.  Add 'link-and-anchor string that handles a
+      link with an anchor and an optional description.
+    
+    * lisp/muse-groff.el (muse-groff-markup-strings): Ditto.
+    
+    * lisp/muse-html.el (muse-html-markup-strings): Ditto.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Ditto.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Ditto.
+    
+    * lisp/muse-xml.el (muse-xml-markup-strings): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-url-transforms): Remove
+      muse-publish-prepare-url.
+    
+    * lisp/muse-publish.el (muse-markup-text): Turn this into a function and
+      add documentation.  It will now handle arguments like "%N%", which
+      indicate the position of an argument to insert.  `format' is applied
+      afterward.
+      (muse-publish-classify-url): New function derived from
+      muse-publish-prepare-url that returns a data structure with complete
+      information about the given target string.
+      (muse-publish-url): Use muse-publish-classify-url.  This should fix an
+      error in the LaTeX publishing style when specifying links to anchors.
+      (muse-publish-insert-url): Remove unnecessary let-binding.
+      (muse-publish-markup-url): Simplify, now that we have whole-document
+      escaping of specials.
+      (muse-publish-prepare-url): Remove.
+    
+    * lisp/muse.el (muse-replace-regexp-in-string): Use a more robust
+      fallback routine when neither replace-regexp-in-string nor
+      replace-in-string are found.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el lisp/muse-groff.el
+     lisp/muse-html.el lisp/muse-latex.el lisp/muse-publish.el
+     lisp/muse-texinfo.el lisp/muse-xml.el lisp/muse.el
+
+
 2005-12-25 04:32:27 GMT	Michael Olson <mwolson@gnu.org>	patch-319
 
     Summary:

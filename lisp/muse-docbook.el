@@ -110,8 +110,10 @@ For more on the structure of this list, see
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-strings
-  '((url-link        . "<ulink url=\"%s\">%s</ulink>")
-    (internal-link   . "<link linkend=\"%s\">%s</link>")
+  '((anchor-ref      . "<link linkend=\"%s\">%s</link>")
+    (url             . "<ulink url=\"%s\">%s</ulink>")
+    (link            . "<ulink url=\"%s\">%s</ulink>")
+    (link-and-anchor . "<ulink url=\"%s#%s\">%s</ulink>")
     (email-addr      . "<email>%s</email>")
     (anchor          . "<anchor id=\"%s\" />\n")
     (emdash          . " &mdash; ")
