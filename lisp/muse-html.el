@@ -379,26 +379,28 @@ This will be used if no special characters are found."
   :type 'string
   :group 'muse-html)
 
-(defun muse-html-markup-anchor ()
+(defun muse-html-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
+  (skip-chars-forward (concat muse-regexp-blank "\n"))
+  (if (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
+      (let ((tag (match-string 1)))
+        (goto-char (match-end 0))
+        (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
+        (when muse-html-anchor-on-word
+          (or (and (search-forward (format "</%s>" tag)
+                                   (muse-line-end-position) t)
+                   (goto-char (match-beginning 0)))
+              (forward-word 1)))
+        (muse-insert-markup "</a>"))
+    (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
+    (when muse-html-anchor-on-word
+      (forward-word 1))
+    (muse-insert-markup "</a>\n")))
+
+(defun muse-html-markup-anchor ()
   (unless (get-text-property (match-end 1) 'noemphasis)
-    (let ((anchor (match-string 2)))
-      (save-match-data
-        (skip-chars-forward (concat muse-regexp-blank "\n"))
-        (if (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
-            (let ((tag (match-string 1)))
-              (goto-char (match-end 0))
-              (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
-              (when muse-html-anchor-on-word
-                (or (and (search-forward (format "</%s>" tag)
-                                         (muse-line-end-position) t)
-                         (goto-char (match-beginning 0)))
-                    (forward-word 1)))
-              (muse-insert-markup "</a>"))
-          (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
-          (when muse-html-anchor-on-word
-            (forward-word 1))
-          (muse-insert-markup "</a>\n"))))
+    (save-match-data
+      (muse-html-insert-anchor (match-string 2)))
     (match-string 1)))
 
 (defun muse-html-markup-paragraph ()

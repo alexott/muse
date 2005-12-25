@@ -129,6 +129,7 @@ For more on the structure of this list, see
     (url-link        . "@uref{%s, %s}")
     (internal-link   . "@ref{%s, %s}")
     (email-addr      . "@email{%s}")
+    (anchor          . "@anchor{%s} ")
     (emdash          . "---")
     (comment-begin   . "@ignore\n")
     (comment-end     . "\n@end ignore\n")
@@ -167,9 +168,7 @@ For more on the structure of this list, see
     (end-oli         . "\n@end enumerate")
     (begin-ddt       . "@table @strong\n@item ")
     (start-dde       . "\n")
-    (end-ddt         . "\n@end table")
-    (begin-anchor    . "@anchor{")
-    (end-anchor      . "} "))
+    (end-ddt         . "\n@end table"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."

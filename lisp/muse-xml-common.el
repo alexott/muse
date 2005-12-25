@@ -89,14 +89,12 @@ if not escaped."
 
 (defun muse-xml-markup-anchor ()
   (unless (get-text-property (match-end 1) 'noemphasis)
-    (let ((anchor (match-string 2)))
+    (let ((text (muse-markup-text 'anchor (match-string 2))))
       (save-match-data
         (skip-chars-forward (concat muse-regexp-blank "\n"))
         (when (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
           (goto-char (match-end 0)))
-        (muse-insert-markup (muse-markup-text 'begin-anchor)
-                            anchor
-                            (muse-markup-text 'end-anchor))))
+        (muse-insert-markup text)))
     (match-string 1)))
 
 (defun muse-xml-sort-table (table)

@@ -146,6 +146,7 @@ For more on the structure of this list, see
     (url-link        . "\\href{%s}{%s}")
     (internal-link   . "\\ref{%s}")
     (email-addr      . "\\verb|%s|")
+    (anchor          . "\\label{%s}")
     (emdash          . "---")
     (comment-begin   . "\\comment{")
     (commend-end     . "}")
@@ -193,9 +194,7 @@ For more on the structure of this list, see
     (end-oli         . "\n\\end{enumerate}")
     (begin-ddt       . "\\begin{description}\n\\item[")
     (start-dde       . "] ")
-    (end-ddt         . "\\end{description}")
-    (begin-anchor    . "\\label{")
-    (end-anchor      . "}\n"))
+    (end-ddt         . "\\end{description}"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."

@@ -2,6 +2,36 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-25 04:32:27 GMT	Michael Olson <mwolson@gnu.org>	patch-319
+
+    Summary:
+      Use simpler markup string for anchors.
+    Revision:
+      muse--main--1.0--patch-319
+
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Use 'anchor instead
+      of 'begin-anchor and 'end-anchor.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-markup-anchor): Ditto.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Ditto.
+    
+    * lisp/muse-xml-common.el (muse-xml-markup-anchor): Ditto.
+    
+    * lisp/muse-xml.el (muse-xml-markup-strings): Ditto.
+    
+    * lisp/muse-html.el (muse-html-insert-anchor, muse-html-markup-anchor):
+      Revert previous change, since muse-html-insert-contents needs
+      muse-html-insert-anchor.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-latex.el lisp/muse-publish.el lisp/muse-texinfo.el
+     lisp/muse-xml-common.el lisp/muse-xml.el
+
+
 2005-12-25 03:15:36 GMT	Michael Olson <mwolson@gnu.org>	patch-318
 
     Summary:

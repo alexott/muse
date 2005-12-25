@@ -665,15 +665,12 @@ the file is published no matter what."
   (delete-region (match-beginning 0) (match-end 0)))
 
 (defun muse-publish-markup-anchor ()
-  (let ((anchor (match-string 2))
-        (begin-text (muse-markup-text 'begin-anchor))
-        (end-text (muse-markup-text 'end-anchor)))
-    (unless (get-text-property (match-end 1) 'noemphasis)
-      (unless (and (string= begin-text "")
-                   (string= end-text ""))
+  (unless (get-text-property (match-end 1) 'noemphasis)
+    (let ((text (muse-markup-text 'anchor (match-string 2))))
+      (unless (string= text "")
         (save-match-data
           (skip-chars-forward (concat muse-regexp-blank "\n"))
-          (muse-insert-markup begin-text anchor end-text)))
+          (muse-insert-markup text)))
       (match-string 1))))
 
 (defun muse-publish-markup-comment ()
