@@ -120,6 +120,7 @@ For more on the structure of this list, see
     (comment-begin   . "<!-- ")
     (comment-end     . " -->")
     (rule            . "")
+    (no-break-space  . "&nbsp;")
     (enddots         . "....")
     (dots            . "...")
     (section         . "<section><title>")

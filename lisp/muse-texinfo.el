@@ -136,6 +136,7 @@ For more on the structure of this list, see
     (comment-begin   . "@ignore\n")
     (comment-end     . "\n@end ignore\n")
     (rule            . "@sp 1")
+    (no-break-space  . "@w{ }")
     (enddots         . "@enddots{}")
     (dots            . "@dots{}")
     (section         . "@chapter ")

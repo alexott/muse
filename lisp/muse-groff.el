@@ -84,6 +84,7 @@ For more on the structure of this list, see
     (email-addr      . "\f[C]%s\f[]")
     (emdash          . "\\(em")
     (rule            . "\n.RULE\n")
+    (no-break-space  . "\\h")
     (enddots         . "....")
     (dots            . "...")
 ;;     (part            . "\\part{")
