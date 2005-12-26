@@ -185,6 +185,22 @@ differs little between the various styles."
   :type '(alist :key-type character :value-type string)
   :group 'muse-texinfo)
 
+(defcustom muse-texinfo-markup-specials-url
+  '((?@ . "@@")
+    (?{ . "@{")
+    (?} . "@}")
+    (?, . "@comma{}"))
+  "A table of characters which must be represented specially.
+These are applied to URLs."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-texinfo)
+
+(defun muse-texinfo-decide-specials (context)
+  "Determine the specials to escape, depending on CONTEXT."
+  (cond ((eq context 'url)
+         muse-texinfo-markup-specials-url)
+        (t muse-texinfo-markup-specials)))
+
 (defun muse-texinfo-markup-table ()
   (let* ((table-info (muse-publish-table-fields (match-beginning 0)
                                                 (match-end 0)))
@@ -255,7 +271,7 @@ differs little between the various styles."
                      :regexps   'muse-texinfo-markup-regexps
                      :functions 'muse-texinfo-markup-functions
                      :strings   'muse-texinfo-markup-strings
-                     :specials  'muse-texinfo-markup-specials
+                     :specials  'muse-texinfo-decide-specials
                      :after     'muse-texinfo-finalize-buffer
                      :header    'muse-texinfo-header
                      :footer    'muse-texinfo-footer
