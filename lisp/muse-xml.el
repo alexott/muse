@@ -189,15 +189,6 @@ differs little between the various styles."
   :type '(alist :key-type symbol :value-type string)
   :group 'muse-xml)
 
-(defcustom muse-xml-markup-specials
-  '((?\" . "&quot;")
-    (?\< . "&lt;")
-    (?\> . "&gt;")
-    (?\& . "&amp;"))
-  "A table of characters which must be represented specially."
-  :type '(alist :key-type character :value-type string)
-  :group 'muse-xml)
-
 (defcustom muse-xml-encoding-default 'utf-8
   "The default Emacs buffer encoding to use in published files.
 This will be used if no special characters are found."
@@ -252,8 +243,7 @@ found in `muse-xml-encoding-map'."
                      :regexps    'muse-xml-markup-regexps
                      :functions  'muse-xml-markup-functions
                      :strings    'muse-xml-markup-strings
-                     :specials   'muse-xml-markup-specials
-                     :before     'muse-xml-prepare-buffer
+                     :specials   'muse-xml-decide-specials
                      :after      'muse-xml-finalize-buffer
                      :header     'muse-xml-header
                      :footer     'muse-xml-footer

@@ -2,6 +2,46 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-26 07:02:20 GMT	Michael Olson <mwolson@gnu.org>	patch-321
+
+    Summary:
+      Make sure spaces in HTML URLs get escaped properly.
+    Revision:
+      muse--main--1.0--patch-321
+
+    * lisp/muse-docbook.el (muse-docbook-markup-specials): Move to
+      muse-xml-common.el.
+    
+    * lisp/muse-html.el (muse-html-markup-specials): Ditto.
+    
+    * lisp/muse-xml.el (muse-xml-markup-specials): Ditto.
+    
+    * lisp/muse-html.el (muse-html-prepare-buffer): Don't modify
+      muse-publish-url-transforms.
+    
+    * lisp/muse-publish.el (muse-publish-escape-specials): Get specials only
+      once, rather than once-per-iteration.
+      (muse-publish-escape-specials-in-string): If a function is returned by
+      a function in :specials, pass it the string and use the results.  This
+      allows us to deal with funky cases like HTML URLs which work on a
+      negated subset, by passing the buck.  We don't permit this behavior in
+      muse-publish-escape-specials because there hasn't been a need, yet.
+    
+    * lisp/muse-xml-common.el (muse-xml-markup-specials): New option that
+      specifies the specials to normally escape.
+      (muse-xml-markup-specials-url-extra): New option that specifies the
+      extra specials to escape in URLs.  Thanks to John Sullivan for
+      reporting the incorrect translation of the space character in URLs.
+      (muse-xml-decide-specials): New function that determines the specials
+      to escape, given context.
+      (muse-xml-escape-url): Rename from muse-xml-escape-string.  Add "%" to
+      the list of characters to ignore.  Fix code indentation.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-publish.el lisp/muse-xml-common.el lisp/muse-xml.el
+
+
 2005-12-25 17:33:25 GMT	Michael Olson <mwolson@gnu.org>	patch-320
 
     Summary:

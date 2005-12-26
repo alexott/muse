@@ -173,15 +173,6 @@ differs little between the various styles."
   :type '(alist :key-type symbol :value-type string)
   :group 'muse-docbook)
 
-(defcustom muse-docbook-markup-specials
-  '((?\" . "&quot;")
-    (?\< . "&lt;")
-    (?\> . "&gt;")
-    (?\& . "&amp;"))
-  "A table of characters which must be represented specially."
-  :type '(alist :key-type character :value-type string)
-  :group 'muse-docbook)
-
 (defcustom muse-docbook-encoding-default 'utf-8
   "The default Emacs buffer encoding to use in published files.
 This will be used if no special characters are found."
@@ -266,8 +257,7 @@ and anything after `Firstname' is optional."
                      :regexps    'muse-docbook-markup-regexps
                      :functions  'muse-docbook-markup-functions
                      :strings    'muse-docbook-markup-strings
-                     :specials   'muse-docbook-markup-specials
-                     :before     'muse-docbook-prepare-buffer
+                     :specials   'muse-xml-decide-specials
                      :after      'muse-docbook-finalize-buffer
                      :header     'muse-docbook-header
                      :footer     'muse-docbook-footer

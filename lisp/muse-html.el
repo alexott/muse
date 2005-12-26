@@ -338,15 +338,6 @@ searched."
                        function))
   :group 'muse-html)
 
-(defcustom muse-html-markup-specials
-  '((?\" . "&quot;")
-    (?\< . "&lt;")
-    (?\> . "&gt;")
-    (?\& . "&amp;"))
-  "A table of characters which must be represented specially."
-  :type '(alist :key-type character :value-type string)
-  :group 'muse-html)
-
 (defcustom muse-html-meta-http-equiv "Content-Type"
   "The http-equiv attribute used for the HTML <meta> tag."
   :type 'string
@@ -541,8 +532,6 @@ This will be used if no special characters are found."
      muse-html-charset-default)))
 
 (defun muse-html-prepare-buffer ()
-  (set (make-local-variable 'muse-publish-url-transforms)
-       (cons 'muse-xml-escape-string muse-publish-url-transforms))
   (make-local-variable 'muse-html-meta-http-equiv)
   (set (make-local-variable 'muse-html-meta-content-type)
        (if (save-match-data
@@ -567,7 +556,7 @@ This will be used if no special characters are found."
                      :functions 'muse-html-markup-functions
                      :strings   'muse-html-markup-strings
                      :tags      'muse-html-markup-tags
-                     :specials  'muse-html-markup-specials
+                     :specials  'muse-xml-decide-specials
                      :before    'muse-html-prepare-buffer
                      :after     'muse-html-finalize-buffer
                      :header    'muse-html-header

@@ -59,26 +59,55 @@ If no match is found, the DEFAULT charset is used instead."
         (cdr match)
       default)))
 
-(defun muse-xml-escape-string (str &rest ignored)
+(defcustom muse-xml-markup-specials
+  '((?\" . "&quot;")
+    (?\< . "&lt;")
+    (?\> . "&gt;")
+    (?\& . "&amp;"))
+  "A table of characters which must be represented specially."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-xml)
+
+(defcustom muse-xml-markup-specials-url-extra
+  '((?\" . "&quot;")
+    (?\< . "&lt;")
+    (?\> . "&gt;")
+    (?\& . "&amp;")
+    (?\  . "%20")
+    (?\n . "%0D%0A"))
+  "A table of characters which must be represented specially.
+These are extra characters that are escaped within URLs."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-xml)
+
+(defun muse-xml-decide-specials (context)
+  "Determine the specials to escape, depending on CONTEXT."
+  (cond ((memq context '(email url))
+         'muse-xml-escape-url)
+        ((eq context 'url-extra)
+         muse-xml-markup-specials-url-extra)
+        (t muse-xml-markup-specials)))
+
+(defun muse-xml-escape-url (str)
   "Convert to character entities any non-alphanumeric characters
 outside a few punctuation symbols, that risk being misinterpreted
 if not escaped."
   (when str
+    (setq str (muse-publish-escape-specials-in-string str 'url-extra))
     (let (pos code len ch)
       (save-match-data
         (while (setq pos (string-match (concat "[^-"
                                                muse-regexp-alnum
-                                               "/:._=@\\?~#\"<>&;]")
+                                               "/:._=@\\?~#%\"<>&;]")
                                        str pos))
           (setq ch (aref str pos)
-                code (concat "&#"
-                                 (int-to-string
-                                  (cond ((fboundp 'char-to-ucs)
-                                         (char-to-ucs ch))
-                                        ((fboundp 'char-to-int)
-                                         (char-to-int ch))
-                                        (t ch)))
-                                 ";")
+                code (concat "&#" (int-to-string
+                                   (cond ((fboundp 'char-to-ucs)
+                                          (char-to-ucs ch))
+                                         ((fboundp 'char-to-int)
+                                          (char-to-int ch))
+                                         (t ch)))
+                             ";")
                 len (length code)
                 str (concat (substring str 0 pos)
                             code
