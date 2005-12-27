@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-27 03:51:10 GMT	Michael Olson <mwolson@gnu.org>	patch-38
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 323)
+    Revision:
+      muse--rel--3.02--patch-38
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-323
+       Add markup for non-breaking space.
+
+    modified files:
+     ChangeLog ChangeLog.main experimental/muse-xml.el
+     lisp/muse-docbook.el lisp/muse-html.el lisp/muse-latex.el
+     lisp/muse-publish.el lisp/muse-texinfo.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-323
+
+
 2005-12-21 02:44:22 GMT	Michael Olson <mwolson@gnu.org>	patch-37
 
     Summary:

@@ -276,6 +276,7 @@ For more on the structure of this list, see
     (comment-end     . " -->")
     (rule            . "<hr>")
     (fn-sep          . "<hr>\n")
+    (no-break-space  . "&nbsp;")
     (enddots         . "....")
     (dots            . "...")
     (section         . "<h2>")

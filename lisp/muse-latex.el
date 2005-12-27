@@ -165,6 +165,7 @@ For more on the structure of this list, see
     (comment-begin   . "\\comment{")
     (commend-end     . "}")
     (rule            . "\\bigskip")
+    (no-break-space  . "~")
     (enddots         . "\\ldots{}")
     (dots            . "\\dots{}")
     (part            . "\\part{")

@@ -131,6 +131,9 @@ If non-nil, publish comments using the markup of the current style."
     ;; horizontal rule, or section separator
     (1900 "^----+" 0 rule)
 
+    ;; non-breaking space
+    (1950 "~~" 0 no-break-space)
+
     ;; beginning of footnotes section
     (2000 "^Footnotes:?\\s-*" 0 fn-sep)
     ;; footnote definition/reference (def if at beginning of line)
@@ -242,6 +245,7 @@ while processing the markup rules."
     (enddots   . muse-publish-markup-enddots)
     (dots      . muse-publish-markup-dots)
     (rule      . muse-publish-markup-rule)
+    (no-break-space . muse-publish-markup-no-break-space)
     (heading   . muse-publish-markup-heading)
     (footnote  . muse-publish-markup-footnote)
     (fn-sep    . muse-publish-markup-fn-sep)
@@ -796,6 +800,11 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
   (unless (get-text-property (match-beginning 0) 'noemphasis)
     (delete-region (match-beginning 0) (match-end 0))
     (insert (muse-markup-text 'rule))))
+
+(defun muse-publish-markup-no-break-space ()
+  (unless (get-text-property (match-beginning 0) 'noemphasis)
+    (delete-region (match-beginning 0) (match-end 0))
+    (muse-insert-markup (muse-markup-text 'no-break-space))))
 
 (defun muse-publish-markup-heading ()
   (let* ((len (length (match-string 1)))
