@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-27 03:20:11 GMT	Michael Olson <mwolson@gnu.org>	patch-324
+
+    Summary:
+      Implement <quote> tag.
+    Revision:
+      muse--main--1.0--patch-324
+
+    * lisp/muse-publish.el (muse-publish-markup-tags)
+      (muse-publish-quote-tag): Implement <quote> tag, which does a
+      blockquote.  This is an alternative to indenting text, in that the
+      quote can span several paragraphs.  The paragraph detection routine for
+      HTML has not yet been tested with several paragraphs inside a quote.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-12-26 22:26:56 GMT	Michael Olson <mwolson@gnu.org>	patch-323
 
     Summary:

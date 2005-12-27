@@ -249,6 +249,7 @@ current style."
     ("verse"    t   nil muse-publish-verse-tag)
     ("example"  t   nil muse-publish-example-tag)
     ("code"     t   nil muse-publish-code-tag)
+    ("quote"    t   nil muse-publish-quote-tag)
     ("literal"  t   nil muse-publish-mark-read-only)
     ("verbatim" t   nil muse-publish-verbatim-tag)
     ("lisp"     t   nil muse-publish-lisp-tag)
@@ -1239,6 +1240,12 @@ the cadr is the page name, and the cddr is the anchor."
   (unless end (setq end (match-end 0)))
   (add-text-properties beg end '(noemphasis t))
   nil)
+
+(defun muse-publish-quote-tag (beg end)
+  (goto-char end)
+  (muse-insert-markup (muse-markup-text 'end-quote))
+  (goto-char beg)
+  (muse-insert-markup (muse-markup-text 'begin-quote)))
 
 (defun muse-publish-code-tag (beg end)
   (muse-publish-escape-specials beg end nil 'literal)
