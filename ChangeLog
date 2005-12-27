@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-27 16:28:31 GMT	Michael Olson <mwolson@gnu.org>	patch-39
+
+    Summary:
+      Fix use of muse-insert-markup.
+    Revision:
+      muse--rel--3.02--patch-39
+
+    * lisp/muse-publish.el (muse-publish-markup-no-break-space): Replace
+      muse-insert-markup with `insert'.  Thanks to Ken Brown for catching
+      this.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-12-27 03:51:10 GMT	Michael Olson <mwolson@gnu.org>	patch-38
 
     Summary:

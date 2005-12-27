@@ -804,7 +804,7 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
 (defun muse-publish-markup-no-break-space ()
   (unless (get-text-property (match-beginning 0) 'noemphasis)
     (delete-region (match-beginning 0) (match-end 0))
-    (muse-insert-markup (muse-markup-text 'no-break-space))))
+    (insert (muse-markup-text 'no-break-space))))
 
 (defun muse-publish-markup-heading ()
   (let* ((len (length (match-string 1)))
