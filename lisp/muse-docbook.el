@@ -75,19 +75,9 @@ This may be text or a filename."
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-regexps
-  `(;; Join together the parts of a list
-    (10000 ,(concat "</\\(itemized\\|ordered\\|variable\\)list>"
-                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
-                    "[" muse-regexp-blank "]*"
-                    "<\\1list" "[^>]*>\\s-*")
-           0 "")
-
-    ;; Beginning of doc, end of doc, or plain paragraph separator
-    (10100 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
-                    "\\(\\(\n\\(["
-                    muse-regexp-blank
-                    "]*\n\\)+\\)\\|\\`\\s-*\\|\\s-*\\'\\)"
-                    "\\(<\\(blockquote\\|center\\)>\n\\)?")
+  `(;; Beginning of doc, end of doc, or plain paragraph separator
+    (10000 ,(concat "\\(\\(\n\\([" muse-regexp-blank "]*\n\\)+\\)"
+                    "\\|\\`\\s-*\\|\\s-*\\'\\)")
            0 muse-docbook-markup-paragraph))
   "List of markup rules for publishing a Muse page to DocBook XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
@@ -153,13 +143,24 @@ For more on the structure of this list, see
     (end-center      . "\n</para>")
     (begin-quote     . "<blockquote>\n")
     (end-quote       . "\n</blockquote>")
-    (begin-uli       . "<itemizedlist mark=\"bullet\">\n<listitem><para>")
-    (end-uli         . "</para></listitem>\n</itemizedlist>")
-    (begin-oli       . "<orderedlist>\n<listitem><para>")
-    (end-oli         . "</para></listitem>\n</orderedlist>")
-    (begin-ddt       . "<variablelist>\n<varlistentry>\n<term>")
-    (start-dde       . "</term>\n<listitem><para>")
-    (end-ddt         . "</para></listitem>\n</varlistentry>\n</variablelist>")
+    (begin-quote-item . "<para>")
+    (end-quote-item  . "</para>")
+    (begin-uli       . "<itemizedlist mark=\"bullet\">\n")
+    (end-uli         . "\n</itemizedlist>")
+    (begin-uli-item  . "<listitem><para>")
+    (end-uli-item    . "</para></listitem>")
+    (begin-oli       . "<orderedlist>\n")
+    (end-oli         . "\n</orderedlist>")
+    (begin-oli-item  . "<listitem><para>")
+    (end-oli-item    . "</para></listitem>")
+    (begin-dl        . "<variablelist>\n")
+    (end-dl          . "\n</variablelist>")
+    (begin-dl-item   . "<varlistentry>\n")
+    (end-dl-item     . "\n</varlistentry>")
+    (begin-ddt       . "<term>")
+    (end-ddt         . "</term>\n")
+    (begin-dde       . "<listitem><para>")
+    (end-dde         . "</para></listitem>")
     (begin-table     . "<informaltable>\n")
     (end-table       . "</informaltable>\n")
     (begin-table-group . "  <tgroup cols='%s'>\n")

@@ -28,6 +28,9 @@
 ;;
 ;; Peter K. Lee (saint AT corenova DOT com) provided the
 ;; `muse-style-elements-list' function.
+;;
+;; Jim Ottaway (j DOT ottaway AT lse DOT ac DOT uk) provided an
+;; implementation for nested lists.
 
 ;;; Code:
 
@@ -136,16 +139,11 @@ If non-nil, publish comments using the markup of the current style."
     ;; reason all of these rules are handled here, is so that
     ;; blockquote detection doesn't interfere with indented list
     ;; members.
-    (2200 ,(concat "^["
-                   muse-regexp-blank
-                   "]+\\(-["
-                   muse-regexp-blank
-                   "]*\\|[0-9]+\\.["
-                   muse-regexp-blank
-                   "]*\\|\\(?:.+?\\)["
-                   muse-regexp-blank
-                   "]+::\n?\\)")
-          1 list)
+    (2150 ,(concat "^\\(\\(?:[^" muse-regexp-blank "\n]+\\)["
+                   muse-regexp-blank "]+::\n?\\)")
+          0 " \\&")
+
+    (2200 muse-list-item-regexp 1 list)
 
     (2300 ,(concat "^\\(\\(?:.+?\\)[" muse-regexp-blank "]+::\n?\\)")
           0 list)

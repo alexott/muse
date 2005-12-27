@@ -113,8 +113,6 @@ For more on the structure of this list, see
     (begin-most-emph . "\\f(BI")
     (end-most-emph   . "\\fP")
     (begin-verse     . ".QUOTE")
-    (end-verse-line  . "")
-    (last-stanza-end . "")
     (end-verse       . ".QUOTE OFF")
     (begin-center    . "\n.CENTER\n")
     (end-center      . "\n.QUAD L\n")
@@ -129,7 +127,7 @@ For more on the structure of this list, see
     (begin-oli       . ".list DIGIT\n.SHIFT_LIST 2m\n.ITEM\n")
     (end-oli         . "\n.LIST OFF")
     (begin-ddt       . "\\fB")
-    (start-dde       . "\\fP\n.IR 4P\n")
+    (begin-dde       . "\\fP\n.IR 4P\n")
     (end-ddt         . ".IRX CLEAR"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which

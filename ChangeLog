@@ -2,6 +2,52 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-27 18:51:18 GMT	Michael Olson <mwolson@gnu.org>	patch-325
+
+    Summary:
+      Pave the way for nested lists by adding markup strings.
+    Revision:
+      muse--main--1.0--patch-325
+
+    * examples/muse.rnc: muse.element.format is no longer a block, and may
+      not contain muse.element.p.
+    
+    * lisp/muse-latex.el (muse-latex-markup-strings): Add markup strings for
+      '(begin|end)-(quote|uli|oli|dl)-item.  Add '(begin|end)-(dl|ddt|dde)
+      markup strings.  This will allow for more flexibility in constructing
+      all sorts of lists, especially definition lists.  Rename 'start-dde to
+      'begin-dde for consistency.
+    
+    * lisp/muse-texinfo.el (muse-latex-markup-strings): Ditto.
+      (muse-texinfo-markup-regexps): Remove list concatenation regexp.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-strings)
+      (muse-docbook-markup-regexps): Ditto, but simplify paragraph regexp.
+    
+    * lisp/muse-xml.el (muse-xml-markup-regexps, muse-xml-markup-strings):
+      Ditto.
+    
+    * lisp/muse-html.el (muse-html-markup-regexps, muse-html-markup-strings):
+      Ditto.  Include <p></p> in center markup.
+      (muse-html-markup-paragraph): Remove special treatment of blockquote
+      and center.
+    
+    * lisp/muse-groff.el (muse-groff-markup-strings): Rename 'begin-dde to
+      'start-dde.
+    
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Begin implementing
+      nested list preliminaries.  This is currently broken, probably.
+    
+    * lisp/muse-regexps.el (muse-list-item-regexp): New regexp that matches
+      the beginning of a list item.
+
+    modified files:
+     ChangeLog examples/muse.rnc lisp/muse-docbook.el
+     lisp/muse-groff.el lisp/muse-html.el lisp/muse-latex.el
+     lisp/muse-publish.el lisp/muse-regexps.el lisp/muse-texinfo.el
+     lisp/muse-xml.el
+
+
 2005-12-27 03:20:11 GMT	Michael Olson <mwolson@gnu.org>	patch-324
 
     Summary:

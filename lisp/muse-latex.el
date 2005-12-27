@@ -191,13 +191,16 @@ For more on the structure of this list, see
     (end-center      . "\n\\end{center}")
     (begin-quote     . "\\begin{quote}\n")
     (end-quote       . "\n\\end{quote}")
-    (begin-uli       . "\\begin{itemize}\n\\item ")
+    (begin-uli       . "\\begin{itemize}\n")
     (end-uli         . "\n\\end{itemize}")
-    (begin-oli       . "\\begin{enumerate}\n\\item ")
+    (begin-uli-item  . "\\item ")
+    (begin-oli       . "\\begin{enumerate}\n")
     (end-oli         . "\n\\end{enumerate}")
-    (begin-ddt       . "\\begin{description}\n\\item[")
-    (start-dde       . "] ")
-    (end-ddt         . "\\end{description}"))
+    (begin-oli-item  . "\\item ")
+    (begin-dl        . "\\begin{description}\n")
+    (end-dl          . "\n\\end{description}")
+    (begin-ddt       . "\\item[")
+    (end-ddt         . "] "))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."

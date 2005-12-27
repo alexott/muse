@@ -137,6 +137,15 @@ the time."
   :options '("[:upper:]" "A-Z")
   :group 'muse-regexp)
 
+(defcustom muse-list-item-regexp
+  (concat "^[" muse-regexp-blank "]+\\(-["
+          muse-regexp-blank "]*\\|[0-9]+\\.["
+          muse-regexp-blank "]*\\|\\(?:.+?\\)["
+          muse-regexp-blank "]+::\n?\\)")
+  "Regexp used to match the beginning of list items when publishing."
+  :type 'regexp
+  :group 'muse-regexp)
+
 (defcustom muse-table-field-regexp
   (concat "[" muse-regexp-blank "]+\\(|+\\)[" muse-regexp-blank "]+")
   "Regexp used to match table separators when publishing."

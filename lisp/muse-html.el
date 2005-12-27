@@ -208,18 +208,9 @@ as you wrap the region in <literal></literal>."
   :group 'muse-html)
 
 (defcustom muse-html-markup-regexps
-  `(;; Join together the parts of a list
-    (10000 ,(concat "</\\([oud]l\\)>"
-                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
-                    "[" muse-regexp-blank "]*"
-                    "<\\1>\\s-*")
-           0 "")
-
-    ;; Beginning of doc, end of doc, or plain paragraph separator
-    (10100 ,(concat "\\(\n</\\(blockquote\\|center\\)>\\)?"
-                    "\\(\\(\n\\([" muse-regexp-blank
-                    "]*\n\\)+\\)\\|\\`\\s-*\\|\\s-*\\'\\)"
-                    "\\(<\\(blockquote\\|center\\)>\n\\)?")
+  `(;; Beginning of doc, end of doc, or plain paragraph separator
+    (10000 ,(concat "\\(\\(\n\\([" muse-regexp-blank "]*\n\\)+\\)"
+                    "\\|\\`\\s-*\\|\\s-*\\'\\)")
            0 muse-html-markup-paragraph))
   "List of markup rules for publishing a Muse page to HTML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
@@ -285,17 +276,26 @@ For more on the structure of this list, see
     (end-verse       . "</p>")
     (begin-example   . "<pre class=\"example\">")
     (end-example     . "</pre>")
-    (begin-center    . "<center>\n")
-    (end-center      . "\n</center>")
+    (begin-center    . "<center>\n<p>")
+    (end-center      . "</p>\n</center>")
     (begin-quote     . "<blockquote>\n")
     (end-quote       . "\n</blockquote>")
-    (begin-uli       . "<ul>\n<li>")
-    (end-uli         . "</li>\n</ul>")
-    (begin-oli       . "<ol>\n<li>")
-    (end-oli         . "</li>\n</ol>")
-    (begin-ddt       . "<dl>\n<dt><strong>")
-    (start-dde       . "</strong></dt>\n<dd>")
-    (end-ddt         . "</dd>\n</dl>")
+    (begin-quote-item . "<p class=\"quoted\">")
+    (end-quote-item  . "</p>")
+    (begin-uli       . "<ul>\n")
+    (end-uli         . "\n</ul>")
+    (begin-uli-item  . "<li>")
+    (end-uli-item    . "</li>")
+    (begin-oli       . "<ol>\n")
+    (end-oli         . "\n</ol>")
+    (begin-oli-item  . "<li>")
+    (end-oli-item    . "</li>")
+    (begin-dl        . "<dl>\n")
+    (end-dl          . "\n</dl>")
+    (begin-ddt       . "<dt><strong>")
+    (end-ddt         . "</strong></dt>\n")
+    (begin-dde       . "<dd>")
+    (end-dde         . "</dd>")
     (begin-table     . "<table%s>\n")
     (end-table       . "</table>\n")
     (begin-table-row . "    <tr>\n")
@@ -422,8 +422,6 @@ This will be used if no special characters are found."
       (muse-insert-markup "<p class=\"image-link\">"))))
    ((muse-looking-back "\\(</h[1-4]>\\|<hr>\\)\n\n")
     (muse-insert-markup "<p class=\"first\">"))
-   ((muse-looking-back "<\\(blockquote\\|center\\)>\n")
-    (muse-insert-markup "<p class=\"quoted\">"))
    (t
     (muse-insert-markup "<p>"))))
 

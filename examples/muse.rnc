@@ -49,7 +49,6 @@ MUSE =
       & muse.element.hr*
       & muse.element.image*
       & muse.element.example*
-      & muse.element.format*  # for centering paragraphs
       & muse.element.verse*
   }
 
@@ -92,7 +91,6 @@ muse.element.section = element section {
    & muse.element.hr*
    & muse.element.image*
    & muse.element.example*
-   & muse.element.format*  # for centering paragraphs
    & muse.element.verse*
    & text }?
 
@@ -178,7 +176,6 @@ muse.element.definition = element definition {
 muse.element.format = element format {
    muse.attribute.type?
    & muse.attribute.level?
-   & muse.element.p?
    & text }?
 
   ## code element

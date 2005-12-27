@@ -85,19 +85,9 @@ This may be text or a filename."
   :group 'muse-xml)
 
 (defcustom muse-xml-markup-regexps
-  `(;; Join together the parts of a list
-    (10000 ,(concat "</list>"
-                    "\\([" muse-regexp-blank "]*\n\\)\\{0,2\\}"
-                    "[" muse-regexp-blank "]*"
-                    "<list[^>]*>\\s-*")
-           0 "")
-
-    ;; Beginning of doc, end of doc, or plain paragraph separator
-    (10100 ,(concat "\\(\n</\\(blockquote\\|format\\)>\\)?"
-                    "\\(\\(\n\\(["
-                    muse-regexp-blank
-                    "]*\n\\)+\\)\\|\\`\\s-*\\|\\s-*\\'\\)"
-                    "\\(<\\(blockquote\\|format type=\"center\"\\)>\n\\)?")
+  `(;; Beginning of doc, end of doc, or plain paragraph separator
+    (10000 ,(concat "\\(\\(\n\\([" muse-regexp-blank "]*\n\\)+\\)"
+                    "\\|\\`\\s-*\\|\\s-*\\'\\)")
            0 muse-xml-markup-paragraph))
   "List of markup rules for publishing a Muse page to XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
@@ -167,17 +157,28 @@ For more on the structure of this list, see
     (end-verse       . "</verse>")
     (begin-example   . "<example>")
     (end-example     . "</example>")
-    (begin-center    . "<format type=\"center\">\n")
-    (end-center      . "\n</format>")
+    (begin-center    . "<p><format type=\"center\">\n")
+    (end-center      . "\n</format></p>")
     (begin-quote     . "<blockquote>\n")
     (end-quote       . "\n</blockquote>")
-    (begin-uli       . "<list type=\"unordered\">\n<item>")
-    (end-uli         . "</item>\n</list>")
-    (begin-oli       . "<list type=\"ordered\">\n<item>")
-    (end-oli         . "</item>\n</list>")
-    (begin-ddt       . "<list type=\"definition\">\n<item><term>")
-    (start-dde       . "</term>\n<definition>")
-    (end-ddt         . "</definition>\n</item>\n</list>")
+    (begin-quote-item . "<p>")
+    (end-quote-item  . "</p>")
+    (begin-uli       . "<list type=\"unordered\">\n")
+    (end-uli         . "\n</list>")
+    (begin-uli-item  . "<item>")
+    (end-uli-item    . "</item>")
+    (begin-oli       . "<list type=\"ordered\">\n")
+    (end-oli         . "\n</list>")
+    (begin-oli-item  . "<item>")
+    (end-oli-item    . "</item>")
+    (begin-dl        . "<list type=\"definition\">\n")
+    (end-dl          . "\n</list>")
+    (begin-dl-item   . "<item>\n")
+    (end-dl-item     . "\n</item>")
+    (begin-ddt       . "<term>")
+    (end-ddt         . "</term>\n")
+    (begin-dde       . "<definition>")
+    (end-ddt         . "</definition>")
     (begin-table     . "<table%s>\n")
     (end-table       . "</table>\n")
     (begin-table-row . "    <tr>\n")

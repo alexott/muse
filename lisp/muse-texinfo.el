@@ -97,12 +97,7 @@ It may contain <lisp> markup tags."
   :type 'string
   :group 'muse-texinfo)
 
-(defcustom muse-texinfo-markup-regexps
-  `(;; join together the parts of a list or table
-    (10000 ,(concat "@end \\(\\(multi\\)?table\\|itemize\\|enumerate\\)"
-                    "\n\\{1,2\\}"
-                    "@\\1.*\n+")
-           0 ""))
+(defcustom muse-texinfo-markup-regexps nil
   "List of markup rules for publishing a Muse page to Texinfo.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -165,13 +160,16 @@ For more on the structure of this list, see
     (end-center      . "\n@end quotation")
     (begin-quote     . "@quotation\n")
     (end-quote       . "\n@end quotation")
-    (begin-uli       . "@itemize @bullet\n@item\n")
+    (begin-uli       . "@itemize @bullet\n")
     (end-uli         . "\n@end itemize")
-    (begin-oli       . "@enumerate\n@item\n")
+    (begin-uli-item  . "@item\n")
+    (begin-oli       . "@enumerate\n")
     (end-oli         . "\n@end enumerate")
-    (begin-ddt       . "@table @strong\n@item ")
-    (start-dde       . "\n")
-    (end-ddt         . "\n@end table"))
+    (begin-oli-item  . "@item\n")
+    (begin-dl        . "@table @strong\n")
+    (end-dl          . "\n@end table")
+    (begin-ddt       . "@item ")
+    (end-ddt         . "\n"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
