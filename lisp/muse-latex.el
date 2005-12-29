@@ -151,7 +151,7 @@ For more on the structure of this list, see
     (anchor          . "\\label{%s}")
     (emdash          . "---")
     (comment-begin   . "\\comment{")
-    (commend-end     . "}")
+    (comment-end     . "}")
     (rule            . "\\bigskip")
     (no-break-space  . "~")
     (enddots         . "\\ldots{}")
