@@ -138,11 +138,11 @@ the time."
   :group 'muse-regexp)
 
 (defcustom muse-list-item-regexp
-  (concat "^[" muse-regexp-blank "]+\\(-["
-          muse-regexp-blank "]*\\|[0-9]+\\.["
+  (concat "^%s\\(-[" muse-regexp-blank "]*\\|[0-9]+\\.["
           muse-regexp-blank "]*\\|\\(?:.+?\\)["
-          muse-regexp-blank "]+::\n?\\)")
-  "Regexp used to match the beginning of list items when publishing."
+          muse-regexp-blank "]+::\\)")
+  "Regexp used to match the beginning of list items.
+The '%s' will be replaced with a whitespace regexp when publishing."
   :type 'regexp
   :group 'muse-regexp)
 

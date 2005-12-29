@@ -2,6 +2,38 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-29 07:45:45 GMT	Michael Olson <mwolson@gnu.org>	patch-326
+
+    Summary:
+      Work on nested list support for ordered and unordered lists.
+    Revision:
+      muse--main--1.0--patch-326
+
+    * lisp/muse-publish.el: Nested list support isn't quite finished, but
+      progress is being made.
+      (muse-publish-markup-regexps): Remove 2150 regexp since it doesn't seem
+      useful at the moment.  Invoke `format' to get the general version of
+      muse-list-item-regexp.
+      (muse-publish-surround-text): Add INDENT argument that specifies the
+      leading indentation to strip.  Default is all whitespace.  Loop until
+      MOVE-FUNC returns nil.
+      (muse-list-item-type): New function that figures out what kind of list
+      we have, given its separator string.
+      (muse-forward-paragraph): Make this slightly more general.
+      (muse-forward-list-item): New function that moves forward to the next
+      list item.  Non-nil is returned if we found another item of the same
+      type, nil otherwise.
+      (muse-publish-markup-list): Adapt unordered list and ordered list to
+      perhaps do nested lists correctly, though this hasn't been tested.
+    
+    * lisp/muse-regexps.el (muse-list-item-regexp): Use "%s" in place of
+      initial whitespace for the sake of flexibility.  Call `format' on it to
+      change it.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2005-12-27 18:51:18 GMT	Michael Olson <mwolson@gnu.org>	patch-325
 
     Summary:

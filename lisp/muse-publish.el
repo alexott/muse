@@ -139,11 +139,9 @@ If non-nil, publish comments using the markup of the current style."
     ;; reason all of these rules are handled here, is so that
     ;; blockquote detection doesn't interfere with indented list
     ;; members.
-    (2150 ,(concat "^\\(\\(?:[^" muse-regexp-blank "\n]+\\)["
-                   muse-regexp-blank "]+::\n?\\)")
-          0 " \\&")
 
-    (2200 muse-list-item-regexp 1 list)
+    (2200 ,(format muse-list-item-regexp (concat "[" muse-regexp-blank "]+"))
+          1 list)
 
     (2300 ,(concat "^\\(\\(?:.+?\\)[" muse-regexp-blank "]+::\n?\\)")
           0 list)
@@ -921,63 +919,95 @@ The following contexts exist in Muse.
   (delete-region (match-beginning 0) (match-end 0))
   (muse-insert-markup (muse-markup-text 'fn-sep)))
 
-(defun muse-publish-surround-text (beg-tag end-tag move-func)
-  (let ((beg (point)) end)
-    (skip-chars-backward (concat muse-regexp-blank "\n"))
-    (delete-region (point) beg)
-    (insert "\n\n")
-    (setq beg (point))
-    (muse-insert-markup beg-tag)
-    (funcall move-func)
-    (setq end (point-marker))
-    (goto-char beg)
-    (while (< (point) end)
-      (if (looking-at "^\\s-+")
+(defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent)
+  (unless indent
+    (setq indent (concat "[" muse-regexp-blank "]+")))
+  (let ((beg (point))
+        (continue t)
+        end)
+    (while continue
+      (muse-insert-markup beg-tag)
+      (setq continue (funcall move-func)
+            end (point-marker))
+      (goto-char beg)
+      (while (< (point) end)
+        (when (looking-at indent)
           (replace-match ""))
-      (forward-line 1))
-    (goto-char end)
-    (setq beg (point))
-    (skip-chars-backward (concat muse-regexp-blank "\n"))
-    (delete-region (point) beg))
-  (muse-insert-markup end-tag)
-  (insert "\n"))
+        (forward-line 1))
+      (goto-char end)
+      (skip-chars-backward (concat muse-regexp-blank "\n"))
+      (muse-insert-markup end-tag)
+      (goto-char end))))
+
+(defun muse-list-item-type (str)
+"Determine the type of list given STR.
+Returns either 'ul, 'ol, or 'dl."
+  (cond ((= (aref str 0) ?-) 'ul)
+        ((and (>= (aref str 0) ?0)
+              (<= (aref str 0) ?9)) 'ol)
+        (t 'dl)))
 
 (defsubst muse-forward-paragraph (&optional pattern)
   (if (re-search-forward (if pattern
-                             (concat "^\\(" pattern "["
-                                     muse-regexp-blank
-                                     "]+\\|$\\|\\'\\)")
+                             (concat "^\\(" pattern "\\|$\\|\\'\\)")
                            "^\\s-*\\($\\|\\'\\)") nil t)
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
+
+(defun muse-forward-list-item (type indent post-indent)
+  "Move forward to the next item of TYPE.
+Return non-nil if successful, nil otherwise.
+The beginning indentation is given by INDENT.
+The maximum number of spaces to permit after that is given by POST-INDENT."
+  (let ((list-item (format muse-list-item-regexp
+                           (concat indent " \\{0," post-indent "\\}")))
+        (empty-line (concat "^[" muse-regexp-blank "]*\n")))
+    (muse-forward-paragraph (concat "\\(?:" empty-line "\\)?"
+                                    "\\(" list-item "\\)\\|"
+                                    empty-line))
+    (if (null (match-string 3))
+        (if (eq type (muse-list-item-type (match-string 3)))
+            (goto-char (match-beginning 2))
+          (goto-char (match-beginning 0))
+          nil)
+      (goto-char (match-beginning 0))
+      nil)))
 
 (defun muse-publish-markup-list ()
   "Markup a list entry or quoted paragraph.
 The reason this function is so funky, is to prevent text properties
 like read-only from being inadvertently deleted."
-  (let ((str (match-string 1)))
+  (let* ((str (match-string 1))
+         (type (muse-list-item-type str))
+         (indent (buffer-substring (muse-line-beginning-position)
+                                   (match-beginning 1)))
+         (post-indent (length (save-match-data
+                                (when (string-match str "\\s-+\\'")
+                                  (match-string 0 str)))))
+         (last (match-beginning 0)))
     (cond
-     ((and (eq (aref str 0) ?-))
+     ((eq type 'ul)
       (delete-region (match-beginning 0) (match-end 0))
+      (muse-insert-markup (muse-markup-text 'begin-uli))
       (muse-publish-surround-text
-       (muse-markup-text 'begin-uli)
-       (muse-markup-text 'end-uli)
+       (muse-markup-text 'begin-uli-item)
+       (muse-markup-text 'end-uli-item)
        (function
         (lambda ()
-          (muse-forward-paragraph (concat "["
-                                          muse-regexp-blank
-                                          "]+-"))))))
-     ((and (>= (aref str 0) ?0)
-           (<= (aref str 0) ?9))
+          (muse-forward-list-item type indent post-indent)))
+       indent)
+      (muse-insert-markup (muse-markup-text 'end-uli)))
+     ((eq type 'ol)
       (delete-region (match-beginning 0) (match-end 0))
+      (muse-insert-markup (muse-markup-text 'begin-oli))
       (muse-publish-surround-text
-       (muse-markup-text 'begin-oli)
-       (muse-markup-text 'end-oli)
+       (muse-markup-text 'begin-oli-item)
+       (muse-markup-text 'end-oli-item)
        (function
         (lambda ()
-          (muse-forward-paragraph (concat "["
-                                          muse-regexp-blank
-                                          "]+[0-9]+\\."))))))
+          (muse-forward-list-item type indent post-indent)))
+       indent)
+      (muse-insert-markup (muse-markup-text 'end-oli)))
      (t
       (goto-char (match-beginning 1))
       (muse-insert-markup (muse-markup-text 'begin-ddt))
