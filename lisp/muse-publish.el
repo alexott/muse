@@ -954,13 +954,11 @@ Returns either 'ul, 'ol, or 'dl."
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
 
-(defun muse-forward-list-item (type indent post-indent)
+(defun muse-forward-list-item (type indent)
   "Move forward to the next item of TYPE.
 Return non-nil if successful, nil otherwise.
-The beginning indentation is given by INDENT.
-The maximum number of spaces to permit after that is given by POST-INDENT."
-  (let ((list-item (format muse-list-item-regexp
-                           (concat indent " \\{0," post-indent "\\}")))
+The beginning indentation is given by INDENT."
+  (let ((list-item (format muse-list-item-regexp indent))
         (empty-line (concat "^[" muse-regexp-blank "]*\n")))
     (muse-forward-paragraph (concat "\\(?:" empty-line "\\)?"
                                     "\\(" list-item "\\)\\|"
@@ -992,9 +990,8 @@ like read-only from being inadvertently deleted."
       (muse-publish-surround-text
        (muse-markup-text 'begin-uli-item)
        (muse-markup-text 'end-uli-item)
-       (function
-        (lambda ()
-          (muse-forward-list-item type indent post-indent)))
+       (function (lambda ()
+                   (muse-forward-list-item type indent)))
        indent)
       (muse-insert-markup (muse-markup-text 'end-uli)))
      ((eq type 'ol)
@@ -1003,9 +1000,8 @@ like read-only from being inadvertently deleted."
       (muse-publish-surround-text
        (muse-markup-text 'begin-oli-item)
        (muse-markup-text 'end-oli-item)
-       (function
-        (lambda ()
-          (muse-forward-list-item type indent post-indent)))
+       (function (lambda ()
+                   (muse-forward-list-item type indent)))
        indent)
       (muse-insert-markup (muse-markup-text 'end-oli)))
      (t
