@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-29 23:13:30 GMT	Michael Olson <mwolson@gnu.org>	patch-40
+
+    Summary:
+      Fix comment markup.
+    Revision:
+      muse--rel--3.02--patch-40
+
+    * lisp/muse-latex.el (muse-latex-markup-strings): Fix typo.  Thanks to
+      Ken Brown for the detailed report.
+    
+    * lisp/muse-publish.el (muse-publish-markup-comment): Publish the ending
+      tag as read-only as a temporary workaround.  We should make the
+      beginning tag read-only also, but this is already taken care of in
+      muse--main.
+      (muse-publish-comment-tag): Markup up comment region as read-only.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-latex.el
+     lisp/muse-publish.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-329
+
+
 2005-12-27 16:28:31 GMT	Michael Olson <mwolson@gnu.org>	patch-39
 
     Summary:

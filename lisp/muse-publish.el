@@ -681,7 +681,7 @@ the file is published no matter what."
       ""
     (goto-char (match-end 0))
     (insert (muse-markup-text 'comment-end))
-    (muse-publish-mark-read-only (match-beginning 1) (match-end 1))
+    (muse-publish-mark-read-only (match-beginning 1) (point))
     (goto-char (match-beginning 1))
     (insert (muse-markup-text 'comment-begin))
     (delete-region (match-beginning 0) (1- (match-beginning 1)))))
@@ -1180,6 +1180,7 @@ like read-only from being inadvertently deleted."
       (delete-region beg end)
     (goto-char end)
     (insert (muse-markup-text 'comment-end))
+    (muse-publish-mark-read-only beg (point))
     (goto-char beg)
     (insert (muse-markup-text 'comment-begin))))
 

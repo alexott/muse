@@ -163,7 +163,7 @@ For more on the structure of this list, see
     (email-addr      . "\\verb|%s|")
     (emdash          . "---")
     (comment-begin   . "\\comment{")
-    (commend-end     . "}")
+    (comment-end     . "}")
     (rule            . "\\bigskip")
     (no-break-space  . "~")
     (enddots         . "\\ldots{}")
