@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2005-12-30 03:33:43 GMT	Michael Olson <mwolson@gnu.org>	patch-41
+
+    Summary:
+      Fix #4923: Definition lists with numbers are not possible.
+    Revision:
+      muse--rel--3.02--patch-41
+
+    * lisp/muse-publish.el (muse-publish-markup-list): Use string-match to
+      determine whether an item is an ordered list or definition list.  This
+      should fix Bug #4923.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-publish.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-331
+
+
 2005-12-29 23:13:30 GMT	Michael Olson <mwolson@gnu.org>	patch-40
 
     Summary:

@@ -924,8 +924,8 @@ like read-only from being inadvertently deleted."
           (muse-forward-paragraph (concat "["
                                           muse-regexp-blank
                                           "]+-"))))))
-     ((and (>= (aref str 0) ?0)
-           (<= (aref str 0) ?9))
+     ((save-match-data
+        (string-match "\\`[0-9]+\\." str))
       (delete-region (match-beginning 0) (match-end 0))
       (muse-publish-surround-text
        (muse-markup-text 'begin-oli)
