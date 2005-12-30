@@ -972,7 +972,8 @@ The beginning indentation is given by INDENT."
     (if (and (match-string 3)
              (eq type (muse-list-item-type (match-string 3))))
         (progn
-          (replace-match "" t t nil 3)
+          (unless (eq type 'dl)
+            (replace-match "" t t nil 3))
           (goto-char (match-beginning 2)))
       (goto-char (match-beginning 0))
       nil)))
@@ -1032,7 +1033,8 @@ like read-only from being inadvertently deleted."
           (replace-match "")
           (muse-insert-markup (muse-markup-text 'start-dde))))
       (muse-forward-paragraph)
-      (muse-insert-markup (muse-markup-text 'end-ddt) ?\n)))))
+      (muse-insert-markup (muse-markup-text 'end-ddt) ?\n))))
+  nil)
 
 (defun muse-publish-markup-quote ()
   "Markup a quoted paragraph.

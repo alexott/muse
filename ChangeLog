@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-30 23:12:56 GMT	Michael Olson <mwolson@gnu.org>	patch-332
+
+    Summary:
+      muse-publish: Prevent an error with list markup.
+    Revision:
+      muse--main--1.0--patch-332
+
+    * lisp/muse-publish.el (muse-forward-list-item): If type is 'dl, do not
+      remove the matched text from muse-list-item-regexp.
+      (muse-publish-markup-list): Apply patch from Sacha that keeps
+      muse-publish-markup-region from being confused.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-12-30 01:42:30 GMT	Michael Olson <mwolson@gnu.org>	patch-331
 
     Summary:
