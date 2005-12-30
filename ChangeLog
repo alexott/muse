@@ -2,6 +2,42 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-30 00:35:12 GMT	Michael Olson <mwolson@gnu.org>	patch-330
+
+    Summary:
+      Make progress on non-nested ordered and unordered lists.
+    Revision:
+      muse--main--1.0--patch-330
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Make sure that we
+      don't match lines with just whitespace for 'quote.
+      (muse-publish-markup-comment): Use muse-insert-markup in the correct
+      order.  Remove extra comment space.
+      (muse-publish-surround-text): Stay at end of line if we are at the end
+      of a series of list items.  Otherwise advance.
+      (muse-forward-paragraph): Use "\n" instead of "$" in regexps, since the
+      former works better in multi-line contexts.
+      (muse-forward-list-item): Fix a silly logic error.  Simplify the regexp
+      passed to muse-forward-paragraph.  Remove the initial "- " or "1. "
+      when the markup types match on a new item.
+      (muse-publish-markup-list): Docfix.  Swap args of string-match.  Ignore
+      an unordered list if a dash immediately follows.  This disambiguates
+      the emdash and unordered list markups.  Use save-excursion to ensure
+      that the point ends on the line after the begin-list markup.  We still
+      haven't dealt with definition lists yet.
+      (muse-publish-markup-quote): Docfix.  Deal with improved regexp.
+      Manually remove the leading whitespace.  Insert 'begin-quote and
+      'end-quote correctly, and use 'quote-item for
+      muse-publish-surround-text.
+      (muse-publish-quote-tag): Deal with multiple paragraphs inside of a
+      quote tag.  Skip past additional whitespace in the move function for
+      muse-publish-surround-text.
+      (muse-publish-comment-tag): Make the comment text read-only.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-12-29 23:02:18 GMT	Michael Olson <mwolson@gnu.org>	patch-329
 
     Summary:

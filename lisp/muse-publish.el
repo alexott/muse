@@ -146,7 +146,7 @@ If non-nil, publish comments using the markup of the current style."
     (2300 ,(concat "^\\(\\(?:.+?\\)[" muse-regexp-blank "]+::\n?\\)")
           0 list)
 
-    (2400 ,(concat "^\\([" muse-regexp-blank "]+\\)") 0 quote)
+    (2400 ,(concat "^\\([" muse-regexp-blank "]+\\).+") 0 quote)
 
     (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]+\\)--\\($\\|["
                    muse-regexp-blank "]+\\)")
@@ -694,9 +694,9 @@ the file is published no matter what."
     (goto-char (match-end 0))
     (muse-insert-markup (muse-markup-text 'comment-end))
     (muse-publish-mark-read-only (match-beginning 1) (match-end 1))
-    (goto-char (match-beginning 1))
-    (muse-insert-markup (muse-markup-text 'comment-begin))
-    (delete-region (match-beginning 0) (1- (match-beginning 1)))))
+    (delete-region (match-beginning 0) (match-beginning 1))
+    (goto-char (match-beginning 0))
+    (muse-insert-markup (muse-markup-text 'comment-begin))))
 
 (defun muse-publish-markup-tag ()
   (let ((tag-info (muse-markup-tag-info (match-string 1))))
@@ -942,7 +942,8 @@ The following contexts exist in Muse.
           (forward-line 1))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup end-tag)
-        (goto-char (point-max))))))
+        (when continue
+          (goto-char (point-max)))))))
 
 (defun muse-list-item-type (str)
 "Determine the type of list given STR.
@@ -954,8 +955,8 @@ Returns either 'ul, 'ol, or 'dl."
 
 (defsubst muse-forward-paragraph (&optional pattern)
   (if (re-search-forward (if pattern
-                             (concat "^\\(" pattern "\\|$\\|\\'\\)")
-                           "^\\s-*\\($\\|\\'\\)") nil t)
+                             (concat "^\\(" pattern "\\|\n\\|\\'\\)")
+                           "^\\s-*\\(\n\\|\\'\\)") nil t)
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
 
@@ -966,18 +967,17 @@ The beginning indentation is given by INDENT."
   (let ((list-item (format muse-list-item-regexp indent))
         (empty-line (concat "^[" muse-regexp-blank "]*\n")))
     (muse-forward-paragraph (concat "\\(?:" empty-line "\\)?"
-                                    "\\(" list-item "\\)\\|"
-                                    empty-line))
-    (if (null (match-string 3))
-        (if (eq type (muse-list-item-type (match-string 3)))
-            (goto-char (match-beginning 2))
-          (goto-char (match-beginning 0))
-          nil)
+                                    "\\(" list-item "\\)"))
+    (if (and (match-string 3)
+             (eq type (muse-list-item-type (match-string 3))))
+        (progn
+          (replace-match "" t t nil 3)
+          (goto-char (match-beginning 2)))
       (goto-char (match-beginning 0))
       nil)))
 
 (defun muse-publish-markup-list ()
-  "Markup a list entry or quoted paragraph.
+  "Markup a list entry.
 The reason this function is so funky, is to prevent text properties
 like read-only from being inadvertently deleted."
   (let* ((str (match-string 1))
@@ -985,30 +985,35 @@ like read-only from being inadvertently deleted."
          (indent (buffer-substring (muse-line-beginning-position)
                                    (match-beginning 1)))
          (post-indent (length (save-match-data
-                                (when (string-match str "\\s-+\\'")
+                                (when (string-match "\\s-+\\'" str)
                                   (match-string 0 str)))))
          (last (match-beginning 0)))
     (cond
      ((eq type 'ul)
-      (delete-region (match-beginning 0) (match-end 0))
-      (muse-insert-markup (muse-markup-text 'begin-uli))
-      (muse-publish-surround-text
-       (muse-markup-text 'begin-uli-item)
-       (muse-markup-text 'end-uli-item)
-       (function (lambda ()
-                   (muse-forward-list-item type indent)))
-       indent)
-      (muse-insert-markup (muse-markup-text 'end-uli)))
+      (unless (eq (char-after (match-end 1)) ?-)
+        (delete-region (match-beginning 0) (match-end 0))
+        (muse-insert-markup (muse-markup-text 'begin-uli))
+        (save-excursion
+          (muse-publish-surround-text
+           (muse-markup-text 'begin-uli-item)
+           (muse-markup-text 'end-uli-item)
+           (function (lambda ()
+                       (muse-forward-list-item type indent)))
+           indent)
+          (muse-insert-markup (muse-markup-text 'end-uli)))
+        (forward-line 1)))
      ((eq type 'ol)
       (delete-region (match-beginning 0) (match-end 0))
       (muse-insert-markup (muse-markup-text 'begin-oli))
-      (muse-publish-surround-text
-       (muse-markup-text 'begin-oli-item)
-       (muse-markup-text 'end-oli-item)
-       (function (lambda ()
-                   (muse-forward-list-item type indent)))
-       indent)
-      (muse-insert-markup (muse-markup-text 'end-oli)))
+      (save-excursion
+        (muse-publish-surround-text
+         (muse-markup-text 'begin-oli-item)
+         (muse-markup-text 'end-oli-item)
+         (function (lambda ()
+                     (muse-forward-list-item type indent)))
+         indent)
+        (muse-insert-markup (muse-markup-text 'end-oli)))
+      (forward-line 1))
      (t
       (goto-char (match-beginning 1))
       (muse-insert-markup (muse-markup-text 'begin-ddt))
@@ -1029,16 +1034,23 @@ like read-only from being inadvertently deleted."
       (muse-insert-markup (muse-markup-text 'end-ddt) ?\n)))))
 
 (defun muse-publish-markup-quote ()
-  "Markup a list entry or quoted paragraph.
+  "Markup a quoted paragraph.
 The reason this function is so funky, is to prevent text properties
 like read-only from being inadvertently deleted."
-  (let* ((ws (match-string 0))
+  (let* ((ws (match-string 1))
          (centered (>= (string-width ws) 6))
-         (begin-elem (if centered 'begin-center 'begin-quote))
-         (end-elem (if centered 'end-center 'end-quote)))
+         (begin-elem (if centered 'begin-center 'begin-quote-item))
+         (end-elem (if centered 'end-center 'end-quote-item)))
+    (replace-match "" t t nil 1)
+    (unless centered
+      (muse-insert-markup (muse-markup-text 'begin-quote)))
     (muse-publish-surround-text (muse-markup-text begin-elem)
                                 (muse-markup-text end-elem)
-                                'muse-forward-paragraph)))
+                                (function (lambda ()
+                                            (muse-forward-paragraph)
+                                            nil)))
+    (unless centered
+      (muse-insert-markup (muse-markup-text 'end-quote)))))
 
 (defun muse-publish-markup-leading-space (markup-space multiple)
   (let (count)
@@ -1273,10 +1285,17 @@ the cadr is the page name, and the cddr is the anchor."
   nil)
 
 (defun muse-publish-quote-tag (beg end)
-  (goto-char end)
-  (muse-insert-markup (muse-markup-text 'end-quote))
-  (goto-char beg)
-  (muse-insert-markup (muse-markup-text 'begin-quote)))
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      (muse-insert-markup (muse-markup-text 'begin-quote))
+      (muse-publish-surround-text (muse-markup-text 'begin-quote-item)
+                                  (muse-markup-text 'end-quote-item)
+                                  (function (lambda ()
+                                              (muse-forward-paragraph)
+                                              (goto-char (match-end 0))
+                                              (< (point) (point-max)))))
+      (muse-insert-markup (muse-markup-text 'end-quote)))))
 
 (defun muse-publish-code-tag (beg end)
   (muse-publish-escape-specials beg end nil 'literal)
@@ -1326,6 +1345,7 @@ the cadr is the page name, and the cddr is the anchor."
       (delete-region beg end)
     (goto-char end)
     (muse-insert-markup (muse-markup-text 'comment-end))
+    (muse-publish-mark-read-only beg end)
     (goto-char beg)
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
