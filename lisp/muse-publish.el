@@ -949,8 +949,9 @@ The following contexts exist in Muse.
 "Determine the type of list given STR.
 Returns either 'ul, 'ol, or 'dl."
   (cond ((= (aref str 0) ?-) 'ul)
-        ((and (>= (aref str 0) ?0)
-              (<= (aref str 0) ?9)) 'ol)
+        ((save-match-data
+           (string-match "\\`[0-9]+\\." str))
+         'ol)
         (t 'dl)))
 
 (defsubst muse-forward-paragraph (&optional pattern)
