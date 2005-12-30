@@ -453,7 +453,7 @@ to the text with ARGS as parameters."
                           ((symbolp repl)
                            (symbol-value repl))
                           (t repl))))
-              (if text
+              (if (stringp text)
                   (replace-match text t))))
           (if (and muse-publishing-last-position
                    (= pos muse-publishing-last-position))

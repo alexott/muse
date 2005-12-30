@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2005-12-30 23:22:45 GMT	Michael Olson <mwolson@gnu.org>	patch-333
+
+    Summary:
+      muse-publish: Prevent error when return value is not a string.
+    Revision:
+      muse--main--1.0--patch-333
+
+    * lisp/muse-publish.el (muse-publish-markup): Make sure returned value is
+      a string before using it to replace text.  Thanks to Sacha for the
+      patch.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-12-30 23:12:56 GMT	Michael Olson <mwolson@gnu.org>	patch-332
 
     Summary:
