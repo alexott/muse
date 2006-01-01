@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-01 21:48:30 GMT	Michael Olson <mwolson@gnu.org>	patch-42
+
+    Summary:
+      Fix #4970, #4971.
+    Revision:
+      muse--rel--3.02--patch-42
+
+    * lisp/muse-html.el (muse-html-escape-string): Add "%" and "+" to the
+      list of specials to leave alone.  This fixes #4971.
+    
+    * lisp/muse-publish.el (muse-publish-markup-word): Escape specials in all
+      forms of emphasis.  This fixes #4970.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-html.el
+     lisp/muse-publish.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-336
+
+
 2005-12-30 03:33:43 GMT	Michael Olson <mwolson@gnu.org>	patch-41
 
     Summary:

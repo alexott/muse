@@ -774,8 +774,8 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
             (goto-char beg)
             (insert open-tag)
             (setq beg (point)))
+          (muse-publish-escape-specials beg end t)
           (when mark-read-only
-            (muse-publish-escape-specials beg end t)
             (muse-publish-mark-read-only (1- beg) (1+ end))))
       (backward-char))
     nil))
