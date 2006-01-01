@@ -924,10 +924,11 @@ The following contexts exist in Muse.
   (delete-region (match-beginning 0) (match-end 0))
   (muse-insert-markup (muse-markup-text 'fn-sep)))
 
-(defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent)
+(defun muse-publish-surround-dl (move-func &optional indent)
   (unless indent
     (setq indent (concat "[" muse-regexp-blank "]+")))
   (let ((continue t)
+        (beg-dde (muse-markup-text 'begin-dde))
         beg)
     (while continue
       (muse-insert-markup beg-tag)
@@ -938,6 +939,29 @@ The following contexts exist in Muse.
         (goto-char (point-min))
         (while (< (point) (point-max))
           (when (looking-at indent)
+            (replace-match ""))
+          (forward-line 1))
+        (skip-chars-backward (concat muse-regexp-blank "\n"))
+        (muse-insert-markup end-tag)
+        (when continue
+          (goto-char (point-max)))))))
+
+(defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent post-indent)
+  (unless indent
+    (setq indent (concat "[" muse-regexp-blank "]+")))
+  (when post-indent
+    (setq post-indent (concat " \\{0," (number-to-string post-indent) "\\}")))
+  (let ((continue t)
+        beg)
+    (while continue
+      (muse-insert-markup beg-tag)
+      (setq beg (point)
+            continue (funcall move-func))
+      (save-restriction
+        (narrow-to-region beg (point))
+        (goto-char (point-min))
+        (while (< (point) (point-max))
+          (when (looking-at (concat indent post-indent))
             (replace-match ""))
           (forward-line 1))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
@@ -975,7 +999,6 @@ The beginning indentation is given by INDENT."
           (unless (eq type 'dl)
             (replace-match "" t t nil 3))
           (goto-char (match-beginning 2)))
-      (goto-char (match-beginning 0))
       nil)))
 
 (defun muse-publish-markup-list ()
@@ -986,9 +1009,7 @@ like read-only from being inadvertently deleted."
          (type (muse-list-item-type str))
          (indent (buffer-substring (muse-line-beginning-position)
                                    (match-beginning 1)))
-         (post-indent (length (save-match-data
-                                (when (string-match "\\s-+\\'" str)
-                                  (match-string 0 str)))))
+         (post-indent (length str))
          (last (match-beginning 0)))
     (cond
      ((eq type 'ul)
@@ -1001,7 +1022,7 @@ like read-only from being inadvertently deleted."
            (muse-markup-text 'end-uli-item)
            (function (lambda ()
                        (muse-forward-list-item type indent)))
-           indent)
+           indent post-indent)
           (muse-insert-markup (muse-markup-text 'end-uli)))
         (forward-line 1)))
      ((eq type 'ol)
@@ -1013,7 +1034,7 @@ like read-only from being inadvertently deleted."
          (muse-markup-text 'end-oli-item)
          (function (lambda ()
                      (muse-forward-list-item type indent)))
-         indent)
+         indent post-indent)
         (muse-insert-markup (muse-markup-text 'end-oli)))
       (forward-line 1))
      (t
