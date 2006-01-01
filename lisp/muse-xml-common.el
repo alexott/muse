@@ -98,7 +98,7 @@ if not escaped."
       (save-match-data
         (while (setq pos (string-match (concat "[^-"
                                                muse-regexp-alnum
-                                               "/:._=@\\?~#%\"<>&;]")
+                                               "/:._=@\\?~#%\"\\+<>&;]")
                                        str pos))
           (setq ch (aref str pos)
                 code (concat "&#" (int-to-string
