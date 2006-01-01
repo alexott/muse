@@ -924,11 +924,16 @@ The following contexts exist in Muse.
   (delete-region (match-beginning 0) (match-end 0))
   (muse-insert-markup (muse-markup-text 'fn-sep)))
 
-(defun muse-publish-surround-dl (move-func &optional indent)
+(defun muse-publish-surround-dl (move-func &optional indent post-indent)
   (unless indent
     (setq indent (concat "[" muse-regexp-blank "]+")))
+  (when post-indent
+    (setq post-indent (concat " \\{0," (number-to-string post-indent) "\\}")))
   (let ((continue t)
+        (beg-item (muse-markup-text 'begin-item))
+        (end-item (muse-markup-text 'end-item))
         (beg-dde (muse-markup-text 'begin-dde))
+        (end-dde (muse-markup-text 'end-dde))
         beg)
     (while continue
       (muse-insert-markup beg-tag)
