@@ -163,12 +163,16 @@ style and ignore the others."
                             (muse-current-file)
                             (cddr (muse-project-of-file))))))
     (cond ((and remote-style local-style muse-publishing-p)
-           (muse-publish-link-file
-            (file-relative-name (expand-file-name
-                                 page (muse-style-element :path remote-style))
-                                (expand-file-name
-                                 (muse-style-element :path local-style)))
-            nil remote-style))
+           (let ((prefix (muse-style-element :base-url remote-style)))
+             (muse-publish-link-file
+              (if prefix
+                  (concat prefix page)
+                (file-relative-name (expand-file-name
+                                     page
+                                     (muse-style-element :path remote-style))
+                                    (expand-file-name
+                                     (muse-style-element :path local-style))))
+              nil remote-style)))
           ((not muse-publishing-p)
            (if page-path
                page-path
