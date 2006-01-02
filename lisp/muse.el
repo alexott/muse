@@ -372,6 +372,26 @@ The value of the :type attribute should be an unconverted widget type."
 
 ;; Link-handling functions and variables
 
+(defun muse-link-escape (text)
+  "Escape characters in TEXT that conflict with the explicit link
+regexp."
+  (if text
+      (progn
+        (muse-replace-regexp-in-string "\\[" "%5B" text t t)
+        (muse-replace-regexp-in-string "\\]" "%5D" text t t)
+        text)
+    ""))
+
+(defun muse-link-unescape (text)
+  "Un-escape characters in TEXT that conflict with the explicit
+link regexp."
+  (if text
+      (progn
+        (muse-replace-regexp-in-string "%5B" "[" text t t)
+        (muse-replace-regexp-in-string "%5D" "]" text t t)
+        text)
+    ""))
+
 (defun muse-handle-url (&optional string)
   "If STRING or point has a URL, match and return it."
   (if (if string (string-match muse-url-regexp string)
@@ -443,9 +463,10 @@ function."
         (if res
             (setq funcs nil)
           (setq funcs (cdr funcs)))))
-    (if res
-        res
-      (or link (match-string 1)))))
+    (muse-link-unescape
+     (if res
+         res
+       (or link (match-string 1))))))
 
 (provide 'muse)
 

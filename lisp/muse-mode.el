@@ -288,8 +288,8 @@ This is used to keep links from being improperly colorized by flyspell."
            link
            (not (string= name ""))
            (not (string= link name)))
-      (concat "[[" (or link "") "][" name "]]")
-    (concat "[[" (or link "") "]]")))
+      (concat "[[" (muse-link-escape link) "][" (muse-link-escape name) "]]")
+    (concat "[[" (muse-link-escape link) "]]")))
 
 ;;;###autoload
 (defun muse-edit-link-at-point ()
