@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-02 19:40:26 GMT	Michael Olson <mwolson@gnu.org>	patch-43
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 338)
+    Revision:
+      muse--rel--3.02--patch-43
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-338
+       muse-colors: Implement <lisp> tag evaluation when viewing Muse files.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-colors.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-338
+
+
 2006-01-01 21:48:30 GMT	Michael Olson <mwolson@gnu.org>	patch-42
 
     Summary:
