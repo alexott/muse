@@ -38,6 +38,8 @@
 ;;
 ;; Sergey Vlasov (vsu AT altlinux DOT ru) fixed an issue with coloring
 ;; links that are in consecutive lines.
+;;
+;; Jim Ottaway ported the <lisp> tag from emacs-wiki.
 
 ;;; Code:
 
@@ -470,7 +472,7 @@ of the functions listed in `muse-colors-markup'."
   '(("example" t nil muse-colors-example-tag)
     ("code" t nil muse-colors-example-tag)
     ("verbatim" t nil muse-colors-literal-tag)
-    ("lisp" t nil muse-colors-literal-tag)
+    ("lisp" t nil muse-colors-lisp-tag)
     ("literal" t nil muse-colors-literal-tag))
   "A list of tag specifications for specially highlighting text.
 XML-style tags are the best way to add custom highlighting to Muse.
@@ -562,6 +564,16 @@ Functions should not modify the contents of the buffer."
                  (forward-line 1)
                  (> end (point)))))
     (add-text-properties beg end `(font-lock-multiline ,multi))))
+
+(defun muse-colors-lisp-tag (beg end)
+  (muse-unhighlight-region beg end)
+  (add-text-properties
+   beg end
+   (list 'font-lock-multiline t
+         'display (muse-eval-lisp
+                   (buffer-substring-no-properties (+ beg 6)
+                                                   (- end 7)))
+               'intangible t)))
 
 (defvar muse-mode-local-map
   (let ((map (make-sparse-keymap)))
