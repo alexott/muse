@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-03 04:29:09 GMT	Michael Olson <mwolson@gnu.org>	patch-44
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 339-340)
+    Revision:
+      muse--rel--3.02--patch-44
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-339
+       Implement escaping of "[" and "]" in extended links.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-340
+       Fix an issue with muse-project-file-alist.
+
+    modified files:
+     AUTHORS ChangeLog ChangeLog.main lisp/muse-mode.el
+     lisp/muse-project.el lisp/muse.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-339
+     mwolson@gnu.org--2005/muse--main--1.0--patch-340
+
+
 2006-01-02 19:40:26 GMT	Michael Olson <mwolson@gnu.org>	patch-43
 
     Summary:

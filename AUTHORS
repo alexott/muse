@@ -49,6 +49,9 @@ John Sullivan: Contributor -- documentation
 Ganesh Swami: Original author of muse-latex2png.el
               (assignment pending)
 
+G. J. Teale: Contributor,
+             muse-project.el: 2 lines changed.
+
 Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               basis for muse-blosxom.el
               (assigned past and future changes)
