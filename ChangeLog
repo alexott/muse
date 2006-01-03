@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-03 02:46:18 GMT	Michael Olson <mwolson@gnu.org>	patch-340
+
+    Summary:
+      Fix an issue with muse-project-file-alist.
+    Revision:
+      muse--main--1.0--patch-340
+
+    * lisp/muse-project.el (muse-project-file-alist): Apply patch from
+      G. J. Teale.  Make sure that last-mod is loaded correctly.  This fixes
+      a problem that causes some files to not be published.
+
+    modified files:
+     AUTHORS ChangeLog lisp/muse-project.el
+
+
 2006-01-02 21:59:27 GMT	Michael Olson <mwolson@gnu.org>	patch-339
 
     Summary:

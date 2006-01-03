@@ -355,8 +355,8 @@ On UNIX, this list is only updated if one of the directories'
 contents have changed.  On Windows, it is always reread from
 disk."
   (setq project (muse-project project))
-  (let ((file-alist (assoc (car project) muse-project-file-alist))
-        last-mod)
+  (let* ((file-alist (assoc (car project) muse-project-file-alist))
+         (last-mod (cdr (cdr file-alist))))
     ;; Determine the last modified of any directory mentioned in the
     ;; project's pattern list
     (unless (or muse-under-windows-p no-check-p)
