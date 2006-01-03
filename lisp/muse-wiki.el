@@ -194,7 +194,9 @@ Match 2 is set to the description."
           (looking-at muse-wiki-interwiki-regexp))
     (let* ((project (match-string 1 string))
            (subst (cdr (assoc project muse-wiki-interwiki-alist)))
-           (word (match-string 2 string)))
+           (word (if string
+                     (substring string (match-beginning 2))
+                   (match-string 2 string))))
       (if subst
           (if (functionp subst)
               (funcall subst word)

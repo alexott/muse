@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-03 04:58:18 GMT	Michael Olson <mwolson@gnu.org>	patch-341
+
+    Summary:
+      Fix #4718: InterWiki links with special characters are not handled properly.
+    Revision:
+      muse--main--1.0--patch-341
+
+    * lisp/muse-wiki.el (muse-wiki-handle-interwiki): If given a string, make
+      sure that we get everything after the interwiki delimiter.  This fixes
+      #4718.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2006-01-03 02:46:18 GMT	Michael Olson <mwolson@gnu.org>	patch-340
 
     Summary:
