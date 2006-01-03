@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-03 04:59:41 GMT	Michael Olson <mwolson@gnu.org>	patch-45
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 341)
+    Revision:
+      muse--rel--3.02--patch-45
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-341
+       Fix #4718: InterWiki links with special characters are not handled properly.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-341
+
+
 2006-01-03 04:29:09 GMT	Michael Olson <mwolson@gnu.org>	patch-44
 
     Summary:
