@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-04 00:00:52 GMT	Michael Olson <mwolson@gnu.org>	patch-342
+
+    Summary:
+      Nested ordered and unordered lists seem to work now.
+    Revision:
+      muse--main--1.0--patch-342
+
+    * muse-publish.el (muse-insert-markup-end-list): New function that
+      publishes the text with end-list properties.
+      (muse-publish-surround-text): If we are looking at a list item while
+      stripping whitespace, make sure it has at least one space in front so
+      that it gets published correctly.  Use muse-insert-markup-end-list for
+      inserting end-tag.
+      (muse-forward-list-item): Get the position of the next list-end
+      property and use it if point moves past it.  Use `cond' instead of `if'
+      for a nicer look.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2006-01-03 04:58:18 GMT	Michael Olson <mwolson@gnu.org>	patch-341
 
     Summary:

@@ -924,6 +924,12 @@ The following contexts exist in Muse.
   (delete-region (match-beginning 0) (match-end 0))
   (muse-insert-markup (muse-markup-text 'fn-sep)))
 
+(defun muse-insert-markup-end-list (&rest args)
+  (let ((beg (point)))
+    (apply 'insert args)
+    (add-text-properties beg (point) '(end-list t))
+    (muse-publish-mark-read-only beg (point))))
+
 (defun muse-publish-surround-dl (move-func &optional indent post-indent)
   (unless indent
     (setq indent (concat "[" muse-regexp-blank "]+")))
@@ -967,10 +973,12 @@ The following contexts exist in Muse.
         (goto-char (point-min))
         (while (< (point) (point-max))
           (when (looking-at (concat indent post-indent))
-            (replace-match ""))
+            (replace-match "")
+            (when (looking-at "-\\|[0-9]+\\.")
+              (insert " ")))
           (forward-line 1))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
-        (muse-insert-markup end-tag)
+        (muse-insert-markup-end-list end-tag)
         (when continue
           (goto-char (point-max)))))))
 
@@ -995,16 +1003,20 @@ Returns either 'ul, 'ol, or 'dl."
 Return non-nil if successful, nil otherwise.
 The beginning indentation is given by INDENT."
   (let ((list-item (format muse-list-item-regexp indent))
-        (empty-line (concat "^[" muse-regexp-blank "]*\n")))
+        (empty-line (concat "^[" muse-regexp-blank "]*\n"))
+        (next-list-end (or (next-single-property-change (point) 'end-list)
+                           (point-max))))
     (muse-forward-paragraph (concat "\\(?:" empty-line "\\)?"
                                     "\\(" list-item "\\)"))
-    (if (and (match-string 3)
-             (eq type (muse-list-item-type (match-string 3))))
-        (progn
-          (unless (eq type 'dl)
-            (replace-match "" t t nil 3))
-          (goto-char (match-beginning 2)))
-      nil)))
+    (cond ((> (point) next-list-end)
+           (goto-char next-list-end)
+           nil)
+          ((and (match-string 3)
+                (eq type (muse-list-item-type (match-string 3))))
+           (unless (eq type 'dl)
+             (replace-match "" t t nil 3))
+           (goto-char (match-beginning 2)))
+          (t nil))))
 
 (defun muse-publish-markup-list ()
   "Markup a list entry.
