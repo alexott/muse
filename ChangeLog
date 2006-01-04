@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-04 00:37:27 GMT	Michael Olson <mwolson@gnu.org>	patch-343
+
+    Summary:
+      Nested list fix.
+    Revision:
+      muse--main--1.0--patch-343
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Preserve indentation
+      of nested-list items until they are processed.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2006-01-04 00:00:52 GMT	Michael Olson <mwolson@gnu.org>	patch-342
 
     Summary:
