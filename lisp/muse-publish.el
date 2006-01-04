@@ -961,8 +961,8 @@ The following contexts exist in Muse.
   (unless indent
     (setq indent (concat "[" muse-regexp-blank "]+")))
   (when post-indent
-    (setq post-indent (concat indent " \\{0," (number-to-string post-indent)
-                              "\\}")))
+    (setq indent (concat indent " \\{0," (number-to-string post-indent)
+                         "\\}")))
   (let ((continue t)
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]+")))
@@ -976,7 +976,7 @@ The following contexts exist in Muse.
         (goto-char (point-min))
         (while (< (point) (point-max))
           (when (and (not (looking-at list-item))
-                     (looking-at post-indent))
+                     (looking-at indent))
             (replace-match ""))
           (forward-line 1))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
