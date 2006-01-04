@@ -195,7 +195,8 @@ Match 2 is set to the description."
     (let* ((project (match-string 1 string))
            (subst (cdr (assoc project muse-wiki-interwiki-alist)))
            (word (if string
-                     (substring string (match-beginning 2))
+                     (and (match-beginning 2)
+                          (substring string (match-beginning 2)))
                    (match-string 2 string))))
       (if subst
           (if (functionp subst)
