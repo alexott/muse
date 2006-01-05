@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-05 16:20:51 GMT	Michael Olson <mwolson@gnu.org>	patch-349
+
+    Summary:
+      Merged from john@wjsullivan.net--2006 (patch 0-1)
+    Revision:
+      muse--main--1.0--patch-349
+
+    Patches applied:
+    
+     * john@wjsullivan.net--2006/muse--johnsu01--0--patch-1
+       Updated copyright year. Added notes about using the .muse file extension to the Projects node.
+
+    modified files:
+     ChangeLog muse.texi
+
+    new patches:
+     john@wjsullivan.net--2006/muse--johnsu01--0--base-0
+     john@wjsullivan.net--2006/muse--johnsu01--0--patch-1
+
+
 2006-01-05 14:38:56 GMT	Michael Olson <mwolson@gnu.org>	patch-348
 
     Summary:

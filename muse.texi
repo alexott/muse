@@ -14,7 +14,7 @@
 @copying
 This manual is for the Emacs Muse version 3.02.5.
 
-Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -382,6 +382,29 @@ in the directory @file{~/Pages}.  The default page to visit is
 output as HTML to the directory @file{~/public_html}, and as PDF to
 the directory @file{~/public_html/pdf}.  Within any project page, you
 may create a link to other pages using the syntax @samp{[[pagename]]}.
+
+By default, Muse expects all project files to have the file extension
+@file{.muse}. Files without this extension will not be associated with
+Muse mode and will not be considered part of any project, even if they
+are within a project directory.
+
+If you don't want to use @file{.muse}, you can customize the extension
+by setting the value of @code{muse-file-extension}.
+
+If you don't want to use any extension at all, and want Muse to
+autodetect project files based on their location, then use:
+
+@lisp
+(setq muse-file-extension nil
+      muse-mode-auto-p t)
+@end lisp
+
+If you set these options directly in your @file{.emacs} outside of the
+Customize interface, then you will also need to add:
+
+@lisp
+(add-hook 'find-file-hooks 'muse-mode-maybe)
+@end lisp
 
 @c PRE3_03: Give more examples
 @c PRE3_03: Describe :set and other options fully
