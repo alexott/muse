@@ -158,7 +158,7 @@ For more on the structure of this list, see
     (begin-dl-item   . "<varlistentry>\n")
     (end-dl-item     . "\n</varlistentry>")
     (begin-ddt       . "<term>")
-    (end-ddt         . "</term>\n")
+    (end-ddt         . "</term>")
     (begin-dde       . "<listitem><para>")
     (end-dde         . "</para></listitem>")
     (begin-table     . "<informaltable>\n")

@@ -168,8 +168,7 @@ For more on the structure of this list, see
     (begin-oli-item  . "@item\n")
     (begin-dl        . "@table @strong\n")
     (end-dl          . "\n@end table")
-    (begin-ddt       . "@item ")
-    (end-ddt         . "\n"))
+    (begin-ddt       . "@item "))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."

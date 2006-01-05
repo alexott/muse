@@ -141,8 +141,15 @@ the time."
   (concat "^%s\\(-[" muse-regexp-blank "]*\\|[0-9]+\\.["
           muse-regexp-blank "]*\\|\\(?:.+?\\)["
           muse-regexp-blank "]+::[" muse-regexp-blank "]*\\)")
-  "Regexp used to match the beginning of list items.
+  "Regexp used to match the beginning of a list item.
 The '%s' will be replaced with a whitespace regexp when publishing."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-dl-entry-regexp
+  (concat "^[" muse-regexp-blank "]+::[" muse-regexp-blank "]*")
+  "Regexp used to match the beginning of a definition list entry.
+Entries usually come after a term."
   :type 'regexp
   :group 'muse-regexp)
 

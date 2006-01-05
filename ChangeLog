@@ -2,6 +2,48 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-05 13:28:49 GMT	Michael Olson <mwolson@gnu.org>	patch-347
+
+    Summary:
+      Fix nested list regression.  Make some (untested) progress on dl.
+    Revision:
+      muse--main--1.0--patch-347
+
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Drop newline from
+      end-ddt string.
+    
+    * lisp/muse-html.el (muse-html-markup-strings): Ditto.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-strings): Ditto.
+    
+    * lisp/muse-xml.el (muse-xml-markup-strings): Ditto.
+    
+    * muse.texi (Introduction): Fix dated part concerning muse-wiki.
+    
+    * lisp/muse-publish.el (muse-publish-surround-dl): Make good progress on
+      this.
+      (muse-list-item-type): Deal with null str by returning nil.  It should
+      never have to do this, but I'd rather not be bothered when I'm
+      debugging something else.
+      (muse-forward-paragraph): Make the enclosing parens shy.
+      (muse-forward-list-item): Take optional ENTRY-P argument so that we can
+      use this for both dl terms and dl entries.  Use muse-dl-entry-regexp
+      when dealing with dl entries.  Lower the match number to cope with
+      change to muse-forward-paragraph.
+      (muse-publish-markup-list): Quote arguments lambda functions properly,
+      so that we don't run into namespace conflicts.  This should fix a
+      regression in nested list handling.
+    
+    * lisp/muse-regexps.el (muse-list-item-regexp): Clarify docstring.
+      (muse-dl-entry-regexp): New regexp that matches the beginning of a
+      definition list entry.
+
+    modified files:
+     ChangeLog lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-publish.el lisp/muse-regexps.el lisp/muse-texinfo.el
+     lisp/muse-xml.el muse.texi
+
+
 2006-01-05 03:51:57 GMT	Michael Olson <mwolson@gnu.org>	patch-346
 
     Summary:

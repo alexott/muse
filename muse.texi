@@ -160,9 +160,9 @@ available.
 The Muse codebase is a departure from emacs-wiki.el version 2.44. The
 code has been restructured and rewritten, especially its publishing
 functions. The focus in this revision is on the authoring and publishing
-aspects, and the "wikiness" has been removed as a default behavior (to
-be offered again as an optional module). CamelCase words are no longer
-special by default.
+aspects, and the "wikiness" has been removed as a default behavior
+(available in the optional @file{muse-wiki} module). CamelCase words are
+no longer special by default.
 
 @node Obtaining Muse, Installation, Introduction, Top
 @comment  node-name,  next,  previous,  up

@@ -930,30 +930,47 @@ The following contexts exist in Muse.
     (add-text-properties beg (point) '(end-list t))
     (muse-publish-mark-read-only beg (point))))
 
-(defun muse-publish-surround-dl (move-func &optional indent post-indent)
-  (unless indent
-    (setq indent (concat "[" muse-regexp-blank "]+")))
-  (when post-indent
-    (setq post-indent (concat " \\{0," (number-to-string post-indent) "\\}")))
-  (let ((continue t)
-        (beg-item (muse-markup-text 'begin-item))
-        (end-item (muse-markup-text 'end-item))
-        (beg-dde (muse-markup-text 'begin-dde))
-        (end-dde (muse-markup-text 'end-dde))
-        beg)
+(defun muse-publish-surround-dl (indent post-indent)
+  (let* ((beg-item (muse-markup-text 'begin-dl-item))
+         (end-item (muse-markup-text 'end-dl-item))
+         (beg-ddt (muse-markup-text 'begin-ddt))
+         (end-ddt (muse-markup-text 'end-ddt))
+         (beg-dde (muse-markup-text 'begin-dde))
+         (end-dde (muse-markup-text 'end-dde))
+         (move-term `(lambda ()
+                        (while (and (muse-forward-list-item 'dl ,indent)
+                                    (null (match-string 3))))))
+         (move-entry `(lambda ()
+                        (muse-forward-list-item 'dl ,indent t)))
+         (term-regexp (format muse-list-item-regexp
+                              (concat "[" muse-regexp-blank "]*")))
+         (continue t)
+         beg search-p)
     (while continue
-      (muse-insert-markup beg-tag)
+      (muse-insert-markup beg-item)
+      (when (looking-at term-regexp)
+        (setq beg (point))
+        (goto-char (match-end 2))
+        (delete-region (match-end 2) (match-end 1))
+        (muse-insert-markup end-ddt)
+        (if (eq (char-after) ?\n)
+            (setq search-p t)
+          (setq search-p nil)
+          (insert ?\n))
+        (goto-char beg)
+        (muse-insert-markup beg-ddt)
+        (forward-line 1))
       (setq beg (point)
-            continue (funcall move-func))
+            continue (funcall move-term))
       (save-restriction
         (narrow-to-region beg (point))
         (goto-char (point-min))
-        (while (< (point) (point-max))
-          (when (looking-at indent)
-            (replace-match ""))
-          (forward-line 1))
+        (when (or (null search-p) (funcall move-entry))
+          (muse-publish-surround-text beg-dde end-dde move-entry
+                                      indent post-indent))
+        (goto-char (point-max))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
-        (muse-insert-markup end-tag)
+        (muse-insert-markup end-item)
         (when continue
           (goto-char (point-max)))))))
 
@@ -987,7 +1004,9 @@ The following contexts exist in Muse.
 (defun muse-list-item-type (str)
 "Determine the type of list given STR.
 Returns either 'ul, 'ol, or 'dl."
-  (cond ((= (aref str 0) ?-) 'ul)
+  (cond ((string= str "")
+         nil)
+        ((= (aref str 0) ?-) 'ul)
         ((save-match-data
            (string-match "\\`[0-9]+\\." str))
          'ol)
@@ -995,16 +1014,22 @@ Returns either 'ul, 'ol, or 'dl."
 
 (defsubst muse-forward-paragraph (&optional pattern)
   (if (re-search-forward (if pattern
-                             (concat "^\\(" pattern "\\|\n\\|\\'\\)")
+                             (concat "^\\(?:" pattern "\\|\n\\|\\'\\)")
                            "^\\s-*\\(\n\\|\\'\\)") nil t)
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
 
-(defun muse-forward-list-item (type indent)
+(defun muse-forward-list-item (type indent &optional entry-p)
   "Move forward to the next item of TYPE.
 Return non-nil if successful, nil otherwise.
-The beginning indentation is given by INDENT."
-  (let ((list-item (format muse-list-item-regexp indent))
+The beginning indentation is given by INDENT.
+
+If TYPE is 'dl and ENTRY-P is non-nil, seach ahead by dl entries.
+Otherwise if TYPE is 'dl and ENTRY-P is nil, search ahead by dl
+terms."
+  (let ((list-item (if (and (eq type 'dl) entry-p)
+                       muse-dl-entry-regexp
+                     (format muse-list-item-regexp indent)))
         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
         (next-list-end (or (next-single-property-change (point) 'end-list)
                            (point-max))))
@@ -1013,11 +1038,19 @@ The beginning indentation is given by INDENT."
     (cond ((> (point) next-list-end)
            (goto-char next-list-end)
            nil)
-          ((and (match-string 3)
-                (eq type (muse-list-item-type (match-string 3))))
+          ((and (eq type 'dl)
+                entry-p)
+           (if (match-beginning 1)
+               (progn
+                 (goto-char (match-beginning 1))
+                 (replace-match "" t t nil 1)
+                 t)
+             nil))
+          ((and (match-string 2)
+                (eq type (muse-list-item-type (match-string 2))))
            (unless (eq type 'dl)
-             (replace-match "" t t nil 3))
-           (goto-char (match-beginning 2)))
+             (replace-match "" t t nil 2))
+           (goto-char (match-beginning 1)))
           (t nil))))
 
 (defun muse-publish-markup-list ()
@@ -1039,8 +1072,8 @@ like read-only from being inadvertently deleted."
           (muse-publish-surround-text
            (muse-markup-text 'begin-uli-item)
            (muse-markup-text 'end-uli-item)
-           (function (lambda ()
-                       (muse-forward-list-item type indent)))
+           `(lambda ()
+              (muse-forward-list-item 'ul ,indent))
            indent post-indent)
           (muse-insert-markup (muse-markup-text 'end-uli)))
         (forward-line 1)))
@@ -1051,29 +1084,16 @@ like read-only from being inadvertently deleted."
         (muse-publish-surround-text
          (muse-markup-text 'begin-oli-item)
          (muse-markup-text 'end-oli-item)
-         (function (lambda ()
-                     (muse-forward-list-item type indent)))
+         `(lambda ()
+            (muse-forward-list-item 'ol ,indent))
          indent post-indent)
         (muse-insert-markup (muse-markup-text 'end-oli)))
       (forward-line 1))
      (t
-      (goto-char (match-beginning 1))
-      (muse-insert-markup (muse-markup-text 'begin-ddt))
-      (save-match-data
-        (save-excursion
-          (forward-line 1)
-          (while (looking-at (concat "^\\([" muse-regexp-blank
-                                     "]*\\)[^" muse-regexp-blank "\n]"))
-            (delete-region (match-beginning 1) (match-end 1))
-            (forward-line 1))))
-      (save-match-data
-        (when (re-search-forward (concat "[" muse-regexp-blank "\n]+::["
-                                         muse-regexp-blank "\n]+")
-                                 nil t)
-          (replace-match "")
-          (muse-insert-markup (muse-markup-text 'start-dde))))
-      (muse-forward-paragraph)
-      (muse-insert-markup (muse-markup-text 'end-ddt) ?\n))))
+      (goto-char (match-beginning 0))
+      (muse-insert-markup (muse-markup-text 'begin-dl))
+      (muse-publish-surround-dl indent post-indent)
+      (muse-insert-markup (muse-markup-text 'end-dl)))))
   nil)
 
 (defun muse-publish-markup-quote ()

@@ -293,7 +293,7 @@ For more on the structure of this list, see
     (begin-dl        . "<dl>\n")
     (end-dl          . "\n</dl>")
     (begin-ddt       . "<dt><strong>")
-    (end-ddt         . "</strong></dt>\n")
+    (end-ddt         . "</strong></dt>")
     (begin-dde       . "<dd>")
     (end-dde         . "</dd>")
     (begin-table     . "<table%s>\n")
