@@ -291,8 +291,9 @@ See `muse-registry-show-level' for details."
       (when (setq muse-directory (pop muse-directories))
         (mapcar (lambda (file)
                   (unless (or (file-directory-p file)
-                              (string-match muse-project-ignore-regexp
-                                            file))
+                              (let ((case-fold-search nil))
+                                (string-match muse-project-ignore-regexp
+                                              file)))
                     (dolist (elem (muse-registry-new-entries file))
                       (add-to-list 'muse-registry-alist elem))))
                 (directory-files muse-directory t)))))
