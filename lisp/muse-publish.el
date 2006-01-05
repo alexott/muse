@@ -942,24 +942,22 @@ The following contexts exist in Muse.
                                     (null (match-string 3))))))
          (move-entry `(lambda ()
                         (muse-forward-list-item 'dl ,indent t)))
-         (term-regexp (format muse-list-item-regexp
-                              (concat "[" muse-regexp-blank "]*")))
          (continue t)
          beg search-p)
     (while continue
       (muse-insert-markup beg-item)
-      (when (looking-at term-regexp)
+      (when (looking-at muse-dl-term-regexp)
         (setq beg (point))
-        (goto-char (match-end 2))
-        (delete-region (match-end 2) (match-end 1))
+        (goto-char (match-end 1))
+        (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
         (if (eq (char-after) ?\n)
             (setq search-p t)
           (setq search-p nil)
           (insert ?\n))
         (goto-char beg)
-        (muse-insert-markup beg-ddt)
-        (forward-line 1))
+        (delete-region (point) (match-beginning 1))
+        (muse-insert-markup beg-ddt))
       (setq beg (point)
             continue (funcall move-term))
       (save-restriction
@@ -1013,6 +1011,7 @@ Returns either 'ul, 'ol, or 'dl."
         (t 'dl)))
 
 (defsubst muse-forward-paragraph (&optional pattern)
+  (forward-line 1)
   (if (re-search-forward (if pattern
                              (concat "^\\(?:" pattern "\\|\n\\|\\'\\)")
                            "^\\s-*\\(\n\\|\\'\\)") nil t)
@@ -1027,8 +1026,12 @@ The beginning indentation is given by INDENT.
 If TYPE is 'dl and ENTRY-P is non-nil, seach ahead by dl entries.
 Otherwise if TYPE is 'dl and ENTRY-P is nil, search ahead by dl
 terms."
-  (let ((list-item (if (and (eq type 'dl) entry-p)
-                       muse-dl-entry-regexp
+  (let ((list-item (if (eq type 'dl)
+                       (if entry-p
+                           muse-dl-entry-regexp
+                         (format muse-list-item-regexp
+                                 (concat "\\(" muse-dl-entry-regexp "\\|"
+                                         indent "\\)")))
                      (format muse-list-item-regexp indent)))
         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
         (next-list-end (or (next-single-property-change (point) 'end-list)
@@ -1046,12 +1049,22 @@ terms."
                  (replace-match "" t t nil 1)
                  t)
              nil))
+          ((eq type 'dl)
+           (if (string= (match-string 2) indent)
+               t
+             (if (match-beginning 3)
+                 (progn
+                   (goto-char (match-beginning 1))
+                   (eq 'dl (muse-list-item-type (match-string 3))))
+               nil)))
           ((and (match-string 2)
                 (eq type (muse-list-item-type (match-string 2))))
-           (unless (eq type 'dl)
-             (replace-match "" t t nil 2))
+           (replace-match "" t t nil 2)
            (goto-char (match-beginning 1)))
-          (t nil))))
+          (t
+           (when (match-beginning 1)
+             (goto-char (match-beginnimg 1)))
+           nil))))
 
 (defun muse-publish-markup-list ()
   "Markup a list entry.

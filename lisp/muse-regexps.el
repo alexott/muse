@@ -146,8 +146,16 @@ The '%s' will be replaced with a whitespace regexp when publishing."
   :type 'regexp
   :group 'muse-regexp)
 
+(defcustom muse-dl-term-regexp
+  (concat "[" muse-regexp-blank "]*\\(.+?\\)["
+          muse-regexp-blank "]+::[" muse-regexp-blank "]*")
+  "Regexp used to match a definition list term.
+The first match string should contain the term."
+  :type 'regexp
+  :group 'muse-regexp)
+
 (defcustom muse-dl-entry-regexp
-  (concat "^[" muse-regexp-blank "]+::[" muse-regexp-blank "]*")
+  (concat "[" muse-regexp-blank "]+::[" muse-regexp-blank "]*")
   "Regexp used to match the beginning of a definition list entry.
 Entries usually come after a term."
   :type 'regexp

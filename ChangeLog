@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-05 14:38:56 GMT	Michael Olson <mwolson@gnu.org>	patch-348
+
+    Summary:
+      More nested list twiddling.
+    Revision:
+      muse--main--1.0--patch-348
+
+    * lisp/muse-publish.el (muse-publish-surround-dl)
+      (muse-forward-list-item): Make marginal progress on definition lists.
+      (muse-forward-paragraph): Move forward first before searching.
+    
+    * lisp/muse-regexps.el (muse-dl-term-regexp): New regexp that specifies
+      how a term begins.  The first match string contains the term.
+      (muse-dl-term-regexp): Don't include initial "^", so that we can embed
+      this more easily.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-01-05 13:28:49 GMT	Michael Olson <mwolson@gnu.org>	patch-347
 
     Summary:
