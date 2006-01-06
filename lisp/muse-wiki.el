@@ -163,12 +163,16 @@ style and ignore the others."
                             (muse-current-file)
                             (cddr (muse-project-of-file))))))
     (cond ((and remote-style local-style muse-publishing-p)
-           (muse-publish-link-file
-            (file-relative-name (expand-file-name
-                                 page (muse-style-element :path remote-style))
-                                (expand-file-name
-                                 (muse-style-element :path local-style)))
-            nil remote-style))
+           (let ((prefix (muse-style-element :base-url remote-style)))
+             (muse-publish-link-file
+              (if prefix
+                  (concat prefix page)
+                (file-relative-name (expand-file-name
+                                     page
+                                     (muse-style-element :path remote-style))
+                                    (expand-file-name
+                                     (muse-style-element :path local-style))))
+              nil remote-style)))
           ((not muse-publishing-p)
            (if page-path
                page-path
@@ -191,7 +195,8 @@ Match 2 is set to the description."
     (let* ((project (match-string 1 string))
            (subst (cdr (assoc project muse-wiki-interwiki-alist)))
            (word (if string
-                     (substring string (match-beginning 2))
+                     (and (match-beginning 2)
+                          (substring string (match-beginning 2)))
                    (match-string 2 string))))
       (if subst
           (if (functionp subst)

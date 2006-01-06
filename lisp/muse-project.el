@@ -233,7 +233,10 @@ when publishing files in that project."
 (defcustom muse-project-ignore-regexp
   (concat "\\`\\(.*\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'\\|"
           "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\)\\(/\\|\\'\\)")
-  "A regexp matching files to be ignored in Wiki directories."
+  "A regexp matching files to be ignored in Wiki directories.
+
+You should set case-fold-search to nil before using this regexp
+in code."
   :type 'regexp
   :group 'muse-regexp)
 
@@ -242,9 +245,10 @@ when publishing files in that project."
 A list of these directories is returned.
 Directories starting with \".\" will be ignored, as well as those
 which match `muse-project-ignore-regexp'."
-  (when (and (file-directory-p base)
-             (not (string-match muse-project-ignore-regexp base)))
-    (let (list dir)
+  (let ((case-fold-search nil)
+        list dir)
+    (when (and (file-directory-p base)
+               (not (string-match muse-project-ignore-regexp base)))
       (dolist (file (directory-files base t "^[^.]"))
         (when (and (file-directory-p file)
                    (not (string-match muse-project-ignore-regexp file)))
@@ -322,7 +326,8 @@ For an example of the use of this function, see
 
 (defun muse-project-file-entries (path)
   (let* ((names (list t))
-         (lnames names))
+         (lnames names)
+         (case-fold-search nil))
     (cond
      ((file-directory-p path)
       (dolist (file (directory-files
@@ -412,7 +417,8 @@ If PATHNAME is nil, the current buffer's filename is used."
     (unless pathname (setq pathname (muse-current-file)))
     (save-match-data
       (when (and pathname
-                 (not (string-match muse-project-ignore-regexp pathname)))
+                 (not (let ((case-fold-search nil))
+                        (string-match muse-project-ignore-regexp pathname))))
         (let* ((file (file-truename pathname))
                (dir  (file-name-directory file))
                (project-entry muse-project-alist)

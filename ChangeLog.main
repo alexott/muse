@@ -33,6 +33,60 @@
      jeho@jeho.org--2005/muse--jeho--1.0--patch-21
 
 
+2006-01-05 16:20:51 GMT	Michael Olson <mwolson@gnu.org>	patch-349
+
+    Summary:
+      Merged from john@wjsullivan.net--2006 (patch 0-1)
+    Revision:
+      muse--main--1.0--patch-349
+
+    Patches applied:
+    
+     * john@wjsullivan.net--2006/muse--johnsu01--0--patch-1
+       Updated copyright year. Added notes about using the .muse file extension to the Projects node.
+
+    modified files:
+     ChangeLog muse.texi
+
+    new patches:
+     john@wjsullivan.net--2006/muse--johnsu01--0--base-0
+     john@wjsullivan.net--2006/muse--johnsu01--0--patch-1
+
+
+2006-01-05 03:51:57 GMT	Michael Olson <mwolson@gnu.org>	patch-346
+
+    Summary:
+      Fix #4973: muse-project-ignore-regexp too aggressive
+    Revision:
+      muse--main--1.0--patch-346
+
+    * lisp/muse-project.el (muse-project-ignore-regexp): Note that
+      case-fold-search should be nil before using this regexp.
+      (muse-project-recurse-directory, muse-project-file-entries)
+      (muse-project-of-file): Set case-fold-search to nil before matching
+      against muse-project-ignore-regexp.  Thanks to G. J. Teale for the
+      report.
+    
+    * muse-registry.el (muse-registry-make-new-registry): Ditto.
+
+    modified files:
+     ChangeLog lisp/muse-project.el lisp/muse-registry.el
+
+
+2006-01-04 20:07:54 GMT	Michael Olson <mwolson@gnu.org>	patch-345
+
+    Summary:
+      Fix backtrace on project names.
+    Revision:
+      muse--main--1.0--patch-345
+
+    * lisp/muse-wiki.el (muse-wiki-handle-interwiki): Fix backtrace on
+      coloring project names.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2006-01-03 04:58:18 GMT	Michael Olson <mwolson@gnu.org>	patch-341
 
     Summary:
@@ -97,6 +151,21 @@
      ChangeLog lisp/muse-colors.el
 
 
+2006-01-02 01:05:13 GMT	Michael Olson <mwolson@gnu.org>	patch-337
+
+    Summary:
+      muse-wiki: Allow interwiki links to use different base URLs.
+    Revision:
+      muse--main--1.0--patch-337
+
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): If :base-url is
+      defined for the remote style, use it instead of file-relative-name to
+      resolve the path.  Thanks to Justin Kirby for the idea.
+
+    modified files:
+     ChangeLog lisp/muse-wiki.el
+
+
 2006-01-01 19:15:02 GMT	Michael Olson <mwolson@gnu.org>	patch-336
 
     Summary:
@@ -108,6 +177,21 @@
 
     modified files:
      ChangeLog lisp/muse-xml-common.el
+
+
+2005-12-30 23:22:45 GMT	Michael Olson <mwolson@gnu.org>	patch-333
+
+    Summary:
+      muse-publish: Prevent error when return value is not a string.
+    Revision:
+      muse--main--1.0--patch-333
+
+    * lisp/muse-publish.el (muse-publish-markup): Make sure returned value is
+      a string before using it to replace text.  Thanks to Sacha for the
+      patch.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
 
 
 2005-12-30 01:42:30 GMT	Michael Olson <mwolson@gnu.org>	patch-331
