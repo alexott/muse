@@ -139,6 +139,26 @@
      ChangeLog lisp/muse-latex.el
 
 
+2005-12-29 21:33:08 GMT	Michael Olson <mwolson@gnu.org>	patch-328
+
+    Summary:
+      muse-publish: Use narrow-to-region to fix various bugs.
+    Revision:
+      muse--main--1.0--patch-328
+
+    * lisp/muse-publish.el (muse-publish-markup-tag): Code indent change.
+      (muse-publish-escape-specials): Use `narrow-to-region' so that we
+      better define the region to work with.  Thanks to Sacha Chua for the
+      advice.  Also make sure that we are more careful with the result from
+      next-single-property-change.
+      (muse-publish-surround-text): Use narrow-to-region.  Make this routine
+      less brain-dead.
+      (muse-publish-verse-tag): Use narrow-to-region.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2005-12-26 22:26:56 GMT	Michael Olson <mwolson@gnu.org>	patch-323
 
     Summary:

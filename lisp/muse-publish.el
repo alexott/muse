@@ -694,7 +694,8 @@ the file is published no matter what."
                (not (get-text-property (match-beginning 0) 'read-only)))
       (let ((closed-tag (match-string 3))
             (start (match-beginning 0))
-            (beg (point)) end attrs)
+            (beg (point))
+            end attrs)
         (when (nth 2 tag-info)
           (let ((attrstr (match-string 2)))
             (while (and attrstr
@@ -728,17 +729,19 @@ the file is published no matter what."
   "Escape specials from BEG to END using style-specific :specials.
 If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
   (save-excursion
-    (goto-char beg)
-    (while (< (point) end)
-      (if (and (not ignore-read-only) (get-text-property (point) 'read-only))
-          (forward-char 1)
-        (let ((repl
-               (or (assoc (char-after) (muse-style-element :specials))
-                   (assoc (char-after) muse-publish-markup-specials))))
-          (if (null repl)
-              (forward-char 1)
-            (delete-char 1)
-            (insert-before-markers (cdr repl))))))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (< (point) (point-max))
+        (if (and (not ignore-read-only) (get-text-property (point) 'read-only))
+            (forward-char 1)
+          (let ((repl
+                 (or (assoc (char-after) (muse-style-element :specials))
+                     (assoc (char-after) muse-publish-markup-specials))))
+            (if (null repl)
+                (forward-char 1)
+              (delete-char 1)
+              (insert-before-markers (cdr repl)))))))))
 
 (defun muse-publish-markup-word ()
   (let* ((beg (match-beginning 2))
@@ -884,18 +887,19 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
   (insert (muse-markup-text 'fn-sep)))
 
 (defun muse-publish-surround-text (beg-tag end-tag move-func)
-  (let ((beg (point)) end)
+  (let (beg)
     (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg)
     (insert "\n\n" beg-tag)
+    (setq beg (point))
     (funcall move-func)
-    (setq end (point-marker))
-    (goto-char beg)
-    (while (< (point) end)
-      (if (looking-at "^\\s-+")
-          (replace-match ""))
-      (forward-line 1))
-    (goto-char end)
+    (save-restriction
+      (narrow-to-region (beg (point)))
+      (goto-char (point-min))
+      (while (< (point) (point-max))
+        (if (looking-at "^\\s-+")
+            (replace-match ""))
+        (forward-line 1)))
     (setq beg (point))
     (skip-chars-backward muse-regexp-space)
     (delete-region (point) beg))
@@ -1115,14 +1119,16 @@ like read-only from being inadvertently deleted."
 
 (defun muse-publish-verse-tag (beg end)
   (save-excursion
-    (goto-char beg)
-    (while (eq ?\  (char-syntax (char-after)))
-      (delete-char 1))
-    (while (< (point) end)
-      (insert "> ")
-      (forward-line))
-    (if (eq ?\  (char-syntax (char-before)))
-      (delete-char -1))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (eq ?\  (char-syntax (char-after)))
+        (delete-char 1))
+      (while (< (point) (point-max))
+        (insert "> ")
+        (forward-line))
+      (if (eq ?\  (char-syntax (char-before)))
+          (delete-char -1)))))
 
 (defun muse-publish-mark-read-only (beg end)
   (add-text-properties beg end '(rear-nonsticky (read-only) read-only t))

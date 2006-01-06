@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-06 20:39:49 GMT	Michael Olson <mwolson@gnu.org>	patch-49
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 328)
+    Revision:
+      muse--rel--3.02--patch-49
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-328
+       muse-publish: Use narrow-to-region to fix various bugs.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-publish.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-328
+
+
 2006-01-06 20:29:16 GMT	Michael Olson <mwolson@gnu.org>	patch-48
 
     Summary:
