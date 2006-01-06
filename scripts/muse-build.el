@@ -68,7 +68,8 @@
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; End:")
+;; End:
+")
     (insert ?\n)
     (save-buffer 0)
     (kill-buffer (current-buffer))))

@@ -2,6 +2,37 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-06 18:17:07 GMT	Michael Olson <mwolson@gnu.org>	patch-350
+
+    Summary:
+      Sync with contributors.
+    Revision:
+      muse--main--1.0--patch-350
+
+    * scripts/muse-build.el (muse-generate-autoloads): Add a newline to keep
+      Emacs from being confused when it loads this file.  I don't think
+      Emacs' evaluation of the quoted local variables section does any harm,
+      but if it does, I'll provide a different fix.
+
+    modified files:
+     ChangeLog scripts/muse-build.el
+
+    new patches:
+     ajk@iu.edu--2005/muse--main--1.0--base-0
+     ajk@iu.edu--2005/muse--main--1.0--patch-1
+     ajk@iu.edu--2005/muse--main--1.0--patch-2
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-12
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-13
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-14
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-15
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-16
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-17
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-18
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-19
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-20
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-21
+
+
 2006-01-05 16:20:51 GMT	Michael Olson <mwolson@gnu.org>	patch-349
 
     Summary:
