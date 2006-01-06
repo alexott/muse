@@ -19,15 +19,12 @@
 
 ;;; Commentary:
 
-;; A Compact RelaxNG schema is available in `examples/muse.rnc'.  The
-;; current maintainer has no idea how to make use of it, except that
-;; it might come in handy with nxml-mode, xml.el, xml-parse.el, or
-;; XSLT.
-;;
-;; This file is currently in experimental state.  This means that the
-;; published output is subject to change.  This also means that you
-;; still have the opportunity to correct braindeaded publishing
-;; choices by sending email to the list :^) .
+;; James Clarke's nxml-mode can be used for editing and validating
+;; Muse-generated XML files.  If you are in nxml-mode use the command
+;; C-c C-s C-f to point to the schema in `contrib/muse.rnc', which
+;; comes with Muse.  Say yes if you are asked if you want to copy the
+;; file to your location.  C-c C-s C-a can then be used to reload the
+;; schema if you make changes to the file.
 
 ;;; Contributors:
 
@@ -37,6 +34,9 @@
 ;;
 ;; Brad Collins (brad AT chenla DOT org) provided a Compact RelaxNG
 ;; schema.
+;;
+;; Michael Olson (mwolson AT gnu DOT org) assembled everything into a
+;; usable form.
 
 ;;; Code:
 
@@ -77,7 +77,7 @@ This may be text or a filename."
 
 (defcustom muse-xml-footer "
   <!-- Page published by Emacs Muse ends here -->
-</page>\n"
+</MUSE>\n"
   "Footer used for publishing Xml XML files.
 This may be text or a filename."
   :type 'string
@@ -136,11 +136,11 @@ For more on the structure of this list, see
     (url-with-image  . "<link type=\"image\" href=\"%s\">%s</link>")
     (url-link        . "<link type=\"url\" href=\"%s\">%s</link>")
     (email-addr      . "<link type=\"email\" href=\"%s\">%s</link>")
-    (emdash          . " &mdash; ")
+    (emdash          . " -- ")
     (comment-begin   . "<!-- ")
     (comment-end     . " -->")
-    (rule            . "<hr>")
-    (fn-sep          . "<hr>\n")
+    (rule            . "<hr />")
+    (fn-sep          . "<hr />\n")
     (no-break-space  . "&nbsp;")
     (enddots         . "....")
     (dots            . "...")
@@ -174,8 +174,8 @@ For more on the structure of this list, see
     (end-verse       . "</verse>")
     (begin-example   . "<example>")
     (end-example     . "</example>")
-    (begin-center    . "<format type=\"center\">\n")
-    (end-center      . "\n</format>")
+    (begin-center    . "<p><format type=\"center\">\n")
+    (end-center      . "\n</format></p>")
     (begin-quote     . "<blockquote>\n")
     (end-quote       . "\n</blockquote>")
     (begin-uli       . "<list type=\"unordered\">\n<item>")

@@ -171,6 +171,77 @@
      lisp/muse-texinfo.el lisp/muse-xml.el
 
 
+2005-12-17 01:19:30 GMT	Michael Olson <mwolson@gnu.org>	patch-305
+
+    Summary:
+      Revert QuickStart changes, hack more on muse.rnc.
+    Revision:
+      muse--main--1.0--patch-305
+
+    * examples/QuickStart.muse: Revert previous changes; they cause
+      publishing to fail.  Hrm.  Guess I'll have to fix the display issue
+      with <literal> tags then.
+    
+    * muse.rnc: Put blockquote in the muse.element namespace, since it's not
+      an attribute.
+
+    modified files:
+     ChangeLog examples/QuickStart.muse examples/muse.rnc
+
+
+2005-12-16 23:37:24 GMT	Michael Olson <mwolson@gnu.org>	patch-304
+
+    Summary:
+      QuickStart: Correct old syntax.
+    Revision:
+      muse--main--1.0--patch-304
+
+    * examples/QuickStart.muse: Don't wrap the literal tag around other tags.
+      Just use equal sign escaping.
+
+    modified files:
+     ChangeLog examples/QuickStart.muse
+
+
+2005-12-16 23:19:09 GMT	Michael Olson <mwolson@gnu.org>	patch-303
+
+    Summary:
+      Make XML publishing work with QuickStart; no longer considered unstable.
+    Revision:
+      muse--main--1.0--patch-303
+
+    * examples/muse.rnc: Strip trailing whitespace.  Hack it to the point
+      that it works with our QuickStart document.
+    
+    * examples/Makefile (%.html, %.pdf, %.info, realclean, distclean)
+      (fullclean): Adapt to work with .muse extension.
+    
+    * examples/QuickStart.muse: Rename from QuickStart.  This makes it
+      automatically get colorized as a Muse document when opened.
+    
+    * lisp/muse-xml.el: Move from experimental.
+      (muse-xml-footer): Use correct ending tag.
+      (muse-xml-markup-strings): Make emdash publish as " -- " to avoid an
+      annoying error regarding "&mdash;" when validating with nxml-mode.
+      rule and fn-sep should use the empty form of the HR tag.
+    
+    * README: Fix directions for QuickStart.
+
+    modified files:
+     ChangeLog README examples/Makefile examples/muse.rnc
+     lisp/muse-xml.el
+
+    renamed files:
+     examples/.arch-ids/QuickStart.id
+       ==> examples/.arch-ids/QuickStart.muse.id
+     examples/QuickStart
+       ==> examples/QuickStart.muse
+     experimental/.arch-ids/muse-xml.el.id
+       ==> lisp/.arch-ids/muse-xml.el.id
+     experimental/muse-xml.el
+       ==> lisp/muse-xml.el
+
+
 2005-12-16 21:29:58 GMT	Michael Olson <mwolson@gnu.org>	patch-302
 
     Summary:

@@ -2,6 +2,45 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-06 19:27:17 GMT	Michael Olson <mwolson@gnu.org>	patch-47
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 303-305)
+    Revision:
+      muse--rel--3.02--patch-47
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-303
+       Make XML publishing work with QuickStart; no longer considered unstable.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-304
+       QuickStart: Correct old syntax.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-305
+       Revert QuickStart changes, hack more on muse.rnc.
+    Patches applied:
+
+    modified files:
+     ChangeLog ChangeLog.main README examples/Makefile
+     examples/muse.rnc lisp/muse-xml.el
+
+    renamed files:
+     examples/.arch-ids/QuickStart.id
+       ==> examples/.arch-ids/QuickStart.muse.id
+     examples/QuickStart
+       ==> examples/QuickStart.muse
+     experimental/.arch-ids/muse-xml.el.id
+       ==> lisp/.arch-ids/muse-xml.el.id
+     experimental/muse-xml.el
+       ==> lisp/muse-xml.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-303
+     mwolson@gnu.org--2005/muse--main--1.0--patch-304
+     mwolson@gnu.org--2005/muse--main--1.0--patch-305
+
+
 2006-01-06 19:10:33 GMT	Michael Olson <mwolson@gnu.org>	patch-46
 
     Summary:
