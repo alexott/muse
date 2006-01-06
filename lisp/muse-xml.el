@@ -266,10 +266,11 @@ match is found, `muse-xml-charset-default' is used instead."
 
 (defun muse-xml-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (when (looking-at "<\\([^ />]+\\)>")
-    (goto-char (match-end 0)))
-  (insert "<anchor id=\"" anchor "\" />\n"))
+  (unless (get-text-property (match-end 1) 'noemphasis)
+    (skip-chars-forward muse-regexp-space)
+    (when (looking-at "<\\([^ />]+\\)>")
+      (goto-char (match-end 0)))
+    (insert "<anchor id=\"" anchor "\" />\n")))
 
 (defun muse-xml-markup-anchor ()
   (save-match-data

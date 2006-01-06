@@ -2,6 +2,35 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-06 20:29:16 GMT	Michael Olson <mwolson@gnu.org>	patch-48
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 279, 311, 318)
+    Revision:
+      muse--rel--3.02--patch-48
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-279
+       Update AUTHORS.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-311
+       muse-build: Prevent backup files when generating autoloads.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-318
+       Fix a markup error involving links like [[#foo]].
+
+    modified files:
+     AUTHORS ChangeLog ChangeLog.main lisp/muse-docbook.el
+     lisp/muse-html.el lisp/muse-latex.el lisp/muse-publish.el
+     lisp/muse-texinfo.el lisp/muse-xml.el scripts/muse-build.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-279
+     mwolson@gnu.org--2005/muse--main--1.0--patch-311
+     mwolson@gnu.org--2005/muse--main--1.0--patch-318
+
+
 2006-01-06 19:27:17 GMT	Michael Olson <mwolson@gnu.org>	patch-47
 
     Summary:

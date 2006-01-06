@@ -102,11 +102,11 @@ If non-nil, publish comments using the markup of the current style."
     ;; commented lines
     (1350 "^;\\s-+\\(.+\\)" 0 comment)
 
-    ;; define anchor points
-    (1400 "^\\(\\W*\\)#\\(\\S-+\\)\\s-*" 0 anchor)
-
     ;; prevent emphasis characters in explicit links from being marked
-    (1500 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
+    (1400 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
+
+    ;; define anchor points
+    (1500 "^\\(\\W*\\)#\\(\\S-+\\)\\s-*" 0 anchor)
 
     ;; emphasized or literal text
     (1600 ,(concat

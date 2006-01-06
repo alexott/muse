@@ -186,10 +186,11 @@ differs little between the various styles."
 
 (defun muse-texinfo-insert-anchor (anchor)
   "Insert an anchor, either before the next word, or within a tag."
-  (skip-chars-forward muse-regexp-space)
-  (when (looking-at "<\\([^ />]+\\)>")
-    (goto-char (match-end 0)))
-  (insert "@anchor{" anchor "}"))
+  (unless (get-text-property (match-end 1) 'noemphasis)
+    (skip-chars-forward muse-regexp-space)
+    (when (looking-at "<\\([^ />]+\\)>")
+      (goto-char (match-end 0)))
+    (insert "@anchor{" anchor "}")))
 
 (defun muse-texinfo-markup-anchor ()
   (save-match-data

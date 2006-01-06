@@ -274,7 +274,8 @@ This applies to text in \\texttt{} regions."
 (defun muse-latex-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag.
 If the anchor occurs at the end of a line, ignore it."
-  (unless (bolp)      ; point is placed after newline if anchor at end
+  (unless (or (bolp)  ; point is placed after newline if anchor at end
+              (get-text-property (match-end 1) 'noemphasis))
     (skip-chars-forward muse-regexp-space)
     (if (looking-at "<\\([^ />]+\\)>")
         (let ((tag (match-string 1)))
