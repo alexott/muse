@@ -185,6 +185,7 @@ should be allowed in a filename."
   (muse-replace-regexp-in-string (concat "[^-." muse-regexp-alnum "]")
                                  "_" (downcase title)))
 
+;;;###autoload
 (defun muse-blosxom-new-entry (category title)
   "Start a new blog entry with given CATEGORY.
 The filename of the blog entry is derived from TITLE.

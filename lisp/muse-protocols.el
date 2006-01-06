@@ -106,6 +106,7 @@ URL, or nil if no URL should be included."
       (setq list (cdr list)))
     entry))
 
+;;;###autoload
 (defun muse-browse-url (url &optional other-window)
   "Handle URL with the function specified in `muse-url-protocols'.
 If OTHER-WINDOW is non-nil, open in a different window."

@@ -2,6 +2,53 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-06 19:10:33 GMT	Michael Olson <mwolson@gnu.org>	patch-46
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 299-301, 350)
+    Revision:
+      muse--rel--3.02--patch-46
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-299
+       Add autoload cookies.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-300
+       Generate autoloads file.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-301
+       Makefile: Minor tweak.
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-350
+       Sync with contributors.
+
+    modified files:
+     ChangeLog ChangeLog.main Makefile lisp/Makefile
+     lisp/muse-blosxom.el lisp/muse-mode.el lisp/muse-project.el
+     lisp/muse-protocols.el lisp/muse-publish.el
+     scripts/muse-build.el
+
+    new patches:
+     ajk@iu.edu--2005/muse--main--1.0--base-0
+     ajk@iu.edu--2005/muse--main--1.0--patch-1
+     ajk@iu.edu--2005/muse--main--1.0--patch-2
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-12
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-13
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-14
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-15
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-16
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-17
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-18
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-19
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-20
+     jeho@jeho.org--2005/muse--jeho--1.0--patch-21
+     mwolson@gnu.org--2005/muse--main--1.0--patch-299
+     mwolson@gnu.org--2005/muse--main--1.0--patch-300
+     mwolson@gnu.org--2005/muse--main--1.0--patch-301
+     mwolson@gnu.org--2005/muse--main--1.0--patch-350
+
+
 2006-01-03 04:59:41 GMT	Michael Olson <mwolson@gnu.org>	patch-45
 
     Summary:

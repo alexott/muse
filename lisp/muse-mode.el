@@ -293,6 +293,7 @@ This is used to keep links from being improperly colorized by flyspell."
       (concat "[[" (muse-link-escape link) "][" (muse-link-escape name) "]]")
     (concat "[[" (muse-link-escape link) "]]")))
 
+;;;###autoload
 (defun muse-edit-link-at-point ()
   "Edit the current link.
 Do not rename the page originally referred to."
@@ -358,6 +359,7 @@ in `muse-project-alist'."
         (funcall visit-link-function link other-window)
       (muse-visit-link-default link other-window))))
 
+;;;###autoload
 (defun muse-browse-result (style &optional other-window)
   "Visit the current page's published result."
   (interactive (list (muse-publish-get-style) current-prefix-arg))
@@ -375,6 +377,7 @@ in `muse-project-alist'."
             (message "The %s publishing style does not support browsing."
                      style)))))))
 
+;;;###autoload
 (defun muse-follow-name-at-point (&optional other-window)
   "Visit the link at point, or insert a newline if none is found."
   (interactive "P")
@@ -383,6 +386,7 @@ in `muse-project-alist'."
         (muse-visit-link link other-window)
       (error "There is no valid link at point"))))
 
+;;;###autoload
 (defun muse-follow-name-at-point-other-window ()
   "Visit the link at point in other window."
   (interactive)
@@ -414,6 +418,7 @@ in `muse-project-alist'."
   (select-window (car (cadr event)))
   (muse-follow-name-at-mouse event t))
 
+;;;###autoload
 (defun muse-next-reference ()
   "Move forward to next Muse link or URL, cycling if necessary."
   (interactive)
@@ -438,6 +443,7 @@ in `muse-project-alist'."
     (if pos
         (goto-char pos))))
 
+;;;###autoload
 (defun muse-previous-reference ()
   "Move backward to the next Muse link or URL, cycling if necessary.
 This function is not entirely accurate, but it's close enough."
@@ -459,6 +465,7 @@ This function is not entirely accurate, but it's close enough."
     (if pos
         (goto-char pos))))
 
+;;;###autoload
 (defun muse-what-changed ()
   "Show the unsaved changes that have been made to the current file."
   (interactive)
@@ -474,6 +481,7 @@ This function is not entirely accurate, but it's close enough."
       (insert index)
       (current-buffer))))
 
+;;;###autoload
 (defun muse-index ()
   "Display an index of all known Muse pages."
   (interactive)
@@ -517,6 +525,7 @@ this variable to a list.")
 If there are (X)HTML tags that you use frequently with that
 function, you might want to set this manually.")
 
+;;;###autoload
 (defun muse-insert-tag (tag)
   "Insert a tag interactively with a blank line after it."
   (interactive

@@ -1,4 +1,4 @@
-.PHONY: all lisp examples experimental doc clean realclean distclean fullclean install-info install-bin install test dist release debbuild debrevision debrelease upload
+.PHONY: all lisp autoloads examples experimental doc clean realclean distclean fullclean install-info install-bin install test dist release debbuild debrevision debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
@@ -9,6 +9,9 @@ all: lisp muse.info
 
 lisp:
 	(cd lisp && $(MAKE))
+
+autoloads:
+	(cd lisp && $(MAKE) autoloads)
 
 examples:
 	(cd examples && $(MAKE))

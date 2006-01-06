@@ -452,6 +452,7 @@ If PATHNAME is nil, the current buffer's filename is used."
                                default)))
     (cons name (muse-project-page-file name project))))
 
+;;;###autoload
 (defun muse-project-find-file (name project &optional command directory)
   "Open the Muse page given by NAME in PROJECT.
 If COMMAND is non-nil, it is the function used to visit the file.
@@ -568,6 +569,7 @@ The name of a project may be used for STYLES."
    (if (boundp 'save-some-buffers-action-alist)
        save-some-buffers-action-alist)))
 
+;;;###autoload
 (defun muse-project-publish (project &optional force)
   "Publish the pages of PROJECT that need publishing."
   (interactive (list (muse-read-project "Publish project: " nil t)
