@@ -571,9 +571,11 @@ Functions should not modify the contents of the buffer."
    beg end
    (list 'font-lock-multiline t
          'display (muse-eval-lisp
-                   (buffer-substring-no-properties (+ beg 6)
-                                                   (- end 7)))
-               'intangible t)))
+                   (concat "(progn "
+                           (buffer-substring-no-properties (+ beg 6)
+                                                           (- end 7))
+                           ")"))
+         'intangible t)))
 
 (defvar muse-mode-local-map
   (let ((map (make-sparse-keymap)))
