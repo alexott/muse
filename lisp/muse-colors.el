@@ -1,6 +1,6 @@
 ;;; muse-colors.el --- coloring and highlighting used by Muse
 
-;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006  Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse-colors.el
@@ -70,6 +70,16 @@ this to nil."
   :type '(choice (const :tag "Default (scaled) headings" t)
                  (const :tag "Use outline-mode headings" outline)
                  (const :tag "Don't touch the headings" nil))
+  :group 'muse-colors)
+
+(defcustom muse-colors-evaluate-lisp-tags t
+  "Specify whether to evaluate the contents of <lisp> tags at
+display time.  If nil, don't evaluate them.  If non-nil, evaluate
+them.
+
+The actual contents of the buffer are not changed, only the
+displayed text."
+  :type 'boolean
   :group 'muse-colors)
 
 (defvar muse-colors-outline-faces-list
@@ -566,16 +576,18 @@ Functions should not modify the contents of the buffer."
     (add-text-properties beg end `(font-lock-multiline ,multi))))
 
 (defun muse-colors-lisp-tag (beg end)
-  (muse-unhighlight-region beg end)
-  (add-text-properties
-   beg end
-   (list 'font-lock-multiline t
-         'display (muse-eval-lisp
-                   (concat "(progn "
-                           (buffer-substring-no-properties (+ beg 6)
-                                                           (- end 7))
-                           ")"))
-         'intangible t)))
+  (if (not muse-colors-evaluate-lisp-tags)
+      (muse-colors-literal-tag beg end)
+    (muse-unhighlight-region beg end)
+    (add-text-properties
+     beg end
+     (list 'font-lock-multiline t
+           'display (muse-eval-lisp
+                     (concat "(progn "
+                             (buffer-substring-no-properties (+ beg 6)
+                                                             (- end 7))
+                             ")"))
+           'intangible t))))
 
 (defvar muse-mode-local-map
   (let ((map (make-sparse-keymap)))

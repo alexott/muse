@@ -1,5 +1,51 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.02.6
+
+** Building Muse
+
+*** Autoloads for Muse are now generated in the muse-autoloads.el
+file at build time.
+
+** HTML
+
+*** Don't escape "%" and "+" in URLs.
+
+** Muse Mode
+
+*** <lisp> tags are now evaluated at display time.
+The actual contents of the buffer will not change, just the displayed
+text.  To toggle this behavior, set `muse-colors-evaluate-lisp-tags'.
+
+** Publishing
+
+*** When errors happen during publishing, a more explanatory message
+is displayed.
+
+*** It is now possible to specify non-breaking-space with "~~"
+(two tildes).  This helps prevent proper names from being split up in
+the output.
+
+*** Escape specials in all forms of emphasis.
+
+*** Escape "[" and "]" in links that are entered using muse-make-link.
+
+*** Errors from invalid lisp code in a <lisp> tag will be published
+as a comment.  If you have `muse-publish-comments-p' set to nil, the
+effect is to remove the error message.
+
+*** Fix several publishing issues involving comments and numbered lists.
+
+** Wiki
+
+*** Interwiki links in extended links that have special characters are
+now handled properly.
+
+** XML
+
+*** The XML publishing style is now considered stable.
+Its schema is available in `examples/muse.rnc'.
+
 * Changes in Muse 3.02.5
 
 ** LaTeX
