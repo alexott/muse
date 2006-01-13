@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-13 02:41:00 GMT	Michael Olson <mwolson@gnu.org>	patch-53
+
+    Summary:
+      Use better code for displaying warnings.
+    Revision:
+      muse--rel--3.02--patch-53
+
+    * lisp/muse.el (muse-display-warning): New function that displays a
+      warning in the proper way, depending on the version of Emacs being
+      used.
+      (muse-eval-lisp, muse-with-temp-buffer): Use it.
+
+    modified files:
+     ChangeLog lisp/muse.el
+
+
 2006-01-13 02:02:03 GMT	Michael Olson <mwolson@gnu.org>	patch-52
 
     Summary:

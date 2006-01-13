@@ -166,6 +166,15 @@ All this means is that certain extensions, like .gz, are removed."
               (replace-match "" t t page)
             page)))))
 
+(defun muse-display-warning (message)
+  "Display the given MESSAGE as a warning."
+  (if (fboundp 'display-warning)
+      (display-warning 'muse message
+                       (if (featurep 'xemacs)
+                           'warning
+                         :warning))
+    (message message)))
+
 (defun muse-eval-lisp (form)
   "Evaluate the given form and return the result as a string."
   (require 'pp)
@@ -184,15 +193,8 @@ All this means is that certain extensions, like .gz, are removed."
            (t
             (pp-to-string object))))
       (error
-       (if (fboundp 'display-warning)
-           (display-warning 'muse
-                            (format "%s: Error evaluating %s: %s"
-                                    (muse-page-name) form err)
-                            (if (featurep 'xemacs)
-                                'warning
-                              :warning))
-         (message "%s: Error evaluating %s: %s"
-                  (muse-page-name) form err))
+       (muse-display-warning (format "%s: Error evaluating %s: %s"
+                                     (muse-page-name) form err))
        "; INVALID LISP CODE"))))
 
 (defmacro muse-with-temp-buffer (&rest body)
@@ -210,26 +212,17 @@ It is meant to be used along with `insert-file-contents'."
                  (with-current-buffer ,temp-buffer
                    ,@body)
                (error
-                (cond
-                 ((and (boundp 'muse-batch-publishing-p)
-                       muse-batch-publishing-p)
-                  (message "%s: Error occured: %s"
-                           (muse-page-name) err)
-                  (backtrace))
-                 ((fboundp 'display-warning)
-                  (display-warning
-                   'muse (format (concat "An error occurred while publishing"
-                                         " %s: %s\n\nSet debug-on-error to"
-                                         " `t' if you would like a backtrace.")
-                                 (muse-page-name) err)
-                   (if (featurep 'xemacs)
-                       'warning
-                     :warning)))
-                 (t
-                  (message (concat "An error occurred while publishing"
+                (if (and (boundp 'muse-batch-publishing-p)
+                         muse-batch-publishing-p)
+                    (progn
+                      (message "%s: Error occured: %s"
+                               (muse-page-name) err)
+                      (backtrace))
+                  (muse-display-warning
+                   (format (concat "An error occurred while publishing"
                                    " %s: %s\n\nSet debug-on-error to"
                                    " `t' if you would like a backtrace.")
-                           (muse-page-name) err))))))
+                                 (muse-page-name) err))))))
          (when (buffer-live-p ,temp-buffer)
            (with-current-buffer ,temp-buffer
              (set-buffer-modified-p nil))
