@@ -41,9 +41,7 @@
           (insert ", " citation ", " pages))
       (insert "\n")
       (goto-char beg)
-      (while (re-search-forward (concat "p.\\\\["
-                                        muse-regexp-space
-                                        "]+")
+      (while (re-search-forward (concat "p.\\\\[" muse-regexp-blank "\n]+")
                                 nil t)
         (replace-match "p."))
       (goto-char beg)

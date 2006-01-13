@@ -95,20 +95,6 @@ the time."
   :options '("[:blank:]" " \t")
   :group 'muse-regexp)
 
-(defcustom muse-regexp-space
-  (if (muse-extreg-usable-p)
-      "[:space:]"
-    " \t\n")
-  "Regexp to use in place of \"[:space:]\".
-This should be something that matches spaces, tabs, and newlines.
-
-It is like a regexp, but should be embeddable inside brackets.
-muse will detect the appropriate value correctly most of
-the time."
-  :type 'string
-  :options '("[:space:]" " \t\n")
-  :group 'muse-regexp)
-
 (defcustom muse-regexp-alnum
   (if (muse-extreg-usable-p)
       "[:alnum:]"
@@ -152,7 +138,7 @@ the time."
   :group 'muse-regexp)
 
 (defcustom muse-tag-regexp
-  (concat "<\\([^/" muse-regexp-space "][^" muse-regexp-space
+  (concat "<\\([^/\n" muse-regexp-blank "][^\n" muse-regexp-blank
           "</>]*\\)\\(\\s-+[^<>]+[^</>]\\)?\\(/\\)?>")
   "A regexp used to find XML-style tags within a buffer when publishing.
 Group 1 should be the tag name, group 2 the properties, and group
@@ -168,7 +154,7 @@ Paren group 1 must match the URL, and paren group 2 the description."
   :group 'muse-regexp)
 
 (defcustom muse-implicit-link-regexp
-  (concat "\\([^" muse-regexp-space "]+\\)")
+  (concat "\\([^" muse-regexp-blank "\n]+\\)")
   "Regexp used to match an implicit link.
 An implicit link is the largest block of text to be checked for
 URLs and bare WikiNames by the `muse-link-at-point' function.

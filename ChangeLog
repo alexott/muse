@@ -2,6 +2,34 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-13 00:40:30 GMT	Michael Olson <mwolson@gnu.org>	patch-51
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 317)
+    Revision:
+      muse--rel--3.02--patch-51
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Fix several typos.
+    
+    * lisp/muse.el (muse-eval-lisp): Insert this as a comment, not hardcoded
+      HTML.
+    
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-317
+       Get rid of muse-regexp-space.  Standardize anchor markup somewhat.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-convert.el
+     lisp/muse-docbook.el lisp/muse-html.el lisp/muse-latex.el
+     lisp/muse-mode.el lisp/muse-protocols.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-texinfo.el lisp/muse-xml.el
+     lisp/muse.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-317
+
+
 2006-01-06 20:44:29 GMT	Michael Olson <mwolson@gnu.org>	patch-50
 
     Summary:

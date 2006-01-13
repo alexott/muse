@@ -109,16 +109,11 @@ If non-nil, publish comments using the markup of the current style."
     (1500 "^\\(\\W*\\)#\\(\\S-+\\)\\s-*" 0 anchor)
 
     ;; emphasized or literal text
-    (1600 ,(concat
-            "\\(^\\|[-["
-            muse-regexp-space
-            "<('`\"]\\)\\(=[^="
-            muse-regexp-space
-            "]\\|_[^_"
-            muse-regexp-space
-            "]\\|\\*+[^*"
-            muse-regexp-space
-            "]\\)")
+    (1600 ,(concat "\\(^\\|[-[" muse-regexp-blank
+            "<('`\"\n]\\)\\(=[^=" muse-regexp-blank
+            "\n]\\|_[^_" muse-regexp-blank
+            "\n]\\|\\*+[^*" muse-regexp-blank
+            "\n]\\)")
           2 word)
 
     ;; headings, outline-mode style
@@ -700,8 +695,8 @@ the file is published no matter what."
           (let ((attrstr (match-string 2)))
             (while (and attrstr
                         (string-match (concat "\\([^"
-                                              muse-regexp-space
-                                              "=]+\\)\\(=\"\\"
+                                              muse-regexp-blank
+                                              "=\n]+\\)\\(=\"\\"
                                               "([^\"]+\\)\"\\)?")
                                       attrstr))
               (let ((attr (cons (downcase
@@ -887,21 +882,21 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property."
   (insert (muse-markup-text 'fn-sep)))
 
 (defun muse-publish-surround-text (beg-tag end-tag move-func)
-  (let (beg)
-    (skip-chars-backward muse-regexp-space)
+  (let ((beg (point)))
+    (skip-chars-backward (concat muse-regexp-blank "\n"))
     (delete-region (point) beg)
     (insert "\n\n" beg-tag)
     (setq beg (point))
     (funcall move-func)
     (save-restriction
-      (narrow-to-region (beg (point)))
+      (narrow-to-region beg (point))
       (goto-char (point-min))
       (while (< (point) (point-max))
         (if (looking-at "^\\s-+")
             (replace-match ""))
         (forward-line 1)))
     (setq beg (point))
-    (skip-chars-backward muse-regexp-space)
+    (skip-chars-backward (concat muse-regexp-blank "\n"))
     (delete-region (point) beg))
   (insert end-tag "\n"))
 
@@ -947,19 +942,15 @@ like read-only from being inadvertently deleted."
       (save-match-data
         (save-excursion
           (forward-line 1)
-          (while (looking-at (concat "^\\(["
-                                     muse-regexp-blank
-                                     "]*\\)[^"
-                                     muse-regexp-space
-                                     "]"))
+          (while (looking-at (concat "^\\([" muse-regexp-blank
+                                     "]*\\)[^" muse-regexp-blank
+                                     "\n]"))
             (delete-region (match-beginning 1) (match-end 1))
             (forward-line 1))))
       (save-match-data
-        (when (re-search-forward (concat "["
-                                         muse-regexp-space
-                                         "]+::["
-                                         muse-regexp-space
-                                         "]+")
+        (when (re-search-forward (concat "[" muse-regexp-blank
+                                         "\n]+::[" muse-regexp-blank
+                                         "\n]+")
                                  nil t)
           (replace-match (muse-markup-text 'start-dde))))
       (muse-forward-paragraph)

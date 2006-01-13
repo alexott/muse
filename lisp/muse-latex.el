@@ -276,7 +276,7 @@ This applies to text in \\texttt{} regions."
 If the anchor occurs at the end of a line, ignore it."
   (unless (or (bolp)  ; point is placed after newline if anchor at end
               (get-text-property (match-end 1) 'noemphasis))
-    (skip-chars-forward muse-regexp-space)
+    (skip-chars-forward (concat muse-regexp-blank "\n"))
     (if (looking-at "<\\([^ />]+\\)>")
         (let ((tag (match-string 1)))
           (goto-char (match-end 0))

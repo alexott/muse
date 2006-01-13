@@ -246,8 +246,7 @@ This is used to keep links from being improperly colorized by flyspell."
   (let ((end (point)))
     (save-excursion
       (save-restriction
-        (skip-chars-backward (concat "^\\["
-                                     muse-regexp-space))
+        (skip-chars-backward (concat "^\\[\n" muse-regexp-blank))
         (narrow-to-region (point) end))
       (pcomplete-parse-buffer-arguments))))
 
@@ -276,8 +275,7 @@ This is used to keep links from being improperly colorized by flyspell."
               (muse-handle-explicit-link))
           (goto-char here)
           ;; Check for bare URL or other link type
-          (skip-chars-backward (concat "^'\"<>{}(\n"
-                                       muse-regexp-space))
+          (skip-chars-backward (concat "^'\"<>{}(\n" muse-regexp-blank))
           (and (looking-at muse-implicit-link-regexp)
                (muse-handle-implicit-link)))))))
 

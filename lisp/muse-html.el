@@ -424,7 +424,7 @@ system to an associated HTML coding system. If no match is found,
 (defun muse-html-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
   (unless (get-text-property (match-end 1) 'noemphasis)
-    (skip-chars-forward muse-regexp-space)
+    (skip-chars-forward (concat muse-regexp-blank "\n"))
     (if (looking-at "<\\([^ />]+\\)>")
         (let ((tag (match-string 1)))
           (goto-char (match-end 0))

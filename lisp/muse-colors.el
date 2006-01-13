@@ -331,7 +331,7 @@ whether progress messages should be displayed to the user."
     ("\\*\\{1,5\\}" ?* muse-colors-emphasized)
 
     ;; make underlined text appear underlined
-    (,(concat "_[^" muse-regexp-space "_]")
+    (,(concat "_[^" muse-regexp-blank "_\n]")
      ?_ muse-colors-underlined)
 
     ("^#title " ?\# muse-colors-title)
@@ -339,7 +339,7 @@ whether progress messages should be displayed to the user."
     (muse-explicit-link-regexp ?\[ muse-colors-explicit-link)
 
     ;; render in teletype and suppress further parsing
-    (,(concat "=[^" muse-regexp-space "=]") ?= muse-colors-verbatim)
+    (,(concat "=[^" muse-regexp-blank "=\n]") ?= muse-colors-verbatim)
 
     ;; highlight any markup tags encountered
     (muse-tag-regexp ?\< muse-colors-custom-tags)
@@ -510,8 +510,8 @@ Functions should not modify the contents of the buffer."
           (let ((attrstr (match-string 2)))
             (while (and attrstr
                         (string-match (concat "\\([^"
-                                              muse-regexp-space
-                                              "=]+\\)\\(=\""
+                                              muse-regexp-blank
+                                              "=\n]+\\)\\(=\""
                                               "\\([^\"]+\\)\"\\)?")
                                       attrstr))
               (let ((attr (cons (downcase

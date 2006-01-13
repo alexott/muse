@@ -255,7 +255,7 @@ match is found, `muse-docbook-charset-default' is used instead."
 (defun muse-docbook-insert-anchor (anchor)
   "Insert an anchor, either before the next word, or within a tag."
   (unless (get-text-property (match-end 1) 'noemphasis)
-    (skip-chars-forward muse-regexp-space)
+    (skip-chars-forward (concat muse-regexp-blank "\n"))
     (when (looking-at "<\\([^ />]+\\)>")
       (goto-char (match-end 0)))
     (insert "<anchor id=\"" anchor "\" />\n")))
