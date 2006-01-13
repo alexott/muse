@@ -1063,7 +1063,7 @@ terms."
            (goto-char (match-beginning 1)))
           (t
            (when (match-beginning 1)
-             (goto-char (match-beginnimg 1)))
+             (goto-char (match-beginning 1)))
            nil))))
 
 (defun muse-publish-markup-list ()
