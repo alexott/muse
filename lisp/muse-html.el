@@ -1,6 +1,6 @@
 ;;; muse-html.el --- publish to HTML and XHTML
 
-;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
 ;; This file is not part of GNU Emacs.
 

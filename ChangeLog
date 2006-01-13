@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-13 03:29:36 GMT	Michael Olson <mwolson@gnu.org>	patch-54
+
+    Summary:
+      Add NEWS items.  Make eval of <lisp> at display time optional.
+    Revision:
+      muse--rel--3.02--patch-54
+
+    * NEWS: Add items for Muse 3.02.6.
+    
+    * lisp/muse-colors.el (muse-colors-evaluate-lisp-tags): New option that
+      determines whether to evaluate <lisp> tags at display time.  Default is
+      non-nil, which means to evaluate them.
+      (muse-colors-lisp-tag): If we don't want to evaluate <lisp> tags at
+      display time, show them literally.
+    
+    * muse-colors.el, muse-html.el, muse-mode.el, muse-project.el,
+      muse-publish.el, muse-wiki.el, muse.el: Update copyright notice for
+      2006.
+
+    modified files:
+     ChangeLog Makefile.defs NEWS debian/changelog
+     lisp/muse-colors.el lisp/muse-html.el lisp/muse-mode.el
+     lisp/muse-project.el lisp/muse-publish.el lisp/muse-wiki.el
+     lisp/muse.el
+
+
 2006-01-13 02:41:00 GMT	Michael Olson <mwolson@gnu.org>	patch-53
 
     Summary:
