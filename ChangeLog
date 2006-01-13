@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-13 02:02:03 GMT	Michael Olson <mwolson@gnu.org>	patch-52
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 351)
+    Revision:
+      muse--rel--3.02--patch-52
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-351
+       Fix #5044: lisp tag only evaluates first statement.
+
+    modified files:
+     ChangeLog ChangeLog.main lisp/muse-colors.el
+     lisp/muse-publish.el
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-351
+
+
 2006-01-13 00:40:30 GMT	Michael Olson <mwolson@gnu.org>	patch-51
 
     Summary:

@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-11 22:08:16 GMT	Michael Olson <mwolson@gnu.org>	patch-351
+
+    Summary:
+      Fix #5044: lisp tag only evaluates first statement.
+    Revision:
+      muse--main--1.0--patch-351
+
+    * lisp/muse-colors.el (muse-colors-lisp-tag): Manually wrap the contents
+      in (progn ...) so that multiple lisp fragments can be evaluated.
+      Thanks to Jim Ottaway for the idea.
+    
+    * lisp/muse-publish.el (muse-publish-lisp-tag): Ditto.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-publish.el
+
+
 2006-01-06 18:17:07 GMT	Michael Olson <mwolson@gnu.org>	patch-350
 
     Summary:
@@ -304,6 +321,73 @@
     modified files:
      ChangeLog examples/QuickStart.muse lisp/muse-html.el
      lisp/muse-publish.el lisp/muse-xml-common.el
+
+
+2005-12-24 23:13:41 GMT	Michael Olson <mwolson@gnu.org>	patch-317
+
+    Summary:
+      Get rid of muse-regexp-space.  Standardize anchor markup somewhat.
+    Revision:
+      muse--main--1.0--patch-317
+
+    * lisp/muse-colors.el (muse-colors-markup, muse-colors-custom-tags):
+      Replace muse-regexp-space with muse-regexp-blank.  Too many Emacs
+      functions treat [:blank:]+\n differently than [:space:], so we'll use
+      the former everywhere.
+    
+    * lisp/muse-convert.el (muse-write-citation): Ditto.
+    
+    * lisp/muse-mode.el (muse-current-word, muse-link-at-point): Ditto.
+    
+    * lisp/muse-protocols.el (muse-update-url-regexp): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-markup-regexps)
+      (muse-publish-markup-tag, muse-publish-surround-text)
+      (muse-publish-markup-list): Ditto.
+    
+    * lisp/muse-regexps.el (muse-tag-regexp, muse-implicit-link-regexp):
+      Ditto.
+    
+    * lisp/muse-registry.el (muse-registry-url-regexp): Ditto.
+    
+    * lisp/muse-regexps.el (muse-regexp-space): Remove.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-functions): Use
+      muse-xml-markup-anchor.
+      (muse-docbook-markup-strings): Add markup strings for anchors.
+      (muse-docbook-insert-anchor, muse-docbook-markup-anchor): Remove.
+    
+    * lisp/muse-html.el (muse-html-markup-footnote): Use muse-insert-markup.
+    
+    * lisp/muse-latex.el (muse-latex-markup-functions): Remove anchor rule,
+      since we now have a sane default in muse-publish.el.
+      (muse-latex-markup-strings): Add markup strings for anchors.
+      (muse-latex-insert-anchor, muse-latex-markup-anchor): Remove.
+    
+    * lisp/muse-publish.el (muse-publish-markup-anchor): Consult markup
+      strings.  If style does not handle anchors, remove them.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-functions): Remove anchor
+      rule, since we now have a sane default in muse-publish.el.
+      (muse-texinfo-markup-strings): Add markup strings for anchors.
+      (muse-texinfo-insert-anchor, muse-texinfo-markup-anchor): Remove.
+    
+    * lisp/muse-xml-common.el (muse-xml-markup-anchor): New generic routine
+      for handling anchors.
+      (muse-xml-markup-table): Pass row-len to begin-table-group markup
+      string.
+    
+    * lisp/muse-xml.el (muse-xml-markup-strings): Add markup strings for
+      anchors.
+      (muse-xml-insert-anchor, muse-xml-markup-anchor): Remove.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-convert.el
+     lisp/muse-docbook.el lisp/muse-html.el lisp/muse-latex.el
+     lisp/muse-mode.el lisp/muse-protocols.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-registry.el
+     lisp/muse-texinfo.el lisp/muse-xml-common.el lisp/muse-xml.el
+     lisp/muse.el
 
 
 2005-12-23 01:42:39 GMT	Michael Olson <mwolson@gnu.org>	patch-311

@@ -1157,7 +1157,9 @@ like read-only from being inadvertently deleted."
   (save-excursion
     (let ((str (muse-eval-lisp
                 (prog1
-                    (buffer-substring-no-properties beg end)
+                    (concat "(progn "
+                            (buffer-substring-no-properties beg end)
+                            ")")
                   (delete-region beg end)))))
       (set-text-properties 0 (length str) nil str)
       (insert str))))
