@@ -1,3 +1,14 @@
+muse-el (3.02.6-2) unstable; urgency=low
+
+  * Update copyright data.
+  * Bump `muse-version' up to 3.02.6.  Thanks to Romain Francoise for
+    spotting this.
+  * debian/emacsen-install, debian/emacsen-statup: Use autoload file.
+  * debian/rules: (build-stamp): Make autoloads.
+    (install): Install NEWS properly.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Mon, 16 Jan 2006 21:28:57 -0500
+
 muse-el (3.02.6-1) unstable; urgency=low
 
   * New upstream release.

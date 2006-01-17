@@ -5,7 +5,7 @@ include Makefile.defs
 
 SUBDIRS = lisp examples experimental
 
-all: lisp muse.info
+all: autoloads lisp muse.info
 
 lisp:
 	(cd lisp && $(MAKE))
@@ -60,7 +60,9 @@ dist: distclean
 
 release: dist
 	(cd .. && tar -czf muse-$(VERSION).tar.gz muse-$(VERSION) ; \
-	  zip -r muse-$(VERSION).zip muse-$(VERSION))
+	  zip -r muse-$(VERSION).zip muse-$(VERSION) && \
+	  gpg --detach muse-$(VERSION).tar.gz && \
+	  gpg --detach muse-$(VERSION).zip)
 
 debbuild:
 	(cd ../muse-el-$(VERSION) && \
@@ -92,7 +94,5 @@ debrelease: dist
 	$(MAKE) debbuild
 
 upload: release
-	(cd .. && gpg --detach muse-$(VERSION).tar.gz && \
-	  gpg --detach muse-$(VERSION).zip && \
-	  scp muse-$(VERSION).zip* muse-$(VERSION).tar.gz* \
+	(cd .. && scp muse-$(VERSION).zip* muse-$(VERSION).tar.gz* \
 	    mwolson@download.gna.org:/upload/muse-el)

@@ -2,6 +2,33 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-17 03:50:43 GMT	Michael Olson <mwolson@gnu.org>	patch-56
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 354)
+    Revision:
+      muse--rel--3.02--patch-56
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2005/muse--main--1.0--patch-354
+       Post-release updates.
+
+    modified files:
+     AUTHORS ChangeLog ChangeLog.main Makefile Makefile.defs
+     debian/changelog debian/copyright debian/emacsen-install
+     debian/emacsen-startup debian/rules lisp/Makefile lisp/muse.el
+
+    renamed files:
+     debian/.arch-ids/NEWS.id
+       ==> debian/.arch-ids/NEWS.Debian.id
+     debian/NEWS
+       ==> debian/NEWS.Debian
+
+    new patches:
+     mwolson@gnu.org--2005/muse--main--1.0--patch-354
+
+
 2006-01-13 03:32:18 GMT	Michael Olson <mwolson@gnu.org>	patch-55
 
     Summary:

@@ -29,9 +29,9 @@ clean:
 realclean distclean fullclean: clean
 	-rm -f muse-autoloads.el
 
-install: $(ELC)
+install: autoloads lisp
 	install -d $(ELISPDIR)
-	install -m 0644 $(EL) $(ELC) $(ELISPDIR)
+	install -m 0644 muse-autoloads.el $(EL) $(ELC) $(ELISPDIR)
 
 test: $(ELC)
 	$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \

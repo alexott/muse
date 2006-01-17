@@ -32,7 +32,7 @@ ELCDIR=/usr/share/${FLAVOR}/site-lisp/${PACKAGE}
 
 install -m 755 -d ${ELCDIR}
 cd ${ELDIR}
-FILES=`echo *.el`
+FILES=`ls -1 *.el | grep -v autoloads`
 rm -f ${ELCDIR}/*.el
 cp ${FILES} ${ELCDIR}
 cd ${ELCDIR}

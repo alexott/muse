@@ -45,7 +45,7 @@
 
 ;;; Code:
 
-(defvar muse-version "3.02.5"
+(defvar muse-version "3.02.6"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)

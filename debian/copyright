@@ -6,18 +6,30 @@ http://www.mwolson.org/projects/MuseMode.html
 
 Upstream Authors: John Wiegley <johnw@gnu.org>
                   Michael Olson <mwolson@gnu.org>
+                  Trent Buck <trentbuck@gmail.com>
                   Sacha Chua <sacha@free.net.ph>
                   Brad Collins <brad@chenla.org>
                   Li Daobing <lidaobing@gmail.com>
+                  Bastien Guerry <bzg@altern.org>
                   Yann Hodique <yann.hodique@gmail.com>
+                  Andrew J. Korty <ajk@iu.edu>
+                  Peter K. Lee <saint@corenova.com>
+                  Na Li <nali@umn.edu>
+                  Phillip Lord <Phillip.Lord@newcastle.ac.uk>
+                  Chris Lowis <chris.lowis@gmail.com>
+                  Jim Ottaway <j.ottaway@lse.ac.uk>
                   Andrea Riciputi <ariciputi@pito.com>
+                  Dale P. Smith <dsmich@adelphia.net>
                   John Sullivan <john@wjsullivan.net>
+                  Ganesh Swami <g5@iamganesh.com>
+                  G. J. Teale <tealeg@member.fsf.org>
                   Gary Vaughan <gary@gnu.org>
+                  Sergey Vlasov <vsu@altlinux.ru>
                   Lan Yufeng <nlany.web@gmail.com>
 
 Copyright:
 
-   Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+   Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
    This package is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

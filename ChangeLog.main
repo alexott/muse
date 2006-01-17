@@ -2,6 +2,43 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-17 02:08:48 GMT	Michael Olson <mwolson@gnu.org>	patch-354
+
+    Summary:
+      Post-release updates.
+    Revision:
+      muse--main--1.0--patch-354
+
+    * AUTHORS: Update assignments.
+    
+    * Makefile (release): Sign files here, rather than just before upload.
+    
+    * debian/copyright: Update.
+    
+    * debian/emacsen-install (FILES): Filter out autoloads.
+    
+    * debian/emacsen-startup: Load autoload file.
+    
+    * rules (build-stamp): Make autoloads.
+      (install): Install NEWS properly.
+    
+    * lisp/Makefile: Make sure autoloads get generated upon install.
+    
+    * lisp/muse.el (muse-version): Change to version 3.02.6.  Oops.  Thanks
+      to Romain Francoise for spotting this.
+
+    modified files:
+     AUTHORS ChangeLog Makefile debian/copyright
+     debian/emacsen-install debian/emacsen-startup debian/rules
+     lisp/Makefile lisp/muse.el
+
+    renamed files:
+     debian/.arch-ids/NEWS.id
+       ==> debian/.arch-ids/NEWS.Debian.id
+     debian/NEWS
+       ==> debian/NEWS.Debian
+
+
 2006-01-11 22:08:16 GMT	Michael Olson <mwolson@gnu.org>	patch-351
 
     Summary:
