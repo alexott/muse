@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-17 03:57:45 GMT	Michael Olson <mwolson@gnu.org>	patch-355
+
+    Summary:
+      Merged from mwolson@gnu.org--2005 (patch 56)
+    Revision:
+      muse--main--1.0--patch-355
+
+     * Sync a few changes back.
+
+    modified files:
+     ChangeLog Makefile Makefile.defs debian/changelog
+
+    new patches:
+     mwolson@gnu.org--2005/muse--rel--3.02--patch-56
+
+
 2006-01-17 02:08:48 GMT	Michael Olson <mwolson@gnu.org>	patch-354
 
     Summary:

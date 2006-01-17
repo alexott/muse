@@ -60,7 +60,7 @@ dist: distclean
 
 release: dist
 	(cd .. && tar -czf muse-$(VERSION).tar.gz muse-$(VERSION) ; \
-	  zip -r muse-$(VERSION).zip muse-$(VERSION) && ;
+	  zip -r muse-$(VERSION).zip muse-$(VERSION) && \
 	  gpg --detach muse-$(VERSION).tar.gz && \
 	  gpg --detach muse-$(VERSION).zip)
 
