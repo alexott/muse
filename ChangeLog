@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--main--1.0
 #
 
+2006-01-19 01:54:58 GMT	Michael Olson <mwolson@gnu.org>	patch-356
+
+    Summary:
+      Debian fixups.
+    Revision:
+      muse--main--1.0--patch-356
+
+    * debian/emacsen-startup: Remove unnecessary path addition.
+    
+    * debian/rules: Explicitly install NEWS.Debian.  Thanks to Romain
+      Francoise for noticing.
+
+    modified files:
+     ChangeLog debian/emacsen-startup debian/rules
+
+
 2006-01-17 03:57:45 GMT	Michael Olson <mwolson@gnu.org>	patch-355
 
     Summary:

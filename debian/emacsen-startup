@@ -16,7 +16,6 @@
 (when (fboundp 'debian-pkg-add-load-path-item)
   (debian-pkg-add-load-path-item (concat "/usr/share/"
                                          (symbol-name flavor)
-                                         "/site-lisp/muse-el"))
-  (debian-pkg-add-load-path-item "/usr/share/emacs/site-lisp/muse-el"))
+                                         "/site-lisp/muse-el")))
 
 (load "muse-autoloads.el")
