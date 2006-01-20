@@ -539,7 +539,7 @@ The name of a project may be used for STYLES."
         ;; ensure the publishing location is available
         (unless (file-exists-p output-dir)
           (message "Creating publishing directory %s" output-dir)
-          (make-directory output-dir))
+          (make-directory output-dir t))
         ;; publish the member file!
         (if (muse-publish-file file style output-dir force)
             (setq published t))))
