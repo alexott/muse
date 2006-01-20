@@ -528,7 +528,7 @@ The name of a project may be used for STYLES."
                            (not (string-match exclude-regexp file))))
                      (or (not (file-exists-p file))
                          (not (muse-project-private-p file))))
-            (add-to-list 'used-styles style))))
+            (add-to-list 'used-styles style t))))
       used-styles)))
 
 (defun muse-project-publish-file (file styles &optional force ignore-regexp)
