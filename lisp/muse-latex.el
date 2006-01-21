@@ -144,7 +144,7 @@ For more on the structure of this list, see
     (image-link      . "\\includegraphics[width=\\textwidth]{%s}")
     (url-with-image  . "%% %s\n\\includegraphics[width=\\textwidth]{%s}")
     (anchor-ref      . "\\ref{%s}")
-    (url             . "\\href{%s}{%s}")
+    (url             . "\\url{%s}")
     (link            . "\\href{%s}{%s}")
     (link-and-anchor . "\\href{%1%}{%3%}")
     (email-addr      . "\\verb|%s|")
