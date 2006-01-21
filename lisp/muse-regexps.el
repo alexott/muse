@@ -162,14 +162,15 @@ Entries usually come after a term."
   :group 'muse-regexp)
 
 (defcustom muse-table-field-regexp
-  (concat "[" muse-regexp-blank "]+\\(|+\\)[" muse-regexp-blank "]+")
+  (concat "[" muse-regexp-blank "]+\\(|+\\)\\(?:["
+          muse-regexp-blank "]+\\|$\\)")
   "Regexp used to match table separators when publishing."
   :type 'regexp
   :group 'muse-regexp)
 
 (defcustom muse-table-line-regexp
-  (concat "^[" muse-regexp-blank "]*[^|\n]+" muse-table-field-regexp
-          "[^|\n].*")
+  (concat "^[" muse-regexp-blank "]*\\(?:[^|\n]+\\||\\)"
+          muse-table-field-regexp "[^|\n].*")
   "Regexp used to match a table line when publishing."
   :type 'regexp
   :group 'muse-regexp)
