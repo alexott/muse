@@ -337,8 +337,9 @@ These are applied to URLs."
   (let ((open t))
     (while (search-forward "\"" nil t)
       (unless (get-text-property (match-beginning 0) 'read-only)
-        (if (and (bolp) (eq (char-before) ?\n))
-            (setq open t))
+        (when (or (bobp)
+                  (eq (char-before) ?\n))
+          (setq open t))
         (if open
             (progn
               (replace-match "``")
