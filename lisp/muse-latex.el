@@ -260,6 +260,7 @@ system to an associated CJK coding system."
     (?\< . "\\textless{}")
     (?\> . "\\textgreater{}")
     (?^  . "\\^{}")
+    (?\~ . "\\~{}")
     (?\$ . "\\$")
     (?\% . "\\%")
     (?\{ . "\\{")

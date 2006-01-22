@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-22 14:55:33 GMT	Michael Olson <mwolson@gnu.org>	patch-57
+
+    Summary:
+      muse-latex: Escape "~" in texttt regions.
+    Revision:
+      muse--rel--3.02--patch-57
+
+    * lisp/muse-latex.el (muse-latex-markup-texttt-specials): Escape "~".
+    
+    * lisp/muse-project.el (muse-project-applicable-styles): Add styles to
+      list in proper order.
+    
+    * lisp/muse-project.el (muse-project-publish-file): Create parent
+      directories, if necessary.
+
+    modified files:
+     ChangeLog lisp/muse-latex.el lisp/muse-project.el
+
+
 2006-01-17 03:50:43 GMT	Michael Olson <mwolson@gnu.org>	patch-56
 
     Summary:
