@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-01-28 02:49:14 GMT	Michael Olson <mwolson@gnu.org>	patch-58
+
+    Summary:
+      Merged from mwolson@gnu.org--2006 (patch 8)
+    Revision:
+      muse--rel--3.02--patch-58
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2006/muse--main--1.0--patch-8
+       Fix an error with `custom-quote'.
+
+    modified files:
+     ChangeLog lisp/muse-project.el muse.texi
+
+    new patches:
+     mwolson@gnu.org--2006/muse--main--1.0--patch-8
+
+
 2006-01-22 14:55:33 GMT	Michael Olson <mwolson@gnu.org>	patch-57
 
     Summary:
