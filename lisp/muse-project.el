@@ -33,6 +33,7 @@
 
 (require 'muse)
 (require 'muse-publish)
+(require 'cus-edit)
 
 (defgroup muse-project nil
   "Options controlling the behavior of Muse project handling."
