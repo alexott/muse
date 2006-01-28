@@ -1351,10 +1351,16 @@ the cadr is the page name, and the cddr is the anchor."
           (delete-char -1)))))
 
 (defun muse-publish-mark-read-only (beg end)
+  "Add read-only properties to the given region."
   (add-text-properties beg end '(rear-nonsticky (read-only) read-only t))
   nil)
 
 (defun muse-publish-mark-noemphasis (&optional beg end)
+  "Make sure that no emphasis characters are interpreted within
+the given region.  If a region is not specified, use the 0th
+match data to determine it.
+
+This is usually applied to extended links."
   (unless beg (setq beg (match-beginning 0)))
   (unless end (setq end (match-end 0)))
   (add-text-properties beg end '(noemphasis t))
