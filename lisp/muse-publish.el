@@ -955,9 +955,10 @@ The following contexts exist in Muse.
             (setq search-p t)
           (setq search-p nil)
           (insert ?\n))
-        (goto-char beg)
-        (delete-region (point) (match-beginning 1))
-        (muse-insert-markup beg-ddt))
+        (save-excursion
+          (goto-char beg)
+          (delete-region (point) (match-beginning 1))
+          (muse-insert-markup beg-ddt)))
       (setq beg (point)
             continue (funcall move-term))
       (save-restriction
@@ -1038,7 +1039,7 @@ terms."
                            (point-max))))
     (muse-forward-paragraph (concat "\\(?:" empty-line "\\)?"
                                     "\\(" list-item "\\)"))
-    (cond ((> (point) next-list-end)
+    (cond ((>= (point) next-list-end)
            (goto-char next-list-end)
            nil)
           ((and (eq type 'dl)
