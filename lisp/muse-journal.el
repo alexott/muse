@@ -410,26 +410,30 @@ For more on the structure of this list, see
           (setq text (buffer-string))
           (delete-region (point-min) (point-max))
           (let ((entry muse-journal-html-entry-template))
-            (while (string-match "%date%" entry)
-              (setq entry (replace-match (or date "") nil t entry)))
-            (while (string-match "%title%" entry)
-              (setq entry (replace-match (or title "&nbsp;") nil t entry)))
-            (while (string-match "%anchor%" entry)
-              (setq entry (replace-match
-                           (muse-journal-anchorize-title
-                            (or clean-title orig-date))
-                           nil t entry)))
-            (while (string-match "%qotd%" entry)
-              (setq entry (replace-match (or qotd "") nil t entry)))
-            (while (string-match "%text%" entry)
-              (setq entry (replace-match text nil t entry)))
-            (insert entry)
+            (muse-insert-markup entry)
+            (goto-char (point-min))
+            (while (search-forward "%date%" nil t)
+              (replace-match (or date "") nil t))
+            (goto-char (point-min))
+            (while (search-forward "%title%" nil t)
+              (replace-match (or title "&nbsp;") nil t))
+            (goto-char (point-min))
+            (while (search-forward "%anchor%" nil t)
+              (replace-match (muse-journal-anchorize-title
+                              (or clean-title orig-date))
+                             nil t))
+            (goto-char (point-min))
+            (while (search-forward "%qotd%" nil t)
+              (replace-match (or qotd "") nil t))
+            (goto-char (point-min))
+            (while (search-forward "%text%" nil t)
+              (replace-match text nil t))
             (when (null qotd)
               (goto-char (point-min))
-              (search-forward "<div class=\"entry-qotd\">")
-              (let ((beg (match-beginning 0)))
-                (re-search-forward "</div>\n*")
-                (delete-region beg (point))))))))))
+              (when (search-forward "<div class=\"entry-qotd\">" nil t)
+                (let ((beg (match-beginning 0)))
+                  (re-search-forward "</div>\n*" nil t)
+                  (delete-region beg (point)))))))))))
 
 (defun muse-journal-latex-munge-buffer ()
   (goto-char (point-min))
@@ -475,14 +479,16 @@ For more on the structure of this list, see
                         (current-time-zone))
                   date (format-time-string
                         muse-journal-date-format date))))
-        (save-match-data
-          (setq section muse-journal-latex-section)
-          (while (string-match "%title%" section)
-            (setq section (replace-match (or title "Untitled")
-                                         nil t section)))
-          (while (string-match "%date%" section)
-            (setq section (replace-match (or date "") nil t section))))
-        (replace-match section nil t))))
+        (save-restriction
+          (narrow-to-region (match-beginning 0) (match-end 0))
+          (delete-region (point-min) (point-max))
+          (muse-insert-markup muse-journal-latex-section)
+          (goto-char (point-min))
+          (while (search-forward "%title%" nil t)
+            (replace-match (or title "Untitled") nil t))
+          (goto-char (point-min))
+          (while (search-forward "%date%" nil t)
+            (replace-match (or date "") nil t))))))
   (goto-char (point-min))
   (let ((subheading-regexp
          (concat "^" (regexp-quote (muse-markup-text 'subsection))
@@ -490,12 +496,14 @@ For more on the structure of this list, see
                  (regexp-quote (muse-markup-text 'subsection-end)) "$"))
         (inhibit-read-only t))
     (while (re-search-forward subheading-regexp nil t)
-      (let ((subsection muse-journal-latex-subsection))
-        (save-match-data
-          (let ((title (match-string 1)))
-            (while (string-match "%title%" subsection)
-              (setq subsection (replace-match title nil t subsection)))))
-        (replace-match subsection nil t)))))
+      (let ((title (match-string 1)))
+        (save-restriction
+          (narrow-to-region (match-beginning 0) (match-end 0))
+          (delete-region (point-min) (point-max))
+          (muse-insert-markup muse-journal-latex-subsection)
+          (goto-char (point-min))
+          (while (search-forward "%title%" nil t)
+            (replace-match title nil t)))))))
 
 (defun muse-journal-latex-qotd-tag (beg end)
   (goto-char beg)
@@ -552,66 +560,81 @@ For more on the structure of this list, see
               (save-restriction
                 (muse-publish-markup-buffer "rss-entry" "html")
                 (goto-char (point-min))
-                (re-search-forward "Page published by Emacs Muse")
-                (goto-char (muse-line-end-position))
+                (if (re-search-forward "Page published by Emacs Muse" nil t)
+                    (goto-char (muse-line-end-position))
+                  (muse-display-warning
+                   (concat
+                    "Cannot find 'Page published by Emacs Muse begins here'.\n"
+                    "You will probably need this text in your header."))
+                  (goto-char (point-min)))
                 (setq beg (point))
-                (re-search-forward "Page published by Emacs Muse")
-                (goto-char (muse-line-beginning-position))
+                (if (re-search-forward "Page published by Emacs Muse" nil t)
+                    (goto-char (muse-line-beginning-position))
+                  (muse-display-warning
+                   (concat
+                    "Cannot find 'Page published by Emacs Muse ends here'.\n"
+                    "You will probably need this text in your footer."))
+                  (goto-char (point-max)))
                 (setq desc (concat "<![CDATA[" (buffer-substring beg (point))
                                    "]]>")))))
           (delete-region (point-min) (point-max))
           (let ((entry (muse-style-element :entry-template)))
-            (while (string-match "%date%" entry)
-              (setq entry (replace-match (or date "") nil t entry)))
-            (while (string-match "%title%" entry)
-              (setq entry (replace-match (or title "Untitled") nil t entry)))
-            (while (string-match "%desc%" entry)
-              (setq entry (replace-match desc nil t entry)))
-            (while (string-match "%enclosure%" entry)
-              (setq
-               entry
-               (replace-match
-                (if (null enclosure)
-                    ""
-                  (save-match-data
-                    (format
-                     "<enclosure url=\"%s\" %stype=\"%s\"/>"
-                     (if (string-match "//" enclosure)
-                         enclosure
-                       (concat (muse-style-element :base-url)
-                               enclosure))
-                     (let ((file
-                            (expand-file-name enclosure
-                                              (muse-style-element :path))))
-                       (if (file-readable-p file)
-                           (format "length=\"%d\" "
-                                   (nth 7 (file-attributes file)))
-                         ""))
-                     (if (string-match "\\.\\([^.]+\\)$" enclosure)
-                         (let* ((ext (match-string 1 enclosure))
-                                (type
-                                 (assoc
-                                  ext muse-journal-rss-enclosure-types-alist)))
-                           (if type
-                               (cdr type)
-                             "application/octet-stream"))))))
-                nil t entry)))
-            (while (string-match "%link%" entry)
-              (setq entry (replace-match
-                           (concat (muse-style-element :base-url)
-                                   (concat (muse-page-name)
-                                           muse-html-extension))
-                           nil t entry)))
-            (while (string-match "%anchor%" entry)
-              (setq entry (replace-match
-                           (muse-journal-anchorize-title (or title orig-date))
-                           nil t entry)))
-            (while (string-match "%maintainer%" entry)
-              (setq entry (replace-match
-                           (or (muse-style-element :maintainer)
-                               (concat "webmaster@" (system-name)))
-                           nil t entry)))
-            (insert entry)))))
+            (muse-insert-markup entry)
+            (goto-char (point-min))
+            (while (search-forward "%date%" nil t)
+              (replace-match (or date "") nil t))
+            (goto-char (point-min))
+            (while (search-forward "%title%" nil t)
+              (replace-match (or title "Untitled") nil t))
+            (goto-char (point-min))
+            (while (search-forward "%desc%" nil t)
+              (replace-match desc nil t))
+            (goto-char (point-min))
+            (while (search-forward "%enclosure%" nil t)
+              (replace-match
+               (if (null enclosure)
+                   ""
+                 (save-match-data
+                   (format
+                    "<enclosure url=\"%s\" %stype=\"%s\"/>"
+                    (if (string-match "//" enclosure)
+                        enclosure
+                      (concat (muse-style-element :base-url)
+                              enclosure))
+                    (let ((file
+                           (expand-file-name enclosure
+                                             (muse-style-element :path))))
+                      (if (file-readable-p file)
+                          (format "length=\"%d\" "
+                                  (nth 7 (file-attributes file)))
+                        ""))
+                    (if (string-match "\\.\\([^.]+\\)$" enclosure)
+                        (let* ((ext (match-string 1 enclosure))
+                               (type
+                                (assoc
+                                 ext muse-journal-rss-enclosure-types-alist)))
+                          (if type
+                              (cdr type)
+                            "application/octet-stream"))))))
+               nil t))
+            (goto-char (point-min))
+            (while (search-forward "%link%" nil t)
+              (replace-match
+               (concat (muse-style-element :base-url)
+                       (concat (muse-page-name)
+                               muse-html-extension))
+               nil t))
+            (goto-char (point-min))
+            (while (search-forward "%anchor%" nil t)
+              (replace-match
+               (muse-journal-anchorize-title (or title orig-date))
+               nil t))
+            (goto-char (point-min))
+            (while (search-forward "%maintainer%" nil t)
+              (replace-match
+               (or (muse-style-element :maintainer)
+                   (concat "webmaster@" (system-name)))
+               nil t))))))
     (unless (eobp)
       (delete-region (point) (point-max)))))
 

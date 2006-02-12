@@ -1,4 +1,5 @@
-\documentclass{article}
+\documentclass{<lisp>(or (muse-publishing-directive "latex-document-class")
+  "article")</lisp>}
 
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
@@ -16,13 +17,14 @@
 
 \begin{document}
 
-\title{<lisp>(muse-publishing-directive "title")</lisp>}
-\author{<lisp>(muse-publishing-directive "author")</lisp>}
-\date{<lisp>(muse-publishing-directive "date")</lisp>}
+<lisp>(unless (muse-publishing-directive "latex-omit-title")
+(concat "\\title{" (muse-publishing-directive "title") "}
+\\author{" (muse-publishing-directive "author") "}
+\\date{" (muse-publishing-directive "date") "}
 
-\maketitle
+\\maketitle"))
+</lisp>
 
 <lisp>(and muse-publish-generate-contents
            "\\tableofcontents
-\\newpage")</lisp>
-
+\\clearpage")</lisp>
