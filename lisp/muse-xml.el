@@ -180,7 +180,7 @@ For more on the structure of this list, see
     (begin-dde       . "<definition>")
     (end-dde         . "</definition>")
     (begin-table     . "<table%s>\n")
-    (end-table       . "</table>\n")
+    (end-table       . "</table>")
     (begin-table-row . "    <tr>\n")
     (end-table-row   . "    </tr>\n")
     (begin-table-entry . "      <%s>")

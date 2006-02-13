@@ -160,8 +160,8 @@ If non-nil, publish comments using the markup of the current style."
     ;; simple table markup is supported, nothing fancy.  use | to
     ;; separate cells, || to separate header cells, and ||| for footer
     ;; cells
-    (2700 ,(concat "\\(" muse-table-line-regexp "\n"
-                   "\\(" muse-regexp-blank "*\n\\)?\\)+")
+    (2700 ,(concat "\\(\\([" muse-regexp-blank "]*\n\\)?"
+                   "\\(" muse-table-line-regexp "\\(?:\n\\|\\'\\)\\)\\)+")
           0 table)
 
     ;; replace links in the buffer (links to other pages)
@@ -1182,13 +1182,16 @@ The cdr is a list of the fields of the table, with the first
 element indicating the type of the row:
   1: body, 2: header, 3: footer.
 
-The existing region will be removed."
+The existing region will be removed, except for initial blank lines."
   (let ((longest 0)
         (left 0)
         fields field-list)
     (save-restriction
       (narrow-to-region beg end)
       (goto-char (point-min))
+      (while (looking-at (concat "^[" muse-regexp-blank "]*$"))
+        (forward-line 1))
+      (setq beg (point))
       (while (= left 0)
         (when (looking-at muse-table-line-regexp)
           (setq fields (cons (length (match-string 1))

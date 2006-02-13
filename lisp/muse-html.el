@@ -297,7 +297,7 @@ For more on the structure of this list, see
     (begin-dde       . "<dd>")
     (end-dde         . "</dd>")
     (begin-table     . "<table%s>\n")
-    (end-table       . "</table>\n")
+    (end-table       . "</table>")
     (begin-table-row . "    <tr>\n")
     (end-table-row   . "    </tr>\n")
     (begin-table-entry . "      <%s>")
@@ -419,7 +419,10 @@ This will be used if no special characters are found."
           (muse-insert-markup "<p class=\"image-link\">")
         (muse-insert-markup "<p>")))
      ((looking-at "<img[ >]")
-      (muse-insert-markup "<p class=\"image-link\">"))))
+      (muse-insert-markup "<p class=\"image-link\">"))
+     (t
+      (forward-char 1)
+      nil)))
    ((muse-looking-back "\\(</h[1-4]>\\|<hr>\\)\n\n")
     (muse-insert-markup "<p class=\"first\">"))
    (t

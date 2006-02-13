@@ -162,7 +162,7 @@ For more on the structure of this list, see
     (begin-dde       . "<listitem><para>")
     (end-dde         . "</para></listitem>")
     (begin-table     . "<informaltable>\n")
-    (end-table       . "</informaltable>\n")
+    (end-table       . "</informaltable>")
     (begin-table-group . "  <tgroup cols='%s'>\n")
     (end-table-group . "  </tgroup>\n")
     (begin-table-row . "    <row>\n")

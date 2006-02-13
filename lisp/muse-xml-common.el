@@ -169,7 +169,8 @@ if not escaped."
     (when last-part
       (muse-insert-markup "  </" last-part ">\n"))
     (muse-insert-markup (muse-markup-text 'end-table-group))
-    (muse-insert-markup (muse-markup-text 'end-table))))
+    (muse-insert-markup (muse-markup-text 'end-table))
+    (insert ?\n)))
 
 (defun muse-xml-prepare-buffer ()
   (set (make-local-variable 'muse-publish-url-transforms)

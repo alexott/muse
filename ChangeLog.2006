@@ -2,6 +2,40 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-13 04:50:57 GMT	Michael Olson <mwolson@gnu.org>	patch-13
+
+    Summary:
+      Fix a couple of table-publishing edge cases.
+    Revision:
+      muse--main--1.0--patch-13
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Fix a table
+      publishing error that occurs when a table line is the last thing in a
+      document.  Thanks to cymacs for the report and suggested fix.
+      (muse-publish-table-fields): Skip initial blank lines, and don't remove
+      them.
+    
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Don't put a newline
+      at the end of the 'end-table markup string.
+    
+    * lisp/muse-html.el (muse-html-markup-strings): Ditto.
+    
+    * lisp/muse-xml.el (muse-xml-markup-strings): Ditto.
+    
+    * lisp/muse-xml-common.el (muse-xml-markup-table): Always insert a
+      newline at the end of the table.  This should fix a problem with
+      paragraphs after tables not being published as such.  Thanks to cymacs
+      for the report.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-table): Don't use
+      muse-insert-markup to insert a trailing newline.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-publish.el lisp/muse-texinfo.el
+     lisp/muse-xml-common.el lisp/muse-xml.el
+
+
 2006-02-12 22:56:27 GMT	Michael Olson <mwolson@gnu.org>	patch-12
 
     Summary:

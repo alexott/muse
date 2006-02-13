@@ -216,7 +216,8 @@ These are applied to URLs."
         (dolist (field fields)
           (muse-insert-markup " @tab ")
           (insert field))))
-    (muse-insert-markup "\n@end multitable\n")))
+    (muse-insert-markup "\n@end multitable")
+    (insert ?\n)))
 
 (defun muse-texinfo-finalize-buffer ()
   (goto-char (point-min))
