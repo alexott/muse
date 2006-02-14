@@ -12,9 +12,6 @@ PKGDIR  = debian/${PACKAGE}
 DOCDIR  = /usr/share/doc/${PACKAGE}
 LISPDIR = /usr/share/emacs/site-lisp/${PACKAGE}
 
-# This is the debhelper compatibility version to use.
-export DH_COMPAT=4
-
 configure: configure-stamp
 configure-stamp:
 	dh_testdir

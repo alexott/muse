@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-14 06:35:02 GMT	Michael Olson <mwolson@gnu.org>	patch-14
+
+    Summary:
+      Use debian/compat to determine debhelper compat level.
+    Revision:
+      muse--main--1.0--patch-14
+
+    * debian/compat: New file that sets the debhelper compatibility level to
+      4.
+    
+    * debian/rules: Remove DH_COMPAT line.
+
+    new files:
+     debian/.arch-ids/compat.id debian/compat
+
+    modified files:
+     ChangeLog.2006 debian/rules
+
+
 2006-02-13 04:50:57 GMT	Michael Olson <mwolson@gnu.org>	patch-13
 
     Summary:
