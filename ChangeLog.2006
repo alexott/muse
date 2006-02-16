@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-16 03:04:20 GMT	Michael Olson <mwolson@gnu.org>	patch-15
+
+    Summary:
+      Fix edge case in muse-wiki-publish-pretty-title.
+    Revision:
+      muse--main--1.0--patch-15
+
+    * lisp/muse-wiki.el (muse-wiki-publish-pretty-title): If for some reason
+      the document does not have a valid title, use the empty string.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-wiki.el
+
+
 2006-02-14 06:35:02 GMT	Michael Olson <mwolson@gnu.org>	patch-14
 
     Summary:

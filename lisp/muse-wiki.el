@@ -233,7 +233,7 @@ called manually."
 (defun muse-wiki-publish-pretty-title (&optional title explicit)
   "Return a pretty version of the given TITLE.
 If EXPLICIT is non-nil, TITLE will be returned unmodified."
-  (unless title (setq title (muse-publishing-directive "title")))
+  (unless title (setq title (or (muse-publishing-directive "title") "")))
   (if (or explicit
           (save-match-data (string-match muse-url-regexp title)))
       title
