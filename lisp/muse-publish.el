@@ -140,10 +140,7 @@ If non-nil, publish comments using the markup of the current style."
     ;; blockquote detection doesn't interfere with indented list
     ;; members.
 
-    (2200 ,(format muse-list-item-regexp (concat "[" muse-regexp-blank "]+"))
-          1 list)
-
-    (2300 ,(concat "^\\(\\(?:.+?\\)[" muse-regexp-blank "]+::\n?\\)")
+    (2200 ,(format muse-list-item-regexp (concat "[" muse-regexp-blank "]*"))
           0 list)
 
     (2400 ,(concat "^\\([" muse-regexp-blank "]+\\).+") 0 quote)
@@ -168,7 +165,7 @@ If non-nil, publish comments using the markup of the current style."
     (2900 muse-explicit-link-regexp 0 link)
 
     ;; bare URLs
-    (3000 muse-url-regexp  0 url)
+    (3000 muse-url-regexp 0 url)
 
     ;; bare email addresses
     (3500
@@ -981,7 +978,7 @@ The following contexts exist in Muse.
                          "\\}")))
   (let ((continue t)
         (list-item (format muse-list-item-regexp
-                           (concat "[" muse-regexp-blank "]+")))
+                           (concat "[" muse-regexp-blank "]*")))
         beg)
     (while continue
       (muse-insert-markup beg-tag)
@@ -1003,11 +1000,14 @@ The following contexts exist in Muse.
 (defun muse-list-item-type (str)
 "Determine the type of list given STR.
 Returns either 'ul, 'ol, or 'dl."
-  (cond ((string= str "")
+  (cond ((or (string= str "")
+             (< (length str) 2))
          nil)
-        ((= (aref str 0) ?-) 'ul)
+        ((and (= (aref str 0) ?\  )
+              (= (aref str 1) ?-))
+         'ul)
         ((save-match-data
-           (string-match "\\`[0-9]+\\." str))
+           (string-match (concat "\\`[" muse-regexp-blank "][0-9]+\\.") str))
          'ol)
         (t 'dl)))
 

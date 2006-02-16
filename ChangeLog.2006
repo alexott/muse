@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-16 04:43:35 GMT	Michael Olson <mwolson@gnu.org>	patch-16
+
+    Summary:
+      Fix wrapped nested list item edge case.
+    Revision:
+      muse--main--1.0--patch-16
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Remove 2300 rule,
+      since it is no longer needed.  Tweak 2200 regexp to cover 2300's use
+      case.
+      (muse-publish-surround-text): Tweak prefix for muse-list-item-regexp.
+      (muse-list-item-type): Handle the new change to muse-list-item-regexp.
+    
+    * lisp/muse-regexps.el (muse-list-item-regexp): Explicitly require
+      exactly one space character in front of a unnumbered or numbered list.
+      This should make it easier to match every list instance, since
+      definition lists can now be handled more nicely in
+      muse-publish-markup-regexps.  This also has the effect of fixing a
+      wrapped nested list item edge case.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-02-16 03:04:20 GMT	Michael Olson <mwolson@gnu.org>	patch-15
 
     Summary:
