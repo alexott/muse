@@ -417,7 +417,8 @@ If PATHNAME is nil, the current buffer's filename is used."
       muse-current-project
     (unless pathname (setq pathname (muse-current-file)))
     (save-match-data
-      (when (and pathname
+      (when (and (stringp pathname)
+                 (not (string= pathname ""))
                  (not (let ((case-fold-search nil))
                         (string-match muse-project-ignore-regexp pathname))))
         (let* ((file (file-truename pathname))

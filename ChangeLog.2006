@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-16 21:54:11 GMT	Michael Olson <mwolson@gnu.org>	patch-17
+
+    Summary:
+      Fix prompting of non-Muse buffers before publishing.
+    Revision:
+      muse--main--1.0--patch-17
+
+    * lisp/muse-project.el (muse-project-of-file): Apply fix from René
+      Stadler to ignore buffers that have no associated filename.  This fixes
+      an annoyance where Muse prompts to save BBDB and ERC buffers before
+      publishing.
+
+    modified files:
+     AUTHORS ChangeLog.2006 lisp/muse-project.el
+
+
 2006-02-16 04:43:35 GMT	Michael Olson <mwolson@gnu.org>	patch-16
 
     Summary:
