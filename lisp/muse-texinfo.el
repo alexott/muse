@@ -278,11 +278,13 @@ These are applied to URLs."
 
   (muse-derive-style "info" "texi"
                      :final   'muse-texinfo-info-generate
+                     :link-suffix 'muse-texinfo-info-extension
                      :osuffix 'muse-texinfo-info-extension
                      :browser 'info)
 
   (muse-derive-style "info-pdf" "texi"
                      :final   'muse-texinfo-pdf-generate
+                     :link-suffix 'muse-texinfo-pdf-extension
                      :osuffix 'muse-texinfo-pdf-extension
                      :browser 'muse-texinfo-pdf-browse-file))
 
