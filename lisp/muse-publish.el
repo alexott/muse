@@ -601,19 +601,22 @@ the file is published no matter what."
          (target (if output-suffix
                      (concat (file-name-sans-extension output-path)
                              output-suffix)
-                   output-path)))
-    (when (or force (file-newer-than-file-p file target))
-      (if (and muse-publish-report-threshhold
-               (> (nth 7 (file-attributes file))
-                  muse-publish-report-threshhold))
-          (message "Publishing %s ..." file))
-      (muse-with-temp-buffer
-        (insert-file-contents file)
-        (muse-publish-markup-buffer (muse-page-name file) style)
-        (let ((backup-inhibited t))
-          (write-file output-path))
-        (muse-style-run-hooks :final style file output-path target))
-      t)))
+                   output-path))
+         (threshhold (nth 7 (file-attributes file))))
+    (if (not threshhold)
+        (message "Please save %s before publishing" file)
+      (when (or force (file-newer-than-file-p file target))
+        (if (and muse-publish-report-threshhold
+                 (> threshhold
+                    muse-publish-report-threshhold))
+            (message "Publishing %s ..." file))
+        (muse-with-temp-buffer
+          (insert-file-contents file)
+          (muse-publish-markup-buffer (muse-page-name file) style)
+          (let ((backup-inhibited t))
+            (write-file output-path))
+          (muse-style-run-hooks :final style file output-path target))
+        t))))
 
 ;;;###autoload
 (defun muse-publish-this-file (style output-dir &optional force)

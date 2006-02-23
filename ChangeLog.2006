@@ -2,6 +2,29 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-23 03:23:51 GMT	Michael Olson <mwolson@gnu.org>	patch-19
+
+    Summary:
+      Fix backtrace when publishing unsaved files.
+    Revision:
+      muse--main--1.0--patch-19
+
+    * lisp/muse-publish.el (muse-publish-file): Detect case where we are
+      trying to publish a file that has not been saved, and give an
+      explanation to the user.
+    
+    --This line, and those below, will be ignored--
+    Files to commit:
+       lisp/muse-publish.el
+       lisp/muse-blosxom.el
+    
+    This list might be incomplete or outdated if editing the log
+    message was not invoked from an up-to-date changes buffer!
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-02-21 23:19:36 GMT	Michael Olson <mwolson@gnu.org>	patch-18
 
     Summary:
