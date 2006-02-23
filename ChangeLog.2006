@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-23 03:33:03 GMT	Michael Olson <mwolson@gnu.org>	patch-20
+
+    Summary:
+      muse-blosxom: Add ability to use tags in entries.
+    Revision:
+      muse--main--1.0--patch-20
+
+    * lisp/muse-blosxom.el (muse-blosxom-header): If we are using tags,
+      publish them.
+      (muse-blosxom-use-tags): New option that specifies whether we are using
+      tags.
+      (muse-blosxom-new-entry): If using tags, read tags until the user hits
+      RET without entering one.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-blosxom.el
+
+
 2006-02-23 03:23:51 GMT	Michael Olson <mwolson@gnu.org>	patch-19
 
     Summary:
