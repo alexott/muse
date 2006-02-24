@@ -141,10 +141,10 @@ See `muse-blosxom' for more information."
   :group 'muse-blosxom)
 
 (defcustom muse-blosxom-header
-  "<lisp>(when muse-blosxom-use-tags
+  "<lisp>(muse-publishing-directive \"title\")</lisp>
+<lisp>(when muse-blosxom-use-tags
   (let ((tags (muse-publishing-directive \"tags\")))
-    (when tags (concat \"#tags \" tags))))</lisp>
-<lisp>(muse-publishing-directive \"title\")</lisp>\n"
+    (when tags (concat \"#tags \" tags \"\\n\"))))</lisp>"
   "Header used for publishing Blosxom files.  This may be text or a filename."
   :type 'string
   :group 'muse-blosxom)
