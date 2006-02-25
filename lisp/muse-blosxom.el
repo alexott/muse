@@ -51,8 +51,8 @@
 ;; `hardcodedates.py' provides the second service.  Eventually it is
 ;; hoped that a blosxom plugin and script will be found/written.
 ;;
-;; Generating a project description
-;; --------------------------------
+;; Generating a Muse project entry
+;; -------------------------------
 ;;
 ;; Muse-blosxom has some helper functions to make specifying
 ;; muse-blosxom projects a lot easier.  An example follows.
@@ -94,6 +94,16 @@
 ;;    the title, but in lowercase letters and having special
 ;;    characters converted to underscores.  The title and date
 ;;    directives will be inserted automatically.
+;;
+;; Using tags
+;; ----------
+;;
+;; If you wish to keep all of your blog entries in one directory and
+;; use tags to classify your entries, set `muse-blosxom-use-tags' to
+;; non-nil.
+;;
+;; For this to work, you will need to be using the PyBlosxom plugin at
+;; http://pyblosxom.sourceforge.net/blog/registry/meta/Tags.
 
 ;;; Contributors:
 
@@ -131,7 +141,10 @@ See `muse-blosxom' for more information."
   :group 'muse-blosxom)
 
 (defcustom muse-blosxom-header
-  "<lisp>(muse-publishing-directive \"title\")</lisp>\n"
+  "<lisp>(muse-publishing-directive \"title\")</lisp>
+<lisp>(when muse-blosxom-use-tags
+  (let ((tags (muse-publishing-directive \"tags\")))
+    (when tags (concat \"#tags \" tags \"\\n\"))))</lisp>"
   "Header used for publishing Blosxom files.  This may be text or a filename."
   :type 'string
   :group 'muse-blosxom)
@@ -145,6 +158,18 @@ See `muse-blosxom' for more information."
   "Base directory of blog entries.
 This is the top-level directory where your Muse blog entries may be found."
   :type 'directory
+  :group 'muse-blosxom)
+
+(defcustom muse-blosxom-use-tags nil
+  "Determine whether or not to enable use of the #tags directive.
+
+If you wish to keep all of your blog entries in one directory and
+use tags to classify your entries, set `muse-blosxom-use-tags' to
+non-nil.
+
+For this to work, you will need to be using the PyBlosxom plugin
+at http://pyblosxom.sourceforge.net/blog/registry/meta/Tags."
+  :type 'boolean
   :group 'muse-blosxom)
 
 ;; Maintain (published-file . date) alist, which will later be written
@@ -192,18 +217,29 @@ The filename of the blog entry is derived from TITLE.
 The page will be initialized with the current date and TITLE."
   (interactive
    (list
-    (completing-read "Category: "
-                     (mapcar 'list (muse-project-recurse-directory
-                                    muse-blosxom-base-directory)))
+    (if muse-blosxom-use-tags
+        (let ((tag "foo")
+              (tags nil))
+          (while (progn (setq tag (read-string "Tag (RET to continue): "))
+                        (not (string= tag "")))
+            (add-to-list 'tags tag t))
+          tags)
+      (completing-read "Category: "
+                       (mapcar 'list (muse-project-recurse-directory
+                                      muse-blosxom-base-directory))))
     (read-string "Title: ")))
   (let ((file (muse-blosxom-title-to-file title)))
     (muse-project-find-file
      file "blosxom" nil
-     (concat (directory-file-name muse-blosxom-base-directory)
-             "/" category)))
+     (if muse-blosxom-use-tags
+         (directory-file-name muse-blosxom-base-directory)
+       (concat (directory-file-name muse-blosxom-base-directory)
+               "/" category))))
   (goto-char (point-min))
   (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
-          "\n#category " category
+          (if muse-blosxom-use-tags
+              (concat "\n#tags " (mapconcat #'identity category ","))
+            (concat "\n#category " category))
           "\n#title " title
           "\n\n")
   (forward-line 2))
