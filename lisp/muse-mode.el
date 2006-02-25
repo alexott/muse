@@ -128,7 +128,10 @@ so only enable this if you don't use either of these."
     (define-key map [(control ?c) (control ?p)] 'muse-project-publish)
 
     (define-key map [(control ?c) tab] 'muse-insert-tag)
-    (define-key map [(control ?c) (control ?i)] 'muse-insert-tag)
+    (define-key map [(control ?c) (?i) (?t)] 'muse-insert-tag) 
+
+    (define-key map [(control ?c) (?i) (?l)] 
+      'muse-insert-relative-link-to-file)
 
     (when (featurep 'pcomplete)
       (define-key map [(meta tab)] 'pcomplete)
@@ -290,6 +293,19 @@ This is used to keep links from being improperly colorized by flyspell."
            (not (string= link name)))
       (concat "[[" (muse-link-escape link) "][" (muse-link-escape name) "]]")
     (concat "[[" (muse-link-escape link) "]]")))
+
+;;;###autoload
+(defun muse-insert-relative-link-to-file ()
+  "Insert a relative link to a file, with optional description,
+at the current point."
+  ;; Perhaps the relative location should be configurable, so that the
+  ;; file search would start in the publshing directory and then
+  ;; insert the link relative to the publishing directory
+  (interactive)
+  (insert
+   (muse-make-link
+    (file-relative-name (read-file-name "Link: "))
+    (read-string "Text: "))))
 
 ;;;###autoload
 (defun muse-edit-link-at-point ()
