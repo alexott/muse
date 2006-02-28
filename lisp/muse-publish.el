@@ -1095,7 +1095,7 @@ like read-only from being inadvertently deleted."
            `(lambda ()
               (muse-forward-list-item 'ul ,indent))
            indent post-indent)
-          (muse-insert-markup (muse-markup-text 'end-uli)))
+          (muse-insert-markup-end-list (muse-markup-text 'end-uli)))
         (forward-line 1)))
      ((eq type 'ol)
       (delete-region (match-beginning 0) (match-end 0))
@@ -1107,13 +1107,15 @@ like read-only from being inadvertently deleted."
          `(lambda ()
             (muse-forward-list-item 'ol ,indent))
          indent post-indent)
-        (muse-insert-markup (muse-markup-text 'end-oli)))
+        (muse-insert-markup-end-list (muse-markup-text 'end-oli)))
       (forward-line 1))
      (t
       (goto-char (match-beginning 0))
       (muse-insert-markup (muse-markup-text 'begin-dl))
-      (muse-publish-surround-dl indent post-indent)
-      (muse-insert-markup (muse-markup-text 'end-dl)))))
+      (save-excursion
+        (muse-publish-surround-dl indent post-indent)
+        (muse-insert-markup-end-list (muse-markup-text 'end-dl)))
+      (forward-line 1))))
   nil)
 
 (defun muse-publish-markup-quote ()
