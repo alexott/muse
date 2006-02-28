@@ -982,6 +982,7 @@ The following contexts exist in Muse.
   (let ((continue t)
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
+        (list-nested-p nil)
         beg)
     (while continue
       (muse-insert-markup beg-tag)
@@ -991,7 +992,9 @@ The following contexts exist in Muse.
         (narrow-to-region beg (point))
         (goto-char (point-min))
         (while (< (point) (point-max))
-          (when (and (not (looking-at list-item))
+          (when (and (not list-nested-p)
+                     (not (and (looking-at list-item)
+                               (setq list-nested-p t)))
                      (looking-at indent))
             (replace-match ""))
           (forward-line 1))

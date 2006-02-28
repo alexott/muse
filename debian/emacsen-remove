@@ -1,5 +1,5 @@
 #!/bin/sh -e
-# /usr/lib/emacsen-common/packages/remove/emacs-wiki
+# /usr/lib/emacsen-common/packages/remove/muse
 
 FLAVOR=$1
 PACKAGE=muse-el
