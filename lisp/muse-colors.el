@@ -35,11 +35,14 @@
 ;; Lan Yufeng (nlany DOT web AT gmail DOT com) found an error where
 ;; headings were being given the wrong face, contributing a patch to
 ;; fix this.
-;;
+
 ;; Sergey Vlasov (vsu AT altlinux DOT ru) fixed an issue with coloring
 ;; links that are in consecutive lines.
-;;
+
 ;; Jim Ottaway ported the <lisp> tag from emacs-wiki.
+
+;; Per B. Sederberg (per AT med DOT upenn DOT edu) contributed the
+;; viewing of inline images.
 
 ;;; Code:
 

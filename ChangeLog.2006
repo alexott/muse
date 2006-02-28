@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-28 23:48:24 GMT	Michael Olson <mwolson@gnu.org>	patch-27
+
+    Summary:
+      Bookkeeping.
+    Revision:
+      muse--main--1.0--patch-27
+
+    * AUTHORS: Update.
+    
+    * muse-colors.el, muse-mode.el: Credit contributions.
+
+    modified files:
+     AUTHORS ChangeLog.2006 lisp/muse-colors.el lisp/muse-mode.el
+
+
 2006-02-28 23:37:26 GMT	Michael Olson <mwolson@gnu.org>	patch-26
 
     Summary:

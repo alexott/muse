@@ -27,8 +27,11 @@
 ;;; Contributors:
 
 ;; Andrea Riciputi (ariciputi AT pito DOT com) gave an initial
-;; implementation for tag completion by means of the
-;; `muse-insert-tag' function.
+;; implementation for tag completion by means of the `muse-insert-tag'
+;; function.
+
+;; Per B. Sederberg (per AT med DOT upenn DOT edu) contributed the
+;; insertion of relative links and list items.
 
 ;;; Code:
 

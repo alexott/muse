@@ -21,7 +21,7 @@ Li Daobing: Contributor, author of muse-mathml.el
             (assigned past and future changes)
 
 Bastien Guerry: Contributor, author of muse-registry.el
-                (assignment pending)
+                (assigned past and future changes)
 
 Yann Hodique: Contributor, author of muse-wiki.el
               (assigned past and future changes)
@@ -47,6 +47,9 @@ Jim Ottaway: Contributor
              (assigned past and future changes)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
+
+Per B. Sederberg: Contributor
+                  (assignment pending)
 
 René Stadler: Contributor
               muse-project.el: 1 line changed.
