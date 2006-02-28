@@ -128,7 +128,13 @@ so only enable this if you don't use either of these."
     (define-key map [(control ?c) (control ?p)] 'muse-project-publish)
 
     (define-key map [(control ?c) tab] 'muse-insert-tag)
-    (define-key map [(control ?c) (control ?i)] 'muse-insert-tag)
+    (define-key map [(control ?c) (?i) (?t)] 'muse-insert-tag) 
+
+    (define-key map [(control ?c) (?i) (?l)] 
+      'muse-insert-relative-link-to-file)
+
+    ;; Enhanced link functions
+    (define-key map [(meta return)] 'muse-insert-list-item)
 
     (when (featurep 'pcomplete)
       (define-key map [(meta tab)] 'pcomplete)
@@ -233,6 +239,50 @@ This is used to keep links from being improperly colorized by flyspell."
          (funcall (or (muse-get-keyword :major-mode (cadr project) t)
                       'muse-mode)))))
 
+;;; Enhanced list editing
+
+(defun muse-on-blank-line ()
+  "See if point is on a blank line"
+  (save-excursion
+    (beginning-of-line)
+    (looking-at (concat "[" muse-regexp-blank "]?[\n]+"))))
+
+;;;###autoload
+(defun muse-insert-list-item ()
+  "Insert a list item at the current point, taking into account
+your current list type and indentation level."
+  (interactive)
+  (let ((newitem " - ")
+	(pstart nil)
+	(itemno nil)
+        (list-item (format muse-list-item-regexp
+                           (concat "[" muse-regexp-blank "]*")))
+	(para-start (concat "[\n]+[" muse-regexp-blank "]?[\n]+")))
+    ;; determine the type of newitem
+    
+    ;; search back to start of paragraph
+    (save-excursion
+      (if (not (muse-on-blank-line))
+	  (setq pstart (re-search-backward para-start nil t))
+	(setq pstart (line-beginning-position))))
+
+    ;; search backwards for start of current item
+    (save-excursion
+      (when (re-search-backward list-item pstart t)
+	(setq newitem (match-string 0))
+	;; see what type it is
+	(unless (string-match "-" (match-string 0))
+	  ;; is a number so increment
+	  ;; get the number
+	  (string-match "[0-9]+" newitem)
+	  (setq itemno (1+ (string-to-number (match-string 0 newitem))))
+	  (setq newitem (replace-match 
+			 (number-to-string itemno) nil nil newitem)))))
+
+    ;; insert the new item 
+    (insert (concat "\n" newitem))))
+
+
 ;;; Support page name completion using pcomplete
 
 (defun muse-completions ()
@@ -290,6 +340,19 @@ This is used to keep links from being improperly colorized by flyspell."
            (not (string= link name)))
       (concat "[[" (muse-link-escape link) "][" (muse-link-escape name) "]]")
     (concat "[[" (muse-link-escape link) "]]")))
+
+;;;###autoload
+(defun muse-insert-relative-link-to-file ()
+  "Insert a relative link to a file, with optional description,
+at the current point."
+  ;; Perhaps the relative location should be configurable, so that the
+  ;; file search would start in the publshing directory and then
+  ;; insert the link relative to the publishing directory
+  (interactive)
+  (insert
+   (muse-make-link
+    (file-relative-name (read-file-name "Link: "))
+    (read-string "Text: "))))
 
 ;;;###autoload
 (defun muse-edit-link-at-point ()

@@ -82,6 +82,39 @@ displayed text."
   :type 'boolean
   :group 'muse-colors)
 
+(defcustom muse-colors-inline-images t
+  "Specify whether to inline images inside the Emacs buffer.  If
+nil, don't inline them.  If non-nil, an image link will be
+replaced by the image.
+
+The actual contents of the buffer are not changed, only whether
+an image is displayed."
+  :type 'boolean
+  :group 'muse-colors)
+
+(defcustom muse-inline-relative-to 'default-directory
+  "The name of a symbol which records the location relative to
+where images should be found."
+  :type '(choice (const :tag "Current directory" default-directory)
+                 (symbol :tag "Other"))
+  :group 'muse-colors)
+
+
+;;;###autoload
+(defun muse-colors-toggle-inline-images ()
+  "Toggle inlined images on/off."
+  (interactive)
+  ;; toggle the custom setting
+  (if (not muse-colors-inline-images)
+      (setq muse-colors-inline-images t)
+    (setq muse-colors-inline-images nil))
+  ;; reprocess the buffer
+  (muse-colors-buffer))
+
+(define-key muse-mode-map [(control ?c) (control ?i)] 
+  'muse-colors-toggle-inline-images)
+
+
 (defvar muse-colors-outline-faces-list
   (if (facep 'outline-1)
       '(outline-1 outline-2 outline-3 outline-4 outline-5)
@@ -551,7 +584,7 @@ Functions should not modify the contents of the buffer."
         deactivate-mark)
     (unwind-protect
         (remove-text-properties
-         begin end '(face nil font-lock-multiline nil
+         begin end '(face nil font-lock-multiline nil end-glyph nil
                           invisible nil intangible nil display nil
                           mouse-face nil keymap nil help-echo nil))
       (set-buffer-modified-p modified-p))))
@@ -650,6 +683,48 @@ ignored."
                    'muse-link-face
                  'muse-bad-link-face)))))))
 
+(defun muse-colors-resolve-image-file (link)
+  "Determine if we can create images and see if the link is an image
+file."
+  (save-match-data
+    (and (or (fboundp 'create-image)
+	     (fboundp 'make-glyph))
+	 (string-match muse-image-regexp link))))
+
+(defun muse-make-file-glyph (filename)
+  "Given a file name, return a newly-created image glyph.
+This is a hack for supporting inline images in Xemacs."
+  (let ((case-fold-search nil))
+    ;; Scan filename to determine image type
+    (when (fboundp 'make-glyph)
+      (save-match-data
+        (cond ((string-match "jpe?g" filename)
+               (make-glyph (vector 'jpeg :file filename) 'buffer))
+              ((string-match "gif" filename)
+               (make-glyph (vector 'gif :file filename) 'buffer))
+              ((string-match "png" filename)
+               (make-glyph (vector 'png :file filename) 'buffer)))))))
+
+
+(defun muse-colors-insert-image (link beg end invis-props)
+  "Create an image using create-image or make-glyph and insert it
+in place of an image link defined by beg and end"
+
+  (let ((image-file 
+	 (expand-file-name link (symbol-value muse-inline-relative-to)))
+	glyph)
+    (if (fboundp 'create-image)
+	;; use create-image and display property
+	(add-text-properties beg end
+			     (list 'display (create-image image-file)))
+      ;; use make-glyph and invisible property
+      (and (setq glyph (muse-make-file-glyph image-file))
+             (progn
+	       (add-text-properties beg end invis-props)
+	       (add-text-properties beg end (list 
+					     'end-glyph glyph
+					     'help-echo link)))))))
+
 (defun muse-colors-explicit-link ()
   "Color explicit links."
   (when (eq ?\[ (char-after (match-beginning 0)))
@@ -667,25 +742,32 @@ ignored."
            (props (muse-link-properties
                    desc (muse-link-face link t)))
            (invis-props (append props (muse-link-properties desc))))
-      (if desc
-          (progn
-            ;; we put the normal face properties on the invisible
-            ;; portion too, since emacs sometimes will position
-            ;; the cursor on an intangible character
-            (add-text-properties (match-beginning 0)
-                                 (match-beginning 2) invis-props)
-            (add-text-properties (match-beginning 2) (match-end 2) props)
-            (add-text-properties (match-end 2) (match-end 0) invis-props))
-        (add-text-properties (match-beginning 0)
-                             (match-beginning 1) invis-props)
-        (add-text-properties (match-beginning 1) (match-end 0) props)
-        (add-text-properties (match-end 1) (match-end 0) invis-props))
-      (goto-char (match-end 0))
-      (add-text-properties
-       (match-beginning 0) (match-end 0)
-       (muse-link-properties (muse-match-string-no-properties 0)
-                             (muse-link-face link t)))
-      (goto-char (match-end 0)))))
+      ;; see if we should try and inline an image
+      (if (and muse-colors-inline-images
+	       (muse-colors-resolve-image-file link))
+	  ;; we found an image, so inline it
+	  (muse-colors-insert-image 
+	   link 
+	   (match-beginning 0) (match-end 0) invis-props)
+	(if desc
+	      (progn
+		;; we put the normal face properties on the invisible
+		;; portion too, since emacs sometimes will position
+		;; the cursor on an intangible character
+		(add-text-properties (match-beginning 0)
+				     (match-beginning 2) invis-props)
+		(add-text-properties (match-beginning 2) (match-end 2) props)
+		(add-text-properties (match-end 2) (match-end 0) invis-props))
+	    (add-text-properties (match-beginning 0)
+				 (match-beginning 1) invis-props)
+	    (add-text-properties (match-beginning 1) (match-end 0) props)
+	    (add-text-properties (match-end 1) (match-end 0) invis-props))
+	  (goto-char (match-end 0))
+	  (add-text-properties
+	   (match-beginning 0) (match-end 0)
+	   (muse-link-properties (muse-match-string-no-properties 0)
+				 (muse-link-face link t)))
+	(goto-char (match-end 0))))))
 
 (defun muse-colors-implicit-link ()
   "Color implicit links."

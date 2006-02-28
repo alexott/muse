@@ -2,6 +2,64 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-02-28 23:37:26 GMT	Michael Olson <mwolson@gnu.org>	patch-26
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 0-4)
+    Revision:
+      muse--main--1.0--patch-26
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-2
+       Added ability to show inline images in the Emacs buffer.
+    
+     * mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-3
+       Added enhanced list item insertion.
+    
+    Detailed log:
+    
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-mode.el (muse-mode-map): Added new key binding to insert a
+      list item.  New key mapping to toggle showing images.  Added a key
+      mapping to insert a link to a file and modified the key map to insert a
+      tag.
+      (muse-on-blank-line): Helper function to determine if the point is on a
+      line containing only blank spaces.
+      (muse-insert-list-item): New interactive function to insert a new list
+      item, taking into account the current list state.
+      (muse-insert-relative-link-to-file): New function to insert a link to a
+      file, relative to the default directory.
+    
+    * lisp/muse-colors.el (muse-inline-relative-to): Added custom directory
+      for where to search for images to inline in the buffer.
+      (muse-colors-inline-images): Added custom boolean field for whether to
+      show inline images in the buffer.
+      (muse-colors-toggle-inline-images): New function to toggle showing the
+      inline images in the buffer.
+      (muse-unhighlight-region): Now removes end-glyph text properties to
+      support XEmacs.
+      (muse-colors-resolve-image-file): New function to determine if a link
+      is an image and whether the version of Emacs can support inline images.
+      (muse-make-file-glyph): New function to create an image glyph if we are
+      using XEmacs.
+      (muse-colors-insert-image): New function to insert an image in an Emacs
+      buffer.
+      (muse-colors-explicit-link): Modified function to have the ability to
+      insert an image instead of formatting the text of the link.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse-mode.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--base-0
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-1
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-2
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-3
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-4
+
+
 2006-02-28 05:20:11 GMT	Michael Olson <mwolson@gnu.org>	patch-25
 
     Summary:
