@@ -943,7 +943,7 @@ The following contexts exist in Muse.
          (move-entry `(lambda ()
                         (muse-forward-list-item 'dl ,indent t)))
          (continue t)
-         beg search-p)
+         beg)
     (while continue
       (muse-insert-markup beg-item)
       (when (looking-at muse-dl-term-regexp)
@@ -951,9 +951,7 @@ The following contexts exist in Muse.
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
-        (if (eq (char-after) ?\n)
-            (setq search-p t)
-          (setq search-p nil)
+        (unless (eq (char-after) ?\n)
           (insert ?\n))
         (save-excursion
           (goto-char beg)
@@ -964,9 +962,8 @@ The following contexts exist in Muse.
       (save-restriction
         (narrow-to-region beg (point))
         (goto-char (point-min))
-        (when (or (null search-p) (funcall move-entry))
-          (muse-publish-surround-text beg-dde end-dde move-entry
-                                      indent post-indent))
+        (muse-publish-surround-text beg-dde end-dde move-entry
+                                    indent post-indent)
         (goto-char (point-max))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup end-item)
@@ -1095,7 +1092,7 @@ like read-only from being inadvertently deleted."
            `(lambda ()
               (muse-forward-list-item 'ul ,indent))
            indent post-indent)
-          (muse-insert-markup (muse-markup-text 'end-uli)))
+          (muse-insert-markup-end-list (muse-markup-text 'end-uli)))
         (forward-line 1)))
      ((eq type 'ol)
       (delete-region (match-beginning 0) (match-end 0))
@@ -1107,13 +1104,15 @@ like read-only from being inadvertently deleted."
          `(lambda ()
             (muse-forward-list-item 'ol ,indent))
          indent post-indent)
-        (muse-insert-markup (muse-markup-text 'end-oli)))
+        (muse-insert-markup-end-list (muse-markup-text 'end-oli)))
       (forward-line 1))
      (t
       (goto-char (match-beginning 0))
       (muse-insert-markup (muse-markup-text 'begin-dl))
-      (muse-publish-surround-dl indent post-indent)
-      (muse-insert-markup (muse-markup-text 'end-dl)))))
+      (save-excursion
+        (muse-publish-surround-dl indent post-indent)
+        (muse-insert-markup-end-list (muse-markup-text 'end-dl)))
+      (forward-line 1))))
   nil)
 
 (defun muse-publish-markup-quote ()
