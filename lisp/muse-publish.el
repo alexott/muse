@@ -1177,7 +1177,8 @@ like read-only from being inadvertently deleted."
          indent post-indent)
         (muse-insert-markup-end-list (muse-markup-text 'end-oli)))
       (forward-line 1))
-     (t
+     ((not (string= (match-string 2) ""))
+      ;; must have an initial term
       (goto-char (match-beginning 0))
       (muse-insert-markup (muse-markup-text 'begin-dl))
       (save-excursion
