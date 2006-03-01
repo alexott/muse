@@ -933,9 +933,9 @@ The following contexts exist in Muse.
 (defun muse-publish-surround-dl (indent post-indent)
   (let* ((beg-item (muse-markup-text 'begin-dl-item))
          (end-item (muse-markup-text 'end-dl-item))
-         (beg-ddt (muse-markup-text 'begin-ddt))
+         (beg-ddt (muse-markup-text 'begin-ddt)) ;; term
          (end-ddt (muse-markup-text 'end-ddt))
-         (beg-dde (muse-markup-text 'begin-dde))
+         (beg-dde (muse-markup-text 'begin-dde)) ;; definition
          (end-dde (muse-markup-text 'end-dde))
          (move-term `(lambda ()
                        (let (status)
@@ -950,12 +950,16 @@ The following contexts exist in Muse.
          (continue t)
          beg)
     (while continue
+      ;; envelope this as one term+definitions unit -- HTML does not
+      ;; need this, but DocBook and Muse's custom XML format do
       (muse-insert-markup beg-item)
       (when (looking-at muse-dl-term-regexp)
+        ;; find the term and wrap it with published markup
         (setq beg (point))
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
+        ;; if definition is immediately after term, move to next line
         (unless (eq (char-after) ?\n)
           (insert ?\n))
         (save-excursion
@@ -963,10 +967,13 @@ The following contexts exist in Muse.
           (delete-region (point) (match-beginning 1))
           (muse-insert-markup beg-ddt)))
       (setq beg (point)
+            ;; move past current item
             continue (funcall move-term))
       (save-restriction
         (narrow-to-region beg (point))
         (goto-char (point-min))
+        ;; publish each definition that we find, defaulting to an
+        ;; empty definition if none are found
         (muse-publish-surround-text beg-dde end-dde move-entry
                                     indent post-indent)
         (goto-char (point-max))
@@ -989,15 +996,21 @@ The following contexts exist in Muse.
     (while continue
       (muse-insert-markup beg-tag)
       (setq beg (point)
+            ;; move past current item; continue is non-nil if there
+            ;; are more like items to be processed
             continue (funcall move-func))
       (save-restriction
         (narrow-to-region beg (point))
+        ;; narrow to current item
         (goto-char (point-min))
         (while (< (point) (point-max))
           (when (and (not list-nested-p)
+                     ;; if we encounter even one nested list item, we
+                     ;; have to stop removing indentation
                      (not (and (looking-at list-item)
                                (setq list-nested-p t)))
                      (looking-at indent))
+            ;; if list is not nested, remove indentation
             (replace-match ""))
           (forward-line 1))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
@@ -1047,32 +1060,40 @@ Otherwise, search ahead by definition list terms."
              (muse-forward-paragraph list-pattern)
              (when (and (not (match-beginning 1))
                         (< (point) next-list-end))
+               ;; blank line encountered with no list item on the same
+               ;; level after it
                (let ((beg (point)))
                  (forward-line 1)
                  (if (and (looking-at indented-line)
                           (not (looking-at empty-line)))
+                     ;; found that this blank line is followed by some
+                     ;; indentation, plus other text, so we'll keep
+                     ;; going
                      t
                    (goto-char beg)
                    nil)))))
     (cond ((>= (point) next-list-end)
+           ;; past the list boundary, so go back
            (goto-char next-list-end)
            nil)
           (entry-p
            (if (match-beginning 1)
                (progn
+                 ;; valid list entry, so remove the markup
                  (goto-char (match-beginning 1))
                  (replace-match "" t t nil 1)
                  t)
              nil))
           ((match-string 2)
+           ;; move just before next occurrence of list item
            (goto-char (match-beginning 1))
-           (if (and (eq 'dl (muse-list-item-type (match-string 2)))
-                    (string= (buffer-substring (match-beginning 1)
-                                               (match-beginning 2))
-                             indent))
+           (if (eq 'dl (muse-list-item-type (match-string 2)))
+               ;; if same type, indicate that there are more items to
+               ;; be parsed
                t
              nil))
           (t
+           ;; list item found, but was not a definition list
            (when (match-beginning 1)
              (goto-char (match-beginning 1)))
            nil))))
@@ -1092,23 +1113,32 @@ The beginning indentation is given by INDENT."
              (muse-forward-paragraph list-pattern)
              (when (and (not (match-beginning 1))
                         (< (point) next-list-end))
+               ;; blank line encountered with no list item on the same
+               ;; level after it
                (let ((beg (point)))
                  (forward-line 1)
                  (if (and (looking-at indented-line)
                           (not (looking-at empty-line)))
+                     ;; found that this blank line is followed by some
+                     ;; indentation, plus other text, so we'll keep
+                     ;; going
                      t
                    (goto-char beg)
                    nil)))))
     (cond ((>= (point) next-list-end)
+           ;; past the list boundary, so go back
            (goto-char next-list-end)
            nil)
           ((and (match-string 2)
                 (eq type (muse-list-item-type (match-string 2))))
+           ;; same type, so remove the markup and indicate that there
+           ;; are more items to be parsed
            (replace-match "" t t nil 1)
            (goto-char (match-beginning 1)))
           (t
            (when (match-beginning 1)
              (goto-char (match-beginning 1)))
+           ;; move to just before foreign list item markup
            nil))))
 
 (defun muse-publish-markup-list ()
