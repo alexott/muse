@@ -151,7 +151,7 @@ The '%s' will be replaced with a whitespace regexp when publishing."
   (concat "[" muse-regexp-blank "]*\\(.+?\\)["
           muse-regexp-blank "]+::[" muse-regexp-blank "]*")
   "Regexp used to match a definition list term.
-The first match string should contain the term."
+The first match string must contain the term."
   :type 'regexp
   :group 'muse-regexp)
 

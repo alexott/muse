@@ -941,12 +941,12 @@ The following contexts exist in Muse.
                        (let (status)
                          (while (and
                                  (setq status
-                                       (muse-forward-list-item 'dl ,indent))
+                                       (muse-forward-dl-item ,indent))
                                  (string= (match-string 3) ""))
                            (goto-char (match-end 0)))
                          status)))
          (move-entry `(lambda ()
-                        (muse-forward-list-item 'dl ,indent t)))
+                        (muse-forward-dl-item ,indent t)))
          (continue t)
          beg)
     (while continue
@@ -956,7 +956,8 @@ The following contexts exist in Muse.
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
-        (insert ?\n)
+        (unless (eq (char-after) ?\n)
+          (insert ?\n))
         (save-excursion
           (goto-char beg)
           (delete-region (point) (match-beginning 1))
@@ -1026,48 +1027,84 @@ Returns either 'ul, 'ol, or 'dl."
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
 
-(defun muse-forward-list-item (type indent &optional entry-p)
-  "Move forward to the next item of TYPE.
+(defun muse-forward-dl-item (indent &optional entry-p)
+  "Move forward to the next definition list item.
 Return non-nil if successful, nil otherwise.
 The beginning indentation is given by INDENT.
 
-If TYPE is 'dl and ENTRY-P is non-nil, seach ahead by dl entries.
-Otherwise if TYPE is 'dl and ENTRY-P is nil, search ahead by dl
-terms."
-  (let ((list-item (if (and (eq type 'dl)
-                            entry-p)
-                       muse-dl-entry-regexp
-                     (format muse-list-item-regexp indent)))
-        (empty-line (concat "^[" muse-regexp-blank "]*\n"))
-        (next-list-end (or (next-single-property-change (point) 'end-list)
-                           (point-max))))
-    (muse-forward-paragraph (concat "\\(?:" empty-line "\\)?"
-                                    "\\(" list-item "\\)"))
+If ENTRY-P is non-nil, seach ahead by definition list entries.
+Otherwise, search ahead by definition list terms."
+  (let* ((list-item (if entry-p
+                        muse-dl-entry-regexp
+                      (format muse-list-item-regexp indent)))
+         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
+         (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
+         (next-list-end (or (next-single-property-change (point) 'end-list)
+                            (point-max)))
+         (list-pattern (concat "\\(?:" empty-line "\\)?"
+                               "\\(" list-item "\\)")))
+    (while (progn
+             (muse-forward-paragraph list-pattern)
+             (when (and (not (match-beginning 1))
+                        (< (point) next-list-end))
+               (let ((beg (point)))
+                 (forward-line 1)
+                 (if (and (looking-at indented-line)
+                          (not (looking-at empty-line)))
+                     t
+                   (goto-char beg)
+                   nil)))))
     (cond ((>= (point) next-list-end)
            (goto-char next-list-end)
            nil)
-          ((and (eq type 'dl)
-                entry-p)
+          (entry-p
            (if (match-beginning 1)
                (progn
                  (goto-char (match-beginning 1))
                  (replace-match "" t t nil 1)
                  t)
              nil))
-          ((eq type 'dl)
-           (if (match-string 2)
-               (progn
-                 (goto-char (match-beginning 1))
-                 (if (and (eq 'dl (muse-list-item-type (match-string 2)))
-                          (string= (buffer-substring (match-beginning 1)
-                                                     (match-beginning 2))
-                                   indent))
-                     t
-                   nil))
+          ((match-string 2)
+           (goto-char (match-beginning 1))
+           (if (and (eq 'dl (muse-list-item-type (match-string 2)))
+                    (string= (buffer-substring (match-beginning 1)
+                                               (match-beginning 2))
+                             indent))
+               t
              nil))
+          (t
+           (when (match-beginning 1)
+             (goto-char (match-beginning 1)))
+           nil))))
+
+(defun muse-forward-list-item (type indent)
+  "Move forward to the next item of TYPE.
+Return non-nil if successful, nil otherwise.
+The beginning indentation is given by INDENT."
+  (let* ((list-item (format muse-list-item-regexp indent))
+         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
+         (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
+         (next-list-end (or (next-single-property-change (point) 'end-list)
+                            (point-max)))
+         (list-pattern (concat "\\(?:" empty-line "\\)?"
+                               "\\(" list-item "\\)")))
+    (while (progn
+             (muse-forward-paragraph list-pattern)
+             (when (and (not (match-beginning 1))
+                        (< (point) next-list-end))
+               (let ((beg (point)))
+                 (forward-line 1)
+                 (if (and (looking-at indented-line)
+                          (not (looking-at empty-line)))
+                     t
+                   (goto-char beg)
+                   nil)))))
+    (cond ((>= (point) next-list-end)
+           (goto-char next-list-end)
+           nil)
           ((and (match-string 2)
                 (eq type (muse-list-item-type (match-string 2))))
-           (replace-match "" t t nil 2)
+           (replace-match "" t t nil 1)
            (goto-char (match-beginning 1)))
           (t
            (when (match-beginning 1)
