@@ -153,12 +153,14 @@ If PROJECT is not specified, default to first project of
 Note that PAGE can have several output directories.  If this is
 the case, we will use the first one that matches our current
 style and ignore the others."
-  (setq project (or project (caar muse-project-alist))
+  (setq project (or (and project
+                         (muse-project project))
+                    (car muse-project-alist))
         page (or page (muse-get-keyword :default
-                                        (cadr (muse-project project)))))
+                                        (cadr project))))
   (let* ((page-path (muse-project-page-file page project))
          (remote-style (when page-path (car (muse-project-applicable-styles
-                                             page-path project))))
+                                             page-path (cddr project)))))
          (local-style (car (muse-project-applicable-styles
                             (muse-current-file)
                             (cddr (muse-project-of-file))))))
@@ -179,7 +181,7 @@ style and ignore the others."
              (when muse-wiki-allow-nonexistent-wikiword
                ;; make a path to a nonexistent file in project
                (setq page-path (expand-file-name
-                                page (car (cadr (muse-project project)))))
+                                page (car (cadr project))))
                (if (and muse-file-extension
                         (not (string= muse-file-extension "")))
                    (concat page-path "." muse-file-extension)

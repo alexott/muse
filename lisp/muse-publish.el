@@ -938,8 +938,13 @@ The following contexts exist in Muse.
          (beg-dde (muse-markup-text 'begin-dde))
          (end-dde (muse-markup-text 'end-dde))
          (move-term `(lambda ()
-                        (while (and (muse-forward-list-item 'dl ,indent)
-                                    (null (match-string 3))))))
+                       (let (status)
+                         (while (and
+                                 (setq status
+                                       (muse-forward-list-item 'dl ,indent))
+                                 (string= (match-string 3) ""))
+                           (goto-char (match-end 0)))
+                         status)))
          (move-entry `(lambda ()
                         (muse-forward-list-item 'dl ,indent t)))
          (continue t)
@@ -951,8 +956,7 @@ The following contexts exist in Muse.
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
-        (unless (eq (char-after) ?\n)
-          (insert ?\n))
+        (insert ?\n)
         (save-excursion
           (goto-char beg)
           (delete-region (point) (match-beginning 1))
@@ -1030,12 +1034,9 @@ The beginning indentation is given by INDENT.
 If TYPE is 'dl and ENTRY-P is non-nil, seach ahead by dl entries.
 Otherwise if TYPE is 'dl and ENTRY-P is nil, search ahead by dl
 terms."
-  (let ((list-item (if (eq type 'dl)
-                       (if entry-p
-                           muse-dl-entry-regexp
-                         (format muse-list-item-regexp
-                                 (concat "\\(" muse-dl-entry-regexp "\\|"
-                                         indent "\\)")))
+  (let ((list-item (if (and (eq type 'dl)
+                            entry-p)
+                       muse-dl-entry-regexp
                      (format muse-list-item-regexp indent)))
         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
         (next-list-end (or (next-single-property-change (point) 'end-list)
@@ -1054,13 +1055,16 @@ terms."
                  t)
              nil))
           ((eq type 'dl)
-           (if (string= (match-string 2) indent)
-               t
-             (if (match-beginning 3)
-                 (progn
-                   (goto-char (match-beginning 1))
-                   (eq 'dl (muse-list-item-type (match-string 3))))
-               nil)))
+           (if (match-string 2)
+               (progn
+                 (goto-char (match-beginning 1))
+                 (if (and (eq 'dl (muse-list-item-type (match-string 2)))
+                          (string= (buffer-substring (match-beginning 1)
+                                                     (match-beginning 2))
+                                   indent))
+                     t
+                   nil))
+             nil))
           ((and (match-string 2)
                 (eq type (muse-list-item-type (match-string 2))))
            (replace-match "" t t nil 2)
