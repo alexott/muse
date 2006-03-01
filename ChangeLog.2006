@@ -2,6 +2,47 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-01 20:21:08 GMT	Michael Olson <mwolson@gnu.org>	patch-33
+
+    Summary:
+      Add comments to nested list code.
+    Revision:
+      muse--main--1.0--patch-33
+
+    * lisp/muse-publish.el (muse-publish-surround-dl)
+      (muse-publish-surround-text, muse-forward-dl-item):
+      (muse-forward-list-item): Add comments, since there were many
+      intricacies that are probably not obvious to the casual reader.
+      (muse-forward-dl-item): Remove no-op condition.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
+2006-03-01 19:51:45 GMT	Michael Olson <mwolson@gnu.org>	patch-32
+
+    Summary:
+      Make nested list items work when separated by one blank line.
+    Revision:
+      muse--main--1.0--patch-32
+
+    * lisp/muse-publish.el (muse-publish-surround-dl): Use
+      muse-forward-dl-item instead of muse-forward-list-item.  On second
+      thought, don't unconditionally insert a newline, as that breaks some
+      things.
+      (muse-forward-dl-item): New function that moves forward to the next
+      definition list item.  This was factored out from
+      muse-forward-list-item, since it was getting too complex for my liking.
+      (muse-forward-dl-item, muse-forward-list-item): Introduce concept of
+      indented line, and skip past these if we have a blank line followed by
+      an indented line.  "Indented" means "indented one past the current
+      indentation level" here.  Remove some initial whitespace that was being
+      overlooked before.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-03-01 17:43:55 GMT	Michael Olson <mwolson@gnu.org>	patch-31
 
     Summary:

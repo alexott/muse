@@ -933,39 +933,47 @@ The following contexts exist in Muse.
 (defun muse-publish-surround-dl (indent post-indent)
   (let* ((beg-item (muse-markup-text 'begin-dl-item))
          (end-item (muse-markup-text 'end-dl-item))
-         (beg-ddt (muse-markup-text 'begin-ddt))
+         (beg-ddt (muse-markup-text 'begin-ddt)) ;; term
          (end-ddt (muse-markup-text 'end-ddt))
-         (beg-dde (muse-markup-text 'begin-dde))
+         (beg-dde (muse-markup-text 'begin-dde)) ;; definition
          (end-dde (muse-markup-text 'end-dde))
          (move-term `(lambda ()
                        (let (status)
                          (while (and
                                  (setq status
-                                       (muse-forward-list-item 'dl ,indent))
+                                       (muse-forward-dl-item ,indent))
                                  (string= (match-string 3) ""))
                            (goto-char (match-end 0)))
                          status)))
          (move-entry `(lambda ()
-                        (muse-forward-list-item 'dl ,indent t)))
+                        (muse-forward-dl-item ,indent t)))
          (continue t)
          beg)
     (while continue
+      ;; envelope this as one term+definitions unit -- HTML does not
+      ;; need this, but DocBook and Muse's custom XML format do
       (muse-insert-markup beg-item)
       (when (looking-at muse-dl-term-regexp)
+        ;; find the term and wrap it with published markup
         (setq beg (point))
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
-        (insert ?\n)
+        ;; if definition is immediately after term, move to next line
+        (unless (eq (char-after) ?\n)
+          (insert ?\n))
         (save-excursion
           (goto-char beg)
           (delete-region (point) (match-beginning 1))
           (muse-insert-markup beg-ddt)))
       (setq beg (point)
+            ;; move past current item
             continue (funcall move-term))
       (save-restriction
         (narrow-to-region beg (point))
         (goto-char (point-min))
+        ;; publish each definition that we find, defaulting to an
+        ;; empty definition if none are found
         (muse-publish-surround-text beg-dde end-dde move-entry
                                     indent post-indent)
         (goto-char (point-max))
@@ -988,15 +996,21 @@ The following contexts exist in Muse.
     (while continue
       (muse-insert-markup beg-tag)
       (setq beg (point)
+            ;; move past current item; continue is non-nil if there
+            ;; are more like items to be processed
             continue (funcall move-func))
       (save-restriction
         (narrow-to-region beg (point))
+        ;; narrow to current item
         (goto-char (point-min))
         (while (< (point) (point-max))
           (when (and (not list-nested-p)
+                     ;; if we encounter even one nested list item, we
+                     ;; have to stop removing indentation
                      (not (and (looking-at list-item)
                                (setq list-nested-p t)))
                      (looking-at indent))
+            ;; if list is not nested, remove indentation
             (replace-match ""))
           (forward-line 1))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
@@ -1026,52 +1040,105 @@ Returns either 'ul, 'ol, or 'dl."
       (goto-char (match-beginning 0))
     (goto-char (point-max))))
 
-(defun muse-forward-list-item (type indent &optional entry-p)
-  "Move forward to the next item of TYPE.
+(defun muse-forward-dl-item (indent &optional entry-p)
+  "Move forward to the next definition list item.
 Return non-nil if successful, nil otherwise.
 The beginning indentation is given by INDENT.
 
-If TYPE is 'dl and ENTRY-P is non-nil, seach ahead by dl entries.
-Otherwise if TYPE is 'dl and ENTRY-P is nil, search ahead by dl
-terms."
-  (let ((list-item (if (and (eq type 'dl)
-                            entry-p)
-                       muse-dl-entry-regexp
-                     (format muse-list-item-regexp indent)))
-        (empty-line (concat "^[" muse-regexp-blank "]*\n"))
-        (next-list-end (or (next-single-property-change (point) 'end-list)
-                           (point-max))))
-    (muse-forward-paragraph (concat "\\(?:" empty-line "\\)?"
-                                    "\\(" list-item "\\)"))
+If ENTRY-P is non-nil, seach ahead by definition list entries.
+Otherwise, search ahead by definition list terms."
+  (let* ((list-item (if entry-p
+                        muse-dl-entry-regexp
+                      (format muse-list-item-regexp indent)))
+         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
+         (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
+         (next-list-end (or (next-single-property-change (point) 'end-list)
+                            (point-max)))
+         (list-pattern (concat "\\(?:" empty-line "\\)?"
+                               "\\(" list-item "\\)")))
+    (while (progn
+             (muse-forward-paragraph list-pattern)
+             (when (and (not (match-beginning 1))
+                        (< (point) next-list-end))
+               ;; blank line encountered with no list item on the same
+               ;; level after it
+               (let ((beg (point)))
+                 (forward-line 1)
+                 (if (and (looking-at indented-line)
+                          (not (looking-at empty-line)))
+                     ;; found that this blank line is followed by some
+                     ;; indentation, plus other text, so we'll keep
+                     ;; going
+                     t
+                   (goto-char beg)
+                   nil)))))
     (cond ((>= (point) next-list-end)
+           ;; past the list boundary, so go back
            (goto-char next-list-end)
            nil)
-          ((and (eq type 'dl)
-                entry-p)
+          (entry-p
            (if (match-beginning 1)
                (progn
+                 ;; valid list entry, so remove the markup
                  (goto-char (match-beginning 1))
                  (replace-match "" t t nil 1)
                  t)
              nil))
-          ((eq type 'dl)
-           (if (match-string 2)
-               (progn
-                 (goto-char (match-beginning 1))
-                 (if (and (eq 'dl (muse-list-item-type (match-string 2)))
-                          (string= (buffer-substring (match-beginning 1)
-                                                     (match-beginning 2))
-                                   indent))
-                     t
-                   nil))
+          ((match-string 2)
+           ;; move just before next occurrence of list item
+           (goto-char (match-beginning 1))
+           (if (eq 'dl (muse-list-item-type (match-string 2)))
+               ;; if same type, indicate that there are more items to
+               ;; be parsed
+               t
              nil))
+          (t
+           ;; list item found, but was not a definition list
+           (when (match-beginning 1)
+             (goto-char (match-beginning 1)))
+           nil))))
+
+(defun muse-forward-list-item (type indent)
+  "Move forward to the next item of TYPE.
+Return non-nil if successful, nil otherwise.
+The beginning indentation is given by INDENT."
+  (let* ((list-item (format muse-list-item-regexp indent))
+         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
+         (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
+         (next-list-end (or (next-single-property-change (point) 'end-list)
+                            (point-max)))
+         (list-pattern (concat "\\(?:" empty-line "\\)?"
+                               "\\(" list-item "\\)")))
+    (while (progn
+             (muse-forward-paragraph list-pattern)
+             (when (and (not (match-beginning 1))
+                        (< (point) next-list-end))
+               ;; blank line encountered with no list item on the same
+               ;; level after it
+               (let ((beg (point)))
+                 (forward-line 1)
+                 (if (and (looking-at indented-line)
+                          (not (looking-at empty-line)))
+                     ;; found that this blank line is followed by some
+                     ;; indentation, plus other text, so we'll keep
+                     ;; going
+                     t
+                   (goto-char beg)
+                   nil)))))
+    (cond ((>= (point) next-list-end)
+           ;; past the list boundary, so go back
+           (goto-char next-list-end)
+           nil)
           ((and (match-string 2)
                 (eq type (muse-list-item-type (match-string 2))))
-           (replace-match "" t t nil 2)
+           ;; same type, so remove the markup and indicate that there
+           ;; are more items to be parsed
+           (replace-match "" t t nil 1)
            (goto-char (match-beginning 1)))
           (t
            (when (match-beginning 1)
              (goto-char (match-beginning 1)))
+           ;; move to just before foreign list item markup
            nil))))
 
 (defun muse-publish-markup-list ()
