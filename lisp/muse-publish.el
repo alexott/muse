@@ -956,9 +956,7 @@ The following contexts exist in Muse.
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
-        (if (eq (char-after) ?\n)
-            (forward-char)
-          (insert ?\n))
+        (insert ?\n)
         (save-excursion
           (goto-char beg)
           (delete-region (point) (match-beginning 1))

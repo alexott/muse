@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-01 17:24:23 GMT	Michael Olson <mwolson@gnu.org>	patch-30
+
+    Summary:
+      Fix another definition list edge case.
+    Revision:
+      muse--main--1.0--patch-30
+
+    * lisp/muse-publish.el (muse-publish-surround-dl): Fix edge case where
+      unordered list immediately follows definition list term.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-01 17:05:25 GMT	Michael Olson <mwolson@gnu.org>	patch-29
 
     Summary:
