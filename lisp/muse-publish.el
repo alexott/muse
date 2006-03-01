@@ -956,7 +956,8 @@ The following contexts exist in Muse.
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup end-ddt)
-        (unless (eq (char-after) ?\n)
+        (if (eq (char-after) ?\n)
+            (forward-char)
           (insert ?\n))
         (save-excursion
           (goto-char beg)
@@ -1056,13 +1057,15 @@ terms."
                  t)
              nil))
           ((eq type 'dl)
-           (if (match-beginning 2)
-               (if (string= (buffer-substring (match-beginning 1)
-                                              (match-beginning 2))
-                            indent)
-                   t
+           (if (match-string 2)
+               (progn
                  (goto-char (match-beginning 1))
-                 (eq 'dl (muse-list-item-type (match-string 2))))
+                 (if (and (eq 'dl (muse-list-item-type (match-string 2)))
+                          (string= (buffer-substring (match-beginning 1)
+                                                     (match-beginning 2))
+                                   indent))
+                     t
+                   nil))
              nil))
           ((and (match-string 2)
                 (eq type (muse-list-item-type (match-string 2))))
