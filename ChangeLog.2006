@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-01 15:08:45 GMT	Michael Olson <mwolson@gnu.org>	patch-28
+
+    Summary:
+      Merge consecutive definition list terms properly.
+    Revision:
+      muse--main--1.0--patch-28
+
+    * lisp/muse-publish.el (muse-publish-surround-dl): Keep track of status
+      correctly.  This makes Muse merge several definition list items into
+      one list.
+      (muse-forward-list-item): Use simpler regexp for 'dl.
+    
+    * lisp/muse-regexps.el (muse-list-item-regexp): Make terms optional in
+      definition lists, and make terms the 2nd matched text.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-02-28 23:48:24 GMT	Michael Olson <mwolson@gnu.org>	patch-27
 
     Summary:
