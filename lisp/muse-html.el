@@ -404,6 +404,8 @@ This will be used if no special characters are found."
             (save-match-data
               (and (re-search-backward "<\\(/?\\)p[ >]" nil t)
                    (not (string-equal (match-string 1) "/")))))
+      (when (get-text-property (1- (point)) 'end-list)
+        (goto-char (previous-single-property-change (1- (point)) 'end-list)))
       (muse-insert-markup "</p>"))
     (goto-char end))
   (cond

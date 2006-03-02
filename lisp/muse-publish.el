@@ -958,7 +958,7 @@ The following contexts exist in Muse.
         (setq beg (point))
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
-        (muse-insert-markup end-ddt)
+        (muse-insert-markup-end-list end-ddt)
         ;; if definition is immediately after term, move to next line
         (unless (eq (char-after) ?\n)
           (insert ?\n))
@@ -978,7 +978,7 @@ The following contexts exist in Muse.
                                     indent post-indent)
         (goto-char (point-max))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
-        (muse-insert-markup end-item)
+        (muse-insert-markup-end-list end-item)
         (when continue
           (goto-char (point-max)))))))
 
