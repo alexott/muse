@@ -769,6 +769,12 @@ link will be made available.  WikiNames, which are typed in camelcase,
 will be highlighted and published as links, provided that the file they
 refer to exists.
 
+Customization of WikiName recognition may be accomplished by editing the
+@code{muse-wiki-wikiword-regexp} option and subsequently running
+@code{(muse-configure-highlighting 'muse-colors-markupmuse-colors-markup)}.
+If you use the Customize interface, the latter will be done
+automatically.
+
 @cindex InterWiki links
 @cindex inter-project links
 The @command{muse-wiki} module also allows for InterWiki links.  These
@@ -2837,7 +2843,3 @@ Public License instead of this License.
 @printindex cp
 
 @bye
-
-@c Local Variables:
-@c ispell-local-pdict: "ispell-dict"
-@c End:

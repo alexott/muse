@@ -2,6 +2,54 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-02 05:00:07 GMT	Michael Olson <mwolson@gnu.org>	patch-38
+
+    Summary:
+      Fix problem when previous list item was nested.
+    Revision:
+      muse--main--1.0--patch-38
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Bind nested list
+      indicator at the correct place.  This fixes an error where a previous
+      list was nested but the current one isn't.  Thanks to Per B. Sederberg
+      for the report.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
+2006-03-02 04:36:06 GMT	Michael Olson <mwolson@gnu.org>	patch-37
+
+    Summary:
+      Fix #5376: Changing muse-wiki-wikiword-regexp does not seem to affect anything.
+    Revision:
+      muse--main--1.0--patch-37
+
+    * muse.texi (Implicit Links): Mention how to customize the WikiName
+      recognition, and note that if you're setting this manually, you have to
+      call some additional code.  This should fix #5376.  Also remove local
+      variables section at end, since it seems pointless.
+
+    modified files:
+     ChangeLog.2006 muse.texi
+
+
+2006-03-02 04:25:37 GMT	Michael Olson <mwolson@gnu.org>	patch-36
+
+    Summary:
+      Fix #5325: nested formatting not working in HTML output.
+    Revision:
+      muse--main--1.0--patch-36
+
+    * lisp/muse-publish.el (muse-publish-markup-word): Make nested emphasis
+      work.  I'm a bit worried about possible double-escaping, though.
+      Perhaps we should write the context to a text property and escape it
+      later.  This should fix #5325.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-02 01:08:14 GMT	Michael Olson <mwolson@gnu.org>	patch-35
 
     Summary:
