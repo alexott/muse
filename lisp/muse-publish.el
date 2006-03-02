@@ -809,10 +809,9 @@ The following contexts exist in Muse.
           (delete-region beg end)
           (setq end (point-marker))
           (muse-insert-markup close-tag)
-          (save-excursion
-            (goto-char beg)
-            (muse-insert-markup open-tag)
-            (setq beg (point)))
+          (goto-char beg)
+          (muse-insert-markup open-tag)
+          (setq beg (point))
           (when mark-read-only
             (muse-publish-escape-specials beg end t context)
             (muse-publish-mark-read-only beg end)))
