@@ -205,6 +205,8 @@ found in `muse-docbook-encoding-map'."
                             (not (string= (match-string 1) "/")))
                        (and (string= (match-string 2) "footnote")
                             (string= (match-string 1) "/"))))))
+      (when (get-text-property (1- (point)) 'end-list)
+        (goto-char (previous-single-property-change (1- (point)) 'end-list)))
       (muse-insert-markup "</para>"))
     (goto-char end))
   (cond

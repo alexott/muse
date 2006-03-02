@@ -2,6 +2,29 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-02 01:08:14 GMT	Michael Olson <mwolson@gnu.org>	patch-35
+
+    Summary:
+      Make paragraphs respect the end of a list or list item.
+    Revision:
+      muse--main--1.0--patch-35
+
+    * lisp/muse-docbook.el (muse-docbook-markup-paragraph): If we are at the
+      end of a list (or list item), back up.  This allows for a nice side
+      effect when using indented sentences in between list items.
+    
+    * lisp/muse-html.el (muse-html-markup-paragraph): Ditto.
+    
+    * lisp/muse-xml.el (muse-xml-markup-paragraph): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-surround-dl): Make sure that end-ddt
+      and end-item are marked up with end-list properties.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-publish.el lisp/muse-xml.el
+
+
 2006-03-01 21:00:41 GMT	Michael Olson <mwolson@gnu.org>	patch-34
 
     Summary:
