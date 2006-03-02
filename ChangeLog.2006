@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-02 05:38:41 GMT	Michael Olson <mwolson@gnu.org>	patch-39
+
+    Summary:
+      Handle blockquoted sections within lists properly.
+    Revision:
+      muse--main--1.0--patch-39
+
+    * lisp/muse-publish.el (muse-forward-paragraph): Respect end-list
+      property.  This should make blockquoted sections within a list do the
+      right thing.
+      (muse-forward-dl-item, muse-forward-list-item): Adjust logic for new
+      behavior of `muse-forward-paragraph'.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-02 05:00:07 GMT	Michael Olson <mwolson@gnu.org>	patch-38
 
     Summary:

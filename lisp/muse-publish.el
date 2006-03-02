@@ -1031,13 +1031,19 @@ Returns either 'ul, 'ol, or 'dl."
          'ol)
         (t 'dl)))
 
-(defsubst muse-forward-paragraph (&optional pattern)
-  (forward-line 1)
-  (if (re-search-forward (if pattern
-                             (concat "^\\(?:" pattern "\\|\n\\|\\'\\)")
-                           "^\\s-*\\(\n\\|\\'\\)") nil t)
-      (goto-char (match-beginning 0))
-    (goto-char (point-max))))
+(defun muse-forward-paragraph (&optional pattern)
+  (when (get-text-property (point) 'end-list)
+    (goto-char (next-single-property-change (point) 'end-list)))
+  (let ((next-list-end (or (next-single-property-change (point) 'end-list)
+                           (point-max))))
+    (forward-line 1)
+    (if (re-search-forward (if pattern
+                               (concat "^\\(?:" pattern "\\|\n\\|\\'\\)")
+                             "^\\s-*\\(\n\\|\\'\\)") nil t)
+        (goto-char (match-beginning 0))
+      (goto-char (point-max)))
+    (when (> (point) next-list-end)
+      (goto-char next-list-end))))
 
 (defun muse-forward-dl-item (indent &optional entry-p)
   "Move forward to the next definition list item.
@@ -1051,14 +1057,13 @@ Otherwise, search ahead by definition list terms."
                       (format muse-list-item-regexp indent)))
          (empty-line (concat "^[" muse-regexp-blank "]*\n"))
          (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
-         (next-list-end (or (next-single-property-change (point) 'end-list)
-                            (point-max)))
          (list-pattern (concat "\\(?:" empty-line "\\)?"
                                "\\(" list-item "\\)")))
     (while (progn
              (muse-forward-paragraph list-pattern)
              (when (and (not (match-beginning 1))
-                        (< (point) next-list-end))
+                        (not (get-text-property (point) 'end-list))
+                        (< (point) (point-max)))
                ;; blank line encountered with no list item on the same
                ;; level after it
                (let ((beg (point)))
@@ -1071,9 +1076,9 @@ Otherwise, search ahead by definition list terms."
                      t
                    (goto-char beg)
                    nil)))))
-    (cond ((>= (point) next-list-end)
-           ;; past the list boundary, so go back
-           (goto-char next-list-end)
+    (cond ((or (get-text-property (point) 'end-list)
+               (>= (point) (point-max)))
+           ;; at a list boundary, so stop
            nil)
           (entry-p
            (if (match-beginning 1)
@@ -1104,14 +1109,13 @@ The beginning indentation is given by INDENT."
   (let* ((list-item (format muse-list-item-regexp indent))
          (empty-line (concat "^[" muse-regexp-blank "]*\n"))
          (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
-         (next-list-end (or (next-single-property-change (point) 'end-list)
-                            (point-max)))
          (list-pattern (concat "\\(?:" empty-line "\\)?"
                                "\\(" list-item "\\)")))
     (while (progn
              (muse-forward-paragraph list-pattern)
              (when (and (not (match-beginning 1))
-                        (< (point) next-list-end))
+                        (not (get-text-property (point) 'end-list))
+                        (< (point) (point-max)))
                ;; blank line encountered with no list item on the same
                ;; level after it
                (let ((beg (point)))
@@ -1124,9 +1128,9 @@ The beginning indentation is given by INDENT."
                      t
                    (goto-char beg)
                    nil)))))
-    (cond ((>= (point) next-list-end)
-           ;; past the list boundary, so go back
-           (goto-char next-list-end)
+    (cond ((or (get-text-property (point) 'end-list)
+               (>= (point) (point-max)))
+           ;; at a list boundary, so stop
            nil)
           ((and (match-string 2)
                 (eq type (muse-list-item-type (match-string 2))))
