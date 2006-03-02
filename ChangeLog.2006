@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-02 05:00:07 GMT	Michael Olson <mwolson@gnu.org>	patch-38
+
+    Summary:
+      Fix problem when previous list item was nested.
+    Revision:
+      muse--main--1.0--patch-38
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Bind nested list
+      indicator at the correct place.  This fixes an error where a previous
+      list was nested but the current one isn't.  Thanks to Per B. Sederberg
+      for the report.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-02 04:36:06 GMT	Michael Olson <mwolson@gnu.org>	patch-37
 
     Summary:

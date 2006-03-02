@@ -990,7 +990,6 @@ The following contexts exist in Muse.
   (let ((continue t)
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
-        (list-nested-p nil)
         beg)
     (while continue
       (muse-insert-markup beg-tag)
@@ -1002,16 +1001,17 @@ The following contexts exist in Muse.
         (narrow-to-region beg (point))
         ;; narrow to current item
         (goto-char (point-min))
-        (while (< (point) (point-max))
-          (when (and (not list-nested-p)
-                     ;; if we encounter even one nested list item, we
-                     ;; have to stop removing indentation
-                     (not (and (looking-at list-item)
-                               (setq list-nested-p t)))
-                     (looking-at indent))
-            ;; if list is not nested, remove indentation
-            (replace-match ""))
-          (forward-line 1))
+        (let ((list-nested-p nil))
+          (while (< (point) (point-max))
+            (when (and (not list-nested-p)
+                       ;; if we encounter even one nested list item, we
+                       ;; have to stop removing indentation
+                       (not (and (looking-at list-item)
+                                 (setq list-nested-p t)))
+                       (looking-at indent))
+              ;; if list is not nested, remove indentation
+              (replace-match ""))
+            (forward-line 1)))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup-end-list end-tag)
         (when continue
