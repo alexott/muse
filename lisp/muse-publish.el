@@ -972,21 +972,22 @@ The following contexts exist in Muse.
           (goto-char (point-max)))))))
 
 (defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent post-indent)
-  (unless indent
-    (setq indent (concat "[" muse-regexp-blank "]+")))
-  (when post-indent
-    (setq indent (concat indent " \\{0," (number-to-string post-indent)
-                         "\\}")))
   (let ((continue t)
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
+        (orig-indent indent)
         beg)
+    (unless indent
+      (setq indent (concat "[" muse-regexp-blank "]+")))
+    (when post-indent
+      (setq indent (concat indent " \\{0," (number-to-string post-indent)
+                           "\\}")))
     (while continue
       (muse-insert-markup beg-tag)
       (setq beg (point)
             ;; move past current item; continue is non-nil if there
             ;; are more like items to be processed
-            continue (funcall move-func indent))
+            continue (funcall move-func orig-indent))
       (save-restriction
         (narrow-to-region beg (point))
         ;; narrow to current item
