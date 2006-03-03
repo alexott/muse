@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-03 19:28:22 GMT	Michael Olson <mwolson@gnu.org>	patch-41
+
+    Summary:
+      Fix nested list regression.
+    Revision:
+      muse--main--1.0--patch-41
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Keep track of
+      original indentation value and use that.  This fixes a regression
+      caused by the last patch.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-03 05:24:59 GMT	Michael Olson <mwolson@gnu.org>	patch-40
 
     Summary:
