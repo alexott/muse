@@ -936,16 +936,6 @@ The following contexts exist in Muse.
          (end-ddt (muse-markup-text 'end-ddt))
          (beg-dde (muse-markup-text 'begin-dde)) ;; definition
          (end-dde (muse-markup-text 'end-dde))
-         (move-term `(lambda ()
-                       (let (status)
-                         (while (and
-                                 (setq status
-                                       (muse-forward-dl-item ,indent))
-                                 (string= (match-string 3) ""))
-                           (goto-char (match-end 0)))
-                         status)))
-         (move-entry `(lambda ()
-                        (muse-forward-dl-item ,indent t)))
          (continue t)
          beg)
     (while continue
@@ -967,13 +957,13 @@ The following contexts exist in Muse.
           (muse-insert-markup beg-ddt)))
       (setq beg (point)
             ;; move past current item
-            continue (funcall move-term))
+            continue (muse-forward-dl-term indent))
       (save-restriction
         (narrow-to-region beg (point))
         (goto-char (point-min))
         ;; publish each definition that we find, defaulting to an
         ;; empty definition if none are found
-        (muse-publish-surround-text beg-dde end-dde move-entry
+        (muse-publish-surround-text beg-dde end-dde #'muse-forward-dl-entry
                                     indent post-indent)
         (goto-char (point-max))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
@@ -996,7 +986,7 @@ The following contexts exist in Muse.
       (setq beg (point)
             ;; move past current item; continue is non-nil if there
             ;; are more like items to be processed
-            continue (funcall move-func))
+            continue (funcall move-func indent))
       (save-restriction
         (narrow-to-region beg (point))
         ;; narrow to current item
@@ -1045,8 +1035,26 @@ Returns either 'ul, 'ol, or 'dl."
     (when (> (point) next-list-end)
       (goto-char next-list-end))))
 
-(defun muse-forward-dl-item (indent &optional entry-p)
-  "Move forward to the next definition list item.
+(defun muse-forward-dl-term (indent)
+  "Move forward to the next definition list term according to level.
+Return non-nil if successful, nil otherwise.
+The beginning indentation is given by INDENT."
+  (let (status)
+    (while (and
+            (setq status
+                  (muse-forward-dl-part indent))
+            (string= (match-string 3) ""))
+      (goto-char (match-end 0)))
+    status))
+
+(defun muse-forward-dl-entry (indent)
+  "Move forward to the next definition list entry according to level.
+Return non-nil if successful, nil otherwise.
+The beginning indentation is given by INDENT."
+  (muse-forward-dl-part indent t))
+
+(defun muse-forward-dl-part (indent &optional entry-p)
+  "Move forward to the next definition list part.
 Return non-nil if successful, nil otherwise.
 The beginning indentation is given by INDENT.
 
@@ -1163,8 +1171,8 @@ like read-only from being inadvertently deleted."
           (muse-publish-surround-text
            (muse-markup-text 'begin-uli-item)
            (muse-markup-text 'end-uli-item)
-           `(lambda ()
-              (muse-forward-list-item 'ul ,indent))
+           (lambda (indent)
+             (muse-forward-list-item 'ul indent))
            indent post-indent)
           (muse-insert-markup-end-list (muse-markup-text 'end-uli)))
         (forward-line 1)))
@@ -1175,8 +1183,8 @@ like read-only from being inadvertently deleted."
         (muse-publish-surround-text
          (muse-markup-text 'begin-oli-item)
          (muse-markup-text 'end-oli-item)
-         `(lambda ()
-            (muse-forward-list-item 'ol ,indent))
+         (lambda (indent)
+           (muse-forward-list-item 'ol indent))
          indent post-indent)
         (muse-insert-markup-end-list (muse-markup-text 'end-oli)))
       (forward-line 1))
@@ -1203,7 +1211,7 @@ like read-only from being inadvertently deleted."
       (muse-insert-markup (muse-markup-text 'begin-quote)))
     (muse-publish-surround-text (muse-markup-text begin-elem)
                                 (muse-markup-text end-elem)
-                                (function (lambda ()
+                                (function (lambda (indent)
                                             (muse-forward-paragraph)
                                             nil)))
     (unless centered
@@ -1457,7 +1465,7 @@ This is usually applied to extended links."
       (muse-insert-markup (muse-markup-text 'begin-quote))
       (muse-publish-surround-text (muse-markup-text 'begin-quote-item)
                                   (muse-markup-text 'end-quote-item)
-                                  (function (lambda ()
+                                  (function (lambda (indent)
                                               (muse-forward-paragraph)
                                               (goto-char (match-end 0))
                                               (< (point) (point-max)))))
