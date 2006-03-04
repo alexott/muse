@@ -155,13 +155,6 @@ The first match string must contain the term."
   :type 'regexp
   :group 'muse-regexp)
 
-(defcustom muse-dl-entry-regexp
-  (concat "[" muse-regexp-blank "]+::[" muse-regexp-blank "]*")
-  "Regexp used to match the beginning of a definition list entry.
-Entries usually come after a term."
-  :type 'regexp
-  :group 'muse-regexp)
-
 (defcustom muse-table-field-regexp
   (concat "[" muse-regexp-blank "]+\\(|+\\)\\(?:["
           muse-regexp-blank "]+\\|$\\)")

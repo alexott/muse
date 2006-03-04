@@ -1061,30 +1061,37 @@ The beginning indentation is given by INDENT.
 
 If ENTRY-P is non-nil, seach ahead by definition list entries.
 Otherwise, search ahead by definition list terms."
-  (let* ((list-item (if entry-p
-                        muse-dl-entry-regexp
-                      (format muse-list-item-regexp indent)))
+  (let* ((list-item (format muse-list-item-regexp indent))
          (empty-line (concat "^[" muse-regexp-blank "]*\n"))
          (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
          (list-pattern (concat "\\(?:" empty-line "\\)?"
                                "\\(" list-item "\\)")))
     (while (progn
              (muse-forward-paragraph list-pattern)
-             (when (and (not (match-beginning 1))
-                        (not (get-text-property (point) 'end-list))
-                        (< (point) (point-max)))
-               ;; blank line encountered with no list item on the same
-               ;; level after it
-               (let ((beg (point)))
-                 (forward-line 1)
-                 (if (and (looking-at indented-line)
-                          (not (looking-at empty-line)))
-                     ;; found that this blank line is followed by some
-                     ;; indentation, plus other text, so we'll keep
-                     ;; going
-                     t
-                   (goto-char beg)
-                   nil)))))
+             (or (let ((term (match-string 3)))
+                   ;; see whether term begins with whitespace - if so,
+                   ;; move past it
+                   (and term
+                        (or entry-p
+                            (not (string= term "")))
+                        (save-match-data
+                          (string-match (concat "\\`[" muse-regexp-blank "]")
+                                        term))))
+                 (when (and (not (match-beginning 1))
+                            (not (get-text-property (point) 'end-list))
+                            (< (point) (point-max)))
+                   ;; blank line encountered with no list item on the
+                   ;; same level after it
+                   (let ((beg (point)))
+                     (forward-line 1)
+                     (if (and (looking-at indented-line)
+                              (not (looking-at empty-line)))
+                         ;; found that this blank line is followed by
+                         ;; some indentation, plus other text, so
+                         ;; we'll keep going
+                         t
+                       (goto-char beg)
+                       nil))))))
     (cond ((or (get-text-property (point) 'end-list)
                (>= (point) (point-max)))
            ;; at a list boundary, so stop

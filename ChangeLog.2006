@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-04 02:03:59 GMT	Michael Olson <mwolson@gnu.org>	patch-42
+
+    Summary:
+      In a preliminary way, make definition lists nest.
+    Revision:
+      muse--main--1.0--patch-42
+
+    * lisp/muse-publish.el (muse-forward-dl-part): Make it so that definition
+      lists nest a bit better.
+    
+    * lisp/muse-regexps.el (muse-dl-entry-regexp): Removed, since we don't
+      use it anymore.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-03-03 19:28:22 GMT	Michael Olson <mwolson@gnu.org>	patch-41
 
     Summary:
