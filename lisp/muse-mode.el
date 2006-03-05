@@ -138,6 +138,8 @@ so only enable this if you don't use either of these."
 
     ;; Enhanced link functions
     (define-key map [(meta return)] 'muse-insert-list-item)
+    (define-key map [(control ?>)] 'muse-increase-list-item-indentation)
+    (define-key map [(control ?<)] 'muse-decrease-list-item-indentation)
 
     (when (featurep 'pcomplete)
       (define-key map [(meta tab)] 'pcomplete)
@@ -250,41 +252,119 @@ This is used to keep links from being improperly colorized by flyspell."
     (beginning-of-line)
     (looking-at (concat "[" muse-regexp-blank "]?[\n]+"))))
 
+(defun muse-get-paragraph-start ()
+  "Return the start of the current paragraph. This function will
+return nil if there are no prior paragraphs and the beginning of
+the line if point is on a blank line."
+  (let ((para-start (concat "[\n]+[" muse-regexp-blank "]?[\n]+")))
+    ;; search back to start of paragraph
+    (save-excursion
+      (save-match-data
+	(if (not (muse-on-blank-line))
+	    (re-search-backward para-start nil t)
+	  (line-beginning-position))))))
+
 ;;;###autoload
 (defun muse-insert-list-item ()
   "Insert a list item at the current point, taking into account
 your current list type and indentation level."
   (interactive)
   (let ((newitem " - ")
-	(pstart nil)
 	(itemno nil)
+	(pstart (muse-get-paragraph-start))
         (list-item (format muse-list-item-regexp
-                           (concat "[" muse-regexp-blank "]*")))
-	(para-start (concat "[\n]+[" muse-regexp-blank "]?[\n]+")))
-    ;; determine the type of newitem
-    
-    ;; search back to start of paragraph
-    (save-excursion
-      (if (not (muse-on-blank-line))
-	  (setq pstart (re-search-backward para-start nil t))
-	(setq pstart (line-beginning-position))))
-
+                           (concat "[" muse-regexp-blank "]*"))))
     ;; search backwards for start of current item
     (save-excursion
       (when (re-search-backward list-item pstart t)
+	;; save the matching item
 	(setq newitem (match-string 0))
 	;; see what type it is
-	(unless (string-match "-" (match-string 0))
-	  ;; is a number so increment
-	  ;; get the number
-	  (string-match "[0-9]+" newitem)
-	  (setq itemno (1+ (string-to-number (match-string 0 newitem))))
-	  (setq newitem (replace-match 
-			 (number-to-string itemno) nil nil newitem)))))
-
+	(if (string-match "::" (match-string 0))
+	    ;; is a definition, replace the term
+	    (setq newitem (concat " " 
+ 				  (read-string "Term: ")
+ 				  " :: ")) 	  
+	  ;; see if it's a numbered list
+	  (when (string-match "[0-9]+" newitem)
+	    ;; is numbered, so increment
+	    (setq itemno (1+ 
+			  (string-to-number 
+			   (match-string 0 newitem))))
+	    (setq newitem (replace-match 
+			   (number-to-string itemno) 
+			   nil nil newitem))))))
     ;; insert the new item 
     (insert (concat "\n" newitem))))
 
+;;;###autoload
+(defun muse-increase-list-item-indentation ()
+  "Increase the indentation of the current list item."
+  (interactive)
+  (let ((pstart (muse-get-paragraph-start))
+        (list-item (format muse-list-item-regexp
+                           (concat "[" muse-regexp-blank "]*"))))
+    ;; search backwards until start of paragraph to see if we are on a
+    ;; current item
+    (save-excursion
+      (if (looking-at list-item)
+	  ;; we are on an item
+	  (if (string-match "::" (match-string 0))
+	      ;; tell why not indenting
+	      (message "You can not indent definitions.")
+	    ;; move to beginning of line and insert
+	    (progn
+	      (beginning-of-line)
+	      (insert "  ")
+	      (fill-paragraph nil)))
+	;; not on item, so search backwards
+	(if (re-search-backward list-item pstart t)
+	    ;; we are on an item, increase the indentation if we are not
+	    ;; on a definition list
+	    (if (string-match "::" (match-string 0))
+		;; tell why not indenting
+		(message "You can not indent definitions.")
+	      (progn
+		(insert "  ")
+		(fill-paragraph nil)))
+	  ;; we are not on an item, so warn
+	  (message "You are not on a list item."))))))
+
+;;;###autoload
+(defun muse-decrease-list-item-indentation ()
+  "Decrease the indentation of the current list item."
+  (interactive)
+  (let ((pstart (muse-get-paragraph-start))
+        (list-item (format muse-list-item-regexp
+                           (concat "[" muse-regexp-blank "]*"))))
+    ;; search backwards until start of paragraph to see if we are on a
+    ;; current item
+    (save-excursion
+      (if (looking-at list-item)
+	  ;; we are on an item
+	  (if (string-match "::" (match-string 0))
+	      ;; tell why not indenting
+	      (message "You can not indent definitions.")
+	    ;; see if we can delete
+	    (progn
+	      (beginning-of-line)
+	      (when (looking-at "  ")
+		;; we have enough space, so delete it
+		(delete-region (match-beginning 0) (match-end 0))
+		(fill-paragraph nil))))
+	;; not on an item, so search backwards
+	(if (re-search-backward list-item pstart t)
+	  ;; we are on an item, increase the indentation if we are not
+	    ;; on a definition list
+	    (if (string-match "::" (match-string 0))
+		;; tell why not indenting
+		(message "You can not indent definitions.")
+	      (when (looking-at "  ")
+		;; we have enough space, so delete it
+		(delete-region (match-beginning 0) (match-end 0))
+		(fill-paragraph nil)))
+	  ;; we are not on an item, so warn
+	  (message "You are not on a list item."))))))
 
 ;;; Support page name completion using pcomplete
 
