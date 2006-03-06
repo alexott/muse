@@ -2,6 +2,42 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-06 01:06:14 GMT	Michael Olson <mwolson@gnu.org>	patch-44
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 5-14)
+    Revision:
+      muse--main--1.0--patch-44
+
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-mode.el (muse-mode-map): Added key mappings to increase or
+      decrease the current item indentation.
+      (muse-get-paragraph-start): Helper function to determine the start of
+      the current paragraph.
+      (muse-insert-list-item): Cleaned up list item insertion code and made
+      it handle definitions.
+      (muse-increase-list-item-indentation): New interactive function to
+      increase list item indentation.
+      (muse-decrease-list-item-indentation): New interactive function to
+      decrease list item indentation.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-5
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-6
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-7
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-8
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-9
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-10
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-11
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-12
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-13
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-14
+
+
 2006-03-06 00:58:00 GMT	Michael Olson <mwolson@gnu.org>	patch-43
 
     Summary:
