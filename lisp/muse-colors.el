@@ -114,7 +114,7 @@ where images should be found."
   ;; reprocess the buffer
   (muse-colors-buffer))
 
-(define-key muse-mode-map [(control ?c) (control ?i)] 
+(define-key muse-mode-map [(control ?c) (control ?i)]
   'muse-colors-toggle-inline-images)
 
 
@@ -691,8 +691,8 @@ ignored."
 file."
   (save-match-data
     (and (or (fboundp 'create-image)
-	     (fboundp 'make-glyph))
-	 (string-match muse-image-regexp link))))
+             (fboundp 'make-glyph))
+         (string-match muse-image-regexp link))))
 
 (defun muse-make-file-glyph (filename)
   "Given a file name, return a newly-created image glyph.
@@ -713,20 +713,20 @@ This is a hack for supporting inline images in Xemacs."
   "Create an image using create-image or make-glyph and insert it
 in place of an image link defined by beg and end"
 
-  (let ((image-file 
-	 (expand-file-name link (symbol-value muse-inline-relative-to)))
-	glyph)
+  (let ((image-file
+         (expand-file-name link (symbol-value muse-inline-relative-to)))
+        glyph)
     (if (fboundp 'create-image)
-	;; use create-image and display property
-	(add-text-properties beg end
-			     (list 'display (create-image image-file)))
+        ;; use create-image and display property
+        (add-text-properties beg end
+                             (list 'display (create-image image-file)))
       ;; use make-glyph and invisible property
       (and (setq glyph (muse-make-file-glyph image-file))
              (progn
-	       (add-text-properties beg end invis-props)
-	       (add-text-properties beg end (list 
-					     'end-glyph glyph
-					     'help-echo link)))))))
+               (add-text-properties beg end invis-props)
+               (add-text-properties beg end (list
+                                             'end-glyph glyph
+                                             'help-echo link)))))))
 
 (defun muse-colors-explicit-link ()
   "Color explicit links."
@@ -747,30 +747,30 @@ in place of an image link defined by beg and end"
            (invis-props (append props (muse-link-properties desc))))
       ;; see if we should try and inline an image
       (if (and muse-colors-inline-images
-	       (muse-colors-resolve-image-file link))
-	  ;; we found an image, so inline it
-	  (muse-colors-insert-image 
-	   link 
-	   (match-beginning 0) (match-end 0) invis-props)
-	(if desc
-	      (progn
-		;; we put the normal face properties on the invisible
-		;; portion too, since emacs sometimes will position
-		;; the cursor on an intangible character
-		(add-text-properties (match-beginning 0)
-				     (match-beginning 2) invis-props)
-		(add-text-properties (match-beginning 2) (match-end 2) props)
-		(add-text-properties (match-end 2) (match-end 0) invis-props))
-	    (add-text-properties (match-beginning 0)
-				 (match-beginning 1) invis-props)
-	    (add-text-properties (match-beginning 1) (match-end 0) props)
-	    (add-text-properties (match-end 1) (match-end 0) invis-props))
-	  (goto-char (match-end 0))
-	  (add-text-properties
-	   (match-beginning 0) (match-end 0)
-	   (muse-link-properties (muse-match-string-no-properties 0)
-				 (muse-link-face link t)))
-	(goto-char (match-end 0))))))
+               (muse-colors-resolve-image-file link))
+          ;; we found an image, so inline it
+          (muse-colors-insert-image
+           link
+           (match-beginning 0) (match-end 0) invis-props)
+        (if desc
+            (progn
+              ;; we put the normal face properties on the invisible
+              ;; portion too, since emacs sometimes will position
+              ;; the cursor on an intangible character
+              (add-text-properties (match-beginning 0)
+                                   (match-beginning 2) invis-props)
+              (add-text-properties (match-beginning 2) (match-end 2) props)
+              (add-text-properties (match-end 2) (match-end 0) invis-props))
+          (add-text-properties (match-beginning 0)
+                               (match-beginning 1) invis-props)
+          (add-text-properties (match-beginning 1) (match-end 0) props)
+          (add-text-properties (match-end 1) (match-end 0) invis-props))
+        (goto-char (match-end 0))
+        (add-text-properties
+         (match-beginning 0) (match-end 0)
+         (muse-link-properties (muse-match-string-no-properties 0)
+                               (muse-link-face link t))))
+      (goto-char (match-end 0)))))
 
 (defun muse-colors-implicit-link ()
   "Color implicit links."

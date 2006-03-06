@@ -2,6 +2,60 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-06 06:06:38 GMT	Michael Olson <mwolson@gnu.org>	patch-47
+
+    Summary:
+      Get increase and decrease of list indentation to work with complex cases.
+    Revision:
+      muse--main--1.0--patch-47
+
+    * lisp/muse-colors.el: Miscellaneous whitespace fixes.
+      (muse-colors-explicit-link): Minor logic tweak.  The indentation seems
+      to indicate this interpretation, though parens are different.
+    
+    * lisp/muse-mode.el: Miscellaneous whitespace fixes.
+      (muse-alter-list-item-indentation): New function that alters the list
+      structure at point.  The behavior to use is specified by the OPERATION
+      argument.  Currently-supported operations are 'increase and 'decrease
+      indentation level.  This now uses the same sort of list detection
+      algorithm that is used during publishing, so it should work as expected
+      for complicated cases.
+      (muse-increase-list-item-indentation)
+      (muse-decrease-list-item-indentation): Use
+      `muse-alter-list-item-indentation'.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse-mode.el
+
+
+2006-03-06 04:50:17 GMT	Michael Olson <mwolson@gnu.org>	patch-46
+
+    Summary:
+      Code simplification; improve muse-list-item-type function.
+    Revision:
+      muse--main--1.0--patch-46
+
+    * lisp/muse.el (muse-list-item-type): Disambiguate between 'dl-term and
+      'dl-entry, instead of just returning 'dl.
+      (muse-forward-dl-term, muse-forward-dl-entry): Use
+      muse-forward-list-item.
+      (muse-forward-dl-part): Remove, merge functionality into
+      muse-forward-list-item.
+      (muse-forward-list-item): Add a few conditions needed for skipping
+      nested 'dl-term and 'dl-entry items.
+    
+    --This line, and those below, will be ignored--
+    Files to commit:
+       lisp/muse.el
+       lisp/muse-mode.el
+    
+    This list might be incomplete or outdated if editing the log
+    message was not invoked from an up-to-date changes buffer!
+
+    modified files:
+     ChangeLog.2006 lisp/muse.el
+
+
 2006-03-06 01:11:58 GMT	Michael Olson <mwolson@gnu.org>	patch-45
 
     Summary:

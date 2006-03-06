@@ -465,7 +465,7 @@ function."
 
 (defun muse-list-item-type (str)
 "Determine the type of list given STR.
-Returns either 'ul, 'ol, or 'dl."
+Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
   (cond ((or (string= str "")
              (< (length str) 2))
          nil)
@@ -475,7 +475,12 @@ Returns either 'ul, 'ol, or 'dl."
         ((save-match-data
            (string-match (concat "\\`[" muse-regexp-blank "][0-9]+\\.") str))
          'ol)
-        (t 'dl)))
+        ((save-match-data
+           (not (string-match (concat "\\`[" muse-regexp-blank "]+::") str)))
+         ;; if str is not any kind of list, it will be interpreted as
+         ;; a dl-term
+         'dl-term)
+        (t 'dl-entry)))
 
 (defun muse-forward-paragraph (&optional pattern)
   (when (get-text-property (point) 'end-list)
@@ -498,7 +503,7 @@ The beginning indentation is given by INDENT."
   (let (status)
     (while (and
             (setq status
-                  (muse-forward-dl-part indent))
+                  (muse-forward-list-item 'dl-term indent))
             (string= (match-string 3) ""))
       (goto-char (match-end 0)))
     status))
@@ -510,67 +515,10 @@ The beginning indentation is given by INDENT."
   (let (status)
     (while (and
             (setq status
-                  (muse-forward-dl-part indent t))
+                  (muse-forward-list-item 'dl-entry indent))
             (not (string= (match-string 3) "")))
       (goto-char (match-end 0)))
     status))
-
-(defun muse-forward-dl-part (indent &optional entry-p)
-  "Move forward to the next definition list part.
-Return non-nil if successful, nil otherwise.
-The beginning indentation is given by INDENT.
-
-If ENTRY-P is non-nil, seach ahead by definition list entries.
-Otherwise, search ahead by definition list terms."
-  (let* ((list-item (format muse-list-item-regexp indent))
-         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
-         (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
-         (list-pattern (concat "\\(?:" empty-line "\\)?"
-                               "\\(" list-item "\\)")))
-    (while (progn
-             (muse-forward-paragraph list-pattern)
-             (or (let ((term (match-string 3)))
-                   ;; see whether term begins with whitespace - if so,
-                   ;; move past it
-                   (and term
-                        (or entry-p
-                            (not (string= term "")))
-                        (save-match-data
-                          (string-match (concat "\\`[" muse-regexp-blank "]")
-                                        term))))
-                 (when (and (not (match-beginning 1))
-                            (not (get-text-property (point) 'end-list))
-                            (< (point) (point-max)))
-                   ;; blank line encountered with no list item on the
-                   ;; same level after it
-                   (let ((beg (point)))
-                     (forward-line 1)
-                     (if (save-match-data
-                           (and (looking-at indented-line)
-                                (not (looking-at empty-line))))
-                         ;; found that this blank line is followed by
-                         ;; some indentation, plus other text, so
-                         ;; we'll keep going
-                         t
-                       (goto-char beg)
-                       nil))))))
-    (cond ((or (get-text-property (point) 'end-list)
-               (>= (point) (point-max)))
-           ;; at a list boundary, so stop
-           nil)
-          ((match-string 2)
-           ;; move just before next occurrence of list item
-           (goto-char (match-beginning 1))
-           (if (eq 'dl (muse-list-item-type (match-string 2)))
-               ;; if same type, indicate that there are more items to
-               ;; be parsed
-               t
-             nil))
-          (t
-           ;; list item found, but was not a definition list
-           (when (match-beginning 1)
-             (goto-char (match-beginning 1)))
-           nil))))
 
 (defun muse-forward-list-item (type indent)
   "Move forward to the next item of TYPE.
@@ -583,21 +531,30 @@ The beginning indentation is given by INDENT."
                                "\\(" list-item "\\)")))
     (while (progn
              (muse-forward-paragraph list-pattern)
-             (when (and (not (match-beginning 1))
-                        (not (get-text-property (point) 'end-list))
-                        (< (point) (point-max)))
-               ;; blank line encountered with no list item on the same
-               ;; level after it
-               (let ((beg (point)))
-                 (forward-line 1)
-                 (if (and (looking-at indented-line)
-                          (not (looking-at empty-line)))
-                     ;; found that this blank line is followed by some
-                     ;; indentation, plus other text, so we'll keep
-                     ;; going
-                     t
-                   (goto-char beg)
-                   nil)))))
+             (or (let ((term (match-string 3)))
+                   ;; see whether term begins with whitespace - if so,
+                   ;; move past it
+                   (and term
+                        (or (eq type 'dl-entry)
+                            (not (string= term "")))
+                        (save-match-data
+                          (string-match (concat "\\`[" muse-regexp-blank "]")
+                                        term))))
+                 (when (and (not (match-beginning 1))
+                            (not (get-text-property (point) 'end-list))
+                            (< (point) (point-max)))
+                   ;; blank line encountered with no list item on the same
+                   ;; level after it
+                   (let ((beg (point)))
+                     (forward-line 1)
+                     (if (and (looking-at indented-line)
+                              (not (looking-at empty-line)))
+                         ;; found that this blank line is followed by some
+                         ;; indentation, plus other text, so we'll keep
+                         ;; going
+                         t
+                       (goto-char beg)
+                       nil))))))
     (cond ((or (get-text-property (point) 'end-list)
                (>= (point) (point-max)))
            ;; at a list boundary, so stop
