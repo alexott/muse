@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-06 00:58:00 GMT	Michael Olson <mwolson@gnu.org>	patch-43
+
+    Summary:
+      Use slightly better algorithm for removing initial whitespace.
+    Revision:
+      muse--main--1.0--patch-43
+
+    * lisp/muse-publish.el (muse-publish-surround-dl): Keep track of whether
+      the definition occurred on the same line as the term.
+      (muse-publish-surround-text): Use a slightly better algorithm for
+      removing initial indentation of list items.  This way, we preserve
+      nesting of lists and also deal with same-level items that occur after
+      nested items.  This probably doesn't make much of a difference in the
+      output, but it should make support of nested definition lists a bit
+      less troublesome in some cases.
+      (muse-forward-dl-entry): Deal with ambiguity in muse-list-item-regexp
+      regexp.
+      (muse-forward-dl-part, muse-forward-list-item): Don't clobber match
+      data.  Don't remove any text.  This makes the function easier to reuse
+      in display-only situations.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-04 02:03:59 GMT	Michael Olson <mwolson@gnu.org>	patch-42
 
     Summary:
