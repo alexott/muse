@@ -2,6 +2,100 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-06 01:11:58 GMT	Michael Olson <mwolson@gnu.org>	patch-45
+
+    Summary:
+      Put movement by list and paragraph functions in muse.el.
+    Revision:
+      muse--main--1.0--patch-45
+
+    * lisp/muse.el (muse-list-item-type, muse-forward-paragraph):
+      (muse-forward-dl-term, muse-forward-dl-entry, muse-forward-dl-part):
+      (muse-forward-list-item): Move here from muse-publish.el, so that
+      muse-mode can make use of these.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse.el
+
+
+2006-03-06 01:06:14 GMT	Michael Olson <mwolson@gnu.org>	patch-44
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 5-14)
+    Revision:
+      muse--main--1.0--patch-44
+
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-mode.el (muse-mode-map): Added key mappings to increase or
+      decrease the current item indentation.
+      (muse-get-paragraph-start): Helper function to determine the start of
+      the current paragraph.
+      (muse-insert-list-item): Cleaned up list item insertion code and made
+      it handle definitions.
+      (muse-increase-list-item-indentation): New interactive function to
+      increase list item indentation.
+      (muse-decrease-list-item-indentation): New interactive function to
+      decrease list item indentation.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-5
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-6
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-7
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-8
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-9
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-10
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-11
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-12
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-13
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-14
+
+
+2006-03-06 00:58:00 GMT	Michael Olson <mwolson@gnu.org>	patch-43
+
+    Summary:
+      Use slightly better algorithm for removing initial whitespace.
+    Revision:
+      muse--main--1.0--patch-43
+
+    * lisp/muse-publish.el (muse-publish-surround-dl): Keep track of whether
+      the definition occurred on the same line as the term.
+      (muse-publish-surround-text): Use a slightly better algorithm for
+      removing initial indentation of list items.  This way, we preserve
+      nesting of lists and also deal with same-level items that occur after
+      nested items.  This probably doesn't make much of a difference in the
+      output, but it should make support of nested definition lists a bit
+      less troublesome in some cases.
+      (muse-forward-dl-entry): Deal with ambiguity in muse-list-item-regexp
+      regexp.
+      (muse-forward-dl-part, muse-forward-list-item): Don't clobber match
+      data.  Don't remove any text.  This makes the function easier to reuse
+      in display-only situations.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
+2006-03-04 02:03:59 GMT	Michael Olson <mwolson@gnu.org>	patch-42
+
+    Summary:
+      In a preliminary way, make definition lists nest.
+    Revision:
+      muse--main--1.0--patch-42
+
+    * lisp/muse-publish.el (muse-forward-dl-part): Make it so that definition
+      lists nest a bit better.
+    
+    * lisp/muse-regexps.el (muse-dl-entry-regexp): Removed, since we don't
+      use it anymore.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-03-03 19:28:22 GMT	Michael Olson <mwolson@gnu.org>	patch-41
 
     Summary:
