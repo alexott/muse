@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-06 01:11:58 GMT	Michael Olson <mwolson@gnu.org>	patch-45
+
+    Summary:
+      Put movement by list and paragraph functions in muse.el.
+    Revision:
+      muse--main--1.0--patch-45
+
+    * lisp/muse.el (muse-list-item-type, muse-forward-paragraph):
+      (muse-forward-dl-term, muse-forward-dl-entry, muse-forward-dl-part):
+      (muse-forward-list-item): Move here from muse-publish.el, so that
+      muse-mode can make use of these.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse.el
+
+
 2006-03-06 01:06:14 GMT	Michael Olson <mwolson@gnu.org>	patch-44
 
     Summary:
