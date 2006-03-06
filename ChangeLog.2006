@@ -2,6 +2,34 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-06 04:50:17 GMT	Michael Olson <mwolson@gnu.org>	patch-46
+
+    Summary:
+      Code simplification; improve muse-list-item-type function.
+    Revision:
+      muse--main--1.0--patch-46
+
+    * lisp/muse.el (muse-list-item-type): Disambiguate between 'dl-term and
+      'dl-entry, instead of just returning 'dl.
+      (muse-forward-dl-term, muse-forward-dl-entry): Use
+      muse-forward-list-item.
+      (muse-forward-dl-part): Remove, merge functionality into
+      muse-forward-list-item.
+      (muse-forward-list-item): Add a few conditions needed for skipping
+      nested 'dl-term and 'dl-entry items.
+    
+    --This line, and those below, will be ignored--
+    Files to commit:
+       lisp/muse.el
+       lisp/muse-mode.el
+    
+    This list might be incomplete or outdated if editing the log
+    message was not invoked from an up-to-date changes buffer!
+
+    modified files:
+     ChangeLog.2006 lisp/muse.el
+
+
 2006-03-06 01:11:58 GMT	Michael Olson <mwolson@gnu.org>	patch-45
 
     Summary:
