@@ -472,6 +472,9 @@ to the text with ARGS as parameters."
       (setq end (point)))
     (save-restriction
       (narrow-to-region beg end)
+      (remove-text-properties (point-min) (point-max)
+                              '(read-only nil rear-nonsticky nil))
+      (goto-char (point-min))
       (muse-publish-markup (or title "")
                            '((100 "<\\(lisp\\)>" 0
                               muse-publish-markup-tag))))))
