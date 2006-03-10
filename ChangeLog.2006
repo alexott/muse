@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-10 04:57:55 GMT	Michael Olson <mwolson@gnu.org>	patch-50
+
+    Summary:
+      Make resolving of inline image paths more flexible.
+    Revision:
+      muse--main--1.0--patch-50
+
+    * lisp/muse-colors.el (muse-colors-inline-image-method): Rename from
+      `muse-inline-relative-to'.  Add muse-colors-use-publishing-directory
+      option.  Make the fallback customization type a function rather than a
+      symbol.
+      (muse-colors-use-publishing-directory): New function that takes the
+      best guess at where the current Muse file will be published and makes
+      the given link relative to that.
+      (muse-colors-insert-image): If muse-colors-inline-image-method is
+      'default-directory, use the default directory.  If it is a function,
+      call that function with LINK as an argument.  Otherwise, give up.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el
+
+
 2006-03-10 03:43:03 GMT	Michael Olson <mwolson@gnu.org>	patch-49
 
     Summary:
