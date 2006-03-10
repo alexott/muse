@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-10 19:29:56 GMT	Michael Olson <mwolson@gnu.org>	patch-53
+
+    Summary:
+      muse-protocols: Add DOI handling.
+    Revision:
+      muse--main--1.0--patch-53
+
+    * lisp/muse-protocols.el (muse-url-protocols): Add handler for DOI's.
+      DOI's (digitial object identifiers) are a standard identifier used in
+      the publishing industry.  Thanks to Phillip Lord for the patch.
+      (muse-resolve-url-doi, muse-browse-url-doi): New functions that resolve
+      and browse DOI's.
+
+    modified files:
+     AUTHORS ChangeLog.2006 lisp/muse-protocols.el
+
+
 2006-03-10 16:34:52 GMT	Michael Olson <mwolson@gnu.org>	patch-52
 
     Summary:
