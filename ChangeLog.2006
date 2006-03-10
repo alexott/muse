@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-10 16:26:53 GMT	Michael Olson <mwolson@gnu.org>	patch-51
+
+    Summary:
+      Make visiting of links a bit faster.
+    Revision:
+      muse--main--1.0--patch-51
+
+    * lisp/muse-colors.el (muse-unhighlight-region): Remove muse-link
+      property.
+      (muse-link-properties): If we are highlighting a link, add the
+      muse-link property.
+    
+    * lisp/muse-mode.el (muse-link-at-point): If the muse-link property
+      exists at point, use it to bound the link.  Otherwise, use the old
+      method.  This should make it easier to visit custom implicit link
+      forms, since it does not require a change to muse-implicit-link-regexp.
+    
+    * lisp/muse-regexps.el (muse-implicit-link-regexp): Note that this is not
+      used when muse-colors.el is loaded.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse-mode.el
+     lisp/muse-regexps.el
+
+
 2006-03-10 04:57:55 GMT	Michael Olson <mwolson@gnu.org>	patch-50
 
     Summary:

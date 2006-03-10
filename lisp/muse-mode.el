@@ -375,27 +375,40 @@ Valid values of OPERATION are 'increase and 'decrease."
   (let ((case-fold-search nil)
         (inhibit-point-motion-hooks t)
         (here (or pos (point))))
-    (when (or (null pos)
-              (and (char-after pos)
-                   (not (eq (char-syntax (char-after pos)) ?\ ))))
-      (save-excursion
-        (goto-char here)
-        ;; Check for explicit link here or before point
-        (if (or (looking-at muse-explicit-link-regexp)
-                (and
-                 (re-search-backward "\\[\\[\\|\\]\\]"
-                                     (muse-line-beginning-position)
-                                     t)
-                 (string= (or (match-string 0) "") "[[")
-                 (looking-at muse-explicit-link-regexp)))
-            (progn
-              (goto-char (match-beginning 1))
-              (muse-handle-explicit-link))
+    ;; if we are using muse-colors, we can just use link properties to
+    ;; determine whether we are on a link
+    (if (get-text-property here 'muse-link)
+        (progn
+          (when (get-text-property (1- here) 'muse-link)
+            (goto-char (or (previous-single-property-change here 'muse-link)
+                           (point-min))))
+          (if (looking-at muse-explicit-link-regexp)
+              (progn
+                (goto-char (match-beginning 1))
+                (muse-handle-explicit-link))
+            (muse-handle-implicit-link)))
+      ;; use fallback method to find a link
+      (when (or (null pos)
+                (and (char-after pos)
+                     (not (eq (char-syntax (char-after pos)) ?\ ))))
+        (save-excursion
           (goto-char here)
-          ;; Check for bare URL or other link type
-          (skip-chars-backward (concat "^'\"<>{}(\n" muse-regexp-blank))
-          (and (looking-at muse-implicit-link-regexp)
-               (muse-handle-implicit-link)))))))
+          ;; check for explicit link here or before point
+          (if (or (looking-at muse-explicit-link-regexp)
+                  (and
+                   (re-search-backward "\\[\\[\\|\\]\\]"
+                                       (muse-line-beginning-position)
+                                       t)
+                   (string= (or (match-string 0) "") "[[")
+                   (looking-at muse-explicit-link-regexp)))
+              (progn
+                (goto-char (match-beginning 1))
+                (muse-handle-explicit-link))
+            (goto-char here)
+            ;; check for bare URL or other link type
+            (skip-chars-backward (concat "^'\"<>{}(\n" muse-regexp-blank))
+            (and (looking-at muse-implicit-link-regexp)
+                 (muse-handle-implicit-link))))))))
 
 (defun muse-make-link (link &optional name)
   "Return a link to LINK with NAME as the text."

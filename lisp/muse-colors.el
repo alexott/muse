@@ -596,7 +596,8 @@ Functions should not modify the contents of the buffer."
         (remove-text-properties
          begin end '(face nil font-lock-multiline nil end-glyph nil
                           invisible nil intangible nil display nil
-                          mouse-face nil keymap nil help-echo nil))
+                          mouse-face nil keymap nil help-echo nil
+                          muse-link nil))
       (set-buffer-modified-p modified-p))))
 
 (defun muse-colors-example-tag (beg end)
@@ -660,7 +661,7 @@ Functions should not modify the contents of the buffer."
 
 (defsubst muse-link-properties (help-str &optional face)
   (append (if face
-              (list 'face face 'mouse-face 'highlight)
+              (list 'face face 'mouse-face 'highlight 'muse-link t)
             (list 'invisible 'muse 'intangible t))
           (list 'help-echo help-str 'rear-nonsticky t
                 muse-keymap-property muse-mode-local-map)))
