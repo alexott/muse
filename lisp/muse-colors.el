@@ -95,11 +95,18 @@ an image is displayed."
   :type 'boolean
   :group 'muse-colors)
 
-(defcustom muse-inline-relative-to 'default-directory
-  "The name of a symbol which records the location relative to
-where images should be found."
+(defcustom muse-colors-inline-image-method 'default-directory
+  "Determine how to locate inline images.
+Setting this to 'default-directory uses the current directory of
+the current Muse buffer.
+
+Setting this to a function calls that function with the filename
+of the image to be inlined.  The value that is returned will be
+used as the filename of the image."
   :type '(choice (const :tag "Current directory" default-directory)
-                 (symbol :tag "Other"))
+                 (const :tag "Publishing directory"
+                        muse-colors-use-publishing-directory)
+                 (function :tag "Custom function"))
   :group 'muse-colors)
 
 
@@ -686,6 +693,16 @@ ignored."
                    'muse-link-face
                  'muse-bad-link-face)))))))
 
+(defun muse-colors-use-publishing-directory (link)
+  "Make LINK relative to the directory where we will publish the
+current file."
+  (let ((style (car (muse-project-applicable-styles
+                     link (cddr (muse-project)))))
+        path)
+    (when (and style
+               (setq path (muse-style-element :path style)))
+      (expand-file-name link path))))
+
 (defun muse-colors-resolve-image-file (link)
   "Determine if we can create images and see if the link is an image
 file."
@@ -708,25 +725,27 @@ This is a hack for supporting inline images in Xemacs."
               ((string-match "png" filename)
                (make-glyph (vector 'png :file filename) 'buffer)))))))
 
-
 (defun muse-colors-insert-image (link beg end invis-props)
   "Create an image using create-image or make-glyph and insert it
-in place of an image link defined by beg and end"
-
-  (let ((image-file
-         (expand-file-name link (symbol-value muse-inline-relative-to)))
+in place of an image link defined by BEG and END."
+  (let ((image-file (cond
+                     ((eq muse-colors-inline-image-method 'default-directory)
+                      (expand-file-name link))
+                     ((functionp muse-colors-inline-image-method)
+                      (funcall muse-colors-inline-image-method link))))
         glyph)
-    (if (fboundp 'create-image)
-        ;; use create-image and display property
-        (add-text-properties beg end
-                             (list 'display (create-image image-file)))
-      ;; use make-glyph and invisible property
-      (and (setq glyph (muse-make-file-glyph image-file))
+    (when (stringp image-file)
+      (if (fboundp 'create-image)
+          ;; use create-image and display property
+          (add-text-properties beg end
+                               (list 'display (create-image image-file)))
+        ;; use make-glyph and invisible property
+        (and (setq glyph (muse-make-file-glyph image-file))
              (progn
                (add-text-properties beg end invis-props)
                (add-text-properties beg end (list
                                              'end-glyph glyph
-                                             'help-echo link)))))))
+                                             'help-echo link))))))))
 
 (defun muse-colors-explicit-link ()
   "Color explicit links."
