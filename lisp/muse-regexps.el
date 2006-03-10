@@ -195,8 +195,11 @@ Paren group 1 is the text to be checked.
 URLs are checked by default.  To get WikiNames, load
 muse-wiki.el.
 
-If you want to match things with spaces in them, you will have to
-modify this."
+This is only used when you are using muse-mode.el, but not
+muse-colors.el.
+
+If the above applies, and you want to match things with spaces in
+them, you will have to modify this."
   :type 'regexp
   :group 'muse-regexp)
 
