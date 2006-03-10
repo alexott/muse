@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-10 03:43:03 GMT	Michael Olson <mwolson@gnu.org>	patch-49
+
+    Summary:
+      Fix inline image lockup.
+    Revision:
+      muse--main--1.0--patch-49
+
+    * lisp/muse-colors.el (muse-colors-explicit-link): Fix regression in
+      patch-47.  This will prevent Muse from locking up after making a new
+      inline image.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el
+
+
 2006-03-07 03:52:11 GMT	Michael Olson <mwolson@gnu.org>	patch-48
 
     Summary:

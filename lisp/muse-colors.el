@@ -769,8 +769,7 @@ in place of an image link defined by beg and end"
         (add-text-properties
          (match-beginning 0) (match-end 0)
          (muse-link-properties (muse-match-string-no-properties 0)
-                               (muse-link-face link t))))
-      (goto-char (match-end 0)))))
+                               (muse-link-face link t)))))))
 
 (defun muse-colors-implicit-link ()
   "Color implicit links."
