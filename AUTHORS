@@ -9,7 +9,7 @@ John Wiegley: Original author
 Michael Olson: Current maintainer
 
 Trent Buck: Contributor,
-            muse-latex.el: 4 lines changed.
+            muse-latex.el: 4 lines changed
 
 Sacha Chua: Contributor -- documentation
             (assigned past and future changes)
@@ -35,13 +35,15 @@ Peter K. Lee: Contributor,
               (assigned past and future changes)
 
 Na Li:       Contributor,
-             muse-latex2png.el: 1 line changed.
+             muse-latex2png.el: 1 line changed
 
 Phillip Lord: Contributor,
-              muse-colors.el: 3 lines changed.
+              muse-colors.el: 3 lines changed
+              muse-protocols: 3 lines changed
+              (assignment pending)
 
 Chris Lowis: Contributor,
-             muse-latex2png.el: 1 line changed.
+             muse-latex2png.el: 1 line changed
 
 Jim Ottaway: Contributor
              (assigned past and future changes)
