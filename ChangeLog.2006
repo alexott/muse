@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-10 22:56:22 GMT	Michael Olson <mwolson@gnu.org>	patch-54
+
+    Summary:
+      muse-protocols: Add Wikipedia support.
+    Revision:
+      muse--main--1.0--patch-54
+
+    * lisp/muse-protocols.el (muse-url-protocols): Add "dict:" handler.  This
+      is used to look up terms on the Wikipedia website.
+      (muse-wikipedia-country): New option that specifies the country code to
+      use for Wikipedia.
+      (muse-resolve-url-dict, muse-browse-url-dict): New functions that
+      resolve and browse Wikipedia URLs.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-protocols.el
+
+
 2006-03-10 19:29:56 GMT	Michael Olson <mwolson@gnu.org>	patch-53
 
     Summary:
