@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-10 16:34:52 GMT	Michael Olson <mwolson@gnu.org>	patch-52
+
+    Summary:
+      Refine previous patch.
+    Revision:
+      muse--main--1.0--patch-52
+
+    * lisp/muse-mode.el (muse-link-at-point): If muse-colors is loaded, don't
+      ever use the fallback method.  Save point when using new method.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+
 2006-03-10 16:26:53 GMT	Michael Olson <mwolson@gnu.org>	patch-51
 
     Summary:

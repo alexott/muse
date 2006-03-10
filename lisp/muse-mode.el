@@ -377,16 +377,17 @@ Valid values of OPERATION are 'increase and 'decrease."
         (here (or pos (point))))
     ;; if we are using muse-colors, we can just use link properties to
     ;; determine whether we are on a link
-    (if (get-text-property here 'muse-link)
-        (progn
-          (when (get-text-property (1- here) 'muse-link)
-            (goto-char (or (previous-single-property-change here 'muse-link)
+    (if (featurep 'muse-colors)
+        (when (get-text-property here 'muse-link)
+          (save-excursion
+            (when (get-text-property (1- here) 'muse-link)
+              (goto-char (or (previous-single-property-change here 'muse-link)
                            (point-min))))
-          (if (looking-at muse-explicit-link-regexp)
-              (progn
-                (goto-char (match-beginning 1))
-                (muse-handle-explicit-link))
-            (muse-handle-implicit-link)))
+            (if (looking-at muse-explicit-link-regexp)
+                (progn
+                  (goto-char (match-beginning 1))
+                  (muse-handle-explicit-link))
+              (muse-handle-implicit-link))))
       ;; use fallback method to find a link
       (when (or (null pos)
                 (and (char-after pos)
