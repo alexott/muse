@@ -2,6 +2,42 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-11 23:42:56 GMT	Michael Olson <mwolson@gnu.org>	patch-56
+
+    Summary:
+      Make nested definition list items work much better.
+    Revision:
+      muse--main--1.0--patch-56
+
+    * lisp/muse-publish.el (muse-publish-surround-dl): Use
+      `muse-forward-list-item'.  Don't pass indent and post-indent to the
+      move function.
+      (muse-publish-surround-text): If we are to determine the indentation,
+      but have found no list items, set indent to the empty string.  If we
+      are to determine indentation but have found an item, get all leading
+      whitespace and set indent to it.  Never try to determine post-indent
+      using the first line.  Try to contain the amount of "damage" a nested
+      list item can do to wrapped list item text.
+    
+    * lisp/muse-regexps.el (muse-list-item-regexp): Hone the definition list
+      part so that it is easier to indicate the amount of desired initial
+      whitespace.
+    
+    * lisp/muse.el (muse-list-item-type): Make initial whitespace of a dl
+      entry optional.
+      (muse-forward-dl-term, muse-forward-dl-entry): Remove.  Functionality
+      merged into `muse-forward-list-item'.
+      (muse-forward-list-item-1): New function that determines whether a
+      nested list item is found.
+      (muse-forward-list-item): Move hairy nested list detection algorithm
+      into `muse-forward-list-item-1'.  Be extra careful about terminating
+      when we go past the boundary.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+     lisp/muse.el
+
+
 2006-03-11 06:10:19 GMT	Michael Olson <mwolson@gnu.org>	patch-55
 
     Summary:

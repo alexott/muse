@@ -952,9 +952,7 @@ The following contexts exist in Muse.
         (delete-region (point) (match-end 0))
         (muse-insert-markup-end-list end-ddt)
         ;; if definition is immediately after term, move to next line
-        (if (eq (char-after) ?\n)
-            (setq def-on-same-line 0)
-          (setq def-on-same-line 1)
+        (unless (eq (char-after) ?\n)
           (insert ?\n))
         (save-excursion
           (goto-char beg)
@@ -962,14 +960,16 @@ The following contexts exist in Muse.
           (muse-insert-markup beg-ddt)))
       (setq beg (point)
             ;; move past current item
-            continue (muse-forward-dl-term indent))
+            continue (muse-forward-list-item 'dl-term indent))
       (save-restriction
         (narrow-to-region beg (point))
         (goto-char (point-min))
         ;; publish each definition that we find, defaulting to an
         ;; empty definition if none are found
-        (muse-publish-surround-text beg-dde end-dde #'muse-forward-dl-entry
-                                    indent post-indent def-on-same-line)
+        (muse-publish-surround-text beg-dde end-dde
+         (lambda (indent)
+           (muse-forward-list-item 'dl-entry indent))
+         nil nil t)
         (goto-char (point-max))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup-end-list end-item)
@@ -995,38 +995,42 @@ The following contexts exist in Muse.
             ;; are more like items to be processed
             continue (funcall move-func indent))
       (save-restriction
+        (when determine-indent
+          ;; if the caller doesn't know how much indentation
+          ;; to use, figure it out ourselves
+          (if (not continue)
+              (setq indent "")
+            (save-match-data
+              ;; snarf all leading whitespace
+              (let ((this-indent (and (match-beginning 2)
+                                      (buffer-substring (match-beginning 1)
+                                                        (match-beginning 2)))))
+                (when (and this-indent
+                           (not (string= this-indent "")))
+                  (setq indent this-indent
+                        determine-indent nil))))))
         (when continue
-          (when determine-indent
-            (if (= determine-indent 0)
-                ;; if the caller doesn't know how much indentation
-                ;; to use, figure it out ourselves
-                (progn
-                  (setq indent
-                        (or (save-match-data
-                              ;; snarf all but the last whitespace
-                              ;; character
-                              (and (looking-at
-                                    (concat "^\\([" muse-regexp-blank
-                                            "]+\\)[" muse-regexp-blank "]"))
-                                   (match-string 1)))
-                            ""))
-                  (setq determine-indent nil))
-              (setq determine-indent (1- determine-indent))))
           ;; remove list markup if we encountered another item of the
           ;; same type
           (replace-match "" t t nil 1))
         (narrow-to-region beg (point))
         ;; narrow to current item
         (goto-char (point-min))
-        (while (< (point) (point-max))
-          (when (and (not (looking-at list-item))
-                     (looking-at (concat indent post-indent)))
-            ;; if list is not nested, remove indentation
-            (unless indent-found
-                (setq indent (match-string 0)
+        (forward-line 1)
+        (let ((list-nested nil))
+          (while (< (point) (point-max))
+            (when (looking-at list-item)
+              ;; if we encounter a list item, allow no post-indent
+              ;; space
+              (setq list-nested t))
+            (when (looking-at (concat indent (or (and list-nested "")
+                                                 post-indent)))
+              ;; if list is not nested, remove indentation
+              (unless indent-found
+                (setq post-indent (match-string 0)
                       indent-found t))
-            (replace-match ""))
-          (forward-line 1))
+              (replace-match ""))
+            (forward-line 1)))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup-end-list end-tag)
         (when continue
