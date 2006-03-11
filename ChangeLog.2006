@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-11 06:10:19 GMT	Michael Olson <mwolson@gnu.org>	patch-55
+
+    Summary:
+      Add backlink support, thanks to Jim Ottaway.
+    Revision:
+      muse--main--1.0--patch-55
+
+    * lisp/muse-colors.el (muse-colors-fontifying-p): New buffer-local
+      variable that indicates whether Muse is fontifying the current buffer.
+      (muse-colors-region): Set `muse-colors-fontifying' to t.
+    
+    * lisp/muse-backlinks.el: New file by Jim Ottaway that provides backlink
+      support.  I've modified it slightly to get rid of the defadvice forms.
+
+    new files:
+     lisp/.arch-ids/muse-backlink.el.id lisp/muse-backlink.el
+
+    modified files:
+     AUTHORS ChangeLog.2006 lisp/muse-colors.el
+
+
 2006-03-10 22:56:22 GMT	Michael Olson <mwolson@gnu.org>	patch-54
 
     Summary:

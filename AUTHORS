@@ -45,7 +45,8 @@ Phillip Lord: Contributor,
 Chris Lowis: Contributor,
              muse-latex2png.el: 1 line changed
 
-Jim Ottaway: Contributor
+Jim Ottaway: Author of muse-backlink.el
+             Contributor
              (assigned past and future changes)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
@@ -53,8 +54,8 @@ Andrea Riciputi: Idea taken from code, but re-implemented
 Per B. Sederberg: Contributor
                   (assignment pending)
 
-René Stadler: Contributor
-              muse-project.el: 1 line changed.
+René Stadler: Contributor,
+              muse-project.el: 1 line changed
 
 Dale P. Smith: Contributor
                (disclaimed changes to Emacs)
@@ -66,17 +67,17 @@ Ganesh Swami: Original author of muse-latex2png.el
               (assignment pending)
 
 G. J. Teale: Contributor,
-             muse-project.el: 2 lines changed.
+             muse-project.el: 2 lines changed
 
 Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               basis for muse-blosxom.el
               (assigned past and future changes)
 
 Sergey Vlasov: Contributor,
-               muse-colors.el: 3 lines changed.
+               muse-colors.el: 3 lines changed
 
 Lan Yufeng: Contributor,
-            muse-colors.el: 1 line changed.
+            muse-colors.el: 1 line changed
 
 
 Contributed software

@@ -469,6 +469,10 @@ affect the match data results."
   (interactive)
   (muse-colors-region (point-min) (point-max) t))
 
+(defvar muse-colors-fontifying-p nil
+  "Indicate whether Muse is fontifying the current buffer.")
+(make-variable-buffer-local 'muse-colors-fontifying-p)
+
 (defun muse-colors-region (beg end &optional verbose)
   "Apply highlighting according to `muse-colors-markup'.
 Note that this function should NOT change the buffer, nor should any
@@ -478,6 +482,7 @@ of the functions listed in `muse-colors-markup'."
         (inhibit-point-motion-hooks t)
         (inhibit-modification-hooks t)
         (modified-p (buffer-modified-p))
+        (muse-colors-fontifying-p t)
         deactivate-mark)
     (unwind-protect
         (save-excursion
