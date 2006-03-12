@@ -980,7 +980,6 @@ The following contexts exist in Muse.
   (let ((continue t)
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
-        (indent-found nil)
         init-indent beg)
     (unless indent
       (setq indent (concat "[" muse-regexp-blank "]+")))
@@ -1017,7 +1016,9 @@ The following contexts exist in Muse.
         ;; narrow to current item
         (goto-char (point-min))
         (forward-line 1)
-        (let ((list-nested nil))
+        (let ((list-nested nil)
+              (indent-found nil)
+              (post-indent post-indent))
           (while (< (point) (point-max))
             (when (looking-at list-item)
               ;; if we encounter a list item, allow no post-indent

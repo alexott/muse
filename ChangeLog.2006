@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-12 21:12:48 GMT	Michael Olson <mwolson@gnu.org>	patch-59
+
+    Summary:
+      Fix output for consecutive list items of same type.
+    Revision:
+      muse--main--1.0--patch-59
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Make calculated
+      post-indent and indent-found values local to each list item.  This
+      should fix undesired behavior with consecutive list items of the same
+      type.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-12 21:09:43 GMT	Michael Olson <mwolson@gnu.org>	patch-58
 
     Summary:
