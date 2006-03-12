@@ -228,8 +228,9 @@ fill mode."
 Otherwise return nil.
 
 This is used to keep links from being improperly colorized by flyspell."
-  (save-match-data
-    (null (muse-link-at-point))))
+  (and (not (get-text-property (1- (point)) 'muse-link))
+       (save-match-data
+         (null (muse-link-at-point)))))
 
 (defun muse-mode-choose-mode ()
   "Turn the proper Emacs Muse related mode on for this file."

@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-12 19:56:26 GMT	Michael Olson <mwolson@gnu.org>	patch-57
+
+    Summary:
+      Slightly improve flyspell integration.
+    Revision:
+      muse--main--1.0--patch-57
+
+    * lisp/muse-mode.el (muse-mode-flyspell-p): Use the new 'muse-link text
+      property to determine whether we are at a link.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+
 2006-03-11 23:42:56 GMT	Michael Olson <mwolson@gnu.org>	patch-56
 
     Summary:
