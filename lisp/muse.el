@@ -517,10 +517,15 @@ Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
         (goto-char beg)
         nil))))
 
-(defun muse-forward-list-item (type indent)
+(defun muse-forward-list-item (type indent &optional no-skip-nested)
   "Move forward to the next item of TYPE.
 Return non-nil if successful, nil otherwise.
-The beginning indentation is given by INDENT."
+The beginning indentation is given by INDENT.
+
+If NO-SKIP-NESTED is non-nil, do not skip past nested items.
+Note that if you desire this behavior, you will also need to
+provide a very liberal INDENT value, such as
+\(concat \"[\" muse-regexp-blank \"]*\")."
   (let* ((list-item (format muse-list-item-regexp indent))
          (empty-line (concat "^[" muse-regexp-blank "]*\n"))
          (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
@@ -529,7 +534,8 @@ The beginning indentation is given by INDENT."
     (while (progn
              (muse-forward-paragraph list-pattern)
              ;; make sure we don't go past boundary
-             (and (not (or (get-text-property (point) 'end-list)
+             (and (not no-skip-nested)
+                  (not (or (get-text-property (point) 'end-list)
                            (>= (point) (point-max))))
                   (muse-forward-list-item-1 type empty-line indented-line))))
     (cond ((or (get-text-property (point) 'end-list)

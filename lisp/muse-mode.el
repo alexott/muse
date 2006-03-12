@@ -318,9 +318,8 @@ Valid values of OPERATION are 'increase and 'decrease."
             (setq indent (buffer-substring (match-beginning 0)
                                            (match-beginning 1)))
             (muse-forward-list-item (muse-list-item-type (match-string 1))
-                                    (concat " \\{0,"
-                                            (number-to-string (length indent))
-                                            "\\}"))
+                                    (concat "[" muse-regexp-blank "]*")
+                                    t)
             (save-restriction
               (narrow-to-region beg (point))
               (goto-char (point-min))

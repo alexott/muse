@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-12 21:09:43 GMT	Michael Olson <mwolson@gnu.org>	patch-58
+
+    Summary:
+      Make C-> and C-< keybindings not indent nested items.
+    Revision:
+      muse--main--1.0--patch-58
+
+    * lisp/muse-mode.el (muse-alter-list-item-indentation): Don't include
+      nested items.
+    
+    * lisp/muse.el (muse-forward-list-item): Make skipping of nested items
+      optional, and document this.
+    
+    --This line, and those below, will be ignored--
+    Files to commit:
+       lisp/muse.el
+       lisp/muse-publish.el
+       lisp/muse-mode.el
+    
+    This list might be incomplete or outdated if editing the log
+    message was not invoked from an up-to-date changes buffer!
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el lisp/muse.el
+
+
 2006-03-12 19:56:26 GMT	Michael Olson <mwolson@gnu.org>	patch-57
 
     Summary:
