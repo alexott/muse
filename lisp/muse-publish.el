@@ -1278,7 +1278,11 @@ the cadr is the page name, and the cddr is the anchor."
           ((eq type 'link)
            (muse-markup-text 'link url (or desc orig-url)))
           (t
-           (muse-markup-text 'url url (or desc orig-url))))))
+           (or (and desc
+                    (let ((text (muse-markup-text 'url-and-desc url desc)))
+                      (and (not (string= text ""))
+                           text)))
+               (muse-markup-text 'url url (or desc orig-url)))))))
 
 (defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."

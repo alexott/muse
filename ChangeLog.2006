@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-13 19:38:36 GMT	Michael Olson <mwolson@gnu.org>	patch-63
+
+    Summary:
+      muse-latex: Add footnotes to links so that they show up on printed copies.
+    Revision:
+      muse--main--1.0--patch-63
+
+    * lisp/muse-latex.el (muse-latex-markup-strings): Add string for
+      'url-and-desc.  Display footnotes if we have both a link and a
+      description, since we want URLs to show up on printed documents.
+      (muse-latex-markup-specials-document): Escape the "@" character in the
+      entire document.
+    
+    * lisp/muse-publish.el (muse-publish-url): Distinguish between URLs
+      without descriptions and URLs with descriptions.  If no markup string
+      exists for 'url-and-desc, fall back to 'url.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-latex.el lisp/muse-publish.el
+
+
 2006-03-13 18:42:27 GMT	Michael Olson <mwolson@gnu.org>	patch-62
 
     Summary:
