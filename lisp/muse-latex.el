@@ -1,21 +1,21 @@
 ;;; muse-latex.el --- publish entries in LaTex or PDF format
 
-;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
-;; This is free software; you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free
-;; Software Foundation; either version 2, or (at your option) any later
-;; version.
-;;
-;; This is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-;; for more details.
-;;
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
@@ -24,7 +24,7 @@
 ;;; Contributors:
 
 ;; Li Daobing (lidaobing AT gmail DOT com) provided CJK support.
-;;
+
 ;; Trent Buck (trentbuck AT gmail DOT com) gave valuable advice for
 ;; how to treat LaTeX specials and the like.
 
@@ -145,8 +145,9 @@ For more on the structure of this list, see
     (url-with-image  . "%% %s\n\\includegraphics[width=\\textwidth]{%s}")
     (anchor-ref      . "\\ref{%s}")
     (url             . "\\url{%s}")
-    (link            . "\\href{%s}{%s}")
-    (link-and-anchor . "\\href{%1%}{%3%}")
+    (url-and-desc    . "\\href{%s}{%s}\\footnote{%1%}")
+    (link            . "\\href{%s}{%s}\\footnote{%1%}")
+    (link-and-anchor . "\\href{%1%}{%3%}\\footnote{%1%}")
     (email-addr      . "\\verb|%s|")
     (anchor          . "\\label{%s}")
     (emdash          . "---")
@@ -246,6 +247,7 @@ system to an associated CJK coding system."
     (?\> . "\\textgreater{}")
     (?^  . "\\^{}")
     (?\~ . "\\~{}")
+    (?\@ . "\\@")
     (?\$ . "\\$")
     (?\% . "\\%")
     (?\{ . "\\{")

@@ -1,32 +1,27 @@
 ;;; muse-colors.el --- coloring and highlighting used by Muse
 
-;; Copyright (C) 2004, 2005, 2006  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
-;; Emacs Lisp Archive Entry
-;; Filename: muse-colors.el
-;; Date: Thu 11-Mar-2004
-;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
-;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
-;; URL: http://www.mwolson.org/projects/MuseMode.html
-;; Compatibility: Emacs21
+;; Keywords: hypermedia
+;; Date: Thu 11-Mar-2004
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
-;; This is free software; you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free
-;; Software Foundation; either version 2, or (at your option) any later
-;; version.
-;;
-;; This is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-;; for more details.
-;;
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
-;; MA 02111-1307, USA.
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -469,6 +464,10 @@ affect the match data results."
   (interactive)
   (muse-colors-region (point-min) (point-max) t))
 
+(defvar muse-colors-fontifying-p nil
+  "Indicate whether Muse is fontifying the current buffer.")
+(make-variable-buffer-local 'muse-colors-fontifying-p)
+
 (defun muse-colors-region (beg end &optional verbose)
   "Apply highlighting according to `muse-colors-markup'.
 Note that this function should NOT change the buffer, nor should any
@@ -478,6 +477,7 @@ of the functions listed in `muse-colors-markup'."
         (inhibit-point-motion-hooks t)
         (inhibit-modification-hooks t)
         (modified-p (buffer-modified-p))
+        (muse-colors-fontifying-p t)
         deactivate-mark)
     (unwind-protect
         (save-excursion

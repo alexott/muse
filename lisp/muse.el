@@ -10,23 +10,23 @@
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
 ;; Description: An authoring and publishing tool for Emacs
-;; URL: http://www.mwolson.org/projects/MuseMode.html
+;; URL: http://www.mwolson.org/projects/EmacsMuse.html
 ;; Compatibility: Emacs21 XEmacs21 Emacs22
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
-;; This is free software; you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free
-;; Software Foundation; either version 2, or (at your option) any later
-;; version.
-;;
-;; This is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-;; for more details.
-;;
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
@@ -476,7 +476,7 @@ Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
            (string-match (concat "\\`[" muse-regexp-blank "][0-9]+\\.") str))
          'ol)
         ((save-match-data
-           (not (string-match (concat "\\`[" muse-regexp-blank "]+::") str)))
+           (not (string-match (concat "\\`[" muse-regexp-blank "]*::") str)))
          ;; if str is not any kind of list, it will be interpreted as
          ;; a dl-term
          'dl-term)
@@ -496,34 +496,36 @@ Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
     (when (> (point) next-list-end)
       (goto-char next-list-end))))
 
-(defun muse-forward-dl-term (indent)
-  "Move forward to the next definition list term according to level.
-Return non-nil if successful, nil otherwise.
-The beginning indentation is given by INDENT."
-  (let (status)
-    (while (and
-            (setq status
-                  (muse-forward-list-item 'dl-term indent))
-            (string= (match-string 3) ""))
-      (goto-char (match-end 0)))
-    status))
+(defun muse-forward-list-item-1 (type empty-line indented-line)
+  "Determine whether a nested list item is after point."
+  (if (match-beginning 1)
+      ;; if we are given a dl entry, skip past everything on the same
+      ;; level, except for other dl entries
+      (and (eq type 'dl-entry)
+           (not (eq (char-after (match-beginning 2)) ?\:)))
+    ;; blank line encountered with no list item on the same
+    ;; level after it
+    (let ((beg (point)))
+      (forward-line 1)
+      (if (save-match-data
+            (and (looking-at indented-line)
+                 (not (looking-at empty-line))))
+          ;; found that this blank line is followed by some
+          ;; indentation, plus other text, so we'll keep
+          ;; going
+          t
+        (goto-char beg)
+        nil))))
 
-(defun muse-forward-dl-entry (indent)
-  "Move forward to the next definition list entry according to level.
-Return non-nil if successful, nil otherwise.
-The beginning indentation is given by INDENT."
-  (let (status)
-    (while (and
-            (setq status
-                  (muse-forward-list-item 'dl-entry indent))
-            (not (string= (match-string 3) "")))
-      (goto-char (match-end 0)))
-    status))
-
-(defun muse-forward-list-item (type indent)
+(defun muse-forward-list-item (type indent &optional no-skip-nested)
   "Move forward to the next item of TYPE.
 Return non-nil if successful, nil otherwise.
-The beginning indentation is given by INDENT."
+The beginning indentation is given by INDENT.
+
+If NO-SKIP-NESTED is non-nil, do not skip past nested items.
+Note that if you desire this behavior, you will also need to
+provide a very liberal INDENT value, such as
+\(concat \"[\" muse-regexp-blank \"]*\")."
   (let* ((list-item (format muse-list-item-regexp indent))
          (empty-line (concat "^[" muse-regexp-blank "]*\n"))
          (indented-line (concat "^" indent "[" muse-regexp-blank "]"))
@@ -531,30 +533,11 @@ The beginning indentation is given by INDENT."
                                "\\(" list-item "\\)")))
     (while (progn
              (muse-forward-paragraph list-pattern)
-             (or (let ((term (match-string 3)))
-                   ;; see whether term begins with whitespace - if so,
-                   ;; move past it
-                   (and term
-                        (or (eq type 'dl-entry)
-                            (not (string= term "")))
-                        (save-match-data
-                          (string-match (concat "\\`[" muse-regexp-blank "]")
-                                        term))))
-                 (when (and (not (match-beginning 1))
-                            (not (get-text-property (point) 'end-list))
-                            (< (point) (point-max)))
-                   ;; blank line encountered with no list item on the same
-                   ;; level after it
-                   (let ((beg (point)))
-                     (forward-line 1)
-                     (if (and (looking-at indented-line)
-                              (not (looking-at empty-line)))
-                         ;; found that this blank line is followed by some
-                         ;; indentation, plus other text, so we'll keep
-                         ;; going
-                         t
-                       (goto-char beg)
-                       nil))))))
+             ;; make sure we don't go past boundary
+             (and (not no-skip-nested)
+                  (not (or (get-text-property (point) 'end-list)
+                           (>= (point) (point-max))))
+                  (muse-forward-list-item-1 type empty-line indented-line))))
     (cond ((or (get-text-property (point) 'end-list)
                (>= (point) (point-max)))
            ;; at a list boundary, so stop

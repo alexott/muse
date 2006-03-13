@@ -8,44 +8,49 @@ John Wiegley: Original author
 
 Michael Olson: Current maintainer
 
-Trent Buck: Contributor,
-            muse-latex.el: 4 lines changed
+Trent Buck: Contributor:
+             - muse-latex.el: 4 lines changed
 
 Sacha Chua: Contributor -- documentation
             (assigned past and future changes)
 
-Brad Collins: Contributor, author of examples/muse.rnc schema
+Brad Collins: Author of:
+               - muse-protocols.el
+               - examples/muse.rnc schema
+              Contributor
               (assigned past and future changes)
 
-Li Daobing: Contributor, author of muse-mathml.el
+Li Daobing: Author of muse-mathml.el,
+            Contributor
             (assigned past and future changes)
 
-Bastien Guerry: Contributor, author of muse-registry.el
+Bastien Guerry: Author of muse-registry.el,
+                Contributor
                 (assigned past and future changes)
 
-Yann Hodique: Contributor, author of muse-wiki.el
+Yann Hodique: Author of muse-wiki.el,
+              Contributor
               (assigned past and future changes)
 
 Andrew J. Korty: Author of muse-groff.el
                  (assigned past and future changes)
 
-Peter K. Lee: Contributor,
-              muse-xml.el: Ideas and markup strings taken.
-              muse-publish.el: 11 lines changed.
+Peter K. Lee: Contributor
               (assigned past and future changes)
 
-Na Li:       Contributor,
-             muse-latex2png.el: 1 line changed
+Na Li:       Contributor:
+              - muse-latex2png.el: 1 line changed
 
-Phillip Lord: Contributor,
-              muse-colors.el: 3 lines changed
-              muse-protocols: 3 lines changed
+Phillip Lord: Contributor:
+               - muse-colors.el: 3 lines changed
+               - muse-protocols: 3 lines changed
               (assignment pending)
 
-Chris Lowis: Contributor,
-             muse-latex2png.el: 1 line changed
+Chris Lowis: Contributor:
+              - muse-latex2png.el: 1 line changed
 
-Jim Ottaway: Contributor
+Jim Ottaway: Author of muse-backlink.el,
+             Contributor
              (assigned past and future changes)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
@@ -53,8 +58,8 @@ Andrea Riciputi: Idea taken from code, but re-implemented
 Per B. Sederberg: Contributor
                   (assignment pending)
 
-René Stadler: Contributor
-              muse-project.el: 1 line changed.
+René Stadler: Contributor:
+               - muse-project.el: 1 line changed
 
 Dale P. Smith: Contributor
                (disclaimed changes to Emacs)
@@ -62,21 +67,21 @@ Dale P. Smith: Contributor
 John Sullivan: Contributor -- documentation
                (assigned past and future changes)
 
-Ganesh Swami: Original author of muse-latex2png.el
+Ganesh Swami: Author of muse-latex2png.el
               (assignment pending)
 
-G. J. Teale: Contributor,
-             muse-project.el: 2 lines changed.
+G. J. Teale: Contributor:
+              - muse-project.el: 2 lines changed
 
 Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               basis for muse-blosxom.el
               (assigned past and future changes)
 
-Sergey Vlasov: Contributor,
-               muse-colors.el: 3 lines changed.
+Sergey Vlasov: Contributor:
+                - muse-colors.el: 3 lines changed
 
-Lan Yufeng: Contributor,
-            muse-colors.el: 1 line changed.
+Lan Yufeng: Contributor:
+             - muse-colors.el: 1 line changed
 
 
 Contributed software

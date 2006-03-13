@@ -2,20 +2,20 @@
 
 ;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
-;; This is free software; you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free
-;; Software Foundation; either version 2, or (at your option) any later
-;; version.
-;;
-;; This is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-;; for more details.
-;;
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
@@ -228,8 +228,9 @@ fill mode."
 Otherwise return nil.
 
 This is used to keep links from being improperly colorized by flyspell."
-  (save-match-data
-    (null (muse-link-at-point))))
+  (and (not (get-text-property (1- (point)) 'muse-link))
+       (save-match-data
+         (null (muse-link-at-point)))))
 
 (defun muse-mode-choose-mode ()
   "Turn the proper Emacs Muse related mode on for this file."
@@ -317,9 +318,8 @@ Valid values of OPERATION are 'increase and 'decrease."
             (setq indent (buffer-substring (match-beginning 0)
                                            (match-beginning 1)))
             (muse-forward-list-item (muse-list-item-type (match-string 1))
-                                    (concat " \\{0,"
-                                            (number-to-string (length indent))
-                                            "\\}"))
+                                    (concat "[" muse-regexp-blank "]*")
+                                    t)
             (save-restriction
               (narrow-to-region beg (point))
               (goto-char (point-min))

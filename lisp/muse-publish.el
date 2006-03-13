@@ -1,21 +1,21 @@
 ;;; muse-publish.el --- base publishing implementation
 
-;; Copyright (C) 2004, 2005, 2006  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
-;; This is free software; you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free
-;; Software Foundation; either version 2, or (at your option) any later
-;; version.
-;;
-;; This is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-;; for more details.
-;;
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
@@ -25,12 +25,12 @@
 
 ;; Yann Hodique (yann DOT hodique AT gmail DOT com) fixed an
 ;; unnecessary URL description transform in `muse-publish-url'.
-;;
+
 ;; Peter K. Lee (saint AT corenova DOT com) provided the
 ;; `muse-style-elements-list' function.
-;;
-;; Jim Ottaway (j DOT ottaway AT lse DOT ac DOT uk) provided an
-;; implementation for nested lists.
+
+;; Jim Ottaway (j DOT ottaway AT lse DOT ac DOT uk) provided a
+;; reference implementation for nested lists.
 
 ;;; Code:
 
@@ -952,9 +952,7 @@ The following contexts exist in Muse.
         (delete-region (point) (match-end 0))
         (muse-insert-markup-end-list end-ddt)
         ;; if definition is immediately after term, move to next line
-        (if (eq (char-after) ?\n)
-            (setq def-on-same-line 0)
-          (setq def-on-same-line 1)
+        (unless (eq (char-after) ?\n)
           (insert ?\n))
         (save-excursion
           (goto-char beg)
@@ -962,14 +960,16 @@ The following contexts exist in Muse.
           (muse-insert-markup beg-ddt)))
       (setq beg (point)
             ;; move past current item
-            continue (muse-forward-dl-term indent))
+            continue (muse-forward-list-item 'dl-term indent))
       (save-restriction
         (narrow-to-region beg (point))
         (goto-char (point-min))
         ;; publish each definition that we find, defaulting to an
         ;; empty definition if none are found
-        (muse-publish-surround-text beg-dde end-dde #'muse-forward-dl-entry
-                                    indent post-indent def-on-same-line)
+        (muse-publish-surround-text beg-dde end-dde
+         (lambda (indent)
+           (muse-forward-list-item 'dl-entry indent))
+         nil nil t)
         (goto-char (point-max))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup-end-list end-item)
@@ -980,7 +980,6 @@ The following contexts exist in Muse.
   (let ((continue t)
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
-        (indent-found nil)
         init-indent beg)
     (unless indent
       (setq indent (concat "[" muse-regexp-blank "]+")))
@@ -995,38 +994,46 @@ The following contexts exist in Muse.
             ;; are more like items to be processed
             continue (funcall move-func indent))
       (save-restriction
+        (when determine-indent
+          ;; if the caller doesn't know how much indentation
+          ;; to use, figure it out ourselves
+          (if (not continue)
+              (setq indent "")
+            (save-match-data
+              ;; snarf all leading whitespace
+              (let ((this-indent (and (match-beginning 2)
+                                      (buffer-substring (match-beginning 1)
+                                                        (match-beginning 2)))))
+                (when (and this-indent
+                           (not (string= this-indent "")))
+                  (setq indent this-indent
+                        determine-indent nil))))))
         (when continue
-          (when determine-indent
-            (if (= determine-indent 0)
-                ;; if the caller doesn't know how much indentation
-                ;; to use, figure it out ourselves
-                (progn
-                  (setq indent
-                        (or (save-match-data
-                              ;; snarf all but the last whitespace
-                              ;; character
-                              (and (looking-at
-                                    (concat "^\\([" muse-regexp-blank
-                                            "]+\\)[" muse-regexp-blank "]"))
-                                   (match-string 1)))
-                            ""))
-                  (setq determine-indent nil))
-              (setq determine-indent (1- determine-indent))))
           ;; remove list markup if we encountered another item of the
           ;; same type
           (replace-match "" t t nil 1))
         (narrow-to-region beg (point))
         ;; narrow to current item
         (goto-char (point-min))
-        (while (< (point) (point-max))
-          (when (and (not (looking-at list-item))
-                     (looking-at (concat indent post-indent)))
-            ;; if list is not nested, remove indentation
-            (unless indent-found
-                (setq indent (match-string 0)
+        (forward-line 1)
+        (let ((list-nested nil)
+              (indent-found nil)
+              (post-indent post-indent))
+          (while (< (point) (point-max))
+            (when (looking-at list-item)
+              ;; if we encounter a list item, allow no post-indent
+              ;; space
+              (setq list-nested t))
+            (when (looking-at (concat indent "\\("
+                                      (or (and list-nested "")
+                                          post-indent)
+                                      "\\)"))
+              ;; if list is not nested, remove indentation
+              (unless indent-found
+                (setq post-indent (match-string 1)
                       indent-found t))
-            (replace-match ""))
-          (forward-line 1))
+              (replace-match ""))
+            (forward-line 1)))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup-end-list end-tag)
         (when continue
@@ -1271,7 +1278,11 @@ the cadr is the page name, and the cddr is the anchor."
           ((eq type 'link)
            (muse-markup-text 'link url (or desc orig-url)))
           (t
-           (muse-markup-text 'url url (or desc orig-url))))))
+           (or (and desc
+                    (let ((text (muse-markup-text 'url-and-desc url desc)))
+                      (and (not (string= text ""))
+                           text)))
+               (muse-markup-text 'url url (or desc orig-url)))))))
 
 (defun muse-publish-insert-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."

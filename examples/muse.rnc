@@ -1,8 +1,11 @@
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace rng = "http://relaxng.org/ns/structure/1.0"
 
-#   Muse-Mode RELAX NG Schema v. 0.2
-#   Copyright (C) 2005  Free Software Foundation, Inc.
+#   Emacs Muse RELAX NG Schema v. 0.3
+#   Copyright (C) 2005, 2006 Free Software Foundation, Inc.
+
+#   Author: Brad Collins (brad AT chenla DOT org)
+#   Maintainer: Michael Olson (mwolson AT gnu DOT org)
 
 #   This is free software; you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by
@@ -20,7 +23,7 @@ namespace rng = "http://relaxng.org/ns/structure/1.0"
 #
 #   RelaxNG Compact syntax can be converted into RelaxNG XML Syntax,
 #   DTD format and XML Schema language using free tools.
-
+#
 #   Emacs users are encouraged to use James Clarke's nxml-mode for
 #   editing and validating XML files.  If you are in nxml-mode use the
 #   command C-c C-s C-f to point to this schema file, say yes if you
@@ -28,12 +31,21 @@ namespace rng = "http://relaxng.org/ns/structure/1.0"
 #   C-c C-s C-a can be used to reload the schema if you make changes
 #   to the file.
 
+# History:
+#
+#   Version 0.1:
+#    - Original version by Brad Collins.
+#
+#   Version 0.2:
+#    - Hacked it to the point of working with Muse's QuickStart
+#      document.
+#
+#   Version 0.3:
+#    - Permit lists to be nested.
+
 # Contributors:
-#
-# Brad Collins (brad AT chenla DOT org) wrote the initial file.
-#
-# Michael Olson (mwolson AT gnu DOT org) made it work with Muse's
-# QuickStart document.
+
+# Schema:
 
 start = MUSE
 
@@ -143,7 +155,12 @@ muse.element.item = element item {
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
-   & muse.element.image*
+   & muse.element.p*
+   & muse.element.blockquote*
+   & muse.element.table*
+   & muse.element.example*
+   & muse.element.verse*
+   & muse.element.list*
    & text }?
 
 # ------------------------------------------------
