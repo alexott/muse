@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-13 18:42:27 GMT	Michael Olson <mwolson@gnu.org>	patch-62
+
+    Summary:
+      Fix publishing error with multi-line wrapped list items.
+    Revision:
+      muse--main--1.0--patch-62
+
+    * lisp/muse-publish.el (muse-publish-surround-text): Fix a problem with
+      multiple lines of a wrapped list item.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-13 02:10:44 GMT	Michael Olson <mwolson@gnu.org>	patch-61
 
     Summary:

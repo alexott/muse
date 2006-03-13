@@ -1024,11 +1024,13 @@ The following contexts exist in Muse.
               ;; if we encounter a list item, allow no post-indent
               ;; space
               (setq list-nested t))
-            (when (looking-at (concat indent (or (and list-nested "")
-                                                 post-indent)))
+            (when (looking-at (concat indent "\\("
+                                      (or (and list-nested "")
+                                          post-indent)
+                                      "\\)"))
               ;; if list is not nested, remove indentation
               (unless indent-found
-                (setq post-indent (match-string 0)
+                (setq post-indent (match-string 1)
                       indent-found t))
               (replace-match ""))
             (forward-line 1)))
