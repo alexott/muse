@@ -2,6 +2,71 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-13 01:48:10 GMT	Michael Olson <mwolson@gnu.org>	patch-60
+
+    Summary:
+      Update Muse XML schema.
+    Revision:
+      muse--main--1.0--patch-60
+
+    * examples/muse.rnc: Allow nested list items.  Update header.  Provide
+      history.  We'll call this v0.3 of the schema.
+    
+    * lisp/muse-xml-common.el: Update header.
+      (muse-xml-markup-table): Fix table generation when attributes are not
+      specified.
+    
+    --This line, and those below, will be ignored--
+    Files to commit:
+       lisp/muse-wiki.el
+       lisp/muse-http.el
+       lisp/muse-html.el
+       lisp/muse.el
+       lisp/muse-docbook.el
+       lisp/muse-convert.el
+       lisp/muse-colors.el
+       lisp/muse-book.el
+       lisp/muse-texinfo.el
+       lisp/muse-publish.el
+       lisp/muse-project.el
+       lisp/muse-poem.el
+       lisp/muse-mode.el
+       experimental/muse-message.el
+       lisp/muse-latex.el
+       lisp/muse-journal.el
+       lisp/muse-regexps.el
+       experimental/muse-mathml.el
+       lisp/muse-latex2png.el
+       examples/mwolson/stylesheets/screen.css
+       examples/mwolson/stylesheets/print.css
+       examples/mwolson/stylesheets/common.css
+       examples/mwolson/stylesheets/common.css
+       examples/mwolson/stylesheets/blog.css
+       examples/mwolson/stylesheets/blog.css
+       lisp/muse-registry.el
+       examples/muse.rnc
+       examples/mwolson/muse-init.el
+       AUTHORS
+       lisp/muse-backlink.el
+       debian/copyright
+       lisp/muse-xml-common.el
+       muse.texi
+       lisp/muse-protocols.el
+       experimental/muse-cite.el
+       README
+       lisp/muse-xml.el
+       lisp/muse-blosxom.el
+       lisp/muse-groff.el
+       COPYING
+       .arch-ids/COPYING.id
+    
+    This list might be incomplete or outdated if editing the log
+    message was not invoked from an up-to-date changes buffer!
+
+    modified files:
+     ChangeLog.2006 examples/muse.rnc lisp/muse-xml-common.el
+
+
 2006-03-12 21:12:48 GMT	Michael Olson <mwolson@gnu.org>	patch-59
 
     Summary:
