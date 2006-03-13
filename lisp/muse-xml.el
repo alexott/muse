@@ -1,19 +1,24 @@
 ;;; muse-xml.el --- publish XML files
 
-;; Copyright (C) 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
 
-;; This file is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
+;; Author: Michael Olson (mwolson AT gnu DOT org)
+;; Date: Sat 23-Jul-2005
 
-;; This file is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
+
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
@@ -31,12 +36,9 @@
 ;; Peter K. Lee (saint AT corenova DOT com) made the initial
 ;; implementation of planner-publish.el, which was heavily borrowed
 ;; from.
-;;
+
 ;; Brad Collins (brad AT chenla DOT org) provided a Compact RelaxNG
 ;; schema.
-;;
-;; Michael Olson (mwolson AT gnu DOT org) assembled everything into a
-;; usable form.
 
 ;;; Code:
 

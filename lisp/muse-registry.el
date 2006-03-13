@@ -1,25 +1,28 @@
 ;;; muse-registry.el --- registry for Muse and Planner
 
-;; Copyright (C) 2005, 2006 Bastien Guerry
+;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
 ;; Time-stamp: <2006-01-23 18:21:18 guerry>
 ;;
-;; Author: bzg@altern.org
+;; Author: Bastien Guerry <bzg@altern.org>
 ;; Version: $Id: muse-registry.el,v 0.1 2006/01/23 17:21:21 guerry Exp $
 ;; Keywords: planner muse registry
 
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
+
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, write to the Free Software
-;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -65,7 +68,7 @@
 ;; 2) Wiki links support
 
 ;;; Problems:
-;;
+
 ;; If you're using this with Planner, the default value of
 ;; `planner-bibtex-separator' must be changed from ":" to something
 ;; else.
@@ -76,9 +79,11 @@
 ;; URLs as well.
 
 ;;; History:
-;;
+
 ;; 2005.11.22 - new release.
 ;; 2005.11.18 - first release.
+
+;;; Contributors:
 
 ;;; Code:
 

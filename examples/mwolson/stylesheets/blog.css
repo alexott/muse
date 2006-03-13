@@ -3,34 +3,6 @@
    Elements for my blog.
 */
 
-.menu {
-  background-color: #F5F5F5;    /* white smoke */
-  color: black;
-  border: 1px solid black;
-  display: inline;
-  float: right;
-  clear: both;
-  margin-left: 0.2em;
-  margin-bottom: 0.2em;
-  padding: .5em;
-}
-
-.menuitem {
-  text-align: left;
-}
-
-.menuitem a:link, .menuitem a:visited {
-  color: #006400;               /* dark green */
-  display: block;
-  margin: .2em;
-  padding-top: 4px;
-  text-decoration: none;
-}
-
-.menuitem a:hover { 
-  background-color: #D3D3D3;    /* light gray */
-}
-
 td {
 }
 

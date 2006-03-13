@@ -1,30 +1,24 @@
 ;;; muse-mathml.el --- provide MathML support for Muse
 
-;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
-;; Emacs Lisp Archive Entry
-;; Filename: muse-mathml.el
-;; Keywords: Muse mathml hypermedia
 ;; Author: Li Daobing (lidaobing AT gmail DOT com)
-;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
-;; Description: Provide MathML support for Muse
-;; URL: http://www.mwolson.org/projects/MuseMode.html
-;; Compatibility: Emacs20, Emacs21, XEmacs21
+;; Keywords: Muse mathml hypermedia
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
-;; This is free software; you can redistribute it and/or modify it
-;; under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
-;;
-;; This is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
-;; License for more details.
-;;
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 

@@ -2,6 +2,52 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-13 02:10:44 GMT	Michael Olson <mwolson@gnu.org>	patch-61
+
+    Summary:
+      Add COPYING file; update headers.
+    Revision:
+      muse--main--1.0--patch-61
+
+    * COPYING: New file containing the GNU GPL.
+    
+    * AUTHORS: Bookkeeping.
+    
+    * README: Add License section.  Change Muse homepage URL.
+    
+    * debian/copyright: Change Muse homepage URL.  Prune list to those who
+      have changed 15+ lines of code, since this is the amount that
+      constitutes legal contribution to a software work, AFAICT.
+    
+    * examples/mwolson: Update contents of directory to match my current
+      setup.
+    
+    * experimental/muse*.el, lisp/muse*.el: Update headers.
+    
+    * muse.texi: Change Muse homepage URL.
+
+    new files:
+     .arch-ids/COPYING.id COPYING
+
+    modified files:
+     AUTHORS ChangeLog.2006 README debian/copyright
+     examples/mwolson/muse-init.el
+     examples/mwolson/stylesheets/blog.css
+     examples/mwolson/stylesheets/common.css
+     examples/mwolson/stylesheets/print.css
+     examples/mwolson/stylesheets/screen.css
+     experimental/muse-cite.el experimental/muse-mathml.el
+     experimental/muse-message.el lisp/muse-backlink.el
+     lisp/muse-blosxom.el lisp/muse-book.el lisp/muse-colors.el
+     lisp/muse-convert.el lisp/muse-docbook.el lisp/muse-groff.el
+     lisp/muse-html.el lisp/muse-http.el lisp/muse-journal.el
+     lisp/muse-latex.el lisp/muse-latex2png.el lisp/muse-mode.el
+     lisp/muse-poem.el lisp/muse-project.el lisp/muse-protocols.el
+     lisp/muse-publish.el lisp/muse-regexps.el
+     lisp/muse-registry.el lisp/muse-texinfo.el lisp/muse-wiki.el
+     lisp/muse-xml.el lisp/muse.el muse.texi
+
+
 2006-03-13 01:48:10 GMT	Michael Olson <mwolson@gnu.org>	patch-60
 
     Summary:
