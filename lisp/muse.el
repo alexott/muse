@@ -306,10 +306,10 @@ omitted, a default message listing FORM itself is used."
 If fourth arg FIXEDCASE is non-nil, do not alter case of replacement text.
 If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
   (cond
-   ((fboundp 'replace-regexp-in-string)
-    (replace-regexp-in-string regexp replacement text fixedcase literal))
    ((fboundp 'replace-in-string)
     (replace-in-string text regexp replacement literal))
+   ((fboundp 'replace-regexp-in-string)
+    (replace-regexp-in-string regexp replacement text fixedcase literal))
    (t (let ((repl-len (length replacement))
             start)
         (while (setq start (string-match regexp text start))

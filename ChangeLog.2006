@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-14 18:41:54 GMT	Michael Olson <mwolson@gnu.org>	patch-64
+
+    Summary:
+      Fix #5477: muse-replace-regexp-in-string throws error in XEmacs 21.4
+    Revision:
+      muse--main--1.0--patch-64
+
+    * Makefile.defs, lisp/muse-colors.el: Fix typo.
+    
+    * lisp/muse.el (muse-replace-regexp-in-string): Switch order so that
+      `replace-in-string' is checked before `replace-regexp-in-string', since
+      XEmacs' implementation of the latter seems to be broken.  Thanks to Jim
+      Ottaway for the heads up.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs lisp/muse-colors.el lisp/muse.el
+
+
 2006-03-13 19:38:36 GMT	Michael Olson <mwolson@gnu.org>	patch-63
 
     Summary:
