@@ -748,8 +748,8 @@ link descriptions.  The syntax is as follows.
 @end example
 
 Thus, the current maintainer's homepage for Muse can be found
-@samp{[[http://www.mwolson.org/projects/MuseMode.html][here]]},
-or at @samp{[[http://www.mwolson.org/projects/MuseMode.html]]}.
+@samp{[[http://www.mwolson.org/projects/EmacsMuse.html][here]]},
+or at @samp{[[http://www.mwolson.org/projects/EmacsMuse.html]]}.
 
 @node Implicit Links, Images, Explicit Links, Markup Rules
 @comment  node-name,  next,  previous,  up
@@ -778,7 +778,7 @@ will be used as InterWiki names by default.  Several examples follow.
 
 @example
 Blog::DocumentingMuse
-Projects#MuseMode
+Projects#EmacsMuse
 Website
 @end example
 
@@ -2368,7 +2368,7 @@ emacswiki.org page, and anyone may add tips, hints, or bug descriptions
 to it.
 
 @item
-@uref{http://www.mwolson.org/projects/MuseMode.html} is the web page
+@uref{http://www.mwolson.org/projects/EmacsMuse.html} is the web page
 that Michael Olson (the current maintainer) made for Muse.
 
 @item
@@ -2390,7 +2390,7 @@ questions.  The @samp{#muse} channel is also available for
 Muse-specific help, and its current maintainer hangs out there.
 
 @item
-The maintainer of MuseMode, Michael Olson, may be contacted at
+The maintainer of Emacs Muse, Michael Olson, may be contacted at
 @email{mwolson@@gnu.org}.
 
 @end itemize

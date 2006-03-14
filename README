@@ -1,7 +1,7 @@
 
 This is the README file for the Emacs Muse.
 
-The terms "the Emacs Muse", "Emacs Muse", and "Muse" will be used
+The terms "the Emacs Muse", "Emacs Muse", and "Muse" are used
 interchangeably throughout this document to refer to this software.
 
 Synopsis
@@ -11,9 +11,27 @@ Emacs Muse is an authoring and publishing environment for Emacs.  It
 simplifies the process of writings documents and publishing them to
 various output formats.
 
-Muse consists of two main parts: an enhanced text-mode for authoring
-documents and navigating within Muse projects, and a set of publishing
-styles for generating different kinds of output.
+Emacs Muse consists of two main parts: an enhanced text-mode for
+authoring documents and navigating within Muse projects, and a set of
+publishing styles for generating different kinds of output.
+
+License
+=======
+
+Emacs Muse is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+Emacs Muse is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Emacs Muse; see the file COPYING.  If not, write to the
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
 
 Directory contents
 ==================
@@ -142,7 +160,7 @@ more information on bugs, unimplemented features, and user-contributed
 tweaks.
 
 The current maintainer's website is at
-http://www.mwolson.org/projects/MuseMode.html.
+http://www.mwolson.org/projects/EmacsMuse.html.
 
 A mailing list for Muse and some related software exists; consult
 http://www.emacswiki.org/cgi-bin/wiki/EmacsWikiMailingList for details

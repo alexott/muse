@@ -2,6 +2,41 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-03-14 19:21:43 GMT	Michael Olson <mwolson@gnu.org>	patch-59
+
+    Summary:
+      Merged from mwolson@gnu.org--2006 (patch 61)
+    Revision:
+      muse--rel--3.02--patch-59
+
+    Patches applied:
+    
+     * mwolson@gnu.org--2006/muse--main--1.0--patch-61
+       Add COPYING file; update headers.
+
+    new files:
+     .arch-ids/COPYING.id COPYING
+
+    modified files:
+     ChangeLog README debian/copyright
+     examples/mwolson/muse-init.el
+     examples/mwolson/stylesheets/blog.css
+     examples/mwolson/stylesheets/common.css
+     examples/mwolson/stylesheets/print.css
+     examples/mwolson/stylesheets/screen.css
+     experimental/muse-cite.el experimental/muse-message.el
+     lisp/muse-blosxom.el lisp/muse-book.el lisp/muse-colors.el
+     lisp/muse-convert.el lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-http.el lisp/muse-journal.el lisp/muse-latex.el
+     lisp/muse-mode.el lisp/muse-poem.el lisp/muse-project.el
+     lisp/muse-protocols.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-texinfo.el lisp/muse-wiki.el
+     lisp/muse-xml.el lisp/muse.el muse.texi
+
+    new patches:
+     mwolson@gnu.org--2006/muse--main--1.0--patch-61
+
+
 2006-01-28 02:49:14 GMT	Michael Olson <mwolson@gnu.org>	patch-58
 
     Summary:

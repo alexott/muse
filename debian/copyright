@@ -2,11 +2,10 @@ This package was debianized by Trent Buck <trentbuck@gmail.com> on
 Thu, 23 Jun 2005 13:12:12 +1000.
 
 It was downloaded from
-http://www.mwolson.org/projects/MuseMode.html
+http://www.mwolson.org/projects/EmacsMuse.html
 
 Upstream Authors: John Wiegley <johnw@gnu.org>
                   Michael Olson <mwolson@gnu.org>
-                  Trent Buck <trentbuck@gmail.com>
                   Sacha Chua <sacha@free.net.ph>
                   Brad Collins <brad@chenla.org>
                   Li Daobing <lidaobing@gmail.com>
@@ -14,18 +13,10 @@ Upstream Authors: John Wiegley <johnw@gnu.org>
                   Yann Hodique <yann.hodique@gmail.com>
                   Andrew J. Korty <ajk@iu.edu>
                   Peter K. Lee <saint@corenova.com>
-                  Na Li <nali@umn.edu>
-                  Phillip Lord <Phillip.Lord@newcastle.ac.uk>
-                  Chris Lowis <chris.lowis@gmail.com>
                   Jim Ottaway <j.ottaway@lse.ac.uk>
-                  Andrea Riciputi <ariciputi@pito.com>
                   Dale P. Smith <dsmich@adelphia.net>
                   John Sullivan <john@wjsullivan.net>
                   Ganesh Swami <g5@iamganesh.com>
-                  G. J. Teale <tealeg@member.fsf.org>
-                  Gary Vaughan <gary@gnu.org>
-                  Sergey Vlasov <vsu@altlinux.ru>
-                  Lan Yufeng <nlany.web@gmail.com>
 
 Copyright:
 

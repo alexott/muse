@@ -1,4 +1,4 @@
-/* Michael Olson's tweaked emacs-wiki stylesheet
+/* Michael Olson's tweaked Muse stylesheet
 
    Common elements.
 */
@@ -47,14 +47,6 @@ body {
   margin-top: 1%;
 }
 
-dl.contents {
-  margin-top: 0;
-}
-
-dt.contents {
-  margin-bottom: .5em;
-}
-
 dt {
   font-weight: bold;
   margin-top: .5em;
@@ -77,6 +69,7 @@ h1 {
 
 h2 {
   border-bottom: solid 2px #708090; /* slate gray */
+  clear: left;
   font-size: large;
   margin-top: 2.5em;
   margin-bottom: .5em;
@@ -103,6 +96,10 @@ h4 {
   padding-right: 6px;
 }
 
+hr {
+  clear: right;
+}
+
 img {
   border: 0;
 }
@@ -113,6 +110,7 @@ li {
 }
 
 p.verse {
+  clear: left;
   line-height: 2em;
   margin-left: 5%;
 }
@@ -153,4 +151,42 @@ table {
 ul {
   list-style-type: disc;
   margin-bottom: 1.5em;
+}
+
+/* Menu */
+
+.menu {
+  background-color: #F5F5F5;    /* white smoke */
+  color: white;
+  border: 1px solid black;
+  display: inline;
+  float: right;
+  clear: both;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  padding: .5em;
+}
+
+.menuitem {
+  text-align: left;
+}
+
+.menuitem a:link, .menuitem a:visited {
+  color: #006400;               /* dark green */
+  display: block;
+  margin: .2em;
+  padding-top: 4px;
+}
+
+.menuitem a:hover { 
+  background-color: #D3D3D3;    /* light gray */
+}
+
+#tooltipbox {
+  float: right;
+  visibility: hidden;
+}
+
+#tooltip {
+  color: #006400;               /* dark green */
 }

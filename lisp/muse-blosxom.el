@@ -1,25 +1,24 @@
 ;;; muse-blosxom.el --- publish a document tree for serving by (py)Blosxom
 
-;; Copyright (C) 2004, 2005  Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
-;; Date: Wed, 23 March 2005
 ;; Author: Michael Olson (mwolson AT gnu DOT org)
-;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
+;; Date: Wed, 23 March 2005
 
-;; This file is not part of GNU Emacs.
+;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
-;; This is free software; you can redistribute it and/or modify it under
-;; the terms of the GNU General Public License as published by the Free
-;; Software Foundation; either version 2, or (at your option) any later
-;; version.
-;;
-;; This is distributed in the hope that it will be useful, but WITHOUT
-;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-;; for more details.
-;;
+;; Emacs Muse is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation; either version 2, or (at your
+;; option) any later version.
+
+;; Emacs Muse is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with Emacs Muse; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
@@ -99,12 +98,9 @@
 
 ;; Gary Vaughan (gary AT gnu DOT org) is the original author of
 ;; `emacs-wiki-blosxom.el', which is the ancestor of this file.
-;;
+
 ;; Brad Collins (brad AT chenla DOT org) ported this file to Muse.
-;;
-;; Michael Olson (mwolson AT gnu DOT org) further adapted this file to
-;; Muse and continues to maintain it.
-;;
+
 ;; Björn Lindström (bkhl AT elektrubadur DOT se) made many valuable
 ;; suggestions.
 
