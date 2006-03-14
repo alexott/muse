@@ -714,7 +714,7 @@ file."
 
 (defun muse-make-file-glyph (filename)
   "Given a file name, return a newly-created image glyph.
-This is a hack for supporting inline images in Xemacs."
+This is a hack for supporting inline images in XEmacs."
   (let ((case-fold-search nil))
     ;; Scan filename to determine image type
     (when (fboundp 'make-glyph)
