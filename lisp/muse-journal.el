@@ -524,8 +524,8 @@ For more on the structure of this list, see
         (if title
             (save-match-data
               (if (string-match muse-explicit-link-regexp title)
-                  (setq enclosure (match-string 1 title)
-                        title (match-string 2 title)))))
+                  (setq enclosure (muse-get-link title)
+                        title (muse-get-link-desc title)))))
         (save-match-data
           (when (and date
                      (string-match

@@ -760,8 +760,8 @@ in place of an image link defined by BEG and END."
     (save-excursion
       (goto-char (match-beginning 0))
       (looking-at muse-explicit-link-regexp))
-    (let* ((link (muse-match-string-no-properties 1))
-           (desc (muse-match-string-no-properties 2))
+    (let* ((link (muse-get-link))
+           (desc (muse-get-link-desc))
            (props (muse-link-properties
                    desc (muse-link-face link t)))
            (invis-props (append props (muse-link-properties desc))))
