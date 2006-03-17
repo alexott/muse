@@ -365,6 +365,16 @@ The value of the :type attribute should be an unconverted widget type."
 
 ;; Link-handling functions and variables
 
+(defun muse-get-link (&optional target)
+  "Based on the match data, retrieve the link.
+Use TARGET to get the string, if it is specified."
+  (muse-match-string-no-properties 1 target))
+
+(defun muse-get-link-desc (&optional target)
+  "Based on the match data, retrieve the link description.
+Use TARGET to get the string, if it is specified."
+  (muse-match-string-no-properties 2 target))
+
 (defun muse-link-escape (text)
   "Escape characters in TEXT that conflict with the explicit link
 regexp."
@@ -459,7 +469,7 @@ function."
     (muse-link-unescape
      (if res
          res
-       (or link (match-string 1))))))
+       (or link (muse-get-link))))))
 
 ;; Movement functions
 

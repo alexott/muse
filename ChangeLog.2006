@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-17 01:56:38 GMT	Michael Olson <mwolson@gnu.org>	patch-65
+
+    Summary:
+      Attempt to make new syntaxes easier to support.
+    Revision:
+      muse--main--1.0--patch-65
+
+    * lisp/muse-colors.el (muse-colors-explicit-link): Use `muse-get-link'
+      and `muse-get-link-data'.
+    
+    * lisp/muse-journal.el (muse-journal-rss-munge-buffer): Ditto.
+    
+    * lisp/muse-mode.el (muse-edit-link-at-point): Ditto.
+      (muse-make-link): Change argument name.
+    
+    * lisp/muse.el (muse-handle-explicit-link): Ditto.
+      (muse-get-link, muse-get-link-desc): New functions that return the link
+      and the link description, respectively, from the given TARGET.  The
+      idea is that at least one other markup syntax puts descriptions before
+      links, so all they would have to do is re-define these two functions.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse-journal.el
+     lisp/muse-mode.el lisp/muse.el
+
+
 2006-03-14 18:41:54 GMT	Michael Olson <mwolson@gnu.org>	patch-64
 
     Summary:

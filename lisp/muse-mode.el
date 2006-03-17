@@ -411,16 +411,16 @@ Valid values of OPERATION are 'increase and 'decrease."
             (and (looking-at muse-implicit-link-regexp)
                  (muse-handle-implicit-link))))))))
 
-(defun muse-make-link (link &optional name)
-  "Return a link to LINK with NAME as the text."
+(defun muse-make-link (link &optional desc)
+  "Return a link to LINK with DESC as the description."
   (when (string-match muse-explicit-link-regexp link)
-    (unless name (setq name (match-string 2 link)))
-    (setq link (match-string 1 link)))
-  (if (and name
+    (unless desc (setq desc (muse-get-link-desc link)))
+    (setq link (muse-get-link link)))
+  (if (and desc
            link
-           (not (string= name ""))
-           (not (string= link name)))
-      (concat "[[" (muse-link-escape link) "][" (muse-link-escape name) "]]")
+           (not (string= desc ""))
+           (not (string= link desc)))
+      (concat "[[" (muse-link-escape link) "][" (muse-link-escape desc) "]]")
     (concat "[[" (muse-link-escape link) "]]")))
 
 ;;;###autoload
@@ -446,9 +446,9 @@ Do not rename the page originally referred to."
        (save-match-data
          (muse-make-link
           (read-string "Link: "
-                       (muse-match-string-no-properties 1))
+                       (muse-get-link))
           (read-string "Text: "
-                       (muse-match-string-no-properties 2))))
+                       (muse-get-link-desc))))
        t t)
     (error "There is no valid link at point")))
 
