@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-20 18:43:15 GMT	Michael Olson <mwolson@gnu.org>	patch-66
+
+    Summary:
+      Make it easier to call context-specific region-escaping function.
+    Revision:
+      muse--main--1.0--patch-66
+
+    * lisp/muse-publish.el (muse-publish-escape-specials): If a function is
+      returned from specials, call it with beg, end, ignore-read-only args.
+      This allows for people to specify their own functions for escaping
+      regions, depending on context.  See `muse-xml-decide-specials' in
+      muse-xml-common.el.  This functionality already exists for escaping
+      specials in strings.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-03-17 01:56:38 GMT	Michael Olson <mwolson@gnu.org>	patch-65
 
     Summary:
