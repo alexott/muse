@@ -667,7 +667,6 @@ GREP-COMMAND if passed will supplant `muse-grep-command'."
                             (shell-quote-argument
                              (expand-file-name dir)))
                           muse-directories " ")))
-    ;;(dirs default-directory))
     (while (string-match "%W" str)
       (setq str (replace-match string t t str)))
     (while (string-match "%D" str)

@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-21 01:59:03 GMT	Michael Olson <mwolson@gnu.org>	patch-68
+
+    Summary:
+      Minor code cleanup.
+    Revision:
+      muse--main--1.0--patch-68
+
+    * lisp/muse-mode.el (muse-grep): Remove commented-out code.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+
 2006-03-21 01:56:21 GMT	Michael Olson <mwolson@gnu.org>	patch-67
 
     Summary:
