@@ -95,10 +95,38 @@ so only enable this if you don't use either of these."
            (set sym val))
   :group 'muse-mode)
 
+(defcustom muse-grep-command
+  "find %D -type f ! -name '*~' | xargs -I {} echo \\\"{}\\\" | xargs egrep -n -e \"%W\""
+  "The command to use when grepping for backlinks and other
+searches through the muse projects.  The string %D is replaced by
+the directories from muse-project-alist, space-separated.  The
+string %W is replaced with the name of the muse page or whatever
+else you are searching for.  This command has been modified to
+handle spaces in filenames, which were giving egrep a problem.
+
+Note: We highly recommend using glimpse to search large projects.
+To use glimpse, install and edit a file called .glimpse_exclude
+in your home directory.  Put a list of glob patterns in that file
+to exclude Emacs backup files, etc.  Then, run the indexer using:
+
+  glimpseindex -o <list of Wiki directories>
+
+Once that's completed, customize this variable to have the
+following value:
+
+  glimpse -nyi \"%W\"
+
+Your searches will go much, much faster, especially for very
+large projects.  Don't forget to add a user cronjob to update the
+index at intervals."
+  :type 'string
+  :group 'muse-mode)
+
+
 (defvar muse-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [(control ?c) (control ?a)] 'muse-index)
-    (define-key map [(control ?c) (control ?b)] 'muse-browse-result)
+    (define-key map [(control ?c) (control ?v)] 'muse-browse-result)
     (define-key map [(control ?c) (control ?c)] 'muse-follow-name-at-point)
     (define-key map [(control ?c) (control ?e)] 'muse-edit-link-at-point)
     (define-key map [(control ?c) (control ?t)] 'muse-publish-this-file)
@@ -136,7 +164,11 @@ so only enable this if you don't use either of these."
     (define-key map [(control ?c) (?i) (?l)]
       'muse-insert-relative-link-to-file)
 
-    ;; Enhanced link functions
+    ;; Searching functions
+    (define-key map [(control ?c) (control ?b)] 'muse-find-backlinks)    
+    (define-key map [(control ?c) (control ?s)] 'muse-search)
+
+    ;; Enhanced list functions
     (define-key map [(meta return)] 'muse-insert-list-item)
     (define-key map [(control ?>)] 'muse-increase-list-item-indentation)
     (define-key map [(control ?<)] 'muse-decrease-list-item-indentation)
@@ -613,6 +645,66 @@ This function is not entirely accurate, but it's close enough."
   "Show the unsaved changes that have been made to the current file."
   (interactive)
   (diff-backup buffer-file-name))
+
+
+;;; Find text in project pages, or pages referring to the current page
+
+(defvar muse-search-history nil)
+
+(defun muse-grep (string &optional grep-command-no-shadow)
+  "Grep for STRING in the project directories.
+GREP-COMMAND if passed will supplant `muse-grep-command'."
+  ;; careful - grep-command leaks into compile, so we call it
+  ;; -no-shadow instead
+  (require 'compile)
+  (let* ((str (or grep-command-no-shadow muse-grep-command))
+	;((car (car (cdr (car muse-project-alist)))))
+	(muse-directories (mapcar 
+			   (lambda (thing)
+			     (car (cadr thing)))
+			   muse-project-alist))
+        (dirs (mapconcat (lambda (dir)
+                           (shell-quote-argument
+                            (expand-file-name dir)))
+                         muse-directories " ")))
+	;;(dirs default-directory))
+    (while (string-match "%W" str)
+      (setq str (replace-match string t t str)))
+    (while (string-match "%D" str)
+      (setq str (replace-match dirs t t str)))
+    (if (fboundp 'compilation-start)
+        (compilation-start str nil (lambda (&rest args) "*search*")
+                           grep-regexp-alist)
+      (compile-internal str "No more search hits" "search"
+                        nil grep-regexp-alist))))
+
+;;;###autoload
+(defun muse-search-with-command (text)
+  "Search for the given TEXT string in the project directories using the specified command."
+  (interactive
+   (list (let ((str (concat muse-grep-command)) pos)
+           (when (string-match "%W" str)
+             (setq pos (match-beginning 0))
+             (unless (featurep 'xemacs)
+               (setq pos (1+ pos)))
+             (setq str (replace-match "" t t str)))
+           (read-from-minibuffer "Search command: "
+                                 (cons str pos) nil nil
+                                 'muse-search-history))))
+  (muse-grep nil text))
+
+;;;###autoload
+(defun muse-search ()
+  "Search for the given TEXT using the default grep command."
+  (interactive)
+  (muse-grep (read-string "Search: ")))
+
+;;;###autoload
+(defun muse-find-backlinks ()
+  "Grep for the current pagename in all the project directories."
+  (interactive)
+  (muse-grep (muse-page-name)))
+
 
 ;;; Generate an index of all known Muse pages
 
