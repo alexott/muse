@@ -758,8 +758,10 @@ The following contexts exist in Muse.
            (setq specials (funcall specials context)))
           ((symbolp specials)
            (setq specials (symbol-value specials))))
-    (save-excursion
-      (save-restriction
+    (if (functionp specials)
+        (funcall specials beg end ignore-read-only)
+      (save-excursion
+        (save-restriction
         (narrow-to-region beg end)
         (goto-char (point-min))
         (while (< (point) (point-max))
@@ -773,7 +775,7 @@ The following contexts exist in Muse.
               (if (null repl)
                   (forward-char 1)
                 (delete-char 1)
-                (insert-before-markers (cdr repl))))))))))
+                (insert-before-markers (cdr repl)))))))))))
 
 (defun muse-publish-markup-word ()
   (let* ((beg (match-beginning 2))
