@@ -31,7 +31,8 @@
 ;; function.
 
 ;; Per B. Sederberg (per AT med DOT upenn DOT edu) contributed the
-;; insertion of relative links and list items.
+;; insertion of relative links and list items, backlink searching, and
+;; other things as well.
 
 ;;; Code:
 
@@ -165,7 +166,7 @@ index at intervals."
       'muse-insert-relative-link-to-file)
 
     ;; Searching functions
-    (define-key map [(control ?c) (control ?b)] 'muse-find-backlinks)    
+    (define-key map [(control ?c) (control ?b)] 'muse-find-backlinks)
     (define-key map [(control ?c) (control ?s)] 'muse-search)
 
     ;; Enhanced list functions
@@ -658,16 +659,14 @@ GREP-COMMAND if passed will supplant `muse-grep-command'."
   ;; -no-shadow instead
   (require 'compile)
   (let* ((str (or grep-command-no-shadow muse-grep-command))
-	;((car (car (cdr (car muse-project-alist)))))
-	(muse-directories (mapcar 
-			   (lambda (thing)
-			     (car (cadr thing)))
-			   muse-project-alist))
-        (dirs (mapconcat (lambda (dir)
-                           (shell-quote-argument
-                            (expand-file-name dir)))
-                         muse-directories " ")))
-	;;(dirs default-directory))
+         (muse-directories (mapcar
+                            (lambda (thing)
+                              (car (cadr thing)))
+                            muse-project-alist))
+         (dirs (mapconcat (lambda (dir)
+                            (shell-quote-argument
+                             (expand-file-name dir)))
+                          muse-directories " ")))
     (while (string-match "%W" str)
       (setq str (replace-match string t t str)))
     (while (string-match "%D" str)
@@ -675,12 +674,14 @@ GREP-COMMAND if passed will supplant `muse-grep-command'."
     (if (fboundp 'compilation-start)
         (compilation-start str nil (lambda (&rest args) "*search*")
                            grep-regexp-alist)
-      (compile-internal str "No more search hits" "search"
-                        nil grep-regexp-alist))))
+      (and (fboundp 'compile-internal)
+           (compile-internal str "No more search hits" "search"
+                             nil grep-regexp-alist)))))
 
 ;;;###autoload
 (defun muse-search-with-command (text)
-  "Search for the given TEXT string in the project directories using the specified command."
+  "Search for the given TEXT string in the project directories
+using the specified command."
   (interactive
    (list (let ((str (concat muse-grep-command)) pos)
            (when (string-match "%W" str)

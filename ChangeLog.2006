@@ -2,6 +2,57 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-21 01:59:03 GMT	Michael Olson <mwolson@gnu.org>	patch-68
+
+    Summary:
+      Minor code cleanup.
+    Revision:
+      muse--main--1.0--patch-68
+
+    * lisp/muse-mode.el (muse-grep): Remove commented-out code.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+
+2006-03-21 01:56:21 GMT	Michael Olson <mwolson@gnu.org>	patch-67
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 15-26)
+    Revision:
+      muse--main--1.0--patch-67
+
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-mode.el (muse-grep-command): Add custom to set up the command
+      used for grepping.
+      (muse-mode-map): Changed muse-browse-result to C-c C-v and made
+      muse-find-backlinks C-c C-b
+      (muse-grep): New function to envoke a search with the compiler.
+      (muse-search-with-command): New function to search for text, optionally
+      editing the command.
+      (muse-search): New function to search for text.
+      (muse-find-backlinks): New function to search for backlinks to the
+      current page.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-15
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-16
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-17
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-18
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-19
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-20
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-21
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-22
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-23
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-24
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-25
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-26
+
+
 2006-03-20 18:43:15 GMT	Michael Olson <mwolson@gnu.org>	patch-66
 
     Summary:
