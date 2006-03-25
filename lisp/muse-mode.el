@@ -45,9 +45,11 @@
 (require 'muse)
 (require 'muse-regexps)
 (require 'muse-project)
-(require 'muse-publish)
 
 (autoload 'muse-use-font-lock "muse-colors")
+(autoload 'muse-publish-this-file "muse-publish")
+(autoload 'muse-publish-get-style "muse-publish")
+(autoload 'muse-publish-output-file "muse-publish")
 
 (require 'derived)
 (eval-when-compile
@@ -770,12 +772,16 @@ function, you might want to set this manually.")
      (concat "Tag: "
              (when muse-tag-history
                (concat "(default: " (car muse-tag-history) ") ")))
-     (mapcar 'list (nconc (mapcar 'car muse-publish-markup-tags)
-                          muse-custom-tags))
+     (progn
+       (require 'muse-publish)
+       (mapcar 'list (nconc (mapcar 'car muse-publish-markup-tags)
+                            muse-custom-tags)))
      nil nil nil 'muse-tag-history
      (car muse-tag-history))))
   (when (equal tag "")
     (setq tag (car muse-tag-history)))
+  (unless (interactive-p)
+    (require 'muse-publish))
   (let ((tag-entry (assoc tag muse-publish-markup-tags))
         (options ""))
     ;; Add to custom list if no entry exists
