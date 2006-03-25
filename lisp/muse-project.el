@@ -589,6 +589,8 @@ The name of a project may be used for STYLES."
     ;; determine the style from the project, or else ask
     (unless styles
       (setq styles (list (muse-publish-get-style))))
+    (unless project
+      (error "Cannot find a project to publish"))
     ;; prompt to save any buffers related to this project
     (muse-project-save-buffers project)
     ;; run hook before publishing begins
