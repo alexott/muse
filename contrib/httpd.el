@@ -2,9 +2,10 @@
 ;;;
 ;;; Author: Eric Marsden <emarsden@laas.fr>
 ;;;         John Wiegley <johnw@gnu.org>
-;;; Version: 1.0
+;;; Version: 1.1
 ;;; Keywords: games
 ;;; Copyright (C) 2001, 2003 Eric Marsden
+;;; Parts copyright (C) 2006 Free Software Foundation, Inc.
 ;;
 ;;     This program is free software; you can redistribute it and/or
 ;;     modify it under the terms of the GNU General Public License as
@@ -34,6 +35,8 @@
 ;;
 ;; I have only tested this code with Emacs; it may need modifications
 ;; to work with XEmacs.
+;;
+;; This version has been modified to work with GNU Emacs 21 and 22.
 ;;
 ;;; Acknowledgements:
 ;;
@@ -258,8 +261,14 @@ content.")
   (if httpd-process
       (delete-process httpd-process))
   (setq httpd-process
-	(open-network-stream-server "httpd" (generate-new-buffer "httpd")
-				    port nil 'httpd-serve))
+	(if (fboundp 'make-network-process)
+	    (make-network-process :name "httpd"
+				  :buffer (generate-new-buffer "httpd")
+				  :host 'local :service port
+				  :server t :noquery t
+				  :filter 'httpd-serve)
+	  (open-network-stream-server "httpd" (generate-new-buffer "httpd")
+				      port nil 'httpd-serve)))
   (if (eq (process-status httpd-process) 'listen)
       (message "httpd.el is listening on port %d" port)))
 
