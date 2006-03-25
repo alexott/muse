@@ -108,6 +108,14 @@ and group 3 is the optional heading for the entry."
   :type 'regexp
   :group 'muse-journal)
 
+(defcustom muse-journal-rss-heading-regexp
+  (concat "^\\* " muse-journal-heading-regexp "$")
+  "A regexp that matches a journal heading from an HTML document.
+Paren group 1 is the ISO date, group 2 is the optional category,
+and group 3 is the optional heading for the entry."
+  :type 'regexp
+  :group 'muse-journal)
+
 (defcustom muse-journal-html-entry-template
   "<div class=\"entry\">
   <a name=\"%anchor%\" style=\"text-decoration: none\">&nbsp;</a>
@@ -513,7 +521,7 @@ For more on the structure of this list, see
 
 (defun muse-journal-rss-munge-buffer ()
   (goto-char (point-min))
-  (let ((heading-regexp (concat "^\\* " muse-journal-heading-regexp "$"))
+  (let ((heading-regexp muse-journal-rss-heading-regexp)
         (inhibit-read-only t))
     (while (re-search-forward heading-regexp nil t)
       (let* ((date (match-string 1))

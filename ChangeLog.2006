@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-25 05:27:46 GMT	Michael Olson <mwolson@gnu.org>	patch-71
+
+    Summary:
+      muse-journal: Make custom RSS heading regexps possible.
+    Revision:
+      muse--main--1.0--patch-71
+
+    * lisp/muse-journal.el (muse-journal-rss-heading-regexp): New option that
+      determines the regexp to use when searching for an RSS heading.
+      (muse-journal-rss-munge-buffer): Use `muse-journal-rss-heading-regexp'.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-journal.el
+
+
 2006-03-25 04:33:40 GMT	Michael Olson <mwolson@gnu.org>	patch-70
 
     Summary:
