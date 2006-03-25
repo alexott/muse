@@ -480,16 +480,14 @@ to the text with ARGS as parameters."
                               muse-publish-markup-tag))))))
 
 (defun muse-style-run-hooks (keyword style &rest args)
-  (let (handled)
-    (while (and style (not handled))
-      (setq style (muse-style style))
+  (catch 'handled
+    (while (and style
+                (setq style (muse-style style)))
       (let ((func (muse-get-keyword keyword style t)))
-        (if func
-            (if (apply func args)
-                (setq handled t))))
-      (unless handled
-        (setq style (muse-style-element :base style))))
-    handled))
+        (when (and func
+                   (apply func args))
+          (throw 'handled t)))
+      (setq style (muse-style-element :base style)))))
 
 (defun muse-publish-markup-region (beg end title style)
   "Apply the given STYLE's markup rules to the given region."
@@ -588,6 +586,17 @@ to the text with ARGS as parameters."
     (concat (file-name-directory file)
             (muse-publish-link-name file style))))
 
+(defun muse-detect-invalid-style (style)
+  "Throw an error if STYLE is invalid."
+  (setq style (muse-style style))
+  (when (null style)
+    (error "Invalid style"))
+  (setq style (muse-style-element :base style))
+  (when (null style)
+    (error "Style does not contain a :base value"))
+  (unless (muse-style style)
+    (error "Cannot find the %s publishing style" style)))
+
 ;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
   "Publish the given FILE in a particular STYLE to OUTPUT-DIR.
@@ -597,6 +606,7 @@ the file is published no matter what."
   (interactive (cons (read-file-name "Publish file: ")
                      (muse-publish-get-info)))
   (setq style (muse-style style))
+  (muse-detect-invalid-style style)
   (let* ((output-path (muse-publish-output-file file output-dir style))
          (output-suffix (muse-style-element :osuffix style))
          (muse-publishing-current-file file)

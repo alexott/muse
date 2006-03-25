@@ -2,6 +2,27 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-25 04:33:40 GMT	Michael Olson <mwolson@gnu.org>	patch-70
+
+    Summary:
+      Fix #5190: Endless loop in muse style-run-hooks when muse-project-publish is called with undefined style.
+    Revision:
+      muse--main--1.0--patch-70
+
+    * lisp/muse-project.el (muse-project-publish): If we cannot find a
+      project to publish, indicate this in an error message.
+    
+    * lisp/muse-publish.el (muse-style-run-hooks): Never go into an endless
+      loop.  This should fix #5190.  Thanks to Rod Morehead for the report.
+      (muse-detect-invalid-style): New function that makes sure that the
+      given style is in a valid format.
+      (muse-publish-file): Call `muse-detect-invalid-style' before doing any
+      publishing.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-project.el lisp/muse-publish.el
+
+
 2006-03-25 03:31:36 GMT	Michael Olson <mwolson@gnu.org>	patch-69
 
     Summary:
