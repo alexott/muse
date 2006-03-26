@@ -619,6 +619,9 @@ multiple lines.
 Verbatim text will be colored as gray by default.  To change this,
 customize @code{muse-verbatim-face}.
 
+You can also use the @verb{|<code>|} tag to indicate verbatim and
+monospace text.  This is handy for regions that have an ``='' in them.
+
 @node Footnotes, Verse, Emphasizing Text, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Making notes to be shown at the end

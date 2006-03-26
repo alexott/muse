@@ -602,18 +602,15 @@ in `muse-project-alist'."
   (interactive)
   (let ((cycled 0) pos)
     (save-excursion
-      (when (memq (get-text-property (point) 'face)
-                  '(muse-link-face muse-bad-link-face))
-        (goto-char (or (next-single-property-change (point) 'face)
+      (when (get-text-property (point) 'muse-link)
+        (goto-char (or (next-single-property-change (point) 'muse-link)
                        (point-max))))
       (while (< cycled 2)
         (let ((next (point)))
           (if (while (and (null pos)
                           (setq next
-                                (next-single-property-change
-                                 next 'face)))
-                (when (memq (get-text-property next 'face)
-                            '(muse-link-face muse-bad-link-face))
+                                (next-single-property-change next 'muse-link)))
+                (when (get-text-property next 'muse-link)
                   (setq pos next)))
               (setq cycled 2)
             (goto-char (point-min))
@@ -633,9 +630,8 @@ This function is not entirely accurate, but it's close enough."
           (if (while (and (null pos)
                           (setq prev
                                 (previous-single-property-change
-                                 prev 'face)))
-              (when (memq (get-text-property prev 'face)
-                          '(muse-link-face muse-bad-link-face))
+                                 prev 'muse-link)))
+              (when (get-text-property prev 'muse-link)
                 (setq pos prev)))
               (setq cycled 2)
             (goto-char (point-max))

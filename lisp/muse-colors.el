@@ -119,7 +119,6 @@ used as the filename of the image."
 (define-key muse-mode-map [(control ?c) (control ?i)]
   'muse-colors-toggle-inline-images)
 
-
 (defvar muse-colors-outline-faces-list
   (if (facep 'outline-1)
       '(outline-1 outline-2 outline-3 outline-4 outline-5)
@@ -136,20 +135,22 @@ used as the filename of the image."
     (dolist (num '(1 2 3 4 5))
       (setq newsym (intern (concat "muse-header-"
                                    (int-to-string num))))
+      ;; put in the proper group and give documentation
+      (eval `(defface ,newsym
+               '((t (:size
+                     ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt" "11pt"))
+                     :bold t)))
+               "Muse header face"
+               :group 'muse-colors))
+      ;; copy the desired face definition
       (cond
-       ((null muse-colors-autogen-headings)
-        (make-empty-face newsym))
+       ((not muse-colors-autogen-headings)
+        nil)
        ((featurep 'xemacs)
-        (if (eq muse-colors-autogen-headings 'outline)
-            (copy-face (nth (1- num)
-                            muse-colors-outline-faces-list)
-                       newsym)
-          (eval `(defface ,newsym
-                   '((t (:size
-                         ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt" "11pt"))
-                         :bold t)))
-                   "Muse header face"
-                   :group 'muse-colors))))
+        (when (eq muse-colors-autogen-headings 'outline)
+          (copy-face (nth (1- num)
+                          muse-colors-outline-faces-list)
+                     newsym)))
        ((< emacs-major-version 21)
         (if (eq muse-colors-autogen-headings 'outline)
             (copy-face (nth (1- num)
@@ -171,7 +172,7 @@ used as the filename of the image."
                  "Muse header face"
                  :group 'muse-colors)))))))
 
-(defface muse-link-face
+(defface muse-link
   '((((class color) (background light))
      (:foreground "green" :underline "green" :bold t))
     (((class color) (background dark))
@@ -180,7 +181,7 @@ used as the filename of the image."
   "Face for Muse cross-references."
   :group 'muse-colors)
 
-(defface muse-bad-link-face
+(defface muse-bad-link
   '((((class color) (background light))
      (:foreground "red" :underline "red" :bold t))
     (((class color) (background dark))
@@ -189,7 +190,7 @@ used as the filename of the image."
   "Face for bad Muse cross-references."
   :group 'muse-colors)
 
-(defface muse-verbatim-face
+(defface muse-verbatim
   '((((class color) (background light))
      (:foreground "slate gray"))
     (((class color) (background dark))
@@ -197,26 +198,24 @@ used as the filename of the image."
   "Face for verbatim text."
   :group 'muse-colors)
 
-(if (featurep 'xemacs)
-    (progn
-      (copy-face 'italic 'muse-emphasis-1)
-      (copy-face 'bold 'muse-emphasis-2)
-      (copy-face 'bold-italic 'muse-emphasis-3))
+(defface muse-emphasis-1
+  '((t (:italic t)))
+  "Face for italic emphasized text."
+  :group 'muse-colors)
 
-  (defface muse-emphasis-1
-    '((t (:italic t)))
-    "Face for italic emphasized text."
-    :group 'muse-colors)
+(defface muse-emphasis-2
+  '((t (:bold t)))
+  "Face for bold emphasized text."
+  :group 'muse-colors)
 
-  (defface muse-emphasis-2
-    '((t (:bold t)))
-    "Face for bold emphasized text."
-    :group 'muse-colors)
+(defface muse-emphasis-3
+  '((t (:bold t :italic t)))
+  "Face for bold italic emphasized text."
+  :group 'muse-colors)
 
-  (defface muse-emphasis-3
-    '((t (:bold t :italic t)))
-    "Face for bold italic emphasized text."
-    :group 'muse-colors))
+(copy-face 'italic 'muse-emphasis-1)
+(copy-face 'bold 'muse-emphasis-2)
+(copy-face 'bold-italic 'muse-emphasis-3)
 
 (defcustom muse-colors-buffer-hook nil
   "A hook run after a region is highlighted.
@@ -364,7 +363,7 @@ whether progress messages should be displayed to the user."
                            (eq (char-syntax (char-after (1+ (point)))) ?w)))
             (setq pos (min (1+ (point)) (point-max)))
             (add-text-properties start (1+ start) '(invisible muse))
-            (add-text-properties (1+ start) (point) '(face muse-verbatim-face))
+            (add-text-properties (1+ start) (point) '(face muse-verbatim))
             (add-text-properties (point)
                                  (min (1+ (point)) (point-max))
                                  '(invisible muse))
@@ -601,13 +600,13 @@ Functions should not modify the contents of the buffer."
       (set-buffer-modified-p modified-p))))
 
 (defun muse-colors-example-tag (beg end)
-  "Strip properties and colorize with `muse-verbatim-face'."
+  "Strip properties and colorize with `muse-verbatim'."
   (muse-unhighlight-region beg end)
   (let ((multi (save-excursion
                  (goto-char beg)
                  (forward-line 1)
                  (> end (point)))))
-    (add-text-properties beg end `(face muse-verbatim-face
+    (add-text-properties beg end `(face muse-verbatim
                                    font-lock-multiline ,multi))))
 
 (defun muse-colors-literal-tag (beg end)
@@ -677,13 +676,13 @@ ignored."
                   (muse-handle-implicit-link link-name))))
       (when link
         (cond ((string-match muse-url-regexp link)
-               'muse-link-face)
+               'muse-link)
               ((string-match muse-file-regexp link)
                (if (file-exists-p link)
-                   'muse-link-face
-                 'muse-bad-link-face))
+                   'muse-link
+                 'muse-bad-link))
               ((not (featurep 'muse-project))
-               'muse-link-face)
+               'muse-link)
               (t
                (if (string-match "#" link)
                    (setq link (substring link 0 (match-beginning 0))))
@@ -691,8 +690,8 @@ ignored."
                             (muse-project-page-file
                              link muse-current-project t))
                        (file-exists-p link))
-                   'muse-link-face
-                 'muse-bad-link-face)))))))
+                   'muse-link
+                 'muse-bad-link)))))))
 
 (defun muse-colors-use-publishing-directory (link)
   "Make LINK relative to the directory where we will publish the
@@ -763,7 +762,7 @@ in place of an image link defined by BEG and END."
     (let* ((link (muse-get-link))
            (desc (muse-get-link-desc))
            (props (muse-link-properties
-                   desc (muse-link-face link t)))
+                   desc (muse-link link t)))
            (invis-props (append props (muse-link-properties desc))))
       ;; see if we should try and inline an image
       (if (and muse-colors-inline-images
@@ -789,7 +788,7 @@ in place of an image link defined by BEG and END."
         (add-text-properties
          (match-beginning 0) (match-end 0)
          (muse-link-properties (muse-match-string-no-properties 0)
-                               (muse-link-face link t)))))))
+                               (muse-link link t)))))))
 
 (defun muse-colors-implicit-link ()
   "Color implicit links."
@@ -803,7 +802,7 @@ in place of an image link defined by BEG and END."
               (eq (char-before (match-beginning 0)) ?\")
               (eq (char-after (match-end 0)) ?\"))
     (let ((link (muse-match-string-no-properties 1))
-          (face (muse-link-face (match-string 1))))
+          (face (muse-link (match-string 1))))
       (when face
         (add-text-properties (match-beginning 1) (match-end 0)
                              (muse-link-properties
