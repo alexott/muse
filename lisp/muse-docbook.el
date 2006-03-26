@@ -106,7 +106,7 @@ For more on the structure of this list, see
     (link-and-anchor . "<ulink url=\"%s#%s\">%s</ulink>")
     (email-addr      . "<email>%s</email>")
     (anchor          . "<anchor id=\"%s\" />\n")
-    (emdash          . " &mdash; ")
+    (emdash          . "%s&mdash;%s")
     (comment-begin   . "<!-- ")
     (comment-end     . " -->")
     (rule            . "")

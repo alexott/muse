@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-26 06:35:49 GMT	Michael Olson <mwolson@gnu.org>	patch-73
+
+    Summary:
+      Fix bug in verse markup, undesired behavior with emdash.
+    Revision:
+      muse--main--1.0--patch-73
+
+    * lisp/muse-docbook.el (muse-docbook-markup-strings): Preserve whitespace
+      around emdash.
+    
+    * lisp/muse-html.el (muse-html-markup-strings): Ditto.
+    
+    * lisp/muse-xml.el (muse-xml-markup-strings): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-markup-emdash): Pass preceding and
+      trailing whitespace to `muse-markup-text', in case the current
+      publishing wishes to use them.
+      (muse-publish-markup-verse): Insert newline without adding read-only
+      properties to it.  This fixes a paragraph detection bug in HTML
+      publishing.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-docbook.el lisp/muse-html.el
+     lisp/muse-publish.el lisp/muse-xml.el
+
+
 2006-03-25 05:57:36 GMT	Michael Olson <mwolson@gnu.org>	patch-72
 
     Summary:

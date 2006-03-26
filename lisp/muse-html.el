@@ -242,7 +242,7 @@ For more on the structure of this list, see
     (link            . "<a href=\"%s\">%s</a>")
     (link-and-anchor . "<a href=\"%s#%s\">%s</a>")
     (email-addr      . "<a href=\"mailto:%s\">%s</a>")
-    (emdash          . " &mdash; ")
+    (emdash          . "%s&mdash;%s")
     (comment-begin   . "<!-- ")
     (comment-end     . " -->")
     (rule            . "<hr>")
