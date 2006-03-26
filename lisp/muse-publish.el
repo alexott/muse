@@ -834,10 +834,12 @@ The following contexts exist in Muse.
     nil))
 
 (defun muse-publish-markup-emdash ()
-  (delete-region (match-beginning 0) (match-end 0))
-  (muse-insert-markup (muse-markup-text 'emdash))
-  (if (eq (char-after) ?\<)
-      (insert ?\n)))
+  (let ((prespace (match-string 1))
+        (postspace (match-string 2)))
+    (delete-region (match-beginning 0) (match-end 0))
+    (muse-insert-markup (muse-markup-text 'emdash prespace postspace))
+    (when (eq (char-after) ?\<)
+      (insert ?\n))))
 
 (defun muse-publish-markup-enddots ()
   (unless (get-text-property (match-beginning 0) 'noemphasis)
@@ -1159,7 +1161,8 @@ like read-only from being inadvertently deleted."
             (when begin-text (muse-insert-markup begin-text))
             (end-of-line))))
         (forward-line 1))))
-  (muse-insert-markup (muse-markup-text 'end-verse) ?\n))
+  (muse-insert-markup (muse-markup-text 'end-verse))
+  (insert ?\n))
 
 (defun muse-publish-table-fields (beg end)
   "Parse given region as a table, returning a cons cell.

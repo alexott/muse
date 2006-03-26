@@ -121,7 +121,7 @@ For more on the structure of this list, see
     (link-and-anchor . "<link type=\"url\" href=\"%s#%s\">%s</link>")
     (email-addr      . "<link type=\"email\" href=\"%s\">%s</link>")
     (anchor          . "<anchor id=\"%s\" />\n")
-    (emdash          . " -- ")
+    (emdash          . "%s--%s")
     (comment-begin   . "<!-- ")
     (comment-end     . " -->")
     (rule            . "<hr />")
