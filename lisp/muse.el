@@ -339,6 +339,13 @@ that can be added."
                                      dir))
                     mustmatch initial)))
 
+;; Set face globally in a predictable fashion
+(defun muse-copy-face (old new)
+  "Copy face OLD to NEW."
+  (if (featurep 'xemacs)
+      (copy-face old new 'all)
+    (copy-face old new)))
+
 ;; Widget compatibility functions
 
 (defun muse-widget-type-value-create (widget)

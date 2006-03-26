@@ -9,8 +9,8 @@
 ;;; Setup
 
 ;; Add to load path
-(add-to-list 'load-path "/stuff/proj/emacs/muse/mwolson/lisp")
-(add-to-list 'load-path "/stuff/proj/emacs/muse/mwolson/experimental")
+(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/mwolson/lisp")
+(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/mwolson/experimental")
 
 ;; Initialize
 (require 'outline)       ; I like outline-style faces
@@ -107,12 +107,13 @@
 ;; Wiki settings
 (setq muse-wiki-interwiki-alist
       '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/wiki/")
-        ("TheEmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
+        ("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
         ("ArchWiki" . "http://wiki.gnuarch.org/")
         ;; abbreviations
         ("CERIAS" . "http://www.cerias.purdue.edu/")
-        ("Planner" . "http://www.plannerlove.com/")
+        ("PlannerMode" . "http://www.plannerlove.com/")
         ("GP2X" . "http://www.gp2x.co.uk/")
+        ("UbuntuLinux" . "http://ubuntulinux.org/")
         ("PLUG" . "http://plug.student-orgs.purdue.edu/wiki/")))
 
 ;;; Functions
@@ -164,12 +165,12 @@ If FILE is not specified, use the published version of the current file."
   (save-match-data
     (muse-with-temp-buffer
       (insert-file-contents file)
-      ;; Surround first line in <h3></h3>
+      ;; surround first line in <h3></h3>
       (goto-char (point-min))
       (insert "<h3>")
       (end-of-line)
       (insert "</h3>")
-      ;; Treat example regions properly
+      ;; treat example regions properly
       (let (beg end)
         (while (re-search-forward "<pre[^>]*>" nil t)
           (setq beg (match-end 0))
@@ -178,29 +179,29 @@ If FILE is not specified, use the published version of the current file."
                       (point)))
           (save-restriction
             (narrow-to-region beg end)
-            ;; Change spaces to &nbsp;
+            ;; change initial spaces to &nbsp;
             (goto-char (point-min))
             (while (re-search-forward "^ +" nil t)
               (replace-match (apply 'concat (make-list
                                              (length (match-string 0))
                                              "&nbsp;"))))
-            ;; Change newline to <br />
+            ;; change newline to <br />
             (goto-char (point-min))
             (while (re-search-forward "\n" nil t)
               (replace-match "<br />")))))
-      ;; Get rid of 2 spaces together and merge lines
+      ;; get rid of 2 spaces together and merge lines
       (goto-char (point-min))
       (while (re-search-forward (concat "[" muse-regexp-blank "\n]+") nil t)
         (replace-match " "))
-      ;; Remove trailing space
+      ;; remove trailing space
       (goto-char (point-min))
       (while (re-search-forward " *</p> *" nil t)
         (replace-match "</p>"))
-      ;; Make relative links work
+      ;; make relative links work
       (goto-char (point-min))
       (while (re-search-forward "href=\"[/.]+" nil t)
         (replace-match "href=\"http://www.mwolson.org/" nil t))
-      ;; Copy entry to clipboard
+      ;; copy entry to clipboard
       (clipboard-kill-ring-save (point-min) (point-max)))))
 
 ;;; Key customizations
@@ -247,7 +248,7 @@ If FILE is not specified, use the published version of the current file."
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
  '(muse-xhtml-header "~/personal-site/muse/generic-header.html"))
 (custom-set-faces
- '(muse-bad-link-face ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold))))
- '(muse-link-face ((t (:foreground "blue" :underline "blue" :weight bold)))))
+ '(muse-bad-link ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold))))
+ '(muse-link ((t (:foreground "blue" :underline "blue" :weight bold)))))
 
 ;;; muse-init.el ends here
