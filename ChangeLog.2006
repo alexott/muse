@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-26 18:38:31 GMT	Michael Olson <mwolson@gnu.org>	patch-75
+
+    Summary:
+      Make faces more robust and namespace-conforming.
+    Revision:
+      muse--main--1.0--patch-75
+
+    * lisp/muse-colors.el (muse-make-faces): Make sure that each generated
+      face has documentation and a group.
+      (muse-link, muse-bad-link, muse-verbatim): Renamed faces to drop the
+      "-face" suffix.
+      (muse-emphasis-1, muse-emphasis-2, muse-emphasis-3): Make sure that the
+      faces have documentation and a group.  Copy unconditionally from the
+      related Emacs faces, rather than specifying face attributes.
+      (muse-colors-verbatim, muse-colors-example-tag, muse-link-face):
+      (muse-colors-explicit-link, muse-colors-implicit-link): Use the new
+      face names.
+    
+    * lisp/muse-mode.el (muse-next-reference, muse-previous-reference): Use
+      the 'muse-link property rather than looking at the face.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse-mode.el
+
+
 2006-03-26 18:33:12 GMT	Michael Olson <mwolson@gnu.org>	patch-74
 
     Summary:
