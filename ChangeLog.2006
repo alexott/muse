@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-26 22:38:01 GMT	Michael Olson <mwolson@gnu.org>	patch-78
+
+    Summary:
+      Fix a couple of recently-introduced bugs.
+    Revision:
+      muse--main--1.0--patch-78
+
+    * lisp/muse-colors.el: Fix errors introduced in a recent patch.  Try
+      extra hard to preserve our settings for faces, especially after a new
+      frame or splash screen.
+    
+    * lisp/muse.el (muse-copy-face): New function that ensures the face is
+      copied globally, to the extent the Emacs permits this.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse.el
+
+
 2006-03-26 20:02:11 GMT	Michael Olson <mwolson@gnu.org>	patch-77
 
     Summary:

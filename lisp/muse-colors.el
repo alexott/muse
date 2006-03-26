@@ -122,7 +122,7 @@ used as the filename of the image."
 (defvar muse-colors-outline-faces-list
   (if (facep 'outline-1)
       '(outline-1 outline-2 outline-3 outline-4 outline-5)
-    ;; These are supposed to be equivalent in coloring
+    ;; these are equivalent in coloring to the outline faces
     '(font-lock-function-name-face
       font-lock-variable-name-face
       font-lock-keyword-face
@@ -130,7 +130,7 @@ used as the filename of the image."
       font-lock-comment-face))
   "Outline faces to use when assigning Muse header faces.")
 
-(defun muse-make-faces ()
+(progn
   (let (newsym)
     (dolist (num '(1 2 3 4 5))
       (setq newsym (intern (concat "muse-header-"
@@ -141,29 +141,29 @@ used as the filename of the image."
                      ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt" "11pt"))
                      :bold t)))
                "Muse header face"
-               :group 'muse-colors))
+               :group 'muse-colors)))))
+
+(defun muse-make-faces (&optional frame)
+  (let (newsym)
+    (dolist (num '(1 2 3 4 5))
+      (setq newsym (intern (concat "muse-header-"
+                                   (int-to-string num))))
       ;; copy the desired face definition
       (cond
        ((not muse-colors-autogen-headings)
         nil)
        ((featurep 'xemacs)
         (when (eq muse-colors-autogen-headings 'outline)
-          (copy-face (nth (1- num)
-                          muse-colors-outline-faces-list)
-                     newsym)))
+          (muse-copy-face (nth (1- num) muse-colors-outline-faces-list)
+                          newsym)))
        ((< emacs-major-version 21)
         (if (eq muse-colors-autogen-headings 'outline)
-            (copy-face (nth (1- num)
-                            muse-colors-outline-faces-list)
-                       newsym)
-          (copy-face 'default newsym)))
+            (muse-copy-face (nth (1- num) muse-colors-outline-faces-list)
+                            newsym)
+          (muse-copy-face 'default newsym)))
        ((eq muse-colors-autogen-headings 'outline)
-        (eval `(defface ,newsym
-                 '((t (:inherit
-                       ,(nth (1- num)
-                             muse-colors-outline-faces-list))))
-                 "Muse header face"
-                 :group 'muse-colors)))
+        (muse-copy-face (nth (1- num) muse-colors-outline-faces-list)
+                   newsym))
        (t
         (eval `(defface ,newsym
                  '((t (:height ,(1+ (* 0.1 (- 5 num)))
@@ -171,6 +171,13 @@ used as the filename of the image."
                                :weight bold)))
                  "Muse header face"
                  :group 'muse-colors)))))))
+
+;; after displaying the Emacs splash screen, the faces are wiped out,
+;; so recover from that
+(add-to-list 'window-setup-hook #'muse-make-faces)
+;; ditto for when a new frame is created
+(when (boundp 'after-make-frame-functions)
+  (add-to-list 'after-make-frame-functions #'muse-make-faces))
 
 (defface muse-link
   '((((class color) (background light))
@@ -213,9 +220,9 @@ used as the filename of the image."
   "Face for bold italic emphasized text."
   :group 'muse-colors)
 
-(copy-face 'italic 'muse-emphasis-1)
-(copy-face 'bold 'muse-emphasis-2)
-(copy-face 'bold-italic 'muse-emphasis-3)
+(muse-copy-face 'italic 'muse-emphasis-1)
+(muse-copy-face 'bold 'muse-emphasis-2)
+(muse-copy-face 'bold-italic 'muse-emphasis-3)
 
 (defcustom muse-colors-buffer-hook nil
   "A hook run after a region is highlighted.
@@ -762,7 +769,7 @@ in place of an image link defined by BEG and END."
     (let* ((link (muse-get-link))
            (desc (muse-get-link-desc))
            (props (muse-link-properties
-                   desc (muse-link link t)))
+                   desc (muse-link-face link t)))
            (invis-props (append props (muse-link-properties desc))))
       ;; see if we should try and inline an image
       (if (and muse-colors-inline-images
@@ -788,7 +795,7 @@ in place of an image link defined by BEG and END."
         (add-text-properties
          (match-beginning 0) (match-end 0)
          (muse-link-properties (muse-match-string-no-properties 0)
-                               (muse-link link t)))))))
+                               (muse-link-face link t)))))))
 
 (defun muse-colors-implicit-link ()
   "Color implicit links."
@@ -802,7 +809,7 @@ in place of an image link defined by BEG and END."
               (eq (char-before (match-beginning 0)) ?\")
               (eq (char-after (match-end 0)) ?\"))
     (let ((link (muse-match-string-no-properties 1))
-          (face (muse-link (match-string 1))))
+          (face (muse-link-face (match-string 1))))
       (when face
         (add-text-properties (match-beginning 1) (match-end 0)
                              (muse-link-properties
