@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-03-26 19:54:43 GMT	Michael Olson <mwolson@gnu.org>	patch-76
+
+    Summary:
+      Remove cruft from patch logs.
+    Revision:
+      muse--main--1.0--patch-76
+
+
+    modified files:
+     ChangeLog.2006
+     {arch}/muse-el/muse-el--devel/muse-el--devel--0/mwolson@gnu.org--2006-muse-el/patch-log/patch-14
+     {arch}/muse-el/muse-el--devel/muse-el--devel--0/mwolson@gnu.org--2006-muse-el/patch-log/patch-25
+     {arch}/muse-el/muse-el--devel/muse-el--devel--0/mwolson@gnu.org--2006-muse-el/patch-log/patch-3
+     {arch}/muse/muse--main/muse--main--1.0/mwolson@gnu.org--2006/patch-log/patch-19
+     {arch}/muse/muse--main/muse--main--1.0/mwolson@gnu.org--2006/patch-log/patch-46
+     {arch}/muse/muse--main/muse--main--1.0/mwolson@gnu.org--2006/patch-log/patch-58
+     {arch}/muse/muse--main/muse--main--1.0/mwolson@gnu.org--2006/patch-log/patch-60
+     {arch}/muse/muse--main/muse--main--1.0/mwolson@gnu.org--2006/patch-log/patch-74
+
+
 2006-03-26 18:38:31 GMT	Michael Olson <mwolson@gnu.org>	patch-75
 
     Summary:
@@ -35,15 +55,6 @@
       muse--main--1.0--patch-74
 
     * muse.texi (Emphasizing Text): Mention the <code> tag.
-    
-    --This line, and those below, will be ignored--
-    Files to commit:
-       lisp/muse-colors.el
-       lisp/muse-mode.el
-       muse.texi
-    
-    This list might be incomplete or outdated if editing the log
-    message was not invoked from an up-to-date changes buffer!
 
     modified files:
      ChangeLog.2006 muse.texi
@@ -351,53 +362,6 @@
     * lisp/muse-xml-common.el: Update header.
       (muse-xml-markup-table): Fix table generation when attributes are not
       specified.
-    
-    --This line, and those below, will be ignored--
-    Files to commit:
-       lisp/muse-wiki.el
-       lisp/muse-http.el
-       lisp/muse-html.el
-       lisp/muse.el
-       lisp/muse-docbook.el
-       lisp/muse-convert.el
-       lisp/muse-colors.el
-       lisp/muse-book.el
-       lisp/muse-texinfo.el
-       lisp/muse-publish.el
-       lisp/muse-project.el
-       lisp/muse-poem.el
-       lisp/muse-mode.el
-       experimental/muse-message.el
-       lisp/muse-latex.el
-       lisp/muse-journal.el
-       lisp/muse-regexps.el
-       experimental/muse-mathml.el
-       lisp/muse-latex2png.el
-       examples/mwolson/stylesheets/screen.css
-       examples/mwolson/stylesheets/print.css
-       examples/mwolson/stylesheets/common.css
-       examples/mwolson/stylesheets/common.css
-       examples/mwolson/stylesheets/blog.css
-       examples/mwolson/stylesheets/blog.css
-       lisp/muse-registry.el
-       examples/muse.rnc
-       examples/mwolson/muse-init.el
-       AUTHORS
-       lisp/muse-backlink.el
-       debian/copyright
-       lisp/muse-xml-common.el
-       muse.texi
-       lisp/muse-protocols.el
-       experimental/muse-cite.el
-       README
-       lisp/muse-xml.el
-       lisp/muse-blosxom.el
-       lisp/muse-groff.el
-       COPYING
-       .arch-ids/COPYING.id
-    
-    This list might be incomplete or outdated if editing the log
-    message was not invoked from an up-to-date changes buffer!
 
     modified files:
      ChangeLog.2006 examples/muse.rnc lisp/muse-xml-common.el
@@ -431,15 +395,6 @@
     
     * lisp/muse.el (muse-forward-list-item): Make skipping of nested items
       optional, and document this.
-    
-    --This line, and those below, will be ignored--
-    Files to commit:
-       lisp/muse.el
-       lisp/muse-publish.el
-       lisp/muse-mode.el
-    
-    This list might be incomplete or outdated if editing the log
-    message was not invoked from an up-to-date changes buffer!
 
     modified files:
      ChangeLog.2006 lisp/muse-mode.el lisp/muse.el
@@ -683,14 +638,6 @@
       muse-forward-list-item.
       (muse-forward-list-item): Add a few conditions needed for skipping
       nested 'dl-term and 'dl-entry items.
-    
-    --This line, and those below, will be ignored--
-    Files to commit:
-       lisp/muse.el
-       lisp/muse-mode.el
-    
-    This list might be incomplete or outdated if editing the log
-    message was not invoked from an up-to-date changes buffer!
 
     modified files:
      ChangeLog.2006 lisp/muse.el
@@ -1215,14 +1162,6 @@
     * lisp/muse-publish.el (muse-publish-file): Detect case where we are
       trying to publish a file that has not been saved, and give an
       explanation to the user.
-    
-    --This line, and those below, will be ignored--
-    Files to commit:
-       lisp/muse-publish.el
-       lisp/muse-blosxom.el
-    
-    This list might be incomplete or outdated if editing the log
-    message was not invoked from an up-to-date changes buffer!
 
     modified files:
      ChangeLog.2006 lisp/muse-publish.el
