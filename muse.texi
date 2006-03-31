@@ -56,6 +56,7 @@ under the terms of the GNU General Public License.
 * Keystroke Summary::           Keys used in Muse mode.
 * Markup Rules::                Rules for using markup.
 * Publishing Styles::           Publishing various types of documents.
+* Extending Muse::              Making your own publishing styles.
 * Getting Help and Reporting Bugs::  
 * History::                     History of this document.
 * Contributors::                Contributors to this documentation.
@@ -101,15 +102,18 @@ Publishing Various Types of Documents
 * LaTeX::                       Publishing LaTeX documents.
 * Poem::                        Publish a poem to LaTex or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
-* Common Elements::             Common functionality shared by styles.
-* Deriving Styles::             Deriving a new style from an existing
-                                  one.
 
 Integrating Muse and pyblosxom.cgi
 
 * Blosxom Requirements::        Other tools needed to the Blosxom style.
 * Blosxom Entries::             Format of a Blosxom entry and automation.
 * Blosxom Options::             Blosxom styles and options provided.
+
+Making your own publishing styles
+
+* Common Elements::             Common functionality shared by styles.
+* Deriving Styles::             Deriving a new style from an existing
+                                  one.
 
 Common functionality shared by styles
 
@@ -890,7 +894,7 @@ published.
 That is, only a semi-colon at the beginning of a line, followed by a
 literal space, will cause that line to be treated as a comment.
 
-@node Publishing Styles, Getting Help and Reporting Bugs, Markup Rules, Top
+@node Publishing Styles, Extending Muse, Markup Rules, Top
 @comment  node-name,  next,  previous,  up
 @chapter Publishing Various Types of Documents
 @cindex publishing styles
@@ -908,9 +912,6 @@ easy to create new styles, or derive from an existing style.
 * LaTeX::                       Publishing LaTeX documents.
 * Poem::                        Publish a poem to LaTex or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
-* Common Elements::             Common functionality shared by styles.
-* Deriving Styles::             Deriving a new style from an existing
-                                  one.
 @end menu
 
 @node Blosxom, Book, Publishing Styles, Publishing Styles
@@ -1697,7 +1698,7 @@ differs little between the various styles.
 
 @end table
 
-@node Texinfo, Common Elements, Poem, Publishing Styles
+@node Texinfo, , Poem, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Publish entries to Texinfo format or PDF
 
@@ -1772,7 +1773,18 @@ A table of characters which must be represented specially.
 
 @end table
 
-@node Common Elements, Deriving Styles, Texinfo, Publishing Styles
+
+@node Extending Muse, Getting Help and Reporting Bugs, Publishing Styles, Top
+@comment  node-name,  next,  previous,  up
+@chapter Making your own publishing styles
+
+@menu
+* Common Elements::             Common functionality shared by styles.
+* Deriving Styles::             Deriving a new style from an existing
+                                  one.
+@end menu
+
+@node Common Elements, Deriving Styles, , Extending Muse
 @comment  node-name,  next,  previous,  up
 @section Common functionality shared by styles
 @cindex publishing styles, common
@@ -2320,7 +2332,7 @@ The function used to browse the published result of files of this style.
 
 @end table
 
-@node Deriving Styles, , Common Elements, Publishing Styles
+@node Deriving Styles, , Common Elements, Extending Muse
 @comment  node-name,  next,  previous,  up
 @section Deriving a new style from an existing one
 @cindex publishing styles, deriving
@@ -2359,7 +2371,7 @@ base style's string list will be queried.
 @end table
 
 
-@node Getting Help and Reporting Bugs, History, Publishing Styles, Top
+@node Getting Help and Reporting Bugs, History, Extending Muse, Top
 @comment  node-name,  next,  previous,  up
 @chapter Getting Help and Reporting Bugs
 @cindex help, getting
