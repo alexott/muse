@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-01 15:32:26 GMT	Michael Olson <mwolson@gnu.org>	patch-81
+
+    Summary:
+      debian: Install ChangeLog properly.
+    Revision:
+      muse--main--1.0--patch-81
+
+    * debian/rules: Create ChangeLog using ChangeLog.2006 as a base, and then
+      appending the logs for previous years.  Thanks to Sergei V. Fleytin for
+      the breakage report.
+
+    modified files:
+     ChangeLog.2006 debian/rules
+
+
 2006-04-01 04:20:45 GMT	Michael Olson <mwolson@gnu.org>	patch-80
 
     Summary:
