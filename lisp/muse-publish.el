@@ -586,17 +586,6 @@ to the text with ARGS as parameters."
     (concat (file-name-directory file)
             (muse-publish-link-name file style))))
 
-(defun muse-detect-invalid-style (style)
-  "Throw an error if STYLE is invalid."
-  (setq style (muse-style style))
-  (when (null style)
-    (error "Invalid style"))
-  (setq style (muse-style-element :base style))
-  (when (null style)
-    (error "Style does not contain a :base value"))
-  (unless (muse-style style)
-    (error "Cannot find the %s publishing style" style)))
-
 ;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
   "Publish the given FILE in a particular STYLE to OUTPUT-DIR.
@@ -605,8 +594,10 @@ newer than the published version.  If the argument FORCE is non-nil,
 the file is published no matter what."
   (interactive (cons (read-file-name "Publish file: ")
                      (muse-publish-get-info)))
-  (setq style (muse-style style))
-  (muse-detect-invalid-style style)
+  (let ((style-name style))
+    (setq style (muse-style style))
+    (unless style
+      (error "There is no style '%s' defined." style-name)))
   (let* ((output-path (muse-publish-output-file file output-dir style))
          (output-suffix (muse-style-element :osuffix style))
          (muse-publishing-current-file file)
@@ -642,9 +633,8 @@ the file is published no matter what."
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
   (let ((muse-batch-publishing-p t)
-        style-name style output-dir)
-    (setq style-name (car command-line-args-left)
-          style (muse-style style-name)
+        style output-dir)
+    (setq style (car command-line-args-left)
           command-line-args-left (cdr command-line-args-left)
           output-dir (car command-line-args-left)
           output-dir
@@ -652,8 +642,6 @@ the file is published no matter what."
               (prog1
                   (substring output-dir (match-end 0))
                 (setq command-line-args-left (cdr command-line-args-left)))))
-    (unless style
-      (error "There is no style '%s' defined." style-name))
     (dolist (file command-line-args-left)
       (muse-publish-file file style output-dir t))))
 
