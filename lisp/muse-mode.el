@@ -217,10 +217,11 @@ index at intervals."
                    'muse-mode-fill-nobreak-p)))
   ;; Make fill work nicely with item lists
   (set (make-local-variable 'adaptive-fill-regexp)
-       "\\s-+\\(-\\|[0-9]+\\.\\)\\s-+\\|\\[[0-9]+\\]\\s-*\\|\\s-*")
+       (concat "\\s-+\\(-\\|[0-9]+\\.\\)\\s-+\\|\\[[0-9]+\\]\\s-*"
+               "\\|\\s-*::\\s-*\\|\\s-*"))
   (set (make-local-variable 'paragraph-start)
        (concat paragraph-start "\\|\\s-+\\(-\\|[0-9]+\\.\\)\\s-+"
-               "\\|\\[[0-9]+\\]\\s-*"))
+               "\\|\\[[0-9]+\\]\\s-*\\|\\s-*::\\s-*"))
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
        "; ")

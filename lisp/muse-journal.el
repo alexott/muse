@@ -70,6 +70,10 @@
 
 ;;; Contributors:
 
+;; René Stadler (mail AT renestadler DOT de) provided a patch that
+;; causes dates in RSS feeds to be generated in a format that RSS
+;; readers can parse.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -544,8 +548,11 @@ For more on the structure of this list, see
                                     (string-to-number (match-string 2 date))
                                     (string-to-number (match-string 1 date))
                                     (current-time-zone))
-                  date (format-time-string
-                        (muse-style-element :date-format) date))))
+                  ;; make sure that date is in a format that RSS
+                  ;; readers can handle
+                  date (let ((system-time-locale "C"))
+                         (format-time-string
+                          (muse-style-element :date-format) date)))))
         (save-restriction
           (narrow-to-region
            (match-beginning 0)

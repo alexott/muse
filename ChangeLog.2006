@@ -2,6 +2,48 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-04 22:23:40 GMT	Michael Olson <mwolson@gnu.org>	patch-84
+
+    Summary:
+      muse-mode: Recognize definition lists when filling text.
+    Revision:
+      muse--main--1.0--patch-84
+
+    * lisp/muse-mode.el (muse-mode): Recognize definition lists when filling
+      text.
+    
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+
+2006-04-04 22:22:19 GMT	Michael Olson <mwolson@gnu.org>	patch-83
+
+    Summary:
+      Remove unrelated part of patch-82.
+    Revision:
+      muse--main--1.0--patch-83
+
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+
+2006-04-04 22:11:16 GMT	Michael Olson <mwolson@gnu.org>	patch-82
+
+    Summary:
+      muse-journal: Fix dates in RSS feeds.
+    Revision:
+      muse--main--1.0--patch-82
+
+    * lisp/muse-journal.el (muse-journal-rss-munge-buffer): Make sure that
+      date is in a format that RSS readers can handle.  Thanks to René
+      Stadler for the patch.
+
+    modified files:
+     AUTHORS ChangeLog.2006 lisp/muse-journal.el lisp/muse-mode.el
+
+
 2006-04-01 15:32:26 GMT	Michael Olson <mwolson@gnu.org>	patch-81
 
     Summary:
