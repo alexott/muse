@@ -445,6 +445,14 @@ If PATHNAME is nil, the current buffer's filename is used."
               (setq project-entry (cdr project-entry))))
           found)))))
 
+(defun muse-project-after-save-hook ()
+  "Update Muse's file-alist if we are saving a Muse file."
+  (let ((project (muse-project-of-file)))
+    (when project
+      (muse-project-file-alist project))))
+
+(add-hook 'after-save-hook 'muse-project-after-save-hook)
+
 (defun muse-read-project (prompt &optional no-check-p no-assume)
   "Read a project name from the minibuffer, if it can't be figured
   out."
