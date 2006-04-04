@@ -292,6 +292,10 @@ For an example of the use of this function, see
 (defvar muse-project-file-alist nil
   "This variable is automagically constructed as needed.")
 
+(defvar muse-project-file-alist-hook nil
+  "Functions that are to be exectuted immediately after updating
+`muse-project-file-alist'.")
+
 (defvar muse-current-project nil
   "Project we are currently visiting.")
 (make-variable-buffer-local 'muse-current-project)
@@ -398,17 +402,19 @@ disk."
               muse-project-file-alist
               (cons file-alist muse-project-file-alist)))
       ;; Read in all of the file entries
-      (save-match-data
-        (setcar
-         (cdr file-alist)
-         (let* ((names (list t))
-                (pats (cadr project)))
-           (while pats
-             (if (symbolp (car pats))
-                 (setq pats (cddr pats))
-               (nconc names (muse-project-file-entries (car pats)))
-               (setq pats (cdr pats))))
-           (cdr names)))))))
+      (prog1
+          (save-match-data
+            (setcar
+             (cdr file-alist)
+             (let* ((names (list t))
+                    (pats (cadr project)))
+               (while pats
+                 (if (symbolp (car pats))
+                     (setq pats (cddr pats))
+                   (nconc names (muse-project-file-entries (car pats)))
+                   (setq pats (cdr pats))))
+               (cdr names))))
+        (run-hooks muse-project-file-alist-hook)))))
 
 (defun muse-project-of-file (&optional pathname)
   "Determine which project the given PATHNAME relates to.

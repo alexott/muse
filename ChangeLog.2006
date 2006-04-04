@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-04 22:39:57 GMT	Michael Olson <mwolson@gnu.org>	patch-85
+
+    Summary:
+      Add a hook that is called whenever Muse's file-alist is updated.
+    Revision:
+      muse--main--1.0--patch-85
+
+    * lisp/muse-project.el (muse-project-file-alist-hook): New hook that is
+      executed after an update to muse-project-file-alist happens.
+      (muse-project-file-alist): Call `muse-project-file-alist-hook'.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-project.el
+
+
 2006-04-04 22:23:40 GMT	Michael Olson <mwolson@gnu.org>	patch-84
 
     Summary:
