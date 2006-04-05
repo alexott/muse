@@ -68,6 +68,41 @@
   :type 'boolean
   :group 'muse-wiki)
 
+(defcustom muse-wiki-wikiword-match-project-files t
+  "Whether to extend WikiName functionality to also match
+  existing filenames.  If non-nil, will color and publish
+  implicit links to any file in your project."
+  :type 'boolean
+  :group 'muse-wiki)
+
+(defun muse-wiki-update-local-wikiword-regexp-hook ()
+  "Update a local copy of `muse-wiki-wikiword-regexp' to include
+all the files in the project."
+  ;; see if must append project files
+  (when (and muse-wiki-use-wikiword
+	     muse-wiki-wikiword-match-project-files)
+    ;; clear out current modified regexp
+    (when (local-variable-p 'muse-wiki-wikiword-regexp)
+      (kill-local-variable 'muse-wiki-wikiword-regexp))
+    ;; make the regexp local
+    (make-variable-buffer-local 'muse-wiki-wikiword-regexp)
+    ;; append the files from the project
+    (setq muse-wiki-wikiword-regexp 
+	  (concat "\\(\\("
+		  muse-wiki-wikiword-regexp "\\)\\|\\(\\<\\("
+		  (mapconcat 'car
+			     (muse-project-file-alist (muse-project))
+			     "\\|")
+		  "\\)\\>\\)\\)"))
+
+    (when (featurep 'muse-colors)
+      (muse-configure-highlighting 
+       'muse-colors-markup muse-colors-markup))))
+
+;; add the update-local-wikiword to all the right hooks
+(add-hook 'muse-mode-hook
+          'muse-wiki-update-local-wikiword-regexp-hook)
+
 (defcustom muse-wiki-ignore-bare-project-names nil
   "Determine whether project names without a page specifer are links.
 If non-nil, project names without a page specifier will not be
