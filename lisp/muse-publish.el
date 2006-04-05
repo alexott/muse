@@ -681,6 +681,9 @@ the file is published no matter what."
   (setq muse-publishing-last-position nil)
   (delete-region (match-beginning 0) (match-end 0)))
 
+(defsubst muse-publishing-directive (name)
+  (cdr (assoc name muse-publishing-directives)))
+
 (defun muse-publish-markup-anchor ()
   (unless (get-text-property (match-end 1) 'noemphasis)
     (let ((text (muse-markup-text 'anchor (match-string 2))))
@@ -1422,9 +1425,6 @@ This is usually applied to extended links."
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
 ;; Miscellaneous helper functions
-
-(defsubst muse-publishing-directive (name)
-  (cdr (assoc name muse-publishing-directives)))
 
 (defun muse-publish-strip-tags (string)
   "Remove all tags from the string."
