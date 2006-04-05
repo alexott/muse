@@ -519,6 +519,7 @@ to the text with ARGS as parameters."
                                      muse-publishing-current-file))))))
         (muse-publishing-p t)
         (inhibit-read-only t))
+    (run-hooks 'muse-update-values-hook)
     (run-hooks 'muse-before-publish-hook)
     (muse-publish-markup-region (point-min) (point-max) title style)
     (goto-char (point-min))

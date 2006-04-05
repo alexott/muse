@@ -78,7 +78,7 @@ all the files in the project."
       ;; make the regexp local
       (set (make-local-variable 'muse-wiki-wikiword-regexp)
            (concat "\\(\\("
-                   (default-value muse-wiki-wikiword-regexp)
+                   (default-value 'muse-wiki-wikiword-regexp)
                    "\\)\\|\\(\\<\\("
                    ;; append the files from the project
                    (mapconcat 'car
@@ -90,10 +90,7 @@ all the files in the project."
         (muse-configure-highlighting
          'muse-colors-markup muse-colors-markup)))))
 
-;; add the update-local-wikiword to all the right hooks
-(add-hook 'muse-mode-hook
-          'muse-wiki-update-local-wikiword-regexp)
-(add-hook 'muse-before-publish-hook
+(add-hook 'muse-update-values-hook
           'muse-wiki-update-local-wikiword-regexp)
 (add-hook 'muse-project-file-alist-hook
           'muse-wiki-update-local-wikiword-regexp)
@@ -189,6 +186,10 @@ this."
           (muse-wiki-update-interwiki-regexp value)
           (set sym value)))
   :group 'muse-wiki)
+
+(add-hook 'muse-update-values-hook
+          (lambda ()
+            (muse-wiki-update-interwiki-regexp muse-wiki-interwiki-alist)))
 
 (defun muse-wiki-resolve-project-page (&optional project page)
   "Return the published path from the current page to PAGE of PROJECT.
@@ -380,16 +381,12 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
 (add-to-list 'muse-explicit-link-functions
              'muse-wiki-handle-interwiki t)
 
-;; Update several things when Muse mode is entered
+;; Obsolete functions
+
 (defun muse-wiki-update-custom-values ()
-  "Update some important muse-wiki values that may have been altered manually."
-  (muse-wiki-update-interwiki-regexp muse-wiki-interwiki-alist))
-
-(custom-add-option 'muse-mode-hook
-                   'muse-wiki-update-custom-values)
-
-(add-hook 'muse-mode-hook
-          'muse-wiki-update-custom-values)
+  (muse-display-warning
+   (concat "Please remove `muse-wiki-update-custom-values' from"
+           " `muse-mode-hook'.  Its use is now deprecated.")))
 
 (provide 'muse-wiki)
 ;;; muse-wiki.el ends here

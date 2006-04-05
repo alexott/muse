@@ -92,10 +92,6 @@ so only enable this if you don't use either of these."
   :type 'hook
   :options '(flyspell-mode footnote-mode turn-on-auto-fill
              highlight-changes-mode)
-  :set #'(lambda (sym val)
-           (when (featurep 'muse-wiki)
-             (add-to-list 'val 'muse-wiki-update-custom-values))
-           (set sym val))
   :group 'muse-mode)
 
 (defcustom muse-grep-command
@@ -201,11 +197,6 @@ index at intervals."
     (set (make-local-variable 'inhibit-point-motion-hooks) t))
   (setq muse-current-project (muse-project-of-file))
   (muse-project-set-variables)
-  ;; Make sure several variables get updated if the user has changed
-  ;; them without using the customize interface.
-  (muse-update-ignored-extensions-regexp 'muse-ignored-extensions
-                                         muse-ignored-extensions)
-  (muse-update-url-regexp 'muse-url-protocols muse-url-protocols)
   ;; Make fill not split up links
   (when (boundp 'fill-nobreak-predicate)
     (make-local-variable 'fill-nobreak-predicate)
@@ -239,6 +230,8 @@ index at intervals."
          'muse-mode-completions)
     (set (make-local-variable 'pcomplete-parse-arguments-function)
          'muse-mode-current-word))
+  ;; Initialize any auto-generated variables
+  (run-hooks 'muse-update-values-hook)
   (when muse-mode-highlight-p
     (muse-use-font-lock)))
 
