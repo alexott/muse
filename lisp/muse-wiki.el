@@ -77,14 +77,14 @@ all the files in the project."
     (let ((muse-wiki-updating-wikiword-p t))
       ;; make the regexp local
       (set (make-local-variable 'muse-wiki-wikiword-regexp)
-           (concat "\\(\\("
-                   (default-value 'muse-wiki-wikiword-regexp)
-                   "\\)\\|\\(\\<\\("
+           (concat "\\(\\<\\(?:"
                    ;; append the files from the project
                    (mapconcat 'car
                               (muse-project-file-alist (muse-project))
                               "\\|")
-                   "\\)\\>\\)\\)"))
+                   "\\)\\>\\|\\(?:"
+                   (default-value 'muse-wiki-wikiword-regexp)
+                   "\\)\\)"))
       ;; update coloring setup
       (when (featurep 'muse-colors)
         (muse-configure-highlighting
