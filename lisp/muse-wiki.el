@@ -141,6 +141,9 @@ If you want this replacement to happen, you must add
   :type 'regexp
   :group 'muse-wiki)
 
+(eval-when-compile
+  (defvar muse-wiki-interwiki-alist))
+
 (defun muse-wiki-update-interwiki-regexp ()
   "Update the value of `muse-wiki-interwiki-regexp' based on
 `muse-wiki-interwiki-alist' and `muse-project-alist'."
