@@ -102,6 +102,10 @@ all the files in the project."
 ;; add the update-local-wikiword to all the right hooks
 (add-hook 'muse-mode-hook
           'muse-wiki-update-local-wikiword-regexp-hook)
+(add-hook 'muse-before-publish-hook
+          'muse-wiki-update-local-wikiword-regexp-hook)
+(add-hook 'after-save-hook
+          'muse-wiki-update-local-wikiword-regexp-hook)
 
 (defcustom muse-wiki-ignore-bare-project-names nil
   "Determine whether project names without a page specifer are links.
