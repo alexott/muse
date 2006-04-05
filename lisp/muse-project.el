@@ -414,7 +414,7 @@ disk."
                    (nconc names (muse-project-file-entries (car pats)))
                    (setq pats (cdr pats))))
                (cdr names))))
-        (run-hooks muse-project-file-alist-hook)))))
+        (run-hooks 'muse-project-file-alist-hook)))))
 
 (defun muse-project-of-file (&optional pathname)
   "Determine which project the given PATHNAME relates to.
