@@ -739,6 +739,9 @@ fields, and then the body fields.  You can use any order for these
 sections that you like, and Muse will re-order them for you at
 publish-time.
 
+If you wish to disable table generation for one Muse file, add the
+directive @samp{#disable-tables t} to the top of the file.
+
 @node Explicit Links, Implicit Links, Tables, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Hyperlinks and email addresses with descriptions
