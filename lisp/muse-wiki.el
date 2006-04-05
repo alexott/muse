@@ -26,6 +26,9 @@
 
 ;;; Contributors:
 
+;; Per B. Sederberg (per AT med DOT upenn DOT edu) made it so that all
+;; files in a Muse project can become implicit links.
+
 ;;; Code:
 
 (require 'muse-regexps)
@@ -38,26 +41,6 @@
   "Options controlling the behavior of Emacs Muse Wiki features."
   :group 'muse-mode)
 
-(defun muse-wiki-update-wikiword-regexp (sym val)
-  "Update everything related to `muse-wiki-wikiword-regexp'."
-  (set sym val)
-  (when (featurep 'muse-colors)
-    (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
-
-(defcustom muse-wiki-hide-nop-tag t
-  "If non-nil, hide <nop> tags when coloring a Muse buffer."
-  :type 'boolean
-  :group 'muse-wiki)
-
-(defcustom muse-wiki-wikiword-regexp
-  (concat "\\<\\(\\(?:[" muse-regexp-upper
-          "]+[" muse-regexp-lower "]+\\)\\(?:["
-          muse-regexp-upper "]+[" muse-regexp-lower "]+\\)+\\)")
-  "Regexp used to match WikiWords."
-  :type 'regexp
-  :group 'muse-wiki
-  :set 'muse-wiki-update-wikiword-regexp)
-
 (defcustom muse-wiki-use-wikiword t
   "Whether to use color and publish bare WikiNames."
   :type 'boolean
@@ -68,44 +51,68 @@
   :type 'boolean
   :group 'muse-wiki)
 
-(defcustom muse-wiki-wikiword-match-project-files t
+(defcustom muse-wiki-match-all-project-files nil
   "Whether to extend WikiName functionality to also match
-  existing filenames.  If non-nil, will color and publish
-  implicit links to any file in your project."
+existing filenames, regardless of whether they are named in
+WikiWord format.
+
+If non-nil, Muse will color and publish implicit links to any
+file in your project."
   :type 'boolean
   :group 'muse-wiki)
 
-(defun muse-wiki-update-local-wikiword-regexp-hook ()
+(defvar muse-wiki-updating-wikiword-p nil
+  "Prevent recursive calls to `muse-wiki-update-local-wikiword-regexp'.")
+
+(eval-when-compile
+  (defvar muse-wiki-wikiword-regexp))
+
+(defun muse-wiki-update-local-wikiword-regexp ()
   "Update a local copy of `muse-wiki-wikiword-regexp' to include
 all the files in the project."
-  ;; see if must append project files
+  ;; see if the user wants to append project files
   (when (and muse-wiki-use-wikiword
-	     muse-wiki-wikiword-match-project-files)
-    ;; clear out current modified regexp
-    (when (local-variable-p 'muse-wiki-wikiword-regexp)
-      (kill-local-variable 'muse-wiki-wikiword-regexp))
-    ;; make the regexp local
-    (make-variable-buffer-local 'muse-wiki-wikiword-regexp)
-    ;; append the files from the project
-    (setq muse-wiki-wikiword-regexp 
-	  (concat "\\(\\("
-		  muse-wiki-wikiword-regexp "\\)\\|\\(\\<\\("
-		  (mapconcat 'car
-			     (muse-project-file-alist (muse-project))
-			     "\\|")
-		  "\\)\\>\\)\\)"))
-
-    (when (featurep 'muse-colors)
-      (muse-configure-highlighting 
-       'muse-colors-markup muse-colors-markup))))
+             muse-wiki-match-all-project-files
+             (not muse-wiki-updating-wikiword-p))
+    (let ((muse-wiki-updating-wikiword-p t))
+      ;; make the regexp local
+      (set (make-local-variable 'muse-wiki-wikiword-regexp)
+           (concat "\\(\\("
+                   (default-value muse-wiki-wikiword-regexp)
+                   "\\)\\|\\(\\<\\("
+                   ;; append the files from the project
+                   (mapconcat 'car
+                              (muse-project-file-alist (muse-project))
+                              "\\|")
+                   "\\)\\>\\)\\)"))
+      ;; update coloring setup
+      (when (featurep 'muse-colors)
+        (muse-configure-highlighting
+         'muse-colors-markup muse-colors-markup)))))
 
 ;; add the update-local-wikiword to all the right hooks
 (add-hook 'muse-mode-hook
-          'muse-wiki-update-local-wikiword-regexp-hook)
+          'muse-wiki-update-local-wikiword-regexp)
 (add-hook 'muse-before-publish-hook
-          'muse-wiki-update-local-wikiword-regexp-hook)
-(add-hook 'after-save-hook
-          'muse-wiki-update-local-wikiword-regexp-hook)
+          'muse-wiki-update-local-wikiword-regexp)
+(add-hook 'muse-project-file-alist-hook
+          'muse-wiki-update-local-wikiword-regexp)
+
+(defun muse-wiki-update-wikiword-regexp (sym val)
+  "Update everything related to `muse-wiki-wikiword-regexp'."
+  (set sym val)
+  (muse-wiki-update-local-wikiword-regexp)
+  (when (featurep 'muse-colors)
+    (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
+
+(defcustom muse-wiki-wikiword-regexp
+  (concat "\\<\\(\\(?:[" muse-regexp-upper
+          "]+[" muse-regexp-lower "]+\\)\\(?:["
+          muse-regexp-upper "]+[" muse-regexp-lower "]+\\)+\\)")
+  "Regexp used to match WikiWords."
+  :type 'regexp
+  :group 'muse-wiki
+  :set 'muse-wiki-update-wikiword-regexp)
 
 (defcustom muse-wiki-ignore-bare-project-names nil
   "Determine whether project names without a page specifer are links.
@@ -269,6 +276,11 @@ Match 1 is set to the WikiWord."
 This is used by `muse-wiki-publish-pretty-title', which must be
 called manually."
   :type '(repeat string)
+  :group 'muse-wiki)
+
+(defcustom muse-wiki-hide-nop-tag t
+  "If non-nil, hide <nop> tags when coloring a Muse buffer."
+  :type 'boolean
   :group 'muse-wiki)
 
 (defun muse-wiki-publish-pretty-title (&optional title explicit)
