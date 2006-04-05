@@ -241,7 +241,7 @@ If FILE is not specified, use the published version of the current file."
  '(muse-latex-header "~/personal-site/muse/header.tex")
  '(muse-mode-auto-p nil nil (muse-project))
  '(muse-mode-highlight-p t nil (muse-colors))
- '(muse-mode-hook (quote (muse-wiki-update-custom-values flyspell-mode footnote-mode)))
+ '(muse-mode-hook (quote (flyspell-mode footnote-mode)))
  '(muse-publish-comments-p t)
  '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki)))
  '(muse-wiki-publish-small-title-words (quote ("the" "and" "at" "on" "of" "for" "in" "an" "a" "page")))

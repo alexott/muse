@@ -101,6 +101,10 @@ URL, or nil if no URL should be included."
   :set 'muse-update-url-regexp
   :group 'muse)
 
+(add-hook 'muse-update-values-hook
+          (lambda ()
+            (muse-update-url-regexp 'muse-url-protocols muse-url-protocols)))
+
 (defcustom muse-wikipedia-country "en"
   "Indicate the 2-digit country code that we use for Wikipedia
 queries."
