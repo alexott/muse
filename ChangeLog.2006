@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-05 18:56:26 GMT	Michael Olson <mwolson@gnu.org>	patch-93
+
+    Summary:
+      muse-wiki: Honor setting for muse-wiki-hide-nop-tag.
+    Revision:
+      muse--main--1.0--patch-93
+
+    * lisp/muse-wiki.el (muse-wiki-colors-nop-tag): Take the value of
+      `muse-wiki-hide-nop-tag' into account.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-wiki.el
+
+
 2006-04-05 18:47:54 GMT	Michael Olson <mwolson@gnu.org>	patch-92
 
     Summary:
