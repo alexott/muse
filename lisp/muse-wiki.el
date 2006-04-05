@@ -141,14 +141,26 @@ If you want this replacement to happen, you must add
   :type 'regexp
   :group 'muse-wiki)
 
-(defun muse-wiki-update-interwiki-regexp (value)
-  "Update the value of `muse-wiki-interwiki-regexp' based on VALUE
-and `muse-project-alist'."
+(defun muse-wiki-update-interwiki-regexp ()
+  "Update the value of `muse-wiki-interwiki-regexp' based on
+`muse-wiki-interwiki-alist' and `muse-project-alist'."
+  (when muse-wiki-match-all-project-files
+    (make-local-variable 'muse-wiki-interwiki-regexp))
   (setq muse-wiki-interwiki-regexp
         (concat "\\<\\(" (mapconcat 'car muse-project-alist "\\|")
-                (when value (concat "\\|" (mapconcat 'car value "\\|")))
+                (when muse-wiki-interwiki-alist
+                  (concat "\\|" (mapconcat 'car muse-wiki-interwiki-alist
+                                           "\\|")))
                 "\\)\\(?:\\(?:" muse-wiki-interwiki-delimiter
-                "\\)\\(\\sw+\\)\\)?\\>"))
+                "\\)\\("
+                (when muse-wiki-match-all-project-files
+                  ;; append the files from the project
+                  (concat
+                   (mapconcat 'car
+                              (muse-project-file-alist (muse-project))
+                              "\\|")
+                   "\\|"))
+                "\\sw+\\)\\)?\\>"))
   (when (featurep 'muse-colors)
     (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
 
@@ -183,13 +195,12 @@ this."
                        (choice (string :tag "URL") function)))
   :set (function
         (lambda (sym value)
-          (muse-wiki-update-interwiki-regexp value)
-          (set sym value)))
+          (set sym value)
+          (muse-wiki-update-interwiki-regexp)))
   :group 'muse-wiki)
 
 (add-hook 'muse-update-values-hook
-          (lambda ()
-            (muse-wiki-update-interwiki-regexp muse-wiki-interwiki-alist)))
+          'muse-wiki-update-interwiki-regexp)
 
 (defun muse-wiki-resolve-project-page (&optional project page)
   "Return the published path from the current page to PAGE of PROJECT.
