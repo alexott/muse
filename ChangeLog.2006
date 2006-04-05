@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-05 16:37:13 GMT	Michael Olson <mwolson@gnu.org>	patch-90
+
+    Summary:
+      Permit table generation to be disabled for a single Muse page.
+    Revision:
+      muse--main--1.0--patch-90
+
+    * lisp/muse-latex.el (muse-latex-markup-table): If we don't get any table
+      data, don't publish the table.
+    
+    * lisp/muse-texinfo.el (muse-texinfo-markup-table): Ditto.
+    
+    * lisp/muse-xml-common.el (muse-xml-markup-table): Ditto.
+    
+    * lisp/muse-publish.el (muse-publish-table-fields): If the
+      "disable-tables" publishing directive exists for the current page, do
+      not generate a table.
+    
+    * muse.texi (Tables): Mention that table generation can be disabled for a
+      single page.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-latex.el lisp/muse-publish.el
+     lisp/muse-texinfo.el lisp/muse-xml-common.el muse.texi
+
+
 2006-04-05 15:56:11 GMT	Michael Olson <mwolson@gnu.org>	patch-89
 
     Summary:
