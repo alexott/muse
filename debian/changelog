@@ -1,3 +1,9 @@
+muse-el (3.02.6.arch.93-1) unstable; urgency=low
+
+  * New Arch snapshot.
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Fri,  7 Apr 2006 21:20:11 -0400
+
 muse-el (3.02.6-2) unstable; urgency=low
 
   * Update copyright data.
