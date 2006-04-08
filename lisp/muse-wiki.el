@@ -159,9 +159,13 @@ If you want this replacement to happen, you must add
                 (when muse-wiki-match-all-project-files
                   ;; append the files from the project
                   (concat
-                   (mapconcat 'car
-                              (muse-project-file-alist (muse-project))
-                              "\\|")
+                   (mapconcat
+                    (function
+                     (lambda (proj)
+                       (mapconcat 'car
+                                  (muse-project-file-alist (car proj))
+                                  "\\|")))
+                    muse-project-alist "")
                    "\\|"))
                 "\\sw+\\)\\)?\\>"))
   (when (featurep 'muse-colors)

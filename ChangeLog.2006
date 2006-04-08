@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-08 17:08:39 GMT	Michael Olson <mwolson@gnu.org>	patch-98
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 41-47)
+    Revision:
+      muse--main--1.0--patch-98
+
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Modify
+      interwiki-regexp to search for any project file name.  This is so it
+      will match files with spaces.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-41
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-42
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-43
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-44
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-45
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-46
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-47
+
+
 2006-04-08 16:32:00 GMT	Michael Olson <mwolson@gnu.org>	patch-97
 
     Summary:
