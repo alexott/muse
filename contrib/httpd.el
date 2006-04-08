@@ -253,11 +253,11 @@ content.")
       )))
 
 (defun httpd-start (&optional port)
-  (interactive (list (read-input "Serve Web requests on port: " "8080")))
+  (interactive (list (read-string "Serve Web requests on port: " "8080")))
   (if (null port)
       (setq port 8080)
     (if (stringp port)
-	(setq port (string-to-int port))))
+	(setq port (string-to-number port))))
   (if httpd-process
       (delete-process httpd-process))
   (setq httpd-process
@@ -267,9 +267,12 @@ content.")
 				  :host 'local :service port
 				  :server t :noquery t
 				  :filter 'httpd-serve)
-	  (open-network-stream-server "httpd" (generate-new-buffer "httpd")
-				      port nil 'httpd-serve)))
-  (if (eq (process-status httpd-process) 'listen)
+	  (and (fboundp 'open-network-stream-server)
+	       (open-network-stream-server "httpd"
+					   (generate-new-buffer "httpd")
+					   port nil 'httpd-serve))))
+  (if (and (processp httpd-process)
+	   (eq (process-status httpd-process) 'listen))
       (message "httpd.el is listening on port %d" port)))
 
 (defun httpd-stop ()

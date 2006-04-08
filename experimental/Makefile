@@ -1,4 +1,4 @@
-.PHONY: all lisp clean realclean distclean fullclean install test
+.PHONY: all experimental clean realclean distclean fullclean install install-uncompiled
 .PRECIOUS: %.elc
 
 include ../Makefile.defs
@@ -24,6 +24,6 @@ install: $(ELC)
 	install -d $(ELISPDIR)/experimental
 	install -m 0644 $(EL) $(ELC) $(ELISPDIR)/experimental
 
-test: $(ELC)
-	$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \
-		-f muse-elint-files muse-*.el
+install-uncompiled:
+	install -d $(ELISPDIR)/experimental
+	install -m 0644 $(EL) $(ELISPDIR)/experimental

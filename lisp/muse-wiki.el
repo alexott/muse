@@ -336,8 +336,9 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
 (eval-after-load "muse-colors"
   '(progn
      (defun muse-wiki-colors-nop-tag (beg end)
-       (add-text-properties beg (+ beg 5)
-                            '(invisible muse intangible t)))
+       (when muse-wiki-hide-nop-tag
+         (add-text-properties beg (+ beg 5)
+                              '(invisible muse intangible t))))
      (defun muse-colors-wikiword-separate ()
        (add-text-properties (match-beginning 0) (match-end 0)
                             '(invisible muse intangible t)))
