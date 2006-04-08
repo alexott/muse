@@ -174,10 +174,10 @@ used as the filename of the image."
 
 ;; after displaying the Emacs splash screen, the faces are wiped out,
 ;; so recover from that
-(add-to-list 'window-setup-hook #'muse-make-faces)
+(add-hook 'window-setup-hook #'muse-make-faces)
 ;; ditto for when a new frame is created
 (when (boundp 'after-make-frame-functions)
-  (add-to-list 'after-make-frame-functions #'muse-make-faces))
+  (add-hook 'after-make-frame-functions #'muse-make-faces))
 
 (defface muse-link
   '((((class color) (background light))

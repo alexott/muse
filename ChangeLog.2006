@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-08 16:32:00 GMT	Michael Olson <mwolson@gnu.org>	patch-97
+
+    Summary:
+      Try to fix failure to recognize Muse file extension.
+    Revision:
+      muse--main--1.0--patch-97
+
+    * lisp/muse-colors.el: Use add-hook instead of add-to-list, for the sake
+      of semantics.
+    
+    * lisp/muse.el: Call muse-update-file-extension in
+      muse-update-values-hook, instead of
+      muse-ignored-file-extensions-regexp.  Add muse-update-file-extension to
+      emacs-startup-hook, so that the user has time to set this in their
+      .emacs file.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse.el
+
+
 2006-04-08 02:46:41 GMT	Michael Olson <mwolson@gnu.org>	patch-96
 
     Summary:
