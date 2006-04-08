@@ -1,14 +1,17 @@
-.PHONY: all lisp autoloads examples experimental doc clean realclean distclean fullclean install-info install-bin install test dist release debbuild debrevision debrelease upload
+.PHONY: all lisp contrib autoloads examples experimental doc clean realclean distclean fullclean install-info install-bin install test dist release debbuild debrevision debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
 
-SUBDIRS = lisp examples experimental
+SUBDIRS = lisp contrib examples experimental
 
-all: autoloads lisp muse.info
+all: autoloads lisp contrib muse.info
 
 lisp:
 	(cd lisp && $(MAKE))
+
+contrib:
+	(cd contrib && $(MAKE))
 
 autoloads:
 	(cd lisp && $(MAKE) autoloads)
@@ -41,8 +44,10 @@ install-info: muse.info
 	install -m 0644 muse.info $(INFODIR)/muse
 	$(INSTALLINFO) $(INFODIR)/muse
 
-install-bin: lisp
+install-bin: lisp contrib
 	(cd lisp && $(MAKE) install)
+	(cd contrib && $(MAKE) install)
+	(cd experimental && $(MAKE) install-uncompiled)
 
 install: install-bin install-info
 

@@ -1,8 +1,12 @@
-muse-el (3.02.6.arch.93-1) unstable; urgency=low
+muse-el (3.02.90.arch.96-1) unstable; urgency=low
 
   * New Arch snapshot.
+  * Bug fix: "muse-el: Doesn't escape specials when publish using the
+    latex style", thanks to Jeremy Hankins (Closes: #340620).
+  * Bug fix: "muse-el: muse-http.el is not functional", thanks to Junichi
+    Uekawa (Closes: #357949).
 
- -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Fri,  7 Apr 2006 21:20:11 -0400
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Fri,  7 Apr 2006 21:45:14 -0400
 
 muse-el (3.02.6-2) unstable; urgency=low
 

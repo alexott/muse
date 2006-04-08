@@ -5,6 +5,7 @@
 ;; Originally contributed by Nils Naumann <naumann@unileoben.ac.at>
 ;; Modified by Dirk Eddelbuettel <edd@debian.org>
 ;; Adapted for dh-make by Jim Van Zandt <jrv@vanzandt.mv.com>
+;; Adapted for Muse by Michael Olson <mwolson@gnu.org>
 
 ;; The muse package follows the Debian/GNU Linux 'emacsen' policy and
 ;; byte-compiles its elisp files for each 'emacs flavor' (emacs19,
@@ -14,8 +15,10 @@
 
 ;; Add the source file
 (when (fboundp 'debian-pkg-add-load-path-item)
-  (debian-pkg-add-load-path-item (concat "/usr/share/"
-                                         (symbol-name flavor)
-                                         "/site-lisp/muse-el")))
+  (let ((prefix (concat "/usr/share/"
+                        (symbol-name flavor)
+                        "/site-lisp/muse-el")))
+    (debian-pkg-add-load-path-item prefix)
+    (debian-pkg-add-load-path-item (concat prefix "/contrib"))))
 
 (load "muse-autoloads.el")
