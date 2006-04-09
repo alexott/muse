@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-09 01:36:50 GMT	Michael Olson <mwolson@gnu.org>	patch-99
+
+    Summary:
+      Try to fix failure to recognize Muse file extension (2nd attempt).
+    Revision:
+      muse--main--1.0--patch-99
+
+    * lisp/muse.el: Try to fix failure to put muse-mode-choose-mode in
+      auto-mode-alist.
+
+    modified files:
+     ChangeLog.2006 lisp/muse.el
+
+
 2006-04-08 17:08:39 GMT	Michael Olson <mwolson@gnu.org>	patch-98
 
     Summary:
