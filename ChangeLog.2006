@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-09 01:53:19 GMT	Michael Olson <mwolson@gnu.org>	patch-100
+
+    Summary:
+      Try to fix failure to recognize Muse file extension (3rd attempt).
+    Revision:
+      muse--main--1.0--patch-100
+
+    * lisp/muse.el (muse-update-values-hook): Fix a sequencep error.
+
+    modified files:
+     ChangeLog.2006 lisp/muse.el
+
+
 2006-04-09 01:36:50 GMT	Michael Olson <mwolson@gnu.org>	patch-99
 
     Summary:
