@@ -144,11 +144,21 @@ If you want this replacement to happen, you must add
 (eval-when-compile
   (defvar muse-wiki-interwiki-alist))
 
+(defun muse-wiki-project-files-with-spaces (&optional project)
+  "Return a list of project files that have spaces."
+  (setq project (muse-project project))
+  (let ((flist))
+    (save-match-data
+      (mapcar (function (lambda (file) 
+			  (when (string-match " " (car file))
+			    (setq flist (append 
+					 flist (list (list (car file))))))))
+	      (muse-project-file-alist project)))
+    (append flist)))
+
 (defun muse-wiki-update-interwiki-regexp ()
   "Update the value of `muse-wiki-interwiki-regexp' based on
 `muse-wiki-interwiki-alist' and `muse-project-alist'."
-  (when muse-wiki-match-all-project-files
-    (make-local-variable 'muse-wiki-interwiki-regexp))
   (setq muse-wiki-interwiki-regexp
         (concat "\\<\\(" (mapconcat 'car muse-project-alist "\\|")
                 (when muse-wiki-interwiki-alist
@@ -162,8 +172,9 @@ If you want this replacement to happen, you must add
                    (mapconcat
                     (function
                      (lambda (proj)
-                       (mapconcat 'car
-                                  (muse-project-file-alist (car proj))
+                       (mapconcat 
+			'car
+			(muse-wiki-project-files-with-spaces (car proj))
                                   "\\|")))
                     muse-project-alist "")
                    "\\|"))
