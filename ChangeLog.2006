@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-09 23:54:07 GMT	Michael Olson <mwolson@gnu.org>	patch-103
+
+    Summary:
+      Try to fix failure to recognize Muse file extension (5th attempt).
+    Revision:
+      muse--main--1.0--patch-103
+
+    * lisp/muse.el: To detect whether Emacs has fully started, check
+      `command-line-processed' instead of `inhibit-startup-hooks', since the
+      latter only exists for Emacs22.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs debian/changelog lisp/muse.el
+
+
 2006-04-09 23:48:06 GMT	Michael Olson <mwolson@gnu.org>	patch-102
 
     Summary:
