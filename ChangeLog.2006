@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-09 23:48:06 GMT	Michael Olson <mwolson@gnu.org>	patch-102
+
+    Summary:
+      muse-html: Add :style-sheet element.
+    Revision:
+      muse--main--1.0--patch-102
+
+    * lisp/muse-html.el (muse-html-header, muse-xhtml-header): Use the
+      :style-sheet element.
+      ("html", "xhtml"): Add the :style-sheet element.
+    
+    * lisp/muse-publish.el (muse-define-style): Don't give an error when a
+      style already exists.  Instead, just replace the existing style.
+      (muse-derive-style): Ditto.
+    
+    * muse.texi (Style Elements): Mention :style-sheet.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-html.el lisp/muse-publish.el
+     muse.texi
+
+
 2006-04-09 02:23:47 GMT	Michael Olson <mwolson@gnu.org>	patch-101
 
     Summary:

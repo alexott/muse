@@ -128,8 +128,9 @@ An example of using <link> is as follows.
       (let ((maintainer (muse-style-element :maintainer)))
         (when maintainer
           (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\">\")))
+    </lisp><lisp>
+      (muse-style-element :style-sheet muse-publishing-current-style)
     </lisp>
-    <lisp>muse-html-style-sheet</lisp>
   </head>
   <body>
     <h1><lisp>
@@ -169,8 +170,9 @@ An example of using <link> is as follows.
       (let ((maintainer (muse-style-element :maintainer)))
         (when maintainer
           (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\" />\")))
+    </lisp><lisp>
+      (muse-style-element :style-sheet muse-publishing-current-style)
     </lisp>
-    <lisp>muse-xhtml-style-sheet</lisp>
   </head>
   <body>
     <h1><lisp>
@@ -565,13 +567,15 @@ This will be used if no special characters are found."
                      :after     'muse-html-finalize-buffer
                      :header    'muse-html-header
                      :footer    'muse-html-footer
+                     :style-sheet 'muse-html-style-sheet
                      :browser   'muse-html-browse-file)
 
   (muse-derive-style "xhtml" "html"
                      :suffix    'muse-xhtml-extension
                      :strings   'muse-xhtml-markup-strings
                      :header    'muse-xhtml-header
-                     :footer    'muse-xhtml-footer))
+                     :footer    'muse-xhtml-footer
+                     :style-sheet 'muse-xhtml-style-sheet))
 
 (provide 'muse-html)
 
