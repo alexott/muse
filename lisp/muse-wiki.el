@@ -61,6 +61,14 @@ file in your project."
   :type 'boolean
   :group 'muse-wiki)
 
+(defcustom muse-wiki-ignore-implicit-links-to-current-page nil
+  "Whether to ignore implicit links to the current page.
+
+If non-nil, Muse will skip right past implicit links to the
+current page, both when formatting and publishing."
+  :type 'boolean
+  :group 'muse-wiki)
+
 (defvar muse-wiki-updating-wikiword-p nil
   "Prevent recursive calls to `muse-wiki-update-local-wikiword-regexp'.")
 
@@ -295,7 +303,9 @@ Match 1 is set to the WikiWord."
                  (and (muse-project-of-file)
                       (muse-project-page-file
                        (match-string 1 string) muse-current-project t))
-                 (file-exists-p (match-string 1 string))))
+                 (file-exists-p (match-string 1 string)))
+	     (not (and muse-wiki-ignore-implicit-links-to-current-page
+		       (string= (match-string 1 string) (muse-page-name)))))
     (match-string 1 string)))
 
 ;; Prettifications
