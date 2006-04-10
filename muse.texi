@@ -396,18 +396,12 @@ If you don't want to use @file{.muse}, you can customize the extension
 by setting the value of @code{muse-file-extension}.
 
 If you don't want to use any extension at all, and want Muse to
-autodetect project files based on their location, then use:
+autodetect project files based on their location, then add the following
+to your Muse settings file.
 
 @lisp
 (setq muse-file-extension nil
       muse-mode-auto-p t)
-@end lisp
-
-If you set these options directly in your @file{.emacs} outside of the
-Customize interface, then you will also need to add:
-
-@lisp
-(add-hook 'find-file-hooks 'muse-mode-maybe)
 @end lisp
 
 @c PRE3_03: Give more examples
@@ -2321,14 +2315,20 @@ just-published LaTeX files.
 @item :header
 Header used for publishing files of this style.
 
-This may be text or a filename.  It is inserted at the beginning of a
-file, after evaluating the publishing markup.
+This may be a variable, text, or a filename.  It is inserted at the
+beginning of a file, after evaluating the publishing markup.
 
 @item :footer
 Footer used for publishing files of this style.
 
-This may be text or a filename.  It is inserted at the end of a file,
-after evaluating the publishing markup.
+This may be a variable, text, or a filename.  It is inserted at the end
+of a file, after evaluating the publishing markup.
+
+@item :style-sheet
+Style sheet used for publishing files of this style.
+
+This may be a variable or text.  It is used in the header of HTML and
+XHTML based publishing styles.
 
 @item :browser
 The function used to browse the published result of files of this style.

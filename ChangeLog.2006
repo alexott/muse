@@ -2,6 +2,117 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-10 03:13:41 GMT	Michael Olson <mwolson@gnu.org>	patch-106
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 53)
+    Revision:
+      muse--main--1.0--patch-106
+
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-wiki.el (muse-wiki-ignore-implicit-links-to-current-page):
+      Option to not create implicit links to the current page.
+      (muse-wiki-handle-wikiword): Process the option to not create implicit
+      links to the current page.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs debian/changelog
+     lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-53
+
+
+2006-04-10 03:03:28 GMT	Michael Olson <mwolson@gnu.org>	patch-105
+
+    Summary:
+      Try to fix failure to recognize Muse file extension (6th attempt).
+    Revision:
+      muse--main--1.0--patch-105
+
+    * lisp/muse-mode.el: Call `muse-mode-maybe-after-init' after the user's
+      init file is loaded.
+      (muse-mode-maybe-after-init): New function that causes muse-mode-maybe
+      to be added to find-file-hooks when muse-mode-auto-p is non-nil.
+    
+    * lisp/muse.el: Call `muse-update-file-extension-after-init after the
+      user's init file is loaded.  Explicitly add the Muse file extension
+      when muse.el is loaded, to make life simpler.
+      (muse-update-file-extension): Take several edge cases into account.
+      (muse-file-extension): Docfix.
+      (muse-update-file-extension-after-init): New function that causes the
+      file extension to be updated.
+    
+    * muse.texi (Projects): It is no longer necessary to call
+      `muse-mode-maybe' manually.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el lisp/muse.el muse.texi
+
+
+2006-04-10 00:08:01 GMT	Michael Olson <mwolson@gnu.org>	patch-104
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 48-52)
+    Revision:
+      muse--main--1.0--patch-104
+
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-wiki.el (muse-wiki-project-files-with-spaces): New function
+      to return a list of project files that have spaces.
+      (muse-wiki-update-interwiki-regexp): Make use of new project-files with
+      spaces function.  Don't make this buffer-local.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-48
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-49
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-50
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-51
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-52
+
+
+2006-04-09 23:54:07 GMT	Michael Olson <mwolson@gnu.org>	patch-103
+
+    Summary:
+      Try to fix failure to recognize Muse file extension (5th attempt).
+    Revision:
+      muse--main--1.0--patch-103
+
+    * lisp/muse.el: To detect whether Emacs has fully started, check
+      `command-line-processed' instead of `inhibit-startup-hooks', since the
+      latter only exists for Emacs22.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs debian/changelog lisp/muse.el
+
+
+2006-04-09 23:48:06 GMT	Michael Olson <mwolson@gnu.org>	patch-102
+
+    Summary:
+      muse-html: Add :style-sheet element.
+    Revision:
+      muse--main--1.0--patch-102
+
+    * lisp/muse-html.el (muse-html-header, muse-xhtml-header): Use the
+      :style-sheet element.
+      ("html", "xhtml"): Add the :style-sheet element.
+    
+    * lisp/muse-publish.el (muse-define-style): Don't give an error when a
+      style already exists.  Instead, just replace the existing style.
+      (muse-derive-style): Ditto.
+    
+    * muse.texi (Style Elements): Mention :style-sheet.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-html.el lisp/muse-publish.el
+     muse.texi
+
+
 2006-04-09 02:23:47 GMT	Michael Olson <mwolson@gnu.org>	patch-101
 
     Summary:

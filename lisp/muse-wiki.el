@@ -64,8 +64,8 @@ file in your project."
 (defcustom muse-wiki-ignore-implicit-links-to-current-page nil
   "Whether to ignore implicit links to the current page.
 
-If non-nil, Muse will skip right past implicit links to the
-current page, both when formatting and publishing."
+If non-nil, Muse will not recognize implicit links to the current
+page, both when formatting and publishing."
   :type 'boolean
   :group 'muse-wiki)
 
@@ -153,16 +153,15 @@ If you want this replacement to happen, you must add
   (defvar muse-wiki-interwiki-alist))
 
 (defun muse-wiki-project-files-with-spaces (&optional project)
-  "Return a list of project files that have spaces."
+  "Return a list of files in PROJECT that have spaces."
   (setq project (muse-project project))
-  (let ((flist))
+  (let ((flist nil))
     (save-match-data
-      (mapcar (function (lambda (file) 
-			  (when (string-match " " (car file))
-			    (setq flist (append 
-					 flist (list (list (car file))))))))
-	      (muse-project-file-alist project)))
-    (append flist)))
+      (mapcar (function (lambda (file)
+                          (when (string-match " " (car file))
+                            (setq flist (cons (car file) flist)))))
+              (muse-project-file-alist project)))
+    flist))
 
 (defun muse-wiki-update-interwiki-regexp ()
   "Update the value of `muse-wiki-interwiki-regexp' based on
@@ -180,9 +179,9 @@ If you want this replacement to happen, you must add
                    (mapconcat
                     (function
                      (lambda (proj)
-                       (mapconcat 
-			'car
-			(muse-wiki-project-files-with-spaces (car proj))
+                       (mapconcat 'identity
+                                  (muse-wiki-project-files-with-spaces
+                                   (car proj))
                                   "\\|")))
                     muse-project-alist "")
                    "\\|"))
@@ -304,8 +303,8 @@ Match 1 is set to the WikiWord."
                       (muse-project-page-file
                        (match-string 1 string) muse-current-project t))
                  (file-exists-p (match-string 1 string)))
-	     (not (and muse-wiki-ignore-implicit-links-to-current-page
-		       (string= (match-string 1 string) (muse-page-name)))))
+             (and muse-wiki-ignore-implicit-links-to-current-page
+                  (not (string= (match-string 1 string) (muse-page-name)))))
     (match-string 1 string)))
 
 ;; Prettifications

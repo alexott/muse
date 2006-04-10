@@ -321,17 +321,14 @@ This is used to make sure that publishing doesn't get stalled.")
 (defun muse-define-style (name &rest elements)
   (let ((entry (assoc name muse-publishing-styles)))
     (if entry
-        (error "There is already a style named %s." name)
+        (setcdr entry elements)
       (setq muse-publishing-styles
-            (cons (append (list name) elements)
+            (cons (append (list name) )
                   muse-publishing-styles)))))
 
 (defun muse-derive-style (new-name base-name &rest elements)
-  (let ((entry (assoc new-name muse-publishing-styles)))
-    (if entry
-        (error "There is already a style named %s." new-name)
-      (apply 'muse-define-style new-name
-             (append elements (list :base base-name))))))
+  (apply 'muse-define-style new-name
+         (append elements (list :base base-name))))
 
 (defsubst muse-get-keyword (keyword list &optional direct)
   (let ((value (cadr (memq keyword list))))
