@@ -2,6 +2,33 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-10 03:03:28 GMT	Michael Olson <mwolson@gnu.org>	patch-105
+
+    Summary:
+      Try to fix failure to recognize Muse file extension (6th attempt).
+    Revision:
+      muse--main--1.0--patch-105
+
+    * lisp/muse-mode.el: Call `muse-mode-maybe-after-init' after the user's
+      init file is loaded.
+      (muse-mode-maybe-after-init): New function that causes muse-mode-maybe
+      to be added to find-file-hooks when muse-mode-auto-p is non-nil.
+    
+    * lisp/muse.el: Call `muse-update-file-extension-after-init after the
+      user's init file is loaded.  Explicitly add the Muse file extension
+      when muse.el is loaded, to make life simpler.
+      (muse-update-file-extension): Take several edge cases into account.
+      (muse-file-extension): Docfix.
+      (muse-update-file-extension-after-init): New function that causes the
+      file extension to be updated.
+    
+    * muse.texi (Projects): It is no longer necessary to call
+      `muse-mode-maybe' manually.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el lisp/muse.el muse.texi
+
+
 2006-04-10 00:08:01 GMT	Michael Olson <mwolson@gnu.org>	patch-104
 
     Summary:

@@ -396,18 +396,12 @@ If you don't want to use @file{.muse}, you can customize the extension
 by setting the value of @code{muse-file-extension}.
 
 If you don't want to use any extension at all, and want Muse to
-autodetect project files based on their location, then use:
+autodetect project files based on their location, then add the following
+to your Muse settings file.
 
 @lisp
 (setq muse-file-extension nil
       muse-mode-auto-p t)
-@end lisp
-
-If you set these options directly in your @file{.emacs} outside of the
-Customize interface, then you will also need to add:
-
-@lisp
-(add-hook 'find-file-hooks 'muse-mode-maybe)
 @end lisp
 
 @c PRE3_03: Give more examples

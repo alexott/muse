@@ -80,6 +80,14 @@
           (set sym value)))
   :group 'muse-mode)
 
+(defun muse-mode-maybe-after-init ()
+  (when muse-mode-auto-p
+    (add-hook 'find-file-hooks 'muse-mode-maybe)))
+
+;; If the user sets this value in their init file, make sure that
+;; it takes effect
+(add-hook 'after-init-hook 'muse-mode-maybe-after-init)
+
 (defcustom muse-mode-intangible-links nil
   "If non-nil, use the intangible property on links.
 This can cause problems with flyspell (and potentially fill-mode),
