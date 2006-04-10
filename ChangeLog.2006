@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-10 03:13:41 GMT	Michael Olson <mwolson@gnu.org>	patch-106
+
+    Summary:
+      Merged from mwolson@gnu.org--2006-muse-el (patch 53)
+    Revision:
+      muse--main--1.0--patch-106
+
+    (Author: Per B. Sederberg <per@med.upenn.edu>)
+    
+    * lisp/muse-wiki.el (muse-wiki-ignore-implicit-links-to-current-page):
+      Option to not create implicit links to the current page.
+      (muse-wiki-handle-wikiword): Process the option to not create implicit
+      links to the current page.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs debian/changelog
+     lisp/muse-wiki.el
+
+    new patches:
+     mwolson@gnu.org--2006-muse-el/muse-el--devel--0--patch-53
+
+
 2006-04-10 03:03:28 GMT	Michael Olson <mwolson@gnu.org>	patch-105
 
     Summary:
