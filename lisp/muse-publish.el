@@ -323,7 +323,7 @@ This is used to make sure that publishing doesn't get stalled.")
     (if entry
         (setcdr entry elements)
       (setq muse-publishing-styles
-            (cons (append (list name) )
+            (cons (append (list name) elements)
                   muse-publishing-styles)))))
 
 (defun muse-derive-style (new-name base-name &rest elements)
