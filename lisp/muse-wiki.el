@@ -298,13 +298,19 @@ Match 1 is set to the WikiWord."
              (if string
                  (string-match muse-wiki-wikiword-regexp string)
                (looking-at muse-wiki-wikiword-regexp))
-             (or muse-wiki-allow-nonexistent-wikiword
-                 (and (muse-project-of-file)
-                      (muse-project-page-file
-                       (match-string 1 string) muse-current-project t))
-                 (file-exists-p (match-string 1 string)))
-             (and muse-wiki-ignore-implicit-links-to-current-page
-                  (not (string= (match-string 1 string) (muse-page-name)))))
+             (cond
+              (muse-wiki-allow-nonexistent-wikiword
+               t)
+              ((and muse-wiki-ignore-implicit-links-to-current-page
+                    (string= (match-string 1 string) (muse-page-name)))
+               nil)
+              ((and (muse-project-of-file)
+                    (muse-project-page-file
+                     (match-string 1 string) muse-current-project t))
+               t)
+              ((file-exists-p (match-string 1 string))
+               t)
+              (t nil)))
     (match-string 1 string)))
 
 ;; Prettifications
