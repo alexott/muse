@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-14 18:56:30 GMT	Michael Olson <mwolson@gnu.org>	patch-108
+
+    Summary:
+      muse-wiki: Fix bug that caused WikiWords not to publish or display.
+    Revision:
+      muse--main--1.0--patch-108
+
+    * lisp/muse-wiki.el (muse-wiki-handle-wikiword): Logic fix.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs debian/changelog
+     lisp/muse-wiki.el
+
+
 2006-04-11 03:49:41 GMT	Michael Olson <mwolson@gnu.org>	patch-107
 
     Summary:
