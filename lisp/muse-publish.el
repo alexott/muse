@@ -744,13 +744,13 @@ CONTEXT is used to figure out what kind of specials to escape.
 
 The following contexts exist in Muse.
 'underline  _underlined text_
-'literal    =monospaced text= or <code>region</code> (monospaced, escaped)
+'literal    =monospaced text= or <code> region (monospaced, escaped)
 'emphasis   *emphasized text*
 'email      email@example.com
 'url        http://example.com
 'url-desc   [[...][description of an extended link]]
-'example    <example>region</example> (monospaced, block context, escaped)
-'verbatim   <verbatim>region</verbatim> (escaped)
+'example    <example> region (monospaced, block context, escaped)
+'verbatim   <verbatim> region (escaped)
 'document   normal text"
   (let ((specials (muse-style-element :specials nil t)))
     (cond ((functionp specials)
