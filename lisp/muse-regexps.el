@@ -179,7 +179,7 @@ Group 1 should be the tag name, group 2 the properties, and group
   :group 'muse-regexp)
 
 (defcustom muse-explicit-link-regexp
-  "\\[\\[\\([^][\t\n]+\\)\\]\\(?:\\[\\([^][\n]+\\)\\]\\)?\\]"
+  "\\[\\[\\([^][\n]+\\)\\]\\(?:\\[\\([^][\n]+\\)\\]\\)?\\]"
   "Regexp used to match [[target][description]] links.
 Paren group 1 must match the URL, and paren group 2 the description."
   :type 'regexp
