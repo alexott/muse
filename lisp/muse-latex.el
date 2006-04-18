@@ -261,9 +261,12 @@ regions."
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-specials-example
-  '((?\\ . "\\\\"))
+  '()
   "A table of characters which must be represented specially.
-These are applied to <example>regions</example>."
+These are applied to <example> regions.
+
+With the default interpretation of <example> regions, no specials
+need to be escaped."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
 
@@ -281,7 +284,7 @@ These are applied to <example>regions</example>."
     (?\& . "\\&")
     (?\# . "\\#"))
   "A table of characters which must be represented specially.
-This applies to =monospaced text= and <code>regions</code>."
+This applies to =monospaced text= and <code> regions."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
 
