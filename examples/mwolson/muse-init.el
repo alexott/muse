@@ -140,7 +140,7 @@
     (call-interactively 'muse-project-find-file)))
 
 ;; Determine whether we are publishing a certain kind of output
-(defsubst my-muse-format-p (format)
+(defun my-muse-format-p (format)
   (let ((base (muse-get-keyword :base muse-publishing-current-style)))
     (when base (string-match format base))))
 
@@ -229,7 +229,6 @@ If FILE is not specified, use the published version of the current file."
  '(muse-blosxom-base-directory "~/proj/wiki/blog/")
  '(muse-colors-autogen-headings (quote outline))
  '(muse-colors-inline-image-method (quote muse-colors-use-publishing-directory))
- '(muse-file-extension "muse")
  '(muse-html-charset-default "utf-8")
  '(muse-html-encoding-default (quote utf-8))
  '(muse-html-footer "~/personal-site/muse/generic-footer.html")
@@ -239,14 +238,15 @@ If FILE is not specified, use the published version of the current file."
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />")
  '(muse-latex-header "~/personal-site/muse/header.tex")
- '(muse-mode-auto-p nil nil (muse-project))
- '(muse-mode-highlight-p t nil (muse-colors))
  '(muse-mode-hook (quote (flyspell-mode footnote-mode)))
  '(muse-publish-comments-p t)
  '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki)))
  '(muse-wiki-publish-small-title-words (quote ("the" "and" "at" "on" "of" "for" "in" "an" "a" "page")))
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
- '(muse-xhtml-header "~/personal-site/muse/generic-header.html"))
+ '(muse-xhtml-header "~/personal-site/muse/generic-header.html")
+ '(muse-xhtml-style-sheet "<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"/common.css\" />
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
+<link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />"))
 (custom-set-faces
  '(muse-bad-link ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold))))
  '(muse-link ((t (:foreground "blue" :underline "blue" :weight bold)))))

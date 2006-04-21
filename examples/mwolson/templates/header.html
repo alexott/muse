@@ -9,7 +9,9 @@
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.mwolson.org/blog/index.rss" />
   <link rel="author" href="http://www.mwolson.org/web/AboutMe.html" />
   <link rel="home" href="http://www.mwolson.org/web/WelcomePage.html" />
-  <lisp>muse-html-style-sheet</lisp>
+  <lisp>
+    (muse-style-element :style-sheet muse-publishing-current-style)
+  </lisp>
   <meta name="description" content="Michael Olson, maintainer of emacs-wiki and Muse" />
   <meta name="keywords" content="emacs-wiki,muse" />
   <meta name="generator" content="Muse" />
