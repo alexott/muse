@@ -153,6 +153,42 @@
 	  (t
 	   (cgi-lose "Can't handle request method %s" method)))))
 
+;; ====================================================================
+;; a sample application: calendar via the web. If invoked without
+;; arguments, presents a calendar for the three months around the
+;; current date. You can request a calendar for a specific period by
+;; specifying the year and the month in the query string:
+;;
+;;   ~$ lynx -dump 'http://localhost/cgi-bin/cal?year=1975&month=6'
+;;
+;; When run in batch mode, text normally displayed in the echo area
+;; (via `princ' for example) goes to stdout, and thus to the browser.
+;; Text output using `message' goes to stderr, and thus normally to
+;; your web server's error_log.
+;; ====================================================================
+(defun cgi-calendar-string ()
+  (require 'calendar)
+  (let* ((args (cgi-arguments))
+	 (now (calendar-current-date))
+	 (mnth (cdr (assoc "month" args)))
+	 (month (if mnth (string-to-number mnth)
+		  (extract-calendar-month now)))
+	 (yr (cdr (assoc "year" args)))
+	 (year (if yr (string-to-number yr)
+		 (extract-calendar-year now))))
+    (with-temp-buffer
+      (generate-calendar month year)
+      (buffer-string))))
+
+(defun cgi-calendar ()
+  (cgi-evaluate
+   (princ "Content-type: text/html\n\n")
+   (princ "<html><head><title>Emacs calendar</title></head>\r\n")
+   (princ "<body> <h1>Emacs calendar</h1>\r\n")
+   (princ "<pre>\r\n")
+   (princ (cgi-calendar-string))
+   (princ "\r\n</pre></body></html>\r\n")))
+
 (provide 'cgi)
 
 ;; cgi.el ends here

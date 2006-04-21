@@ -479,14 +479,14 @@ at the current point."
 Do not rename the page originally referred to."
   (interactive)
   (if (muse-link-at-point)
-      (replace-match
-       (save-match-data
-         (muse-make-link
-          (read-string "Link: "
-                       (muse-get-link))
-          (read-string "Text: "
-                       (muse-get-link-desc))))
-       t t)
+      (let ((link (muse-get-link))
+            (desc (muse-get-link-desc)))
+        (replace-match
+         (save-match-data
+           (muse-make-link
+            (read-string "Link: " link)
+            (read-string "Text: " desc)))
+         t t))
     (error "There is no valid link at point")))
 
 (defun muse-visit-link-default (link &optional other-window)

@@ -2,6 +2,38 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-21 19:31:23 GMT	Michael Olson <mwolson@gnu.org>	patch-112
+
+    Summary:
+      Re-add some cgi.el stuff and update my example config.
+    Revision:
+      muse--main--1.0--patch-112
+
+    * contrib/cgi.el (cgi-calendar-string, cgi-calendar): Re-add these, since
+      they are mentioned in the documentation.
+    
+    * examples/mwolson/: Update.
+
+    modified files:
+     ChangeLog.2006 contrib/cgi.el examples/mwolson/muse-init.el
+     examples/mwolson/templates/footer.html
+     examples/mwolson/templates/header.html
+
+
+2006-04-21 15:23:13 GMT	Michael Olson <mwolson@gnu.org>	patch-111
+
+    Summary:
+      muse-mode: Make C-c C-e work better.
+    Revision:
+      muse--main--1.0--patch-111
+
+    * lisp/muse-mode.el (muse-edit-link-at-point): Save link data earlier so
+      that this is more robust.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el
+
+
 2006-04-18 21:09:37 GMT	Michael Olson <mwolson@gnu.org>	patch-110
 
     Summary:
