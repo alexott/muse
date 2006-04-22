@@ -130,47 +130,43 @@ used as the filename of the image."
       font-lock-comment-face))
   "Outline faces to use when assigning Muse header faces.")
 
-(progn
-  (let (newsym)
-    (dolist (num '(1 2 3 4 5))
-      (setq newsym (intern (concat "muse-header-"
-                                   (int-to-string num))))
+(defun muse-make-faces-default (&optional later)
+  (dolist (num '(1 2 3 4 5))
+    (let ((newsym (intern (concat "muse-header-" (int-to-string num)))))
       ;; put in the proper group and give documentation
-      (eval `(defface ,newsym
-               '((t (:size
-                     ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt" "11pt"))
-                     :bold t)))
-               "Muse header face"
-               :group 'muse-colors)))))
+      (if later
+          (unless (featurep 'xemacs)
+            (muse-copy-face 'variable-pitch newsym)
+            (set-face-attribute newsym nil :height (1+ (* 0.1 (- 5 num)))
+                                :weight 'bold))
+        (if (featurep 'xemacs)
+            (eval `(defface ,newsym
+                     '((t (:size
+                           ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt" "11pt"))
+                           :bold t)))
+                     "Muse header face"
+                     :group 'muse-colors))
+          (eval `(defface ,newsym
+                   '((t (:height ,(1+ (* 0.1 (- 5 num)))
+                                 :inherit variable-pitch
+                                 :weight bold)))
+                   "Muse header face"
+                   :group 'muse-colors)))))))
+
+(progn (muse-make-faces-default))
 
 (defun muse-make-faces (&optional frame)
-  (let (newsym)
+  (cond
+   ((not muse-colors-autogen-headings)
+    nil)
+   ((eq muse-colors-autogen-headings t)
+    (muse-make-faces-default t))
+   (t
     (dolist (num '(1 2 3 4 5))
-      (setq newsym (intern (concat "muse-header-"
-                                   (int-to-string num))))
-      ;; copy the desired face definition
-      (cond
-       ((not muse-colors-autogen-headings)
-        nil)
-       ((featurep 'xemacs)
-        (when (eq muse-colors-autogen-headings 'outline)
-          (muse-copy-face (nth (1- num) muse-colors-outline-faces-list)
-                          newsym)))
-       ((< emacs-major-version 21)
-        (if (eq muse-colors-autogen-headings 'outline)
-            (muse-copy-face (nth (1- num) muse-colors-outline-faces-list)
-                            newsym)
-          (muse-copy-face 'default newsym)))
-       ((eq muse-colors-autogen-headings 'outline)
+      (let ((newsym (intern (concat "muse-header-" (int-to-string num)))))
+        ;; copy the desired face definition
         (muse-copy-face (nth (1- num) muse-colors-outline-faces-list)
-                   newsym))
-       (t
-        (eval `(defface ,newsym
-                 '((t (:height ,(1+ (* 0.1 (- 5 num)))
-                               :inherit variable-pitch
-                               :weight bold)))
-                 "Muse header face"
-                 :group 'muse-colors)))))))
+                        newsym))))))
 
 ;; after displaying the Emacs splash screen, the faces are wiped out,
 ;; so recover from that

@@ -2,6 +2,22 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-22 03:35:12 GMT	Michael Olson <mwolson@gnu.org>	patch-113
+
+    Summary:
+      Try to fix face clobbering bug.
+    Revision:
+      muse--main--1.0--patch-113
+
+    * lisp/muse-colors.el (muse-make-faces-default): New function that sets
+      the default value of the header faces.  It can be re-used.
+      (muse-make-faces): Simplify.  This should now fix the face clobbering
+      bug.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el
+
+
 2006-04-21 19:31:23 GMT	Michael Olson <mwolson@gnu.org>	patch-112
 
     Summary:
