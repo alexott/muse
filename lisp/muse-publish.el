@@ -640,6 +640,10 @@ the file is published no matter what."
               (prog1
                   (substring output-dir (match-end 0))
                 (setq command-line-args-left (cdr command-line-args-left)))))
+    (setq auto-mode-alist
+          (delete (cons (concat "\\." muse-file-extension "\\'")
+                        'muse-mode-choose-mode)
+                  auto-mode-alist))
     (dolist (file command-line-args-left)
       (muse-publish-file file style output-dir t))))
 
