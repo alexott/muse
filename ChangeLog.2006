@@ -2,6 +2,63 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-25 00:31:42 GMT	Michael Olson <mwolson@gnu.org>	patch-116
+
+    Summary:
+      cgi.el: Make this work without cl-seq.el.
+    Revision:
+      muse--main--1.0--patch-116
+
+    * contrib/cgi.el: Fix a compiler warning introduced by sample calendar
+      code.  Make this not depend on 'cl at runtime.
+      (cgi-position): New function that implements a simple replacement for
+      the position function found in cl-seq.el.
+      (cgi-decode): Use `cgi-position' instead of `position' and `substring'
+      instead of `subseq'.
+    
+    * contrib/httpd.el: Credit myself.
+
+    modified files:
+     ChangeLog.2006 contrib/cgi.el contrib/httpd.el
+
+
+2006-04-25 00:04:10 GMT	Michael Olson <mwolson@gnu.org>	patch-115
+
+    Summary:
+      Make publishing DTRT when using escaped list markup.
+    Revision:
+      muse--main--1.0--patch-115
+
+    * lisp/muse-publish.el (muse-publish-surround-text)
+      (muse-publish-markup-list): Ignore escaped list markup.
+    
+    * lisp/muse.el (muse-list-item-type): Docfix.
+      (muse-list-item-critical-point): New function that returns the point
+      where we should expect to find the first character in the current list
+      item markup.
+      (muse-forward-paragraph): Docfix and cosmetic change.
+      (muse-forward-list-item): Ignore escaped list markup.  This should fix
+      a few publishing errors that involve markup like =::=.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse.el
+
+
+2006-04-22 03:46:04 GMT	Michael Olson <mwolson@gnu.org>	patch-114
+
+    Summary:
+      muse-publish: Get rid of warning when batch publishing.
+    Revision:
+      muse--main--1.0--patch-114
+
+    * lisp/muse-publish.el (muse-batch-publish-files): Get rid of a batch
+      publishing warning message.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs debian/changelog
+     lisp/muse-publish.el
+
+
 2006-04-22 03:35:12 GMT	Michael Olson <mwolson@gnu.org>	patch-113
 
     Summary:
