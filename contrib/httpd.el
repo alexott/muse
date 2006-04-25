@@ -2,6 +2,7 @@
 ;;;
 ;;; Author: Eric Marsden <emarsden@laas.fr>
 ;;;         John Wiegley <johnw@gnu.org>
+;;;         Michael Olson <mwolson@gnu.org> (slight modifications)
 ;;; Version: 1.1
 ;;; Keywords: games
 ;;; Copyright (C) 2001, 2003 Eric Marsden

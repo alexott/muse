@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-25 00:31:42 GMT	Michael Olson <mwolson@gnu.org>	patch-116
+
+    Summary:
+      cgi.el: Make this work without cl-seq.el.
+    Revision:
+      muse--main--1.0--patch-116
+
+    * contrib/cgi.el: Fix a compiler warning introduced by sample calendar
+      code.  Make this not depend on 'cl at runtime.
+      (cgi-position): New function that implements a simple replacement for
+      the position function found in cl-seq.el.
+      (cgi-decode): Use `cgi-position' instead of `position' and `substring'
+      instead of `subseq'.
+    
+    * contrib/httpd.el: Credit myself.
+
+    modified files:
+     ChangeLog.2006 contrib/cgi.el contrib/httpd.el
+
+
 2006-04-25 00:04:10 GMT	Michael Olson <mwolson@gnu.org>	patch-115
 
     Summary:

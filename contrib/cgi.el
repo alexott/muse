@@ -1,10 +1,12 @@
 ;;; cgi.el -- using Emacs for CGI scripting
 ;;;
 ;;; Author: Eric Marsden  <emarsden@laas.fr>
+;;;         Michael Olson <mwolson@gnu.org> (slight modifications)
 ;;; Keywords: CGI web scripting slow
-;;; Version: 0.2
+;;; Version: 0.3
 ;;; Time-stamp: <2001-08-24 emarsden>
 ;;; Copyright: (C) 2000  Eric Marsden
+;;; Parts copyright (C) 2006 Free Software Foundation, Inc.
 ;;
 ;;     This program is free software; you can redistribute it and/or
 ;;     modify it under the terms of the GNU General Public License as
@@ -66,8 +68,9 @@
 
 ;;; Code:
 
-(require 'cl)
-
+(eval-when-compile
+  (require 'cl)
+  (require 'calendar))
 
 (defconst cgi-url-unreserved-chars '(
     ?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m
@@ -106,14 +109,22 @@
 	    (t (push ch decoded)
 	       (incf i))))))
 
+(defun cgi-position (item seq &optional start end)
+  (or start (setq start 0))
+  (or end (setq end (length seq)))
+  (while (and (< start end)
+	      (not (equal item (aref seq start))))
+    (setq start (1+ start)))
+  (and (< start end) start))
+
 ;; Parse "foo=x&bar=y+re" into (("foo" . "x") ("bar" . "y re"))
 ;; Substrings are plus-decoded and then URI-decoded.
 (defun cgi-decode (q)
   (when q
     (flet ((split-= (str)
-	    (let ((pos (or (position ?= str) 0)))
-	      (cons (cgi-decode-string (subseq str 0 pos))
-		    (cgi-decode-string (subseq str (+ pos 1)))))))
+	    (let ((pos (or (cgi-position ?= str) 0)))
+	      (cons (cgi-decode-string (substring str 0 pos))
+		    (cgi-decode-string (substring str (+ pos 1)))))))
       (mapcar #'split-= (split-string q "&")))))
 
 (defun cgi-lose (fmt &rest args)
