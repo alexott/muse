@@ -1027,7 +1027,9 @@ The following contexts exist in Muse.
               (indent-found nil)
               (post-indent post-indent))
           (while (< (point) (point-max))
-            (when (looking-at list-item)
+            (when (and (looking-at list-item)
+                       (not (get-text-property (muse-list-item-critical-point)
+                                               'read-only)))
               ;; if we encounter a list item, allow no post-indent
               ;; space
               (setq list-nested t))
@@ -1057,6 +1059,8 @@ like read-only from being inadvertently deleted."
          (post-indent (length str))
          (last (match-beginning 0)))
     (cond
+     ((get-text-property (muse-list-item-critical-point) 'read-only)
+      nil)
      ((eq type 'ul)
       (unless (eq (char-after (match-end 1)) ?-)
         (delete-region (match-beginning 0) (match-end 0))

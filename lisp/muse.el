@@ -516,7 +516,7 @@ function."
 ;; Movement functions
 
 (defun muse-list-item-type (str)
-"Determine the type of list given STR.
+  "Determine the type of list given STR.
 Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
   (cond ((or (string= str "")
              (< (length str) 2))
@@ -534,15 +534,25 @@ Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
          'dl-term)
         (t 'dl-entry)))
 
+(defun muse-list-item-critical-point ()
+  "Figure out where the list item markup for the current match is."
+  (if (eq (match-end 0) (match-end 1))
+      ;; at a definition list
+      (match-end 1)
+    ;; at a different kind of list
+    (match-beginning 1)))
+
 (defun muse-forward-paragraph (&optional pattern)
+  "Move forward safely by one paragraph, or according to PATTERN."
   (when (get-text-property (point) 'end-list)
     (goto-char (next-single-property-change (point) 'end-list)))
+  (setq pattern (if pattern
+                    (concat "^\\(?:" pattern "\\|\n\\|\\'\\)")
+                  "^\\s-*\\(\n\\|\\'\\)"))
   (let ((next-list-end (or (next-single-property-change (point) 'end-list)
                            (point-max))))
     (forward-line 1)
-    (if (re-search-forward (if pattern
-                               (concat "^\\(?:" pattern "\\|\n\\|\\'\\)")
-                             "^\\s-*\\(\n\\|\\'\\)") nil t)
+    (if (re-search-forward pattern nil t)
         (goto-char (match-beginning 0))
       (goto-char (point-max)))
     (when (> (point) next-list-end)
@@ -586,10 +596,20 @@ provide a very liberal INDENT value, such as
     (while (progn
              (muse-forward-paragraph list-pattern)
              ;; make sure we don't go past boundary
-             (and (not no-skip-nested)
-                  (not (or (get-text-property (point) 'end-list)
+             (and (not (or (get-text-property (point) 'end-list)
                            (>= (point) (point-max))))
-                  (muse-forward-list-item-1 type empty-line indented-line))))
+                  ;; move past markup that is part of another construct
+                  (or (and (match-beginning 1)
+                           (if (and (boundp 'muse-publishing-p)
+                                    muse-publishing-p)
+                               (get-text-property
+                                (muse-list-item-critical-point) 'read-only)
+                             (get-text-property
+                              (muse-list-item-critical-point) 'face)))
+                      ;; skip nested items
+                      (and (not no-skip-nested)
+                           (muse-forward-list-item-1 type empty-line
+                                                     indented-line))))))
     (cond ((or (get-text-property (point) 'end-list)
                (>= (point) (point-max)))
            ;; at a list boundary, so stop

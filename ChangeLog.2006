@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-25 00:04:10 GMT	Michael Olson <mwolson@gnu.org>	patch-115
+
+    Summary:
+      Make publishing DTRT when using escaped list markup.
+    Revision:
+      muse--main--1.0--patch-115
+
+    * lisp/muse-publish.el (muse-publish-surround-text)
+      (muse-publish-markup-list): Ignore escaped list markup.
+    
+    * lisp/muse.el (muse-list-item-type): Docfix.
+      (muse-list-item-critical-point): New function that returns the point
+      where we should expect to find the first character in the current list
+      item markup.
+      (muse-forward-paragraph): Docfix and cosmetic change.
+      (muse-forward-list-item): Ignore escaped list markup.  This should fix
+      a few publishing errors that involve markup like =::=.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse.el
+
+
 2006-04-22 03:46:04 GMT	Michael Olson <mwolson@gnu.org>	patch-114
 
     Summary:
