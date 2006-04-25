@@ -20,6 +20,6 @@ muse-build.elc: ../scripts/muse-build.el
 clean realclean distclean fullclean:
 	-rm -f *.elc *~
 
-install: lisp
+install: $(ELC)
 	install -d $(ELISPDIR)/contrib
 	install -m 0644 $(EL) $(ELC) $(ELISPDIR)/contrib

@@ -6,9 +6,9 @@ include ../Makefile.defs
 EL  = $(filter-out muse-autoloads.el,$(wildcard *.el))
 ELC = $(patsubst %.el,%.elc,$(EL))
 
-all: autoloads lisp
+all: lisp
 
-lisp: $(ELC)
+lisp: autoloads $(ELC)
 
 muse-build.elc: ../scripts/muse-build.el
 	@echo muse-build.el is not byte-compiled
@@ -29,7 +29,7 @@ clean:
 realclean distclean fullclean: clean
 	-rm -f muse-autoloads.el
 
-install: autoloads lisp
+install: autoloads $(ELC)
 	install -d $(ELISPDIR)
 	install -m 0644 muse-autoloads.el $(EL) $(ELC) $(ELISPDIR)
 

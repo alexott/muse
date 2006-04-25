@@ -2,6 +2,23 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-25 22:28:01 GMT	Michael Olson <mwolson@gnu.org>	patch-117
+
+    Summary:
+      Make build targets more consistent.
+    Revision:
+      muse--main--1.0--patch-117
+
+    * contrib/Makefile (install): Make build targets more consistent.  Thanks
+      to dsmith for the report.
+    
+    * lisp/Makefile (all, lisp, install): Ditto.
+
+    modified files:
+     ChangeLog.2006 Makefile.defs contrib/Makefile debian/changelog
+     lisp/Makefile
+
+
 2006-04-25 00:31:42 GMT	Michael Olson <mwolson@gnu.org>	patch-116
 
     Summary:
