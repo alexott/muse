@@ -731,9 +731,10 @@ This is a hack for supporting inline images in XEmacs."
 (defun muse-colors-insert-image (link beg end invis-props)
   "Create an image using create-image or make-glyph and insert it
 in place of an image link defined by BEG and END."
+  (setq link (expand-file-name link))
   (let ((image-file (cond
                      ((eq muse-colors-inline-image-method 'default-directory)
-                      (expand-file-name link))
+                      link)
                      ((functionp muse-colors-inline-image-method)
                       (funcall muse-colors-inline-image-method link))))
         glyph)

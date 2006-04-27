@@ -499,7 +499,9 @@ first directory within the project's fileset is used."
             name (cons name (muse-project-page-file name project))))
     ;; If we're given a relative or absolute filename, open it as-is
     (if (and (car name)
-             (save-match-data (string-match muse-file-regexp (car name))))
+             (save-match-data
+               (or (string-match muse-file-regexp (car name))
+                   (string-match muse-image-regexp (car name)))))
         (setcdr name (car name))
       ;; At this point, name is (PAGE . FILE).
       (unless (cdr name)

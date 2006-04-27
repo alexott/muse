@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-04-27 00:31:01 GMT	Michael Olson <mwolson@gnu.org>	patch-118
+
+    Summary:
+      Fix a few image bugs.
+    Revision:
+      muse--main--1.0--patch-118
+
+    * lisp/muse-colors.el (muse-colors-insert-image): Expand file name before
+      passing it to `muse-colors-inline-image-method'.  This makes images
+      with the same current directory and publishing directory get resolved
+      correctly.
+    
+    * lisp/muse-project.el (muse-project-find-file): Don't try to add a
+      ".muse" extension to images.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el lisp/muse-project.el
+
+
 2006-04-25 22:28:01 GMT	Michael Olson <mwolson@gnu.org>	patch-117
 
     Summary:
