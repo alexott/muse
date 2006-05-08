@@ -419,28 +419,40 @@ This is a summary of keystrokes available in every Muse buffer.
 @item C-c C-a (`muse-index')
 Display an index of all known Muse pages.
 
-@item C-c C-b (`muse-browse-result')
-Show the published result of this page.
+@item C-c C-b (`muse-find-backlinks')
+Find all pages that link to this page.
 
 @item C-c C-e (`muse-edit-link-at-point')
 Edit link at point.
 
-@item C-c C-f (`muse-project-find-file'), also C-c C-v
+@item C-c C-f (`muse-project-find-file')
 Open another Muse page.  Prompt for the name.
 
+@item C-c C-i (`muse-insert-tag')
+Insert a tag interactively.
+
 @item C-c C-l (`font-lock-mode')
-Highlight/refresh the current buffer.
+Toggle font lock / highlighting for the current buffer.
 
 @item C-c C-p (`muse-project-publish')
 Publish any Muse pages that have changed.
 
-@item C-c C-v (`muse-project-find-file'), also C-c C-f
-Open another Muse page.  Prompt for the name.
+@item C-c C-s (`muse-search')
+Find text in all files of the current project.
+
+@item C-c C-v (`muse-browse-result')
+Show the published result of this page.
+
+@item C-c i l (`muse-insert-relative-link-to-file')
+Insert a link to a file interactively.
+
+@item C-c i t (`muse-insert-tag'), also C-c TAB
+Insert a tag interactively.
 
 @item C-c = (`muse-what-changed')
 Diff this page against the last backup version.
 
-@item C-c TAB (`muse-insert-tag')
+@item C-c TAB (`muse-insert-tag'), also C-c i t
 Insert a tag interactively.
 
 @item TAB
@@ -448,6 +460,18 @@ Move to the next Wiki reference.
 
 @item S-TAB
 Move to the previous Wiki reference.
+
+@item M-TAB
+Complete the name of a page from the current project at point.
+
+@item M-RET
+Insert a new list item at point, indenting properly.
+
+@item C-<
+Decrease the indentation of the list item at point.
+
+@item C->
+Increase the indentation of the list item at point.
 
 @end table
 

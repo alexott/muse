@@ -129,17 +129,21 @@ index at intervals."
   :type 'string
   :group 'muse-mode)
 
+(defvar muse-insert-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "l" 'muse-insert-relative-link-to-file)
+    (define-key map "t" 'muse-insert-tag)
+
+    map))
 
 (defvar muse-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [(control ?c) (control ?a)] 'muse-index)
-    (define-key map [(control ?c) (control ?v)] 'muse-browse-result)
     (define-key map [(control ?c) (control ?c)] 'muse-follow-name-at-point)
     (define-key map [(control ?c) (control ?e)] 'muse-edit-link-at-point)
-    (define-key map [(control ?c) (control ?t)] 'muse-publish-this-file)
-    (define-key map [(control ?c) (control ?v)] 'muse-follow-name-at-point)
-
     (define-key map [(control ?c) (control ?l)] 'font-lock-mode)
+    (define-key map [(control ?c) (control ?t)] 'muse-publish-this-file)
+    (define-key map [(control ?c) (control ?v)] 'muse-browse-result)
 
     (define-key map [(control ?c) ?=]           'muse-what-changed)
 
@@ -166,10 +170,7 @@ index at intervals."
     (define-key map [(control ?c) (control ?p)] 'muse-project-publish)
 
     (define-key map [(control ?c) tab] 'muse-insert-tag)
-    (define-key map [(control ?c) (?i) (?t)] 'muse-insert-tag)
-
-    (define-key map [(control ?c) (?i) (?l)]
-      'muse-insert-relative-link-to-file)
+    (define-key map [(control ?c) (?i)] 'muse-insert-thing)
 
     ;; Searching functions
     (define-key map [(control ?c) (control ?b)] 'muse-find-backlinks)
@@ -302,6 +303,18 @@ the line if point is on a blank line."
             (re-search-backward para-start nil t)
           (line-beginning-position))))))
 
+(defun muse-insert-thing ()
+  "Prompt for something to insert into the current buffer."
+  (interactive)
+  (message "Insert:\nl  link\nt  tag")
+  (let (key cmd)
+    (let ((overriding-local-map muse-insert-map))
+      (setq key (read-key-sequence nil)))
+    (if (commandp (setq cmd (lookup-key muse-insert-map key)))
+        (progn (message "")
+               (call-interactively cmd))
+      (message "Not inserting anything"))))
+
 ;;;###autoload
 (defun muse-insert-list-item ()
   "Insert a list item at the current point, taking into account
@@ -390,14 +403,14 @@ Valid values of OPERATION are 'increase and 'decrease."
 
 ;;; Support page name completion using pcomplete
 
-(defun muse-completions ()
+(defun muse-mode-completions ()
   "Return a list of possible completions names for this buffer."
   (let ((project (muse-project-of-file)))
     (if project
         (while (pcomplete-here
                 (mapcar 'car (muse-project-file-alist project)))))))
 
-(defun muse-current-word ()
+(defun muse-mode-current-word ()
   (let ((end (point)))
     (save-excursion
       (save-restriction
