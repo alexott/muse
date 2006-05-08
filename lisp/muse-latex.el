@@ -140,9 +140,9 @@ For more on the structure of this list, see
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-strings
-  '((image-with-desc . "\\includegraphics[width=\\textwidth]{%s}")
-    (image-link      . "\\includegraphics[width=\\textwidth]{%s}")
-    (url-with-image  . "%% %s\n\\includegraphics[width=\\textwidth]{%s}")
+  '((image-with-desc . "\\begin{figure}[h]\\centering\\includegraphics[width=0.75\\textwidth]{%s}\\caption{%s}\\end{figure}")
+    (image-link      . "\\begin{figure}[h]\\centering\\includegraphics[width=0.75\\textwidth]{%s}\\end{figure}")
+    (url-with-image  . "%% %s\n\\includegraphics[width=0.75\\textwidth]{%s}")
     (anchor-ref      . "\\ref{%s}")
     (url             . "\\url{%s}")
     (url-and-desc    . "\\href{%s}{%s}\\footnote{%1%}")
