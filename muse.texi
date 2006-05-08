@@ -518,7 +518,7 @@ than formatting.
 Paragraphs in Muse must be separated by a blank line.
 
 @cindex paragraphs, centered
-@strong{Centered paragraphs and quotations}
+@subheading Centered paragraphs and quotations
 
 A line that begins with six or more columns of whitespace (either tabs
 or spaces) indicates a centered paragraph.
@@ -531,7 +531,7 @@ indicates a quoted paragraph.
 @cindex examples
 @cindex monospace, rendering blocks
 @cindex HTML, rendering blocks in monospace
-@strong{Literal paragraphs}
+@subheading Literal paragraphs
 
 The @verb{|<example>|} tag is used for examples, where whitespace should
 be preserved, the text rendered in monospace, and any characters special
@@ -831,7 +831,7 @@ Customization of interwiki links may be accomplished by editing the
 @section Publishing and displaying images
 @cindex images
 @cindex links, with images
-@strong{Image links}
+@subheading Image links
 
 Links to images may be used in either the target or the description, or
 both.  Thus, the following code will publish as a clickable image that
@@ -864,7 +864,7 @@ An image link is not required to have a description.  The link
 
 @cindex horizontal rules
 @cindex dashes
-@strong{Horizontal Rules}
+@subheading Horizontal Rules
 
 Four or more dashes indicate a horizontal rule.  Be sure to put blank
 lines around it, or it will be considered part of the proceeding or
@@ -872,7 +872,7 @@ following paragraph!
 
 @cindex anchors
 @cindex links, with target on same page
-@strong{Anchors}
+@subheading Anchors
 
 If you begin a line with "#anchor" -- where "anchor" can be any word
 that doesn't contain whitespace -- it defines an anchor at that point
