@@ -281,7 +281,7 @@ updated at the same time as the Arch repository.
 
 Muse may be compiled and installed on your machine.
 
-@subsubheading Compilation
+@subheading Compilation
 
 This is an optional step, since Emacs Lisp source code does not
 necessarily have to be byte-compiled.  It will yield a speed increase,
@@ -305,7 +305,7 @@ SITEFLAG = -no-site-file
 Running @code{make} should compile the Muse source files in the
 @file{lisp} directory.
 
-@subsubheading Installation
+@subheading Installation
 
 Muse may be installed into your file hierarchy by doing the following.
 
@@ -1034,7 +1034,7 @@ title and date directives will be inserted automatically.
 The following styles and options are available in the Blosxom publishing
 style.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1048,7 +1048,7 @@ Publish Blosxom entries in XHTML form.
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 @table @code
 
@@ -1088,7 +1088,7 @@ You will need to call the @code{muse-book-publish-project} function in
 order to publish this style.  An example of this may be found in John
 Wiegley's configuration file at @file{examples/johnw/muse-johnw.el}.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1104,7 +1104,7 @@ the normal PDF publishing mode.
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 @table @code
 
@@ -1132,7 +1132,7 @@ This may be text or a filename.
 
 This publishing style is used to generate DocBook XML files.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1141,7 +1141,7 @@ This publishing style is used to generate DocBook XML files.
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 @table @code
 
@@ -1193,7 +1193,7 @@ Use the base name of the coding system (i.e. without the -unix).
 
 This publishing style is capable of producing HTML or XHTML documents.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1206,7 +1206,7 @@ Supports publishing to XHTML 1.0 and XHTML 1.1, Strict or Transitional.
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 If an HTML option does not have a corresponding XHTML option, it will
 be used for both of these publishing styles.
@@ -1376,7 +1376,7 @@ with the "rdf" style.  It uses the first two sentences of the first
 paragraph of each entry as its "description", and auto-generates tags
 for linking to the various entries.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1416,7 +1416,7 @@ Publish journal entries as an RSS file (RSS 2.0).
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 @table @code
 
@@ -1532,7 +1532,7 @@ If you wish to publish PDF documents, you will need to have a good TeX
 installation.  For Debian, this can be accomplished by installing the
 ``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts are also a must.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1556,7 +1556,7 @@ LaTeX document conversion tool.
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 @table @code
 
@@ -1659,7 +1659,7 @@ John Wiegley uses this module for publishing all of the poems on his
 website, which are at
 @uref{http://www.newartisans.com/johnw/poems.html}.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1681,7 +1681,7 @@ Publish a book of poems to a PDF document.
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 @table @code
 
@@ -1725,7 +1725,7 @@ differs little between the various styles.
 
 Rules for publishing a Muse file as a Texinfo article.
 
-@subsubheading Styles provided
+@subheading Styles provided
 
 @table @code
 
@@ -1743,7 +1743,7 @@ Publish a file in PDF form.
 
 @end table
 
-@subsubheading Options provided
+@subheading Options provided
 
 @table @code
 
@@ -1891,7 +1891,7 @@ the regular expressions can be a tricky business.  Note that case
 is never ignored.  `case-fold-search' is always bound to nil
 while processing the markup rules.
 
-@subsubheading Publishing order
+@subheading Publishing order
 
 This is the order that the publishing rules are consulted, by default.
 This may be changed by customizing @code{muse-publish-markup-regexps}.
@@ -2010,7 +2010,7 @@ particular style.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles.
 
-@subsubheading Available markup strings
+@subheading Available markup strings
 
 @table @code
 
@@ -2271,7 +2271,7 @@ Style elements are tags that define a style.  Use
 (muse-define-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
 @end example
 
-@subsubheading Usable elements
+@subheading Usable elements
 
 @table @option
 
