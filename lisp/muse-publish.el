@@ -540,12 +540,12 @@ to the text with ARGS as parameters."
 
 ;; Commands for publishing files
 
-(defsubst muse-publish-get-style ()
-  (if (= 1 (length muse-publishing-styles))
-      (car muse-publishing-styles)
-    (assoc (completing-read "Publish with style: "
-                            muse-publishing-styles nil t)
-           muse-publishing-styles)))
+(defsubst muse-publish-get-style (&optional styles)
+  (unless styles (setq styles muse-publishing-styles))
+  (if (= 1 (length styles))
+      (car styles)
+    (assoc (completing-read "Publish with style: " styles nil t)
+           styles)))
 
 (defsubst muse-publish-get-output-dir (style)
   (let ((default-directory (or (muse-style-element :path style)

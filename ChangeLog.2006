@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-08 07:34:41 GMT	Michael Olson <mwolson@gnu.org>	patch-120
+
+    Summary:
+      Fix buggy behavior in muse-browse-result.
+    Revision:
+      muse--main--1.0--patch-120
+
+    * lisp/muse-mode.el (muse-browse-result): Construct a mapping of style
+      names to styles, based on the styles contained in the current Muse
+      project.  Thanks to kid kid for the analysis.
+    
+    * lisp/muse-publish.el (muse-publish-get-style): Permit styles to be
+      specified as an argument.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-mode.el lisp/muse-publish.el
+
+
 2006-05-08 07:29:42 GMT	Michael Olson <mwolson@gnu.org>	patch-119
 
     Summary:

@@ -542,7 +542,12 @@ in `muse-project-alist'."
 ;;;###autoload
 (defun muse-browse-result (style &optional other-window)
   "Visit the current page's published result."
-  (interactive (list (muse-publish-get-style) current-prefix-arg))
+  (interactive (list (muse-publish-get-style
+                      (mapcar
+                       (lambda (style)
+                         (cons (muse-get-keyword :base style) style))
+                       (cddr muse-current-project)))
+                     current-prefix-arg))
   (setq style (muse-style style))
   (let ((result-path
          (muse-publish-output-file buffer-file-name
