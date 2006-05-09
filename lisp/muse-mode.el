@@ -266,7 +266,8 @@ fill mode."
 Otherwise return nil.
 
 This is used to keep links from being improperly colorized by flyspell."
-  (and (not (get-text-property (1- (point)) 'muse-link))
+  (and (not (get-text-property (if (bobp) (point) (1- (point)))
+                               'muse-link))
        (save-match-data
          (null (muse-link-at-point)))))
 
@@ -430,9 +431,10 @@ Valid values of OPERATION are 'increase and 'decrease."
     (if (featurep 'muse-colors)
         (when (get-text-property here 'muse-link)
           (save-excursion
-            (when (get-text-property (1- here) 'muse-link)
+            (when (and (not (bobp))
+                       (get-text-property (1- here) 'muse-link))
               (goto-char (or (previous-single-property-change here 'muse-link)
-                           (point-min))))
+                             (point-min))))
             (if (looking-at muse-explicit-link-regexp)
                 (progn
                   (goto-char (match-beginning 1))
