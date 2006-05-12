@@ -561,7 +561,8 @@ in `muse-project-alist'."
                       (mapcar
                        (lambda (style)
                          (cons (muse-get-keyword :base style) style))
-                       (cddr muse-current-project)))
+                       (muse-project-applicable-styles
+                        buffer-file-name (cddr muse-current-project))))
                      current-prefix-arg))
   (setq style (muse-style style))
   (let ((result-path

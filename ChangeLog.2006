@@ -2,6 +2,31 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-12 04:16:43 GMT	Michael Olson <mwolson@gnu.org>	patch-125
+
+    Summary:
+      Fix #5925: Emphasis on item breaks lists.
+    Revision:
+      muse--main--1.0--patch-125
+
+    * lisp/muse-blosxom.el ("blosxom-html", "blosxom-xhtml"): Use find-file
+      as the browsing function.
+    
+    * lisp/muse-mode.el (muse-browse-result): Only include styles that match
+      the current file.
+    
+    * lisp/muse.el (muse-list-item-critical-point): Take a new argument named
+      `offset' into account, in case the list-item regexp is nested in
+      another group.
+      (muse-forward-list-item): Call `muse-list-item-critical-point' with an
+      offset of 1.  This should fix an unpleasant list-as-blockquote error
+      that was noticed recently.  Thanks to John Sullivan for the report.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-blosxom.el lisp/muse-mode.el
+     lisp/muse.el
+
+
 2006-05-09 00:55:02 GMT	Michael Olson <mwolson@gnu.org>	patch-124
 
     Summary:
