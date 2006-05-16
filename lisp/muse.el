@@ -534,13 +534,18 @@ Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
          'dl-term)
         (t 'dl-entry)))
 
-(defun muse-list-item-critical-point ()
-  "Figure out where the list item markup for the current match is."
-  (if (eq (match-end 0) (match-end 1))
+(defun muse-list-item-critical-point (&optional offset)
+  "Figure out where the important markup character for the
+currently-matched list item is.
+
+If OFFSET is specified, it is the number of groupings outside of
+the contents of `muse-list-item-regexp'."
+  (unless offset (setq offset 0))
+  (if (match-end (+ offset 2))
       ;; at a definition list
-      (match-end 1)
+      (match-end (+ offset 2))
     ;; at a different kind of list
-    (match-beginning 1)))
+    (match-beginning (+ offset 1))))
 
 (defun muse-forward-paragraph (&optional pattern)
   "Move forward safely by one paragraph, or according to PATTERN."
@@ -603,9 +608,9 @@ provide a very liberal INDENT value, such as
                            (if (and (boundp 'muse-publishing-p)
                                     muse-publishing-p)
                                (get-text-property
-                                (muse-list-item-critical-point) 'read-only)
+                                (muse-list-item-critical-point 1) 'read-only)
                              (get-text-property
-                              (muse-list-item-critical-point) 'face)))
+                              (muse-list-item-critical-point 1) 'face)))
                       ;; skip nested items
                       (and (not no-skip-nested)
                            (muse-forward-list-item-1 type empty-line
