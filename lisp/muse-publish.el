@@ -1311,7 +1311,9 @@ the cadr is the page name, and the cddr is the anchor."
                      (if (string-match muse-explicit-link-regexp
                                        (match-string 0))
                          t nil)))
-    (setq desc (if explicit (match-string 2) (match-string 0)))
+    (setq desc (if explicit
+                   (or (match-string 2) (match-string 1))
+                 (match-string 0)))
     (setq link (if explicit
                    (muse-handle-explicit-link (match-string 1))
                  (muse-handle-implicit-link (match-string 0))))
@@ -1319,6 +1321,10 @@ the cadr is the page name, and the cddr is the anchor."
                (or explicit
                    (not (or (eq (char-before (match-beginning 0)) ?\")
                             (eq (char-after (match-end 0)) ?\")))))
+      ;; if explicit link has no user-provided description, treat it
+      ;; as if it were an implicit link
+      (when (and explicit (not (match-string 2)))
+        (setq explicit nil))
       (muse-publish-insert-url link desc explicit))))
 
 (defun muse-publish-markup-url ()

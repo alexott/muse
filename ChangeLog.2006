@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-17 21:27:19 GMT	Michael Olson <mwolson@gnu.org>	patch-127
+
+    Summary:
+      DTRT with explicit links that have no description.
+    Revision:
+      muse--main--1.0--patch-127
+
+    * lisp/muse-publish.el (muse-publish-markup-link): If we are given an
+      explicit link without a description, use the name of the linked page.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-05-16 15:53:56 GMT	Michael Olson <mwolson@gnu.org>	patch-126
 
     Summary:
