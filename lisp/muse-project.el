@@ -528,6 +528,18 @@ first directory within the project's fileset is used."
       (error "There is no page %s in project %s."
              (car name) project-name))))
 
+(defun muse-project-choose-style (closure test styles)
+  "Run TEST on STYLES and return first style where TEST yields non-nil.
+TEST should take two arguments.  The first is CLOSURE, which is
+passed verbatim.  The second if the current style to consider.
+
+If no style passes TEST, return the first style."
+  (or (catch 'winner
+        (dolist (style styles)
+          (when (funcall test closure style)
+            (throw 'winner style))))
+      (car styles)))
+
 (defun muse-project-applicable-styles (file styles &optional ignore-regexp)
   "Given STYLES, return a list of the ones that are considered for FILE.
 The name of a project may be used for STYLES."
