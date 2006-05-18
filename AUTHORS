@@ -40,7 +40,10 @@ Peter K. Lee: Contributor
 Na Li:       Contributor:
               - muse-latex2png.el: 1 line changed
 
-Phillip Lord: Contributor
+Phillip Lord: Author of:
+               - muse-split.el
+               - muse-protocol-iw.el
+              Contributor
               (assigned past and future changes)
 
 Chris Lowis: Contributor:
