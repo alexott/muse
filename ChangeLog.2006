@@ -2,6 +2,47 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-18 01:24:04 GMT	Michael Olson <mwolson@gnu.org>	patch-128
+
+    Summary:
+      Fix bug where links with :: in them were marked up as lists.
+    Revision:
+      muse--main--1.0--patch-128
+
+    * lisp/muse-html.el, lisp/muse-publish.el, lisp/muse-xml-common.el:
+      Change noemphasis property to muse-link.
+    
+    * lisp/muse.el (muse-forward-list-item): Respect muse-link property.
+    
+    * lisp/muse-publish.el (muse-publish-surround-text)
+      (muse-publish-markup-list): Ditto.  This should fix a bug.
+      (muse-publish-markup-list): Docfix.
+      (muse-publish-mark-link): Rename from `muse-publish-mark-noemphasis'.
+    
+    * lisp/muse-regexps.el (muse-list-item-regexp, muse-dl-term-regexp):
+      There must be either one or more spaces or a single newline after the
+      colons.  This prevents an ambiguity with the double-colon muse-wiki
+      interwiki delimiter.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-html.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-xml-common.el lisp/muse.el
+
+
+2006-05-17 21:27:19 GMT	Michael Olson <mwolson@gnu.org>	patch-127
+
+    Summary:
+      DTRT with explicit links that have no description.
+    Revision:
+      muse--main--1.0--patch-127
+
+    * lisp/muse-publish.el (muse-publish-markup-link): If we are given an
+      explicit link without a description, use the name of the linked page.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
 2006-05-16 15:53:56 GMT	Michael Olson <mwolson@gnu.org>	patch-126
 
     Summary:
