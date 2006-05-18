@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-18 06:03:49 GMT	Michael Olson <mwolson@gnu.org>	patch-129
+
+    Summary:
+      muse-wiki: Make the interwiki resolver a bit more clever.
+    Revision:
+      muse--main--1.0--patch-129
+
+    * lisp/muse-project.el (muse-project-choose-style): New function that
+      chooses a style from a list of styles, given a user-supplied test.
+    
+    * lisp/muse-wiki.el (muse-wiki-choose-style-by-link-suffix): New function
+      that is used along with `muse-project-choose-style' to pick the first
+      style that matches a given value for :link-prefix.
+      (muse-wiki-resolve-project-page-1): New function split from
+      `muse-wiki-resolve-project-page' for readability.  Try to match files
+      that have the same link-suffix.  This should hopefully fix a bug
+      noticed by Hans Ekbrand.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-project.el lisp/muse-wiki.el
+
+
 2006-05-18 01:24:04 GMT	Michael Olson <mwolson@gnu.org>	patch-128
 
     Summary:

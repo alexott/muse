@@ -227,6 +227,41 @@ this."
 (add-hook 'muse-update-values-hook
           'muse-wiki-update-interwiki-regexp)
 
+(defun muse-wiki-choose-style-by-link-suffix (given-suffix style)
+  "If the given STYLE has a link-suffix that equals GIVEN-SUFFIX,
+return non-nil."
+  (let ((link-suffix (muse-style-element :link-suffix style)))
+    (and (stringp link-suffix)
+         (string= given-suffix link-suffix))))
+
+(defun muse-wiki-resolve-project-page-1 (page local-styles remote-styles)
+  "Pick the best match for PAGE given potential local and remote styles.
+See `muse-wiki-resolve-project-page' for more information."
+  (let ((link-suffix (muse-style-element :link-suffix))
+        remote-style local-style prefix)
+    (if (not (stringp link-suffix))
+        (progn
+          (setq remote-style (car remote-styles)
+                local-style (car local-styles)))
+      (setq remote-style (muse-project-choose-style
+                          link-suffix
+                          #'muse-wiki-choose-style-by-link-suffix
+                          remote-styles)
+            local-style (muse-project-choose-style
+                         link-suffix
+                         #'muse-wiki-choose-style-by-link-suffix
+                         local-styles)))
+    (setq prefix (muse-style-element :base-url remote-style))
+    (muse-publish-link-file
+     (if prefix
+         (concat prefix page)
+       (file-relative-name (expand-file-name
+                            page
+                            (muse-style-element :path remote-style))
+                           (expand-file-name
+                            (muse-style-element :path local-style))))
+     nil remote-style)))
+
 (defun muse-wiki-resolve-project-page (&optional project page)
   "Return the published path from the current page to PAGE of PROJECT.
 If PAGE is not specified, use the value of :default in PROJECT.
@@ -235,29 +270,22 @@ If PROJECT is not specified, default to first project of
 
 Note that PAGE can have several output directories.  If this is
 the case, we will use the first one that matches our current
-style and ignore the others."
+style and has the same link suffix, ignoring the others.  If no
+style has the same link suffix as the current publishing style,
+use the first style we find."
   (setq project (or (and project
                          (muse-project project))
                     (car muse-project-alist))
         page (or page (muse-get-keyword :default
                                         (cadr project))))
   (let* ((page-path (muse-project-page-file page project))
-         (remote-style (when page-path (car (muse-project-applicable-styles
-                                             page-path (cddr project)))))
-         (local-style (car (muse-project-applicable-styles
-                            (muse-current-file)
-                            (cddr (muse-project-of-file))))))
-    (cond ((and remote-style local-style muse-publishing-p)
-           (let ((prefix (muse-style-element :base-url remote-style)))
-             (muse-publish-link-file
-              (if prefix
-                  (concat prefix page)
-                (file-relative-name (expand-file-name
-                                     page
-                                     (muse-style-element :path remote-style))
-                                    (expand-file-name
-                                     (muse-style-element :path local-style))))
-              nil remote-style)))
+         (remote-styles (when page-path (muse-project-applicable-styles
+                                         page-path (cddr project))))
+         (local-styles (muse-project-applicable-styles
+                        (muse-current-file)
+                        (cddr (muse-project-of-file)))))
+    (cond ((and remote-styles local-styles muse-publishing-p)
+           (muse-wiki-resolve-project-page-1 page local-styles remote-styles))
           ((not muse-publishing-p)
            (if page-path
                page-path
