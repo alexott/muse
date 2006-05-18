@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-18 06:43:30 GMT	Michael Olson <mwolson@gnu.org>	patch-130
+
+    Summary:
+      Add muse-split.el to experimental folder.
+    Revision:
+      muse--main--1.0--patch-130
+
+    * experimental/muse-split.el: New experimental file that splits published
+      Muse files into several smaller files.
+
+    new files:
+     experimental/.arch-ids/muse-split.el.id
+     experimental/muse-split.el
+
+    modified files:
+     AUTHORS ChangeLog.2006 Makefile.defs debian/changelog
+     debian/control
+
+
 2006-05-18 06:03:49 GMT	Michael Olson <mwolson@gnu.org>	patch-129
 
     Summary:
