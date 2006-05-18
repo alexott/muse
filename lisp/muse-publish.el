@@ -100,7 +100,7 @@ If non-nil, publish comments using the markup of the current style."
     (1350 "^;\\s-+\\(.+\\)" 0 comment)
 
     ;; prevent emphasis characters in explicit links from being marked
-    (1400 muse-explicit-link-regexp 0 muse-publish-mark-noemphasis)
+    (1400 muse-explicit-link-regexp 0 muse-publish-mark-link)
 
     ;; define anchor points
     (1500 "^\\(\\W*\\)#\\(\\S-+\\)\\s-*" 0 anchor)
@@ -686,7 +686,7 @@ the file is published no matter what."
   (cdr (assoc name muse-publishing-directives)))
 
 (defun muse-publish-markup-anchor ()
-  (unless (get-text-property (match-end 1) 'noemphasis)
+  (unless (get-text-property (match-end 1) 'muse-link)
     (let ((text (muse-markup-text 'anchor (match-string 2))))
       (unless (string= text "")
         (save-match-data
@@ -807,11 +807,11 @@ The following contexts exist in Muse.
                         close-tag (muse-markup-text 'end-most-emph)))
          (t (setq context nil))))))
     (if (and context
-             (not (get-text-property beg 'noemphasis))
+             (not (get-text-property beg 'muse-link))
              (setq loc (search-forward leader nil t))
              (or (eobp) (not (eq (char-syntax (char-after loc)) ?w)))
              (not (eq (char-syntax (char-before (point))) ?\ ))
-             (not (get-text-property (point) 'noemphasis)))
+             (not (get-text-property (point) 'muse-link)))
         (progn
           (replace-match "")
           (delete-region beg end)
@@ -827,7 +827,7 @@ The following contexts exist in Muse.
     nil))
 
 (defun muse-publish-markup-emdash ()
-  (unless (get-text-property (match-beginning 0) 'noemphasis)
+  (unless (get-text-property (match-beginning 0) 'muse-link)
     (let ((prespace (match-string 1))
           (postspace (match-string 2)))
       (delete-region (match-beginning 0) (match-end 0))
@@ -836,22 +836,22 @@ The following contexts exist in Muse.
         (insert ?\n)))))
 
 (defun muse-publish-markup-enddots ()
-  (unless (get-text-property (match-beginning 0) 'noemphasis)
+  (unless (get-text-property (match-beginning 0) 'muse-link)
     (delete-region (match-beginning 0) (match-end 0))
     (muse-insert-markup (muse-markup-text 'enddots))))
 
 (defun muse-publish-markup-dots ()
-  (unless (get-text-property (match-beginning 0) 'noemphasis)
+  (unless (get-text-property (match-beginning 0) 'muse-link)
     (delete-region (match-beginning 0) (match-end 0))
     (muse-insert-markup (muse-markup-text 'dots))))
 
 (defun muse-publish-markup-rule ()
-  (unless (get-text-property (match-beginning 0) 'noemphasis)
+  (unless (get-text-property (match-beginning 0) 'muse-link)
     (delete-region (match-beginning 0) (match-end 0))
     (muse-insert-markup (muse-markup-text 'rule))))
 
 (defun muse-publish-markup-no-break-space ()
-  (unless (get-text-property (match-beginning 0) 'noemphasis)
+  (unless (get-text-property (match-beginning 0) 'muse-link)
     (delete-region (match-beginning 0) (match-end 0))
     (muse-insert-markup (muse-markup-text 'no-break-space))))
 
@@ -881,7 +881,7 @@ The following contexts exist in Muse.
 (defun muse-publish-markup-footnote ()
   "Scan ahead and snarf up the footnote body"
   (cond
-   ((get-text-property (match-beginning 0) 'noemphasis)
+   ((get-text-property (match-beginning 0) 'muse-link)
     nil)
    ((= (muse-line-beginning-position) (match-beginning 0))
     "")
@@ -1029,8 +1029,10 @@ The following contexts exist in Muse.
               (post-indent post-indent))
           (while (< (point) (point-max))
             (when (and (looking-at list-item)
-                       (not (get-text-property (muse-list-item-critical-point)
-                                               'read-only)))
+                       (not (or (get-text-property
+                                 (muse-list-item-critical-point) 'read-only)
+                                (get-text-property
+                                 (muse-list-item-critical-point) 'muse-link))))
               ;; if we encounter a list item, allow no post-indent
               ;; space
               (setq list-nested t))
@@ -1051,8 +1053,8 @@ The following contexts exist in Muse.
 
 (defun muse-publish-markup-list ()
   "Markup a list entry.
-The reason this function is so funky, is to prevent text properties
-like read-only from being inadvertently deleted."
+This function works by marking up items of the same list level
+and type, respecting the end-of-list property."
   (let* ((str (match-string 1))
          (type (muse-list-item-type str))
          (indent (buffer-substring (muse-line-beginning-position)
@@ -1060,7 +1062,8 @@ like read-only from being inadvertently deleted."
          (post-indent (length str))
          (last (match-beginning 0)))
     (cond
-     ((get-text-property (muse-list-item-critical-point) 'read-only)
+     ((or (get-text-property (muse-list-item-critical-point) 'read-only)
+          (get-text-property (muse-list-item-critical-point) 'muse-link))
       nil)
      ((eq type 'ul)
       (unless (eq (char-after (match-end 1)) ?-)
@@ -1358,15 +1361,15 @@ the cadr is the page name, and the cddr is the anchor."
   (add-text-properties beg end '(rear-nonsticky (read-only) read-only t))
   nil)
 
-(defun muse-publish-mark-noemphasis (&optional beg end)
-  "Make sure that no emphasis characters are interpreted within
-the given region.  If a region is not specified, use the 0th
-match data to determine it.
+(defun muse-publish-mark-link (&optional beg end)
+  "Indicate that the given region is a Muse link, so that other
+markup elements respect it.  If a region is not specified, use
+the 0th match data to determine it.
 
 This is usually applied to extended links."
   (unless beg (setq beg (match-beginning 0)))
   (unless end (setq end (match-end 0)))
-  (add-text-properties beg end '(noemphasis t))
+  (add-text-properties beg end '(muse-link t))
   nil)
 
 (defun muse-publish-quote-tag (beg end)

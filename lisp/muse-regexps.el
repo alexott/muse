@@ -140,8 +140,8 @@ the time."
 (defcustom muse-list-item-regexp
   (concat "^%s\\([" muse-regexp-blank "]-[" muse-regexp-blank
           "]*\\|[" muse-regexp-blank "][0-9]+\\.["
-          muse-regexp-blank "]*\\|\\([^\n" muse-regexp-blank "].*?\\)?::["
-          muse-regexp-blank "]*\\)")
+          muse-regexp-blank "]*\\|\\([^\n" muse-regexp-blank "].*?\\)?"
+          "::\\(?:[" muse-regexp-blank "]+\\|$\\)\\)")
   "Regexp used to match the beginning of a list item.
 The '%s' will be replaced with a whitespace regexp when publishing."
   :type 'regexp
@@ -149,7 +149,7 @@ The '%s' will be replaced with a whitespace regexp when publishing."
 
 (defcustom muse-dl-term-regexp
   (concat "[" muse-regexp-blank "]*\\(.+?\\)["
-          muse-regexp-blank "]+::[" muse-regexp-blank "]*")
+          muse-regexp-blank "]+::\\(?:[" muse-regexp-blank "]+\\|$\\)")
   "Regexp used to match a definition list term.
 The first match string must contain the term."
   :type 'regexp

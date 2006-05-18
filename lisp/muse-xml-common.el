@@ -117,7 +117,7 @@ if not escaped."
         str))))
 
 (defun muse-xml-markup-anchor ()
-  (unless (get-text-property (match-end 1) 'noemphasis)
+  (unless (get-text-property (match-end 1) 'muse-link)
     (let ((text (muse-markup-text 'anchor (match-string 2))))
       (save-match-data
         (skip-chars-forward (concat muse-regexp-blank "\n"))

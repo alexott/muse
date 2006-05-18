@@ -394,7 +394,7 @@ This will be used if no special characters are found."
     (muse-insert-markup "</a>\n")))
 
 (defun muse-html-markup-anchor ()
-  (unless (get-text-property (match-end 1) 'noemphasis)
+  (unless (get-text-property (match-end 1) 'muse-link)
     (save-match-data
       (muse-html-insert-anchor (match-string 2)))
     (match-string 1)))
@@ -434,7 +434,7 @@ This will be used if no special characters are found."
 
 (defun muse-html-markup-footnote ()
   (cond
-   ((get-text-property (match-beginning 0) 'noemphasis)
+   ((get-text-property (match-beginning 0) 'muse-link)
     nil)
    ((= (muse-line-beginning-position) (match-beginning 0))
     (prog1

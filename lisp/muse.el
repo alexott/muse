@@ -605,12 +605,10 @@ provide a very liberal INDENT value, such as
                            (>= (point) (point-max))))
                   ;; move past markup that is part of another construct
                   (or (and (match-beginning 1)
-                           (if (and (boundp 'muse-publishing-p)
-                                    muse-publishing-p)
+                           (or (get-text-property
+                                (muse-list-item-critical-point 1) 'muse-link)
                                (get-text-property
-                                (muse-list-item-critical-point 1) 'read-only)
-                             (get-text-property
-                              (muse-list-item-critical-point 1) 'face)))
+                                (muse-list-item-critical-point 1) 'face)))
                       ;; skip nested items
                       (and (not no-skip-nested)
                            (muse-forward-list-item-1 type empty-line
