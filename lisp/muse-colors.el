@@ -177,7 +177,7 @@ used as the filename of the image."
 
 (defface muse-link
   '((((class color) (background light))
-     (:foreground "green" :underline "green" :bold t))
+     (:foreground "blue" :underline "blue" :bold t))
     (((class color) (background dark))
      (:foreground "cyan" :underline "cyan" :bold t))
     (t (:bold t)))

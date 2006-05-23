@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-23 15:30:02 GMT	Michael Olson <mwolson@gnu.org>	patch-133
+
+    Summary:
+      Make links colored blue by default.
+    Revision:
+      muse--main--1.0--patch-133
+
+    * lisp/muse-colors.el (muse-link): Make links blue by default, like most
+      other Emacs modes do.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el
+
+
 2006-05-23 14:24:58 GMT	Michael Olson <mwolson@gnu.org>	patch-132
 
     Summary:
