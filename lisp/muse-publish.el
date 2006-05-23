@@ -464,6 +464,7 @@ to the text with ARGS as parameters."
 (defun muse-insert-file-or-string (file-or-string &optional title)
   (let ((beg (point)) end)
     (if (and (not (string-equal file-or-string ""))
+             (not (string-match "\n" file-or-string))
              (file-readable-p file-or-string))
         (setq end (+ beg (cadr (insert-file-contents file-or-string))))
       (insert file-or-string)
