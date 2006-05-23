@@ -139,12 +139,20 @@ If non-nil, publish comments using the markup of the current style."
     ;; reason all of these rules are handled here, is so that
     ;; blockquote detection doesn't interfere with indented list
     ;; members.
-
     (2200 ,(format muse-list-item-regexp (concat "[" muse-regexp-blank "]*"))
           0 list)
 
+    ;; simple table markup is supported, nothing fancy.  use | to
+    ;; separate cells, || to separate header cells, and ||| for footer
+    ;; cells
+    (2300 ,(concat "\\(\\([" muse-regexp-blank "]*\n\\)?"
+                   "\\(" muse-table-line-regexp "\\(?:\n\\|\\'\\)\\)\\)+")
+          0 table)
+
+    ;; blockquote and centered text
     (2400 ,(concat "^\\([" muse-regexp-blank "]+\\).+") 0 quote)
 
+    ;; the emdash ("--")
     (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]+\\)--\\($\\|["
                    muse-regexp-blank "]+\\)")
           0 emdash)
@@ -153,13 +161,6 @@ If non-nil, publish comments using the markup of the current style."
     ;; response: "> text", where text may contain initial whitespace
     ;; (see below).
     (2600 ,(concat "^[" muse-regexp-blank "]*> ") 0 verse)
-
-    ;; simple table markup is supported, nothing fancy.  use | to
-    ;; separate cells, || to separate header cells, and ||| for footer
-    ;; cells
-    (2700 ,(concat "\\(\\([" muse-regexp-blank "]*\n\\)?"
-                   "\\(" muse-table-line-regexp "\\(?:\n\\|\\'\\)\\)\\)+")
-          0 table)
 
     ;; replace links in the buffer (links to other pages)
     (2900 muse-explicit-link-regexp 0 link)

@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-23 14:24:58 GMT	Michael Olson <mwolson@gnu.org>	patch-132
+
+    Summary:
+      Fix publishing error with tables and initial whitespace.
+    Revision:
+      muse--main--1.0--patch-132
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Move table rule
+      above blockquote and centered text, so that indented but blank initial
+      table fields publish correctly.
+    
+    * lisp/muse-regexps.el (muse-table-line-regexp): Make this much simpler.
+      We accept anything that has at least one field delimiter.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-05-18 06:58:58 GMT	Michael Olson <mwolson@gnu.org>	patch-131
 
     Summary:
