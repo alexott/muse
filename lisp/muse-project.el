@@ -359,6 +359,9 @@ For an example of the use of this function, see
           (setq lnames (cdr lnames))))))
     (cdr names)))
 
+(defvar muse-updating-file-alist-p nil
+  "Make sure that recursive calls to `muse-project-file-alist' are bounded.")
+
 (defun muse-project-file-alist (&optional project no-check-p)
   "Return member filenames for the given Muse PROJECT.
 On UNIX, this list is only updated if one of the directories'
@@ -391,6 +394,7 @@ disk."
     ;; Either return the currently known list, or read it again from
     ;; disk
     (if (or (and no-check-p (cadr file-alist))
+            muse-updating-file-alist-p
             (not (or muse-under-windows-p
                      (null (cddr file-alist))
                      (null last-mod)
@@ -402,19 +406,20 @@ disk."
               muse-project-file-alist
               (cons file-alist muse-project-file-alist)))
       ;; Read in all of the file entries
-      (prog1
-          (save-match-data
-            (setcar
-             (cdr file-alist)
-             (let* ((names (list t))
-                    (pats (cadr project)))
-               (while pats
-                 (if (symbolp (car pats))
-                     (setq pats (cddr pats))
-                   (nconc names (muse-project-file-entries (car pats)))
-                   (setq pats (cdr pats))))
-               (cdr names))))
-        (run-hooks 'muse-project-file-alist-hook)))))
+      (let ((muse-updating-file-alist-p t))
+        (prog1
+            (save-match-data
+              (setcar
+               (cdr file-alist)
+               (let* ((names (list t))
+                      (pats (cadr project)))
+                 (while pats
+                   (if (symbolp (car pats))
+                       (setq pats (cddr pats))
+                     (nconc names (muse-project-file-entries (car pats)))
+                     (setq pats (cdr pats))))
+                 (cdr names))))
+          (run-hooks 'muse-project-file-alist-hook))))))
 
 (defun muse-project-of-file (&optional pathname)
   "Determine which project the given PATHNAME relates to.
