@@ -2,6 +2,74 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-24 03:30:40 GMT	Michael Olson <mwolson@gnu.org>	patch-135
+
+    Summary:
+      Fix a potential unbounded recursive call.
+    Revision:
+      muse--main--1.0--patch-135
+
+    * lisp/muse-project.el (muse-updating-file-alist-p): New variable that
+      prevents calls to muse-project-file-alist in its hook functions from
+      going into an infinite loop.
+      (muse-project-file-alist): Use it.
+    
+    * lisp/muse-wiki.el (muse-wiki-updating-wikiword-p): Remove.  This is now
+      handled in muse-project.el.
+      (muse-wiki-update-local-wikiword-regexp): Remove the use of
+      muse-wiki-updating-wikiword-p.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-project.el lisp/muse-wiki.el
+
+
+2006-05-23 18:10:49 GMT	Michael Olson <mwolson@gnu.org>	patch-134
+
+    Summary:
+      Try not to call tramp during publishing.
+    Revision:
+      muse--main--1.0--patch-134
+
+    * lisp/muse-publish.el (muse-insert-file-or-string): Do not call
+      file-readable-p on text that has a newline in it, because this could
+      cause tramp to be invoked.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el
+
+
+2006-05-23 15:30:02 GMT	Michael Olson <mwolson@gnu.org>	patch-133
+
+    Summary:
+      Make links colored blue by default.
+    Revision:
+      muse--main--1.0--patch-133
+
+    * lisp/muse-colors.el (muse-link): Make links blue by default, like most
+      other Emacs modes do.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-colors.el
+
+
+2006-05-23 14:24:58 GMT	Michael Olson <mwolson@gnu.org>	patch-132
+
+    Summary:
+      Fix publishing error with tables and initial whitespace.
+    Revision:
+      muse--main--1.0--patch-132
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Move table rule
+      above blockquote and centered text, so that indented but blank initial
+      table fields publish correctly.
+    
+    * lisp/muse-regexps.el (muse-table-line-regexp): Make this much simpler.
+      We accept anything that has at least one field delimiter.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-publish.el lisp/muse-regexps.el
+
+
 2006-05-18 06:58:58 GMT	Michael Olson <mwolson@gnu.org>	patch-131
 
     Summary:

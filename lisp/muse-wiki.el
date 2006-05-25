@@ -69,9 +69,6 @@ page, both when formatting and publishing."
   :type 'boolean
   :group 'muse-wiki)
 
-(defvar muse-wiki-updating-wikiword-p nil
-  "Prevent recursive calls to `muse-wiki-update-local-wikiword-regexp'.")
-
 (eval-when-compile
   (defvar muse-wiki-wikiword-regexp))
 
@@ -80,23 +77,21 @@ page, both when formatting and publishing."
 all the files in the project."
   ;; see if the user wants to append project files
   (when (and muse-wiki-use-wikiword
-             muse-wiki-match-all-project-files
-             (not muse-wiki-updating-wikiword-p))
-    (let ((muse-wiki-updating-wikiword-p t))
-      ;; make the regexp local
-      (set (make-local-variable 'muse-wiki-wikiword-regexp)
-           (concat "\\(\\<\\(?:"
-                   ;; append the files from the project
-                   (mapconcat 'car
-                              (muse-project-file-alist (muse-project))
-                              "\\|")
-                   "\\)\\>\\|\\(?:"
-                   (default-value 'muse-wiki-wikiword-regexp)
-                   "\\)\\)"))
-      ;; update coloring setup
-      (when (featurep 'muse-colors)
-        (muse-configure-highlighting
-         'muse-colors-markup muse-colors-markup)))))
+             muse-wiki-match-all-project-files)
+    ;; make the regexp local
+    (set (make-local-variable 'muse-wiki-wikiword-regexp)
+         (concat "\\(\\<\\(?:"
+                 ;; append the files from the project
+                 (mapconcat 'car
+                            (muse-project-file-alist (muse-project))
+                            "\\|")
+                 "\\)\\>\\|\\(?:"
+                 (default-value 'muse-wiki-wikiword-regexp)
+                 "\\)\\)"))
+    ;; update coloring setup
+    (when (featurep 'muse-colors)
+      (muse-configure-highlighting
+       'muse-colors-markup muse-colors-markup))))
 
 (add-hook 'muse-update-values-hook
           'muse-wiki-update-local-wikiword-regexp)

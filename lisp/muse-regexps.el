@@ -162,9 +162,7 @@ The first match string must contain the term."
   :type 'regexp
   :group 'muse-regexp)
 
-(defcustom muse-table-line-regexp
-  (concat "^[" muse-regexp-blank "]*\\(?:[^|\n]+\\||\\)"
-          muse-table-field-regexp "[^|\n].*")
+(defcustom muse-table-line-regexp (concat "^.*" muse-table-field-regexp ".*")
   "Regexp used to match a table line when publishing."
   :type 'regexp
   :group 'muse-regexp)
