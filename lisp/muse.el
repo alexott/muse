@@ -207,7 +207,14 @@ All this means is that certain extensions, like .gz, are removed."
                        (if (featurep 'xemacs)
                            'warning
                          :warning))
-    (message message)))
+    (let ((buf (get-buffer-create "*Muse warnings*")))
+      (with-current-buffer buf
+        (goto-char (point-max))
+        (insert "Warning (muse): " message)
+        (unless (bolp)
+          (newline)))
+      (display-buffer buf)
+      (sit-for 0))))
 
 (defun muse-eval-lisp (form)
   "Evaluate the given form and return the result as a string."

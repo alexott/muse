@@ -248,7 +248,6 @@ If FILE is not specified, use the published version of the current file."
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"screen\" href=\"/screen.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"print\" href=\"/print.css\" />"))
 (custom-set-faces
- '(muse-bad-link ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold))))
- '(muse-link ((t (:foreground "blue" :underline "blue" :weight bold)))))
+ '(muse-bad-link ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold)))))
 
 ;;; muse-init.el ends here

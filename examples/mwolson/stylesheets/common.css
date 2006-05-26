@@ -1,6 +1,9 @@
 /* Michael Olson's tweaked Muse stylesheet
 
    Common elements.
+
+   License: Modification and propagation of this document is
+            permitted.  Attribution of credit to me is optional.
 */
 
 /* Normal elements */
@@ -26,6 +29,14 @@ a.top, a:visited.top, a:link.top {
 
 a:visited {
   color: #556B2F;               /* dark olive green */
+}
+
+a:hover {
+  background-color: #F5F5F5;    /* white smoke */
+}
+
+h1 a:hover {
+  background-color: #708090;    /* slate gray */
 }
 
 a {
@@ -97,7 +108,7 @@ h4 {
 }
 
 hr {
-  clear: right;
+  clear: both;
 }
 
 img {
@@ -156,26 +167,34 @@ ul {
 /* Menu */
 
 .menu {
-  background-color: #F5F5F5;    /* white smoke */
-  color: white;
+  background-color: #D3D3D3;    /* light gray */
   border: 1px solid black;
   display: inline;
   float: right;
   clear: both;
   margin-left: 5px;
   margin-bottom: 5px;
-  padding: .5em;
+  padding: 3px;
 }
 
 .menuitem {
+  background-color: #F5F5F5;    /* white smoke */
+  margin: 0;
+  padding-top: 2px;
+  padding-bottom: 3px;
+  padding-left: 2px;
+  padding-right: 2px;
   text-align: left;
 }
 
 .menuitem a:link, .menuitem a:visited {
   color: #006400;               /* dark green */
   display: block;
-  margin: .2em;
-  padding-top: 4px;
+  margin: 0;
+  padding-top: 2px;
+  padding-bottom: 3px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .menuitem a:hover { 

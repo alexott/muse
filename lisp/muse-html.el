@@ -490,9 +490,9 @@ This will be used if no special characters are found."
               (setq index (1+ index)))))))
     (setq index 1 contents (reverse contents))
     (let ((depth 1) (sub-open 0) (p (point)))
-      (muse-insert-markup "<dl class=\"contents\">\n")
+      (muse-insert-markup "<div class=\"contents\">\n<dl>\n")
       (while contents
-        (muse-insert-markup "<dt class=\"contents\">\n"
+        (muse-insert-markup "<dt>\n"
                             "<a href=\"#sec" (int-to-string index) "\">"
                             (muse-publish-strip-tags (cdar contents))
                             "</a>\n"
@@ -509,12 +509,12 @@ This will be used if no special characters are found."
                 (setq sub-open (1- sub-open)
                       idx (1+ idx)))))
            ((> (caar contents) depth) ; can't jump more than one ahead
-            (muse-insert-markup "<dd>\n<dl class=\"contents\">\n")
+            (muse-insert-markup "<dd>\n<dl>\n")
             (setq sub-open (1+ sub-open))))))
       (while (> sub-open 0)
         (muse-insert-markup "</dl>\n</dd>\n")
         (setq sub-open (1- sub-open)))
-      (muse-insert-markup "</dl>\n")
+      (muse-insert-markup "</dl>\n</div>\n")
       (muse-publish-mark-read-only p (point)))))
 
 (defun muse-html-class-tag (beg end attrs)

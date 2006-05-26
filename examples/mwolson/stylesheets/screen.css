@@ -1,6 +1,9 @@
 /* Michael Olson's tweaked Muse stylesheet
 
    Elements for most of my web site.
+
+   License: Modification and propagation of this document is
+            permitted.  Attribution of credit to me is optional.
 */
 
 /* Footnote */
@@ -27,18 +30,29 @@
 
 /* Table of Contents */
 
-dl.contents {
-  background-color: #7cfc00;    /* lawn green */
+.contents {
+  clear: left;
+  float: left;
+  background-color: #D3D3D3;    /* light gray */
+  border: 1px solid black;
+  margin-top: 0;
+  margin-right: 5px;
+  margin-left: 0;
+  margin-bottom: 15px;
+  padding: 3px;
+}
+
+.contents dl {
+  background-color: #F5F5F5;    /* white smoke */
   display: block;
   float: left;
   font-size: small;
-  margin-right: 5px;
-  margin-bottom: 15px;
   margin-top: 0;
+  margin-bottom: 0;
   padding-bottom: 5px;
 }
 
-dt.contents {
+.contents dt {
   clear: left;
   display: block;
   padding-right: 5px;
@@ -46,12 +60,12 @@ dt.contents {
   text-align: left;
 }
 
-.contents dd dt.contents {
+.contents dd dt {
   display: list-item;
 }
 
 .contents a:hover { 
-  background-color: #20b2aa;    /* light sea green */
+  background-color: #D3D3D3;    /* light gray */
 }
 
 /* Planner */
