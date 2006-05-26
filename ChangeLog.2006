@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-26 14:38:01 GMT	Michael Olson <mwolson@gnu.org>	patch-137
+
+    Summary:
+      Use better fallback when displaying warnings.
+    Revision:
+      muse--main--1.0--patch-137
+
+    * lisp/muse.el (muse-display-warning): Use a better fallback if
+      `display-warning' does not exist.
+
+    modified files:
+     ChangeLog.2006 lisp/muse.el
+
+
 2006-05-25 21:23:55 GMT	Michael Olson <mwolson@gnu.org>	patch-136
 
     Summary:
