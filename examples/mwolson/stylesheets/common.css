@@ -19,7 +19,7 @@ a.nonexistent:visited {
   color: red;
 }
 
-a.top, a:visited.top, a:link.top {
+a:link.top, a:visited.top {
   color: #F5DEB3;               /* wheat */
   line-height: 90%;
   position: relative;
@@ -27,19 +27,19 @@ a.top, a:visited.top, a:link.top {
   top: -13px;
 }
 
+a:link:hover, a:visited:hover {
+  background-color: #F5F5F5;    /* white smoke */
+}
+
+h1 a:link:hover, h1 a:visited:hover {
+  background-color: #708090;    /* slate gray */
+}
+
 a:visited {
   color: #556B2F;               /* dark olive green */
 }
 
-a:hover {
-  background-color: #F5F5F5;    /* white smoke */
-}
-
-h1 a:hover {
-  background-color: #708090;    /* slate gray */
-}
-
-a {
+a:link {
   color: #0000CD;               /* blue */
 }
 
@@ -197,7 +197,7 @@ ul {
   padding-right: 2px;
 }
 
-.menuitem a:hover { 
+.menuitem a:link:hover, .menuitem a:visited:hover { 
   background-color: #D3D3D3;    /* light gray */
 }
 

@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-27 06:25:32 GMT	Michael Olson <mwolson@gnu.org>	patch-138
+
+    Summary:
+      Minor tweak in my example CSS stylesheet.
+    Revision:
+      muse--main--1.0--patch-138
+
+    * examples/mwolson/stylesheets/common.css: Be careful about
+      distinguishing between links and anchors.
+
+    modified files:
+     ChangeLog.2006 examples/mwolson/stylesheets/common.css
+
+
 2006-05-26 14:38:01 GMT	Michael Olson <mwolson@gnu.org>	patch-137
 
     Summary:
