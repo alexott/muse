@@ -1,5 +1,6 @@
 """
-Run this file 'python getstamps.py' from your pyblosxom data-dir.
+Run 'python getstamps.py' from the directory that contains your blog
+entries.
 
 You may need to make some modification for your situation. This
 assumes your blog entries use a .txt extension.

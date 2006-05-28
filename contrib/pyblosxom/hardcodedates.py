@@ -1,13 +1,20 @@
 """
-This allows the user to create a file "timestamps" in their datadir,
-that will override the timestamp of any given blog entry. Each line
-in this file should be of the form "YYYY-MM-DD-hh-mm file-name".
+
+This allows the user to create a file "timestamps" in their top-level
+blog entries directory, that will override the timestamp of any given
+blog entry.
+
+Each line in this file should be of the following form.
+
+"YYYY-MM-DD-hh-mm file-name"
+
 Then for any entry that one of these lines exist the system will use
 that timestamp instead of the actual files modification time.
 
-Note: the filename is relative to your data-dir.
-Example of a line for the file /var/data-dir/school/abc.txt
-   where the datadir is "/var/data-dir/" and the date is Aug 9, 2004.
+Note: the filename is relative to your data-dir.  An example follows
+of a line for the file /var/data-dir/school/abc.txt, where the
+top-level blog entries directory is "/var/data-dir/" and the date is
+Aug 9, 2004.
 
 2004-08-09-00-00 school/abc.txt
 
