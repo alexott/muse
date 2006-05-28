@@ -233,11 +233,13 @@ The page will be initialized with the current date and TITLE."
                "/" category))))
   (goto-char (point-min))
   (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
-          (if muse-blosxom-use-tags
-              (concat "\n#tags " (mapconcat #'identity category ","))
-            (concat "\n#category " category))
-          "\n#title " title
-          "\n\n")
+          "\n#title " title)
+  (unless (string= category "")
+    (insert
+     (if muse-blosxom-use-tags
+         (concat "\n#tags " (mapconcat #'identity category ","))
+       (concat "\n#category " category))))
+  (insert "\n\n")
   (forward-line 2))
 
 ;; Register the Blosxom Publisher

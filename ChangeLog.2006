@@ -2,6 +2,50 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-28 06:40:46 GMT	Michael Olson <mwolson@gnu.org>	patch-140
+
+    Summary:
+      muse-blosxom: Perform extra check on category in new entry.
+    Revision:
+      muse--main--1.0--patch-140
+
+    * lisp/muse-blosxom.el (muse-blosxom-new-entry): Make it impossible to
+      write an invalid categories line, which could cause other mysterious
+      troubles later on.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-blosxom.el
+
+
+2006-05-28 06:31:11 GMT	Michael Olson <mwolson@gnu.org>	patch-139
+
+    Summary:
+      Improve documentation in the included pyblosxom plug-ins.
+    Revision:
+      muse--main--1.0--patch-139
+
+    * contrib/pyblosxom/getstamps.py, hardcodedates.py: Improve
+      documentation.  The initial wording was very confusing.
+
+    modified files:
+     ChangeLog.2006 contrib/pyblosxom/getstamps.py
+     contrib/pyblosxom/hardcodedates.py
+
+
+2006-05-27 06:25:32 GMT	Michael Olson <mwolson@gnu.org>	patch-138
+
+    Summary:
+      Minor tweak in my example CSS stylesheet.
+    Revision:
+      muse--main--1.0--patch-138
+
+    * examples/mwolson/stylesheets/common.css: Be careful about
+      distinguishing between links and anchors.
+
+    modified files:
+     ChangeLog.2006 examples/mwolson/stylesheets/common.css
+
+
 2006-05-26 14:38:01 GMT	Michael Olson <mwolson@gnu.org>	patch-137
 
     Summary:
