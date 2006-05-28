@@ -985,6 +985,11 @@ date-gathering script and your plugin can both understand it.
 2004-10-24 personal/finished_free_culture
 @end example
 
+The script @file{contrib/pyblosxom/make-blog} demonstrates how to call
+@file{getstamps.py}.  Note that you will need to set the current
+directory to where your Muse files are, execute @file{getstamps.py}, and
+then move the generated timestamps file to your publishing directory.
+
 @node Blosxom Entries, Blosxom Options, Blosxom Requirements, Blosxom
 @comment  node-name,  next,  previous,  up
 @subsection Format of a Blosxom entry and automation

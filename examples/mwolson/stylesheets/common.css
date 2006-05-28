@@ -201,6 +201,11 @@ ul {
   background-color: #D3D3D3;    /* light gray */
 }
 
+.menuother {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
 #tooltipbox {
   float: right;
   visibility: hidden;
