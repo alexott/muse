@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-28 06:40:46 GMT	Michael Olson <mwolson@gnu.org>	patch-140
+
+    Summary:
+      muse-blosxom: Perform extra check on category in new entry.
+    Revision:
+      muse--main--1.0--patch-140
+
+    * lisp/muse-blosxom.el (muse-blosxom-new-entry): Make it impossible to
+      write an invalid categories line, which could cause other mysterious
+      troubles later on.
+
+    modified files:
+     ChangeLog.2006 lisp/muse-blosxom.el
+
+
 2006-05-28 06:31:11 GMT	Michael Olson <mwolson@gnu.org>	patch-139
 
     Summary:
