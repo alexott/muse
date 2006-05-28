@@ -1,6 +1,6 @@
 """
-Run 'python getstamps.py' from the directory that contains your blog
-entries.
+Run 'python getstamps.py' from the directory that contains your
+unpublished blog entries.
 
 You may need to make some modification for your situation. This
 assumes your blog entries use a .txt extension.
@@ -16,7 +16,12 @@ import re, sys, os, types
 
 OutFile=None
 
+# The format of the date line in each blog entry
 DateRegexp = re.compile (r'^#date\s+(.+)$')
+
+# The part of the filename of the blog entry to write to the
+# timestamps file.  Only the first grouping will be used.
+FileNameRegexp = re.compile (r'^(.+?)(\.muse)?$')
 
 def getdate(f):
     for line in f:
@@ -32,6 +37,8 @@ def recurse(so_far):
 
         # just makes output prettier.
         if filename == ".svn": continue
+        if filename == ".arch-ids": continue
+        if filename == "{arch}": continue
 
         if os.path.isdir(filepath):
             print "dir %s" % (filepath,)
@@ -41,8 +48,10 @@ def recurse(so_far):
         if os.path.isfile(filepath) and filepath != "timestamps":
             thisfile = open(filepath,'r')
             thisdate = getdate (thisfile)
-            if thisdate:
-                OutFile.write("%s %s\n" % (thisdate, filepath[2:] + ".txt"))
+            matched = FileNameRegexp.search(filepath[2:])
+            if thisdate and matched:
+                thisname = matched.group(1) + ".txt"
+                OutFile.write("%s %s\n" % (thisdate, thisname))
                 continue
 
 if __name__ == "__main__":
