@@ -249,7 +249,9 @@ current style."
     ("lisp"     t   nil muse-publish-lisp-tag)
     ("class"    t   t   muse-publish-class-tag)
     ("command"  t   t   muse-publish-command-tag)
-    ("comment"  t   nil muse-publish-comment-tag))
+    ("comment"  t   nil muse-publish-comment-tag)
+    ("include"  nil t   muse-publish-include-tag)
+    ("markup"   t   t   muse-publish-mark-up-tag))
   "A list of tag specifications, for specially marking up text.
 XML-style tags are the best way to add custom markup to Muse.
 This is easily accomplished by customizing this list of markup tags.
@@ -437,6 +439,7 @@ to the text with ARGS as parameters."
               (message "Publishing %s...%d%%" name
                        (* (/ (float (+ (point) base)) limit) 100)))
           (unless (and (> (- (match-end 0) (match-beginning 0)) 0)
+                       (match-beginning group)
                        (get-text-property (match-beginning group) 'read-only))
             (let* (func
                    (text (cond
@@ -461,6 +464,17 @@ to the text with ARGS as parameters."
     (if (and verbose (not muse-batch-publishing-p))
         (message "Publishing %s...done" name))))
 
+(defcustom muse-publish-markup-header-footer-tags
+  '(("lisp"     t   nil muse-publish-lisp-tag)
+    ("markup"   t   t   muse-publish-mark-up-tag))
+  "Tags used when publishing headers and footers.
+See `muse-publish-markup-tags' for details."
+  :type '(repeat (list (string :tag "Markup tag")
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       function))
+  :group 'muse-publish)
+
 (defun muse-insert-file-or-string (file-or-string &optional title)
   (let ((beg (point)) end)
     (if (and (not (string-equal file-or-string ""))
@@ -474,9 +488,10 @@ to the text with ARGS as parameters."
       (remove-text-properties (point-min) (point-max)
                               '(read-only nil rear-nonsticky nil))
       (goto-char (point-min))
-      (muse-publish-markup (or title "")
-                           '((100 "<\\(lisp\\)>" 0
-                              muse-publish-markup-tag))))))
+      (let ((muse-publish-markup-tags muse-publish-markup-header-footer-tags))
+        (muse-publish-markup (or title "")
+                             '((100 muse-tag-regexp 0
+                                    muse-publish-markup-tag)))))))
 
 (defun muse-style-run-hooks (keyword style &rest args)
   (catch 'handled
@@ -488,8 +503,18 @@ to the text with ARGS as parameters."
           (throw 'handled t)))
       (setq style (muse-style-element :base style)))))
 
-(defun muse-publish-markup-region (beg end title style)
-  "Apply the given STYLE's markup rules to the given region."
+(defun muse-publish-markup-region (beg end &optional title style)
+  "Apply the given STYLE's markup rules to the given region.
+TITLE is used when indicating the publishing progress; it may be nil."
+  (unless title (setq title ""))
+  (unless style (setq style muse-publishing-current-style))
+  (unless style
+    (muse-display-warning
+     (concat "Cannot find any publishing style to use.\n"
+             "\nIf you have code that operates in a temporary buffer,"
+             " you should\nprobably call `muse-publish-propagate-settings'"
+             " first."))
+    (error "Cannot find any publishing styles to use"))
   (save-restriction
     (narrow-to-region beg end)
     (muse-style-run-hooks :before style)
@@ -1440,6 +1465,69 @@ This is usually applied to extended links."
     (muse-publish-mark-read-only beg end)
     (goto-char beg)
     (muse-insert-markup (muse-markup-text 'comment-begin))))
+
+(defun muse-publish-include-tag (beg end attrs)
+  "Include the named file at the current location during publishing.
+
+<include file=\"...\">
+
+Files are marked up according to the Muse publishing rules.  If
+you want no markup to be performed, either add
+<example>..</example> inside the source file or use
+
+<include file=\"...\" markup=\"nil\">
+
+The `markup' attribute controls how this section is marked up. If
+non-nil, it should be the name of a function to call after
+inserting the file with the buffer narrowed to the section
+inserted.  Note that no further marking-up will be performed on
+this region."
+  (let ((filename (cdr (assoc "file" attrs)))
+        (markup (cdr (assoc "markup" attrs)))
+        (muse-publishing-directives muse-publishing-directives))
+    (if filename
+        (setq filename (expand-file-name
+                        filename
+                        (file-name-directory muse-publishing-current-file)))
+      (error "No file attribute specified in <include> tag"))
+    (if markup
+        (let ((markup-function (read markup)))
+          (if (and markup-function (not (functionp markup-function)))
+              (error "Invalid markup function `%s'" markup)
+            (save-restriction
+              (narrow-to-region beg end)
+              (insert-file-contents filename)
+              (when markup-function
+                (funcall markup-function))
+              (goto-char (point-max)))))
+      (insert-file-contents filename)
+      (muse-publish-markup-region beg (point)))
+    (muse-publish-mark-read-only beg (point))))
+
+(defun muse-publish-mark-up-tag (beg end attrs)
+  "Run an Emacs Lisp function on the region delimted by this tag.
+
+<markup function=\"...\">
+
+The optional `function' attribute controls how this section is
+marked up.  If used, it should be the name of a function to call
+with the buffer narrowed to the delimited region.  Note that no
+further marking-up will be performed on this region.
+
+If `function' is ommitted, use the standard Muse markup function.
+This is useful for marking up content in headers and footers."
+  (let ((function (cdr (assoc "function" attrs)))
+        (muse-publishing-directives muse-publishing-directives))
+    (if function
+        (let ((markup-function (intern function)))
+          (if (and markup-function (functionp markup-function))
+              (save-restriction
+                (narrow-to-region beg end)
+                (funcall markup-function)
+                (goto-char (point-max)))
+            (error "Invalid markup function `%s'" function)))
+      (muse-publish-markup-region beg end))
+    (muse-publish-mark-read-only beg (point))))
 
 ;; Miscellaneous helper functions
 
