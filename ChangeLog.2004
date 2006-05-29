@@ -343,3 +343,7 @@
 	* muse-mode.el (muse-mode): Set variables.
 	(muse-visit-link): Allow override of `visit-link-function' using
 	the new :visit-link keyword.
+
+;; Local Variables:
+;; coding: utf-8
+;; End:

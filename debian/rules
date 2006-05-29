@@ -57,7 +57,7 @@ install: build
 	install -m 0644 AUTHORS ${PKGDIR}${DOCDIR}/AUTHORS
 	install -m 0644 NEWS ${PKGDIR}${DOCDIR}/NEWS
 	install -m 0644 README ${PKGDIR}${DOCDIR}/README
-	install -m 0644 ChangeLog.2006 ${PKGDIR}${DOCDIR}/changelog
+	install -m 0644 ChangeLog ${PKGDIR}${DOCDIR}/changelog
 	cat ChangeLog.2005 >> ${PKGDIR}${DOCDIR}/changelog
 	cat ChangeLog.2004 >> ${PKGDIR}${DOCDIR}/changelog
 

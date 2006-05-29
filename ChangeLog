@@ -2,6 +2,28 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-29 14:59:31 GMT	Michael Olson <mwolson@gnu.org>	patch-142
+
+    Summary:
+      Make ChangeLog conform to conventions better.
+    Revision:
+      muse--main--1.0--patch-142
+
+    * ChangeLog: Renamed from ChangeLog.2006 in order to follow Emacs
+      conventions better.  Specify the buffer encoding.  Add helpful notices
+      near the bottom of this and ChangeLog.2005.
+
+    modified files:
+     ChangeLog ChangeLog.2004 ChangeLog.2005 debian/rules
+     {arch}/muse/muse--main/muse--main--1.0/mwolson@gnu.org--2006/patch-log/base-0
+
+    renamed files:
+     .arch-ids/ChangeLog.2006.id
+       ==> .arch-ids/ChangeLog.id
+     ChangeLog.2006
+       ==> ChangeLog
+
+
 2006-05-28 07:45:09 GMT	Michael Olson <mwolson@gnu.org>	patch-141
 
     Summary:
@@ -2719,7 +2741,7 @@
     Revision:
       muse--main--1.0--base-0
 
-    (automatically generated log message)
+    See ChangeLog.2005 for earlier changes.
 
     new patches:
      ajk@iu.edu--2005/muse--ajk--1.0--base-0
