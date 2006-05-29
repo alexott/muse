@@ -211,9 +211,13 @@ as you wrap the region in <literal></literal>."
 
 (defcustom muse-html-markup-regexps
   `(;; Beginning of doc, end of doc, or plain paragraph separator
-    (10000 ,(concat "\\(\\(\n\\([" muse-regexp-blank "]*\n\\)+\\)"
+    (10000 ,(concat "\\(\\(\n\\(?:[" muse-regexp-blank "]*\n\\)*"
+                    "\\([" muse-regexp-blank "]*\n\\)\\)"
                     "\\|\\`\\s-*\\|\\s-*\\'\\)")
-           0 muse-html-markup-paragraph))
+           ;; this is somewhat repetitive because we only require the
+           ;; line just before the paragraph beginning to be not
+           ;; read-only
+           3 muse-html-markup-paragraph))
   "List of markup rules for publishing a Muse page to HTML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice

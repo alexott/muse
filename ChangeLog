@@ -2,6 +2,82 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-29 21:34:34 GMT	Michael Olson <mwolson@gnu.org>	patch-144
+
+    Summary:
+      List all tags in Muse's documentation.
+    Revision:
+      muse--main--1.0--patch-144
+
+    * lisp/muse-publish.el (muse-publish-markup-region): Remove cruft that I
+      was trying out.
+      (muse-publish-contents-depth): New option that specifies the maximum
+      depth of headings to include with <contents> tags.
+      (muse-publish-contents-tag): Use it.
+      (muse-publish-include-tag): Docfix.
+    
+    * muse.texi (Paragraphs): Mention <center> and <quote> tags.
+      (Tag Summary): New section that defines the syntax used for tags and
+      gives a complete listing of all of the tags that Muse comes with, as
+      well as some documentation for each tag.
+      (HTML): Update documentation.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el muse.texi
+
+
+2006-05-29 18:48:41 GMT	Michael Olson <mwolson@gnu.org>	patch-143
+
+    Summary:
+      Implement <include> and <markup> tags.
+    Revision:
+      muse--main--1.0--patch-143
+
+    * lisp/muse-html.el (muse-html-markup-regexps): Make paragraph detection
+      work better when a paragraph follows some other markup, especially
+      tables.
+    
+    * lisp/muse-publish.el (muse-publish-markup-tags): Add <include> and
+      <markup> tags.
+      (muse-publish-markup): Fix edge case.
+      (muse-publish-markup-header-footer-tags): New option that specifies
+      which tags may be used when publishing headers and footers.
+      (muse-insert-file-or-string): Use
+      muse-publish-markup-header-footer-tags instead of a hard-coded value.
+      (muse-publish-markup-region): Make title and style arguments optional,
+      so that this is easier to use.
+      (muse-publish-include-tag): Implement <include> tag.  I've tested all
+      of the cases I can think of, and it works.
+      (muse-publish-mark-up-tag): Implement <markup> tag.  This is handy for
+      times when you want to publish Muse markup in headers and footers.
+      Adding a table of contents to a header should be particularly easy now.
+
+    modified files:
+     ChangeLog lisp/muse-html.el lisp/muse-publish.el
+
+
+2006-05-29 14:59:31 GMT	Michael Olson <mwolson@gnu.org>	patch-142
+
+    Summary:
+      Make ChangeLog conform to conventions better.
+    Revision:
+      muse--main--1.0--patch-142
+
+    * ChangeLog: Renamed from ChangeLog.2006 in order to follow Emacs
+      conventions better.  Specify the buffer encoding.  Add helpful notices
+      near the bottom of this and ChangeLog.2005.
+
+    modified files:
+     ChangeLog ChangeLog.2004 ChangeLog.2005 debian/rules
+     {arch}/muse/muse--main/muse--main--1.0/mwolson@gnu.org--2006/patch-log/base-0
+
+    renamed files:
+     .arch-ids/ChangeLog.2006.id
+       ==> .arch-ids/ChangeLog.id
+     ChangeLog.2006
+       ==> ChangeLog
+
+
 2006-05-28 07:45:09 GMT	Michael Olson <mwolson@gnu.org>	patch-141
 
     Summary:
@@ -2719,7 +2795,7 @@
     Revision:
       muse--main--1.0--base-0
 
-    (automatically generated log message)
+    See ChangeLog.2005 for earlier changes.
 
     new patches:
      ajk@iu.edu--2005/muse--ajk--1.0--base-0

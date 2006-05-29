@@ -91,6 +91,7 @@ Rules for Using Markup
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
 * Comments::                    Lines to omit from published output.
+* Tag Summary::                 Tags that Muse recognizes.
 
 Publishing Various Types of Documents
 
@@ -508,6 +509,7 @@ than formatting.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
 * Comments::                    Lines to omit from published output.
+* Tag Summary::                 Tags that Muse recognizes.
 @end menu
 
 @node Paragraphs, Headings, Markup Rules, Markup Rules
@@ -521,12 +523,16 @@ Paragraphs in Muse must be separated by a blank line.
 @subheading Centered paragraphs and quotations
 
 A line that begins with six or more columns of whitespace (either tabs
-or spaces) indicates a centered paragraph.
+or spaces) indicates a centered paragraph.  Alternatively, you can use
+the @verb{|<center>|} tag to surround regions that are to be published as
+centered paragraphs.
 
 @cindex paragraphs, quoted
 @cindex quotations
 But if a line begins with whitespace, though less than six columns, it
-indicates a quoted paragraph.
+indicates a quoted paragraph.  Alternatively, you can use the
+@verb{|<quote>|} tag to surround regions that are to be published as
+quoted paragraphs.
 
 @cindex examples
 @cindex monospace, rendering blocks
@@ -899,7 +905,7 @@ Note that you should not use the @code{insert} command within a set of
 @verb{|<lisp>|} tags, since the return value from the @verb{|<lisp>|}
 tags will be automatically inserted into the document.
 
-@node Comments, , Embedded Lisp, Markup Rules
+@node Comments, Tag Summary, Embedded Lisp, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Lines to omit from published output
 @cindex comments
@@ -914,6 +920,142 @@ published.
 
 That is, only a semi-colon at the beginning of a line, followed by a
 literal space, will cause that line to be treated as a comment.
+
+@node Tag Summary, , Comments, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Tags that Muse recognizes
+@cindex tags
+@cindex inserting files at publish time
+@cindex publishing, including markup in headers and footers
+@cindex publishing, inserting files
+
+Muse has several built-in tags that may prove useful during publishing.
+@xref{muse-publish-markup-tags}, to see how to customize the tags that
+Muse uses, as well as make your own tags.
+
+@subheading Syntax
+
+If a tag takes arguments, it will look like this, where ``tagname'' is
+the name of the tag.
+
+@example
+<tagname arg1="string1" arg2="string2">
+@end example
+
+If a tag surrounds some text, it will look like this.
+
+@example
+<tagname>Some text</tagname>
+@end example
+
+If a tag surrounds a large region, it will look like this.
+
+@example
+<tagname>
+Some text.
+Some more text.
+</tagname>
+@end example
+
+@subheading Tag listing
+
+This is the complete list of tags that Muse accepts, including those
+that were mentioned in previous sections.
+
+@table @verb
+
+@item |<class>|
+If publishing to HTML, surround the given text with a @verb{|<span>|}
+tag.  It takes one argument called ``name'' that specifies the class
+attribute of the @verb{|<span>|} tag.
+
+If publishing to a different format, do nothing extra to the text.
+
+@item |<code>|
+Treat the text surrounded by the tag as if they were enclosed in equal
+signs, that is, make it monospace.
+
+@item |<command>|
+Run a command on the region, replacing the region with the result of the
+command.  The command is specified with the ``interp'' argument.  If no
+value for ``interp'' is given, pass the entire region to the shell.
+
+@item |<comment>|
+Treat the entire region as a comment.  If the option
+@var{muse-publish-comments-p} is nil, delete the region, otherwise
+publish it using the comment syntax of the current publishing style.
+
+@item |<contents>|
+Publish a Table of Contents.  This will either be inserted in-place or
+at the beginning of the document, depending on your publishing style.
+It does not have a delimiting tag.
+
+By default, only 2 levels of headings will be included in the generated
+Table of Contents.  To change this globally, customize the
+@var{muse-publish-contents-depth} option.  To change this only for the
+current tag, use the ``depth'' argument.
+
+@item |<example>|
+Publish the region in monospace, preserving the newlines in the region.
+This is useful for snippets of code.
+
+@item |<include>|
+Include the named file at the current location during publishing.  Files
+are marked up according to the Muse publishing rules by default.  If you
+want to specify a command to be run instead of marking up the region,
+use the ``markup'' argument with the name of the command.
+
+If you want no markup to be performed, either add
+@verb{|<example>..</example>|} inside the source file or specify
+markup="nil".
+
+@item |<lisp>|
+Evaluate the Emacs Lisp expressions between the initial and ending tags.
+The result is then inserted into the document, so you do not need to
+explicitly call @code{insert}.  All text properties are removed from the
+resulting text.
+
+@item |<literal>|
+Make sure that the text enclosed by this tag is published without
+escaping it in any way.  This is useful for inserting markup directly
+into the published document, when Muse does not provide the desired
+functionality.
+
+@item |<markup>|
+Mark up the text between the initial and ending tags.  The markup
+command to use may be specified by the ``function'' argument.  The
+standard Muse markup routines are used by default if no ``function''
+argument is provided.
+
+This is useful for marking up regions in headers and footers.  One
+example that comes to mind is generating a published index of all of the
+files in the current project by doing the following.
+
+@example
+<markup><lisp>(muse-index-as-string t t)</lisp></markup>
+@end example
+
+@item |<quote>|
+Publish the region as a blockquote.  This will either be inserted
+in-place or at the beginning of the document, depending on your
+publishing style.  It does not have a delimiting tag.
+
+@item |<verbatim>|
+This is used when you want to prevent Muse from trying to interpret some
+markup.  Surround the markup in @verb{|<verbatim>|} and
+@verb{|</verbatim>|}, and it will not be interpreted.
+
+This tag was used often in previous versions of Muse because they did
+not support whole-document escaping of specials.  Now, it will only be
+needed for other tags, and perhaps footnotes as well.
+
+@item |<verse>|
+Preserve the newlines in the region.  In formats like HTML, newlines are
+removed by default, hence the need for this tag.  In other publishing
+styles, this tag may cause the text to be indented slightly in a way
+that looks nice for poetry and prose.
+
+@end table
 
 @node Publishing Styles, Extending Muse, Markup Rules, Top
 @comment  node-name,  next,  previous,  up
@@ -1264,9 +1406,8 @@ style is different from your link style.
 @item muse-html-table-attributes
 The attribute to be used with HTML @verb{|<table>|} tags.
 
-Note that since Muse supports direct insertion of HTML tags, you can
-easily create any kind of table you want, as long as each line begins at
-column 0 (to prevent it from being blockquoted).
+If you want to make more-complicated tables in HTML, surround the HTML
+with the @verb{|literal|} tag, so that it does not get escaped.
 
 @item muse-html-markup-regexps
 List of markup rules for publishing a Muse page to HTML.
