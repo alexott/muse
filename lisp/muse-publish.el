@@ -507,14 +507,9 @@ See `muse-publish-markup-tags' for details."
   "Apply the given STYLE's markup rules to the given region.
 TITLE is used when indicating the publishing progress; it may be nil."
   (unless title (setq title ""))
-  (unless style (setq style muse-publishing-current-style))
   (unless style
-    (muse-display-warning
-     (concat "Cannot find any publishing style to use.\n"
-             "\nIf you have code that operates in a temporary buffer,"
-             " you should\nprobably call `muse-publish-propagate-settings'"
-             " first."))
-    (error "Cannot find any publishing styles to use"))
+    (or (setq style muse-publishing-current-style)
+        (error "Cannot find any publishing styles to use")))
   (save-restriction
     (narrow-to-region beg end)
     (muse-style-run-hooks :before style)
@@ -1364,11 +1359,17 @@ the cadr is the page name, and the cddr is the anchor."
 
 ;; Default publishing tags
 
+(defcustom muse-publish-contents-depth 2
+  "The number of heading levels to include with <contents> tags."
+  :type 'integer
+  :group 'muse-publish)
+
 (defun muse-publish-contents-tag (beg end attrs)
   (set (make-local-variable 'muse-publish-generate-contents)
        (cons (copy-marker (point) t)
              (let ((depth (cdr (assoc "depth" attrs))))
-               (or (and depth (string-to-number depth)) 2)))))
+               (or (and depth (string-to-number depth))
+                   muse-publish-contents-depth)))))
 
 (defun muse-publish-verse-tag (beg end)
   (save-excursion
@@ -1473,7 +1474,8 @@ This is usually applied to extended links."
 
 Files are marked up according to the Muse publishing rules.  If
 you want no markup to be performed, either add
-<example>..</example> inside the source file or use
+<example>..</example> inside the source file or use the
+following invocation.
 
 <include file=\"...\" markup=\"nil\">
 

@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-29 21:34:34 GMT	Michael Olson <mwolson@gnu.org>	patch-144
+
+    Summary:
+      List all tags in Muse's documentation.
+    Revision:
+      muse--main--1.0--patch-144
+
+    * lisp/muse-publish.el (muse-publish-markup-region): Remove cruft that I
+      was trying out.
+      (muse-publish-contents-depth): New option that specifies the maximum
+      depth of headings to include with <contents> tags.
+      (muse-publish-contents-tag): Use it.
+      (muse-publish-include-tag): Docfix.
+    
+    * muse.texi (Paragraphs): Mention <center> and <quote> tags.
+      (Tag Summary): New section that defines the syntax used for tags and
+      gives a complete listing of all of the tags that Muse comes with, as
+      well as some documentation for each tag.
+      (HTML): Update documentation.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el muse.texi
+
+
 2006-05-29 18:48:41 GMT	Michael Olson <mwolson@gnu.org>	patch-143
 
     Summary:
