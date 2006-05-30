@@ -1,4 +1,4 @@
-;;; muse-convert.el --- convert a LaTex file into a Muse file
+;;; muse-convert-latex.el --- convert a LaTex file into a Muse file
 
 ;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 
@@ -30,7 +30,7 @@
 (require 'muse)
 (require 'muse-regexps)
 
-(defun muse-write-citation (note author citation pages)
+(defun muse-c-l-write-citation (note author citation pages)
   (save-excursion
     (goto-char (point-max))
     (if (= note 1)
@@ -48,7 +48,7 @@
       (while (re-search-forward "--" nil t)
         (replace-match "-")))))
 
-(defun muse-write-footnote (note text)
+(defun muse-c-l-write-footnote (note text)
   (save-excursion
     (goto-char (point-max))
     (if (= note 1)
@@ -56,7 +56,7 @@
     (insert "\n[" (number-to-string note) "]  " text ?\n)))
 
 ;;;###autoload
-(defun muse-latex-transform ()
+(defun muse-convert-latex ()
   (interactive)
   (goto-char (point-min))
   (while (not (eobp))
@@ -131,9 +131,9 @@
                     (forward-line)))))))
         (insert "[" (number-to-string footnote-index) "]")
         (if (string= (match-string 2) "footnote")
-            (muse-write-footnote footnote-index (match-string 9))
-          (muse-write-citation footnote-index (match-string 5)
-                                     (match-string 7) (match-string 8)))
+            (muse-c-l-write-footnote footnote-index (match-string 9))
+          (muse-c-l-write-citation footnote-index (match-string 5)
+                                   (match-string 7) (match-string 8)))
         (setq footnote-index (1+ footnote-index))
         (delete-region beg end))))
   (goto-char (point-min))
@@ -142,4 +142,4 @@
   (while (re-search-forward "\n\n+" nil t)
     (replace-match "\n\n")))
 
-(provide 'muse-convert)
+(provide 'muse-convert-latex)
