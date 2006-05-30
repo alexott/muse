@@ -488,7 +488,7 @@ See `muse-publish-markup-tags' for details."
       (remove-text-properties (point-min) (point-max)
                               '(read-only nil rear-nonsticky nil))
       (goto-char (point-min))
-      (let ((muse-publish-markup-tags muse-publish-markup-header-footer-tags))
+      (let ((muse-inhibit-style-tags t))
         (muse-publish-markup (or title "")
                              '((100 muse-tag-regexp 0
                                     muse-publish-markup-tag)))))))
@@ -726,8 +726,14 @@ the file is published no matter what."
     (goto-char (match-beginning 0))
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
+(defvar muse-inhibit-style-tags nil
+  "If non-nil, do not search for style-specific tags.
+This is used when publishing headers and footers.")
+
 (defun muse-publish-markup-tag ()
-  (let ((tag-info (muse-markup-tag-info (match-string 1))))
+  (let ((tag-info (if muse-inhibit-style-tags
+                      (assoc (match-string 1) muse-publish-markup-tags)
+                    (muse-markup-tag-info (match-string 1)))))
     (when (and tag-info
                (not (get-text-property (match-beginning 0) 'read-only)))
       (let ((closed-tag (match-string 3))
@@ -760,7 +766,9 @@ the file is published no matter what."
           (let ((args (list start end)))
             (if (nth 2 tag-info)
                 (nconc args (list attrs)))
-            (apply (nth 3 tag-info) args))))))
+            (let ((muse-inhibit-style-tags nil))
+              ;; remove the inhibition
+              (apply (nth 3 tag-info) args)))))))
   nil)
 
 (defun muse-publish-escape-specials (beg end &optional ignore-read-only context)

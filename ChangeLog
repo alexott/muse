@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-05-30 18:21:51 GMT	Michael Olson <mwolson@gnu.org>	patch-146
+
+    Summary:
+      Fix tag-publishing in <insert> and <markup>.
+    Revision:
+      muse--main--1.0--patch-146
+
+    * lisp/muse-publish.el (muse-insert-file-or-string): Don't set
+      muse-publish-markup-tags, since that messes other things up for
+      <markup> and <insert>.
+      (muse-inhibit-style-tags): New variable that specifies whether to
+      disable looking for tag definitions that are specific to the current
+      style.  This is useful for publishing headers and footers.
+      (muse-publish-markup-tag): Use `muse-inhibit-style-tags', but disable
+      it unconditionally when calling a tag's function, so that the effect
+      does not propagate.
+    
+    * lisp/muse.el (muse-file-remote-p): New function that detects whether
+      the given file path is a remote location.  This is not used yet.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el lisp/muse.el
+
+
 2006-05-30 00:19:37 GMT	Michael Olson <mwolson@gnu.org>	patch-145
 
     Summary:
