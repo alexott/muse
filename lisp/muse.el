@@ -381,6 +381,21 @@ that can be added."
                                      dir))
                     mustmatch initial)))
 
+(defun muse-file-remote-p (file)
+  "Test whether FILE specifies a location on a remote system.
+Return non-nil if the location is indeed remote.
+
+For example, the filename \"/user@host:/foo\" specifies a location
+on the system \"/user@host:\"."
+  (cond ((fboundp 'file-remote-p)
+         (file-remote-p file))
+        ((fboundp 'tramp-handle-file-remote-p)
+         (tramp-handle-file-remote-p file))
+        ((and (boundp 'ange-ftp-name-format)
+              (string-match ange-ftp-name-format file))
+         t)
+        (t nil)))
+
 ;; Set face globally in a predictable fashion
 (defun muse-copy-face (old new)
   "Copy face OLD to NEW."
