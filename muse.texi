@@ -942,6 +942,13 @@ the name of the tag.
 <tagname arg1="string1" arg2="string2">
 @end example
 
+If you want the tag to look like it came straight from an XHTML
+document, you can alternatively do the following.
+
+@example
+<tagname arg1="string1" arg2="string2" />
+@end example
+
 If a tag surrounds some text, it will look like this.
 
 @example
