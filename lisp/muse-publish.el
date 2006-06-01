@@ -102,9 +102,6 @@ If non-nil, publish comments using the markup of the current style."
     ;; prevent emphasis characters in explicit links from being marked
     (1400 muse-explicit-link-regexp 0 muse-publish-mark-link)
 
-    ;; define anchor points
-    (1500 "^\\(\\W*\\)#\\(\\S-+\\)\\s-*" 0 anchor)
-
     ;; emphasized or literal text
     (1600 ,(concat "\\(^\\|[-[" muse-regexp-blank
                    "<('`\"\n]\\)\\(=[^=" muse-regexp-blank
@@ -161,6 +158,9 @@ If non-nil, publish comments using the markup of the current style."
     ;; response: "> text", where text may contain initial whitespace
     ;; (see below).
     (2600 ,(concat "^[" muse-regexp-blank "]*> ") 0 verse)
+
+    ;; define anchor points
+    (2700 "^\\(\\W*\\)#\\(\\S-+\\)\\s-*" 0 anchor)
 
     ;; replace links in the buffer (links to other pages)
     (2900 muse-explicit-link-regexp 0 link)
@@ -350,7 +350,7 @@ If STYLE is not specified, use current style."
       (setq style (muse-get-keyword :base style)))
     elements))
 
-(defsubst muse-style-element (elem &optional style direct)
+(defun muse-style-element (elem &optional style direct)
   "Search for ELEM in STYLE, including base styles.
 If STYLE is not specified, use current style."
   (setq style (muse-style style))

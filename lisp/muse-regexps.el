@@ -38,6 +38,9 @@
   "Regular expressions used in publishing and syntax highlighting."
   :group 'muse)
 
+;;; Deal with the lack of character classes for regexps in Emacs21 and
+;;; XEmacs
+
 (defcustom muse-regexp-use-character-classes 'undecided
   "Indicate whether to use extended character classes like [:space:].
 If 'undecided, Muse will use them if your emacs is known to support them.
@@ -137,6 +140,8 @@ the time."
   :options '("[:upper:]" "A-Z")
   :group 'muse-regexp)
 
+;;; Regexps used to define Muse publishing syntax
+
 (defcustom muse-list-item-regexp
   (concat "^%s\\([" muse-regexp-blank "]-[" muse-regexp-blank
           "]*\\|[" muse-regexp-blank "][0-9]+\\.["
@@ -200,6 +205,8 @@ If the above applies, and you want to match things with spaces in
 them, you will have to modify this."
   :type 'regexp
   :group 'muse-regexp)
+
+;;; Regexps used to determine file types
 
 (defcustom muse-file-regexp
   "[/?]\\|\\.\\(html?\\|pdf\\|mp3\\|el\\|zip\\|txt\\|tar\\)\\(\\.\\(gz\\|bz2\\)\\)?\\'"
