@@ -4,8 +4,7 @@
 include ../Makefile.defs
 
 EL  = $(filter-out muse-autoloads.el,$(wildcard *.el))
-ELC_IN = $(patsubst %.el,%.elc,$(EL))
-ELC = muse-publish.elc $(filter-out muse-publish.elc,$(ELC_IN))
+ELC = $(patsubst %.el,%.elc,$(EL))
 
 all: lisp
 
