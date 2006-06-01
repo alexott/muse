@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-06-01 03:44:00 GMT	Michael Olson <mwolson@gnu.org>	patch-147
+
+    Summary:
+      Try to work around a bug in XEmacs beta.
+    Revision:
+      muse--main--1.0--patch-147
+
+    * lisp/Makefile (ELC): Compile muse-publish.el first, to try to work
+      around a bug in XEmacs beta.
+
+    modified files:
+     ChangeLog lisp/Makefile
+
+
 2006-05-30 18:21:51 GMT	Michael Olson <mwolson@gnu.org>	patch-146
 
     Summary:
