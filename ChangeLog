@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-06-03 21:12:36 GMT	Michael Olson <mwolson@gnu.org>	patch-151
+
+    Summary:
+      Provide some markup shortcuts for the <include> tag.
+    Revision:
+      muse--main--1.0--patch-151
+
+    * lisp/muse-publish.el (muse-publish-examplify-buffer): New function that
+      transforms the current buffer as if it were an <example> region.
+      (muse-publish-versify-buffer): Ditto, but for <verse> regions.
+      (muse-publish-include-tag): Docfix.  Support special cases for
+      markup="example" and markup="verse".
+    
+    * muse.texi (Tag Summary): Update for new <include> shortcuts.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el muse.texi
+
+
 2006-06-01 04:14:45 GMT	Michael Olson <mwolson@gnu.org>	patch-150
 
     Summary:

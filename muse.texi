@@ -1007,14 +1007,22 @@ Publish the region in monospace, preserving the newlines in the region.
 This is useful for snippets of code.
 
 @item |<include>|
-Include the named file at the current location during publishing.  Files
-are marked up according to the Muse publishing rules by default.  If you
-want to specify a command to be run instead of marking up the region,
-use the ``markup'' argument with the name of the command.
+Include the named file at the current location during publishing.
 
-If you want no markup to be performed, either add
-@verb{|<example>..</example>|} inside the source file or specify
-markup="nil".
+The ``markup'' attribute controls how this section is marked up.
+If it is omitted, publish the included text with the normal Muse
+rules.
+
+If "nil", do not mark up the included text at all.
+
+If "example", treat the included text as if it was surrounded by the
+@verb{|<example>|} tag.
+
+If "verse", treat the included text as if it was surrounded by the
+@verb{|<verse>|} tag, to preserve newlines.
+
+Otherwise, it should be the name of a function to call after inserting
+the file with the buffer narrowed to the section inserted.
 
 @item |<lisp>|
 Evaluate the Emacs Lisp expressions between the initial and ending tags.

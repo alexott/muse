@@ -1475,23 +1475,41 @@ This is usually applied to extended links."
     (goto-char beg)
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
+(defun muse-publish-examplify-buffer ()
+  "Transform the current buffer as if it were an <example> region."
+  (let ((end (progn (goto-char (point-max)) (point-marker))))
+    (muse-publish-example-tag (point-min) end)))
+
+(defun muse-publish-versify-buffer ()
+  "Transform the current buffer as if it were a <verse> region."
+  (muse-publish-verse-tag (point-min) (point-max))
+  (muse-publish-markup ""
+                       `((100 ,(concat "^[" muse-regexp-blank "]*> ") 0
+                              muse-publish-markup-verse))))
+
 (defun muse-publish-include-tag (beg end attrs)
   "Include the named file at the current location during publishing.
 
-<include file=\"...\">
+<include file=\"...\" markup=\"...\">
 
-Files are marked up according to the Muse publishing rules.  If
-you want no markup to be performed, either add
-<example>..</example> inside the source file or use the
-following invocation.
+The `markup' attribute controls how this section is marked up.
+If it is omitted, publish the included text with the normal Muse
+rules.
 
-<include file=\"...\" markup=\"nil\">
+If \"nil\", do not mark up the included text at all.
 
-The `markup' attribute controls how this section is marked up. If
-non-nil, it should be the name of a function to call after
+If \"example\", treat the included text as if it was surrounded
+by the <example> tag.
+
+If \"verse\", treat the included text as if it was surrounded
+by the <verse> tag, to preserve newlines.
+
+Otherwise, it should be the name of a function to call after
 inserting the file with the buffer narrowed to the section
-inserted.  Note that no further marking-up will be performed on
-this region."
+inserted.
+
+Note that no further marking-up will be performed on this
+region."
   (let ((filename (cdr (assoc "file" attrs)))
         (markup (cdr (assoc "markup" attrs)))
         (muse-publishing-directives muse-publishing-directives))
@@ -1502,8 +1520,14 @@ this region."
       (error "No file attribute specified in <include> tag"))
     (if markup
         (let ((markup-function (read markup)))
-          (if (and markup-function (not (functionp markup-function)))
-              (error "Invalid markup function `%s'" markup)
+          (cond ((eq markup-function 'example)
+                 (setq markup-function #'muse-publish-examplify-buffer))
+                ((eq markup-function 'verse)
+                 (setq markup-function #'muse-publish-versify-buffer))
+                ((and markup-function (not (functionp markup-function)))
+                 (error "Invalid markup function `%s'" markup))
+                (t nil))
+          (when markup-function
             (save-restriction
               (narrow-to-region beg end)
               (insert-file-contents filename)
