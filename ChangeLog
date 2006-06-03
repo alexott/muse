@@ -2,6 +2,20 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-06-03 23:38:12 GMT	Michael Olson <mwolson@gnu.org>	patch-153
+
+    Summary:
+      Fix bug introduced in last patch.
+    Revision:
+      muse--main--1.0--patch-153
+
+    * muse-publish.el (muse-publish-include-tag): Fix bug introduced in last
+      patch.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2006-06-03 21:18:35 GMT	Michael Olson <mwolson@gnu.org>	patch-152
 
     Summary:

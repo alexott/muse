@@ -1527,13 +1527,12 @@ region."
                 ((and markup-function (not (functionp markup-function)))
                  (error "Invalid markup function `%s'" markup))
                 (t nil))
-          (when markup-function
-            (save-restriction
-              (narrow-to-region beg end)
-              (insert-file-contents filename)
-              (when markup-function
-                (funcall markup-function))
-              (goto-char (point-max)))))
+          (save-restriction
+            (narrow-to-region beg end)
+            (insert-file-contents filename)
+            (when markup-function
+              (funcall markup-function))
+            (goto-char (point-max))))
       (insert-file-contents filename)
       (muse-publish-markup-region beg (point)))
     (muse-publish-mark-read-only beg (point))))
