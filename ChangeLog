@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-06-12 13:58:59 GMT	Michael Olson <mwolson@gnu.org>	patch-156
+
+    Summary:
+      Improve ignored files regexp.
+    Revision:
+      muse--main--1.0--patch-156
+
+    * lisp/muse-project.el (muse-project-ignore-regexp): Ignore Darcs and SVN
+      metadata directories, and use a better matching technique for autosave
+      files.  Previously, files with '#' in them were ignored erroneously.
+
+    modified files:
+     ChangeLog lisp/muse-project.el
+
+
 2006-06-12 13:55:17 GMT	Michael Olson <mwolson@gnu.org>	patch-155
 
     Summary:

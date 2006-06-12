@@ -232,8 +232,9 @@ when publishing files in that project."
 ;; Make it easier to specify a muse-project-alist entry
 
 (defcustom muse-project-ignore-regexp
-  (concat "\\`\\(.*\\.?#.*\\|.*,v\\|.*~\\|\\.\\.?\\|,.*\\)\\'\\|"
-          "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\)\\(/\\|\\'\\)")
+  (concat "\\`\\(#.*#\\|.*,v\\|.*~\\|\\.\\.?\\|\\.#.*\\|,.*\\)\\'\\|"
+          "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\|\\.svn\\|"
+          "_darcs\\)\\(/\\|\\'\\)")
   "A regexp matching files to be ignored in Wiki directories.
 
 You should set case-fold-search to nil before using this regexp
