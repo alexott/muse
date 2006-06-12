@@ -969,30 +969,30 @@ Some more text.
 This is the complete list of tags that Muse accepts, including those
 that were mentioned in previous sections.
 
-@table @verb
+@table @samp
 
-@item |<class>|
+@item <class>
 If publishing to HTML, surround the given text with a @verb{|<span>|}
 tag.  It takes one argument called ``name'' that specifies the class
 attribute of the @verb{|<span>|} tag.
 
 If publishing to a different format, do nothing extra to the text.
 
-@item |<code>|
+@item <code>
 Treat the text surrounded by the tag as if they were enclosed in equal
 signs, that is, make it monospace.
 
-@item |<command>|
+@item <command>
 Run a command on the region, replacing the region with the result of the
 command.  The command is specified with the ``interp'' argument.  If no
 value for ``interp'' is given, pass the entire region to the shell.
 
-@item |<comment>|
+@item <comment>
 Treat the entire region as a comment.  If the option
 @var{muse-publish-comments-p} is nil, delete the region, otherwise
 publish it using the comment syntax of the current publishing style.
 
-@item |<contents>|
+@item <contents>
 Publish a Table of Contents.  This will either be inserted in-place or
 at the beginning of the document, depending on your publishing style.
 It does not have a delimiting tag.
@@ -1002,12 +1002,18 @@ Table of Contents.  To change this globally, customize the
 @var{muse-publish-contents-depth} option.  To change this only for the
 current tag, use the ``depth'' argument.
 
-@item |<example>|
+@item <example>
 Publish the region in monospace, preserving the newlines in the region.
 This is useful for snippets of code.
 
-@item |<include>|
-Include the named file at the current location during publishing.
+@item <include>
+Insert the given file at the current location during publishing.  The
+basic use of this tag is as follows, replacing ``included_file'' with
+the name of the file that you want to include.
+
+@example
+<include file="included_file">
+@end example
 
 The ``markup'' attribute controls how this section is marked up.
 If it is omitted, publish the included text with the normal Muse
@@ -1024,19 +1030,19 @@ If "verse", treat the included text as if it was surrounded by the
 Otherwise, it should be the name of a function to call after inserting
 the file with the buffer narrowed to the section inserted.
 
-@item |<lisp>|
+@item <lisp>
 Evaluate the Emacs Lisp expressions between the initial and ending tags.
 The result is then inserted into the document, so you do not need to
 explicitly call @code{insert}.  All text properties are removed from the
 resulting text.
 
-@item |<literal>|
+@item <literal>
 Make sure that the text enclosed by this tag is published without
 escaping it in any way.  This is useful for inserting markup directly
 into the published document, when Muse does not provide the desired
 functionality.
 
-@item |<markup>|
+@item <markup>
 Mark up the text between the initial and ending tags.  The markup
 command to use may be specified by the ``function'' argument.  The
 standard Muse markup routines are used by default if no ``function''
@@ -1050,12 +1056,12 @@ files in the current project by doing the following.
 <markup><lisp>(muse-index-as-string t t)</lisp></markup>
 @end example
 
-@item |<quote>|
+@item <quote>
 Publish the region as a blockquote.  This will either be inserted
 in-place or at the beginning of the document, depending on your
 publishing style.  It does not have a delimiting tag.
 
-@item |<verbatim>|
+@item <verbatim>
 This is used when you want to prevent Muse from trying to interpret some
 markup.  Surround the markup in @verb{|<verbatim>|} and
 @verb{|</verbatim>|}, and it will not be interpreted.
@@ -1064,7 +1070,7 @@ This tag was used often in previous versions of Muse because they did
 not support whole-document escaping of specials.  Now, it will only be
 needed for other tags, and perhaps footnotes as well.
 
-@item |<verse>|
+@item <verse>
 Preserve the newlines in the region.  In formats like HTML, newlines are
 removed by default, hence the need for this tag.  In other publishing
 styles, this tag may cause the text to be indented slightly in a way
