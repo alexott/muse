@@ -1007,7 +1007,13 @@ Publish the region in monospace, preserving the newlines in the region.
 This is useful for snippets of code.
 
 @item <include>
-Include the named file at the current location during publishing.
+Insert the given file at the current location during publishing.  The
+basic use of this tag is as follows, replacing ``included_file'' with
+the name of the file that you want to include.
+
+@example
+<include file="included_file">
+@end example
 
 The ``markup'' attribute controls how this section is marked up.
 If it is omitted, publish the included text with the normal Muse

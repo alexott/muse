@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-06-12 13:55:17 GMT	Michael Olson <mwolson@gnu.org>	patch-155
+
+    Summary:
+      Provide example for <include> in Muse manual.
+    Revision:
+      muse--main--1.0--patch-155
+
+    * muse.texi (Tag Summary): Give an example of using the <include> tag.
+
+    modified files:
+     ChangeLog muse.texi
+
+
 2006-06-10 06:49:08 GMT	Michael Olson <mwolson@gnu.org>	patch-154
 
     Summary:
