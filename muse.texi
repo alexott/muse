@@ -444,16 +444,13 @@ Find text in all files of the current project.
 @item C-c C-v (`muse-browse-result')
 Show the published result of this page.
 
-@item C-c i l (`muse-insert-relative-link-to-file')
-Insert a link to a file interactively.
-
-@item C-c i t (`muse-insert-tag'), also C-c TAB
-Insert a tag interactively.
-
 @item C-c = (`muse-what-changed')
 Diff this page against the last backup version.
 
-@item C-c TAB (`muse-insert-tag'), also C-c i t
+@item C-c TAB l (`muse-insert-relative-link-to-file')
+Insert a link to a file interactively.
+
+@item C-c TAB t (`muse-insert-tag')
 Insert a tag interactively.
 
 @item TAB

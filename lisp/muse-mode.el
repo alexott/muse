@@ -169,8 +169,7 @@ index at intervals."
     (define-key map [(control ?c) (control ?f)] 'muse-project-find-file)
     (define-key map [(control ?c) (control ?p)] 'muse-project-publish)
 
-    (define-key map [(control ?c) tab] 'muse-insert-tag)
-    (define-key map [(control ?c) (?i)] 'muse-insert-thing)
+    (define-key map [(control ?c) tab] 'muse-insert-thing)
 
     ;; Searching functions
     (define-key map [(control ?c) (control ?b)] 'muse-find-backlinks)
@@ -770,7 +769,7 @@ If EXCLUDE-CURRENT is non-nil, exclude the current file from the output."
         (setq files (cdr files)))
       (buffer-string))))
 
-;;; Insert tags interactively on C-c TAB
+;;; Insert tags interactively on C-c TAB t
 
 (defvar muse-tag-history nil
   "List of recently-entered tags; used by `muse-insert-tag'.

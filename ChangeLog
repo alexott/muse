@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-06-26 18:13:59 GMT	Michael Olson <mwolson@gnu.org>	patch-157
+
+    Summary:
+      Don't use illegal C-c i keybinding.
+    Revision:
+      muse--main--1.0--patch-157
+
+    * lisp/muse-mode.el (muse-mode-map): Remove "C-c i" binding and use "C-c
+      TAB" for that purpose instead.  Thanks to Adrian Aichner for the
+      report.
+    
+    * muse.texi (Keystroke Summary): Update documentation for the above
+      change.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el muse.texi
+
+
 2006-06-12 13:58:59 GMT	Michael Olson <mwolson@gnu.org>	patch-156
 
     Summary:
