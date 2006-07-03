@@ -534,8 +534,10 @@ TITLE is used when indicating the publishing progress; it may be nil."
                (cons "author" (user-full-name))
                (cons "date" (format-time-string
                              "%B %e, %Y"
-                             (nth 5 (file-attributes
-                                     muse-publishing-current-file))))))
+                             (if muse-publishing-current-file
+                                 (nth 5 (file-attributes
+                                         muse-publishing-current-file))
+                               (current-time))))))
         (muse-publishing-p t)
         (inhibit-read-only t))
     (run-hooks 'muse-update-values-hook)
