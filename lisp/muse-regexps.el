@@ -162,7 +162,7 @@ The first match string must contain the term."
 
 (defcustom muse-table-field-regexp
   (concat "[" muse-regexp-blank "]+\\(|+\\)\\(?:["
-          muse-regexp-blank "]+\\|$\\)")
+          muse-regexp-blank "]\\|$\\)")
   "Regexp used to match table separators when publishing."
   :type 'regexp
   :group 'muse-regexp)
