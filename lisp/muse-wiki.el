@@ -241,10 +241,7 @@ use the first style we find."
   (let* ((page-path (muse-project-page-file page project))
          (remote-styles (when page-path (muse-project-applicable-styles
                                          page-path (cddr project))))
-         (local-style (or (muse-style)
-                          (car (muse-project-applicable-styles
-                                (muse-current-file)
-                                (cddr (muse-project-of-file)))))))
+         (local-style (muse-project-current-output-style page-path project)))
     (cond ((and remote-styles local-style muse-publishing-p)
            (muse-project-resolve-link page local-style remote-styles))
           ((not muse-publishing-p)

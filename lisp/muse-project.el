@@ -301,6 +301,9 @@ For an example of the use of this function, see
   "Project we are currently visiting.")
 (make-variable-buffer-local 'muse-current-project)
 
+(defvar muse-current-output-style nil
+  "The output style that we are currently using for publishing files.")
+
 (defsubst muse-project (&optional project)
   "Resolve the given PROJECT into a full Muse project, if it is a string."
   (if (null project)
@@ -323,12 +326,12 @@ For an example of the use of this function, see
       (if dir
           (save-match-data
             (dolist (file files)
-              (setq matches (cons (cons (string-match
-                                         (concat (regexp-quote dir) "\\'")
-                                         (file-name-directory (cdr file)))
-                                        (cdr file))
-                                  matches)))
-            (car (muse-sort-by-rating files)))
+              (let ((pos (string-match (concat (regexp-quote dir) "\\'")
+                                       (file-name-directory (cdr file)))))
+                (when pos
+                  (setq matches (cons (cons pos (cdr file))
+                                      matches)))))
+            (car (muse-sort-by-rating matches)))
         (dolist (file files)
           (setq matches (cons (cons (length (cdr file)) (cdr file))
                               matches)))
@@ -598,8 +601,7 @@ The name of a project may be used for STYLES."
 to another file.
 
 The best match for PAGE is determined by comparing the link
-suffix of the given potential local style and that of the remote
-styles.
+suffix of the given local style and that of the remote styles.
 
 The remote styles are usually populated by
 `muse-project-applicable-styles'."
@@ -624,9 +626,17 @@ The remote styles are usually populated by
                                 (muse-style-element :path local-style))))))
      nil remote-style)))
 
+(defun muse-project-current-output-style (&optional file project)
+  (or muse-current-output-style
+      (progn
+        (unless file (setq file (muse-current-file)))
+        (unless project (setq project (muse-project-of-file file)))
+        (car (muse-project-applicable-styles file (cddr project))))))
+
 (defun muse-project-link-page (page)
   (let ((project (muse-project-of-file)))
-    (muse-project-resolve-link page (muse-style)
+    (muse-project-resolve-link page
+                               (muse-project-current-output-style)
                                (muse-project-applicable-styles
                                 (muse-project-page-file page project)
                                 (cddr project)))))
@@ -635,7 +645,8 @@ The remote styles are usually populated by
   (setq styles (muse-project-applicable-styles file styles ignore-regexp))
   (let (published)
     (dolist (style styles)
-      (let ((output-dir (muse-style-element :path style)))
+      (let ((output-dir (muse-style-element :path style))
+            (muse-current-output-style style))
         ;; ensure the publishing location is available
         (unless (file-exists-p output-dir)
           (message "Creating publishing directory %s" output-dir)
