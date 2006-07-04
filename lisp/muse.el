@@ -164,7 +164,7 @@ understand that it is part of a regexp."
 
 (require 'muse-protocols)
 
-;;; Return an list of known wiki names and the files they represent.
+;; Helper functions
 
 (defsubst muse-delete-file-if-exists (file)
   (when (file-exists-p file)
@@ -271,6 +271,45 @@ It is meant to be used along with `insert-file-contents'."
 
 (put 'muse-with-temp-buffer 'lisp-indent-function 0)
 (put 'muse-with-temp-buffer 'edebug-form-spec '(body))
+
+(defun muse-collect-alist (list element &optional test)
+  "Collect items from LIST whose car is equal to ELEMENT.
+If TEST is specified, use it to compare ELEMENT."
+  (unless test (setq test 'equal))
+  (let ((items nil))
+    (dolist (item list)
+      (when (funcall test element (car item))
+        (setq items (cons item items))))
+    items))
+
+(defmacro muse-sort-with-closure (list predicate closure)
+  "Sort LIST, stably, comparing elements using PREDICATE.
+Returns the sorted list.  LIST is modified by side effects.
+PREDICATE is called with two elements of list and CLOSURE.
+PREDICATE should return non-nil if the first element should sort
+before the second."
+  `(sort ,list (lambda (a b) (funcall ,predicate a b ,closure))))
+
+(put 'muse-sort-with-closure 'lisp-indent-function 0)
+(put 'muse-sort-with-closure 'edebug-form-spec '(form function-form form))
+
+(defun muse-sort-by-rating (rated-list &optional test)
+  "Sort RATED-LIST according to the rating of each element.
+The rating is stripped out in the returned list.
+Default sorting is highest-first.
+
+If TEST if specified, use it to sort the list."
+  (unless test (setq test '>))
+  (mapcar #'cdr
+          (muse-sort-with-closure
+            rated-list
+            (lambda (a b closure)
+              (let ((na (numberp (car a)))
+                    (nb (numberp (car b))))
+                (cond ((and na nb) (funcall closure (car a) (car b)))
+                      (na (not nb))
+                      (t nil))))
+            test)))
 
 ;; The following code was extracted from cl
 

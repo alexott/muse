@@ -608,6 +608,11 @@ TITLE is used when indicating the publishing progress; it may be nil."
     (concat (file-name-directory file)
             (muse-publish-link-name file style))))
 
+(defsubst muse-publish-link-page (page)
+  (if (fboundp 'muse-project-link-page)
+      (muse-project-link-page page)
+    (muse-publish-link-file page)))
+
 ;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
   "Publish the given FILE in a particular STYLE to OUTPUT-DIR.
@@ -1287,11 +1292,11 @@ the cadr is the page name, and the cddr is the anchor."
            (if (eq (aref target 0) ?\#)
               (cons 'anchor-ref (cons nil (substring target 1)))
              (cons 'link-and-anchor
-                   (cons (muse-publish-link-name
+                   (cons (muse-publish-link-page
                           (substring target 0 (match-beginning 0)))
                          (substring target (match-end 0))))))
           (t
-           (cons 'link (cons (muse-publish-link-name target) nil))))))
+           (cons 'link (cons (muse-publish-link-page target) nil))))))
 
 (defun muse-publish-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."

@@ -405,6 +405,9 @@ to your Muse settings file.
       muse-mode-auto-p t)
 @end lisp
 
+If you would like to include only some files from a directory in a Muse
+project, you may use a regexp in place of @file{~/Pages} in the example.
+
 @c PRE3_03: Give more examples
 @c PRE3_03: Describe :set and other options fully
 

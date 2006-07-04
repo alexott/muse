@@ -2,6 +2,52 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-07-04 04:06:44 GMT	Michael Olson <mwolson@gnu.org>	patch-160
+
+    Summary:
+      Make links to files in subdirectories work.
+    Revision:
+      muse--main--1.0--patch-160
+
+    * lisp/muse-project.el (muse-project-alist-styles): Fix stray comment.
+      (muse-project-page-file): Change to a defun.  Handle files with the
+      same name but in different directories.  Handle case where a
+      subdirectory is given in a link.
+      (muse-project-choose-style-by-link-suffix): Move from muse-wiki.el.
+      (muse-project-applicable-styles): Sort entries according to how late in
+      the string the match for the include regexp occurs.
+      (muse-project-resolve-link): Moved from muse-wiki.el.  Strip
+      subdirectory from page because we have already determined the correct
+      path.
+      (muse-project-link-page): New function that resolves a link to a page
+      in the same project.
+    
+    * lisp/muse-publish.el (muse-publish-link-page): Simple wrapper for
+      muse-project-link-page.
+      (muse-publish-classify-url): Use muse-publish-link-page.
+    
+    * lisp/muse-regexps.el (muse-file-regexp): Don't match subdirectory
+      links.
+    
+    * lisp/muse-wiki.el (muse-wiki-choose-style-by-link-suffix)
+      (muse-wiki-resolve-project-page-1): Move to muse-project.el.
+      (muse-wiki-resolve-project-page): Use muse-project-resolve-link.
+    
+    * lisp/muse.el (muse-collect-alist): New function that is like assoc, but
+      returns a list of matches.
+      (muse-sort-with-closure): New convenience macro for using `sort' with a
+      closure argument.
+      (muse-sort-by-rating): New function that takes a rating list and sorts
+      it, discarding the rating.
+    
+    * muse.texi (Projects): Mention that you can use regexps in place of
+      directory names in project entries.  Caught that when source-diving.
+
+    modified files:
+     ChangeLog lisp/muse-project.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-wiki.el lisp/muse.el muse.texi
+
+
 2006-07-03 01:33:17 GMT	Michael Olson <mwolson@gnu.org>	patch-159
 
     Summary:
