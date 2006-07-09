@@ -150,8 +150,8 @@ If non-nil, publish comments using the markup of the current style."
     (2400 ,(concat "^\\([" muse-regexp-blank "]+\\).+") 0 quote)
 
     ;; the emdash ("--")
-    (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]+\\)--\\($\\|["
-                   muse-regexp-blank "]+\\)")
+    (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]*\\)--\\($\\|["
+                   muse-regexp-blank "]*\\)")
           0 emdash)
 
     ;; "verse" text is indicated the same way as a quoted e-mail
