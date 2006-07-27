@@ -426,6 +426,9 @@ Display an index of all known Muse pages.
 @item C-c C-b (`muse-find-backlinks')
 Find all pages that link to this page.
 
+@item C-c C-c (`muse-follow-name-at-point')
+Visit the link at point.
+
 @item C-c C-e (`muse-edit-link-at-point')
 Edit link at point.
 
@@ -443,6 +446,14 @@ Publish any Muse pages that have changed.
 
 @item C-c C-s (`muse-search')
 Find text in all files of the current project.
+
+@item C-c C-t (`muse-project-publish-this-file')
+Publish the currently-visited file.  Prompt for the style if the current
+file can be published using more than one style.
+
+@item C-c C-T (`muse-publish-this-file')
+Publish the currently-visited file.  Prompt for both the style and
+output directory.
 
 @item C-c C-v (`muse-browse-result')
 Show the published result of this page.

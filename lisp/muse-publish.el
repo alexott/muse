@@ -651,11 +651,13 @@ the file is published no matter what."
 
 ;;;###autoload
 (defun muse-publish-this-file (style output-dir &optional force)
-  "Publish the page in the current file."
+  "Publish the currently-visited file.
+Prompt for both the STYLE and OUTPUT-DIR if they are not
+supplied."
   (interactive (muse-publish-get-info))
   (unless (muse-publish-file buffer-file-name style output-dir force)
     (message (concat "The published version is up-to-date; use"
-                     " C-u C-c C-t to force an update."))))
+                     " C-u C-c C-T to force an update."))))
 
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."

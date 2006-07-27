@@ -143,7 +143,9 @@ index at intervals."
     (define-key map [(control ?c) (control ?c)] 'muse-follow-name-at-point)
     (define-key map [(control ?c) (control ?e)] 'muse-edit-link-at-point)
     (define-key map [(control ?c) (control ?l)] 'font-lock-mode)
-    (define-key map [(control ?c) (control ?t)] 'muse-publish-this-file)
+    (define-key map [(control ?c) (control ?t)]
+      'muse-project-publish-this-file)
+    (define-key map [(control ?c) (control ?T)] 'muse-publish-this-file)
     (define-key map [(control ?c) (control ?v)] 'muse-browse-result)
 
     (define-key map [(control ?c) ?=]           'muse-what-changed)
@@ -562,13 +564,10 @@ in `muse-project-alist'."
 ;;;###autoload
 (defun muse-browse-result (style &optional other-window)
   "Visit the current page's published result."
-  (interactive (list (muse-publish-get-style
-                      (mapcar
-                       (lambda (style)
-                         (cons (muse-get-keyword :base style) style))
-                       (muse-project-applicable-styles
-                        buffer-file-name (cddr muse-current-project))))
-                     current-prefix-arg))
+  (interactive
+   (list (muse-project-get-applicable-style buffer-file-name
+                                            (cddr muse-current-project))
+         current-prefix-arg))
   (setq style (muse-style style))
   (let ((result-path
          (muse-publish-output-file buffer-file-name
@@ -585,7 +584,7 @@ in `muse-project-alist'."
 
 ;;;###autoload
 (defun muse-follow-name-at-point (&optional other-window)
-  "Visit the link at point, or insert a newline if none is found."
+  "Visit the link at point."
   (interactive "P")
   (let ((link (muse-link-at-point)))
     (if link

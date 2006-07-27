@@ -2,6 +2,36 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-07-27 20:46:38 GMT	Michael Olson <mwolson@gnu.org>	patch-166
+
+    Summary:
+      Make C-c C-t publish the current file in a more sensible way.
+    Revision:
+      muse--main--1.0--patch-166
+
+    * lisp/muse-mode.el (muse-mode-map): Make C-c C-t call
+      muse-project-publish-this-file instead of muse-publish-this file.  Make
+      C-c C-T call the latter.
+      (muse-browse-result): Use `muse-project-get-applicable-styles'.
+      (muse-follow-name-at-point): Docfix.
+    
+    * lisp/muse-project.el (muse-project-get-applicable-style): New function
+      that prompts the user for a style if more than one style applies to the
+      given file.
+      (muse-project-publish-this-file): New function that publishes the
+      currently-visited file according to `muse-project-alist', prompting if
+      more than one style applies.
+    
+    * lisp/muse-publish.el (muse-publish-this-file): Docfix.
+    
+    * muse.texi (Keystroke Summary): Update for the changes made.  C-c C-c
+      was not previously documented.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse-project.el
+     lisp/muse-publish.el muse.texi
+
+
 2006-07-27 19:36:31 GMT	Michael Olson <mwolson@gnu.org>	patch-165
 
     Summary:
