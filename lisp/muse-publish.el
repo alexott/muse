@@ -1255,9 +1255,8 @@ function for the list of available contexts."
       (apply (function concat)
              (mapcar
               (lambda (ch)
-                (let (repl)
-                  (setq repl (or (assoc ch specials)
-                                 (assoc ch muse-publish-markup-specials)))
+                (let ((repl (or (assoc ch specials)
+                                (assoc ch muse-publish-markup-specials))))
                   (if (null repl)
                       (char-to-string ch)
                     (cdr repl))))
@@ -1308,6 +1307,7 @@ the cadr is the page name, and the cddr is the anchor."
       (setq desc (save-match-data
                    (when desc (funcall transform desc explicit)))))
     (when desc
+      (setq desc (muse-link-unescape desc))
       (setq desc (muse-publish-escape-specials-in-string desc 'url-desc)))
     (setq orig-url
           (muse-publish-escape-specials-in-string orig-url 'url-desc))

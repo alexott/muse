@@ -2,6 +2,44 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-07-27 18:50:50 GMT	Michael Olson <mwolson@gnu.org>	patch-164
+
+    Summary:
+      Make escaping of brackets in links work properly.
+    Revision:
+      muse--main--1.0--patch-164
+
+    * lisp/muse-colors.el (muse-colors-explicit-link): If the link has
+      escaped characters, display them unescaped.
+    
+    * lisp/muse-mode.el (muse-make-link): Handle case where we are given no
+      link.
+      (muse-edit-link-at-point): Unescape the link before presenting it to
+      the user for editing.
+    
+    * lisp/muse-publish.el (muse-publish-escape-specials-in-string): Minor
+      coding style fix.
+      (muse-publish-url): Unescape the link description before doing further
+      transforms on it.  The link has already been unescaped.
+    
+    * lisp/muse.el (muse-sort-by-rating): Minor coding style fix.
+      (muse-escape-specials-in-string): New function that escapes specials in
+      a string.  This differs from Muse's other specials-escaping routines in
+      that it replaces strings rather than characters, and is reversible if
+      the specials are defined properly.
+      (muse-replace-regexp-in-string): Docfix.
+      (muse-link-specials): New variable containing the specials that Muse
+      uses to handle syntactic issues with link text.  Namely: brackets.  The
+      percent sign must also be escaped since it is used in the escaped text.
+      (muse-link-escape, muse-link-unescape): Call
+      muse-escape-specials-in-string.  Embarrassingly, these functions
+      previously had no effect before.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-mode.el
+     lisp/muse-publish.el lisp/muse.el
+
+
 2006-07-09 18:28:25 GMT	Michael Olson <mwolson@gnu.org>	patch-163
 
     Summary:

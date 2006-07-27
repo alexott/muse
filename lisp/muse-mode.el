@@ -472,7 +472,7 @@ Valid values of OPERATION are 'increase and 'decrease."
            (not (string= desc ""))
            (not (string= link desc)))
       (concat "[[" (muse-link-escape link) "][" (muse-link-escape desc) "]]")
-    (concat "[[" (muse-link-escape link) "]]")))
+    (concat "[[" (or (muse-link-escape link) "") "]]")))
 
 ;;;###autoload
 (defun muse-insert-relative-link-to-file ()
@@ -493,8 +493,8 @@ at the current point."
 Do not rename the page originally referred to."
   (interactive)
   (if (muse-link-at-point)
-      (let ((link (muse-get-link))
-            (desc (muse-get-link-desc)))
+      (let ((link (muse-link-unescape (muse-get-link)))
+            (desc (muse-link-unescape (muse-get-link-desc))))
         (replace-match
          (save-match-data
            (muse-make-link
