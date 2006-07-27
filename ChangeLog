@@ -2,6 +2,25 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-07-27 19:36:31 GMT	Michael Olson <mwolson@gnu.org>	patch-165
+
+    Summary:
+      Implement interactive insertion of URLs.
+    Revision:
+      muse--main--1.0--patch-165
+
+    * lisp/muse-mode.el (muse-insert-map): Add binding for muse-insert-url.
+      (muse-insert-thing): Add text for URL to prompt.
+      (muse-insert-relative-link-to-file): Docfix, style fix.
+      (muse-insert-url): New function that reads a URL and description from
+      the user.
+    
+    * muse.texi (Keystroke Summary): Mention insert-url keybinding.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el muse.texi
+
+
 2006-07-27 18:50:50 GMT	Michael Olson <mwolson@gnu.org>	patch-164
 
     Summary:

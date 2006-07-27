@@ -133,6 +133,7 @@ index at intervals."
   (let ((map (make-sparse-keymap)))
     (define-key map "l" 'muse-insert-relative-link-to-file)
     (define-key map "t" 'muse-insert-tag)
+    (define-key map "u" 'muse-insert-url)
 
     map))
 
@@ -306,7 +307,7 @@ the line if point is on a blank line."
 (defun muse-insert-thing ()
   "Prompt for something to insert into the current buffer."
   (interactive)
-  (message "Insert:\nl  link\nt  tag")
+  (message "Insert:\nl  link\nt  tag\nu  URL")
   (let (key cmd)
     (let ((overriding-local-map muse-insert-map))
       (setq key (read-key-sequence nil)))
@@ -476,16 +477,21 @@ Valid values of OPERATION are 'increase and 'decrease."
 
 ;;;###autoload
 (defun muse-insert-relative-link-to-file ()
-  "Insert a relative link to a file, with optional description,
-at the current point."
+  "Insert a relative link to a file, with optional description, at point."
   ;; Perhaps the relative location should be configurable, so that the
-  ;; file search would start in the publshing directory and then
+  ;; file search would start in the publishing directory and then
   ;; insert the link relative to the publishing directory
   (interactive)
   (insert
-   (muse-make-link
-    (file-relative-name (read-file-name "Link: "))
-    (read-string "Text: "))))
+   (muse-make-link (file-relative-name (read-file-name "Link: "))
+                   (read-string "Text: "))))
+
+(defun muse-insert-url ()
+  "Insert a URL, with optional description, at point."
+  (interactive)
+  (insert
+   (muse-make-link (read-string "URL: ")
+                   (read-string "Text: "))))
 
 ;;;###autoload
 (defun muse-edit-link-at-point ()

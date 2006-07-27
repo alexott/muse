@@ -456,6 +456,9 @@ Insert a link to a file interactively.
 @item C-c TAB t (`muse-insert-tag')
 Insert a tag interactively.
 
+@item C-c TAB u (`muse-insert-url')
+Insert a URL interactively.
+
 @item TAB
 Move to the next Wiki reference.
 
