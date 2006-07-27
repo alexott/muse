@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-07-27 22:28:13 GMT	Michael Olson <mwolson@gnu.org>	patch-167
+
+    Summary:
+      Fix #5899: muse-follow-name-at-mouse breaks mouse-yank-at-point.
+    Revision:
+      muse--main--1.0--patch-167
+
+    * lisp/muse-mode.el (muse-follow-name-at-mouse): Restore the point before
+      calling the fallback keybinding.  This fixes #5899.
+    
+    * lisp/muse-publish.el (muse-publish-escape-specials): Docfix.
+      (muse-publish-mark-link): Docfix.
+      (muse-link-specials): Docfix.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse-publish.el lisp/muse.el
+
+
 2006-07-27 20:46:38 GMT	Michael Olson <mwolson@gnu.org>	patch-166
 
     Summary:

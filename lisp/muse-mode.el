@@ -600,20 +600,23 @@ in `muse-project-alist'."
 (defun muse-follow-name-at-mouse (event &optional other-window)
   "Visit the link at point, or yank text if none is found."
   (interactive "eN")
-  (save-excursion
-    (cond ((fboundp 'event-window)      ; XEmacs
-           (set-buffer (window-buffer (event-window event)))
-           (and (funcall (symbol-function 'event-point) event)
-                (goto-char (funcall (symbol-function 'event-point) event))))
-          ((fboundp 'posn-window)       ; Emacs
-           (set-buffer (window-buffer (posn-window (event-start event))))
-           (goto-char (posn-point (event-start event)))))
-    (let ((link (muse-link-at-point)))
-      (if link
-          (muse-visit-link link other-window)
-        ;; Fall back to normal binding for this event
-        (call-interactively
-         (lookup-key (current-global-map) (this-command-keys)))))))
+  (unless
+      (save-excursion
+        (cond ((fboundp 'event-window)      ; XEmacs
+               (set-buffer (window-buffer (event-window event)))
+               (and (funcall (symbol-function 'event-point) event)
+                    (goto-char (funcall (symbol-function 'event-point)
+                                        event))))
+              ((fboundp 'posn-window)       ; Emacs
+               (set-buffer (window-buffer (posn-window (event-start event))))
+               (goto-char (posn-point (event-start event)))))
+        (let ((link (muse-link-at-point)))
+          (when link
+            (muse-visit-link link other-window)
+            t)))
+    ;; Fall back to normal binding for this event
+    (call-interactively
+     (lookup-key (current-global-map) (this-command-keys)))))
 
 (defun muse-follow-name-at-mouse-other-window (event)
   "Visit the link at point"

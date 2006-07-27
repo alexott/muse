@@ -791,7 +791,7 @@ The following contexts exist in Muse.
 'emphasis   *emphasized text*
 'email      email@example.com
 'url        http://example.com
-'url-desc   [[...][description of an extended link]]
+'url-desc   [[...][description of an explicit link]]
 'example    <example> region (monospaced, block context, escaped)
 'verbatim   <verbatim> region (escaped)
 'document   normal text"
@@ -1411,7 +1411,7 @@ the cadr is the page name, and the cddr is the anchor."
 markup elements respect it.  If a region is not specified, use
 the 0th match data to determine it.
 
-This is usually applied to extended links."
+This is usually applied to explicit links."
   (unless beg (setq beg (match-beginning 0)))
   (unless end (setq end (match-end 0)))
   (add-text-properties beg end '(muse-link t))
