@@ -405,6 +405,9 @@ to your Muse settings file.
       muse-mode-auto-p t)
 @end lisp
 
+If you would like to include only some files from a directory in a Muse
+project, you may use a regexp in place of @file{~/Pages} in the example.
+
 @c PRE3_03: Give more examples
 @c PRE3_03: Describe :set and other options fully
 
@@ -1777,8 +1780,37 @@ The default Emacs buffer encoding to use in published files.
 
 This will be used if no special characters are found.
 
-@item muse-latex-markup-specials
+@item muse-latex-markup-specials-example
 A table of characters which must be represented specially.
+These are applied to @verb{|example>|} regions.
+
+With the default interpretation of @verb{|<example>|} regions, no
+specials need to be escaped.
+
+@item muse-latex-markup-specials-document
+A table of characters which must be represented specially.
+These are applied to the entire document, sans already-escaped
+regions.
+
+@item muse-latex-markup-specials-literal
+A table of characters which must be represented specially.
+This applies to =monospaced text= and @verb{|<code>|} regions.
+
+@item muse-latex-markup-specials-url
+A table of characters which must be represented specially.
+These are applied to URLs.
+
+@item muse-latex-permit-contents-tag
+If nil, ignore @verb{|<contents>|} tags.  Otherwise, insert table of
+contents.
+
+Most of the time, it is best to have a table of contents on the
+first page, with a new page immediately following.  To make this
+work with documents published in both HTML and LaTeX, we need to
+ignore the @verb{|<contents>|} tag.
+
+If you don't agree with this, then set this option to non-nil,
+and it will do what you expect.
 
 @end table
 

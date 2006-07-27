@@ -28,6 +28,9 @@
 ;; Trent Buck (trentbuck AT gmail DOT com) gave valuable advice for
 ;; how to treat LaTeX specials and the like.
 
+;; Matthias Kegelmann (mathias DOT kegelmann AT sdm DOT de) provided a
+;; scenario where we would need to respect the <contents> tag.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -72,6 +75,7 @@
 \\maketitle
 
 <lisp>(and muse-publish-generate-contents
+           (not muse-latex-permit-contents-tag)
            \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
   "Header used for publishing LaTeX files.  This may be text or a filename."
   :type 'string
@@ -90,6 +94,8 @@
 \\usepackage[CJKbookmarks=true]{hyperref}
 \\usepackage[pdftex]{graphicx}
 
+\\newcommand{\\comment}[1]{}
+
 \\begin{document}
 \\begin{CJK*}<lisp>(muse-latexcjk-encoding)</lisp>
 
@@ -100,6 +106,7 @@
 \\maketitle
 
 <lisp>(and muse-publish-generate-contents
+           (not muse-latex-permit-contents-tag)
            \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
   "Header used for publishing LaTeX files (CJK).  This may be text or a
 filename."
@@ -353,9 +360,26 @@ These are applied to URLs."
           (replace-match "''")
           (setq open t))))))
 
+(defcustom muse-latex-permit-contents-tag nil
+  "If nil, ignore <contents> tags.  Otherwise, insert table of contents.
+
+Most of the time, it is best to have a table of contents on the
+first page, with a new page immediately following.  To make this
+work with documents published in both HTML and LaTeX, we need to
+ignore the <contents> tag.
+
+If you don't agree with this, then set this option to non-nil,
+and it will do what you expect."
+  :type 'boolean
+  :group 'muse-latex)
+
 (defun muse-latex-finalize-buffer ()
   (goto-char (point-min))
-  (muse-latex-fixup-dquotes))
+  (muse-latex-fixup-dquotes)
+  (when (and muse-latex-permit-contents-tag
+             muse-publish-generate-contents)
+    (goto-char (car muse-publish-generate-contents))
+    (muse-insert-markup "\\tableofcontents")))
 
 (defun muse-latex-pdf-browse-file (file)
   (shell-command (concat "open " file)))

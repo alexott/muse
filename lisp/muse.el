@@ -164,7 +164,7 @@ understand that it is part of a regexp."
 
 (require 'muse-protocols)
 
-;;; Return an list of known wiki names and the files they represent.
+;; Helper functions
 
 (defsubst muse-delete-file-if-exists (file)
   (when (file-exists-p file)
@@ -272,6 +272,71 @@ It is meant to be used along with `insert-file-contents'."
 (put 'muse-with-temp-buffer 'lisp-indent-function 0)
 (put 'muse-with-temp-buffer 'edebug-form-spec '(body))
 
+(defun muse-collect-alist (list element &optional test)
+  "Collect items from LIST whose car is equal to ELEMENT.
+If TEST is specified, use it to compare ELEMENT."
+  (unless test (setq test 'equal))
+  (let ((items nil))
+    (dolist (item list)
+      (when (funcall test element (car item))
+        (setq items (cons item items))))
+    items))
+
+(defmacro muse-sort-with-closure (list predicate closure)
+  "Sort LIST, stably, comparing elements using PREDICATE.
+Returns the sorted list.  LIST is modified by side effects.
+PREDICATE is called with two elements of list and CLOSURE.
+PREDICATE should return non-nil if the first element should sort
+before the second."
+  `(sort ,list (lambda (a b) (funcall ,predicate a b ,closure))))
+
+(put 'muse-sort-with-closure 'lisp-indent-function 0)
+(put 'muse-sort-with-closure 'edebug-form-spec '(form function-form form))
+
+(defun muse-sort-by-rating (rated-list &optional test)
+  "Sort RATED-LIST according to the rating of each element.
+The rating is stripped out in the returned list.
+Default sorting is highest-first.
+
+If TEST if specified, use it to sort the list."
+  (unless test (setq test '>))
+  (mapcar (function cdr)
+          (muse-sort-with-closure
+            rated-list
+            (lambda (a b closure)
+              (let ((na (numberp (car a)))
+                    (nb (numberp (car b))))
+                (cond ((and na nb) (funcall closure (car a) (car b)))
+                      (na (not nb))
+                      (t nil))))
+            test)))
+
+(defun muse-escape-specials-in-string (specials string &optional reverse)
+  "Apply the transformations in SPECIALS to STRING.
+
+The transforms should form a fully reversible and non-ambiguous
+syntax when STRING is parsed from left to right.
+
+If REVERSE is specified, reverse an already-escaped string."
+  (let ((rules (mapcar (lambda (rule)
+                         (cons (regexp-quote (if reverse
+                                                 (cdr rule)
+                                               (car rule)))
+                               (if reverse (car rule) (cdr rule))))
+                       specials)))
+    (with-temp-buffer
+      (insert string)
+      (goto-char (point-min))
+      (save-match-data
+        (while (not (eobp))
+          (unless (catch 'found
+                    (dolist (rule rules)
+                      (when (looking-at (car rule))
+                        (replace-match (cdr rule) t t)
+                        (throw 'found t))))
+            (forward-char))))
+      (buffer-string))))
+
 ;; The following code was extracted from cl
 
 (defun muse-const-expr-p (x)
@@ -345,6 +410,9 @@ omitted, a default message listing FORM itself is used."
 
 (defun muse-replace-regexp-in-string (regexp replacement text &optional fixedcase literal)
   "Replace REGEXP with REPLACEMENT in TEXT.
+
+Return a new string containing the replacements.
+
 If fourth arg FIXEDCASE is non-nil, do not alter case of replacement text.
 If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
   (cond
@@ -439,25 +507,25 @@ Use TARGET to get the string, if it is specified."
 Use TARGET to get the string, if it is specified."
   (muse-match-string-no-properties 2 target))
 
+(defvar muse-link-specials
+  '(("[" . "%5B")
+    ("]" . "%5D")
+    ("%" . "%%"))
+  "Syntax used for escaping and unescaping links.
+This allows brackets to occur in extended links as long as you
+use the standard Muse functions to create them.")
+
 (defun muse-link-escape (text)
   "Escape characters in TEXT that conflict with the explicit link
 regexp."
-  (if text
-      (progn
-        (muse-replace-regexp-in-string "\\[" "%5B" text t t)
-        (muse-replace-regexp-in-string "\\]" "%5D" text t t)
-        text)
-    ""))
+  (when (stringp text)
+    (muse-escape-specials-in-string muse-link-specials text)))
 
 (defun muse-link-unescape (text)
   "Un-escape characters in TEXT that conflict with the explicit
 link regexp."
-  (if text
-      (progn
-        (muse-replace-regexp-in-string "%5B" "[" text t t)
-        (muse-replace-regexp-in-string "%5D" "]" text t t)
-        text)
-    ""))
+  (when (stringp text)
+    (muse-escape-specials-in-string muse-link-specials text t)))
 
 (defun muse-handle-url (&optional string)
   "If STRING or point has a URL, match and return it."

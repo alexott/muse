@@ -162,7 +162,7 @@ The first match string must contain the term."
 
 (defcustom muse-table-field-regexp
   (concat "[" muse-regexp-blank "]+\\(|+\\)\\(?:["
-          muse-regexp-blank "]+\\|$\\)")
+          muse-regexp-blank "]\\|$\\)")
   "Regexp used to match table separators when publishing."
   :type 'regexp
   :group 'muse-regexp)
@@ -209,7 +209,9 @@ them, you will have to modify this."
 ;;; Regexps used to determine file types
 
 (defcustom muse-file-regexp
-  "[/?]\\|\\.\\(html?\\|pdf\\|mp3\\|el\\|zip\\|txt\\|tar\\)\\(\\.\\(gz\\|bz2\\)\\)?\\'"
+  (concat "\\`[~/]\\|\\?\\|\\."
+          "\\(html?\\|pdf\\|mp3\\|el\\|zip\\|txt\\|tar\\)"
+          "\\(\\.\\(gz\\|bz2\\)\\)?\\'")
   "A link matching this regexp will be regarded as a link to a file."
   :type 'regexp
   :group 'muse-regexp)

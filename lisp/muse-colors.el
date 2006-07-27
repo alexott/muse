@@ -763,10 +763,11 @@ in place of an image link defined by BEG and END."
     (save-excursion
       (goto-char (match-beginning 0))
       (looking-at muse-explicit-link-regexp))
-    (let* ((link (muse-get-link))
-           (desc (muse-get-link-desc))
-           (props (muse-link-properties
-                   desc (muse-link-face link t)))
+    (let* ((unesc-link (muse-get-link))
+           (unesc-desc (muse-get-link-desc))
+           (link (muse-link-unescape unesc-link))
+           (desc (muse-link-unescape unesc-desc))
+           (props (muse-link-properties desc (muse-link-face link t)))
            (invis-props (append props (muse-link-properties desc))))
       ;; see if we should try and inline an image
       (if (and muse-colors-inline-images
@@ -783,11 +784,19 @@ in place of an image link defined by BEG and END."
               (add-text-properties (match-beginning 0)
                                    (match-beginning 2) invis-props)
               (add-text-properties (match-beginning 2) (match-end 2) props)
-              (add-text-properties (match-end 2) (match-end 0) invis-props))
+              (add-text-properties (match-end 2) (match-end 0) invis-props)
+              ;; in case specials were escaped, cause the unescaped
+              ;; text to be displayed
+              (unless (string= desc unesc-desc)
+                (add-text-properties (match-beginning 2) (match-end 2)
+                                     (list 'display desc))))
           (add-text-properties (match-beginning 0)
                                (match-beginning 1) invis-props)
           (add-text-properties (match-beginning 1) (match-end 0) props)
-          (add-text-properties (match-end 1) (match-end 0) invis-props))
+          (add-text-properties (match-end 1) (match-end 0) invis-props)
+          (unless (string= link unesc-link)
+            (add-text-properties (match-beginning 1) (match-end 1)
+                                 (list 'display link))))
         (goto-char (match-end 0))
         (add-text-properties
          (match-beginning 0) (match-end 0)

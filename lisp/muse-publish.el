@@ -150,8 +150,8 @@ If non-nil, publish comments using the markup of the current style."
     (2400 ,(concat "^\\([" muse-regexp-blank "]+\\).+") 0 quote)
 
     ;; the emdash ("--")
-    (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]+\\)--\\($\\|["
-                   muse-regexp-blank "]+\\)")
+    (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]*\\)--\\($\\|["
+                   muse-regexp-blank "]*\\)")
           0 emdash)
 
     ;; "verse" text is indicated the same way as a quoted e-mail
@@ -534,8 +534,10 @@ TITLE is used when indicating the publishing progress; it may be nil."
                (cons "author" (user-full-name))
                (cons "date" (format-time-string
                              "%B %e, %Y"
-                             (nth 5 (file-attributes
-                                     muse-publishing-current-file))))))
+                             (if muse-publishing-current-file
+                                 (nth 5 (file-attributes
+                                         muse-publishing-current-file))
+                               (current-time))))))
         (muse-publishing-p t)
         (inhibit-read-only t))
     (run-hooks 'muse-update-values-hook)
@@ -605,6 +607,11 @@ TITLE is used when indicating the publishing progress; it may be nil."
       (expand-file-name (muse-publish-link-name file style) output-dir)
     (concat (file-name-directory file)
             (muse-publish-link-name file style))))
+
+(defsubst muse-publish-link-page (page)
+  (if (fboundp 'muse-project-link-page)
+      (muse-project-link-page page)
+    (muse-publish-link-file page)))
 
 ;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
@@ -1248,9 +1255,8 @@ function for the list of available contexts."
       (apply (function concat)
              (mapcar
               (lambda (ch)
-                (let (repl)
-                  (setq repl (or (assoc ch specials)
-                                 (assoc ch muse-publish-markup-specials)))
+                (let ((repl (or (assoc ch specials)
+                                (assoc ch muse-publish-markup-specials))))
                   (if (null repl)
                       (char-to-string ch)
                     (cdr repl))))
@@ -1285,11 +1291,11 @@ the cadr is the page name, and the cddr is the anchor."
            (if (eq (aref target 0) ?\#)
               (cons 'anchor-ref (cons nil (substring target 1)))
              (cons 'link-and-anchor
-                   (cons (muse-publish-link-name
+                   (cons (muse-publish-link-page
                           (substring target 0 (match-beginning 0)))
                          (substring target (match-end 0))))))
           (t
-           (cons 'link (cons (muse-publish-link-name target) nil))))))
+           (cons 'link (cons (muse-publish-link-page target) nil))))))
 
 (defun muse-publish-url (url &optional desc explicit)
   "Resolve a URL into its final <a href> form."
@@ -1301,6 +1307,7 @@ the cadr is the page name, and the cddr is the anchor."
       (setq desc (save-match-data
                    (when desc (funcall transform desc explicit)))))
     (when desc
+      (setq desc (muse-link-unescape desc))
       (setq desc (muse-publish-escape-specials-in-string desc 'url-desc)))
     (setq orig-url
           (muse-publish-escape-specials-in-string orig-url 'url-desc))

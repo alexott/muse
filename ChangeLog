@@ -2,6 +2,182 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-07-27 18:50:50 GMT	Michael Olson <mwolson@gnu.org>	patch-164
+
+    Summary:
+      Make escaping of brackets in links work properly.
+    Revision:
+      muse--main--1.0--patch-164
+
+    * lisp/muse-colors.el (muse-colors-explicit-link): If the link has
+      escaped characters, display them unescaped.
+    
+    * lisp/muse-mode.el (muse-make-link): Handle case where we are given no
+      link.
+      (muse-edit-link-at-point): Unescape the link before presenting it to
+      the user for editing.
+    
+    * lisp/muse-publish.el (muse-publish-escape-specials-in-string): Minor
+      coding style fix.
+      (muse-publish-url): Unescape the link description before doing further
+      transforms on it.  The link has already been unescaped.
+    
+    * lisp/muse.el (muse-sort-by-rating): Minor coding style fix.
+      (muse-escape-specials-in-string): New function that escapes specials in
+      a string.  This differs from Muse's other specials-escaping routines in
+      that it replaces strings rather than characters, and is reversible if
+      the specials are defined properly.
+      (muse-replace-regexp-in-string): Docfix.
+      (muse-link-specials): New variable containing the specials that Muse
+      uses to handle syntactic issues with link text.  Namely: brackets.  The
+      percent sign must also be escaped since it is used in the escaped text.
+      (muse-link-escape, muse-link-unescape): Call
+      muse-escape-specials-in-string.  Embarrassingly, these functions
+      previously had no effect before.
+
+    modified files:
+     ChangeLog lisp/muse-colors.el lisp/muse-mode.el
+     lisp/muse-publish.el lisp/muse.el
+
+
+2006-07-09 18:28:25 GMT	Michael Olson <mwolson@gnu.org>	patch-163
+
+    Summary:
+      Make space around emdash optional.
+    Revision:
+      muse--main--1.0--patch-163
+
+    * lisp/muse-publish.el (muse-publish-markup-regexps): Make space around
+      emdash optional.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
+2006-07-08 20:38:12 GMT	Michael Olson <mwolson@gnu.org>	patch-162
+
+    Summary:
+      muse-latex: Make publishing of <contents> tags optional.
+    Revision:
+      muse--main--1.0--patch-162
+
+    * lisp/muse-html.el (muse-html-insert-contents): Use nreverse rather than
+      reverse for a minor speed boost.
+    
+    * lisp/muse-latex.el (muse-latex-header, muse-latexcjk-header): Only
+      insert a table of contents when muse-latex-permit-contents-tag is nil.
+      (muse-latexcjk-header): Make comments do the right thing.
+      (muse-latex-permit-contents-tag): New option that specifies whether we
+      should take action on the <contents> tag.
+      (muse-latex-finalize-buffer): If muse-latex-permit-contents-tag is
+      non-nil, publish a table of contents in the place where the <contents>
+      tag is.
+    
+    * muse.texi (LaTeX): Bring up-to-date with new options.
+
+    modified files:
+     ChangeLog lisp/muse-html.el lisp/muse-latex.el muse.texi
+
+
+2006-07-04 05:00:35 GMT	Michael Olson <mwolson@gnu.org>	patch-161
+
+    Summary:
+      Fix publishing bug introduced in last patch.
+    Revision:
+      muse--main--1.0--patch-161
+
+    * lisp/muse-project.el (muse-current-output-style): New variable that
+      holds the output style that is currently being used to publish a file.
+      (muse-project-page-file): When a subdirectory is used, only record
+      matches.  Sort using matches, not entire list.
+      (muse-project-resolve-link): Docfix.
+      (muse-project-current-output-style): New function that returns the
+      current output style.
+      (muse-project-link-page): Use the local output style, not the other
+      kind of style.
+      (muse-project-publish-file): Set muse-current-output-style.
+    
+    * lisp/muse-wiki.el (muse-wiki-resolve-project-page): Use
+      muse-current-output-style.
+
+    modified files:
+     ChangeLog lisp/muse-project.el lisp/muse-wiki.el
+
+
+2006-07-04 04:06:44 GMT	Michael Olson <mwolson@gnu.org>	patch-160
+
+    Summary:
+      Make links to files in subdirectories work.
+    Revision:
+      muse--main--1.0--patch-160
+
+    * lisp/muse-project.el (muse-project-alist-styles): Fix stray comment.
+      (muse-project-page-file): Change to a defun.  Handle files with the
+      same name but in different directories.  Handle case where a
+      subdirectory is given in a link.
+      (muse-project-choose-style-by-link-suffix): Move from muse-wiki.el.
+      (muse-project-applicable-styles): Sort entries according to how late in
+      the string the match for the include regexp occurs.
+      (muse-project-resolve-link): Moved from muse-wiki.el.  Strip
+      subdirectory from page because we have already determined the correct
+      path.
+      (muse-project-link-page): New function that resolves a link to a page
+      in the same project.
+    
+    * lisp/muse-publish.el (muse-publish-link-page): Simple wrapper for
+      muse-project-link-page.
+      (muse-publish-classify-url): Use muse-publish-link-page.
+    
+    * lisp/muse-regexps.el (muse-file-regexp): Don't match subdirectory
+      links.
+    
+    * lisp/muse-wiki.el (muse-wiki-choose-style-by-link-suffix)
+      (muse-wiki-resolve-project-page-1): Move to muse-project.el.
+      (muse-wiki-resolve-project-page): Use muse-project-resolve-link.
+    
+    * lisp/muse.el (muse-collect-alist): New function that is like assoc, but
+      returns a list of matches.
+      (muse-sort-with-closure): New convenience macro for using `sort' with a
+      closure argument.
+      (muse-sort-by-rating): New function that takes a rating list and sorts
+      it, discarding the rating.
+    
+    * muse.texi (Projects): Mention that you can use regexps in place of
+      directory names in project entries.  Caught that when source-diving.
+
+    modified files:
+     ChangeLog lisp/muse-project.el lisp/muse-publish.el
+     lisp/muse-regexps.el lisp/muse-wiki.el lisp/muse.el muse.texi
+
+
+2006-07-03 01:33:17 GMT	Michael Olson <mwolson@gnu.org>	patch-159
+
+    Summary:
+      Fix publishing of blank table fields.
+    Revision:
+      muse--main--1.0--patch-159
+
+    * lisp/muse-regexps.el (muse-table-field-regexp): Make publishing blank
+      fields work properly.
+
+    modified files:
+     ChangeLog lisp/muse-regexps.el
+
+
+2006-07-03 00:39:47 GMT	Michael Olson <mwolson@gnu.org>	patch-158
+
+    Summary:
+      Make muse-publish-markup-buffer usable even with no current file.
+    Revision:
+      muse--main--1.0--patch-158
+
+    * lisp/muse-publish.el (muse-publish-markup-buffer): Make this work even
+      if no file is associated with the buffer.  Thanks to dds for the fix.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el
+
+
 2006-06-26 18:13:59 GMT	Michael Olson <mwolson@gnu.org>	patch-157
 
     Summary:

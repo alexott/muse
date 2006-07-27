@@ -272,7 +272,7 @@ For an example of the use of this function, see
   (cons `(:base ,style :path ,(expand-file-name output-dir)
                 :include ,(concat "/" (file-name-nondirectory entry-dir)
                                   "/[^/]+$"))
-        (mapcar (lambda (dir);
+        (mapcar (lambda (dir)
                   `(:base ,style
                           :path ,(expand-file-name dir output-dir)
                           :include ,(concat "/" dir "/[^/]+$")))
@@ -301,6 +301,9 @@ For an example of the use of this function, see
   "Project we are currently visiting.")
 (make-variable-buffer-local 'muse-current-project)
 
+(defvar muse-current-output-style nil
+  "The output style that we are currently using for publishing files.")
+
 (defsubst muse-project (&optional project)
   "Resolve the given PROJECT into a full Muse project, if it is a string."
   (if (null project)
@@ -311,10 +314,28 @@ For an example of the use of this function, see
       (muse-assert (consp project))
       project)))
 
-(defsubst muse-project-page-file (page project &optional no-check-p)
+(defun muse-project-page-file (page project &optional no-check-p)
   "Return a filename if PAGE exists within the given Muse PROJECT."
   (setq project (muse-project project))
-  (cdr (assoc page (muse-project-file-alist project no-check-p))))
+  (let ((dir (file-name-directory page)))
+    (when dir (setq page (file-name-nondirectory page)))
+    (let ((files (muse-collect-alist
+                  (muse-project-file-alist project no-check-p)
+                  page))
+          (matches nil))
+      (if dir
+          (save-match-data
+            (dolist (file files)
+              (let ((pos (string-match (concat (regexp-quote dir) "\\'")
+                                       (file-name-directory (cdr file)))))
+                (when pos
+                  (setq matches (cons (cons pos (cdr file))
+                                      matches)))))
+            (car (muse-sort-by-rating matches)))
+        (dolist (file files)
+          (setq matches (cons (cons (length (cdr file)) (cdr file))
+                              matches)))
+        (car (muse-sort-by-rating matches '<))))))
 
 (defun muse-project-private-p (file)
   "Return non-nil if NAME is a private page with PROJECT."
@@ -546,32 +567,86 @@ If no style passes TEST, return the first style."
             (throw 'winner style))))
       (car styles)))
 
+(defun muse-project-choose-style-by-link-suffix (given-suffix style)
+  "If the given STYLE has a link-suffix that equals GIVEN-SUFFIX,
+return non-nil."
+  (let ((link-suffix (muse-style-element :link-suffix style)))
+    (and (stringp link-suffix)
+         (string= given-suffix link-suffix))))
+
 (defun muse-project-applicable-styles (file styles &optional ignore-regexp)
   "Given STYLES, return a list of the ones that are considered for FILE.
 The name of a project may be used for STYLES."
   (when (stringp styles)
     (setq styles (cddr (muse-project styles))))
   (when (and file styles)
-    (let (used-styles)
+    (let ((used-styles nil))
       (dolist (style styles)
         (let ((include-regexp (muse-style-element :include style))
-              (exclude-regexp (muse-style-element :exclude style)))
+              (exclude-regexp (muse-style-element :exclude style))
+              (rating nil))
           (when (and (or ignore-regexp
                          (and (null include-regexp)
                               (null exclude-regexp))
                          (if include-regexp
-                             (string-match include-regexp file)
+                             (setq rating (string-match include-regexp file))
                            (not (string-match exclude-regexp file))))
                      (or (not (file-exists-p file))
                          (not (muse-project-private-p file))))
-            (setq used-styles (cons style used-styles)))))
-      (nreverse used-styles))))
+            (setq used-styles (cons (cons rating style) used-styles)))))
+      (muse-sort-by-rating (nreverse used-styles)))))
+
+(defun muse-project-resolve-link (page local-style remote-styles)
+  "Return a published relative link from the output path of one file
+to another file.
+
+The best match for PAGE is determined by comparing the link
+suffix of the given local style and that of the remote styles.
+
+The remote styles are usually populated by
+`muse-project-applicable-styles'."
+  (let ((link-suffix (muse-style-element :link-suffix local-style))
+        remote-style)
+    (if (not (stringp link-suffix))
+        (setq remote-style (car remote-styles))
+      (setq remote-style (muse-project-choose-style
+                          link-suffix
+                          #'muse-project-choose-style-by-link-suffix
+                          remote-styles)))
+    (muse-publish-link-file
+     (if (null remote-style)
+         page
+       (let ((prefix (muse-style-element :base-url remote-style)))
+         (if prefix
+             (concat prefix page)
+           (file-relative-name (expand-file-name
+                                (file-name-nondirectory page)
+                                (muse-style-element :path remote-style))
+                               (expand-file-name
+                                (muse-style-element :path local-style))))))
+     nil remote-style)))
+
+(defun muse-project-current-output-style (&optional file project)
+  (or muse-current-output-style
+      (progn
+        (unless file (setq file (muse-current-file)))
+        (unless project (setq project (muse-project-of-file file)))
+        (car (muse-project-applicable-styles file (cddr project))))))
+
+(defun muse-project-link-page (page)
+  (let ((project (muse-project-of-file)))
+    (muse-project-resolve-link page
+                               (muse-project-current-output-style)
+                               (muse-project-applicable-styles
+                                (muse-project-page-file page project)
+                                (cddr project)))))
 
 (defun muse-project-publish-file (file styles &optional force ignore-regexp)
   (setq styles (muse-project-applicable-styles file styles ignore-regexp))
   (let (published)
     (dolist (style styles)
-      (let ((output-dir (muse-style-element :path style)))
+      (let ((output-dir (muse-style-element :path style))
+            (muse-current-output-style style))
         ;; ensure the publishing location is available
         (unless (file-exists-p output-dir)
           (message "Creating publishing directory %s" output-dir)

@@ -492,7 +492,7 @@ This will be used if no special characters are found."
               (goto-char (match-beginning 2))
               (muse-html-insert-anchor (concat "sec" (int-to-string index)))
               (setq index (1+ index)))))))
-    (setq index 1 contents (reverse contents))
+    (setq index 1 contents (nreverse contents))
     (let ((depth 1) (sub-open 0) (p (point)))
       (muse-insert-markup "<div class=\"contents\">\n<dl>\n")
       (while contents
