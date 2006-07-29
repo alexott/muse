@@ -192,11 +192,11 @@ This mailing list also provides support for @command{Planner} and
 
 @cindex releases, Debian package
 @cindex Debian package for Muse
-Debian users can get Muse via apt-get.  The @file{muse-el} package is
-available both at Michael Olson's Debian repository and the official
-Debian repository.  To make use of the former, add the following line to
-your @file{/etc/apt/sources.list} file and run @code{apt-get install
-muse}.
+Debian and Ubuntu users can get Muse via apt-get.  The @file{muse-el}
+package is available both at Michael Olson's APT repository and the
+official Debian and Ubuntu repositories.  To make use of the former, add
+the following line to your @file{/etc/apt/sources.list} file and run
+@code{apt-get install muse}.
 
 @example
 deb http://www.mwolson.org/debian/ ./
@@ -230,7 +230,7 @@ the following steps.
 @item Install arch
 
 @itemize @bullet
-@item Debian: @kbd{apt-get install tla}.
+@item Debian and Ubuntu: @kbd{apt-get install tla}.
 @item Other distributions: see @uref{http://regexps.srparish.net/www/}.
 @end itemize
 
@@ -316,8 +316,9 @@ where you want the source and compiled Muse files to be installed and
 will want to edit @env{EMACS} and @env{SITEFLAG} as shown in the
 Compilation section if you are using XEmacs.
 
-If you are installing Muse on a Debian system, you might want to change
-the value of @env{INSTALLINFO} as specified in @file{Makefile.defs}.
+If you are installing Muse on a Debian or Ubuntu system, you might want
+to change the value of @env{INSTALLINFO} as specified in
+@file{Makefile.defs}.
 
 If you wish to install Muse to different locations than the defaults
 specify, edit @file{Makefile.defs} accordingly.
@@ -1710,8 +1711,9 @@ For more on the structure of this list,
 This publishing style is capable of producing LaTeX or PDF documents.
 
 If you wish to publish PDF documents, you will need to have a good TeX
-installation.  For Debian, this can be accomplished by installing the
-``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts are also a must.
+installation.  For Debian and Ubuntu, this can be accomplished by
+installing the ``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts
+are also a must.
 
 @subheading Styles provided
 
