@@ -2,6 +2,21 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-07-29 04:03:29 GMT	Michael Olson <mwolson@gnu.org>	patch-169
+
+    Summary:
+      Manual: Update mailing list info.
+    Revision:
+      muse--main--1.0--patch-169
+
+    * muse.texi (Releases): Update mailing list info.
+      (Implicit Links): Fix use of future tense.
+      (Getting Help and Reporting Bugs): Update mailing list info.
+
+    modified files:
+     ChangeLog muse.texi
+
+
 2006-07-29 03:49:29 GMT	Michael Olson <mwolson@gnu.org>	patch-168
 
     Summary:

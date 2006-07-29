@@ -185,10 +185,8 @@ no longer special by default.
 Choose to install a release if you want to minimize risk.
 
 Errors are corrected in development first.  User-visible changes will be
-announced on the @email{emacs-wiki-discuss@@nongnu.org} mailing list.
-This mailing list also provides support for @command{Planner} and
-@command{emacs-wiki}, which is the predecessor of Muse.
-@pxref{Getting Help and Reporting Bugs}.
+announced on the @email{muse-el-discuss@@gna.org} mailing list.
+@xref{Getting Help and Reporting Bugs}.
 
 @cindex releases, Debian package
 @cindex Debian package for Muse
@@ -814,8 +812,8 @@ they are not separated from the rest of the Muse document in any way.
 
 @cindex WikiNames
 If the @command{muse-wiki} module is loaded, another form of implicit
-link will be made available.  WikiNames, which are typed in camelcase,
-will be highlighted and published as links, provided that the file they
+link will be made available.  WikiNames, which are typed in CamelCase,
+are highlighted and published as links, provided that the file they
 refer to exists.
 
 Customization of WikiName recognition may be accomplished by editing the
@@ -2632,16 +2630,39 @@ to it.
 that Michael Olson (the current maintainer) made for Muse.
 
 @item
-You can join the mailing list at @email{emacs-wiki-discuss@@nongnu.org}
-using the subscription form at
-@uref{http://mail.nongnu.org/mailman/listinfo/ emacs-wiki-discuss}.
-This mailing list provides support for Muse, @command{Planner} and
-@command{emacs-wiki}, which is the predecessor of Muse.
+Muse has three mailing lists.
 
-There are additional methods for accessing the mailing list, adding
-content to it, and searching it.  Consult
-@uref{http://www.emacswiki.org/cgi-bin/wiki/EmacsWikiMailingList} for
-more information.
+@table @samp
+
+@item muse-el-announce
+Low-traffic list for Muse-related announcements.
+
+You can join this mailing list (@email{muse-el-announce@@gna.org})
+using the subscription form at
+@url{http://mail.gna.org/listinfo/muse-el-announce/}.  This
+mailing list is also available via Gmane (@url{http://gmane.org/}). The
+group is called @samp{gmane.emacs.muse.announce}.
+
+@item muse-el-discuss
+Discussion, bugfixes, suggestions, tips, and the like for Muse.
+This mailing list also includes the content of muse-el-announce.
+
+You can join this mailing list (@email{muse-el-discuss@@gna.org})
+using the subscription form at
+@url{http://mail.gna.org/listinfo/muse-el-discuss/}.  This mailing
+list is also available via Gmane with the identifier
+@samp{gmane.emacs.muse.general}.
+
+@item muse-el-commits
+Log messages for changes committed to Muse.
+
+You can join this mailing list (@email{muse-el-commits@@gna.org}) using
+the subscription form at
+@url{http://mail.gna.org/listinfo/muse-el-commits/}.  This mailing list
+is also available via Gmane with the identifier
+@samp{gmane.emacs.muse.cvs}.
+
+@end table
 
 @item
 You can visit the IRC Freenode channel @samp{#emacs}. Many of the
@@ -2651,7 +2672,8 @@ Muse-specific help, and its current maintainer hangs out there.
 
 @item
 The maintainer of Emacs Muse, Michael Olson, may be contacted at
-@email{mwolson@@gnu.org}.
+@email{mwolson@@gnu.org}.  He can be rather slow at answering email, so
+it is often better to use the muse-el-discuss mailing list.
 
 @end itemize
 
