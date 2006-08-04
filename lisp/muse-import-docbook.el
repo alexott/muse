@@ -32,7 +32,7 @@
 
 (provide 'muse-import-docbook)
 
-(require 'muse-from-xml)
+(require 'muse-import-xml)
 
 (defvar muse-import-docbook-prefix "muse-import-docbook-"
   "The name prefix for tag functions")
@@ -48,9 +48,9 @@
 (defun muse-import-docbook (src dest)
   "Convert the xml SRC buffer in a muse DEST buffer"
   (interactive "bDocbook buffer:\nBMuse buffer:")
-  (setq muse-from-xml-prefix muse-import-docbook-prefix)
-  (setq muse-from-xml-generic-function-name "muse-from-xml-node")
-  (muse-from-xml src dest))
+  (setq muse-import-xml-prefix muse-import-docbook-prefix)
+  (setq muse-import-xml-generic-function-name "muse-import-xml-node")
+  (muse-import-xml src dest))
 
 (defun muse-import-docbook-files (src dest)
   "Convert the xml SRC file in a muse DEST file"
@@ -64,12 +64,12 @@
 (defun muse-import-docbook-get-title (node)
   (let ((tit (car (xml-get-children node 'title))))
     (insert (caddr tit) ?\n ?\n)
-    (muse-from-xml-parse-tree (xml-node-children (remove tit node)))))
+    (muse-import-xml-parse-tree (xml-node-children (remove tit node)))))
   
 
 (defun muse-import-docbook-article (node)
   "Article conversion function"
-  (muse-from-xml-node node))
+  (muse-import-xml-node node))
 
 (defun muse-import-docbook-articleinfo (node)
   "Article conversion function"
@@ -106,31 +106,31 @@
 
 (defun muse-import-docbook-para (node)
   (insert muse-import-docbook-para-indent)
-  (muse-from-xml-node node))
+  (muse-import-xml-node node))
 
 
 (defun muse-import-docbook-emphasis (node)
   (insert "*")
-  (muse-from-xml-node node)
+  (muse-import-xml-node node)
   (insert "*"))
   
 (defun muse-import-docbook-quote (node)
   (insert "\"")
-  (muse-from-xml-node node)
+  (muse-import-xml-node node)
   (insert "\""))
   
 (defun muse-import-docbook-blockquote (node)
   (setq muse-import-docbook-para-indent "\n\n  ")
-  (muse-from-xml-node node)
+  (muse-import-xml-node node)
   (muse-import-docbook-reset-para-indent))
 
 (defun muse-import-docbook-member (node)
   (insert "\n> ")
-  (muse-from-xml-node node))
+  (muse-import-xml-node node))
 
 (defun muse-import-docbook-bridgehead (node)
   (insert "\n* ")
-  (muse-from-xml-node node))
+  (muse-import-xml-node node))
 
 
 

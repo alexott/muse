@@ -63,7 +63,7 @@
 (defun muse-import-xml-parse-node (node)
   "Parse a xml tree node"
   (if (stringp node)
-      (insert node)
+      (insert (replace-regexp-in-string "^[ \t]+" "" node))
     (let ((fname (intern-soft (concat muse-import-xml-prefix
 				      (symbol-name (xml-node-name node))))))
       (if (functionp fname)
