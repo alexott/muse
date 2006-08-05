@@ -651,11 +651,13 @@ the file is published no matter what."
 
 ;;;###autoload
 (defun muse-publish-this-file (style output-dir &optional force)
-  "Publish the page in the current file."
+  "Publish the currently-visited file.
+Prompt for both the STYLE and OUTPUT-DIR if they are not
+supplied."
   (interactive (muse-publish-get-info))
   (unless (muse-publish-file buffer-file-name style output-dir force)
     (message (concat "The published version is up-to-date; use"
-                     " C-u C-c C-t to force an update."))))
+                     " C-u C-c C-T to force an update."))))
 
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
@@ -789,7 +791,7 @@ The following contexts exist in Muse.
 'emphasis   *emphasized text*
 'email      email@example.com
 'url        http://example.com
-'url-desc   [[...][description of an extended link]]
+'url-desc   [[...][description of an explicit link]]
 'example    <example> region (monospaced, block context, escaped)
 'verbatim   <verbatim> region (escaped)
 'document   normal text"
@@ -1409,7 +1411,7 @@ the cadr is the page name, and the cddr is the anchor."
 markup elements respect it.  If a region is not specified, use
 the 0th match data to determine it.
 
-This is usually applied to extended links."
+This is usually applied to explicit links."
   (unless beg (setq beg (match-beginning 0)))
   (unless end (setq end (match-end 0)))
   (add-text-properties beg end '(muse-link t))

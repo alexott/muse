@@ -596,6 +596,14 @@ The name of a project may be used for STYLES."
             (setq used-styles (cons (cons rating style) used-styles)))))
       (muse-sort-by-rating (nreverse used-styles)))))
 
+(defun muse-project-get-applicable-style (file styles)
+  "Choose a style from the STYLES that FILE can publish to.
+The user is prompted if several styles are found."
+  (muse-publish-get-style (mapcar
+                           (lambda (style)
+                             (cons (muse-get-keyword :base style) style))
+                           (muse-project-applicable-styles file styles))))
+
 (defun muse-project-resolve-link (page local-style remote-styles)
   "Return a published relative link from the output path of one file
 to another file.
@@ -655,6 +663,20 @@ The remote styles are usually populated by
         (if (muse-publish-file file style output-dir force)
             (setq published t))))
     published))
+
+;;;###autoload
+(defun muse-project-publish-this-file (&optional force)
+  "Publish the currently-visited file according to `muse-project-alist',
+prompting if more than one style applies.
+
+If FORCE is given, publish the file even if it is up-to-date."
+  (interactive (list current-prefix-arg))
+  (let* ((style (muse-project-get-applicable-style
+                buffer-file-name (cddr muse-current-project)))
+         (output-dir (muse-style-element :path style)))
+    (unless (muse-publish-file buffer-file-name style output-dir force)
+      (message (concat "The published version is up-to-date; use"
+                       " C-u C-c C-t to force an update.")))))
 
 (defun muse-project-save-buffers (&optional project)
   (setq project (muse-project project))

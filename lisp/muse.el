@@ -512,7 +512,7 @@ Use TARGET to get the string, if it is specified."
     ("]" . "%5D")
     ("%" . "%%"))
   "Syntax used for escaping and unescaping links.
-This allows brackets to occur in extended links as long as you
+This allows brackets to occur in explicit links as long as you
 use the standard Muse functions to create them.")
 
 (defun muse-link-escape (text)

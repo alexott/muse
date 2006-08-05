@@ -2,6 +2,122 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-08-05 15:12:38 GMT	Michael Olson <mwolson@gnu.org>	patch-170
+
+    Summary:
+      Rename muse-convert-latex.el to muse-import-latex.el.
+    Revision:
+      muse--main--1.0--patch-170
+
+    * lisp/muse-import-latex.el: Rename from muse-convert-latex.el.  Rename
+      all functions as well.
+
+    modified files:
+     ChangeLog lisp/muse-import-latex.el
+
+    renamed files:
+     lisp/.arch-ids/muse-convert-latex.el.id
+       ==> lisp/.arch-ids/muse-import-latex.el.id
+     lisp/muse-convert-latex.el
+       ==> lisp/muse-import-latex.el
+
+
+2006-07-29 04:03:29 GMT	Michael Olson <mwolson@gnu.org>	patch-169
+
+    Summary:
+      Manual: Update mailing list info.
+    Revision:
+      muse--main--1.0--patch-169
+
+    * muse.texi (Releases): Update mailing list info.
+      (Implicit Links): Fix use of future tense.
+      (Getting Help and Reporting Bugs): Update mailing list info.
+
+    modified files:
+     ChangeLog muse.texi
+
+
+2006-07-29 03:49:29 GMT	Michael Olson <mwolson@gnu.org>	patch-168
+
+    Summary:
+      Mention both Ubuntu and Debian throughout.
+    Revision:
+      muse--main--1.0--patch-168
+
+    * Makefile.defs, README, muse.texi: Mention Ubuntu wherever Debian is
+      mentioned.
+
+    modified files:
+     ChangeLog Makefile.defs README muse.texi
+
+
+2006-07-27 22:28:13 GMT	Michael Olson <mwolson@gnu.org>	patch-167
+
+    Summary:
+      Fix #5899: muse-follow-name-at-mouse breaks mouse-yank-at-point.
+    Revision:
+      muse--main--1.0--patch-167
+
+    * lisp/muse-mode.el (muse-follow-name-at-mouse): Restore the point before
+      calling the fallback keybinding.  This fixes #5899.
+    
+    * lisp/muse-publish.el (muse-publish-escape-specials): Docfix.
+      (muse-publish-mark-link): Docfix.
+      (muse-link-specials): Docfix.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse-publish.el lisp/muse.el
+
+
+2006-07-27 20:46:38 GMT	Michael Olson <mwolson@gnu.org>	patch-166
+
+    Summary:
+      Make C-c C-t publish the current file in a more sensible way.
+    Revision:
+      muse--main--1.0--patch-166
+
+    * lisp/muse-mode.el (muse-mode-map): Make C-c C-t call
+      muse-project-publish-this-file instead of muse-publish-this file.  Make
+      C-c C-T call the latter.
+      (muse-browse-result): Use `muse-project-get-applicable-styles'.
+      (muse-follow-name-at-point): Docfix.
+    
+    * lisp/muse-project.el (muse-project-get-applicable-style): New function
+      that prompts the user for a style if more than one style applies to the
+      given file.
+      (muse-project-publish-this-file): New function that publishes the
+      currently-visited file according to `muse-project-alist', prompting if
+      more than one style applies.
+    
+    * lisp/muse-publish.el (muse-publish-this-file): Docfix.
+    
+    * muse.texi (Keystroke Summary): Update for the changes made.  C-c C-c
+      was not previously documented.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el lisp/muse-project.el
+     lisp/muse-publish.el muse.texi
+
+
+2006-07-27 19:36:31 GMT	Michael Olson <mwolson@gnu.org>	patch-165
+
+    Summary:
+      Implement interactive insertion of URLs.
+    Revision:
+      muse--main--1.0--patch-165
+
+    * lisp/muse-mode.el (muse-insert-map): Add binding for muse-insert-url.
+      (muse-insert-thing): Add text for URL to prompt.
+      (muse-insert-relative-link-to-file): Docfix, style fix.
+      (muse-insert-url): New function that reads a URL and description from
+      the user.
+    
+    * muse.texi (Keystroke Summary): Mention insert-url keybinding.
+
+    modified files:
+     ChangeLog lisp/muse-mode.el muse.texi
+
+
 2006-07-27 18:50:50 GMT	Michael Olson <mwolson@gnu.org>	patch-164
 
     Summary:

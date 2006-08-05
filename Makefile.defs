@@ -15,8 +15,8 @@ INFODIR  = $(PREFIX)/info
 # Command to use to install the Info dir entry
 INSTALLINFO = install-info --info-dir=$(INFODIR)
 
-# If you're using Debian, uncomment the following line and comment out
-#the above line.
+# If you're using Debian or Ubuntu, uncomment the following line and
+# comment out the above line and enable the following line.
 #INSTALLINFO = install-info --section "Emacs" "emacs" --info-dir=$(INFODIR)
 
 # Useful only for the maintainer

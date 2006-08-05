@@ -133,6 +133,7 @@ index at intervals."
   (let ((map (make-sparse-keymap)))
     (define-key map "l" 'muse-insert-relative-link-to-file)
     (define-key map "t" 'muse-insert-tag)
+    (define-key map "u" 'muse-insert-url)
 
     map))
 
@@ -142,7 +143,9 @@ index at intervals."
     (define-key map [(control ?c) (control ?c)] 'muse-follow-name-at-point)
     (define-key map [(control ?c) (control ?e)] 'muse-edit-link-at-point)
     (define-key map [(control ?c) (control ?l)] 'font-lock-mode)
-    (define-key map [(control ?c) (control ?t)] 'muse-publish-this-file)
+    (define-key map [(control ?c) (control ?t)]
+      'muse-project-publish-this-file)
+    (define-key map [(control ?c) (control ?T)] 'muse-publish-this-file)
     (define-key map [(control ?c) (control ?v)] 'muse-browse-result)
 
     (define-key map [(control ?c) ?=]           'muse-what-changed)
@@ -306,7 +309,7 @@ the line if point is on a blank line."
 (defun muse-insert-thing ()
   "Prompt for something to insert into the current buffer."
   (interactive)
-  (message "Insert:\nl  link\nt  tag")
+  (message "Insert:\nl  link\nt  tag\nu  URL")
   (let (key cmd)
     (let ((overriding-local-map muse-insert-map))
       (setq key (read-key-sequence nil)))
@@ -476,16 +479,21 @@ Valid values of OPERATION are 'increase and 'decrease."
 
 ;;;###autoload
 (defun muse-insert-relative-link-to-file ()
-  "Insert a relative link to a file, with optional description,
-at the current point."
+  "Insert a relative link to a file, with optional description, at point."
   ;; Perhaps the relative location should be configurable, so that the
-  ;; file search would start in the publshing directory and then
+  ;; file search would start in the publishing directory and then
   ;; insert the link relative to the publishing directory
   (interactive)
   (insert
-   (muse-make-link
-    (file-relative-name (read-file-name "Link: "))
-    (read-string "Text: "))))
+   (muse-make-link (file-relative-name (read-file-name "Link: "))
+                   (read-string "Text: "))))
+
+(defun muse-insert-url ()
+  "Insert a URL, with optional description, at point."
+  (interactive)
+  (insert
+   (muse-make-link (read-string "URL: ")
+                   (read-string "Text: "))))
 
 ;;;###autoload
 (defun muse-edit-link-at-point ()
@@ -556,13 +564,10 @@ in `muse-project-alist'."
 ;;;###autoload
 (defun muse-browse-result (style &optional other-window)
   "Visit the current page's published result."
-  (interactive (list (muse-publish-get-style
-                      (mapcar
-                       (lambda (style)
-                         (cons (muse-get-keyword :base style) style))
-                       (muse-project-applicable-styles
-                        buffer-file-name (cddr muse-current-project))))
-                     current-prefix-arg))
+  (interactive
+   (list (muse-project-get-applicable-style buffer-file-name
+                                            (cddr muse-current-project))
+         current-prefix-arg))
   (setq style (muse-style style))
   (let ((result-path
          (muse-publish-output-file buffer-file-name
@@ -579,7 +584,7 @@ in `muse-project-alist'."
 
 ;;;###autoload
 (defun muse-follow-name-at-point (&optional other-window)
-  "Visit the link at point, or insert a newline if none is found."
+  "Visit the link at point."
   (interactive "P")
   (let ((link (muse-link-at-point)))
     (if link
@@ -595,20 +600,23 @@ in `muse-project-alist'."
 (defun muse-follow-name-at-mouse (event &optional other-window)
   "Visit the link at point, or yank text if none is found."
   (interactive "eN")
-  (save-excursion
-    (cond ((fboundp 'event-window)      ; XEmacs
-           (set-buffer (window-buffer (event-window event)))
-           (and (funcall (symbol-function 'event-point) event)
-                (goto-char (funcall (symbol-function 'event-point) event))))
-          ((fboundp 'posn-window)       ; Emacs
-           (set-buffer (window-buffer (posn-window (event-start event))))
-           (goto-char (posn-point (event-start event)))))
-    (let ((link (muse-link-at-point)))
-      (if link
-          (muse-visit-link link other-window)
-        ;; Fall back to normal binding for this event
-        (call-interactively
-         (lookup-key (current-global-map) (this-command-keys)))))))
+  (unless
+      (save-excursion
+        (cond ((fboundp 'event-window)      ; XEmacs
+               (set-buffer (window-buffer (event-window event)))
+               (and (funcall (symbol-function 'event-point) event)
+                    (goto-char (funcall (symbol-function 'event-point)
+                                        event))))
+              ((fboundp 'posn-window)       ; Emacs
+               (set-buffer (window-buffer (posn-window (event-start event))))
+               (goto-char (posn-point (event-start event)))))
+        (let ((link (muse-link-at-point)))
+          (when link
+            (muse-visit-link link other-window)
+            t)))
+    ;; Fall back to normal binding for this event
+    (call-interactively
+     (lookup-key (current-global-map) (this-command-keys)))))
 
 (defun muse-follow-name-at-mouse-other-window (event)
   "Visit the link at point"

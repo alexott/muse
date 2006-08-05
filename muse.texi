@@ -185,18 +185,16 @@ no longer special by default.
 Choose to install a release if you want to minimize risk.
 
 Errors are corrected in development first.  User-visible changes will be
-announced on the @email{emacs-wiki-discuss@@nongnu.org} mailing list.
-This mailing list also provides support for @command{Planner} and
-@command{emacs-wiki}, which is the predecessor of Muse.
-@pxref{Getting Help and Reporting Bugs}.
+announced on the @email{muse-el-discuss@@gna.org} mailing list.
+@xref{Getting Help and Reporting Bugs}.
 
 @cindex releases, Debian package
 @cindex Debian package for Muse
-Debian users can get Muse via apt-get.  The @file{muse-el} package is
-available both at Michael Olson's Debian repository and the official
-Debian repository.  To make use of the former, add the following line to
-your @file{/etc/apt/sources.list} file and run @code{apt-get install
-muse}.
+Debian and Ubuntu users can get Muse via apt-get.  The @file{muse-el}
+package is available both at Michael Olson's APT repository and the
+official Debian and Ubuntu repositories.  To make use of the former, add
+the following line to your @file{/etc/apt/sources.list} file and run
+@code{apt-get install muse}.
 
 @example
 deb http://www.mwolson.org/debian/ ./
@@ -230,7 +228,7 @@ the following steps.
 @item Install arch
 
 @itemize @bullet
-@item Debian: @kbd{apt-get install tla}.
+@item Debian and Ubuntu: @kbd{apt-get install tla}.
 @item Other distributions: see @uref{http://regexps.srparish.net/www/}.
 @end itemize
 
@@ -316,8 +314,9 @@ where you want the source and compiled Muse files to be installed and
 will want to edit @env{EMACS} and @env{SITEFLAG} as shown in the
 Compilation section if you are using XEmacs.
 
-If you are installing Muse on a Debian system, you might want to change
-the value of @env{INSTALLINFO} as specified in @file{Makefile.defs}.
+If you are installing Muse on a Debian or Ubuntu system, you might want
+to change the value of @env{INSTALLINFO} as specified in
+@file{Makefile.defs}.
 
 If you wish to install Muse to different locations than the defaults
 specify, edit @file{Makefile.defs} accordingly.
@@ -426,6 +425,9 @@ Display an index of all known Muse pages.
 @item C-c C-b (`muse-find-backlinks')
 Find all pages that link to this page.
 
+@item C-c C-c (`muse-follow-name-at-point')
+Visit the link at point.
+
 @item C-c C-e (`muse-edit-link-at-point')
 Edit link at point.
 
@@ -444,6 +446,14 @@ Publish any Muse pages that have changed.
 @item C-c C-s (`muse-search')
 Find text in all files of the current project.
 
+@item C-c C-t (`muse-project-publish-this-file')
+Publish the currently-visited file.  Prompt for the style if the current
+file can be published using more than one style.
+
+@item C-c C-T (`muse-publish-this-file')
+Publish the currently-visited file.  Prompt for both the style and
+output directory.
+
 @item C-c C-v (`muse-browse-result')
 Show the published result of this page.
 
@@ -455,6 +465,9 @@ Insert a link to a file interactively.
 
 @item C-c TAB t (`muse-insert-tag')
 Insert a tag interactively.
+
+@item C-c TAB u (`muse-insert-url')
+Insert a URL interactively.
 
 @item TAB
 Move to the next Wiki reference.
@@ -799,8 +812,8 @@ they are not separated from the rest of the Muse document in any way.
 
 @cindex WikiNames
 If the @command{muse-wiki} module is loaded, another form of implicit
-link will be made available.  WikiNames, which are typed in camelcase,
-will be highlighted and published as links, provided that the file they
+link will be made available.  WikiNames, which are typed in CamelCase,
+are highlighted and published as links, provided that the file they
 refer to exists.
 
 Customization of WikiName recognition may be accomplished by editing the
@@ -1696,8 +1709,9 @@ For more on the structure of this list,
 This publishing style is capable of producing LaTeX or PDF documents.
 
 If you wish to publish PDF documents, you will need to have a good TeX
-installation.  For Debian, this can be accomplished by installing the
-``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts are also a must.
+installation.  For Debian and Ubuntu, this can be accomplished by
+installing the ``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts
+are also a must.
 
 @subheading Styles provided
 
@@ -2616,16 +2630,39 @@ to it.
 that Michael Olson (the current maintainer) made for Muse.
 
 @item
-You can join the mailing list at @email{emacs-wiki-discuss@@nongnu.org}
-using the subscription form at
-@uref{http://mail.nongnu.org/mailman/listinfo/ emacs-wiki-discuss}.
-This mailing list provides support for Muse, @command{Planner} and
-@command{emacs-wiki}, which is the predecessor of Muse.
+Muse has three mailing lists.
 
-There are additional methods for accessing the mailing list, adding
-content to it, and searching it.  Consult
-@uref{http://www.emacswiki.org/cgi-bin/wiki/EmacsWikiMailingList} for
-more information.
+@table @samp
+
+@item muse-el-announce
+Low-traffic list for Muse-related announcements.
+
+You can join this mailing list (@email{muse-el-announce@@gna.org})
+using the subscription form at
+@url{http://mail.gna.org/listinfo/muse-el-announce/}.  This
+mailing list is also available via Gmane (@url{http://gmane.org/}). The
+group is called @samp{gmane.emacs.muse.announce}.
+
+@item muse-el-discuss
+Discussion, bugfixes, suggestions, tips, and the like for Muse.
+This mailing list also includes the content of muse-el-announce.
+
+You can join this mailing list (@email{muse-el-discuss@@gna.org})
+using the subscription form at
+@url{http://mail.gna.org/listinfo/muse-el-discuss/}.  This mailing
+list is also available via Gmane with the identifier
+@samp{gmane.emacs.muse.general}.
+
+@item muse-el-commits
+Log messages for changes committed to Muse.
+
+You can join this mailing list (@email{muse-el-commits@@gna.org}) using
+the subscription form at
+@url{http://mail.gna.org/listinfo/muse-el-commits/}.  This mailing list
+is also available via Gmane with the identifier
+@samp{gmane.emacs.muse.cvs}.
+
+@end table
 
 @item
 You can visit the IRC Freenode channel @samp{#emacs}. Many of the
@@ -2635,7 +2672,8 @@ Muse-specific help, and its current maintainer hangs out there.
 
 @item
 The maintainer of Emacs Muse, Michael Olson, may be contacted at
-@email{mwolson@@gnu.org}.
+@email{mwolson@@gnu.org}.  He can be rather slow at answering email, so
+it is often better to use the muse-el-discuss mailing list.
 
 @end itemize
 
