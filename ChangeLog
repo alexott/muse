@@ -2,6 +2,26 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-08-05 15:12:38 GMT	Michael Olson <mwolson@gnu.org>	patch-170
+
+    Summary:
+      Rename muse-convert-latex.el to muse-import-latex.el.
+    Revision:
+      muse--main--1.0--patch-170
+
+    * lisp/muse-import-latex.el: Rename from muse-convert-latex.el.  Rename
+      all functions as well.
+
+    modified files:
+     ChangeLog lisp/muse-import-latex.el
+
+    renamed files:
+     lisp/.arch-ids/muse-convert-latex.el.id
+       ==> lisp/.arch-ids/muse-import-latex.el.id
+     lisp/muse-convert-latex.el
+       ==> lisp/muse-import-latex.el
+
+
 2006-07-29 04:03:29 GMT	Michael Olson <mwolson@gnu.org>	patch-169
 
     Summary:
