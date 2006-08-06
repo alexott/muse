@@ -3,36 +3,36 @@
 
 include ../Makefile.defs
 
-EL  = $(filter-out muse-autoloads.el,$(wildcard *.el))
+EL  = $(filter-out $(PROJECT)-autoloads.el,$(wildcard *.el))
 ELC = $(patsubst %.el,%.elc,$(EL))
 
 all: lisp
 
 lisp: autoloads $(ELC)
 
-muse-build.elc: ../scripts/muse-build.el
-	@echo muse-build.el is not byte-compiled
+$(PROJECT)-build.elc: ../scripts/$(PROJECT)-build.el
+	@echo $(PROJECT)-build.el is not byte-compiled
 
-autoloads: muse-autoloads.el
+autoloads: $(PROJECT)-autoloads.el
 
-muse-autoloads.el: $(EL)
-	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \
-		-f muse-generate-autoloads . ../contrib ../experimental
+$(PROJECT)-autoloads.el: $(EL)
+	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
+		-f $(PROJECT)-generate-autoloads . ../contrib ../experimental
 
 %.elc: %.el
-	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \
+	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
 		-f batch-byte-compile $<
 
 clean:
 	-rm -f *.elc *~
 
 realclean distclean fullclean: clean
-	-rm -f muse-autoloads.el
+	-rm -f $(PROJECT)-autoloads.el
 
 install: autoloads $(ELC)
 	install -d $(ELISPDIR)
-	install -m 0644 muse-autoloads.el $(EL) $(ELC) $(ELISPDIR)
+	install -m 0644 $(PROJECT)-autoloads.el $(EL) $(ELC) $(ELISPDIR)
 
 test: $(ELC)
-	$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \
-		-f muse-elint-files muse-*.el
+	$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
+		-f $(PROJECT)-elint-files $(EL)

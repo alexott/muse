@@ -10,12 +10,12 @@ all: contrib
 
 contrib: $(ELC)
 
-muse-build.elc: ../scripts/muse-build.el
-	@echo muse-build.el is not byte-compiled
+$(PROJECT)-build.elc: ../scripts/$(PROJECT)-build.el
+	@echo $(PROJECT)-build.el is not byte-compiled
 
 %.elc: %.el
-	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \
-		-f batch-byte-compile $<
+	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
+	    -f batch-byte-compile $<
 
 clean realclean distclean fullclean:
 	-rm -f *.elc *~
