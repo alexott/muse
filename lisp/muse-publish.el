@@ -249,6 +249,9 @@ current style."
     ("lisp"     t   nil muse-publish-lisp-tag)
     ("class"    t   t   muse-publish-class-tag)
     ("command"  t   t   muse-publish-command-tag)
+    ("perl"     t   t   muse-publish-perl-tag)
+    ("python"   t   t   muse-publish-python-tag)
+    ("ruby"     t   t   muse-publish-ruby-tag)
     ("comment"  t   nil muse-publish-comment-tag)
     ("include"  nil t   muse-publish-include-tag)
     ("markup"   t   t   muse-publish-mark-up-tag))
@@ -1468,12 +1471,24 @@ This is usually applied to explicit links."
     (forward-line))
   (let ((interp (cdr (assoc "interp" attrs))))
     (if (null interp)
-        (shell-command
-         (prog1
-             (buffer-substring-no-properties (point) end)
-           (delete-region beg end)) t)
+        (shell-command (prog1
+                           (buffer-substring-no-properties (point) end)
+                         (delete-region beg end))
+                       t)
       (shell-command-on-region beg end interp t t))
     (muse-publish-mark-read-only beg (point))))
+
+(defun muse-publish-perl-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (list (cons "interp" (executable-find "perl")))))
+
+(defun muse-publish-python-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (list (cons "interp" (executable-find "python")))))
+
+(defun muse-publish-ruby-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (list (cons "interp" (executable-find "ruby")))))
 
 (defun muse-publish-comment-tag (beg end)
   (if (null muse-publish-comments-p)

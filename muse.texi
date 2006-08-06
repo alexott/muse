@@ -1069,10 +1069,22 @@ files in the current project by doing the following.
 <markup><lisp>(muse-index-as-string t t)</lisp></markup>
 @end example
 
+@item <perl>
+Run the @command{perl} language interpreter on the region, replacing the
+region with the result of the command.
+
+@item <python>
+Run the @command{python} language interpreter on the region, replacing
+the region with the result of the command.
+
 @item <quote>
 Publish the region as a blockquote.  This will either be inserted
 in-place or at the beginning of the document, depending on your
 publishing style.  It does not have a delimiting tag.
+
+@item <ruby>
+Run the @command{ruby} language interpreter on the region, replacing the
+region with the result of the command.
 
 @item <verbatim>
 This is used when you want to prevent Muse from trying to interpret some
