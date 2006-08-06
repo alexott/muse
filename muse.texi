@@ -1000,6 +1000,22 @@ Run a command on the region, replacing the region with the result of the
 command.  The command is specified with the ``interp'' argument.  If no
 value for ``interp'' is given, pass the entire region to the shell.
 
+The ``markup'' argument controls how this section is marked up.
+
+If it is omitted, publish the region with the normal Muse rules.
+
+If "nil", do not mark up the region at all, but prevent Muse from
+further interpreting it.
+
+If "example", treat the region as if it was surrounded by the
+@verb{|<example>|} tag.
+
+If "verse", treat the region as if it was surrounded by the
+@verb{|<verse>|} tag, to preserve newlines.
+
+Otherwise, it should be the name of a function to call, with the buffer
+narrowed to the region.
+
 @item <comment>
 Treat the entire region as a comment.  If the option
 @var{muse-publish-comments-p} is nil, delete the region, otherwise
@@ -1028,7 +1044,8 @@ the name of the file that you want to include.
 <include file="included_file">
 @end example
 
-The ``markup'' attribute controls how this section is marked up.
+The ``markup'' argument controls how this section is marked up.
+
 If it is omitted, publish the included text with the normal Muse
 rules.
 
@@ -1048,6 +1065,9 @@ Evaluate the Emacs Lisp expressions between the initial and ending tags.
 The result is then inserted into the document, so you do not need to
 explicitly call @code{insert}.  All text properties are removed from the
 resulting text.
+
+This tag takes the ``markup'' argument.  See the description of
+@verb{|<command>|} for details.
 
 @item <literal>
 Make sure that the text enclosed by this tag is published without
@@ -1073,9 +1093,15 @@ files in the current project by doing the following.
 Run the @command{perl} language interpreter on the region, replacing the
 region with the result of the command.
 
+This tag takes the ``markup'' argument.  See the description of
+@verb{|<command>|} for details.
+
 @item <python>
 Run the @command{python} language interpreter on the region, replacing
 the region with the result of the command.
+
+This tag takes the ``markup'' argument.  See the description of
+@verb{|<command>|} for details.
 
 @item <quote>
 Publish the region as a blockquote.  This will either be inserted
@@ -1085,6 +1111,9 @@ publishing style.  It does not have a delimiting tag.
 @item <ruby>
 Run the @command{ruby} language interpreter on the region, replacing the
 region with the result of the command.
+
+This tag takes the ``markup'' argument.  See the description of
+@verb{|<command>|} for details.
 
 @item <verbatim>
 This is used when you want to prevent Muse from trying to interpret some

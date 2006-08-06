@@ -2,6 +2,32 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2006/muse--main--1.0
 #
 
+2006-08-06 19:08:25 GMT	Michael Olson <mwolson@gnu.org>	patch-173
+
+    Summary:
+      Make command, lisp, perl, python, and ruby tags interpret "markup".
+    Revision:
+      muse--main--1.0--patch-173
+
+    * lisp/muse-publish.el (muse-publish-markup-tags): Permit <lisp> to take
+      the "markup" argument.
+      (muse-publish-markup-attribute): New macro that interprets the "markup"
+      attribute.
+      (muse-publish-lisp-tag, muse-publish-command-tag): Use
+      muse-publish-markup-attribute.
+      (muse-publish-command-tag): Make sure we have a newline at end of
+      output.
+      (muse-publish-perl-tag, muse-publish-python-tag)
+      (muse-publish-ruby-tag): Pass remaining attributes to
+      muse-publish-command-tag so that the "markup" attribute works.
+      (muse-publish-include-tag): Use muse-publish-markup-attribute.
+    
+    * muse.texi (Tag Summary): Document changes to tags.
+
+    modified files:
+     ChangeLog lisp/muse-publish.el muse.texi
+
+
 2006-08-06 16:44:16 GMT	Michael Olson <mwolson@gnu.org>	patch-172
 
     Summary:

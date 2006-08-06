@@ -246,7 +246,7 @@ current style."
     ("quote"    t   nil muse-publish-quote-tag)
     ("literal"  t   nil muse-publish-mark-read-only)
     ("verbatim" t   nil muse-publish-verbatim-tag)
-    ("lisp"     t   nil muse-publish-lisp-tag)
+    ("lisp"     t   t   muse-publish-lisp-tag)
     ("class"    t   t   muse-publish-class-tag)
     ("command"  t   t   muse-publish-command-tag)
     ("perl"     t   t   muse-publish-perl-tag)
@@ -1455,50 +1455,6 @@ This is usually applied to explicit links."
 
 (defalias 'muse-publish-class-tag 'ignore)
 
-(defun muse-publish-lisp-tag (beg end)
-  (save-excursion
-    (let ((str (muse-eval-lisp
-                (prog1
-                    (concat "(progn "
-                            (buffer-substring-no-properties beg end)
-                            ")")
-                  (delete-region beg end)))))
-      (set-text-properties 0 (length str) nil str)
-      (insert str))))
-
-(defun muse-publish-command-tag (beg end attrs)
-  (while (looking-at "\\s-*$")
-    (forward-line))
-  (let ((interp (cdr (assoc "interp" attrs))))
-    (if (null interp)
-        (shell-command (prog1
-                           (buffer-substring-no-properties (point) end)
-                         (delete-region beg end))
-                       t)
-      (shell-command-on-region beg end interp t t))
-    (muse-publish-mark-read-only beg (point))))
-
-(defun muse-publish-perl-tag (beg end attrs)
-  (muse-publish-command-tag beg end
-                            (list (cons "interp" (executable-find "perl")))))
-
-(defun muse-publish-python-tag (beg end attrs)
-  (muse-publish-command-tag beg end
-                            (list (cons "interp" (executable-find "python")))))
-
-(defun muse-publish-ruby-tag (beg end attrs)
-  (muse-publish-command-tag beg end
-                            (list (cons "interp" (executable-find "ruby")))))
-
-(defun muse-publish-comment-tag (beg end)
-  (if (null muse-publish-comments-p)
-      (delete-region beg end)
-    (goto-char end)
-    (muse-insert-markup (muse-markup-text 'comment-end))
-    (muse-publish-mark-read-only beg end)
-    (goto-char beg)
-    (muse-insert-markup (muse-markup-text 'comment-begin))))
-
 (defun muse-publish-examplify-buffer ()
   "Transform the current buffer as if it were an <example> region."
   (let ((end (progn (goto-char (point-max)) (point-marker))))
@@ -1509,57 +1465,133 @@ This is usually applied to explicit links."
   (muse-publish-verse-tag (point-min) (point-max))
   (muse-publish-markup ""
                        `((100 ,(concat "^[" muse-regexp-blank "]*> ") 0
-                              muse-publish-markup-verse))))
+                              muse-publish-markup-verse)))
+  (goto-char (point-min)))
+
+(defmacro muse-publish-markup-attribute (beg end attrs reinterp &rest body)
+  "Evaluate BODY within the bounds of BEG and END.
+ATTRS is an alist.  Only the \"markup\" element of ATTRS is acted
+on.
+
+If it is omitted, publish the region with the normal Muse rules.
+If RE-INTERP is specified, this is done immediately in a new
+publishing process.  Currently, RE-INTERP is specified only by
+the <include> tag.
+
+If \"nil\", do not mark up the region at all, but prevent it from
+being further interpreted by Muse.
+
+If \"example\", treat the region as if it was surrounded by the
+<example> tag.
+
+If \"verse\", treat the region as if it was surrounded by the
+<verse> tag, to preserve newlines.
+
+Otherwise, it should be the name of a function to call in the
+narrowed region after evaluating BODY."
+  (let ((markup (make-symbol "markup"))
+        (markup-function (make-symbol "markup-function")))
+    `(let ((,markup (cdr (assoc "markup" ,attrs))))
+       (save-restriction
+         (narrow-to-region ,beg ,end)
+         (goto-char (point-min))
+         ,@body
+         (if (not ,markup)
+             (when ,reinterp
+               (muse-publish-markup-region (point-min) (point-max))
+               (muse-publish-mark-read-only (point-min) (point-max))
+               (goto-char (point-max)))
+           (let ((,markup-function (read ,markup)))
+             (cond ((eq ,markup-function 'example)
+                    (setq ,markup-function #'muse-publish-examplify-buffer))
+                   ((eq ,markup-function 'verse)
+                    (setq ,markup-function #'muse-publish-versify-buffer))
+                   ((and ,markup-function (not (functionp ,markup-function)))
+                    (error "Invalid markup function `%s'" ,markup))
+                   (t nil))
+             (if ,markup-function
+                 (funcall ,markup-function)
+               (muse-publish-mark-read-only (point-min) (point-max))
+               (goto-char (point-max)))))))))
+
+(put 'muse-publish-markup-attribute 'lisp-indent-function 4)
+(put 'muse-publish-markup-attribute 'edebug-form-spec
+     '(form form form form body))
+
+(defun muse-publish-lisp-tag (beg end attrs)
+  (muse-publish-markup-attribute beg end attrs nil
+    (save-excursion
+      (let ((str (muse-eval-lisp
+                  (prog1
+                      (concat "(progn "
+                              (buffer-substring-no-properties (point-min)
+                                                              (point-max))
+                              ")")
+                    (delete-region beg end)))))
+        (set-text-properties 0 (length str) nil str)
+        (insert str)))))
+
+(defun muse-publish-command-tag (beg end attrs)
+  (muse-publish-markup-attribute beg end attrs nil
+    (while (looking-at "\\s-*$")
+      (forward-line))
+    (let ((interp (cdr (assoc "interp" attrs))))
+      (if interp
+          (shell-command-on-region (point) (point-max) interp t t)
+        (shell-command
+         (prog1
+             (buffer-substring-no-properties (point) (point-max))
+           (delete-region (point-min) (point-max)))
+         t)))
+    ;; make sure there is a newline at end
+    (goto-char (point-max))
+    (forward-line 0)
+    (unless (looking-at "\\s-*$")
+      (goto-char (point-max))
+      (insert ?\n))
+    (goto-char (point-min))))
+
+(defun muse-publish-perl-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (cons (cons "interp" (executable-find "perl"))
+                                  attrs)))
+
+(defun muse-publish-python-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (cons (cons "interp" (executable-find "python"))
+                                  attrs)))
+
+(defun muse-publish-ruby-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (cons (cons "interp" (executable-find "ruby"))
+                                  attrs)))
+
+(defun muse-publish-comment-tag (beg end)
+  (if (null muse-publish-comments-p)
+      (delete-region beg end)
+    (goto-char end)
+    (muse-insert-markup (muse-markup-text 'comment-end))
+    (muse-publish-mark-read-only beg end)
+    (goto-char beg)
+    (muse-insert-markup (muse-markup-text 'comment-begin))))
 
 (defun muse-publish-include-tag (beg end attrs)
   "Include the named file at the current location during publishing.
 
 <include file=\"...\" markup=\"...\">
 
-The `markup' attribute controls how this section is marked up.
-If it is omitted, publish the included text with the normal Muse
-rules.
-
-If \"nil\", do not mark up the included text at all.
-
-If \"example\", treat the included text as if it was surrounded
-by the <example> tag.
-
-If \"verse\", treat the included text as if it was surrounded
-by the <verse> tag, to preserve newlines.
-
-Otherwise, it should be the name of a function to call after
-inserting the file with the buffer narrowed to the section
-inserted.
-
-Note that no further marking-up will be performed on this
-region."
+The `markup' attribute controls how this file is marked up after
+being inserted.  See `muse-publish-markup-attribute' for an
+explanation of how it works."
   (let ((filename (cdr (assoc "file" attrs)))
-        (markup (cdr (assoc "markup" attrs)))
         (muse-publishing-directives muse-publishing-directives))
     (if filename
         (setq filename (expand-file-name
                         filename
                         (file-name-directory muse-publishing-current-file)))
       (error "No file attribute specified in <include> tag"))
-    (if markup
-        (let ((markup-function (read markup)))
-          (cond ((eq markup-function 'example)
-                 (setq markup-function #'muse-publish-examplify-buffer))
-                ((eq markup-function 'verse)
-                 (setq markup-function #'muse-publish-versify-buffer))
-                ((and markup-function (not (functionp markup-function)))
-                 (error "Invalid markup function `%s'" markup))
-                (t nil))
-          (save-restriction
-            (narrow-to-region beg end)
-            (insert-file-contents filename)
-            (when markup-function
-              (funcall markup-function))
-            (goto-char (point-max))))
-      (insert-file-contents filename)
-      (muse-publish-markup-region beg (point)))
-    (muse-publish-mark-read-only beg (point))))
+    (muse-publish-markup-attribute beg end attrs t
+      (insert-file-contents filename))))
 
 (defun muse-publish-mark-up-tag (beg end attrs)
   "Run an Emacs Lisp function on the region delimted by this tag.
