@@ -309,7 +309,7 @@ the line if point is on a blank line."
 (defun muse-insert-thing ()
   "Prompt for something to insert into the current buffer."
   (interactive)
-  (message "Insert:\nl  link\nt  tag\nu  URL")
+  (message "Insert:\nl  link\nt  Muse tag\nu  URL")
   (let (key cmd)
     (let ((overriding-local-map muse-insert-map))
       (setq key (read-key-sequence nil)))

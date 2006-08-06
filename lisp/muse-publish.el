@@ -500,7 +500,7 @@ See `muse-publish-markup-tags' for details."
   (catch 'handled
     (while (and style
                 (setq style (muse-style style)))
-      (let ((func (muse-get-keyword keyword style t)))
+      (let ((func (muse-style-element keyword style t)))
         (when (and func
                    (apply func args))
           (throw 'handled t)))

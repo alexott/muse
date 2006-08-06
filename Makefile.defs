@@ -22,7 +22,7 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 # Useful only for the maintainer
 PROJECT    = muse
 DEBNAME    = muse-el
-VERSION    = 3.02.90.arch.170
+VERSION    = 3.02.91.arch.174
 MANUAL     = muse
 LASTUPLOAD = 3.02.6-2
 BUILDOPTS  =
