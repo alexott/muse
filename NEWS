@@ -20,6 +20,21 @@ and Muse publishing.
 
 *** Make sure spaces in URLs get escaped properly.
 
+** HTTP daemon (contrib/httpd.el)
+
+*** Update this to work with newer versions of Emacs.
+
+*** Fix a paragraph detection bug for paragraphs that occur after
+verses.
+
+** Journal (lisp/muse-journal.el)
+
+*** New option: muse-journal-rss-heading-regexp.
+Determine the regexp to use when searching for an RSS heading.
+
+*** Make sure that the date is in a format that RSS readers
+can handle.
+
 ** LaTeX publishing (lisp/muse-latex.el)
 
 *** Improve escaping of specials.
@@ -46,6 +61,14 @@ fashion.
 
 **** Mention how to customize the WikiName recognition.
 
+*** Emphasizing Text
+
+**** Mention the <code> tag.
+
+*** Extending Muse
+
+**** Move "Common Elements" and "Deriving Styles" chapters here.
+
 ** Muse Mode (lisp/muse-mode.el)
 
 *** `C-c TAB' now inserts an object, prompting the user for which type.
@@ -60,18 +83,6 @@ that the prompt you get when you hit `C-c TAB' will not change.
 `M-RET' inserts a list item.
 `C->' increases list item indentation.
 `C-<' decreases list item indentation.
-
-*** New option: muse-colors-inline-images.
-This determines whether or not to inline an image.  The default is to
-enable this behavior.
-
-**** `C-c C-i' toggles whether images are inlined.
-
-**** New option: muse-colors-inline-image-method.
-This determines how to find an image that we want to inline.  The
-default is to look in the current directory.  If set to
-'muse-colors-use-publishing-directory, it will look in the directory
-where the current page will be published.
 
 *** Slightly improvement speed of flyspell integration
 
@@ -90,6 +101,31 @@ command for details.
 
 *** Don't require muse-publish.el, since publishing and viewing Muse
 files are supposed to be completely separable.
+
+*** Speed up searching for next and previous references.
+
+*** Make filling definition lists work better.
+
+** Muse Mode highlighting (lisp/muse-colors.el)
+
+*** New option: muse-colors-inline-images.
+This determines whether or not to inline an image.  The default is to
+enable this behavior.
+
+**** `C-c C-i' toggles whether images are inlined.
+
+**** New option: muse-colors-inline-image-method.
+This determines how to find an image that we want to inline.  The
+default is to look in the current directory.  If set to
+'muse-colors-use-publishing-directory, it will look in the directory
+where the current page will be published.
+
+*** Make faces conform the namespace better.
+`muse-link-face' is renamed to `muse-link'.
+`muse-bad-link-face' is renamed to `muse-bad-link'.
+`muse-verbatim-face' is renamed to `muse-verbatim'.
+
+*** Handle muse-emphasis faces better.
 
 ** New modules
 
@@ -117,6 +153,9 @@ to switch to a given Muse project and execute some code.
 *** Ignore buffers that have no associated filename.
 This fixes an annoyance where Muse prompts to save BBDB and ERC
 buffers before publishing.
+
+*** If we cannot find a project to publish, indicate this in an
+error message.  This fixes an infinite loop.
 
 ** Publishing (lisp/muse-publish.el)
 
@@ -163,6 +202,13 @@ than normal characters.
 
 See `muse-xml-decide-specials' in muse-xml-common.el for details.
 This functionality already exists for escaping specials in strings.
+
+*** Fix an infinite loop problem.
+
+*** Preserve whitespace around emdash.
+This allows for more flexibility, since some people seem to prefer to
+have the emdash directly against the surrounding text, while others
+like it to be spaced.
 
 *** New tags, see the Tag Summary section in the manual for details
 

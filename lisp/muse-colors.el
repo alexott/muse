@@ -527,7 +527,7 @@ of the functions listed in `muse-colors-markup'."
   '(("example" t nil muse-colors-example-tag)
     ("code" t nil muse-colors-example-tag)
     ("verbatim" t nil muse-colors-literal-tag)
-    ("lisp" t nil muse-colors-lisp-tag)
+    ("lisp" t t muse-colors-lisp-tag)
     ("literal" t nil muse-colors-literal-tag))
   "A list of tag specifications for specially highlighting text.
 XML-style tags are the best way to add custom highlighting to Muse.
@@ -621,19 +621,27 @@ Functions should not modify the contents of the buffer."
                  (> end (point)))))
     (add-text-properties beg end `(font-lock-multiline ,multi))))
 
-(defun muse-colors-lisp-tag (beg end)
+(defun muse-colors-lisp-tag (beg end attrs)
   (if (not muse-colors-evaluate-lisp-tags)
       (muse-colors-literal-tag beg end)
     (muse-unhighlight-region beg end)
-    (add-text-properties
-     beg end
-     (list 'font-lock-multiline t
-           'display (muse-eval-lisp
-                     (concat "(progn "
-                             (buffer-substring-no-properties (+ beg 6)
-                                                             (- end 7))
-                             ")"))
-           'intangible t))))
+    (let (beg-lisp end-lisp)
+      (save-match-data
+        (goto-char beg)
+        (setq beg-lisp (and (looking-at "<[^ ]+[^>]*>")
+                            (match-end 0)))
+        (goto-char end)
+        (setq end-lisp (and (muse-looking-back "</[^ ]+[^>]*>")
+                            (match-beginning 0))))
+      (add-text-properties
+       beg end
+       (list 'font-lock-multiline t
+             'display (muse-eval-lisp
+                       (concat
+                        "(progn "
+                        (buffer-substring-no-properties beg-lisp end-lisp)
+                        ")"))
+             'intangible t)))))
 
 (defvar muse-mode-local-map
   (let ((map (make-sparse-keymap)))
