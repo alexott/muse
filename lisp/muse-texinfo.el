@@ -195,7 +195,7 @@ These are applied to URLs."
 
 (defun muse-texinfo-decide-specials (context)
   "Determine the specials to escape, depending on CONTEXT."
-  (cond ((eq context 'url)
+  (cond ((memq context '(url image))
          muse-texinfo-markup-specials-url)
         (t muse-texinfo-markup-specials)))
 

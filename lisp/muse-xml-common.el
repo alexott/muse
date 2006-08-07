@@ -82,7 +82,7 @@ These are extra characters that are escaped within URLs."
 
 (defun muse-xml-decide-specials (context)
   "Determine the specials to escape, depending on CONTEXT."
-  (cond ((memq context '(email url))
+  (cond ((memq context '(email url image))
          'muse-xml-escape-url)
         ((eq context 'url-extra)
          muse-xml-markup-specials-url-extra)

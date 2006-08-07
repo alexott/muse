@@ -61,10 +61,6 @@ fashion.
 
 **** Mention how to customize the WikiName recognition.
 
-*** Emphasizing Text
-
-**** Mention the <code> tag.
-
 *** Extending Muse
 
 **** Move "Common Elements" and "Deriving Styles" chapters here.
@@ -157,6 +153,8 @@ buffers before publishing.
 *** If we cannot find a project to publish, indicate this in an
 error message.  This fixes an infinite loop.
 
+*** Update the file-alist whenever a Muse file is saved.
+
 ** Publishing (lisp/muse-publish.el)
 
 *** Implement escaping of specials throughout the entire document.
@@ -210,6 +208,9 @@ This allows for more flexibility, since some people seem to prefer to
 have the emdash directly against the surrounding text, while others
 like it to be spaced.
 
+*** If the #disable-tables publishing directive exists on the current
+Muse page, do not generate a table.
+
 *** New tags, see the Tag Summary section in the manual for details
 
 **** <comment> -- Designate entire regions as comments.
@@ -241,6 +242,19 @@ This specified the country code to use for Wikipedia.
 empty string.
 
 *** Fix some bugs.
+
+*** New option: muse-wiki-wikiword-match-project-files.
+Whether to extend WikiName functionality to also match
+existing filenames, regardless of whether they are named in
+WikiWord format.
+
+If non-nil, Muse will color and publish implicit links to any
+file in your project.  The default is nil.
+
+*** Match filenames in the project before the general WikiWord
+regexp.
+
+*** Take the value of `muse-wiki-hide-nop-tag' into account.
 
 ** XML publishing (lisp/muse-xml.el)
 

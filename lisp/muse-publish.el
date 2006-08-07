@@ -795,6 +795,7 @@ The following contexts exist in Muse.
 'email      email@example.com
 'url        http://example.com
 'url-desc   [[...][description of an explicit link]]
+'image      [[image.png]]
 'example    <example> region (monospaced, block context, escaped)
 'verbatim   <verbatim> region (escaped)
 'document   normal text"
@@ -1318,7 +1319,10 @@ the cadr is the page name, and the cddr is the anchor."
           (muse-publish-escape-specials-in-string orig-url 'url-desc))
     (let ((target (muse-publish-classify-url url)))
       (setq type (car target)
-            url (muse-publish-escape-specials-in-string (cadr target) 'url)
+            url (if (eq type 'image)
+                    (muse-publish-escape-specials-in-string (cadr target)
+                                                            'image)
+                  (muse-publish-escape-specials-in-string (cadr target) 'url))
             anchor (muse-publish-escape-specials-in-string
                     (cddr target) 'url)))
     (cond ((eq type 'anchor-ref)

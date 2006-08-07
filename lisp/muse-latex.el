@@ -296,7 +296,7 @@ This applies to =monospaced text= and <code> regions."
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-specials-url
-  '((?\\ . "\\\\")
+  '((?\\ . "\\textbackslash{}")
     (?\_ . "\\_")
     (?\< . "\\<")
     (?\> . "\\>")
@@ -311,10 +311,28 @@ These are applied to URLs."
   :type '(alist :key-type character :value-type string)
   :group 'muse-latex)
 
+(defcustom muse-latex-markup-specials-image
+  '((?\\ . "\\textbackslash{}")     ; cannot find suitable replacement
+    (?\< . "\\<")
+    (?\> . "\\>")
+    (?\$ . "\\$")
+    (?\% . "\\%")
+    (?\{ . "\\{")
+    (?\} . "\\}")
+    (?\& . "\\&")
+    (?\# . "\\#")                   ; cannot find suitable replacement
+    )
+  "A table of characters which must be represented specially.
+These are applied to image filenames."
+  :type '(alist :key-type character :value-type string)
+  :group 'muse-latex)
+
 (defun muse-latex-decide-specials (context)
   "Determine the specials to escape, depending on CONTEXT."
   (cond ((memq context '(underline emphasis document url-desc verbatim))
          muse-latex-markup-specials-document)
+        ((eq context 'image)
+         muse-latex-markup-specials-image)
         ((memq context '(email url))
          muse-latex-markup-specials-url)
         ((eq context 'literal)
