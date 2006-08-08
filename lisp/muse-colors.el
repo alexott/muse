@@ -780,7 +780,8 @@ in place of an image link defined by BEG and END."
       ;; see if we should try and inline an image
       (if (and muse-colors-inline-images
                (or (muse-colors-resolve-image-file link)
-                   (and (muse-colors-resolve-image-file desc)
+                   (and desc
+                        (muse-colors-resolve-image-file desc)
                         (setq link desc))))
           ;; we found an image, so inline it
           (muse-colors-insert-image
