@@ -857,25 +857,56 @@ both.  Thus, the following code will publish as a clickable image that
 points to @url{http://www.mwolson.org/}.
 
 @example
-[[http://www.mwolson.org/][http://www.mwolson.org/static/logos/site-logo.png]]
+[[http://www.mwolson.org/][/static/logos/site-logo.png]]
 @end example
 
 @cindex images, displaying
-@cindex images, inlined
 @cindex images, local
+@subheading Displaying images in Muse mode
 If a link to a locally-available image is encountered in the link
 description, Muse mode will attempt to display it if your version of
-Emacs permits this.  The following example will display correctly and
-publish correctly if a @acronym{PNG} file called @file{TestLogo.png}
-exists in the @file{../pics/} directory.
+Emacs permits this.
+
+This behavior may be toggled with @kbd{C-c C-i}, or disabled permanently
+by setting the @code{muse-colors-inline-images} option to @code{nil}.
+
+The method for finding images may be altered by customizing the
+@code{muse-colors-inline-image-method} option.  One useful value for
+this option is @code{muse-colors-use-publishing-directory}, which tells
+Muse mode to look in the directory where the current file will be
+published.  The default is to look in the current directory.  Relative
+paths like @samp{../pics/} should work for either setting.
+
+Eventually, it is hoped that Muse will be able to copy images from the a
+``source'' directory to a publishing directory by customizing
+@code{muse-project-alist}, but this has not been implemented yet.
+
+@cindex images, without descriptions
+@cindex images, inlined
+@subheading Publishing simple images
+The following example will display correctly and publish correctly if a
+@acronym{PNG} file called @file{TestLogo.png} exists in the
+@file{../pics/} directory.  If text is on the same line as the picture,
+it will remain so in the output.
 
 @example
-[[TestPage][../pics/TestLogo.png]]
+[[../myimage.png]]
 @end example
 
-@cindex images, without a description
-An image link is not required to have a description.  The link
-@samp{[[../myimage.png]]} will display and publish as expected.
+@cindex images, captions
+@subheading Publishing images with captions
+If you want to add a caption to an image, use the following syntax.
+This will center the image (if the output format supports it) and add a
+centered caption below the picture.  Formats that do not support
+centering the image will instead leave it against the left margin.
+
+@example
+[[../pics/mycat.png][My cat Dexter]]
+@end example
+
+Images with captions may only occur in their own paragraphs, with no
+text on the same line.  Otherwise, the published output will not be
+syntactically correct.
 
 @node Horizontal Rules and Anchors, Embedded Lisp, Images, Markup Rules
 @comment  node-name,  next,  previous,  up
@@ -2268,29 +2299,42 @@ differs little between the various styles.
 @item image-with-desc
 An image and a description.
 
-Argument 1: image.  Argument 2: description.
+Argument 1: image without extension.  Argument 2: image extension.
+Argument 3: description.
+
+@item image
+An inlined image.
+
+Argument 1: image without extension.  Argument 2: image extension.
 
 @item image-link
 A link to an image.
 
-Argument 1: image link.
+Argument 1: link.  Argument 2: image without extension.
+Argument 3: image extension.
 
-@item url-with-image
-A URL with an image.
+@item anchor-ref
+A reference to an anchor on the current page.
 
-Argument 1: link.  Argument 2: image.
+Argument 1: anchor name.  Argument 2: description if one exists, or the
+original link otherwise.
 
-@item url-link
+@item url
+A URL without a description.
+
+Argument 1: URL.
+
+@item link
 A link with a description.
 
 Argument 1: link.  Argument 2: description if one exists, or the
 original link otherwise.
 
-@item internal-link
-A link that refers to an internal anchor.
+@item link-and-anchor
+A link to a page with an anchor, and a description.
 
-Argument 1: internal link.  Argument 2: description if one exists, or
-the original link otherwise.
+Argument 1: link.  Argument 2: anchor name.
+Argument 3: description if one exists, or the original link otherwise.
 
 @item email-addr
 A link to an email address.
@@ -2300,8 +2344,19 @@ Argument 1: email address.  Argument 2: email address.
 @item emdash
 A 2-length dash.
 
+Argument 1: Initial whitespace.  Argument 2: Terminating whitespace.
+
+@item comment-begin
+Beginning of a comment.
+
+@item comment-end
+End of a comment.
+
 @item rule
 A horizontal line or space.
+
+@item no-break-space
+A space that separates two words which are not to be separated.
 
 @item footnote
 Beginning of footnote.
@@ -2314,6 +2369,9 @@ Mark a reference for the current footnote.
 
 Argument 1: number of this footnote.
 
+@item footnotemark-end
+End of a reference for the current footnote.
+
 @item footnotetext
 Indicate the text of the current footnote.
 
@@ -2325,11 +2383,11 @@ End of a footnote text line.
 @item fn-sep
 Text used to replace ``Footnotes:'' line.
 
-@item enddots
-4 dots.
-
 @item dots
 3 dots.
+
+@item enddots
+4 dots.
 
 @item part
 Beginning of a part indicator line.  This is used by book publishing.
@@ -2463,20 +2521,71 @@ Begin an unordered list.
 @item end-uli
 End an unordered list.
 
+@item begin-uli-item
+Begin an unordered list item.
+
+@item end-uli-item
+End an unordered list item.
+
 @item begin-oli
 Begin an ordered list.
 
 @item end-oli
 End an ordered list.
 
-@item begin-ddt
+@item begin-oli-item
+Begin an ordered list item.
+
+@item end-oli-item
+End an ordered list item.
+
+@item begin-dl
 Begin a definition list.
 
-@item start-dde
-Begin a term in a definition list.
+@item end-dl
+End a definition list.
+
+@item begin-dl-item
+Begin a definition list item.
+
+@item end-dl-item
+End a definition list item.
+
+@item begin-ddt
+Begin a definition list term.
 
 @item end-ddt
-End a definition list.
+End a definition list term.
+
+@item begin-dde
+Begin a definition list entry.
+
+@item end-dde
+End a definition list entry.
+
+@item begin-table
+Begin a table.
+
+@item end-table
+End a table.
+
+@item begin-table-group
+Begin a table grouping.
+
+@item end-table-group
+End a table grouping.
+
+@item begin-table-row
+Begin a table row.
+
+@item end-table-row
+End a table row.
+
+@item begin-table-entry
+Begin a table entry.
+
+@item end-table-entry
+End a table entry.
 
 @end table
 

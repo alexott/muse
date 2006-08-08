@@ -1330,14 +1330,18 @@ the cadr is the page name, and the cddr is the anchor."
           ((string= url "")
            desc)
           ((eq type 'image)
-           (if desc
-               (muse-markup-text 'image-with-desc url desc)
-             (muse-markup-text 'image-link url)))
+           (let ((ext (or (file-name-extension url) "")))
+             (setq url (file-name-sans-extension url))
+             (if desc
+                 (muse-markup-text 'image-with-desc url ext desc)
+               (muse-markup-text 'image url ext))))
           ((eq type 'link-and-anchor)
            (muse-markup-text 'link-and-anchor url anchor
                              (or desc orig-url)))
           ((and desc (string-match muse-image-regexp desc))
-           (muse-markup-text 'url-with-image url desc))
+           (let ((ext (or (file-name-extension desc) "")))
+             (setq desc (file-name-sans-extension desc))
+             (muse-markup-text 'image-link url desc ext)))
           ((eq type 'link)
            (muse-markup-text 'link url (or desc orig-url)))
           (t
@@ -1361,7 +1365,7 @@ the cadr is the page name, and the cddr is the anchor."
                                        (match-string 0))
                          t nil)))
     (setq desc (if explicit
-                   (or (match-string 2) (match-string 1))
+                   (match-string 2)
                  (match-string 0)))
     (setq link (if explicit
                    (muse-handle-explicit-link (match-string 1))
@@ -1372,7 +1376,7 @@ the cadr is the page name, and the cddr is the anchor."
                             (eq (char-after (match-end 0)) ?\")))))
       ;; if explicit link has no user-provided description, treat it
       ;; as if it were an implicit link
-      (when (and explicit (not (match-string 2)))
+      (when (and explicit (not desc))
         (setq explicit nil))
       (muse-publish-insert-url link desc explicit))))
 

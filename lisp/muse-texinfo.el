@@ -118,11 +118,11 @@ For more on the structure of this list, see
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-markup-strings
-  '((image-with-desc . "@image{%s}")
-    (image-link      . "@image{%s}")
-    (url-with-image  . "@uref{%s, %s}")
+  '((image-with-desc . "@center @image{%1%, , , %3%, %2%}@*\n@center %3%")
+    (image           . "@noindent @image{%s, , , , %s}")
+    (image-link      . "@uref{%s, %s.%s}")
     (anchor-ref      . "@ref{%s, %s}")
-    (url             . "@uref{%s, %s}")
+    (url             . "@uref{%s}")
     (link            . "@ref{Top, , Overview, %s, %s}")
     (link-and-anchor . "@ref{%2%, , %2%, %1%, %3%}")
     (email-addr      . "@email{%s}")
@@ -221,7 +221,6 @@ These are applied to URLs."
       (insert ?\n))))
 
 (defun muse-texinfo-finalize-buffer ()
-  (goto-char (point-min))
   (muse-latex-fixup-dquotes)
   (texinfo-insert-node-lines (point-min) (point-max) t)
   (texinfo-all-menus-update t))

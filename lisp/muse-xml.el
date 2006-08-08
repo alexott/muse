@@ -112,9 +112,9 @@ For more on the structure of this list, see
   :group 'muse-xml)
 
 (defcustom muse-xml-markup-strings
-  '((image-with-desc . "<image href=\"%s\">%s</image>")
-    (image-link      . "<image href=\"%s\"></image>")
-    (url-with-image  . "<link type=\"image\" href=\"%s\">%s</link>")
+  '((image-with-desc . "<image href=\"%s.%s\">%s</image>")
+    (image           . "<image href=\"%s.%s\"></image>")
+    (image-link      . "<link type=\"image\" href=\"%s\">%s.%s</link>")
     (anchor-ref      . "<link type=\"url\" href=\"#%s\">%s</link>")
     (url             . "<link type=\"url\" href=\"%s\">%s</link>")
     (link            . "<link type=\"url\" href=\"%s\">%s</link>")

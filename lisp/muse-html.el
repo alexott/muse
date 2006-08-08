@@ -240,9 +240,13 @@ For more on the structure of this list, see
   :group 'muse-html)
 
 (defcustom muse-html-markup-strings
-  '((image-with-desc . "<img src=\"%s\" alt=\"%s\">")
-    (image-link      . "<img src=\"%s\" alt=\"\">")
-    (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\"></a>")
+  '((image-with-desc . "<table align=\"center\" class=\"image\">
+  <tr><td><img src=\"%1%.%2%\" alt=\"%3%\"></td></tr>
+  <tr><td align=\"center\" class=\"image-caption\">%3%</td></tr>
+</table>")
+    (image           . "<img src=\"%s.%s\" alt=\"\">")
+    (image-link      . "<a class=\"image-link\" href=\"%s\">
+<img src=\"%s.%s\"></a>")
     (anchor-ref      . "<a href=\"#%s\">%s</a>")
     (url             . "<a href=\"%s\">%s</a>")
     (link            . "<a href=\"%s\">%s</a>")
@@ -315,9 +319,13 @@ differs little between the various styles."
   :group 'muse-html)
 
 (defcustom muse-xhtml-markup-strings
-  '((image-with-desc . "<img src=\"%s\" alt=\"%s\" />")
-    (image-link      . "<img src=\"%s\" alt=\"\" />")
-    (url-with-image  . "<a class=\"image-link\" href=\"%s\"><img src=\"%s\" alt=\"\" /></a>")
+  '((image-with-desc . "<table class=\"image\">
+  <tr><td><img src=\"%1%.%2%\" alt=\"%3%\" /></td></tr>
+  <tr><td align=\"center\" class=\"image-caption\">%3%</td></tr>
+</table>")
+    (image           . "<img src=\"%s.%s\" alt=\"\" />")
+    (image-link      . "<a class=\"image-link\" href=\"%s\">
+<img src=\"%s.%s\" alt=\"\" /></a>")
     (rule            . "<hr />")
     (fn-sep          . "<hr />\n")
     (begin-underline . "<span style=\"text-decoration: underline;\">")
@@ -427,7 +435,7 @@ This will be used if no special characters are found."
           (muse-insert-markup "<p class=\"image-link\">")
         (muse-insert-markup "<p>")))
      ((looking-at "<img[ >]")
-      (muse-insert-markup "<p class=\"image-link\">"))
+      (muse-insert-markup "<p class=\"image\">"))
      (t
       (forward-char 1)
       nil)))

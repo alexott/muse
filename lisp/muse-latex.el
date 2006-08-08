@@ -147,9 +147,15 @@ For more on the structure of this list, see
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-strings
-  '((image-with-desc . "\\begin{figure}[h]\\centering\\includegraphics[width=0.75\\textwidth]{%s}\\caption{%s}\\end{figure}")
-    (image-link      . "\\begin{figure}[h]\\centering\\includegraphics[width=0.75\\textwidth]{%s}\\end{figure}")
-    (url-with-image  . "%% %s\n\\includegraphics[width=0.75\\textwidth]{%s}")
+  '((image-with-desc . "\\begin{figure}[h]
+\\centering\\includegraphics[width=0.75\\textwidth]{%s.%s}
+\\caption{%s}
+\\end{figure}")
+    (image           . "\\begin{figure}[h]
+\\centering\\includegraphics[width=0.75\\textwidth]{%s.%s}
+\\end{figure}")
+    (image-link      . "%% %s
+\\includegraphics[width=0.75\\textwidth]{%s.%s}")
     (anchor-ref      . "\\ref{%s}")
     (url             . "\\url{%s}")
     (url-and-desc    . "\\href{%s}{%s}\\footnote{%1%}")
@@ -365,6 +371,7 @@ These are applied to image filenames."
 
 (defun muse-latex-fixup-dquotes ()
   "Fixup double quotes."
+  (goto-char (point-min))
   (let ((open t))
     (while (search-forward "\"" nil t)
       (unless (get-text-property (match-beginning 0) 'read-only)
@@ -392,7 +399,6 @@ and it will do what you expect."
   :group 'muse-latex)
 
 (defun muse-latex-finalize-buffer ()
-  (goto-char (point-min))
   (muse-latex-fixup-dquotes)
   (when (and muse-latex-permit-contents-tag
              muse-publish-generate-contents)

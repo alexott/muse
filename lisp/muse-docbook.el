@@ -100,7 +100,19 @@ For more on the structure of this list, see
   :group 'muse-docbook)
 
 (defcustom muse-docbook-markup-strings
-  '((anchor-ref      . "<link linkend=\"%s\">%s</link>")
+  '((image-with-desc . "<mediaobject>
+<imageobject>
+<imagedata fileref=\"%1%.%2%\" format=\"%2%\" />
+</imageobject>
+<caption><para>%3%</para></caption>
+</mediaobject>")
+    (image           . "<inlinemediaobject><imageobject>
+<imagedata fileref=\"%1%.%2%\" format=\"%2%\" />
+</imageobject></inlinemediaobject>")
+    (image-link      . "<ulink url=\"%1%\"><inlinemediaobject><imageobject>
+<imagedata fileref=\"%2%.%3%\" format=\"%3%\" />
+</imageobject></inlinemediaobject></ulink>")
+    (anchor-ref      . "<link linkend=\"%s\">%s</link>")
     (url             . "<ulink url=\"%s\">%s</ulink>")
     (link            . "<ulink url=\"%s\">%s</ulink>")
     (link-and-anchor . "<ulink url=\"%s#%s\">%s</ulink>")
@@ -214,7 +226,7 @@ found in `muse-docbook-encoding-map'."
     (unless (bolp)
       (insert "\n")))
    ((eq (char-after) ?\<)
-    (when (looking-at (concat "<\\(emphasis\\|systemitem"
+    (when (looking-at (concat "<\\(emphasis\\|systemitem\\|inlinemediaobject"
                               "\\|u?link\\|anchor\\|email\\)[ >]"))
       (muse-insert-markup "<para>")))
    (t
@@ -247,7 +259,15 @@ and anything after `Firstname' is optional."
                      "</othername>"
                      "<surname>" last "</surname>"))))))
 
+(defun muse-docbook-fixup-images ()
+  (goto-char (point-min))
+  (while (re-search-forward (concat "<imagedata fileref=\"[^\"]+\""
+                                    " format=\"\\([^\"]+\\)\" />$")
+                            nil t)
+    (replace-match (upcase (match-string 1)) t t nil 1)))
+
 (defun muse-docbook-finalize-buffer ()
+  (muse-docbook-fixup-images)
   (when (boundp 'buffer-file-coding-system)
     (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
       ;; make it agree with the default charset

@@ -628,10 +628,10 @@ Functions should not modify the contents of the buffer."
     (let (beg-lisp end-lisp)
       (save-match-data
         (goto-char beg)
-        (setq beg-lisp (and (looking-at "<[^ ]+[^>]*>")
+        (setq beg-lisp (and (looking-at "<[^>]+>")
                             (match-end 0)))
         (goto-char end)
-        (setq end-lisp (and (muse-looking-back "</[^ ]+[^>]*>")
+        (setq end-lisp (and (muse-looking-back "</[^>]+>")
                             (match-beginning 0))))
       (add-text-properties
        beg end
@@ -779,7 +779,9 @@ in place of an image link defined by BEG and END."
            (invis-props (append props (muse-link-properties desc))))
       ;; see if we should try and inline an image
       (if (and muse-colors-inline-images
-               (muse-colors-resolve-image-file link))
+               (or (muse-colors-resolve-image-file link)
+                   (and (muse-colors-resolve-image-file desc)
+                        (setq link desc))))
           ;; we found an image, so inline it
           (muse-colors-insert-image
            link
