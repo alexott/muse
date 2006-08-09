@@ -241,7 +241,7 @@ For more on the structure of this list, see
 
 (defcustom muse-html-markup-strings
   '((image-with-desc . "<table align=\"center\" class=\"image\">
-  <tr><td><img src=\"%1%.%2%\" alt=\"%3%\"></td></tr>
+  <tr><td align=\"center\"><img src=\"%1%.%2%\" alt=\"%3%\"></td></tr>
   <tr><td align=\"center\" class=\"image-caption\">%3%</td></tr>
 </table>")
     (image           . "<img src=\"%s.%s\" alt=\"\">")
@@ -320,7 +320,7 @@ differs little between the various styles."
 
 (defcustom muse-xhtml-markup-strings
   '((image-with-desc . "<table class=\"image\">
-  <tr><td><img src=\"%1%.%2%\" alt=\"%3%\" /></td></tr>
+  <tr><td align=\"center\"><img src=\"%1%.%2%\" alt=\"%3%\" /></td></tr>
   <tr><td align=\"center\" class=\"image-caption\">%3%</td></tr>
 </table>")
     (image           . "<img src=\"%s.%s\" alt=\"\" />")
