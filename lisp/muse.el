@@ -337,6 +337,12 @@ If REVERSE is specified, reverse an already-escaped string."
             (forward-char))))
       (buffer-string))))
 
+(defun muse-trim-whitespace (string)
+  "Return a version of STRING with no initial nor trailing whitespace."
+  (muse-replace-regexp-in-string
+   (concat "\\`[" muse-regexp-blank "]+\\|[" muse-regexp-blank "]+\\'")
+   "" string))
+
 ;; The following code was extracted from cl
 
 (defun muse-const-expr-p (x)

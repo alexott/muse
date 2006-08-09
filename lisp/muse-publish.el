@@ -1230,8 +1230,9 @@ The existing region will be removed, except for initial blank lines."
         (while (= left 0)
           (when (looking-at muse-table-line-regexp)
             (setq fields (cons (length (match-string 1))
-                               (split-string (match-string 0)
-                                             muse-table-field-regexp))
+                               (mapcar #'muse-trim-whitespace
+                                       (split-string (match-string 0)
+                                                     muse-table-field-regexp)))
                   field-list (cons fields field-list)
                   longest (max (length fields) longest)))
           (setq left (forward-line 1))))
