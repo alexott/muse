@@ -240,7 +240,7 @@ For more on the structure of this list, see
   :group 'muse-html)
 
 (defcustom muse-html-markup-strings
-  '((image-with-desc . "<table align=\"center\" class=\"image\">
+  '((image-with-desc . "<table class=\"image\" width=\"100%%\">
   <tr><td align=\"center\"><img src=\"%1%.%2%\" alt=\"%3%\"></td></tr>
   <tr><td align=\"center\" class=\"image-caption\">%3%</td></tr>
 </table>")
@@ -319,7 +319,7 @@ differs little between the various styles."
   :group 'muse-html)
 
 (defcustom muse-xhtml-markup-strings
-  '((image-with-desc . "<table class=\"image\">
+  '((image-with-desc . "<table class=\"image\" width=\"100%%\">
   <tr><td align=\"center\"><img src=\"%1%.%2%\" alt=\"%3%\" /></td></tr>
   <tr><td align=\"center\" class=\"image-caption\">%3%</td></tr>
 </table>")
