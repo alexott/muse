@@ -565,7 +565,9 @@ This will be used if no special characters are found."
   (when (and (boundp 'buffer-file-coding-system)
              (memq buffer-file-coding-system '(no-conversion undecided-unix)))
     ;; make it agree with the default charset
-    (setq buffer-file-coding-system muse-html-encoding-default)))
+    (setq buffer-file-coding-system muse-html-encoding-default))
+  ;; stop processing the :after functions
+  t)
 
 (unless (assoc "html" muse-publishing-styles)
   (muse-define-style "html"

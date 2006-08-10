@@ -498,13 +498,16 @@ See `muse-publish-markup-tags' for details."
 
 (defun muse-style-run-hooks (keyword style &rest args)
   (catch 'handled
-    (while (and style
-                (setq style (muse-style style)))
-      (let ((func (muse-style-element keyword style t)))
-        (when (and func
-                   (apply func args))
-          (throw 'handled t)))
-      (setq style (muse-style-element :base style)))))
+    (let ((cache nil))
+      (while (and style
+                  (setq style (muse-style style)))
+        (let ((func (muse-style-element keyword style t)))
+          (when (and func
+                     (not (member func cache)))
+            (setq cache (cons func cache))
+            (when (apply func args)
+              (throw 'handled t))))
+        (setq style (muse-style-element :base style))))))
 
 (defun muse-publish-markup-region (beg end &optional title style)
   "Apply the given STYLE's markup rules to the given region.
