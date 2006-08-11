@@ -1,0 +1,147 @@
+2006-08-10  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-finalize-buffer): Since the html
+	style does not derive from any other class, return `t' here.
+	This, along with the corresponding change to muse-publish.el,
+	fixes a problem with the table of contents getting inserted
+	multiple times for custom html-based styles.
+	(muse-html-markup-strings, muse-xhtml-markup-strings): Use a
+	smarter method for table centering that works with XHTML.
+
+	* lisp/muse-latex2png.el Rename all functions to have a
+	"muse-latex2png" prefix.  Turn all variables into customizable
+	options in the muse-latex2png group.
+	(muse-latex2png-img-dest): New option specifying where to place
+	the images.
+	(muse-latex2png-template): New option containing the template to
+	use for the surrounding LaTeX code.
+	(muse-latex2png-use-xhtml): New option that toggles strict XHTML
+	compliance.
+	(muse-latex2png-move2pubdir): Avoid multiple redundant error
+	messages when something else goes wrong.  Create the image
+	subdirectory if it doesn't exist already -- thanks to Christian
+	Straßer for the report.  Expand the filename properly.
+	(muse-publish-latex-tag, muse-latex2png): Ditto on error messages
+	and filename expansion.
+	(muse-latex2png): Use the "muse-latex2png" prefix by default.  Set
+	the default directory properly.
+
+	* lisp/muse-publish.el (muse-style-run-hooks): Make sure that we
+	do not run the same function twice.
+
+2006-08-08  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-colors.el (muse-colors-explicit-link): Fix recently
+	introduced wrong-type-argument error.
+
+	* lisp/muse-html.el (muse-html-markup-strings)
+	(muse-xhtml-markup-string): Cause table definition that contains
+	image to be center-aligned.  This should fix an issue with images
+	not being centered when captions are very long.
+
+	* lisp/muse-publish.el (muse-publish-table-fields): Trim
+	whitespace from fields once we have split them up.
+
+	* lisp/muse.el (muse-trim-whitespace): New function that strips
+	leading and trailing whitespace from a string.
+
+2006-08-07  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Update through patch-95.
+
+	* lisp/muse-colors.el (muse-colors-lisp-tag): Use a simpler regexp
+	to match the tags.
+	(muse-colors-explicit-link): Show images in link descriptions if
+	inlined images are enabled.
+
+	* lisp/muse-docbook.el (muse-docbook-markup-strings): Add
+	definitions for 'image-with-desc, 'image, and 'image-link.
+	(muse-docbook-markup-paragraph): If an inlined image begins a
+	paragraph, insert <para> before it.
+	(muse-docbook-fixup-images): New function that upper-cases the
+	"format" attribute of the <imagedata> tag.
+	(muse-docbook-finalize-buffer): Call it.
+
+	* lisp/muse-html.el (muse-html-markup-strings): Publish images
+	with descriptions as centered tables, with a centered caption
+	underneath.  The resulting look is consistent with the way that
+	they are published in the LaTeX style.  Thanks to Jody Klymak for
+	the suggestion.
+	(muse-xhtml-markup-strings): Ditto, but XHTML apparently has no
+	valid way to center a table.
+	(muse-html-markup-paragraph): Use class="image" instead of
+	"image-link" for paragraphs that start with an embedded image.
+
+	* lisp/muse-latex.el (muse-latex-markup-specials-url): Use
+	\textbackslash{} for "\".  Thanks to Jim Ottaway for the
+	suggestion.
+	(muse-latex-markup-specials-image): New option that enables
+	escaping of specials in images.  This was split from the URL
+	specials.
+	(muse-latex-decide-specials): Handle 'image context.
+	(muse-latex-fixup-dquotes): Go to beginning of document, instead
+	of relying on caller to do this for us.
+
+	* lisp/muse-publish.el (muse-publish-escape-specials): Document
+	'image context.
+	(muse-publish-url): Use 'image context for images.  Use 'image
+	instead of 'image-link and 'image-link in place of
+	'url-with-image.  Separate the image file from its extension so
+	that docbook and texinfo can publish images correctly.
+	(muse-publish-markup-link): Don't force a description if one is
+	not given.  This fixes a bug where images without descriptions
+	were being published as 'image-with-desc instead of 'image.
+
+	* lisp/muse-texinfo.el (muse-texinfo-decide-specials): Treat
+	images the same as URLs.
+	(muse-texinfo-markup-strings): Improve image markup to achieve an
+	effect similar to that of the LaTeX publishing style.  Simplify
+	'url string.
+
+	* lisp/muse-xml-common.el (muse-xml-decide-specials): Ditto.
+
+	* lisp/muse.el (muse-replace-regexp-in-string): Save match data
+	when we have to use the custom version of this function.
+
+	* muse.texi (Images): Explain how to toggle inlining of images and
+	give better examples.  Mention captions and that captioned images
+	should not be used inside of text paragraphs.
+	(Markup Strings): Bring up-to-date with the changes made since
+	3.02.
+
+2006-08-06  Michael Olson  <mwolson@gnu.org>
+
+	* ChangeLog.1: Rename from ChangeLog.2004 to comply with standards
+	in the Emacs source tree.
+
+	* ChangeLog.2: Rename from ChangeLog.2005 to comply with standards
+	in the Emacs source tree.
+
+	* ChangeLog.3: New file created from the old ChangeLog.
+
+	* Makefile.defs (VERSION): Set to 3.02.91.
+
+	* NEWS: Update through patch-84.
+
+	* lisp/muse.el (muse-version): Set to 3.02.91.
+
+	* lisp/muse-colors.el (muse-colors-tags): Allow <lisp> to take
+	attributes.
+	(muse-colors-lisp-tag): Figure out where the <lisp> tag and its
+	delimiter are instead of hard-coding it.
+
+	* lisp/muse-mode.el (muse-insert-thing): Qualify "tag".
+	(muse-mode): Make filling definition lists work better.  This
+	should fix #5359.
+
+	* lisp/muse-publish.el (muse-style-run-hooks): Use
+	`muse-style-element' instead of `muse-get-keyword' here.  This
+	should fix #6399.
+
+	* muse.texi: Set version to 3.02.91 (3.02 RC2).
+
+See ChangeLog.3 for earlier changes.
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
