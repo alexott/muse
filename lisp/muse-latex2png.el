@@ -1,7 +1,7 @@
 ;; muse-latex2png.el --- generate PNG images from inline LaTeX code
 
 ;; Copyright (C) 2004, 2005 Ganesh Swami
-;; Copyright (C) 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
 
 ;; Author: Ganesh Swami <ganesh AT iamganesh DOT com>
 ;; Created: May 01 2004
@@ -39,33 +39,79 @@
 
 (require 'muse-publish)
 
-(defvar latex2png-scale-factor 2.5
-  "The scale factor to be used for sizing the resulting latex.")
-(defvar latex2png-fg "Black"
-  "The foreground color.")
-(defvar latex2png-bg "Transparent"
-  "The background color.")
+(defgroup muse-latex2png nil
+  "Publishing LaTeX formulas as PNG files."
+  :group 'muse-publish)
 
-(defun latex2png-move2pubdir (file prefix pubdir)
+(defcustom muse-latex2png-img-dest "./latex"
+  "The folder where the generated images will be placed.
+This is relative to the current publishing directory."
+  :type 'string
+  :group 'muse-latex2png)
+
+(defcustom muse-latex2png-scale-factor 2.5
+  "The scale factor to be used for sizing the resulting LaTeX output."
+  :type 'number
+  :group 'muse-latex2png)
+
+(defcustom muse-latex2png-fg "Black"
+  "The foreground color."
+  :type 'string
+  :group 'muse-latex2png)
+
+(defcustom muse-latex2png-bg "Transparent"
+  "The background color."
+  :type 'string
+  :group 'muse-latex2png)
+
+(defcustom muse-latex2png-template
+  "\\documentclass{article}
+\\usepackage{fullpage}
+\\usepackage{amssymb}
+\\usepackage[usenames]{color}
+\\usepackage{amsmath}
+\\usepackage{latexsym}
+\\usepackage[mathscr]{eucal}
+%preamble%
+\\pagestyle{empty}
+\\begin{document}
+{%code%}
+\\end{document}\n"
+  "The LaTeX template to use."
+  :type 'string
+  :group 'muse-latex2png)
+
+(defcustom muse-latex2png-use-xhtml nil
+  "Indicate whether the output must be valid XHTML.
+This is used for inserting the IMG tag."
+  :type 'boolean
+  :group 'muse-latex2png)
+
+(defun muse-latex2png-move2pubdir (file prefix pubdir)
   "Move FILE to the PUBDIR folder.
 
 This is done so that the resulting images do not clutter your
 main publishing directory.
 
 Old files with PREFIX in the name are deleted."
-  (if (and (file-exists-p file)
-           (file-directory-p pubdir))
-      (progn
-        (copy-file file (concat pubdir (file-name-nondirectory file)) t)
-        (delete-file file)
-        (concat "./latex/" (file-name-nondirectory file)))
-    (message "The latex folder does not exist!")))
+  (when file
+    (if (file-exists-p file)
+        (progn
+          (unless (file-directory-p pubdir)
+            (message "Creating latex directory %s" pubdir)
+            (make-directory pubdir))
+          (copy-file file (expand-file-name (file-name-nondirectory file)
+                                            pubdir)
+                     t)
+          (delete-file file)
+          (concat muse-latex2png-img-dest "/" (file-name-nondirectory file)))
+      (message "Cannot find %s!" file))))
 
 (defun muse-publish-latex-tag (beg end attrs)
   (let ((end-marker (set-marker (make-marker) (1+ end)))
-        (pubdir (concat (file-name-directory
-                         muse-publishing-current-output-path)
-                        "/latex/")))
+        (pubdir (expand-file-name
+                 muse-latex2png-img-dest
+                 (file-name-directory muse-publishing-current-output-path))))
     (save-restriction
       (narrow-to-region beg end)
       (let* ((text (buffer-substring-no-properties beg end))
@@ -79,52 +125,55 @@ Old files with PREFIX in the name are deleted."
         (goto-char (point-min))
         (unless (file-directory-p pubdir)
           (make-directory pubdir))
-        (muse-insert-markup
-         "<img src=\""
-         (latex2png-move2pubdir (latex2png text prefix preamble)
-                                prefix pubdir)
-         "\" alt=\"latex2png equation\" "
-         (if display (concat "class=\"latex-inline\"")
-           (concat "class=\"latex-display\""))
-         " />")
-        (muse-insert-markup "<!-- " text "-->")
-        (goto-char (point-max))))))
+        (let ((path (muse-latex2png-move2pubdir
+                     (muse-latex2png text prefix preamble)
+                     prefix pubdir)))
+          (when path
+            (muse-insert-markup
+             "<img src=\"" path
+             "\" alt=\"latex2png equation\" "
+             (if display (concat "class=\"latex-inline\"")
+               (concat "class=\"latex-display\""))
+             (if muse-latex2png-use-xhtml
+                 " />"
+               ">"))
+            (muse-insert-markup "<!-- " text "-->")
+            (goto-char (point-max))))))))
 
-(defun latex2png (math prefix preamble)
-  "Convert the MATH code into a png with PREFIX."
+(defun muse-latex2png (code prefix preamble)
+  "Convert the LaTeX CODE into a png file beginning with PREFIX.
+PREAMBLE indicates extra packages and definitions to include."
   (unless preamble
     (setq preamble ""))
-  (let ((texfile (expand-file-name
-                  (concat prefix "_"  (format "%d" (abs (sxhash math))))
-                  (cond ((boundp 'temporary-file-directory)
-                         temporary-file-directory)
-                        ((fboundp 'temp-directory)
-                         (temp-directory)))))
-        (oldcddir default-directory))
+  (unless prefix
+    (setq prefix "muse-latex2png"))
+  (let* ((tmpdir (cond ((boundp 'temporary-file-directory)
+                        temporary-file-directory)
+                       ((fboundp 'temp-directory)
+                        (temp-directory))
+                       (t "/tmp")))
+         (texfile (expand-file-name
+                   (concat prefix "_"  (format "%d" (abs (sxhash code))))
+                   tmpdir))
+         (defalt-directory default-directory))
     (with-temp-file (concat texfile ".tex")
-      (insert (concat "\\documentclass{article}
-\\usepackage{fullpage}
-\\usepackage{amssymb}
-\\usepackage[usenames]{color}
-\\usepackage{amsmath}
-\\usepackage{latexsym}
-\\usepackage[mathscr]{eucal}\n" preamble
-"\n\\pagestyle{empty}
-\\begin{document}"
-"{"
- math
-"}\n"
-"\n\\end{document}\n\n")))
-    (cd "/tmp")
+      (insert muse-latex2png-template)
+      (goto-char (point-min))
+      (while (search-forward "%preamble%" nil t)
+        (replace-match preamble nil t))
+      (goto-char (point-min))
+      (while (search-forward "%code%" nil t)
+        (replace-match code nil t)))
+    (setq default-directory tmpdir)
     (call-process "latex" nil nil nil texfile)
     (if (file-exists-p (concat texfile ".dvi"))
         (progn
           (shell-command-to-string
-           (concat "dvipng " texfile ".dvi -E "
-                   " -fg " latex2png-fg
-                   " -bg " latex2png-bg " -T tight"
-                   " -x " (format  "%s" (* latex2png-scale-factor 1000))
-                   " -y " (format  "%s" (* latex2png-scale-factor 1000))
+           (concat "dvipng " texfile ".dvi -E"
+                   " -fg " muse-latex2png-fg
+                   " -bg " muse-latex2png-bg " -T tight"
+                   " -x " (format  "%s" (* muse-latex2png-scale-factor 1000))
+                   " -y " (format  "%s" (* muse-latex2png-scale-factor 1000))
                    " -o " texfile ".png"))
           (if (file-exists-p (concat texfile ".png"))
               (progn
@@ -132,10 +181,11 @@ Old files with PREFIX in the name are deleted."
                 (delete-file (concat texfile ".tex"))
                 (delete-file (concat texfile ".aux"))
                 (delete-file (concat texfile ".log"))
-                (cd oldcddir)
                 (concat texfile ".png"))
-            (message "Failed to create png file")))
-      (message (concat "Failed to create dvi file " texfile)))))
+            (message "Failed to create png file")
+            nil))
+      (message (concat "Failed to create dvi file " texfile))
+      nil)))
 
 ;;; Insinuate with muse-publish
 
