@@ -570,12 +570,27 @@ TITLE is used when indicating the publishing progress; it may be nil."
 
 ;; Commands for publishing files
 
-(defsubst muse-publish-get-style (&optional styles)
+(defun muse-publish-get-style (&optional styles)
   (unless styles (setq styles muse-publishing-styles))
   (if (= 1 (length styles))
       (car styles)
-    (assoc (completing-read "Publish with style: " styles nil t)
-           styles)))
+    (when (catch 'different
+            (let ((first (car (car styles))))
+              (dolist (style (cdr styles))
+                (unless (equal first (car style))
+                  (throw 'different t)))))
+      (setq styles (muse-collect-alist
+                    styles
+                    (completing-read "Publish with style: " styles nil t))))
+    (if (or (= 1 (length styles))
+            (not (muse-get-keyword :path (car styles))))
+        (car styles)
+      (setq styles (mapcar (lambda (style)
+                             (cons (muse-get-keyword :path style)
+                                   style))
+                           styles))
+      (cdr (assoc (completing-read "Publish to directory: " styles nil t)
+                  styles)))))
 
 (defsubst muse-publish-get-output-dir (style)
   (let ((default-directory (or (muse-style-element :path style)

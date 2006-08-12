@@ -17,6 +17,9 @@
 	(muse-publish-insert-url): Pass original URL as an argument.
 	(muse-publish-markup-link): Make this somewhat easier to follow.
 	Pass original URL as argument.
+	(muse-publish-get-style): If the same style is used to publish to
+	two different directories, prompt the user for which directory to
+	use.
 
 	* lisp/muse.el: Use defalias whenever convenient.
 
