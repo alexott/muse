@@ -1309,7 +1309,7 @@ the cadr is the page name, and the cddr is the anchor."
           (t
            (cons 'link (cons (muse-publish-link-page target) nil))))))
 
-(defun muse-publish-url-desc (desc)
+(defun muse-publish-url-desc (desc explicit)
   (when desc
     (dolist (transform muse-publish-desc-transforms)
       (setq desc (save-match-data
@@ -1323,9 +1323,9 @@ the cadr is the page name, and the cddr is the anchor."
     (dolist (transform muse-publish-url-transforms)
       (setq url (save-match-data (when url (funcall transform url explicit)))))
     (if desc
-        (setq desc (muse-publish-url-desc desc))
+        (setq desc (muse-publish-url-desc desc explicit))
       (if orig-url
-          (setq orig-url (muse-publish-url-desc orig-url))))
+          (setq orig-url (muse-publish-url-desc orig-url explicit))))
     (let ((target (muse-publish-classify-url url)))
       (setq type (car target)
             url (if (eq type 'image)

@@ -1,5 +1,10 @@
 2006-08-12  Michael Olson  <mwolson@gnu.org>
 
+	* NEWS: Catch up through patch-120.
+
+	* lisp/muse-project.el (muse-project-get-applicable-style):
+	Indentation tweak.
+
 	* lisp/muse-publish.el (muse-publish-this-file): Display message
 	if the buffer is not associated with any file, so that we avoid
 	errors later on.
@@ -12,6 +17,8 @@
 	(muse-publish-insert-url): Pass original URL as an argument.
 	(muse-publish-markup-link): Make this somewhat easier to follow.
 	Pass original URL as argument.
+
+	* lisp/muse.el: Use defalias whenever convenient.
 
 2006-08-10  Michael Olson  <mwolson@gnu.org>
 

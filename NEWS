@@ -9,12 +9,27 @@ This specifies whether or not we are using tags.  Tags allow a page to
 belong to multiple categories, but they do not rely on the directory
 structure for categorization.
 
+** Building Muse
+
+*** Compile the contents of the contrib directory.
+
 ** Core functionality (lisp/muse.el)
 
 *** Fix an XEmacs beta byte-compiler issue.
 
 *** Make nested list manipulation accessible to both Muse Mode
 and Muse publishing.
+
+*** Fix failure to recognize the .muse file extension.
+Handle the case where the user customizes the file extension.
+
+*** It is now easier to indicate that Muse should not use a file
+extension.  Just do the following.
+
+(setq muse-file-extension nil
+      muse-mode-auto-p t)
+
+*** Allow tab characters in explicit links.
 
 ** HTML publishing (lisp/muse-html.el)
 
@@ -54,6 +69,8 @@ This makes the URLs show up on printed documents in a sensible
 fashion.
 
 *** Escape the "@" character in the entire document.
+
+*** Make images take up 75% of the width of the page.
 
 ** Muse Manual (muse.texi)
 
@@ -101,6 +118,10 @@ files are supposed to be completely separable.
 *** Speed up searching for next and previous references.
 
 *** Make filling definition lists work better.
+
+*** Make editing existing links with `C-c C-e' work better.
+
+*** Make browsing the resulting page with `C-c C-v' work better.
 
 ** Muse Mode highlighting (lisp/muse-colors.el)
 
@@ -211,6 +232,14 @@ like it to be spaced.
 *** If the #disable-tables publishing directive exists on the current
 Muse page, do not generate a table.
 
+*** Don't give an error when trying to define or derive an existing
+style.  Just replace it.
+
+*** Get rid of a warning that occurs when batch publishing.
+
+*** Ignore list items that are part of higher-priority constructs
+like emphasis.
+
 *** New tags, see the Tag Summary section in the manual for details
 
 **** <comment> -- Designate entire regions as comments.
@@ -255,6 +284,12 @@ file in your project.  The default is nil.
 regexp.
 
 *** Take the value of `muse-wiki-hide-nop-tag' into account.
+
+*** New option: muse-wiki-ignore-implicit-links-to-current-page.
+Whether to ignore implicit links to the current page.
+
+If non-nil, Muse will not recognize implicit links to the current
+page, both when formatting and publishing.
 
 ** XML publishing (lisp/muse-xml.el)
 

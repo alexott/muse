@@ -599,10 +599,10 @@ The name of a project may be used for STYLES."
 (defun muse-project-get-applicable-style (file styles)
   "Choose a style from the STYLES that FILE can publish to.
 The user is prompted if several styles are found."
-  (muse-publish-get-style (mapcar
-                           (lambda (style)
-                             (cons (muse-get-keyword :base style) style))
-                           (muse-project-applicable-styles file styles))))
+  (muse-publish-get-style
+   (mapcar (lambda (style)
+             (cons (muse-get-keyword :base style) style))
+           (muse-project-applicable-styles file styles))))
 
 (defun muse-project-resolve-link (page local-style remote-styles)
   "Return a published relative link from the output path of one file
