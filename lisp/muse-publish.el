@@ -661,9 +661,11 @@ the file is published no matter what."
 Prompt for both the STYLE and OUTPUT-DIR if they are not
 supplied."
   (interactive (muse-publish-get-info))
-  (unless (muse-publish-file buffer-file-name style output-dir force)
-    (message (concat "The published version is up-to-date; use"
-                     " C-u C-c C-T to force an update."))))
+  (if buffer-file-name
+      (unless (muse-publish-file buffer-file-name style output-dir force)
+        (message (concat "The published version is up-to-date; use"
+                         " C-u C-c C-T to force an update.")))
+    (message "This buffer is not associated with any file")))
 
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
@@ -1307,20 +1309,23 @@ the cadr is the page name, and the cddr is the anchor."
           (t
            (cons 'link (cons (muse-publish-link-page target) nil))))))
 
-(defun muse-publish-url (url &optional desc explicit)
-  "Resolve a URL into its final <a href> form."
-  (let ((orig-url url)
-        type anchor)
-    (dolist (transform muse-publish-url-transforms)
-      (setq url (save-match-data (when url (funcall transform url explicit)))))
+(defun muse-publish-url-desc (desc)
+  (when desc
     (dolist (transform muse-publish-desc-transforms)
       (setq desc (save-match-data
                    (when desc (funcall transform desc explicit)))))
-    (when desc
-      (setq desc (muse-link-unescape desc))
-      (setq desc (muse-publish-escape-specials-in-string desc 'url-desc)))
-    (setq orig-url
-          (muse-publish-escape-specials-in-string orig-url 'url-desc))
+    (setq desc (muse-link-unescape desc))
+    (muse-publish-escape-specials-in-string desc 'url-desc)))
+
+(defun muse-publish-url (url &optional desc orig-url explicit)
+  "Resolve a URL into its final <a href> form."
+  (let (type anchor)
+    (dolist (transform muse-publish-url-transforms)
+      (setq url (save-match-data (when url (funcall transform url explicit)))))
+    (if desc
+        (setq desc (muse-publish-url-desc desc))
+      (if orig-url
+          (setq orig-url (muse-publish-url-desc orig-url))))
     (let ((target (muse-publish-classify-url url)))
       (setq type (car target)
             url (if (eq type 'image)
@@ -1355,25 +1360,24 @@ the cadr is the page name, and the cddr is the anchor."
                            text)))
                (muse-markup-text 'url url (or desc orig-url)))))))
 
-(defun muse-publish-insert-url (url &optional desc explicit)
+(defun muse-publish-insert-url (url &optional desc orig-url explicit)
   "Resolve a URL into its final <a href> form."
   (delete-region (match-beginning 0) (match-end 0))
-  (let ((text (muse-publish-url url desc explicit)))
+  (let ((text (muse-publish-url url desc orig-url explicit)))
     (when text
       (muse-insert-markup text))))
 
 (defun muse-publish-markup-link ()
-  (let (desc explicit link)
+  (let (desc explicit orig-link link)
     (setq explicit (save-match-data
                      (if (string-match muse-explicit-link-regexp
                                        (match-string 0))
                          t nil)))
-    (setq desc (if explicit
-                   (match-string 2)
-                 (match-string 0)))
+    (setq orig-link (if explicit (match-string 1) (match-string 0)))
+    (setq desc (when explicit (match-string 2)))
     (setq link (if explicit
-                   (muse-handle-explicit-link (match-string 1))
-                 (muse-handle-implicit-link (match-string 0))))
+                   (muse-handle-explicit-link orig-link)
+                 (muse-handle-implicit-link orig-link)))
     (when (and link
                (or explicit
                    (not (or (eq (char-before (match-beginning 0)) ?\")
@@ -1382,7 +1386,7 @@ the cadr is the page name, and the cddr is the anchor."
       ;; as if it were an implicit link
       (when (and explicit (not desc))
         (setq explicit nil))
-      (muse-publish-insert-url link desc explicit))))
+      (muse-publish-insert-url link desc orig-link explicit))))
 
 (defun muse-publish-markup-url ()
   (unless (or (eq (char-before (match-beginning 0)) ?\")

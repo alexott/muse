@@ -1,3 +1,18 @@
+2006-08-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-this-file): Display message
+	if the buffer is not associated with any file, so that we avoid
+	errors later on.
+	(muse-publish-url-desc): New function taken from muse-publish-url
+	that causes a URL description to be transformed.
+	(muse-publish-url): Call muse-publish-url-desc on either the
+	description or the original URL if it will be used as a
+	description.  Accept the original URL as an argument, in case it
+	was transformed earlier.
+	(muse-publish-insert-url): Pass original URL as an argument.
+	(muse-publish-markup-link): Make this somewhat easier to follow.
+	Pass original URL as argument.
+
 2006-08-10  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-finalize-buffer): Since the html
