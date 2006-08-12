@@ -1,6 +1,7 @@
 2006-08-12  Michael Olson  <mwolson@gnu.org>
 
-	* Makefile (.PHONY): Don't use line continuations.
+	* Makefile, experimental/Makefile (.PHONY): Don't use line
+	continuations.
 
 	* NEWS: Catch up with the latest changes.
 

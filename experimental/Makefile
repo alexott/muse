@@ -1,4 +1,5 @@
-.PHONY: all experimental clean realclean distclean fullclean install install-uncompiled
+.PHONY: all experimental clean realclean distclean fullclean install
+.PHONY: install-uncompiled
 .PRECIOUS: %.elc
 
 include ../Makefile.defs
