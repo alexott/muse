@@ -1,9 +1,17 @@
 2006-08-12  Michael Olson  <mwolson@gnu.org>
 
-	* Makefile, experimental/Makefile (.PHONY): Don't use line
-	continuations.
+	* Makefile (.PHONY): Don't use line continuations.
+	(realclean fullclean): Call realclean in subdirs, not distclean.
+	(distclean): Don't call realclean, since this would wipe out our
+	autoloads file.
+	(dist): Use correct path to autoloads file.
 
 	* NEWS: Catch up with the latest changes.
+
+	* experimental/Makefile (.PHONY): Wrap long line.
+
+	* lisp/Makefile (distclean): Do the same thing as "clean", not
+	"realclean".
 
 	* lisp/muse-project.el (muse-project-get-applicable-style):
 	Indentation tweak.

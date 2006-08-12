@@ -23,10 +23,10 @@ $(PROJECT)-autoloads.el: $(EL)
 	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
 		-f batch-byte-compile $<
 
-clean:
+clean distclean:
 	-rm -f *.elc *~
 
-realclean distclean fullclean: clean
+realclean fullclean: clean
 	-rm -f $(PROJECT)-autoloads.el
 
 install: autoloads $(ELC)

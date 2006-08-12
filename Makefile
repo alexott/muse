@@ -39,7 +39,7 @@ clean:
 realclean fullclean: clean
 	-rm -f $(MANUAL).info $(MANUAL).html
 	for i in $(SUBDIRS); do \
-	 (cd $$i && $(MAKE) distclean); done
+	 (cd $$i && $(MAKE) realclean); done
 
 install-info: $(MANUAL).info
 	[ -d $(INFODIR) ] || install -d $(INFODIR)
@@ -56,14 +56,17 @@ install: install-bin install-info
 test: 
 	(cd lisp && $(MAKE) test)
 
-distclean: realclean
+distclean:
+	-rm -f $(MANUAL).info $(MANUAL).html
+	for i in $(SUBDIRS); do \
+	 (cd $$i && $(MAKE) distclean); done
 	-rm -fr ../$(PROJECT)-$(VERSION)
 
 dist: autoloads distclean
 	tla inventory -sB | tar -cf - --no-recursion -T- | \
 	  (mkdir -p ../$(PROJECT)-$(VERSION); cd ../$(PROJECT)-$(VERSION) && \
 	  tar xf -)
-	cp $(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)
+	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)
 	rm -fr ../$(PROJECT)-$(VERSION)/debian
 
 release: dist
