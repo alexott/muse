@@ -66,7 +66,7 @@ dist: autoloads distclean
 	tla inventory -sB | tar -cf - --no-recursion -T- | \
 	  (mkdir -p ../$(PROJECT)-$(VERSION); cd ../$(PROJECT)-$(VERSION) && \
 	  tar xf -)
-	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)
+	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)/lisp
 	rm -fr ../$(PROJECT)-$(VERSION)/debian
 
 release: dist

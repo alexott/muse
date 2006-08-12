@@ -26,6 +26,8 @@ It is now available at mwolson@gnu.org--2006/muse--debian--0.
 *** Further parametrize the build system, so that it can be easily
 used by other Emacs Lisp projects.
 
+*** Include autoloads file (lisp/muse-autoloads.el) with releases.
+
 ** Core functionality (lisp/muse.el)
 
 *** Fix an XEmacs beta byte-compiler issue.
