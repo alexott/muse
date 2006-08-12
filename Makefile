@@ -1,6 +1,6 @@
-.PHONY: all lisp contrib autoloads examples experimental doc clean realclean \
- distclean fullclean install-info install-bin install test dist release \
- debbuild debrevision debrelease upload
+.PHONY: all lisp contrib autoloads examples experimental doc clean realclean
+.PHONY: distclean fullclean install-info install-bin install test dist release
+.PHONY: debbuild debrevision debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
