@@ -1,9 +1,13 @@
 2006-08-12  Michael Olson  <mwolson@gnu.org>
 
-	* NEWS: Catch up through patch-120.
+	* NEWS: Catch up with the latest changes.
 
 	* lisp/muse-project.el (muse-project-get-applicable-style):
 	Indentation tweak.
+	(muse-project-ignore-regexp, muse-project-recurse-directory):
+	Docfix.
+	(muse-project-of-file): Try the ignored files regexp against the
+	base filename as well as the entire path.
 
 	* lisp/muse-publish.el (muse-publish-this-file): Display message
 	if the buffer is not associated with any file, so that we avoid
@@ -20,6 +24,8 @@
 	(muse-publish-get-style): If the same style is used to publish to
 	two different directories, prompt the user for which directory to
 	use.
+	(muse-publish-markup-header-footer-tags): Sync lisp tag with the
+	latest changes.
 
 	* lisp/muse.el: Use defalias whenever convenient.
 

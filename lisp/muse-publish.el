@@ -468,7 +468,7 @@ to the text with ARGS as parameters."
         (message "Publishing %s...done" name))))
 
 (defcustom muse-publish-markup-header-footer-tags
-  '(("lisp"     t   nil muse-publish-lisp-tag)
+  '(("lisp"     t   t   muse-publish-lisp-tag)
     ("markup"   t   t   muse-publish-mark-up-tag))
   "Tags used when publishing headers and footers.
 See `muse-publish-markup-tags' for details."
