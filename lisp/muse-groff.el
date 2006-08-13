@@ -106,9 +106,9 @@ For more on the structure of this list, see
   :group 'muse-groff)
 
 (defcustom muse-groff-markup-strings
-  `((image-with-desc . "\n.MPIMG -R %s\n")
-    (image-link      . "\n.MPIMG -R %s\n")
-    (url-with-image  . "\n.\\\" %s\n.MPIMG -R %s")
+  `((image-with-desc . "\n.MPIMG -R %s.%s\n")
+    (image           . "\n.MPIMG -R %s.%s\n")
+    (image-link      . "\n.\\\" %s\n.MPIMG -R %s.%s")
     (url             . "\n.URL %s %s\n\\z")
     (link            . "\n.URL %s %s\n\\z")
     (email-addr      . "\f[C]%s\f[]")

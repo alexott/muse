@@ -20,6 +20,13 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 #INSTALLINFO = install-info --section "Emacs" "emacs" --info-dir=$(INFODIR)
 
 # Useful only for the maintainer
+<<<<<<< TREE
 VERSION    = 3.02.90.arch.146
+=======
+PROJECT    = muse
+DEBNAME    = muse-el
+VERSION    = 3.02.92
+MANUAL     = muse
+>>>>>>> MERGE-SOURCE
 LASTUPLOAD = 3.02.6-2
 BUILDOPTS  =

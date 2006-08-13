@@ -235,7 +235,7 @@ when publishing files in that project."
   (concat "\\`\\(#.*#\\|.*,v\\|.*~\\|\\.\\.?\\|\\.#.*\\|,.*\\)\\'\\|"
           "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\|\\.svn\\|"
           "_darcs\\)\\(/\\|\\'\\)")
-  "A regexp matching files to be ignored in Wiki directories.
+  "A regexp matching files to be ignored in Muse directories.
 
 You should set case-fold-search to nil before using this regexp
 in code."
@@ -245,6 +245,7 @@ in code."
 (defun muse-project-recurse-directory (base)
   "Recusively retrieve all of the directories underneath BASE.
 A list of these directories is returned.
+
 Directories starting with \".\" will be ignored, as well as those
 which match `muse-project-ignore-regexp'."
   (let ((case-fold-search nil)
@@ -453,7 +454,11 @@ If PATHNAME is nil, the current buffer's filename is used."
       (when (and (stringp pathname)
                  (not (string= pathname ""))
                  (not (let ((case-fold-search nil))
-                        (string-match muse-project-ignore-regexp pathname))))
+                        (or (string-match muse-project-ignore-regexp
+                                          pathname)
+                            (string-match muse-project-ignore-regexp
+                                          (file-name-nondirectory
+                                           pathname))))))
         (let* ((file (file-truename pathname))
                (dir  (file-name-directory file))
                (project-entry muse-project-alist)
@@ -599,10 +604,10 @@ The name of a project may be used for STYLES."
 (defun muse-project-get-applicable-style (file styles)
   "Choose a style from the STYLES that FILE can publish to.
 The user is prompted if several styles are found."
-  (muse-publish-get-style (mapcar
-                           (lambda (style)
-                             (cons (muse-get-keyword :base style) style))
-                           (muse-project-applicable-styles file styles))))
+  (muse-publish-get-style
+   (mapcar (lambda (style)
+             (cons (muse-get-keyword :base style) style))
+           (muse-project-applicable-styles file styles))))
 
 (defun muse-project-resolve-link (page local-style remote-styles)
   "Return a published relative link from the output path of one file

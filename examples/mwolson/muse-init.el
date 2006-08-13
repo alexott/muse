@@ -47,11 +47,15 @@
 
 (setq muse-project-alist
       `(
-        ("Website" ("~/proj/wiki/web/"
+        ("Website" ("~/proj/wiki/web/" "~/proj/wiki/web/testdir/"
                     :force-publish ("WikiIndex")
                     :default "WelcomePage")
          (:base "my-xhtml"
+                :include "/web/[^/]+"
                 :path "~/personal-site/site/web")
+         (:base "my-xhtml"
+                :include "/testdir/[^/]+"
+                :path "~/personal-site/site/web/testdir")
          (:base "my-pdf"
                 :path "~/personal-site/site/web"
                 :include "/CurriculumVitae[^/]*$"))
@@ -108,7 +112,7 @@
 (setq muse-wiki-interwiki-alist
       '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/wiki/")
         ("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
-        ("ArchWiki" . "http://wiki.gnuarch.org/")
+        ("ArchWiki" . "http://gnuarch.org/gnuarchwiki/")
         ;; abbreviations
         ("CERIAS" . "http://www.cerias.purdue.edu/")
         ("PlannerMode" . "http://www.plannerlove.com/")
@@ -202,7 +206,16 @@ If FILE is not specified, use the published version of the current file."
       (while (re-search-forward "href=\"[/.]+" nil t)
         (replace-match "href=\"http://www.mwolson.org/" nil t))
       ;; copy entry to clipboard
-      (clipboard-kill-ring-save (point-min) (point-max)))))
+      (clipboard-kill-ring-save (point-min) (point-max))
+      (message "Copied blog entry to clipboard"))))
+
+;; Turn a word or phrase into a clickable Wikipedia link
+(defun my-muse-dictize (beg end)
+  (interactive "r")
+  (let* ((text (buffer-substring-no-properties beg end))
+         (link (concat "dict:" (replace-regexp-in-string " " "_" text t t))))
+    (delete-region beg end)
+    (insert "[[" link "][" text "]]")))
 
 ;;; Key customizations
 
@@ -221,6 +234,7 @@ If FILE is not specified, use the published version of the current file."
                              (my-muse-project-find-file "Classes")))
 (global-set-key "\C-cpw" #'(lambda () (interactive)
                              (my-muse-project-find-file "Website")))
+(global-set-key "\C-cpW" 'my-muse-dictize)
 (global-set-key "\C-cpx" 'my-muse-prepare-entry-for-xanga)
 
 ;;; Custom variables

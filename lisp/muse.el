@@ -4,7 +4,7 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.02.90 (3.03 RC1)
+;; Version: 3.02.92 (3.03 RC2)
 ;; Date: Fri 7-Apr-2006
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
@@ -45,7 +45,7 @@
 
 ;;; Code:
 
-(defvar muse-version "3.02.90"
+(defvar muse-version "3.02.92"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)
@@ -241,6 +241,7 @@ All this means is that certain extensions, like .gz, are removed."
 (defmacro muse-with-temp-buffer (&rest body)
   "Create a temporary buffer, and evaluate BODY there like `progn'.
 See also `with-temp-file' and `with-output-to-string'.
+
 Unlike `with-temp-buffer', this will never attempt to save the temp buffer.
 It is meant to be used along with `insert-file-contents'."
   (let ((temp-buffer (make-symbol "temp-buffer")))
@@ -337,6 +338,12 @@ If REVERSE is specified, reverse an already-escaped string."
             (forward-char))))
       (buffer-string))))
 
+(defun muse-trim-whitespace (string)
+  "Return a version of STRING with no initial nor trailing whitespace."
+  (muse-replace-regexp-in-string
+   (concat "\\`[" muse-regexp-blank "]+\\|[" muse-regexp-blank "]+\\'")
+   "" string))
+
 ;; The following code was extracted from cl
 
 (defun muse-const-expr-p (x)
@@ -387,26 +394,27 @@ omitted, a default message listing FORM itself is used."
 
 ;; Compatibility functions
 
-(defun muse-looking-back (regexp &optional limit)
-  (if (fboundp 'looking-back)
-      (looking-back regexp limit)
+(if (fboundp 'looking-back)
+    (defalias 'muse-looking-back 'looking-back)
+  (defun muse-looking-back (regexp &optional limit &rest ignored)
     (save-excursion
       (re-search-backward (concat "\\(?:" regexp "\\)\\=") limit t))))
 
-(defun muse-line-end-position (&optional n)
-  (if (fboundp 'line-end-position)
-      (line-end-position n)
+(if (fboundp 'line-end-position)
+    (defalias 'muse-line-end-position 'line-end-position)
+  (defun muse-line-end-position (&optional n)
     (save-excursion (end-of-line n) (point))))
 
-(defun muse-line-beginning-position (&optional n)
-  (if (fboundp 'line-beginning-position)
-      (line-beginning-position n)
+(if (fboundp 'line-beginning-position)
+    (defalias 'muse-line-beginning-position 'line-beginning-position)
+  (defun muse-line-beginning-position (&optional n)
     (save-excursion (beginning-of-line n) (point))))
 
-(defun muse-match-string-no-properties (num &optional string)
+(eval-and-compile
   (if (fboundp 'match-string-no-properties)
-      (match-string-no-properties num string)
-    (match-string num string)))
+      (defalias 'muse-match-string-no-properties 'match-string-no-properties)
+    (defun muse-match-string-no-properties (num &optional string)
+      (match-string num string))))
 
 (defun muse-replace-regexp-in-string (regexp replacement text &optional fixedcase literal)
   "Replace REGEXP with REPLACEMENT in TEXT.
@@ -422,26 +430,27 @@ If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
     (replace-regexp-in-string regexp replacement text fixedcase literal))
    (t (let ((repl-len (length replacement))
             start)
-        (while (setq start (string-match regexp text start))
-          (setq start (+ start repl-len)
-                text (replace-match replacement fixedcase literal text))))
+        (save-match-data
+          (while (setq start (string-match regexp text start))
+            (setq start (+ start repl-len)
+                  text (replace-match replacement fixedcase literal text)))))
       text)))
 
-(defun muse-add-to-invisibility-spec (element)
-  "Add ELEMENT to `buffer-invisibility-spec'.
+(if (fboundp 'add-to-invisibility-spec)
+    (defalias 'muse-add-to-invisibility-spec 'add-to-invisibility-spec)
+  (defun muse-add-to-invisibility-spec (element)
+    "Add ELEMENT to `buffer-invisibility-spec'.
 See documentation for `buffer-invisibility-spec' for the kind of elements
 that can be added."
-  (if (fboundp 'add-to-invisibility-spec)
-      (add-to-invisibility-spec element)
     (if (eq buffer-invisibility-spec t)
         (setq buffer-invisibility-spec (list t)))
     (setq buffer-invisibility-spec
           (cons element buffer-invisibility-spec))))
 
-(defun muse-read-directory-name (prompt &optional dir default-dirname mustmatch initial)
-  "Read directory name - see `read-file-name' for details."
-  (if (fboundp 'read-directory-name)
-      (read-directory-name prompt dir default-dirname mustmatch initial)
+(if (fboundp 'read-directory-name)
+    (defalias 'muse-read-directory-name  'read-directory-name)
+  (defun muse-read-directory-name (prompt &optional dir default-dirname mustmatch initial)
+    "Read directory name - see `read-file-name' for details."
     (unless dir
       (setq dir default-directory))
     (read-file-name prompt dir (or default-dirname

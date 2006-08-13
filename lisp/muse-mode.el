@@ -220,10 +220,11 @@ index at intervals."
   ;; Make fill work nicely with item lists
   (set (make-local-variable 'adaptive-fill-regexp)
        (concat "\\s-+\\(-\\|[0-9]+\\.\\)\\s-+\\|\\[[0-9]+\\]\\s-*"
-               "\\|\\s-*::\\s-*\\|\\s-*"))
+               "\\|.*\\s-*::\\s-+\\|\\s-*"))
   (set (make-local-variable 'paragraph-start)
-       (concat paragraph-start "\\|\\s-+\\(-\\|[0-9]+\\.\\)\\s-+"
-               "\\|\\[[0-9]+\\]\\s-*\\|\\s-*::\\s-*"))
+       (concat paragraph-start
+               "\\|\\s-+\\(-\\|[0-9]+\\.\\)\\s-+\\|\\[[0-9]+\\]\\s-*"
+               "\\|.*\\s-*::\\s-+"))
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
        "; ")
@@ -309,7 +310,7 @@ the line if point is on a blank line."
 (defun muse-insert-thing ()
   "Prompt for something to insert into the current buffer."
   (interactive)
-  (message "Insert:\nl  link\nt  tag\nu  URL")
+  (message "Insert:\nl  link\nt  Muse tag\nu  URL")
   (let (key cmd)
     (let ((overriding-local-map muse-insert-map))
       (setq key (read-key-sequence nil)))

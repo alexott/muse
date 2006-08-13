@@ -246,9 +246,12 @@ current style."
     ("quote"    t   nil muse-publish-quote-tag)
     ("literal"  t   nil muse-publish-mark-read-only)
     ("verbatim" t   nil muse-publish-verbatim-tag)
-    ("lisp"     t   nil muse-publish-lisp-tag)
+    ("lisp"     t   t   muse-publish-lisp-tag)
     ("class"    t   t   muse-publish-class-tag)
     ("command"  t   t   muse-publish-command-tag)
+    ("perl"     t   t   muse-publish-perl-tag)
+    ("python"   t   t   muse-publish-python-tag)
+    ("ruby"     t   t   muse-publish-ruby-tag)
     ("comment"  t   nil muse-publish-comment-tag)
     ("include"  nil t   muse-publish-include-tag)
     ("markup"   t   t   muse-publish-mark-up-tag))
@@ -465,7 +468,7 @@ to the text with ARGS as parameters."
         (message "Publishing %s...done" name))))
 
 (defcustom muse-publish-markup-header-footer-tags
-  '(("lisp"     t   nil muse-publish-lisp-tag)
+  '(("lisp"     t   t   muse-publish-lisp-tag)
     ("markup"   t   t   muse-publish-mark-up-tag))
   "Tags used when publishing headers and footers.
 See `muse-publish-markup-tags' for details."
@@ -495,13 +498,16 @@ See `muse-publish-markup-tags' for details."
 
 (defun muse-style-run-hooks (keyword style &rest args)
   (catch 'handled
-    (while (and style
-                (setq style (muse-style style)))
-      (let ((func (muse-get-keyword keyword style t)))
-        (when (and func
-                   (apply func args))
-          (throw 'handled t)))
-      (setq style (muse-style-element :base style)))))
+    (let ((cache nil))
+      (while (and style
+                  (setq style (muse-style style)))
+        (let ((func (muse-style-element keyword style t)))
+          (when (and func
+                     (not (member func cache)))
+            (setq cache (cons func cache))
+            (when (apply func args)
+              (throw 'handled t))))
+        (setq style (muse-style-element :base style))))))
 
 (defun muse-publish-markup-region (beg end &optional title style)
   "Apply the given STYLE's markup rules to the given region.
@@ -564,12 +570,27 @@ TITLE is used when indicating the publishing progress; it may be nil."
 
 ;; Commands for publishing files
 
-(defsubst muse-publish-get-style (&optional styles)
+(defun muse-publish-get-style (&optional styles)
   (unless styles (setq styles muse-publishing-styles))
   (if (= 1 (length styles))
       (car styles)
-    (assoc (completing-read "Publish with style: " styles nil t)
-           styles)))
+    (when (catch 'different
+            (let ((first (car (car styles))))
+              (dolist (style (cdr styles))
+                (unless (equal first (car style))
+                  (throw 'different t)))))
+      (setq styles (muse-collect-alist
+                    styles
+                    (completing-read "Publish with style: " styles nil t))))
+    (if (or (= 1 (length styles))
+            (not (muse-get-keyword :path (car styles))))
+        (car styles)
+      (setq styles (mapcar (lambda (style)
+                             (cons (muse-get-keyword :path style)
+                                   style))
+                           styles))
+      (cdr (assoc (completing-read "Publish to directory: " styles nil t)
+                  styles)))))
 
 (defsubst muse-publish-get-output-dir (style)
   (let ((default-directory (or (muse-style-element :path style)
@@ -655,9 +676,11 @@ the file is published no matter what."
 Prompt for both the STYLE and OUTPUT-DIR if they are not
 supplied."
   (interactive (muse-publish-get-info))
-  (unless (muse-publish-file buffer-file-name style output-dir force)
-    (message (concat "The published version is up-to-date; use"
-                     " C-u C-c C-T to force an update."))))
+  (if buffer-file-name
+      (unless (muse-publish-file buffer-file-name style output-dir force)
+        (message (concat "The published version is up-to-date; use"
+                         " C-u C-c C-T to force an update.")))
+    (message "This buffer is not associated with any file")))
 
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
@@ -792,6 +815,7 @@ The following contexts exist in Muse.
 'email      email@example.com
 'url        http://example.com
 'url-desc   [[...][description of an explicit link]]
+'image      [[image.png]]
 'example    <example> region (monospaced, block context, escaped)
 'verbatim   <verbatim> region (escaped)
 'document   normal text"
@@ -1226,8 +1250,9 @@ The existing region will be removed, except for initial blank lines."
         (while (= left 0)
           (when (looking-at muse-table-line-regexp)
             (setq fields (cons (length (match-string 1))
-                               (split-string (match-string 0)
-                                             muse-table-field-regexp))
+                               (mapcar #'muse-trim-whitespace
+                                       (split-string (match-string 0)
+                                                     muse-table-field-regexp)))
                   field-list (cons fields field-list)
                   longest (max (length fields) longest)))
           (setq left (forward-line 1))))
@@ -1299,23 +1324,29 @@ the cadr is the page name, and the cddr is the anchor."
           (t
            (cons 'link (cons (muse-publish-link-page target) nil))))))
 
-(defun muse-publish-url (url &optional desc explicit)
-  "Resolve a URL into its final <a href> form."
-  (let ((orig-url url)
-        type anchor)
-    (dolist (transform muse-publish-url-transforms)
-      (setq url (save-match-data (when url (funcall transform url explicit)))))
+(defun muse-publish-url-desc (desc explicit)
+  (when desc
     (dolist (transform muse-publish-desc-transforms)
       (setq desc (save-match-data
                    (when desc (funcall transform desc explicit)))))
-    (when desc
-      (setq desc (muse-link-unescape desc))
-      (setq desc (muse-publish-escape-specials-in-string desc 'url-desc)))
-    (setq orig-url
-          (muse-publish-escape-specials-in-string orig-url 'url-desc))
+    (setq desc (muse-link-unescape desc))
+    (muse-publish-escape-specials-in-string desc 'url-desc)))
+
+(defun muse-publish-url (url &optional desc orig-url explicit)
+  "Resolve a URL into its final <a href> form."
+  (let (type anchor)
+    (dolist (transform muse-publish-url-transforms)
+      (setq url (save-match-data (when url (funcall transform url explicit)))))
+    (if desc
+        (setq desc (muse-publish-url-desc desc explicit))
+      (if orig-url
+          (setq orig-url (muse-publish-url-desc orig-url explicit))))
     (let ((target (muse-publish-classify-url url)))
       (setq type (car target)
-            url (muse-publish-escape-specials-in-string (cadr target) 'url)
+            url (if (eq type 'image)
+                    (muse-publish-escape-specials-in-string (cadr target)
+                                                            'image)
+                  (muse-publish-escape-specials-in-string (cadr target) 'url))
             anchor (muse-publish-escape-specials-in-string
                     (cddr target) 'url)))
     (cond ((eq type 'anchor-ref)
@@ -1323,14 +1354,18 @@ the cadr is the page name, and the cddr is the anchor."
           ((string= url "")
            desc)
           ((eq type 'image)
-           (if desc
-               (muse-markup-text 'image-with-desc url desc)
-             (muse-markup-text 'image-link url)))
+           (let ((ext (or (file-name-extension url) "")))
+             (setq url (file-name-sans-extension url))
+             (if desc
+                 (muse-markup-text 'image-with-desc url ext desc)
+               (muse-markup-text 'image url ext))))
           ((eq type 'link-and-anchor)
            (muse-markup-text 'link-and-anchor url anchor
                              (or desc orig-url)))
           ((and desc (string-match muse-image-regexp desc))
-           (muse-markup-text 'url-with-image url desc))
+           (let ((ext (or (file-name-extension desc) "")))
+             (setq desc (file-name-sans-extension desc))
+             (muse-markup-text 'image-link url desc ext)))
           ((eq type 'link)
            (muse-markup-text 'link url (or desc orig-url)))
           (t
@@ -1340,39 +1375,39 @@ the cadr is the page name, and the cddr is the anchor."
                            text)))
                (muse-markup-text 'url url (or desc orig-url)))))))
 
-(defun muse-publish-insert-url (url &optional desc explicit)
+(defun muse-publish-insert-url (url &optional desc orig-url explicit)
   "Resolve a URL into its final <a href> form."
   (delete-region (match-beginning 0) (match-end 0))
-  (let ((text (muse-publish-url url desc explicit)))
+  (let ((text (muse-publish-url url desc orig-url explicit)))
     (when text
       (muse-insert-markup text))))
 
 (defun muse-publish-markup-link ()
-  (let (desc explicit link)
+  (let (desc explicit orig-link link)
     (setq explicit (save-match-data
                      (if (string-match muse-explicit-link-regexp
                                        (match-string 0))
                          t nil)))
-    (setq desc (if explicit
-                   (or (match-string 2) (match-string 1))
-                 (match-string 0)))
+    (setq orig-link (if explicit (match-string 1) (match-string 0)))
+    (setq desc (when explicit (match-string 2)))
     (setq link (if explicit
-                   (muse-handle-explicit-link (match-string 1))
-                 (muse-handle-implicit-link (match-string 0))))
+                   (muse-handle-explicit-link orig-link)
+                 (muse-handle-implicit-link orig-link)))
     (when (and link
                (or explicit
                    (not (or (eq (char-before (match-beginning 0)) ?\")
                             (eq (char-after (match-end 0)) ?\")))))
       ;; if explicit link has no user-provided description, treat it
       ;; as if it were an implicit link
-      (when (and explicit (not (match-string 2)))
+      (when (and explicit (not desc))
         (setq explicit nil))
-      (muse-publish-insert-url link desc explicit))))
+      (muse-publish-insert-url link desc orig-link explicit))))
 
 (defun muse-publish-markup-url ()
   (unless (or (eq (char-before (match-beginning 0)) ?\")
               (eq (char-after (match-end 0)) ?\"))
-    (muse-publish-insert-url (match-string 0))))
+    (let ((url (match-string 0)))
+      (muse-publish-insert-url url nil url))))
 
 ;; Default publishing tags
 
@@ -1452,38 +1487,6 @@ This is usually applied to explicit links."
 
 (defalias 'muse-publish-class-tag 'ignore)
 
-(defun muse-publish-lisp-tag (beg end)
-  (save-excursion
-    (let ((str (muse-eval-lisp
-                (prog1
-                    (concat "(progn "
-                            (buffer-substring-no-properties beg end)
-                            ")")
-                  (delete-region beg end)))))
-      (set-text-properties 0 (length str) nil str)
-      (insert str))))
-
-(defun muse-publish-command-tag (beg end attrs)
-  (while (looking-at "\\s-*$")
-    (forward-line))
-  (let ((interp (cdr (assoc "interp" attrs))))
-    (if (null interp)
-        (shell-command
-         (prog1
-             (buffer-substring-no-properties (point) end)
-           (delete-region beg end)) t)
-      (shell-command-on-region beg end interp t t))
-    (muse-publish-mark-read-only beg (point))))
-
-(defun muse-publish-comment-tag (beg end)
-  (if (null muse-publish-comments-p)
-      (delete-region beg end)
-    (goto-char end)
-    (muse-insert-markup (muse-markup-text 'comment-end))
-    (muse-publish-mark-read-only beg end)
-    (goto-char beg)
-    (muse-insert-markup (muse-markup-text 'comment-begin))))
-
 (defun muse-publish-examplify-buffer ()
   "Transform the current buffer as if it were an <example> region."
   (let ((end (progn (goto-char (point-max)) (point-marker))))
@@ -1494,57 +1497,133 @@ This is usually applied to explicit links."
   (muse-publish-verse-tag (point-min) (point-max))
   (muse-publish-markup ""
                        `((100 ,(concat "^[" muse-regexp-blank "]*> ") 0
-                              muse-publish-markup-verse))))
+                              muse-publish-markup-verse)))
+  (goto-char (point-min)))
+
+(defmacro muse-publish-markup-attribute (beg end attrs reinterp &rest body)
+  "Evaluate BODY within the bounds of BEG and END.
+ATTRS is an alist.  Only the \"markup\" element of ATTRS is acted
+on.
+
+If it is omitted, publish the region with the normal Muse rules.
+If RE-INTERP is specified, this is done immediately in a new
+publishing process.  Currently, RE-INTERP is specified only by
+the <include> tag.
+
+If \"nil\", do not mark up the region at all, but prevent it from
+being further interpreted by Muse.
+
+If \"example\", treat the region as if it was surrounded by the
+<example> tag.
+
+If \"verse\", treat the region as if it was surrounded by the
+<verse> tag, to preserve newlines.
+
+Otherwise, it should be the name of a function to call in the
+narrowed region after evaluating BODY."
+  (let ((markup (make-symbol "markup"))
+        (markup-function (make-symbol "markup-function")))
+    `(let ((,markup (cdr (assoc "markup" ,attrs))))
+       (save-restriction
+         (narrow-to-region ,beg ,end)
+         (goto-char (point-min))
+         ,@body
+         (if (not ,markup)
+             (when ,reinterp
+               (muse-publish-markup-region (point-min) (point-max))
+               (muse-publish-mark-read-only (point-min) (point-max))
+               (goto-char (point-max)))
+           (let ((,markup-function (read ,markup)))
+             (cond ((eq ,markup-function 'example)
+                    (setq ,markup-function #'muse-publish-examplify-buffer))
+                   ((eq ,markup-function 'verse)
+                    (setq ,markup-function #'muse-publish-versify-buffer))
+                   ((and ,markup-function (not (functionp ,markup-function)))
+                    (error "Invalid markup function `%s'" ,markup))
+                   (t nil))
+             (if ,markup-function
+                 (funcall ,markup-function)
+               (muse-publish-mark-read-only (point-min) (point-max))
+               (goto-char (point-max)))))))))
+
+(put 'muse-publish-markup-attribute 'lisp-indent-function 4)
+(put 'muse-publish-markup-attribute 'edebug-form-spec
+     '(form form form form body))
+
+(defun muse-publish-lisp-tag (beg end attrs)
+  (muse-publish-markup-attribute beg end attrs nil
+    (save-excursion
+      (let ((str (muse-eval-lisp
+                  (prog1
+                      (concat "(progn "
+                              (buffer-substring-no-properties (point-min)
+                                                              (point-max))
+                              ")")
+                    (delete-region beg end)))))
+        (set-text-properties 0 (length str) nil str)
+        (insert str)))))
+
+(defun muse-publish-command-tag (beg end attrs)
+  (muse-publish-markup-attribute beg end attrs nil
+    (while (looking-at "\\s-*$")
+      (forward-line))
+    (let ((interp (cdr (assoc "interp" attrs))))
+      (if interp
+          (shell-command-on-region (point) (point-max) interp t t)
+        (shell-command
+         (prog1
+             (buffer-substring-no-properties (point) (point-max))
+           (delete-region (point-min) (point-max)))
+         t)))
+    ;; make sure there is a newline at end
+    (goto-char (point-max))
+    (forward-line 0)
+    (unless (looking-at "\\s-*$")
+      (goto-char (point-max))
+      (insert ?\n))
+    (goto-char (point-min))))
+
+(defun muse-publish-perl-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (cons (cons "interp" (executable-find "perl"))
+                                  attrs)))
+
+(defun muse-publish-python-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (cons (cons "interp" (executable-find "python"))
+                                  attrs)))
+
+(defun muse-publish-ruby-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (cons (cons "interp" (executable-find "ruby"))
+                                  attrs)))
+
+(defun muse-publish-comment-tag (beg end)
+  (if (null muse-publish-comments-p)
+      (delete-region beg end)
+    (goto-char end)
+    (muse-insert-markup (muse-markup-text 'comment-end))
+    (muse-publish-mark-read-only beg end)
+    (goto-char beg)
+    (muse-insert-markup (muse-markup-text 'comment-begin))))
 
 (defun muse-publish-include-tag (beg end attrs)
   "Include the named file at the current location during publishing.
 
 <include file=\"...\" markup=\"...\">
 
-The `markup' attribute controls how this section is marked up.
-If it is omitted, publish the included text with the normal Muse
-rules.
-
-If \"nil\", do not mark up the included text at all.
-
-If \"example\", treat the included text as if it was surrounded
-by the <example> tag.
-
-If \"verse\", treat the included text as if it was surrounded
-by the <verse> tag, to preserve newlines.
-
-Otherwise, it should be the name of a function to call after
-inserting the file with the buffer narrowed to the section
-inserted.
-
-Note that no further marking-up will be performed on this
-region."
+The `markup' attribute controls how this file is marked up after
+being inserted.  See `muse-publish-markup-attribute' for an
+explanation of how it works."
   (let ((filename (cdr (assoc "file" attrs)))
-        (markup (cdr (assoc "markup" attrs)))
         (muse-publishing-directives muse-publishing-directives))
     (if filename
         (setq filename (expand-file-name
                         filename
                         (file-name-directory muse-publishing-current-file)))
       (error "No file attribute specified in <include> tag"))
-    (if markup
-        (let ((markup-function (read markup)))
-          (cond ((eq markup-function 'example)
-                 (setq markup-function #'muse-publish-examplify-buffer))
-                ((eq markup-function 'verse)
-                 (setq markup-function #'muse-publish-versify-buffer))
-                ((and markup-function (not (functionp markup-function)))
-                 (error "Invalid markup function `%s'" markup))
-                (t nil))
-          (save-restriction
-            (narrow-to-region beg end)
-            (insert-file-contents filename)
-            (when markup-function
-              (funcall markup-function))
-            (goto-char (point-max))))
-      (insert-file-contents filename)
-      (muse-publish-markup-region beg (point)))
-    (muse-publish-mark-read-only beg (point))))
+    (muse-publish-markup-attribute beg end attrs t
+      (insert-file-contents filename))))
 
 (defun muse-publish-mark-up-tag (beg end attrs)
   "Run an Emacs Lisp function on the region delimted by this tag.

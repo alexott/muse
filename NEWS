@@ -1,5 +1,430 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.03 (not yet released)
+
+** Blosxom publishing (lisp/muse-blosxom.el)
+
+*** New option: muse-blosxom-use-tags.
+This specifies whether or not we are using tags.  Tags allow a page to
+belong to multiple categories, but they do not rely on the directory
+structure for categorization.
+
+*** Use `find-file' as the browsing function.
+
+*** Improve internal documentation for the included pyblosxom plug-ins.
+
+*** New example script: contrib/pyblosxom/make-blog.
+This shows how to invoke contrib/pyblosxom/getstamps.py.
+
+** Building Muse
+
+*** Compile the contents of the contrib directory.
+
+*** The debian/ directory has been moved into its own branch.
+It is now available at mwolson@gnu.org--2006/muse--debian--0.
+
+*** Further parametrize the build system, so that it can be easily
+used by other Emacs Lisp projects.
+
+*** Include autoloads file (lisp/muse-autoloads.el) with releases.
+
+** Core functionality (lisp/muse.el)
+
+*** Fix an XEmacs beta byte-compiler issue.
+
+*** Make nested list manipulation accessible to both Muse Mode
+and Muse publishing.
+
+*** Fix failure to recognize the .muse file extension.
+Handle the case where the user customizes the file extension.
+
+*** It is now easier to indicate that Muse should not use a file
+extension.  Just do the following.
+
+(setq muse-file-extension nil
+      muse-mode-auto-p t)
+
+*** Allow tab characters in explicit links.
+
+*** Escape brackets in links, and then un-escape them when displaying
+the link in a buffer of publishing it.  This allows brackets to be
+safely used in link descriptions and links, as long as you use `C-c
+TAB l', `C-c TAB u', `C-c C-e', or automatic Planner annotations.
+
+** HTML publishing (lisp/muse-html.el)
+
+*** Make sure spaces in URLs get escaped properly.
+
+*** Make the Table of Contents CSS easier to customize.
+For an example, see examples/mwolson/stylesheets/screen.css.
+
+** HTTP daemon (contrib/httpd.el)
+
+*** Update this to work with newer versions of Emacs.
+
+*** Fix a paragraph detection bug for paragraphs that occur after
+verses.
+
+** Importing LaTeX documents (lisp/muse-import-latex.el)
+
+*** Rename from muse-convert.el.
+There are plans for importing other formats into Muse as well.
+
+** Journal (lisp/muse-journal.el)
+
+*** New option: muse-journal-rss-heading-regexp.
+Determine the regexp to use when searching for an RSS heading.
+
+*** Make sure that the date is in a format that RSS readers
+can handle.
+
+** LaTeX publishing (lisp/muse-latex.el)
+
+*** Improve escaping of specials.
+
+*** Use \label{} and \ref{} for anchors and anchor references.
+
+*** Emphasize table elements.
+
+*** Improve table generation.
+
+*** Use \url{} to publish bare URLs.
+
+*** Handle case where a Muse page begins with a quote character.
+
+*** Display footnotes when we have both a URL and description.
+This makes the URLs show up on printed documents in a sensible
+fashion.
+
+*** Escape the "@" character in the entire document.
+
+*** Make images take up 75% of the width of the page.
+
+*** New option: muse-latex-permit-contents-tag.
+This specifies whether we should take action on the <contents> tag.
+
+** Muse Manual (muse.texi)
+
+*** Use better style for subsections.
+
+*** Make sure the PDF file for the manual is properly generated.
+
+*** Implicit Links
+
+**** Mention how to customize the WikiName recognition.
+
+*** Extending Muse
+
+**** Move "Common Elements" and "Deriving Styles" chapters here.
+
+** Muse Mode (lisp/muse-mode.el)
+
+*** `C-c TAB' now inserts an object, prompting the user for which type.
+`C-c TAB l' inserts a relative link.
+`C-c TAB t' inserts a Muse tag.
+`C-c TAB u' inserts a URL.
+
+These keybindings may be modified by editing `muse-insert-map'.  Note
+that the prompt you get when you hit `C-c TAB' will not change.
+
+*** New list-oriented keybindings:
+`M-RET' inserts a list item.
+`C->' increases list item indentation.
+`C-<' decreases list item indentation.
+
+*** Slightly improvement speed of flyspell integration
+
+*** Implement searching through Muse files.
+
+**** `C-c C-s' performs a search through Muse files.
+
+**** New option: muse-grep-command.
+Customize this to specify the command used for searching.  In
+particular, "glimpse" is handy.  Check the documentation for this
+command for details.
+
+*** Changed keybindings:
+`C-c C-b' is now `muse-find-backlinks'
+`C-c C-v' is now `muse-browse-result'
+
+*** Don't require muse-publish.el, since publishing and viewing Muse
+files are supposed to be completely separable.
+
+*** Speed up searching for next and previous references.
+
+*** Make filling definition lists work better.
+
+*** Make editing existing links with `C-c C-e' work better.
+
+*** Make browsing the resulting page with `C-c C-v' work better.
+
+*** Don't throw an error if doing flyspell or following link at
+beginning of buffer.
+
+*** When publishing a file with `C-c C-t', consult muse-project-alist
+and use its publishing styles to intelligently prompt the user as to
+the publishing style and output directory.
+
+The old behavior of allowing the file to be published anywhere and
+with any style has been moved to `C-c C-T'.
+
+*** Clicking `mouse-2' now does the right thing when
+mouse-yank-at-point is non-nil.
+
+** Muse Mode highlighting (lisp/muse-colors.el)
+
+*** New option: muse-colors-inline-images.
+This determines whether or not to inline an image.  The default is to
+enable this behavior.
+
+**** `C-c C-i' toggles whether images are inlined.
+
+**** New option: muse-colors-inline-image-method.
+This determines how to find an image that we want to inline.  The
+default is to look in the current directory.  If set to
+'muse-colors-use-publishing-directory, it will look in the directory
+where the current page will be published.
+
+*** Make faces conform the namespace better.
+`muse-link-face' is renamed to `muse-link'.
+`muse-bad-link-face' is renamed to `muse-bad-link'.
+`muse-verbatim-face' is renamed to `muse-verbatim'.
+
+*** Handle muse-emphasis faces better.
+
+*** Make links blue by default, like most other Emacs modes do.
+
+** New modules
+
+*** lisp/muse-backlink.el -- Provide backlink support for Muse.
+
+*** lisp/muse-groff.el --  This introduces the publishing styles
+"groff" and "groff-pdf".
+
+*** lisp/muse-latex2png.el -- Publish embedded LaTeX content to a PNG file.
+This introduces the <latex> tag.
+
+*** lisp/muse-xml-common.el -- Common functionality used by XML-based
+publishing styles, such as HTML, XML, and DocBook.
+
+*** experimental/muse-mathml.el -- This introduces the "mathml"
+publishing style and the <math> tag.
+
+*** experimental/muse-protocol-iw.el: Implements a simpler URL-like
+interwiki protocol that handles subdirectories.
+
+*** experimental/muse-split.el -- Splits published Muse files into several
+smaller files.
+
+** Project settings (lisp/muse-project.el)
+
+*** Introduce the `with-muse-project' macro, which makes it easier
+to switch to a given Muse project and execute some code.
+
+*** Fix an error with `custom-quote'.
+
+*** Ignore buffers that have no associated filename.
+This fixes an annoyance where Muse prompts to save BBDB and ERC
+buffers before publishing.
+
+*** If we cannot find a project to publish, indicate this in an
+error message.  This fixes an infinite loop.
+
+*** Update the file-alist whenever a Muse file is saved.
+
+*** Prevent infinite recursion when updating the file alist.
+
+*** In addition to Arch and CVS metadata directories, also ignore
+these for Darcs and SVN.  Also, don't erroneously ignore files with
+"#" in them.
+
+*** Make links to subdirectories work.
+The idea is to include as much of the path that is needed in order to
+disambiguate the link.  For example: "web/TestPage".
+
+*** New variable: muse-current-output-style.
+This holds the output style that is currently being used to publish a
+file.
+
+** Publishing (lisp/muse-publish.el)
+
+*** Implement escaping of specials throughout the entire document.
+This makes it much easier to publish documents to multiple kinds of
+formats, since you no longer have to worry about putting <verbatim>
+around specials.
+
+*** Make escaping of specials context-sensitive.
+Muse now realizes that URLs, normal document text, <example> regions,
+and the like have different special characters to escape.
+
+*** Distinguish links and footnotes better.
+
+*** Simplify markup string for anchors.
+
+*** Allow text like "%N%" in markup strings.
+This makes it much easier to re-use the same text or put strings in
+a different order.
+
+*** Support nested lists.
+Muse now determines the nested level of a list by its initial
+whitespace.  Ordered lists, unordered lists, and definition lists can
+all be nested.  It is even possible to force a line break in a list
+item by inserting a blank line on the same level between the lines.
+Blockquotes may also be nested inside of a list.
+
+*** Create parent directories when publishing for the first time.
+
+*** Allow empty elements in tables.
+
+*** Allow initial and trailing whitespace in tables, but strip it
+out of the published result.
+
+*** Handle case where we are trying to publish a file that has not
+been saved.
+
+*** Handle nested emphasis types better.
+It should now publish exactly the way it looks in Muse Mode.
+
+*** Fix XEmacs issue where text at beginning of buffer is read-only.
+
+*** Allow publishing styles to specify a function to use for
+escaping specials in a particular context.  This is especially handy
+for HTML URLs, since they have a larger subset of special characters
+than normal characters.
+
+See `muse-xml-decide-specials' in muse-xml-common.el for details.
+This functionality already exists for escaping specials in strings.
+
+*** Fix an infinite loop problem.
+
+*** Preserve whitespace around emdash.
+This allows for more flexibility, since some people seem to prefer to
+have the emdash directly against the surrounding text, while others
+like it to be spaced.
+
+*** If the #disable-tables publishing directive exists on the current
+Muse page, do not generate a table.
+
+*** Don't give an error when trying to define or derive an existing
+style.  Just replace it.
+
+*** Get rid of a warning that occurs when batch publishing.
+
+*** Ignore list items that are part of higher-priority constructs
+like emphasis.
+
+*** Don't markup emdash in a link, since otherwise it will be
+incorrectly escaped.
+
+*** Improve the published descriptions for implicit links and explicit
+links with no provided description.
+
+*** Require at least once space after "::" in definition lists, so
+we avoid an ambiguity with interwiki link syntax.
+
+*** For headers and footers, use a better algorithm to detect whether
+we have been given a filename or the real contents.
+
+*** New option: muse-publish-markup-header-footer-tags.
+This specifies which tags may be used when publishing headers and
+footers.
+
+*** New option: muse-publish-contents-depth.
+This specifies the maximum depth of headings to include with
+<contents> tags.
+
+*** Allow `muse-publish-markup-buffer' to work even if the buffer
+is not associated with a file.
+
+*** Fix a compilation bug with XEmacs beta.
+
+*** Allow the <lisp> tag to take the "markup" attribute.
+see the Tag Summary section in the manual for details.
+
+*** Publish image links with descriptions as captioned images.
+This has been implemented for all Muse publishing styles.
+
+The major change is that image links with descriptions will be
+centered and the description will be displayed just below the image as
+a "caption".  Thus, it is meant to only be used as its own paragraph,
+not surrounded by other text.  Images without descriptions may still
+have surrounding text.
+
+*** Source-level change: Use 'image instead of 'image-link to indicate
+images without descriptions.  Use 'image-link instead of
+'url-with-image to indicate URLs that have an image as their
+description.
+
+*** New tags, see the Tag Summary section in the manual for details
+
+**** <comment> -- Designate entire regions as comments.
+
+**** <include> -- Insert the given file at publish time.
+
+**** <markup> -- Mark up the text between the initial and ending tags.
+
+**** <perl> -- Evaluate perl code.
+
+**** <python> -- Evaluate python code.
+
+**** <quote> -- Publish the region as a blockquote.
+
+**** <ruby> -- Evaluate ruby code.
+
+** Texinfo publishing (lisp/muse-texinfo.el)
+
+*** Escape commas in URLs.
+
+*** Make it so that links to other info or PDF documents use the proper
+suffix.
+
+** URL protocols (lisp/muse-protocols.el)
+
+*** Add support for DOI's.
+DOI's (digitial object identifiers) are a standard identifier used in
+the publishing industry.
+
+*** Add support for "dict:" URLs.
+This is used to look up terms on the Wikipedia website.
+
+**** New option: muse-wikipedia-country.
+This specified the country code to use for Wikipedia.
+
+** Wiki (lisp/muse-wiki.el)
+
+*** If the document does not have a valid title string, use the
+empty string.
+
+*** Fix some bugs.
+
+*** New option: muse-wiki-wikiword-match-project-files.
+Whether to extend WikiName functionality to also match
+existing filenames, regardless of whether they are named in
+WikiWord format.
+
+If non-nil, Muse will color and publish implicit links to any
+file in your project.  The default is nil.
+
+*** Match filenames in the project before the general WikiWord
+regexp.
+
+*** Take the value of `muse-wiki-hide-nop-tag' into account.
+
+*** New option: muse-wiki-ignore-implicit-links-to-current-page.
+Whether to ignore implicit links to the current page.
+
+If non-nil, Muse will not recognize implicit links to the current
+page, both when formatting and publishing.
+
+*** For interwiki links, prefer files that have the same file extension
+as the current file.
+
+** XML publishing (lisp/muse-xml.el)
+
+*** Update examples/muse.rnc to handle nested list items.
+
+*** Fix table generation when some attributes are not given.
+
 * Changes in Muse 3.02.6
 
 ** Building Muse
@@ -7,17 +432,17 @@ Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 *** Autoloads for Muse are now generated in the muse-autoloads.el
 file at build time.
 
-** HTML
+** HTML publishing (lisp/muse-html.el)
 
 *** Don't escape "%" and "+" in URLs.
 
-** Muse Mode
+** Muse Mode (lisp/muse-mode.el)
 
 *** <lisp> tags are now evaluated at display time.
 The actual contents of the buffer will not change, just the displayed
 text.  To toggle this behavior, set `muse-colors-evaluate-lisp-tags'.
 
-** Publishing
+** Publishing (lisp/muse-publish.el)
 
 *** When errors happen during publishing, a more explanatory message
 is displayed.
@@ -36,25 +461,25 @@ effect is to remove the error message.
 
 *** Fix several publishing issues involving comments and numbered lists.
 
-** Wiki
+** Wiki (lisp/muse-wiki.el)
 
 *** Interwiki links in extended links that have special characters are
 now handled properly.
 
-** XML
+** XML publishing (lisp/muse-xml.el)
 
 *** The XML publishing style is now considered stable.
 Its schema is available in `examples/muse.rnc'.
 
 * Changes in Muse 3.02.5
 
-** LaTeX
+** LaTeX publishing (lisp/muse-latex.el)
 
 *** Use a better algorithm for determining how many times we need to
 call pdflatex for publishing.  Anything with a Table of Contents needs
 2 passes.
 
-** Muse Mode
+** Muse Mode (lisp/muse-mode.el)
 
 *** The 3 levels of emphasis now have corresponding muse-emphasis-N faces.
 This permits the user to customize them, which may be useful if a font
@@ -68,13 +493,13 @@ does not have italic and/or bold versions.
 
 *** Fix a display bug with text like =<verbatim><example></verbatim>=.
 
-** Project settings
+** Project settings (lisp/muse-project.el)
 
 *** Fix an edge case that yielded a stringp: nil error.
 
 *** Prevent auto-save files from being recognized as Muse files.
 
-** Wiki
+** Wiki (lisp/muse-wiki.el)
 
 *** By default, WikiWords can have consecutive capital letters.
 
@@ -110,7 +535,7 @@ Enabling this will cause WikiWords with no corresponding file to be
 colored as bad links.  The default is not to color them and turn them
 into links.
 
-** Muse Mode
+** Muse Mode (lisp/muse-mode.el)
 
 *** An error with intangible links has been fixed.
 
@@ -122,14 +547,14 @@ into links.
 This happened previously, but the algorithm was buggy and didn't cover
 implicit links.
 
-** Programming
+** Project handling (lisp/muse-project.el)
 
 *** A convenience macro called `with-muse-project' has been added.
 This allows a code block to be executed after changing the current
 Muse project.  It is analogous to emacs-wiki's
 `with-emacs-wiki-project' function.
 
-** Publishing
+** Publishing (lisp/muse-publish.el)
 
 *** An issue involving anchors at the end of a line has been
 addressed.
@@ -143,7 +568,7 @@ than trying to mark them up.
 
 *** Publishing directives may now include a dash character.
 
-** LaTeX publishing
+** LaTeX publishing (lisp/muse-latex.el)
 
 *** A bug with footnotes has been addressed.
 An attempt has been made to make generated footnote markup look more
@@ -162,13 +587,18 @@ The only quirk is that you must surround dollar signs with equal signs
 to ensure escaping.  This makes publishing PDF documents much more
 useful.
 
-** TexInfo publishing
+** Texinfo publishing (lisp/muse-texinfo.el.el)
 
 *** An attempt was made to hone some of the markup.
 
 * Changes in Muse 3.02.01
 
-** Configuration
+** Muse Mode (lisp/muse-mode.el)
+
+*** Links should no longer prevent moving the point, and help text for
+links should no longer cause errors to occur.
+
+** Project handling (lisp/muse-project.el)
 
 *** `muse-project-alist' -- This variable should now save customizations
 to the correct form in the .emacs file.  Before, it was saving an
@@ -187,12 +617,7 @@ your settings.
 *** `muse-project-alist' -- A bug involving the deleting of items
 using Emacs21 and XEmacs21 has been fixed.
 
-** Muse Mode
-
-*** Links should no longer prevent moving the point, and help text for
-links should no longer cause errors to occur.
-
-** Publishing
+** Publishing (lisp/muse-publish.el)
 
 *** If 2 or more blank lines separate list or table items, each item
 will be published in a separate list or table.
@@ -202,7 +627,7 @@ modified time of each file, rather than the current time of day.  To
 use this value, add '<lisp>(muse-publishing-directive "date")<lisp>'
 to your header or footer.
 
-** HTML publishing
+** HTML publishing (lisp/muse-html.el)
 
 *** `muse-xhtml-style-sheet' -- New option that indicates the style
 settings to use for XHTML documents.  This may be either a filename or
@@ -212,7 +637,7 @@ a string of stylesheet settings.
 
 ** New modules
 
-*** muse-wiki.el --- Provide automatic linking for WikiWords and
+*** lisp/muse-wiki.el --- Provide automatic linking for WikiWords and
 InterWiki links.  These words are clickable and publish as links.
 Project names from `muse-project-alist' are available for InterWiki
 linking by default.  The list of InterWiki names and handlers may be
@@ -239,7 +664,7 @@ ignoring words like `the' and `at' which should not be changed.
 interwiki links according to the text of the
 `muse-wiki-interwiki-replacement' option.
 
-*** muse-protocols.el --- URL protocols that Muse recognizes.
+*** lisp/muse-protocols.el --- URL protocols that Muse recognizes.
 This automatically-included module provides an easily customizable
 list of URL protocols, how to browse them, and how to resolve them for
 publishing.  Customize `muse-url-protocols' to add and remove
@@ -318,7 +743,7 @@ debrevision'.
 The manual and relevant documentation files have been included with
 the Debian package for Muse.
 
-** Muse Mode
+** Muse Mode (lisp/muse-mode.el)
 
 *** Allow use of Muse with outline-minor-mode.
 
@@ -357,7 +782,7 @@ this is helpful.
 
 *** Typing "#title" should never crash Emacs anymore.
 
-** Muse manual
+** Muse manual (muse.texi)
 
 *** Fix problem with producing a PDF version of the manual.
 
@@ -374,7 +799,7 @@ directives that may be used.
 *** New Comments section.
 Describes the use of "; comment text".
 
-** Publishing
+** Publishing (lisp/muse-publish.el)
 
 *** The order of rules should be much improved.
 This means that emphasis characters like `*' and `_' will never be
@@ -432,7 +857,7 @@ output is .html), and it could come in handy for PHP stuff.
 If a link suffix is not specified via :link-suffix, the value of
 :suffix will be used.
 
-** Blosxom publishing
+** Blosxom publishing (lisp/muse-blosxom.el)
 
 *** muse-blosxom-new-entry: A #category directive is added by default.
 Nothing is done with this yet, but it could be handy for tag-based
@@ -440,7 +865,7 @@ Nothing is done with this yet, but it could be handy for tag-based
 in both Muse and Pyblosxom.  Ideas are welcome, and patches even more
 so.
 
-** DocBook publishing
+** DocBook publishing (lisp/muse-docbook.el)
 
 *** The markup has been comprehensively improved.
 Published documents will now pass validation tests and look better in
@@ -458,7 +883,7 @@ Headers first, then footers, then the rest of the table.
 *** Anchors are now handled correctly and publish to the best available
 form.  Links to anchors are published with the <link> tag.
 
-** HTML publishing
+** HTML publishing (lisp/muse-html.el)
 
 *** Fix minor issue with anchors.
 
@@ -481,11 +906,11 @@ Headers first, then footers, then the rest of the table.
 *** `muse-xhtml-extension' -- The default extension for XHTML publishing.
 This is a new option.
 
-** Journal publishing
+** Journal publishing (lisp/muse-journal.el)
 
 *** Use "div class=..." rather than "div id=..." for sections.
 
-** LaTeX publishing
+** LaTeX publishing (lisp/muse-latex.el)
 
 *** A newline will be appended to the default footer for the latex and
 latexpdf publishing styles.  This keeps the PDF-building process from
@@ -505,12 +930,12 @@ A bug preventing this has been fixed.
 *** An attempt has been made to escape special characters more
 consistently.
 
-** TexInfo publishing
+** Texinfo publishing (lisp/muse-texinfo.el)
 
 *** Fix a fatal error that occurs when publishing tables.
 
 *** Generate the contents in the header by default rather than the footer.
-This is the way that most TexInfo manuals do it.
+This is the way that most Texinfo manuals do it.
 
 *** The info-pdf publishing style currently produces the best PDF output
 on the maintainer's machine, so it is now used to publish the PDF
@@ -521,7 +946,7 @@ need to be escaped at publish-time.
 
 *** Improve dots and enddots markup strings.
 
-*** Surround underlined text with "_" since TexInfo doesn't seem to have
+*** Surround underlined text with "_" since Texinfo doesn't seem to have
 any better options for producing underlined text.
 
 *** Anchors and links to them now work properly.

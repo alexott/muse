@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Example publishing script for johnw's configuration
+
 style=$(echo $1 | sed 's/^--//')
 shift
 emacs -q -batch -L $(dirname $0) \
