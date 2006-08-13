@@ -37,8 +37,13 @@
 	use.
 	(muse-publish-markup-header-footer-tags): Sync lisp tag with the
 	latest changes.
+	(muse-publish-markup-url): Pass original URL as an argument.  This
+	fixes the "nil" description for bare URLs that was in 3.02.91.
+	Nothing like finding a bug just after completing the announcement
+	of a release.
 
 	* lisp/muse.el: Use defalias whenever convenient.
+	(muse-version): Set version to 3.02.92 (3.03 RC2).
 
 2006-08-10  Michael Olson  <mwolson@gnu.org>
 

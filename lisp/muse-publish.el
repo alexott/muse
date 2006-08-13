@@ -1406,7 +1406,8 @@ the cadr is the page name, and the cddr is the anchor."
 (defun muse-publish-markup-url ()
   (unless (or (eq (char-before (match-beginning 0)) ?\")
               (eq (char-after (match-end 0)) ?\"))
-    (muse-publish-insert-url (match-string 0))))
+    (let ((url (match-string 0)))
+      (muse-publish-insert-url url nil url))))
 
 ;; Default publishing tags
 
