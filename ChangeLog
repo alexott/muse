@@ -1,3 +1,12 @@
+2006-08-18  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-file-entries): Since we are
+	given a full path, match against the filename as well.  This fixes
+	an issue where backup files were being added to the file alist.
+
+	* lisp/muse-docbook.el (muse-docbook-markup-regexps): Apply a fix
+	from muse-html.el.
+
 2006-08-12  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (.PHONY): Don't use line continuations.

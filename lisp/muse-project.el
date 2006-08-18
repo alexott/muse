@@ -363,6 +363,8 @@ For an example of the use of this function, see
                                        (not (string= muse-file-extension "")))
                               (concat "." muse-file-extension "\\'"))))
         (unless (or (string-match muse-project-ignore-regexp file)
+                    (string-match muse-project-ignore-regexp
+                                  (file-name-nondirectory file))
                     (file-directory-p file))
           (setcdr lnames
                   (cons (cons (muse-page-name file) file) nil))
@@ -376,7 +378,9 @@ For an example of the use of this function, see
       (dolist (file (directory-files
                      (file-name-directory path) t
                      (file-name-nondirectory path)))
-        (unless (string-match muse-project-ignore-regexp file)
+        (unless (or (string-match muse-project-ignore-regexp file)
+                    (string-match muse-project-ignore-regexp
+                                  (file-name-nondirectory file)))
           (setcdr lnames
                   (cons (cons (muse-page-name file) file) nil))
           (setq lnames (cdr lnames))))))
