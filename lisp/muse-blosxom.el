@@ -232,7 +232,7 @@ The page will be initialized with the current date and TITLE."
        (concat (directory-file-name muse-blosxom-base-directory)
                "/" category))))
   (goto-char (point-min))
-  (insert "#date " (format-time-string "%4Y-%2m-%2d-%2H-%2M")
+  (insert "#date " (format-time-string "%Y-%m-%d-%H-%M")
           "\n#title " title)
   (unless (string= category "")
     (insert

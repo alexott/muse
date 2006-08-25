@@ -1,3 +1,9 @@
+2006-08-24  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-blosxom.el (muse-blosxom-new-entry): Remove the
+	numbers from the argument to format-time-string.  This fixes an
+	XEmacs bug.  Thanks to Michael Welle for the report and analysis.
+
 2006-08-18  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-file-entries): Since we are
