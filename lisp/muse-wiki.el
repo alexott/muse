@@ -82,9 +82,8 @@ all the files in the project."
     (set (make-local-variable 'muse-wiki-wikiword-regexp)
          (concat "\\(\\<\\(?:"
                  ;; append the files from the project
-                 (mapconcat 'car
-                            (muse-project-file-alist (muse-project))
-                            "\\|")
+                 (regexp-opt (mapcar 'car
+                                     (muse-project-file-alist (muse-project))))
                  "\\)\\>\\|\\(?:"
                  (default-value 'muse-wiki-wikiword-regexp)
                  "\\)\\)"))
@@ -162,23 +161,23 @@ If you want this replacement to happen, you must add
   "Update the value of `muse-wiki-interwiki-regexp' based on
 `muse-wiki-interwiki-alist' and `muse-project-alist'."
   (setq muse-wiki-interwiki-regexp
-        (concat "\\<\\(" (mapconcat 'car muse-project-alist "\\|")
+        (concat "\\<\\(" (regexp-opt (mapcar 'car muse-project-alist))
                 (when muse-wiki-interwiki-alist
-                  (concat "\\|" (mapconcat 'car muse-wiki-interwiki-alist
-                                           "\\|")))
+                  (concat "\\|"
+                          (regexp-opt (mapcar 'car
+                                              muse-wiki-interwiki-alist))))
                 "\\)\\(?:\\(?:" muse-wiki-interwiki-delimiter
                 "\\)\\("
                 (when muse-wiki-match-all-project-files
                   ;; append the files from the project
                   (concat
-                   (mapconcat
-                    (function
-                     (lambda (proj)
-                       (mapconcat 'identity
-                                  (muse-wiki-project-files-with-spaces
-                                   (car proj))
-                                  "\\|")))
-                    muse-project-alist "")
+                   (let ((files nil))
+                     (dolist (proj muse-project-alist)
+                       (setq files
+                             (nconc (muse-wiki-project-files-with-spaces
+                                     (car proj))
+                                    files)))
+                     (regexp-opt files))
                    "\\|"))
                 "\\sw+\\)\\)?\\>"))
   (when (featurep 'muse-colors)

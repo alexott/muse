@@ -1,3 +1,11 @@
+2006-08-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el (muse-wiki-update-local-wikiword-regexp)
+	(muse-wiki-update-interwiki-regexp): Use regexp-opt instead of
+	mapconcat.  This should hopefully fix a problem with large amounts
+	of files with spaces in their name.  Thanks to Greg Detre for the
+	report.
+
 2006-08-24  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-blosxom.el (muse-blosxom-new-entry): Remove the
