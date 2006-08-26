@@ -1,5 +1,8 @@
 2006-08-26  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-publish.el (muse-publish-surround-text): When looking
+	for indented list items, ignore blank lines.
+
 	* lisp/muse-wiki.el (muse-wiki-update-local-wikiword-regexp)
 	(muse-wiki-update-interwiki-regexp): Use regexp-opt instead of
 	mapconcat.  This should hopefully fix a problem with large amounts

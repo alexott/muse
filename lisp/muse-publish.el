@@ -1051,6 +1051,7 @@ The following contexts exist in Muse.
   (let ((continue t)
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
+        (empty-line (concat "^[" muse-regexp-blank "]*\n"))
         init-indent beg)
     (unless indent
       (setq indent (concat "[" muse-regexp-blank "]+")))
@@ -1099,10 +1100,11 @@ The following contexts exist in Muse.
               ;; if we encounter a list item, allow no post-indent
               ;; space
               (setq list-nested t))
-            (when (looking-at (concat indent "\\("
-                                      (or (and list-nested "")
-                                          post-indent)
-                                      "\\)"))
+            (when (and (not (looking-at empty-line))
+                       (looking-at (concat indent "\\("
+                                           (or (and list-nested "")
+                                               post-indent)
+                                           "\\)")))
               ;; if list is not nested, remove indentation
               (unless indent-found
                 (setq post-indent (match-string 1)
