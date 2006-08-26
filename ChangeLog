@@ -1,3 +1,29 @@
+2006-08-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-surround-text): When looking
+	for indented list items, ignore blank lines.
+
+	* lisp/muse-wiki.el (muse-wiki-update-local-wikiword-regexp)
+	(muse-wiki-update-interwiki-regexp): Use regexp-opt instead of
+	mapconcat.  This should hopefully fix a problem with large amounts
+	of files with spaces in their name.  Thanks to Greg Detre for the
+	report.
+
+2006-08-24  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-blosxom.el (muse-blosxom-new-entry): Remove the
+	numbers from the argument to format-time-string.  This fixes an
+	XEmacs bug.  Thanks to Michael Welle for the report and analysis.
+
+2006-08-18  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-file-entries): Since we are
+	given a full path, match against the filename as well.  This fixes
+	an issue where backup files were being added to the file alist.
+
+	* lisp/muse-docbook.el (muse-docbook-markup-regexps): Apply a fix
+	from muse-html.el.
+
 2006-08-12  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (.PHONY): Don't use line continuations.

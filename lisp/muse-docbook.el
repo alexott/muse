@@ -76,9 +76,10 @@ This may be text or a filename."
 
 (defcustom muse-docbook-markup-regexps
   `(;; Beginning of doc, end of doc, or plain paragraph separator
-    (10000 ,(concat "\\(\\(\n\\([" muse-regexp-blank "]*\n\\)+\\)"
+    (10000 ,(concat "\\(\\(\n\\(?:[" muse-regexp-blank "]*\n\\)*"
+                    "\\([" muse-regexp-blank "]*\n\\)\\)"
                     "\\|\\`\\s-*\\|\\s-*\\'\\)")
-           0 muse-docbook-markup-paragraph))
+           3 muse-docbook-markup-paragraph))
   "List of markup rules for publishing a Muse page to DocBook XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
