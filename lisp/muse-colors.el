@@ -232,13 +232,18 @@ whether progress messages should be displayed to the user."
 (defvar muse-colors-vector nil)
 
 (defun muse-configure-highlighting (sym val)
-  (setq muse-colors-regexp
-        (concat "\\(" (mapconcat (function
-                                  (lambda (rule)
-                                    (if (symbolp (car rule))
-                                        (symbol-value (car rule))
-                                      (car rule)))) val "\\|") "\\)")
-        muse-colors-vector (make-vector 128 nil))
+  (let ((regexps nil))
+    (dolist (rule val)
+      (let ((val (cond ((symbolp (car rule))
+                        (symbol-value (car rule)))
+                       ((stringp (car rule))
+                        (car rule))
+                       (t nil))))
+        (when val (setq regexps (cons val regexps)))))
+    (setq muse-colors-regexp (concat "\\("
+                                     (mapconcat #'identity regexps "\\|")
+                                     "\\)")
+          muse-colors-vector (make-vector 128 nil)))
   (let ((rules val))
     (while rules
       (if (eq (cadr (car rules)) t)
