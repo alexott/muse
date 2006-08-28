@@ -1,5 +1,9 @@
 2006-08-27  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-colors.el (muse-configure-highlighting): Prune out any
+	nil values before they get to mapconcat.  This fixes a lockup when
+	muse-wiki-match-all-project-files is nil.
+
 	* lisp/muse-wiki.el (muse-wiki-match-all-project-files)
 	(muse-wiki-ignore-implicit-links-to-current-page)
 	(muse-wiki-interwiki-regexp, muse-wiki-interwiki-alist)
