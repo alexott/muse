@@ -1052,8 +1052,7 @@ The following contexts exist in Muse.
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
-        (pre-indent determine-indent)
-        beg)
+        init-indent beg)
     (unless indent
       (setq indent (concat "[" muse-regexp-blank "]+")))
     (if post-indent
@@ -1066,25 +1065,25 @@ The following contexts exist in Muse.
             ;; move past current item; continue is non-nil if there
             ;; are more like items to be processed
             continue (funcall move-func indent))
-      (when determine-indent
-        ;; if the caller doesn't know how much indentation
-        ;; to use, figure it out ourselves
-        (if (not continue)
-            (setq indent "")
-          (save-match-data
-            ;; snarf all leading whitespace
-            (let ((this-indent (and (match-beginning 2)
-                                    (buffer-substring (match-beginning 1)
-                                                      (match-beginning 2)))))
-              (when (and this-indent
-                         (not (string= this-indent "")))
-                (setq indent this-indent
-                      determine-indent nil))))))
-      (when continue
+      (save-restriction
+        (when determine-indent
+          ;; if the caller doesn't know how much indentation
+          ;; to use, figure it out ourselves
+          (if (not continue)
+              (setq indent "")
+            (save-match-data
+              ;; snarf all leading whitespace
+              (let ((this-indent (and (match-beginning 2)
+                                      (buffer-substring (match-beginning 1)
+                                                        (match-beginning 2)))))
+                (when (and this-indent
+                           (not (string= this-indent "")))
+                  (setq indent this-indent
+                        determine-indent nil))))))
+        (when continue
           ;; remove list markup if we encountered another item of the
           ;; same type
           (replace-match "" t t nil 1))
-      (save-restriction
         (narrow-to-region beg (point))
         ;; narrow to current item
         (goto-char (point-min))
