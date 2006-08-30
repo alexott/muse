@@ -1,3 +1,13 @@
+2006-08-30  Michael Olson  <mwolson@gnu.org>
+
+	* muse.texi (Blosxom Requirements): Fix typo.
+
+	* contrib/pyblosxom/getstamps.py (recurse): Ignore metadata
+	directories for bzr and darcs.
+
+	* contrib/pyblosxom/make-blog, contrib/pyblosxom/hardcodedates.py:
+	contrib/pyblosxom/getstamps.py: Update version and headers.
+
 2006-08-27  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el (muse-configure-highlighting): Prune out any
