@@ -1,3 +1,16 @@
+2006-09-11  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-path-sans-extension): New function that acts
+	like file-name-sans-extension, but guarantees to never modify the
+	directory part of the path.  Thanks to Evan Monroig for
+	investigating this.
+
+	* lisp/muse-book.el (muse-book-publish-project): Use
+	muse-path-sans-extension instead of file-name-sans-extension.
+
+	* lisp/muse-publish.el (muse-publish-file, muse-publish-url):
+	Ditto.
+
 2006-08-30  Michael Olson  <mwolson@gnu.org>
 
 	* muse.texi (Blosxom Requirements): Fix typo.
