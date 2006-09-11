@@ -106,7 +106,7 @@ Publishing Various Types of Documents
 
 Integrating Muse and pyblosxom.cgi
 
-* Blosxom Requirements::        Other tools needed to the Blosxom style.
+* Blosxom Requirements::        Other tools needed for the Blosxom style.
 * Blosxom Entries::             Format of a Blosxom entry and automation.
 * Blosxom Options::             Blosxom styles and options provided.
 
@@ -1193,14 +1193,14 @@ mirrored tree of stories to be served by blosxom.cgi or pyblosxom.cgi.
 In other words, each blog entry corresponds with one file.
 
 @menu
-* Blosxom Requirements::        Other tools needed to the Blosxom style.
+* Blosxom Requirements::        Other tools needed for the Blosxom style.
 * Blosxom Entries::             Format of a Blosxom entry and automation.
 * Blosxom Options::             Blosxom styles and options provided.
 @end menu
 
 @node Blosxom Requirements, Blosxom Entries, Blosxom, Blosxom
 @comment  node-name,  next,  previous,  up
-@subsection Other tools needed to the Blosxom style
+@subsection Other tools needed for the Blosxom style
 
 You will need to have @command{pyblosxom.cgi} or @command{blosxom.cgi}
 installed on a machine that you have upload access to.

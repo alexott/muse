@@ -134,7 +134,7 @@ pages has changed since it was last published."
          (pats (cadr project))
          (publish force) published)
     (when output-suffix
-      (setq target (concat (file-name-sans-extension target)
+      (setq target (concat (muse-path-sans-extension target)
                            output-suffix)))
     ;; Unless force is non-nil, determine if the book needs publishing
     (unless force

@@ -1,5 +1,10 @@
 #!/bin/sh
-
+#
+# Author: Michael Olson <http://www.mwolson.org>
+#
+# License: Permission is granted to modify and distribute this file as
+# specified by the license that pyblosxom uses.
+#
 # This is a sample script that shows how to update the timestamps
 # file.  Note that you have to run the getstamps.py program in your
 # source directory, and then move the generated timestamps file to the

@@ -651,7 +651,7 @@ the file is published no matter what."
          (muse-publishing-current-file file)
          (muse-publishing-current-output-path output-path)
          (target (if output-suffix
-                     (concat (file-name-sans-extension output-path)
+                     (concat (muse-path-sans-extension output-path)
                              output-suffix)
                    output-path))
          (threshhold (nth 7 (file-attributes file))))
@@ -1357,7 +1357,7 @@ the cadr is the page name, and the cddr is the anchor."
            desc)
           ((eq type 'image)
            (let ((ext (or (file-name-extension url) "")))
-             (setq url (file-name-sans-extension url))
+             (setq url (muse-path-sans-extension url))
              (if desc
                  (muse-markup-text 'image-with-desc url ext desc)
                (muse-markup-text 'image url ext))))
@@ -1366,7 +1366,7 @@ the cadr is the page name, and the cddr is the anchor."
                              (or desc orig-url)))
           ((and desc (string-match muse-image-regexp desc))
            (let ((ext (or (file-name-extension desc) "")))
-             (setq desc (file-name-sans-extension desc))
+             (setq desc (muse-path-sans-extension desc))
              (muse-markup-text 'image-link url desc ext)))
           ((eq type 'link)
            (muse-markup-text 'link url (or desc orig-url)))

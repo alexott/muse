@@ -4,9 +4,10 @@ This allows the user to create a file "timestamps" in their top-level
 blog entries directory, that will override the timestamp of any given
 blog entry.
 
-Each line in this file should be of the following form.
+Each line in this file should be in one of the following forms.
 
 "YYYY-MM-DD-hh-mm file-name"
+"YYYY-MM-DD file-name"
 
 Then for any entry that one of these lines exist the system will use
 that timestamp instead of the actual files modification time.
@@ -18,12 +19,21 @@ Aug 9, 2004.
 
 2004-08-09-00-00 school/abc.txt
 
-Hacked on by Michael Olson <http://www.mwolson.org/>.
+History:
+
+1.3
+
+* Michael Olson <http://www.mwolson.org/> made it optional to include
+  the hours and minutes.
+
+1.2
+
+* Original version
 """
 __author__ = 'Nathan Kent Bullock'
 __homepage__ = 'http://bullock.moo.com/nathan/'
 __email__ = 'nathan_kent_bullock -at- yahoo.ca'
-__version__ = '1.2'
+__version__ = '1.3'
 
 from Pyblosxom import tools
 import os, re, time, sys

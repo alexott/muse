@@ -3,14 +3,26 @@ Run 'python getstamps.py' from the directory that contains your
 unpublished blog entries.
 
 You may need to make some modification for your situation. This
-assumes your blog entries use a .txt extension.
+assumes your blog entries use a .txt extension and that you generate
+them from "source" files in a different directory (with an optional
+.muse extension).
 
-Hacked on by Michael Olson <http://www.mwolson.org/>.
+History:
+
+1.1
+
+* Michael Olson <http://www.mwolson.org/> adapted this for Emacs Muse
+  and added a few more exluded patterns for other version control
+  systems.
+
+1.0
+
+* Original version
 """
 __author__ = 'Nathan Kent Bullock'
 __homepage__ = 'http://bullock.moo.com/nathan/'
 __email__ = 'nathan_kent_bullock -at- yahoo.ca'
-__version__ = '1.0'
+__version__ = '1.1'
 
 import re, sys, os, types
 
@@ -39,6 +51,8 @@ def recurse(so_far):
         if filename == ".svn": continue
         if filename == ".arch-ids": continue
         if filename == "{arch}": continue
+        if filename == ".bzr": continue
+        if filename == "_darcs": continue
 
         if os.path.isdir(filepath):
             print "dir %s" % (filepath,)

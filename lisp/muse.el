@@ -344,6 +344,17 @@ If REVERSE is specified, reverse an already-escaped string."
    (concat "\\`[" muse-regexp-blank "]+\\|[" muse-regexp-blank "]+\\'")
    "" string))
 
+(defun muse-path-sans-extension (path)
+  "Return PATH sans final \"extension\".
+
+The extension, in a file name, is the part that follows the last `.',
+except that a leading `.', if any, doesn't count.
+
+This differs from `file-name-sans-extension' in that it will
+never modify the directory part of the path."
+  (concat (file-name-directory path)
+          (file-name-nondirectory (file-name-sans-extension path))))
+
 ;; The following code was extracted from cl
 
 (defun muse-const-expr-p (x)
