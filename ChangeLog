@@ -1,5 +1,8 @@
 2006-09-11  Michael Olson  <mwolson@gnu.org>
 
+	* muse.texi (Getting Help and Reporting Bugs): Mention the
+	muse-el-internationalization mailing list.
+
 	* lisp/muse.el (muse-path-sans-extension): New function that acts
 	like file-name-sans-extension, but guarantees to never modify the
 	directory part of the path.  Thanks to Evan Monroig for

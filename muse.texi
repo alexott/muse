@@ -2780,7 +2780,7 @@ to it.
 that Michael Olson (the current maintainer) made for Muse.
 
 @item
-Muse has three mailing lists.
+Muse has four mailing lists.
 
 @table @samp
 
@@ -2811,6 +2811,16 @@ the subscription form at
 @url{http://mail.gna.org/listinfo/muse-el-commits/}.  This mailing list
 is also available via Gmane with the identifier
 @samp{gmane.emacs.muse.cvs}.
+
+@item muse-el-internationalization
+Discussion of translation of the Muse website and documentation into
+many languages.
+
+You can join this mailing list
+(@email{muse-el-internationalization@@gna.org}) using the subscription
+form at @url{http://mail.gna.org/listinfo/internationalization/}.  This
+mailing list is also available via Gmane with the identifier
+@samp{gmane.emacs.muse.internationalization}.
 
 @end table
 
