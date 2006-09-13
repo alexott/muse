@@ -110,7 +110,8 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
   :group 'muse-texinfo)
 
 (defcustom muse-texinfo-markup-functions
-  '((table . muse-texinfo-markup-table))
+  '((table . muse-texinfo-markup-table)
+    (heading . muse-texinfo-markup-heading))
   "An alist of style types to custom functions for that kind of text.
 For more on the structure of this list, see
 `muse-publish-markup-functions'."
@@ -219,6 +220,31 @@ These are applied to URLs."
             (insert field))))
       (muse-insert-markup "\n@end multitable")
       (insert ?\n))))
+
+(defun muse-texinfo-remove-links (string)
+  "Remove explicit links from STRING, replacing them with the link
+description.
+
+If no description exists for the link, use the link itself."
+  (let ((start nil))
+    (while (setq start (string-match muse-explicit-link-regexp string
+                                     start))
+      (setq string
+            (replace-match (or (match-string 2 string)
+                               (match-string 1 string))
+                           t t string)))
+    string))
+
+(defun muse-texinfo-markup-heading ()
+  (save-excursion
+    (muse-publish-markup-heading))
+  (let* ((eol (muse-line-end-position))
+         (orig-heading (buffer-substring (point) eol))
+         (beg (point)))
+    (delete-region (point) eol)
+    ;; don't allow links to be published in headings
+    (insert (muse-texinfo-remove-links orig-heading))
+    (muse-publish-mark-read-only beg (point))))
 
 (defun muse-texinfo-finalize-buffer ()
   (muse-latex-fixup-dquotes)

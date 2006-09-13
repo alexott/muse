@@ -1,3 +1,17 @@
+2006-09-13  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-texinfo.el (muse-texinfo-markup-heading): New function
+	adopted from Jim Ottaway's patch.  It removes links from the
+	heading, and then marks the region read-only to inhibit WikiWord
+	detection.
+
+2006-09-13  Jim Ottaway  <j.ottaway@lse.ac.uk>
+
+	* lisp/muse-texinfo.el (muse-texinfo-markup-functions): Add
+	special handling for headings.
+	(muse-texinfo-remove-links): New function that removes explicit
+	links from the given strings, replacing them with a description.
+
 2006-09-11  Michael Olson  <mwolson@gnu.org>
 
 	* muse.texi (Getting Help and Reporting Bugs): Mention the
