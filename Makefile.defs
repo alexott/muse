@@ -21,7 +21,14 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 
 # Useful only for the maintainer
 <<<<<<< TREE
+<<<<<<< TREE
 VERSION    = 3.02.90.arch.146
+=======
+PROJECT    = muse
+DEBNAME    = muse-el
+VERSION    = 3.02.92
+MANUAL     = muse
+>>>>>>> MERGE-SOURCE
 =======
 PROJECT    = muse
 DEBNAME    = muse-el
