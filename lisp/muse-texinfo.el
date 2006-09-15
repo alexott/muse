@@ -235,6 +235,15 @@ If no description exists for the link, use the link itself."
                            t t string)))
     string))
 
+(defun muse-texinfo-protect-wikiwords (start end)
+  "Protect all wikiwords from START to END from further processing."
+  (when (featurep 'muse-wiki)
+    (save-excursion
+      (goto-char start)
+      (while (re-search-forward muse-wiki-wikiword-regexp end t)
+        (muse-publish-mark-read-only (match-beginning 0)
+                                     (match-end 0))))))
+
 (defun muse-texinfo-markup-heading ()
   (save-excursion
     (muse-publish-markup-heading))
@@ -244,7 +253,7 @@ If no description exists for the link, use the link itself."
     (delete-region (point) eol)
     ;; don't allow links to be published in headings
     (insert (muse-texinfo-remove-links orig-heading))
-    (muse-publish-mark-read-only beg (point))))
+    (muse-texinfo-protect-wikiwords beg (point))))
 
 (defun muse-texinfo-finalize-buffer ()
   (muse-latex-fixup-dquotes)
