@@ -1,3 +1,15 @@
+2006-09-14  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-texinfo.el (muse-texinfo-protect-wikiwords): Silence
+	compiler warning.
+
+2006-09-14  Jim Ottaway  <j.ottaway@lse.ac.uk>
+
+	* lisp/muse-texinfo.el (muse-texinfo-protect-wikiwords): New
+	function: Protect all wikiwords from START to END from further
+	processing.
+	(muse-texinfo-markup-heading): Use muse-texinfo-protect-wikiwords.
+
 2006-09-13  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-texinfo.el (muse-texinfo-markup-heading): New function

@@ -237,12 +237,13 @@ If no description exists for the link, use the link itself."
 
 (defun muse-texinfo-protect-wikiwords (start end)
   "Protect all wikiwords from START to END from further processing."
-  (when (featurep 'muse-wiki)
-    (save-excursion
-      (goto-char start)
-      (while (re-search-forward muse-wiki-wikiword-regexp end t)
-        (muse-publish-mark-read-only (match-beginning 0)
-                                     (match-end 0))))))
+  (and (boundp 'muse-wiki-wikiword-regexp)
+       (featurep 'muse-wiki)
+       (save-excursion
+         (goto-char start)
+         (while (re-search-forward muse-wiki-wikiword-regexp end t)
+           (muse-publish-mark-read-only (match-beginning 0)
+                                        (match-end 0))))))
 
 (defun muse-texinfo-markup-heading ()
   (save-excursion
