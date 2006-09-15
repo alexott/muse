@@ -221,33 +221,6 @@ These are applied to URLs."
       (muse-insert-markup "\n@end multitable")
       (insert ?\n))))
 
-<<<<<<< TREE
-(defun muse-texinfo-remove-links (string)
-  "Remove explicit links from STRING, replacing them with the link
-description.
-
-If no description exists for the link, use the link itself."
-  (let ((start nil))
-    (while (setq start (string-match muse-explicit-link-regexp string
-                                     start))
-      (setq string
-            (replace-match (or (match-string 2 string)
-                               (match-string 1 string))
-                           t t string)))
-    string))
-
-(defun muse-texinfo-markup-heading ()
-  (save-excursion
-    (muse-publish-markup-heading))
-  (let* ((eol (muse-line-end-position))
-         (orig-heading (buffer-substring (point) eol))
-         (beg (point)))
-    (delete-region (point) eol)
-    ;; don't allow links to be published in headings
-    (insert (muse-texinfo-remove-links orig-heading))
-    (muse-publish-mark-read-only beg (point))))
-
-=======
 (defun muse-texinfo-remove-links (string)
   "Remove explicit links from STRING, replacing them with the link
 description.
@@ -282,7 +255,6 @@ If no description exists for the link, use the link itself."
     (insert (muse-texinfo-remove-links orig-heading))
     (muse-texinfo-protect-wikiwords beg (point))))
 
->>>>>>> MERGE-SOURCE
 (defun muse-texinfo-finalize-buffer ()
   (muse-latex-fixup-dquotes)
   (texinfo-insert-node-lines (point-min) (point-max) t)
