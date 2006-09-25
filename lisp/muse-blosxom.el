@@ -234,11 +234,11 @@ The page will be initialized with the current date and TITLE."
   (goto-char (point-min))
   (insert "#date " (format-time-string "%Y-%m-%d-%H-%M")
           "\n#title " title)
-  (unless (string= category "")
-    (insert
-     (if muse-blosxom-use-tags
-         (concat "\n#tags " (mapconcat #'identity category ","))
-       (concat "\n#category " category))))
+  (if muse-blosxom-use-tags
+      (if (> (length category) 0)
+          (insert (concat "\n#tags " (mapconcat #'identity category ","))))
+    (unless (string= category "")
+      (insert (concat "\n#category " category))))
   (insert "\n\n")
   (forward-line 2))
 
