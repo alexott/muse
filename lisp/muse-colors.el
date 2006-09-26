@@ -454,7 +454,7 @@ affect the match data results."
   (muse-add-to-invisibility-spec 'muse)
   (set (make-local-variable 'font-lock-multiline) 'undecided)
   (set (make-local-variable 'font-lock-defaults)
-       `(nil t nil nil 'beginning-of-line
+       `(nil t nil nil beginning-of-line
          (font-lock-fontify-region-function . muse-colors-region)
          (font-lock-unfontify-region-function
           . muse-unhighlight-region)))
