@@ -631,44 +631,60 @@ in `muse-project-alist'."
 (defun muse-next-reference ()
   "Move forward to next Muse link or URL, cycling if necessary."
   (interactive)
-  (let ((cycled 0) pos)
+  (let ((pos))
     (save-excursion
       (when (get-text-property (point) 'muse-link)
         (goto-char (or (next-single-property-change (point) 'muse-link)
                        (point-max))))
-      (while (< cycled 2)
-        (let ((next (point)))
-          (if (while (and (null pos)
-                          (setq next
-                                (next-single-property-change next 'muse-link)))
-                (when (get-text-property next 'muse-link)
-                  (setq pos next)))
-              (setq cycled 2)
-            (goto-char (point-min))
-            (setq cycled (1+ cycled))))))
-    (if pos
-        (goto-char pos))))
+
+      (setq pos (next-single-property-change (point) 'muse-link))
+
+      (when (not pos)
+	(if (get-text-property (point-min) 'muse-link)
+	    (setq pos (point-min))
+	  (setq pos (next-single-property-change (point-min) 'muse-link)))))
+
+    (when pos
+      (goto-char pos))))
 
 ;;;###autoload
 (defun muse-previous-reference ()
   "Move backward to the next Muse link or URL, cycling if necessary.
-This function is not entirely accurate, but it's close enough."
+In case of Emacs x <= 21 and ignoring of intangible properties (see
+`muse-mode-intangible-links'): This function is not entirely
+accurate, but it's close enough."
   (interactive)
-  (let ((cycled 0) pos)
+  (let ((pos))
     (save-excursion
-      (while (< cycled 2)
-        (let ((prev (point)))
-          (if (while (and (null pos)
-                          (setq prev
-                                (previous-single-property-change
-                                 prev 'muse-link)))
-              (when (get-text-property prev 'muse-link)
-                (setq pos prev)))
-              (setq cycled 2)
-            (goto-char (point-max))
-            (setq cycled (1+ cycled))))))
-    (if pos
-        (goto-char pos))))
+
+      ;; Hack: The user perceives the two cases of point ("|")
+      ;; position (1) "|[[" and (2) "[[|" or "][|" as "point is at
+      ;; start of link".  But in the sense of the function
+      ;; "previous-single-property-change" these two cases are
+      ;; different.  The following code aligns these two cases.  Emacs
+      ;; 21: If the intangible property is ignored case (2) is more
+      ;; complicate and this hack only solves the problem partially.
+      ;;
+      (when (and (get-text-property (point) 'muse-link)
+		 (muse-looking-back "\\[\\|\\]"))
+	(goto-char (or (previous-single-property-change (point) 'muse-link)
+		       (point-min))))
+
+      (when (eq (point) (point-min))
+	(goto-char (point-max)))
+
+      (setq pos (previous-single-property-change (point) 'muse-link))
+
+      (when (not pos)
+	(if (get-text-property (point-min) 'muse-link)
+	    (setq pos (point-min))
+	  (setq pos (previous-single-property-change (point-max) 'muse-link)))))
+
+    (when pos
+      (if (get-text-property pos 'muse-link)
+	  (goto-char pos)
+	(goto-char (or (previous-single-property-change pos 'muse-link)
+		       (point-min)))))))
 
 ;;;###autoload
 (defun muse-what-changed ()
