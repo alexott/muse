@@ -51,10 +51,11 @@
 
 (eval-when-compile (require 'muse-mode))
 
-(if (< emacs-major-version 22)
-    (progn
-      ;; Swiped from Emacs 22.0.50.4
-      (defvar muse-backlink-split-string-default-separators "[ \f\t\n\r\v]+"
+(eval-and-compile
+  (if (< emacs-major-version 22)
+      (progn
+        ;; Swiped from Emacs 22.0.50.4
+        (defvar muse-backlink-split-string-default-separators "[ \f\t\n\r\v]+"
         "The default value of separators for `split-string'.
 
 A regexp matching strings of whitespace.  May be locale-dependent
@@ -63,7 +64,7 @@ A regexp matching strings of whitespace.  May be locale-dependent
 Warning: binding this to a different value and using it as default is
 likely to have undesired semantics.")
 
-      (defun muse-backlink-split-string (string &optional separators omit-nulls)
+        (defun muse-backlink-split-string (string &optional separators omit-nulls)
         "Split STRING into substrings bounded by matches for SEPARATORS.
 
 The beginning and end of STRING, and each match for SEPARATORS, are
@@ -109,7 +110,7 @@ Modifies the match data; use `save-match-data' if necessary."
                     (cons (substring string start)
                           list)))
           (nreverse list))))
-  (defalias 'muse-backlink-split-string 'split-string))
+    (defalias 'muse-backlink-split-string 'split-string)))
 
 (defgroup muse-backlink nil
   "Hierarchical backlinking for Muse."

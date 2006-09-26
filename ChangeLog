@@ -1,3 +1,25 @@
+2006-09-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-backlink.el: Wrap muse-backlink-split-string in an
+	eval-and-compile block to avoid a compiler warning.
+
+2006-09-25  Jim Ottaway  <j.ottaway@lse.ac.uk>
+
+	* lisp/muse-backlink.el (muse-backlink-split-string):
+	Compatibility with Emacs versions < 22
+	(muse-backlink-pending): New internal variable
+	(muse-backlink-get-mode-hook): Find the major mode hook to use, so
+	that backlinks are inserted at the right time.
+	(muse-backlink-insert-hook-func): Remove unwind-protection; check
+	for pending backlink, and that this is the targe page.
+	(muse-backlink-handle-link): Don’t handle the link if we are
+	already handling one. Return the link as well as the parent links.
+
+2006-09-25  Sasha Kovar  <sasha@arcocene.org>
+
+	* lisp/muse-blosxom.el (muse-blosxom-new-entry): : Fix for bug
+	#6942 - muse-blosxom-new-entry fails when using tags.
+
 2006-09-14  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-texinfo.el (muse-texinfo-protect-wikiwords): Silence
