@@ -1,5 +1,9 @@
 2006-09-26  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-colors.el (muse-use-font-lock): Don't quote
+	beginning-of-line.  This should fix a bug that was noticed in
+	recent Emacs 22 builds.
+
 	* lisp/muse-backlink.el: Wrap muse-backlink-split-string in an
 	eval-and-compile block to avoid a compiler warning.
 
