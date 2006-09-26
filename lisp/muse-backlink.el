@@ -51,6 +51,66 @@
 
 (eval-when-compile (require 'muse-mode))
 
+(if (< emacs-major-version 22)
+    (progn
+      ;; Swiped from Emacs 22.0.50.4
+      (defvar muse-backlink-split-string-default-separators "[ \f\t\n\r\v]+"
+        "The default value of separators for `split-string'.
+
+A regexp matching strings of whitespace.  May be locale-dependent
+\(as yet unimplemented).  Should not match non-breaking spaces.
+
+Warning: binding this to a different value and using it as default is
+likely to have undesired semantics.")
+
+      (defun muse-backlink-split-string (string &optional separators omit-nulls)
+        "Split STRING into substrings bounded by matches for SEPARATORS.
+
+The beginning and end of STRING, and each match for SEPARATORS, are
+splitting points.  The substrings matching SEPARATORS are removed, and
+the substrings between the splitting points are collected as a list,
+which is returned.
+
+If SEPARATORS is non-nil, it should be a regular expression matching text
+which separates, but is not part of, the substrings.  If nil it defaults to
+`split-string-default-separators', normally \"[ \\f\\t\\n\\r\\v]+\", and
+OMIT-NULLS is forced to t.
+
+If OMIT-NULLS is t, zero-length substrings are omitted from the list \(so
+that for the default value of SEPARATORS leading and trailing whitespace
+are effectively trimmed).  If nil, all zero-length substrings are retained,
+which correctly parses CSV format, for example.
+
+Note that the effect of `(split-string STRING)' is the same as
+`(split-string STRING split-string-default-separators t)').  In the rare
+case that you wish to retain zero-length substrings when splitting on
+whitespace, use `(split-string STRING split-string-default-separators)'.
+
+Modifies the match data; use `save-match-data' if necessary."
+        (let ((keep-nulls (not (if separators omit-nulls t)))
+              (rexp (or separators muse-backlink-split-string-default-separators))
+              (start 0)
+              notfirst
+              (list nil))
+          (while (and (string-match rexp string
+                                    (if (and notfirst
+                                             (= start (match-beginning 0))
+                                             (< start (length string)))
+                                        (1+ start) start))
+                      (< start (length string)))
+            (setq notfirst t)
+            (if (or keep-nulls (< start (match-beginning 0)))
+                (setq list
+                      (cons (substring string start (match-beginning 0))
+                            list)))
+            (setq start (match-end 0)))
+          (if (or keep-nulls (< start (length string)))
+              (setq list
+                    (cons (substring string start)
+                          list)))
+          (nreverse list))))
+  (defalias 'muse-backlink-split-string 'split-string))
+
 (defgroup muse-backlink nil
   "Hierarchical backlinking for Muse."
   :group 'muse)
@@ -136,8 +196,9 @@ and `muse-backlink-after-string'."
   (save-excursion
     (goto-char (point-min))
     (when (re-search-forward muse-backlink-regexp nil t)
-      (split-string (match-string 1)
-                    (regexp-quote muse-backlink-separator) t))))
+      (muse-backlink-split-string
+       (match-string 1)
+       (regexp-quote muse-backlink-separator) t))))
 
 (defun muse-backlink-format-link-list (links)
   "Format the list of LINKS as backlinks."
@@ -175,27 +236,39 @@ last element."
   "Internal variable.
 The links to insert in the forthcomingly visited muse page.")
 
+(defvar muse-backlink-pending nil
+  "Internal variable.")
+
 (defvar muse-backlink-parent-buffer nil
   "Internal variable.
 The parent buffer of the forthcomingly visited muse page.")
 
+
+;;; Attach hook to the derived mode hook, to avoid problems such as
+;;; planner-prepare-file thinking that the buffer needs no template.
+(defun muse-backlink-get-mode-hook ()
+  (derived-mode-hook-name major-mode))
+
 (defun muse-backlink-insert-hook-func ()
   "Insert backlinks into the current buffer and clean up."
-  (unwind-protect
-      (when muse-backlink-links
-        (muse-backlink-insert-links muse-backlink-links)
-        (when muse-backlink-avoid-bad-links
-          (save-buffer)
-          (when muse-backlink-parent-buffer
-            (with-current-buffer muse-backlink-parent-buffer
-              (font-lock-fontify-buffer)))))
+  (when (and muse-backlink-links
+             muse-backlink-pending
+             (string= (car muse-backlink-links) (muse-page-name)))
+    (muse-backlink-insert-links (cdr muse-backlink-links))
+    (when muse-backlink-avoid-bad-links
+      (save-buffer)
+      (when muse-backlink-parent-buffer
+        (with-current-buffer muse-backlink-parent-buffer
+          (font-lock-fontify-buffer))))
     (setq muse-backlink-links nil
-          muse-backlink-parent-buffer nil)
-    (remove-hook 'muse-mode-hook #'muse-backlink-insert-hook-func)))
+          muse-backlink-parent-buffer nil
+          muse-backlink-pending nil)
+    (remove-hook (muse-backlink-get-mode-hook) #'muse-backlink-insert-hook-func)))
 
 (defun muse-backlink-handle-link (link)
   "When appropriate, arrange for backlinks on visiting LINK."
   (when (and muse-backlink-create-backlinks
+             (not muse-backlink-pending)
              (memq this-command
                    '(muse-follow-name-at-point muse-follow-name-at-mouse))
              (not muse-publishing-p)
@@ -223,15 +296,19 @@ The parent buffer of the forthcomingly visited muse page.")
                  (string-match muse-backlink-exclude-backlink-parent-regexp
                                (muse-page-name))
                  (string-match muse-backlink-exclude-backlink-regexp link))
-           (add-hook 'muse-mode-hook #'muse-backlink-insert-hook-func)
+           ;; todo: Hmm. This will only work if the child page is the
+           ;; same mode as the parent page.
+           (add-hook (muse-backlink-get-mode-hook) #'muse-backlink-insert-hook-func)
+           (setq muse-backlink-pending t)
            (when muse-backlink-avoid-bad-links
              (setq muse-backlink-parent-buffer (current-buffer))
              (unless (muse-project-page-file
                       (muse-page-name) muse-current-project)
                ;; It must be modified...
                (save-buffer)))
-           (append (muse-backlink-get-current)
-                   (list (muse-make-link (muse-page-name)))))))))
+           (cons link
+                 (append (muse-backlink-get-current)
+                         (list (muse-make-link (muse-page-name))))))))))
   ;; Make sure we always return nil
   nil)
 
