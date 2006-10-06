@@ -50,6 +50,17 @@
 ;; `hardcodedates.py' provides the second service.  Eventually it is
 ;; hoped that a blosxom plugin and script will be found/written.
 ;;
+;; Alternately, the pyblosxom metadate plugin may be used.  Set the
+;; value of muse-blosxom-use-metadate to non-nil to enable adding a
+;; #postdate directive to all published files.  You can do this by:
+;;
+;; M-x customize-variable RET muse-blosxom-use-metadate RET
+;;
+;; With the metadate plugin installed in pyblosxom, the date set in
+;; this directive will be used instead of the file's modification
+;; time.  The plugin is available at:
+;; http://pyblosxom.sourceforge.net/blog/registry/date/metadate
+;;
 ;; Generating a Muse project entry
 ;; -------------------------------
 ;;
@@ -137,10 +148,14 @@ See `muse-blosxom' for more information."
   :group 'muse-blosxom)
 
 (defcustom muse-blosxom-header
-  "<lisp>(muse-publishing-directive \"title\")</lisp>
-<lisp>(when muse-blosxom-use-tags
+  "<lisp>(concat (muse-publishing-directive \"title\") \"\\n\"
+(when muse-blosxom-use-metadate
+  (let ((date (muse-publishing-directive \"date\")))
+    (when date (concat \"#postdate \" 
+                       (muse-blosxom-format-date date) \"\\n\"))))
+(when muse-blosxom-use-tags
   (let ((tags (muse-publishing-directive \"tags\")))
-    (when tags (concat \"#tags \" tags \"\\n\"))))</lisp>"
+    (when tags (concat \"#tags \" tags \"\\n\")))))</lisp>"
   "Header used for publishing Blosxom files.  This may be text or a filename."
   :type 'string
   :group 'muse-blosxom)
@@ -165,6 +180,18 @@ non-nil.
 
 For this to work, you will need to be using the PyBlosxom plugin
 at http://pyblosxom.sourceforge.net/blog/registry/meta/Tags."
+  :type 'boolean
+  :group 'muse-blosxom)
+
+(defcustom muse-blosxom-use-metadate nil
+  "Determine whether or not to use the #postdate directive.
+
+If non-nil, published entries include the original date (as specified
+in the muse #date line) which can be read by the metadate PyBlosxom
+plugin.
+
+For this to work, you will need to be using the PyBlosxom plugin
+at http://pyblosxom.sourceforge.net/blog/registry/date/metadate."
   :type 'boolean
   :group 'muse-blosxom)
 
@@ -205,6 +232,10 @@ Feel free to overwrite this if you have a different concept of what
 should be allowed in a filename."
   (muse-replace-regexp-in-string (concat "[^-." muse-regexp-alnum "]")
                                  "_" (downcase title)))
+
+(defun muse-blosxom-format-date (date)
+  "Convert a date string to PyBlosxom metadate plugin format."
+  (apply #'format "%s-%s-%s %s:%s" (split-string date "-")))
 
 ;;;###autoload
 (defun muse-blosxom-new-entry (category title)
