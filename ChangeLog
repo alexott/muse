@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-10-10 18:16:10 GMT	Michael Olson <mwolson@gnu.org>	patch-60
+
+    Summary:
+      Set Makefile.defs to correct version.
+    Revision:
+      muse--rel--3.02--patch-60
+
+    * Makefile.defs (VERSION): Set to 3.02.6b.
+
+    modified files:
+     ChangeLog Makefile.defs
+
+
 2006-03-14 19:21:43 GMT	Michael Olson <mwolson@gnu.org>	patch-59
 
     Summary:
