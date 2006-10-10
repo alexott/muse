@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-10-10 18:22:13 GMT	Michael Olson <mwolson@gnu.org>	patch-61
+
+    Summary:
+      Port Emacs22 bug fix from muse--main--0 and release as 3.02.7
+    Revision:
+      muse--rel--3.02--patch-61
+
+    * lisp/muse-colors.el (muse-use-font-lock): Don't quote
+      beginning-of-line.  This should fix a bug that was noticed in recent
+      Emacs 22 builds.
+    
+    * lisp/muse.el (muse-version): Release Emacs Muse 3.02.7.
+
+    modified files:
+     ChangeLog Makefile.defs lisp/muse-colors.el lisp/muse.el
+     muse.texi
+
+
 2006-10-10 18:16:10 GMT	Michael Olson <mwolson@gnu.org>	patch-60
 
     Summary:
