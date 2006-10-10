@@ -2,6 +2,19 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-10-10 18:32:00 GMT	Michael Olson <mwolson@gnu.org>	patch-62
+
+    Summary:
+      Update NEWS for release.
+    Revision:
+      muse--rel--3.02--patch-62
+
+    * NEWS: Update for Muse 3.02.7.
+
+    modified files:
+     ChangeLog NEWS debian/changelog
+
+
 2006-10-10 18:22:13 GMT	Michael Olson <mwolson@gnu.org>	patch-61
 
     Summary:

@@ -1,3 +1,11 @@
+muse-el (3.02.7-1) unstable; urgency=low
+
+  * New upstream release.
+  * Bug fix: "muse-el: Can not activate planner-mode on Emacs 22", thanks
+    to intrigeri (Closes: #391408).
+
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Tue, 10 Oct 2006 14:23:37 -0400
+
 muse-el (3.02.6-2) unstable; urgency=low
 
   * Update copyright data.

@@ -1,5 +1,11 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.02.7
+
+** Muse Mode highlighting (lisp/muse-colors.el)
+
+*** Fix bug that caused Muse not to work with recent builds of Emacs 22.
+
 * Changes in Muse 3.02.6
 
 ** Building Muse
