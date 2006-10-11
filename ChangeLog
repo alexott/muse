@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-10-11 01:14:16 GMT	Michael Olson <mwolson@gnu.org>	patch-63
+
+    Summary:
+      Merge many Debian changes since January and update Makefile system
+    Revision:
+      muse--rel--3.02--patch-63
+
+
+    new files:
+     debian/.arch-ids/compat.id debian/compat
+
+    modified files:
+     ChangeLog Makefile Makefile.defs debian/changelog
+     debian/control debian/emacsen-install debian/emacsen-remove
+     debian/emacsen-startup debian/rules experimental/Makefile
+     lisp/Makefile
+
+    renamed files:
+     debian/.arch-ids/NEWS.Debian.id
+       ==> debian/.arch-ids/NEWS.id
+     debian/NEWS.Debian
+       ==> debian/NEWS
+
+
 2006-10-10 18:32:00 GMT	Michael Olson <mwolson@gnu.org>	patch-62
 
     Summary:

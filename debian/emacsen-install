@@ -19,34 +19,31 @@ else
     SITEFLAG="--no-site-file"
 fi
 FLAGS="${SITEFLAG} -q -batch -l path.el -f batch-byte-compile"
+ELPREFIX=/usr/share/emacs/site-lisp/${PACKAGE}
 
-ELDIR=/usr/share/emacs/site-lisp/${PACKAGE}
-ELCDIR=/usr/share/${FLAVOR}/site-lisp/${PACKAGE}
+for i in ${PACKAGE} ${PACKAGE}/contrib; do
 
-# Install-info-altdir does not actually exist. 
-# Maybe somebody will write it.
-# if test -x /usr/sbin/install-info-altdir; then
-#     echo install/${PACKAGE}: install Info links for ${FLAVOR}
-#     install-info-altdir --quiet --section "" "" --dirname=${FLAVOR} /usr/info/${PACKAGE}.info.gz
-# fi
+    ELDIR=/usr/share/emacs/site-lisp/$i
+    ELCDIR=/usr/share/${FLAVOR}/site-lisp/$i
 
-install -m 755 -d ${ELCDIR}
-cd ${ELDIR}
-FILES=`ls -1 *.el | grep -v autoloads`
-rm -f ${ELCDIR}/*.el
-cp ${FILES} ${ELCDIR}
-cd ${ELCDIR}
+    install -m 755 -d ${ELCDIR}
+    cd ${ELDIR}
+    FILES=`ls -1 *.el | grep -v autoloads`
+    rm -f ${ELCDIR}/*.el
+    cp ${FILES} ${ELCDIR}
+    cd ${ELCDIR}
 
-cat << EOF > path.el
-(setq load-path (cons "." (cons "${ELDIR}/contrib" load-path))
+    cat << EOF > path.el
+(setq load-path (cons "${ELPREFIX}" (cons "${ELPREFIX}/contrib" load-path))
       byte-compile-warnings nil)
 EOF
-${FLAVOR} ${FLAGS} ${FILES} 2>&1 | gzip -9qf > CompilationLog.gz
-rm -f *.el path.el
-( cd ${ELDIR}
-  for f in *.el; do
-    ln -sf ${ELDIR}/${f} ${ELCDIR}/${f}
-  done
-)
+    ${FLAVOR} ${FLAGS} ${FILES} 2>&1 | gzip -9qf > CompilationLog.gz
+    rm -f *.el path.el
+    ( cd ${ELDIR}
+        for f in *.el; do
+            ln -sf ${ELDIR}/${f} ${ELCDIR}/${f}
+        done
+    )
+done
 
 exit 0

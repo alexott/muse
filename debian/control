@@ -2,8 +2,9 @@ Source: muse-el
 Section: web
 Priority: optional
 Maintainer: Michael W. Olson (GNU address) <mwolson@gnu.org>
-Build-Depends-Indep: debhelper (>> 4.0.0), texinfo, tetex-bin, emacs21 | emacsen
-Standards-Version: 3.6.2
+Build-Depends: debhelper (>> 4.0.0)
+Build-Depends-Indep: texinfo, tetex-bin, emacs21 | emacsen
+Standards-Version: 3.7.2
 
 Package: muse-el
 Architecture: all

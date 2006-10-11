@@ -1,4 +1,5 @@
-.PHONY: all lisp clean realclean distclean fullclean install test
+.PHONY: all experimental clean realclean distclean fullclean install
+.PHONY: install-uncompiled
 .PRECIOUS: %.elc
 
 include ../Makefile.defs
@@ -10,11 +11,11 @@ all: experimental
 
 experimental: $(ELC)
 
-muse-build.elc: ../scripts/muse-build.el
-	@echo muse-build.el is not byte-compiled
+$(PROJECT)-build.elc: ../scripts/$(PROJECT)-build.el
+	@echo $(PROJECT)-build.el is not byte-compiled
 
 %.elc: %.el
-	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \
+	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
 		-f batch-byte-compile $<
 
 clean realclean distclean fullclean:
@@ -24,6 +25,6 @@ install: $(ELC)
 	install -d $(ELISPDIR)/experimental
 	install -m 0644 $(EL) $(ELC) $(ELISPDIR)/experimental
 
-test: $(ELC)
-	$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/muse-build.el \
-		-f muse-elint-files muse-*.el
+install-uncompiled:
+	install -d $(ELISPDIR)/experimental
+	install -m 0644 $(EL) $(ELISPDIR)/experimental

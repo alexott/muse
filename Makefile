@@ -1,14 +1,19 @@
-.PHONY: all lisp autoloads examples experimental doc clean realclean distclean fullclean install-info install-bin install test dist release debbuild debrevision debrelease upload
+.PHONY: all lisp contrib autoloads examples experimental doc clean realclean
+.PHONY: distclean fullclean install-info install-bin install test dist release
+.PHONY: debbuild debrevision debrelease upload
 .PRECIOUS: %.info %.html
 
 include Makefile.defs
 
-SUBDIRS = lisp examples experimental
+SUBDIRS = lisp contrib examples experimental
 
-all: autoloads lisp muse.info
+all: autoloads lisp contrib $(MANUAL).info
 
 lisp:
 	(cd lisp && $(MAKE))
+
+contrib:
+	(cd contrib && $(MAKE))
 
 autoloads:
 	(cd lisp && $(MAKE) autoloads)
@@ -25,74 +30,83 @@ experimental:
 %.html: %.texi
 	makeinfo --html --no-split $<
 
-doc: muse.info muse.html
+doc: $(MANUAL).info $(MANUAL).html
 
 clean:
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) clean); done
 
 realclean fullclean: clean
-	-rm -f muse.info muse.html
+	-rm -f $(MANUAL).info $(MANUAL).html
 	for i in $(SUBDIRS); do \
-	 (cd $$i && $(MAKE) distclean); done
+	 (cd $$i && $(MAKE) realclean); done
 
-install-info: muse.info
+install-info: $(MANUAL).info
 	[ -d $(INFODIR) ] || install -d $(INFODIR)
-	install -m 0644 muse.info $(INFODIR)/muse
-	$(INSTALLINFO) $(INFODIR)/muse
+	install -m 0644 $(MANUAL).info $(INFODIR)/$(MANUAL)
+	$(INSTALLINFO) $(INFODIR)/$(MANUAL)
 
-install-bin: lisp
+install-bin: autoloads lisp contrib
 	(cd lisp && $(MAKE) install)
+	(cd contrib && $(MAKE) install)
+	(cd experimental && $(MAKE) install-uncompiled)
 
 install: install-bin install-info
 
 test: 
 	(cd lisp && $(MAKE) test)
 
-distclean: realclean
-	-rm -fr ../muse-$(VERSION)
+distclean:
+	-rm -f $(MANUAL).info $(MANUAL).html
+	for i in $(SUBDIRS); do \
+	 (cd $$i && $(MAKE) distclean); done
+	-rm -fr ../$(PROJECT)-$(VERSION)
 
-dist: distclean
+dist: autoloads distclean
 	tla inventory -sB | tar -cf - --no-recursion -T- | \
-	  (mkdir -p ../muse-$(VERSION); cd ../muse-$(VERSION) && \
+	  (mkdir -p ../$(PROJECT)-$(VERSION); cd ../$(PROJECT)-$(VERSION) && \
 	  tar xf -)
-	rm -fr ../muse-$(VERSION)/debian
+	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)/lisp
+	rm -fr ../$(PROJECT)-$(VERSION)/debian
 
 release: dist
-	(cd .. && tar -czf muse-$(VERSION).tar.gz muse-$(VERSION) ; \
-	  zip -r muse-$(VERSION).zip muse-$(VERSION) && \
-	  gpg --detach muse-$(VERSION).tar.gz && \
-	  gpg --detach muse-$(VERSION).zip)
+	(cd .. && tar -czf $(PROJECT)-$(VERSION).tar.gz \
+	    $(PROJECT)-$(VERSION) ; \
+	  zip -r $(PROJECT)-$(VERSION).zip $(PROJECT)-$(VERSION) && \
+	  gpg --detach $(PROJECT)-$(VERSION).tar.gz && \
+	  gpg --detach $(PROJECT)-$(VERSION).zip)
 
 debbuild:
-	(cd ../muse-el-$(VERSION) && \
+	(cd ../$(DEBNAME)-$(VERSION) && \
 	  dpkg-buildpackage -v$(LASTUPLOAD) $(BUILDOPTS) \
 	    -us -uc -rfakeroot && \
 	  echo "Running lintian ..." && \
-	  lintian -i ../muse-el_$(VERSION)*.deb || : && \
+	  lintian -i ../$(DEBNAME)_$(VERSION)*.deb || : && \
 	  echo "Done running lintian." && \
 	  debsign)
-	cp ../muse-el_$(VERSION)* ../../dist
+	cp ../$(DEBNAME)_$(VERSION)* ../../dist
 
 debrevision: dist
-	-rm -f ../../dist/muse-el_*
-	-rm -f ../muse-el_$(VERSION)-*
-	-rm -fr ../muse-el-$(VERSION)
-	mv ../muse-$(VERSION) ../muse-el-$(VERSION)
-	cp -r debian ../muse-el-$(VERSION)
-	-rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
+	-rm -f ../../dist/$(DEBNAME)_*
+	-rm -f ../$(DEBNAME)_$(VERSION)-*
+	-rm -fr ../$(DEBNAME)-$(VERSION)
+	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
+	cp -r debian ../$(DEBNAME)-$(VERSION)
+	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
 	$(MAKE) debbuild
 
 debrelease: dist
-	-rm -f ../../dist/muse-el_*
-	-rm -f ../muse-el_$(VERSION)*
-	-rm -fr ../muse-el-$(VERSION)
-	mv ../muse-$(VERSION) ../muse-el-$(VERSION)
-	(cd .. && tar -czf muse-el_$(VERSION).orig.tar.gz muse-el-$(VERSION))
-	cp -r debian ../muse-el-$(VERSION)
-	-rm -fr ../muse-el-$(VERSION)/debian/.arch-ids
+	-rm -f ../../dist/$(DEBNAME)_*
+	-rm -f ../$(DEBNAME)_$(VERSION)*
+	-rm -fr ../$(DEBNAME)-$(VERSION)
+	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
+	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
+	    $(DEBNAME)-$(VERSION))
+	cp -r debian ../$(DEBNAME)-$(VERSION)
+	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
 	$(MAKE) debbuild
 
 upload: release
-	(cd .. && scp muse-$(VERSION).zip* muse-$(VERSION).tar.gz* \
+	(cd .. && \
+	  scp $(PROJECT)-$(VERSION).zip* $(PROJECT)-$(VERSION).tar.gz* \
 	    mwolson@download.gna.org:/upload/muse-el)

@@ -3,8 +3,19 @@ muse-el (3.02.7-1) unstable; urgency=low
   * New upstream release.
   * Bug fix: "muse-el: Can not activate planner-mode on Emacs 22", thanks
     to intrigeri (Closes: #391408).
-
- -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Tue, 10 Oct 2006 14:23:37 -0400
+  * control (Build-Depends): New field which contains debhelper
+    dependency.
+    (Standards-Version): Bump to 3.7.2.
+  * debian/emacsen-install: Compile files in contrib directory in addition
+    to the normal fare.  Thanks to Junichi Uekawa for the suggestion.
+  * debian/emacsen-startup: Add contrib directory to load-path.
+  * debian/emacsen-remove: Fix comment.
+  * debian/compat: New file that sets the debhelper compatibility level to
+    4.
+  * debian/rules: Remove DH_COMPAT line.
+  * debian/NEWS: Rename from NEWS.Debian.
+  
+ --
 
 muse-el (3.02.6-2) unstable; urgency=low
 
