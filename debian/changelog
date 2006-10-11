@@ -1,4 +1,4 @@
-muse-el (3.02.7-1) unstable; urgency=low
+muse-el (3.02.8-1) unstable; urgency=low
 
   * New upstream release.
   * Bug fix: "muse-el: Can not activate planner-mode on Emacs 22", thanks
@@ -18,7 +18,7 @@ muse-el (3.02.7-1) unstable; urgency=low
     the suggestion.
   * debian/NEWS: Rename from NEWS.Debian.
 
- -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Tue, 10 Oct 2006 21:25:14 -0400
+ -- Michael W. Olson (GNU address) <mwolson@gnu.org>  Tue, 10 Oct 2006 21:44:42 -0400
 
 muse-el (3.02.6-2) unstable; urgency=low
 
