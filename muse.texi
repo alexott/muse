@@ -12,7 +12,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for the Emacs Muse version 3.02.7.
+This manual is for the Emacs Muse version 3.02.8.
 
 Copyright @copyright{} 2004, 2005, 2006 Free Software Foundation, Inc.
 
@@ -2837,7 +2837,3 @@ Public License instead of this License.
 @printindex cp
 
 @bye
-
-@c Local Variables:
-@c ispell-local-pdict: "ispell-dict"
-@c End:

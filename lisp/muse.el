@@ -4,8 +4,8 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.02.6
-;; Date: Sat 12-Jan-2006
+;; Version: 3.02.8
+;; Date: Tue 10-Oct-2006
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
@@ -45,7 +45,7 @@
 
 ;;; Code:
 
-(defvar muse-version "3.02.7"
+(defvar muse-version "3.02.8"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)
