@@ -2,6 +2,34 @@
 # arch-tag: automatic-ChangeLog--mwolson@gnu.org--2005/muse--rel--3.02
 #
 
+2006-10-11 01:32:12 GMT	Michael Olson <mwolson@gnu.org>	patch-64
+
+    Summary:
+      Update versions of cgi.el and httpd.el from 3.03 prerelease
+    Revision:
+      muse--rel--3.02--patch-64
+
+    * contrib/cgi.el: Fix a compiler warning introduced by sample calendar
+      code.  Make this not depend on 'cl at runtime.
+      (cgi-position): New function that implements a simple replacement for
+      the position function found in cl-seq.el.
+      (cgi-decode): Use `cgi-position' instead of `position' and `substring'
+      instead of `subseq'.
+      (cgi-calendar-string, cgi-calendar): Re-add these, since
+      they are mentioned in the documentation.
+    
+    * contrib/httpd.el (httpd-start): Update this to work with newer versions
+      of Emacs.
+    
+    * debian/changelog: Make the necessary changes to close #357949.
+
+    new files:
+     contrib/.arch-ids/Makefile.id contrib/Makefile
+
+    modified files:
+     ChangeLog contrib/cgi.el contrib/httpd.el debian/changelog
+
+
 2006-10-11 01:14:16 GMT	Michael Olson <mwolson@gnu.org>	patch-63
 
     Summary:

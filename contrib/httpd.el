@@ -2,9 +2,11 @@
 ;;;
 ;;; Author: Eric Marsden <emarsden@laas.fr>
 ;;;         John Wiegley <johnw@gnu.org>
-;;; Version: 1.0
+;;;         Michael Olson <mwolson@gnu.org> (slight modifications)
+;;; Version: 1.1
 ;;; Keywords: games
 ;;; Copyright (C) 2001, 2003 Eric Marsden
+;;; Parts copyright (C) 2006 Free Software Foundation, Inc.
 ;;
 ;;     This program is free software; you can redistribute it and/or
 ;;     modify it under the terms of the GNU General Public License as
@@ -34,6 +36,8 @@
 ;;
 ;; I have only tested this code with Emacs; it may need modifications
 ;; to work with XEmacs.
+;;
+;; This version has been modified to work with GNU Emacs 21 and 22.
 ;;
 ;;; Acknowledgements:
 ;;
@@ -250,17 +254,26 @@ content.")
       )))
 
 (defun httpd-start (&optional port)
-  (interactive (list (read-input "Serve Web requests on port: " "8080")))
+  (interactive (list (read-string "Serve Web requests on port: " "8080")))
   (if (null port)
       (setq port 8080)
     (if (stringp port)
-	(setq port (string-to-int port))))
+	(setq port (string-to-number port))))
   (if httpd-process
       (delete-process httpd-process))
   (setq httpd-process
-	(open-network-stream-server "httpd" (generate-new-buffer "httpd")
-				    port nil 'httpd-serve))
-  (if (eq (process-status httpd-process) 'listen)
+	(if (fboundp 'make-network-process)
+	    (make-network-process :name "httpd"
+				  :buffer (generate-new-buffer "httpd")
+				  :host 'local :service port
+				  :server t :noquery t
+				  :filter 'httpd-serve)
+	  (and (fboundp 'open-network-stream-server)
+	       (open-network-stream-server "httpd"
+					   (generate-new-buffer "httpd")
+					   port nil 'httpd-serve))))
+  (if (and (processp httpd-process)
+	   (eq (process-status httpd-process) 'listen))
       (message "httpd.el is listening on port %d" port)))
 
 (defun httpd-stop ()

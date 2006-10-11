@@ -1,10 +1,12 @@
 ;;; cgi.el -- using Emacs for CGI scripting
 ;;;
 ;;; Author: Eric Marsden  <emarsden@laas.fr>
+;;;         Michael Olson <mwolson@gnu.org> (slight modifications)
 ;;; Keywords: CGI web scripting slow
-;;; Version: 0.2
+;;; Version: 0.3
 ;;; Time-stamp: <2001-08-24 emarsden>
 ;;; Copyright: (C) 2000  Eric Marsden
+;;; Parts copyright (C) 2006 Free Software Foundation, Inc.
 ;;
 ;;     This program is free software; you can redistribute it and/or
 ;;     modify it under the terms of the GNU General Public License as
@@ -66,8 +68,9 @@
 
 ;;; Code:
 
-(require 'cl)
-
+(eval-when-compile
+  (require 'cl)
+  (require 'calendar))
 
 (defconst cgi-url-unreserved-chars '(
     ?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m
@@ -106,14 +109,22 @@
 	    (t (push ch decoded)
 	       (incf i))))))
 
+(defun cgi-position (item seq &optional start end)
+  (or start (setq start 0))
+  (or end (setq end (length seq)))
+  (while (and (< start end)
+	      (not (equal item (aref seq start))))
+    (setq start (1+ start)))
+  (and (< start end) start))
+
 ;; Parse "foo=x&bar=y+re" into (("foo" . "x") ("bar" . "y re"))
 ;; Substrings are plus-decoded and then URI-decoded.
 (defun cgi-decode (q)
   (when q
     (flet ((split-= (str)
-	    (let ((pos (or (position ?= str) 0)))
-	      (cons (cgi-decode-string (subseq str 0 pos))
-		    (cgi-decode-string (subseq str (+ pos 1)))))))
+	    (let ((pos (or (cgi-position ?= str) 0)))
+	      (cons (cgi-decode-string (substring str 0 pos))
+		    (cgi-decode-string (substring str (+ pos 1)))))))
       (mapcar #'split-= (split-string q "&")))))
 
 (defun cgi-lose (fmt &rest args)
@@ -152,6 +163,42 @@
 	   (cgi-decode (buffer-string)))
 	  (t
 	   (cgi-lose "Can't handle request method %s" method)))))
+
+;; ====================================================================
+;; a sample application: calendar via the web. If invoked without
+;; arguments, presents a calendar for the three months around the
+;; current date. You can request a calendar for a specific period by
+;; specifying the year and the month in the query string:
+;;
+;;   ~$ lynx -dump 'http://localhost/cgi-bin/cal?year=1975&month=6'
+;;
+;; When run in batch mode, text normally displayed in the echo area
+;; (via `princ' for example) goes to stdout, and thus to the browser.
+;; Text output using `message' goes to stderr, and thus normally to
+;; your web server's error_log.
+;; ====================================================================
+(defun cgi-calendar-string ()
+  (require 'calendar)
+  (let* ((args (cgi-arguments))
+	 (now (calendar-current-date))
+	 (mnth (cdr (assoc "month" args)))
+	 (month (if mnth (string-to-number mnth)
+		  (extract-calendar-month now)))
+	 (yr (cdr (assoc "year" args)))
+	 (year (if yr (string-to-number yr)
+		 (extract-calendar-year now))))
+    (with-temp-buffer
+      (generate-calendar month year)
+      (buffer-string))))
+
+(defun cgi-calendar ()
+  (cgi-evaluate
+   (princ "Content-type: text/html\n\n")
+   (princ "<html><head><title>Emacs calendar</title></head>\r\n")
+   (princ "<body> <h1>Emacs calendar</h1>\r\n")
+   (princ "<pre>\r\n")
+   (princ (cgi-calendar-string))
+   (princ "\r\n</pre></body></html>\r\n")))
 
 (provide 'cgi)
 
