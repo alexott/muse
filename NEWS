@@ -16,18 +16,6 @@ structure for categorization.
 *** New example script: contrib/pyblosxom/make-blog.
 This shows how to invoke contrib/pyblosxom/getstamps.py.
 
-** Building Muse
-
-*** Compile the contents of the contrib directory.
-
-*** The debian/ directory has been moved into its own branch.
-It is now available at mwolson@gnu.org--2006/muse--debian--0.
-
-*** Further parametrize the build system, so that it can be easily
-used by other Emacs Lisp projects.
-
-*** Include autoloads file (lisp/muse-autoloads.el) with releases.
-
 ** Core functionality (lisp/muse.el)
 
 *** Fix an XEmacs beta byte-compiler issue.
@@ -57,10 +45,6 @@ TAB l', `C-c TAB u', `C-c C-e', or automatic Planner annotations.
 
 *** Make the Table of Contents CSS easier to customize.
 For an example, see examples/mwolson/stylesheets/screen.css.
-
-** HTTP daemon (contrib/httpd.el)
-
-*** Update this to work with newer versions of Emacs.
 
 *** Fix a paragraph detection bug for paragraphs that occur after
 verses.
@@ -424,6 +408,30 @@ as the current file.
 *** Update examples/muse.rnc to handle nested list items.
 
 *** Fix table generation when some attributes are not given.
+
+* Changes in Muse 3.02.8
+
+** Building Muse
+
+*** Compile the contents of the contrib directory.
+
+*** The debian/ directory has been moved into its own branch.
+It is now available at mwolson@gnu.org--2006/muse--debian--0.
+
+*** Further parametrize the build system, so that it can be easily
+used by other Emacs Lisp projects.
+
+*** Include autoloads file (lisp/muse-autoloads.el) with releases.
+
+** CGI library (contrib/cgi.el)
+
+*** Make this not depend on cl.el at runtime.
+
+*** Re-add the example calendar application.
+
+** HTTP daemon (contrib/httpd.el)
+
+*** Update this to work with newer versions of Emacs.
 
 * Changes in Muse 3.02.7
 
