@@ -54,6 +54,12 @@
 	which characters can prevent Muse from recognizing something as an
 	implicit link.
 
+2006-09-26  Stefan Schlee  <stefan_schlee@yahoo.com>
+
+	* lisp/muse-mode.el (muse-next-reference)
+	(muse-previous-reference): Fix bug #6367 by moving point to the
+	beginning of the link.
+
 2006-09-26  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el (muse-use-font-lock): Don't quote

@@ -34,6 +34,10 @@
 ;; insertion of relative links and list items, backlink searching, and
 ;; other things as well.
 
+;; Stefan Schlee (stefan_schlee AT yahoo DOT com) fixed a bug in
+;; muse-next-reference and muse-previous-reference involving links
+;; that begin at point 1.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

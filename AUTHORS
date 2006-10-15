@@ -62,6 +62,7 @@ Jim Ottaway: Author of muse-backlink.el,
 Andrea Riciputi: Idea taken from code, but re-implemented
 
 Stefan Schlee: Contributor
+                - muse-mode: >15 lines changed
                 - muse-protocols.el: 1 line changed
                 - muse.texi: 7 lines changed
 
