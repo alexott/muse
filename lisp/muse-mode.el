@@ -640,9 +640,9 @@ in `muse-project-alist'."
       (setq pos (next-single-property-change (point) 'muse-link))
 
       (when (not pos)
-	(if (get-text-property (point-min) 'muse-link)
-	    (setq pos (point-min))
-	  (setq pos (next-single-property-change (point-min) 'muse-link)))))
+        (if (get-text-property (point-min) 'muse-link)
+            (setq pos (point-min))
+          (setq pos (next-single-property-change (point-min) 'muse-link)))))
 
     (when pos
       (goto-char pos))))
@@ -651,8 +651,9 @@ in `muse-project-alist'."
 (defun muse-previous-reference ()
   "Move backward to the next Muse link or URL, cycling if necessary.
 In case of Emacs x <= 21 and ignoring of intangible properties (see
-`muse-mode-intangible-links'): This function is not entirely
-accurate, but it's close enough."
+`muse-mode-intangible-links').
+
+This function is not entirely accurate, but it's close enough."
   (interactive)
   (let ((pos))
     (save-excursion
@@ -666,25 +667,26 @@ accurate, but it's close enough."
       ;; complicate and this hack only solves the problem partially.
       ;;
       (when (and (get-text-property (point) 'muse-link)
-		 (muse-looking-back "\\[\\|\\]"))
-	(goto-char (or (previous-single-property-change (point) 'muse-link)
-		       (point-min))))
+                 (muse-looking-back "\\[\\|\\]"))
+        (goto-char (or (previous-single-property-change (point) 'muse-link)
+                       (point-min))))
 
       (when (eq (point) (point-min))
-	(goto-char (point-max)))
+        (goto-char (point-max)))
 
       (setq pos (previous-single-property-change (point) 'muse-link))
 
       (when (not pos)
-	(if (get-text-property (point-min) 'muse-link)
-	    (setq pos (point-min))
-	  (setq pos (previous-single-property-change (point-max) 'muse-link)))))
+        (if (get-text-property (point-min) 'muse-link)
+            (setq pos (point-min))
+          (setq pos (previous-single-property-change (point-max)
+                                                     'muse-link)))))
 
     (when pos
       (if (get-text-property pos 'muse-link)
-	  (goto-char pos)
-	(goto-char (or (previous-single-property-change pos 'muse-link)
-		       (point-min)))))))
+          (goto-char pos)
+        (goto-char (or (previous-single-property-change pos 'muse-link)
+                       (point-min)))))))
 
 ;;;###autoload
 (defun muse-what-changed ()

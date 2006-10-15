@@ -14,6 +14,10 @@
 
 	* lisp/muse-latex2png.el (muse-publish-markup-tags): Ditto.
 
+	* lisp/muse-mode.el (muse-previous-reference): Minor docfix.
+	(muse-next-reference, muse-previous-reference): Minor whitespace
+	changes.
+
 	* lisp/muse-poem.el (muse-poem-tag): Ditto.
 
 	* lisp/muse-publish.el (muse-publish-markup-tags)
