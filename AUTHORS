@@ -35,7 +35,7 @@ Andrew J. Korty: Author of muse-groff.el
                  (assigned past and future changes)
 
 Sasha Kovar: Contributor
-              - muse-blosxom.el: 5 lines changed
+              - muse-blosxom.el: >15 lines changed
 
 Peter K. Lee: Contributor
               (assigned past and future changes)
@@ -60,6 +60,10 @@ Jim Ottaway: Author of muse-backlink.el,
              (assigned past and future changes)
 
 Andrea Riciputi: Idea taken from code, but re-implemented
+
+Stefan Schlee: Contributor
+                - muse-protocols.el: 1 line changed
+                - muse.texi: 7 lines changed
 
 Per B. Sederberg: Contributor
                   (assigned past and future changes)
