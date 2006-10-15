@@ -1062,10 +1062,11 @@ The following contexts exist in Muse.
         (when continue
           (goto-char (point-max)))))))
 
-(defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent post-indent determine-indent)
+(defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent post-indent determine-indent list-item)
+  (unless list-item
+    (setq list-item (format muse-list-item-regexp
+                            (concat "[" muse-regexp-blank "]*"))))
   (let ((continue t)
-        (list-item (format muse-list-item-regexp
-                           (concat "[" muse-regexp-blank "]*")))
         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
         init-indent beg)
     (unless indent
