@@ -102,6 +102,7 @@ For more on the structure of this list, see
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
                        function))
   :group 'muse-groff)
 

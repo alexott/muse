@@ -239,30 +239,30 @@ current style."
   :group 'muse-publish)
 
 (defcustom muse-publish-markup-tags
-  '(("contents" nil t   muse-publish-contents-tag)
-    ("verse"    t   nil muse-publish-verse-tag)
-    ("example"  t   nil muse-publish-example-tag)
-    ("code"     t   nil muse-publish-code-tag)
-    ("quote"    t   nil muse-publish-quote-tag)
-    ("literal"  t   nil muse-publish-mark-read-only)
-    ("verbatim" t   nil muse-publish-verbatim-tag)
-    ("lisp"     t   t   muse-publish-lisp-tag)
-    ("class"    t   t   muse-publish-class-tag)
-    ("command"  t   t   muse-publish-command-tag)
-    ("perl"     t   t   muse-publish-perl-tag)
-    ("python"   t   t   muse-publish-python-tag)
-    ("ruby"     t   t   muse-publish-ruby-tag)
-    ("comment"  t   nil muse-publish-comment-tag)
-    ("include"  nil t   muse-publish-include-tag)
-    ("markup"   t   t   muse-publish-mark-up-tag))
+  '(("contents" nil t   nil muse-publish-contents-tag)
+    ("verse"    t   nil nil muse-publish-verse-tag)
+    ("example"  t   nil nil muse-publish-example-tag)
+    ("code"     t   nil nil muse-publish-code-tag)
+    ("quote"    t   nil t   muse-publish-quote-tag)
+    ("literal"  t   nil nil muse-publish-mark-read-only)
+    ("verbatim" t   nil nil muse-publish-verbatim-tag)
+    ("lisp"     t   t   nil muse-publish-lisp-tag)
+    ("class"    t   t   nil muse-publish-class-tag)
+    ("command"  t   t   nil muse-publish-command-tag)
+    ("perl"     t   t   nil muse-publish-perl-tag)
+    ("python"   t   t   nil muse-publish-python-tag)
+    ("ruby"     t   t   nil muse-publish-ruby-tag)
+    ("comment"  t   nil nil muse-publish-comment-tag)
+    ("include"  nil t   nil muse-publish-include-tag)
+    ("markup"   t   t   nil muse-publish-mark-up-tag))
   "A list of tag specifications, for specially marking up text.
 XML-style tags are the best way to add custom markup to Muse.
 This is easily accomplished by customizing this list of markup tags.
 
 For each entry, the name of the tag is given, whether it expects
-a closing tag and/or an optional set of attributes, and a
-function that performs whatever action is desired within the
-delimited region.
+a closing tag and/or an optional set of attributes, whether it is
+nestable, and a function that performs whatever action is desired
+within the delimited region.
 
 The tags themselves are deleted during publishing, before the
 function is called.  The function is called with three arguments,
@@ -281,6 +281,7 @@ in-between."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
                        function))
   :group 'muse-publish)
 
@@ -468,13 +469,14 @@ to the text with ARGS as parameters."
         (message "Publishing %s...done" name))))
 
 (defcustom muse-publish-markup-header-footer-tags
-  '(("lisp"     t   t   muse-publish-lisp-tag)
-    ("markup"   t   t   muse-publish-mark-up-tag))
+  '(("lisp"     t   t   nil muse-publish-lisp-tag)
+    ("markup"   t   t   nil muse-publish-mark-up-tag))
   "Tags used when publishing headers and footers.
 See `muse-publish-markup-tags' for details."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
                        function))
   :group 'muse-publish)
 
@@ -758,6 +760,19 @@ supplied."
     (goto-char (match-beginning 0))
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
+(defun muse-publish-goto-tag-end (tag nested)
+  (if (not nested)
+      (search-forward (concat "</" tag ">") nil t)
+    (let ((nesting 1)
+          (tag-regexp (concat "^\\(<\\(/?\\)" tag ">\\)"))
+          (match-found nil))
+      (while (and (> nesting 0)
+                  (setq match-found (re-search-forward tag-regexp nil t)))
+        (if (string-equal (match-string 2) "/")
+            (setq nesting (1- nesting))
+          (setq nesting (1+ nesting))))
+      match-found)))
+
 (defvar muse-inhibit-style-tags nil
   "If non-nil, do not search for style-specific tags.
 This is used when publishing headers and footers.")
@@ -788,7 +803,7 @@ This is used when publishing headers and footers.")
                     (nconc attrs (list attr))
                   (setq attrs (list attr)))))))
         (if (and (cadr tag-info) (not closed-tag))
-            (if (search-forward (concat "</" (car tag-info) ">") nil t)
+            (if (muse-publish-goto-tag-end (car tag-info) (nth 3 tag-info))
                 (delete-region (match-beginning 0) (point))
               (setq tag-info nil)))
         (when tag-info
@@ -800,7 +815,7 @@ This is used when publishing headers and footers.")
                 (nconc args (list attrs)))
             (let ((muse-inhibit-style-tags nil))
               ;; remove the inhibition
-              (apply (nth 3 tag-info) args)))))))
+              (apply (nth 4 tag-info) args)))))))
   nil)
 
 (defun muse-publish-escape-specials (beg end &optional ignore-read-only context)
@@ -1458,14 +1473,30 @@ This is usually applied to explicit links."
   (save-excursion
     (save-restriction
       (narrow-to-region beg end)
-      (muse-insert-markup (muse-markup-text 'begin-quote))
-      (muse-publish-surround-text (muse-markup-text 'begin-quote-item)
-                                  (muse-markup-text 'end-quote-item)
-                                  (function (lambda (indent)
-                                              (muse-forward-paragraph)
-                                              (goto-char (match-end 0))
-                                              (< (point) (point-max)))))
-      (muse-insert-markup (muse-markup-text 'end-quote)))))
+      (let ((quote-regexp "^\\(<\\(/?\\)quote>\\)"))
+        (muse-insert-markup (muse-markup-text 'begin-quote))
+        (while (progn
+                 (unless (looking-at (concat "[" muse-regexp-blank "\n]*"
+                                             "<quote>"))
+                   (muse-publish-surround-text
+                    (muse-markup-text 'begin-quote-item)
+                    (muse-markup-text 'end-quote-item)
+                    (function
+                     (lambda (indent)
+                       (muse-forward-paragraph)
+                       (goto-char (match-end 0))
+                       (and (< (point) (point-max))
+                            (not (looking-at quote-regexp)))))
+                    nil nil nil
+                    quote-regexp))
+                 (if (>= (point) (point-max))
+                     t
+                   (and (search-forward "<quote>" nil t)
+                        (muse-publish-goto-tag-end "quote" t)
+                        (progn (forward-line 1) t)
+                        (< (point) (point-max))))))
+        (goto-char (point-max))
+        (muse-insert-markup (muse-markup-text 'end-quote))))))
 
 (defun muse-publish-code-tag (beg end)
   (muse-publish-escape-specials beg end nil 'literal)

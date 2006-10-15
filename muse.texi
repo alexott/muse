@@ -2612,8 +2612,9 @@ XML-style tags are the best way to add custom markup to Muse.  This is
 easily accomplished by customizing this list of markup tags.
 
 For each entry, the name of the tag is given, whether it expects a
-closing tag and/or an optional set of attributes, and a function that
-performs whatever action is desired within the delimited region.
+closing tag and/or an optional set of attributes, whether it is
+nestable, and a function that performs whatever action is desired within
+the delimited region.
 
 The tags themselves are deleted during publishing, before the function
 is called.  The function is called with three arguments, the beginning

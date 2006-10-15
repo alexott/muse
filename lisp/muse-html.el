@@ -345,11 +345,12 @@ searched."
   :group 'muse-html)
 
 (defcustom muse-html-markup-tags
-  '(("class" t t muse-html-class-tag))
+  '(("class" t t nil muse-html-class-tag))
   "A list of tag specifications, for specially marking up HTML."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
                        function))
   :group 'muse-html)
 
