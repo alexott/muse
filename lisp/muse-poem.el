@@ -190,7 +190,7 @@ differs little between the various styles."
       (forward-line 1))
     nil))
 
-(defvar muse-poem-tag '("poem" nil t muse-poem-markup-tag))
+(defvar muse-poem-tag '("poem" nil t nil muse-poem-markup-tag))
 
 (defun muse-poem-markup-tag (beg end attrs)
   "This markup tag allows a poem to be included from another project page.

@@ -339,6 +339,12 @@ images without descriptions.  Use 'image-link instead of
 'url-with-image to indicate URLs that have an image as their
 description.
 
+*** Nested tags are now supported.
+To activate this, set the 4th element in a `muse-publish-markup-tag'
+to non-nil.  Note that this involved a change to the structure of
+`muse-publish-markup-tag', so be sure to change any custom tags
+appropriately.
+
 *** New tags, see the Tag Summary section in the manual for details
 
 **** <comment> -- Designate entire regions as comments.

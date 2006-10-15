@@ -190,7 +190,7 @@ PREAMBLE indicates extra packages and definitions to include."
 ;;; Insinuate with muse-publish
 
 (add-to-list 'muse-publish-markup-tags
-             '("latex" t t muse-publish-latex-tag)
+             '("latex" t t nil muse-publish-latex-tag)
              t)
 
 (provide 'muse-latex2png)

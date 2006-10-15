@@ -159,12 +159,13 @@ and group 3 is the optional heading for the entry."
   :group 'muse-journal)
 
 (defcustom muse-journal-latex-markup-tags
-  '(("qotd" t nil muse-journal-latex-qotd-tag))
+  '(("qotd" t nil nil muse-journal-latex-qotd-tag))
   "A list of tag specifications, for specially marking up LaTeX.
 See `muse-publish-markup-tags' for more info."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
                        function))
   :group 'muse-journal)
 
