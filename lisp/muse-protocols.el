@@ -46,6 +46,9 @@
 ;; Phillip Lord (Phillip.Lord AT newcastle DOT ac DOT uk) provided a
 ;; handler for DOI URLs.
 
+;; Stefan Schlee fixed a bug with handling of colons at the end of
+;; URLs.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

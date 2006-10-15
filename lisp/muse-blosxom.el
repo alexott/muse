@@ -125,6 +125,10 @@
 ;; Björn Lindström (bkhl AT elektrubadur DOT se) made many valuable
 ;; suggestions.
 
+;; Sasha Kovar (sasha AT arcocene DOT org) fixed
+;; muse-blosxom-new-entry when using tags and also implemented support
+;; for the #postdate directive.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -149,13 +153,13 @@ See `muse-blosxom' for more information."
 
 (defcustom muse-blosxom-header
   "<lisp>(concat (muse-publishing-directive \"title\") \"\\n\"
-(when muse-blosxom-use-metadate
-  (let ((date (muse-publishing-directive \"date\")))
-    (when date (concat \"#postdate \" 
-                       (muse-blosxom-format-date date) \"\\n\"))))
-(when muse-blosxom-use-tags
-  (let ((tags (muse-publishing-directive \"tags\")))
-    (when tags (concat \"#tags \" tags \"\\n\")))))</lisp>"
+  (when muse-blosxom-use-metadate
+    (let ((date (muse-publishing-directive \"date\")))
+      (when date (concat \"#postdate \"
+                         (muse-blosxom-format-date date) \"\\n\"))))
+  (when muse-blosxom-use-tags
+    (let ((tags (muse-publishing-directive \"tags\")))
+      (when tags (concat \"#tags \" tags \"\\n\")))))</lisp>"
   "Header used for publishing Blosxom files.  This may be text or a filename."
   :type 'string
   :group 'muse-blosxom)

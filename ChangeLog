@@ -1,5 +1,10 @@
 2006-10-15  Michael Olson  <mwolson@gnu.org>
 
+	* AUTHORS: Bookkeeping.
+
+	* lisp/muse-blosxom.el (muse-blosxom-header): Indent code in lisp
+	tag.
+
 	* lisp/muse-groff.el (muse-groff-markup-tags): Adapt for nested
 	tags.
 
@@ -26,6 +31,24 @@
 2006-10-10  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Update for 3.02.7 bugfix release.
+
+2006-10-06  Sasha Kovar  <sasha@arcocene.org>
+
+	* lisp/muse-blosxom.el (muse-blosxom-header): Insert the date
+	using the value in the muse #date directive.
+	(muse-blosxom-use-metadate): New option that determines whether or
+	not to use the #postdate directive.
+	(muse-blosxom-format-date): Convert a date string to PyBlosxom
+	metadate plugin format.
+
+2006-09-30  Stefan Schlee  <stefan_schlee@yahoo.com>
+
+	* lisp/muse-protocols.el: Fix bug #6741: Exclude colon in
+	recognised URLs.
+
+	* muse.texi: Clarify handling of implicit links by mentioning
+	which characters can prevent Muse from recognizing something as an
+	implicit link.
 
 2006-09-26  Michael Olson  <mwolson@gnu.org>
 
