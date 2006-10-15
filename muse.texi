@@ -803,12 +803,21 @@ or at @samp{[[http://www.mwolson.org/projects/EmacsMuse.html]]}.
 @section Bare URLs, WikiNames, and InterWiki links
 @cindex links, implicit
 @cindex links, raw
+
 @cindex URLs
 @cindex Email addresses
 
 A URL or email address encountered in the input text is published as a
 hyperlink.  These kind of links are called @dfn{implicit links} because
 they are not separated from the rest of the Muse document in any way.
+
+Some characters in URLs will prevent Muse from recognizing them as
+implicit links. If you want to link to a URL containing spaces or any of
+the characters ``][,"'`()<>^'', you will have to make the link
+explicit. The punctuation characters ``.,;:'' are also not recognized as
+part of a URL when they appear at its end. For information on how to
+make an explicit link, see @ref{Explicit Links,,Hyperlinks and email
+addresses with descriptions}.
 
 @cindex WikiNames
 If the @command{muse-wiki} module is loaded, another form of implicit
