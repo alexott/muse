@@ -760,19 +760,6 @@ supplied."
     (goto-char (match-beginning 0))
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
-(defun muse-publish-goto-tag-end (tag nested)
-  (if (not nested)
-      (search-forward (concat "</" tag ">") nil t)
-    (let ((nesting 1)
-          (tag-regexp (concat "^\\(<\\(/?\\)" tag ">\\)"))
-          (match-found nil))
-      (while (and (> nesting 0)
-                  (setq match-found (re-search-forward tag-regexp nil t)))
-        (if (string-equal (match-string 2) "/")
-            (setq nesting (1- nesting))
-          (setq nesting (1+ nesting))))
-      match-found)))
-
 (defvar muse-inhibit-style-tags nil
   "If non-nil, do not search for style-specific tags.
 This is used when publishing headers and footers.")
@@ -803,7 +790,7 @@ This is used when publishing headers and footers.")
                     (nconc attrs (list attr))
                   (setq attrs (list attr)))))))
         (if (and (cadr tag-info) (not closed-tag))
-            (if (muse-publish-goto-tag-end (car tag-info) (nth 3 tag-info))
+            (if (muse-goto-tag-end (car tag-info) (nth 3 tag-info))
                 (delete-region (match-beginning 0) (point))
               (setq tag-info nil)))
         (when tag-info
@@ -1493,7 +1480,7 @@ This is usually applied to explicit links."
                  (if (>= (point) (point-max))
                      t
                    (and (search-forward "<quote>" nil t)
-                        (muse-publish-goto-tag-end "quote" t)
+                        (muse-goto-tag-end "quote" t)
                         (progn (forward-line 1) t)
                         (< (point) (point-max))))))
         (goto-char (point-max))

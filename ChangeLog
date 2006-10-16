@@ -1,3 +1,23 @@
+2006-10-16  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el: Provide the 'muse-nested-tags feature so that
+	other software -- namely, Planner -- can detect whether they are
+	using a version of Muse that supports nested tags.
+	(muse-goto-tag-end): Moved from muse-publish.el and renamed from
+	muse-publish-goto-tag-end.
+
+	* lisp/muse-colors.el (muse-colors-tags, muse-colors-custom-tags):
+	Adapt for nested tags.
+
+	* lisp/muse-html.el (muse-html-markup-tags): Indicate that the
+	<class> tag is nestable.  Thanks to Phillip Lord for noticing
+	this.
+
+	* lisp/muse-publish.el (muse-publish-markup-tag)
+	(muse-publish-quote-tag): Use muse-goto-tag-end.
+
+	* lisp/muse-wiki.el ("muse-colors"): Adapt for nested tags.
+
 2006-10-15  Michael Olson  <mwolson@gnu.org>
 
 	* AUTHORS: Bookkeeping.
