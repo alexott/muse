@@ -10,6 +10,12 @@
 
 	* lisp/muse-html.el (muse-html-markup-tags): Ditto.
 
+	* lisp/muse-import-docbook.el (muse-import-docbook)
+	(muse-import-docbook-files): Docfix.
+	(muse-import-docbook-get-title): Remove cl.el-ism.
+
+	* lisp/muse-import-xml.el (muse-import-xml): Fix compiler warning.
+
 	* lisp/muse-journal.el (muse-journal-latex-markup-tags): Ditto.
 
 	* lisp/muse-latex2png.el (muse-publish-markup-tags): Ditto.
@@ -34,6 +40,16 @@
 	default is to use muse-list-item-regexp.
 
 	* muse.texi (Markup Tags): Mention nestable tags.
+
+	* NEWS: Mention new files.
+
+2006-10-15  Elena Pomohaci  <e.pomohaci@gmail.com>
+
+	* lisp/muse-import-docbook.el: New file that converts Docbook XML
+	into Muse format.
+
+	* lisp/muse-import-xml.el: New file that provides helper routines
+	for converting XML-ish files to Muse format.
 
 2006-10-10  Michael Olson  <mwolson@gnu.org>
 

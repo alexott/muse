@@ -1,4 +1,4 @@
-;;; muse-import-docbook.el --- convert docbook xml to muse
+;;; muse-import-docbook.el --- convert Docbook XML into Muse format
 
 ;; Copyright (C) 2006 Free Software Foundation, Inc.
 
@@ -23,14 +23,12 @@
 
 ;;; Commentary:
 
-;; It works only for article type docbook docs and recognize followings elements:
-;; article, sect1, sect2, sect3, title 
+;; It works only for article type docbook docs and recognize
+;; followings elements: article, sect1, sect2, sect3, title,
 
 ;;; Contributors:
 
 ;;; Code:
-
-(provide 'muse-import-docbook)
 
 (require 'muse-import-xml)
 
@@ -44,16 +42,17 @@
   (setq muse-import-docbook-para-indent "\n\n"))
 
 
-
+;;;###autoload
 (defun muse-import-docbook (src dest)
-  "Convert the xml SRC buffer in a muse DEST buffer"
+  "Convert the Docbook buffer SRC to Muse, writing output in the DEST buffer."
   (interactive "bDocbook buffer:\nBMuse buffer:")
   (setq muse-import-xml-prefix muse-import-docbook-prefix)
   (setq muse-import-xml-generic-function-name "muse-import-xml-node")
   (muse-import-xml src dest))
 
+;;;###autoload
 (defun muse-import-docbook-files (src dest)
-  "Convert the xml SRC file in a muse DEST file"
+  "Convert the Docbook file SRC to Muse, writing output to the DEST file."
   (interactive "fDocbook file:\nFMuse file:")
   (with-temp-file dest
     (muse-import-docbook (find-file-noselect src) (current-buffer))))
@@ -63,9 +62,9 @@
 
 (defun muse-import-docbook-get-title (node)
   (let ((tit (car (xml-get-children node 'title))))
-    (insert (caddr tit) ?\n ?\n)
+    (insert (car (cddr tit)) ?\n ?\n)
     (muse-import-xml-parse-tree (xml-node-children (remove tit node)))))
-  
+
 
 (defun muse-import-docbook-article (node)
   "Article conversion function"
@@ -113,12 +112,12 @@
   (insert "*")
   (muse-import-xml-node node)
   (insert "*"))
-  
+
 (defun muse-import-docbook-quote (node)
   (insert "\"")
   (muse-import-xml-node node)
   (insert "\""))
-  
+
 (defun muse-import-docbook-blockquote (node)
   (setq muse-import-docbook-para-indent "\n\n  ")
   (muse-import-xml-node node)
@@ -132,7 +131,6 @@
   (insert "\n* ")
   (muse-import-xml-node node))
 
-
+(provide 'muse-import-docbook)
 
 ;;; muse-import-docbook.el ends here
-

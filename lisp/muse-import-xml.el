@@ -43,10 +43,10 @@
     (insert-buffer-substring buf)
     (goto-char (point-min))
     (while (re-search-forward ">[ \n\t]*<" nil t)
-      (replace-match "><" nil nil))	; clean all superfluous blank characters
+      (replace-match "><" nil nil)) ; clean all superfluous blank characters
     (xml-parse-region (point-min)
-		      (point-max)
-		      (current-buffer))))
+                      (point-max)
+                      (current-buffer))))
 
 
 (defun muse-import-xml-generic (node)
@@ -65,10 +65,10 @@
   (if (stringp node)
       (insert (replace-regexp-in-string "^[ \t]+" "" node))
     (let ((fname (intern-soft (concat muse-import-xml-prefix
-				      (symbol-name (xml-node-name node))))))
+                                      (symbol-name (xml-node-name node))))))
       (if (functionp fname)
-	  (funcall fname node)
-	  (funcall (intern muse-import-xml-generic-function-name) node)))))
+          (funcall fname node)
+        (funcall (intern muse-import-xml-generic-function-name) node)))))
 
 
 (defun muse-import-xml-node (node)
@@ -79,8 +79,8 @@
 (defun muse-import-xml (src dest)
   "Convert the xml SRC buffer in a muse DEST buffer"
   (set-buffer (get-buffer-create dest))
-  (muse-mode)
+  (when (fboundp 'muse-mode)
+    (muse-mode))
   (muse-import-xml-parse-tree (muse-import-xml-convert-to-list src)))
 
 ;;; muse-import-xml.el ends here
-

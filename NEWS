@@ -185,6 +185,10 @@ where the current page will be published.
 *** lisp/muse-groff.el --  This introduces the publishing styles
 "groff" and "groff-pdf".
 
+*** lisp/muse-import-docbook.el -- Convert Docbook XML into Muse format.
+
+*** lisp/muse-import-xml.el -- Helper file for muse-import-docbook.el.
+
 *** lisp/muse-latex2png.el -- Publish embedded LaTeX content to a PNG file.
 This introduces the <latex> tag.
 
