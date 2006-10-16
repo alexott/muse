@@ -278,6 +278,7 @@ This is used to keep links from being improperly colorized by flyspell."
        (save-match-data
          (null (muse-link-at-point)))))
 
+;;;###autoload
 (defun muse-mode-choose-mode ()
   "Turn the proper Emacs Muse related mode on for this file."
   (let ((project (muse-project-of-file)))

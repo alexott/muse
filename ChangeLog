@@ -23,6 +23,8 @@
 	* lisp/muse-mode.el (muse-previous-reference): Minor docfix.
 	(muse-next-reference, muse-previous-reference): Minor whitespace
 	changes.
+	(muse-mode-choose-mode): Add autoload cookie.  Thanks to Leo for
+	the suggestion.
 
 	* lisp/muse-poem.el (muse-poem-tag): Ditto.
 
