@@ -529,19 +529,19 @@ of the functions listed in `muse-colors-markup'."
       (set-buffer-modified-p modified-p))))
 
 (defcustom muse-colors-tags
-  '(("example" t nil muse-colors-example-tag)
-    ("code" t nil muse-colors-example-tag)
-    ("verbatim" t nil muse-colors-literal-tag)
-    ("lisp" t t muse-colors-lisp-tag)
-    ("literal" t nil muse-colors-literal-tag))
+  '(("example"  t nil nil muse-colors-example-tag)
+    ("code"     t nil nil muse-colors-example-tag)
+    ("verbatim" t nil nil muse-colors-literal-tag)
+    ("lisp"     t t   nil muse-colors-lisp-tag)
+    ("literal"  t nil nil muse-colors-literal-tag))
   "A list of tag specifications for specially highlighting text.
 XML-style tags are the best way to add custom highlighting to Muse.
 This is easily accomplished by customizing this list of markup tags.
 
 For each entry, the name of the tag is given, whether it expects
-a closing tag and/or an optional set of attributes, and a
-function that performs whatever action is desired within the
-delimited region.
+a closing tag and/or an optional set of attributes, whether it is
+nestable, and a function that performs whatever action is desired
+within the delimited region.
 
 The function is called with three arguments, the beginning and
 end of the region surrounded by the tags. If properties are
@@ -553,6 +553,7 @@ Functions should not modify the contents of the buffer."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
                        function))
   :group 'muse-colors)
 
@@ -582,14 +583,14 @@ Functions should not modify the contents of the buffer."
                     (nconc attrs (list attr))
                   (setq attrs (list attr)))))))
         (if (and (cadr tag-info) (not closed-tag))
-            (if (search-forward (concat "</" (car tag-info) ">") nil t)
+            (if (muse-goto-tag-end (car tag-info) (nth 3 tag-info))
                 (setq end (match-end 0))
               (setq tag-info nil)))
         (when tag-info
           (let ((args (list start end)))
             (if (nth 2 tag-info)
                 (nconc args (list attrs)))
-            (apply (nth 3 tag-info) args)))))))
+            (apply (nth 4 tag-info) args)))))))
 
 (defun muse-unhighlight-region (begin end &optional verbose)
   "Remove all visual highlights in the buffer (except font-lock)."

@@ -1,3 +1,40 @@
+2006-10-28  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-determine-dl-indent): New
+	function that is used as a callback to determine the initial
+	amount of indentation that the current dl item has.
+	(muse-publish-surround-dl): Use it.  Pass the initial indent value
+	and the post-indent value, instead of trying to determine them
+	both.
+	(muse-publish-strip-list-indentation): New function stripped from
+	`muse-publish-surround-text' for readability.
+	(muse-publish-surround-text): Instead of taking a determine-indent
+	value, take a determine-indent-func function, which is called just
+	after finding the next list item.  If we are asked to determine
+	the amount of indentation, concatenate indent and post-indent the
+	first time around.  This effectively fixes all known definition
+	list issues.
+
+2006-10-16  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el: Provide the 'muse-nested-tags feature so that
+	other software -- namely, Planner -- can detect whether they are
+	using a version of Muse that supports nested tags.
+	(muse-goto-tag-end): Moved from muse-publish.el and renamed from
+	muse-publish-goto-tag-end.
+
+	* lisp/muse-colors.el (muse-colors-tags, muse-colors-custom-tags):
+	Adapt for nested tags.
+
+	* lisp/muse-html.el (muse-html-markup-tags): Indicate that the
+	<class> tag is nestable.  Thanks to Phillip Lord for noticing
+	this.
+
+	* lisp/muse-publish.el (muse-publish-markup-tag)
+	(muse-publish-quote-tag): Use muse-goto-tag-end.
+
+	* lisp/muse-wiki.el ("muse-colors"): Adapt for nested tags.
+
 2006-10-15  Michael Olson  <mwolson@gnu.org>
 
 	* AUTHORS: Bookkeeping.

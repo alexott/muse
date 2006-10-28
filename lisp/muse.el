@@ -45,6 +45,9 @@
 
 ;;; Code:
 
+;; Indicate that this version of Muse supports nested tags
+(provide 'muse-nested-tags)
+
 (defvar muse-version "3.02.92"
   "The version of Muse currently loaded")
 
@@ -737,6 +740,23 @@ provide a very liberal INDENT value, such as
              (goto-char (match-beginning 1)))
            ;; move to just before foreign list item markup
            nil))))
+
+(defun muse-goto-tag-end (tag nested)
+  "Move forward past the end of TAG.
+
+If NESTED is non-nil, look for other instances of this tag that
+may be nested inside of this tag, and skip past them."
+  (if (not nested)
+      (search-forward (concat "</" tag ">") nil t)
+    (let ((nesting 1)
+          (tag-regexp (concat "^\\(<\\(/?\\)" tag ">\\)"))
+          (match-found nil))
+      (while (and (> nesting 0)
+                  (setq match-found (re-search-forward tag-regexp nil t)))
+        (if (string-equal (match-string 2) "/")
+            (setq nesting (1- nesting))
+          (setq nesting (1+ nesting))))
+      match-found)))
 
 (provide 'muse)
 

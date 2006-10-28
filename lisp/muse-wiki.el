@@ -367,7 +367,7 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
                             '(invisible muse intangible t)))
 
      (add-to-list 'muse-colors-tags
-                  '("nop" nil nil muse-wiki-colors-nop-tag)
+                  '("nop" nil nil nil muse-wiki-colors-nop-tag)
                   t)
 
      (add-to-list 'muse-colors-markup
