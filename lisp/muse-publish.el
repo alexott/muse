@@ -1005,6 +1005,22 @@ The following contexts exist in Muse.
     (add-text-properties beg (point) '(end-list t))
     (muse-publish-mark-read-only beg (point))))
 
+(defun muse-publish-determine-dl-indent (continue indent-sym determine-sym)
+  ;; If the caller doesn't know how much indentation to use, figure it
+  ;; out ourselves.  It is assumed that `muse-forward-list-item' has
+  ;; been called just before this to set the match data.
+  (when (and continue
+             (symbol-value determine-sym))
+    (save-match-data
+      ;; snarf all leading whitespace
+      (let ((indent (and (match-beginning 2)
+                         (buffer-substring (match-beginning 1)
+                                           (match-beginning 2)))))
+        (when (and indent
+                   (not (string= indent "")))
+          (set indent-sym indent)
+          (set determine-sym nil))))))
+
 (defun muse-publish-surround-dl (indent post-indent)
   (let* ((beg-item (muse-markup-text 'begin-dl-item))
          (end-item (muse-markup-text 'end-dl-item))
@@ -1042,20 +1058,46 @@ The following contexts exist in Muse.
         (muse-publish-surround-text beg-dde end-dde
          (lambda (indent)
            (muse-forward-list-item 'dl-entry indent))
-         nil nil t)
+         indent post-indent
+         #'muse-publish-determine-dl-indent)
         (goto-char (point-max))
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup-end-list end-item)
         (when continue
           (goto-char (point-max)))))))
 
-(defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent post-indent determine-indent list-item)
+(defun muse-publish-strip-list-indentation (list-item empty-line indent post-indent)
+  (let ((list-nested nil)
+        (indent-found nil))
+    (while (< (point) (point-max))
+      (when (and (looking-at list-item)
+                 (not (or (get-text-property
+                           (muse-list-item-critical-point) 'read-only)
+                          (get-text-property
+                           (muse-list-item-critical-point) 'muse-link))))
+        ;; if we encounter a list item, allow no post-indent space
+        (setq list-nested t))
+      (when (and (not (looking-at empty-line))
+                 (looking-at (concat indent "\\("
+                                     (or (and list-nested "")
+                                         post-indent)
+                                     "\\)")))
+        ;; if list is not nested, remove indentation
+        (unless indent-found
+          (setq post-indent (match-string 1)
+                indent-found t))
+        (replace-match ""))
+      (forward-line 1))))
+
+(defun muse-publish-surround-text (beg-tag end-tag move-func &optional indent post-indent determine-indent-func list-item)
   (unless list-item
     (setq list-item (format muse-list-item-regexp
                             (concat "[" muse-regexp-blank "]*"))))
   (let ((continue t)
         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
-        init-indent beg)
+        (determine-indent (if determine-indent-func t nil))
+        (new-indent indent)
+        beg)
     (unless indent
       (setq indent (concat "[" muse-regexp-blank "]+")))
     (if post-indent
@@ -1068,54 +1110,23 @@ The following contexts exist in Muse.
             ;; move past current item; continue is non-nil if there
             ;; are more like items to be processed
             continue (funcall move-func indent))
-      (save-restriction
-        (when determine-indent
-          ;; if the caller doesn't know how much indentation
-          ;; to use, figure it out ourselves
-          (if (not continue)
-              (setq indent "")
-            (save-match-data
-              ;; snarf all leading whitespace
-              (let ((this-indent (and (match-beginning 2)
-                                      (buffer-substring (match-beginning 1)
-                                                        (match-beginning 2)))))
-                (when (and this-indent
-                           (not (string= this-indent "")))
-                  (setq indent this-indent
-                        determine-indent nil))))))
-        (when continue
+      (when determine-indent-func
+        (funcall determine-indent-func continue 'new-indent 'determine-indent))
+      (when continue
           ;; remove list markup if we encountered another item of the
           ;; same type
           (replace-match "" t t nil 1))
+      (save-restriction
         (narrow-to-region beg (point))
         ;; narrow to current item
         (goto-char (point-min))
         (forward-line 1)
-        (let ((list-nested nil)
-              (indent-found nil)
-              (post-indent post-indent))
-          (while (< (point) (point-max))
-            (when (and (looking-at list-item)
-                       (not (or (get-text-property
-                                 (muse-list-item-critical-point) 'read-only)
-                                (get-text-property
-                                 (muse-list-item-critical-point) 'muse-link))))
-              ;; if we encounter a list item, allow no post-indent
-              ;; space
-              (setq list-nested t))
-            (when (and (not (looking-at empty-line))
-                       (looking-at (concat indent "\\("
-                                           (or (and list-nested "")
-                                               post-indent)
-                                           "\\)")))
-              ;; if list is not nested, remove indentation
-              (unless indent-found
-                (setq post-indent (match-string 1)
-                      indent-found t))
-              (replace-match ""))
-            (forward-line 1)))
+        (muse-publish-strip-list-indentation list-item empty-line
+                                             indent post-indent)
         (skip-chars-backward (concat muse-regexp-blank "\n"))
         (muse-insert-markup-end-list end-tag)
+        (when determine-indent-func
+          (setq indent new-indent))
         (when continue
           (goto-char (point-max)))))))
 
