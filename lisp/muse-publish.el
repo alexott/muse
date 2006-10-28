@@ -1097,6 +1097,7 @@ The following contexts exist in Muse.
         (empty-line (concat "^[" muse-regexp-blank "]*\n"))
         (determine-indent (if determine-indent-func t nil))
         (new-indent indent)
+        (first t)
         beg)
     (unless indent
       (setq indent (concat "[" muse-regexp-blank "]+")))
@@ -1109,7 +1110,9 @@ The following contexts exist in Muse.
       (setq beg (point)
             ;; move past current item; continue is non-nil if there
             ;; are more like items to be processed
-            continue (funcall move-func indent))
+            continue (if (and determine-indent-func first)
+                         (funcall move-func (concat indent post-indent))
+                       (funcall move-func indent)))
       (when determine-indent-func
         (funcall determine-indent-func continue 'new-indent 'determine-indent))
       (when continue
@@ -1127,6 +1130,8 @@ The following contexts exist in Muse.
         (muse-insert-markup-end-list end-tag)
         (when determine-indent-func
           (setq indent new-indent))
+        (when first
+          (setq first nil))
         (when continue
           (goto-char (point-max)))))))
 
