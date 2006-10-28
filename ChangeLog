@@ -10,8 +10,10 @@
 	`muse-publish-surround-text' for readability.
 	(muse-publish-surround-text): Instead of taking a determine-indent
 	value, take a determine-indent-func function, which is called just
-	after finding the next list item.  There are still some definition
-	list bugs with this implementation, but I need to checkpoint it.
+	after finding the next list item.  If we are asked to determine
+	the amount of indentation, concatenate indent and post-indent the
+	first time around.  This effectively fixes all known definition
+	list issues.
 
 2006-10-16  Michael Olson  <mwolson@gnu.org>
 
