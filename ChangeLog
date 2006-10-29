@@ -1,5 +1,7 @@
 2006-10-29  Michael Olson  <mwolson@gnu.org>
 
+	* NEWS: Update.
+
 	* lisp/muse-publish.el (muse-publish-url): Allow the original link
 	to serve as a description for a URL, as long as it differs from
 	the destination URL.  This fixes the description of WikPage links
