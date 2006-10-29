@@ -1,5 +1,13 @@
 2006-10-29  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-project.el (muse-project-find-file): Permit non-Muse
+	files in projects to be linked to, though it isn't yet sure
+	whether they will publish correctly.
+
+	* lisp/muse-regexps.el (muse-file-regexp): If something ends in
+	"/", it is a file or directory, not a Muse page.  Thanks to
+	Phillip Lord for the suggestion.
+
 	* NEWS: Update.
 
 	* lisp/muse-publish.el (muse-publish-url): Allow the original link

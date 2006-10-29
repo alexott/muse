@@ -209,7 +209,7 @@ them, you will have to modify this."
 ;;; Regexps used to determine file types
 
 (defcustom muse-file-regexp
-  (concat "\\`[~/]\\|\\?\\|\\."
+  (concat "\\`[~/]\\|\\?\\|/\\'\\|\\."
           "\\(html?\\|pdf\\|mp3\\|el\\|zip\\|txt\\|tar\\)"
           "\\(\\.\\(gz\\|bz2\\)\\)?\\'")
   "A link matching this regexp will be regarded as a link to a file."
