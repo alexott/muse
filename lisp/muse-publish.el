@@ -1390,8 +1390,10 @@ the cadr is the page name, and the cddr is the anchor."
           ((eq type 'link)
            (muse-markup-text 'link url (or desc orig-url)))
           (t
-           (or (and desc
-                    (let ((text (muse-markup-text 'url-and-desc url desc)))
+           (or (and (or desc
+                        (not (string= url orig-url)))
+                    (let ((text (muse-markup-text 'url-and-desc url
+                                                  (or desc orig-url))))
                       (and (not (string= text ""))
                            text)))
                (muse-markup-text 'url url (or desc orig-url)))))))
