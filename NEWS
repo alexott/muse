@@ -343,7 +343,11 @@ images without descriptions.  Use 'image-link instead of
 'url-with-image to indicate URLs that have an image as their
 description.
 
-*** Nested tags are now supported.
+*** Self-nested tags are now supported.
+Tags with the same name can now be nested inside one another.  This
+only applies to the new <quote> tag and the <class> tag currently, but
+it may be useful for custom tags as well.
+
 To activate this, set the 4th element in a `muse-publish-markup-tag'
 to non-nil.  Note that this involved a change to the structure of
 `muse-publish-markup-tag', so be sure to change any custom tags

@@ -1,4 +1,24 @@
+2006-10-29  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Update.
+
+	* lisp/muse-publish.el (muse-publish-url): Allow the original link
+	to serve as a description for a URL, as long as it differs from
+	the destination URL.  This fixes the description of WikPage links
+	in PDF output.
+
+	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): Use the path
+	of the current page as the local path, instead of duplicating the
+	remote file's path.  This probably fixes at least one reported
+	bug. since it's quite major.
+
 2006-10-28  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-choose-style-by-link-suffix)
+	(muse-project-resolve-link): If the given style does not have a
+	link-suffix, default to suffix.  This fixes a bug I was noticing
+	when linking to a file that was published in both PDF and HTML
+	form.
 
 	* lisp/muse-publish.el (muse-publish-determine-dl-indent): New
 	function that is used as a callback to determine the initial
