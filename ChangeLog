@@ -1,5 +1,11 @@
 2006-10-28  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-project.el (muse-project-choose-style-by-link-suffix)
+	(muse-project-resolve-link): If the given style does not have a
+	link-suffix, default to suffix.  This fixes a bug I was noticing
+	when linking to a file that was published in both PDF and HTML
+	form.
+
 	* lisp/muse-publish.el (muse-publish-determine-dl-indent): New
 	function that is used as a callback to determine the initial
 	amount of indentation that the current dl item has.

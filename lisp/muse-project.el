@@ -579,7 +579,8 @@ If no style passes TEST, return the first style."
 (defun muse-project-choose-style-by-link-suffix (given-suffix style)
   "If the given STYLE has a link-suffix that equals GIVEN-SUFFIX,
 return non-nil."
-  (let ((link-suffix (muse-style-element :link-suffix style)))
+  (let ((link-suffix (or (muse-style-element :link-suffix style)
+                         (muse-style-element :suffix style))))
     (and (stringp link-suffix)
          (string= given-suffix link-suffix))))
 
@@ -622,7 +623,8 @@ suffix of the given local style and that of the remote styles.
 
 The remote styles are usually populated by
 `muse-project-applicable-styles'."
-  (let ((link-suffix (muse-style-element :link-suffix local-style))
+  (let ((link-suffix (or (muse-style-element :link-suffix local-style)
+                         (muse-style-element :suffix local-style)))
         remote-style)
     (if (not (stringp link-suffix))
         (setq remote-style (car remote-styles))
