@@ -18,7 +18,7 @@
 \begin{document}
 
 <lisp>(unless (muse-publishing-directive "latex-omit-title")
-(concat "\\title{" (muse-publishing-directive "title") "}
+(concat "\\title{" (muse-wiki-publish-pretty-title) "}
 \\author{" (muse-publishing-directive "author") "}
 \\date{" (muse-publishing-directive "date") "}
 

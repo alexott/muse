@@ -21,6 +21,7 @@
 (require 'muse-docbook)  ; load DocBook publishing style
 (require 'muse-html)     ; load (X)HTML publishing style
 (require 'muse-latex)    ; load LaTeX/PDF publishing styles
+(require 'muse-latex2png) ; publish <latex> tags
 (require 'muse-texinfo)  ; load Info publishing style
 (require 'muse-wiki)     ; load Wiki support
 (require 'muse-xml)      ; load XML support
@@ -116,9 +117,11 @@
         ;; abbreviations
         ("CERIAS" . "http://www.cerias.purdue.edu/")
         ("PlannerMode" . "http://www.plannerlove.com/")
+        ("RememberMode" . "http://www.emacswiki.org/cgi-bin/wiki/RememberMode")
         ("GP2X" . "http://www.gp2x.co.uk/")
         ("UbuntuLinux" . "http://ubuntulinux.org/")
-        ("PLUG" . "http://plug.student-orgs.purdue.edu/wiki/")))
+        ("PLUG" . "http://plug.student-orgs.purdue.edu/wiki/")
+        ("PAC" . "http://web.ics.purdue.edu/~pac/")))
 
 ;;; Functions
 

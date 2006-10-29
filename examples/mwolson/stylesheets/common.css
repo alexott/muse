@@ -116,34 +116,35 @@ img {
 }
 
 li {
-  line-height: 1.5em;
+  line-height: 1.2em;
   margin-top: .7em;
 }
 
 p.verse {
   clear: left;
   line-height: 2em;
-  margin-left: 5%;
+  margin-left: 3%;
 }
 
 p {
-  line-height: 1.5em;
+  line-height: 1.2em;
 }
 
 pre.example {
-  margin-left: 5%;
-  margin-bottom: 2.5em;
+  margin-left: 3%;
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
 }
 
 pre.verse {
   font-family: inherit;
   line-height: 2em;
-  margin-left: 5%;
+  margin-left: 3%;
 }
 
 pre {
   font-family: monospace;
-  margin-left: 5%;
+  margin-left: 3%;
   white-space: pre;
 }
 
