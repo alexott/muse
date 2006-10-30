@@ -30,6 +30,12 @@
 	of the current page as the local path, instead of duplicating the
 	remote file's path.  This probably fixes at least one reported
 	bug. since it's quite major.
+	(muse-wiki-update-project-file-regexp)
+	(muse-wiki-update-interwiki-regexp): Ensure that nil is never
+	passed to regexp-opt, since that can cause Emacs 21 to throw an
+	"maximum binding depth exceeded" error.  Thanks to xs32 AT cornell
+	DOT edu for the report.
+	(muse-wiki-handle-wikiword): Avoid a potential stringp error.
 
 2006-10-28  Michael Olson  <mwolson@gnu.org>
 
