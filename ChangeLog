@@ -1,16 +1,41 @@
 2006-10-29  Michael Olson  <mwolson@gnu.org>
 
+	* examples/mwolson: Update my example configuration.
+
 	* NEWS: Update.
+
+	* lisp/muse-colors.el (muse-configure-highlighting): Remove rules
+	without a regexp in the first position before iterating through
+	them to build muse-colors-vector.  This fixes a bug with the
+	display of <example> tags.  Thanks to Stefan Reichör for the
+	report.
+
+	* lisp/muse-project.el (muse-project-find-file): Permit non-Muse
+	files in projects to be linked to, though it isn't yet sure
+	whether they will publish correctly.
 
 	* lisp/muse-publish.el (muse-publish-url): Allow the original link
 	to serve as a description for a URL, as long as it differs from
 	the destination URL.  This fixes the description of WikPage links
 	in PDF output.
+	(muse-publish-link-file): Check to see whether the given link
+	points at a valid file.  If so, return it.  Otherwise, apply other
+	transforms like prefix and link suffix.
+
+	* lisp/muse-regexps.el (muse-file-regexp): If something ends in
+	"/", it is a file or directory, not a Muse page.  Thanks to
+	Phillip Lord for the suggestion.
 
 	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): Use the path
 	of the current page as the local path, instead of duplicating the
 	remote file's path.  This probably fixes at least one reported
 	bug. since it's quite major.
+	(muse-wiki-update-project-file-regexp)
+	(muse-wiki-update-interwiki-regexp): Ensure that nil is never
+	passed to regexp-opt, since that can cause Emacs 21 to throw an
+	"maximum binding depth exceeded" error.  Thanks to xs32 AT cornell
+	DOT edu for the report.
+	(muse-wiki-handle-wikiword): Avoid a potential stringp error.
 
 2006-10-28  Michael Olson  <mwolson@gnu.org>
 

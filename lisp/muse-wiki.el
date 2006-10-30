@@ -75,13 +75,13 @@ when `muse-wiki-martch-all-project-files' is non-nil.")
 all the files in the project."
   ;; see if the user wants to match project files
   (when muse-wiki-match-all-project-files
-    (setq muse-wiki-project-file-regexp
-          (concat "\\("
-                  ;; include all files from the project
-                  (regexp-opt (mapcar 'car
-                                      (muse-project-file-alist (muse-project)))
-                              'words)
-                  "\\)"))
+    (let ((files (mapcar #'car (muse-project-file-alist (muse-project)))))
+      (setq muse-wiki-project-file-regexp
+            (when files
+              (concat "\\("
+                      ;; include all files from the project
+                      (regexp-opt files 'words)
+                      "\\)"))))
     ;; update coloring setup
     (when (featurep 'muse-colors)
       (muse-configure-highlighting
@@ -157,25 +157,26 @@ If you want this replacement to happen, you must add
 (defun muse-wiki-update-interwiki-regexp ()
   "Update the value of `muse-wiki-interwiki-regexp' based on
 `muse-wiki-interwiki-alist' and `muse-project-alist'."
+  (muse-assert (consp muse-project-alist))
   (setq muse-wiki-interwiki-regexp
-        (concat "\\<\\(" (regexp-opt (mapcar 'car muse-project-alist))
+        (concat "\\<\\(" (regexp-opt (mapcar #'car muse-project-alist))
                 (when muse-wiki-interwiki-alist
-                  (concat "\\|"
-                          (regexp-opt (mapcar 'car
-                                              muse-wiki-interwiki-alist))))
+                  (let ((interwiki-rules (mapcar #'car
+                                                 muse-wiki-interwiki-alist)))
+                    (when interwiki-rules
+                      (concat "\\|" (regexp-opt interwiki-rules)))))
                 "\\)\\(?:\\(?:" muse-wiki-interwiki-delimiter
                 "\\)\\("
                 (when muse-wiki-match-all-project-files
                   ;; append the files from the project
-                  (concat
-                   (let ((files nil))
-                     (dolist (proj muse-project-alist)
-                       (setq files
-                             (nconc (muse-wiki-project-files-with-spaces
-                                     (car proj))
-                                    files)))
-                     (regexp-opt files))
-                   "\\|"))
+                  (let ((files nil))
+                    (dolist (proj muse-project-alist)
+                      (setq files
+                            (nconc (muse-wiki-project-files-with-spaces
+                                    (car proj))
+                                   files)))
+                    (when files
+                      (concat (regexp-opt files) "\\|"))))
                 "\\sw+\\)\\)?\\>"))
   (when (featurep 'muse-colors)
     (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
@@ -282,6 +283,7 @@ Match 2 is set to the description."
 
 Match 1 is set to the WikiWord."
   (when (and (or (and muse-wiki-match-all-project-files
+                      muse-wiki-project-file-regexp
                       (if string
                           (string-match muse-wiki-project-file-regexp string)
                         (looking-at muse-wiki-project-file-regexp)))
