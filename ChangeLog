@@ -1,3 +1,8 @@
+2006-10-30  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Fix bug
+	introduced yesterday.
+
 2006-10-29  Michael Olson  <mwolson@gnu.org>
 
 	* examples/mwolson: Update my example configuration.
@@ -11,8 +16,7 @@
 	report.
 
 	* lisp/muse-project.el (muse-project-find-file): Permit non-Muse
-	files in projects to be linked to, though it isn't yet sure
-	whether they will publish correctly.
+	files in projects to be linked to.
 
 	* lisp/muse-publish.el (muse-publish-url): Allow the original link
 	to serve as a description for a URL, as long as it differs from
