@@ -4,6 +4,12 @@
 
 	* NEWS: Update.
 
+	* lisp/muse-colors.el (muse-configure-highlighting): Remove rules
+	without a regexp in the first position before iterating through
+	them to build muse-colors-vector.  This fixes a bug with the
+	display of <example> tags.  Thanks to Stefan Reichör for the
+	report.
+
 	* lisp/muse-project.el (muse-project-find-file): Permit non-Muse
 	files in projects to be linked to, though it isn't yet sure
 	whether they will publish correctly.
