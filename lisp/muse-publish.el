@@ -624,12 +624,17 @@ TITLE is used when indicating the publishing progress; it may be nil."
           (or (muse-style-element :link-suffix style)
               (muse-style-element :suffix style))))
 
-(defsubst muse-publish-link-file (file &optional output-dir style)
+(defun muse-publish-link-file (file &optional output-dir style)
   (setq style (muse-style style))
   (if output-dir
-      (expand-file-name (muse-publish-link-name file style) output-dir)
-    (concat (file-name-directory file)
-            (muse-publish-link-name file style))))
+      (let ((link-name (expand-file-name file output-dir)))
+        (if (file-exists-p link-name)
+            link-name
+          (expand-file-name (muse-publish-link-name file style) output-dir)))
+    (if (file-exists-p file)
+        file
+      (concat (file-name-directory file)
+              (muse-publish-link-name file style)))))
 
 (defsubst muse-publish-link-page (page)
   (if (fboundp 'muse-project-link-page)

@@ -12,6 +12,9 @@
 	to serve as a description for a URL, as long as it differs from
 	the destination URL.  This fixes the description of WikPage links
 	in PDF output.
+	(muse-publish-link-file): Check to see whether the given link
+	points at a valid file.  If so, return it.  Otherwise, apply other
+	transforms like prefix and link suffix.
 
 	* lisp/muse-regexps.el (muse-file-regexp): If something ends in
 	"/", it is a file or directory, not a Muse page.  Thanks to
