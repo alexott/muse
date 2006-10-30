@@ -233,7 +233,7 @@ whether progress messages should be displayed to the user."
 
 (defun muse-configure-highlighting (sym val)
   (let ((regexps nil)
-        (newval nil))
+        (rules nil))
     (dolist (rule val)
       (let ((value (cond ((symbolp (car rule))
                           (symbol-value (car rule)))
@@ -241,14 +241,13 @@ whether progress messages should be displayed to the user."
                           (car rule))
                          (t nil))))
         (when value
-          (setq newval (cons rule newval))
+          (setq rules (cons rule rules))
           (setq regexps (cons value regexps)))))
     (setq muse-colors-regexp (concat "\\("
                                      (mapconcat #'identity regexps "\\|")
                                      "\\)")
-          muse-colors-vector (make-vector 128 nil)
-          val newval))
-  (let ((rules val))
+          muse-colors-vector (make-vector 128 nil))
+    (setq rules (nreverse rules))
     (while rules
       (if (eq (cadr (car rules)) t)
           (let ((i 0) (l 128))
@@ -436,10 +435,7 @@ markup text invisible, inlining images, etc).
 font-lock is used to apply the markup rules, so that they can happen
 on a deferred basis.  They are not always accurate, but you can use
 \\[font-lock-fontifty-block] near the point of error to force
-fontification in that area.
-
-Lastly, none of the regexp should contain grouping elements that will
-affect the match data results."
+fontification in that area."
   :type '(repeat
           (list :tag "Highlight rule"
                 (choice (regexp :tag "Locate regexp")
@@ -566,7 +562,10 @@ Functions should not modify the contents of the buffer."
 
 (defun muse-colors-custom-tags ()
   "Highlight `muse-colors-tags'."
-  (let ((tag-info (muse-colors-tag-info (match-string 4))))
+  (save-excursion
+    (goto-char (match-beginning 0))
+    (looking-at muse-tag-regexp))
+  (let ((tag-info (muse-colors-tag-info (match-string 1))))
     (when tag-info
       (let ((closed-tag (match-string 3))
             (start (match-beginning 0))

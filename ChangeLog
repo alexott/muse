@@ -1,5 +1,13 @@
 2006-10-30  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-colors.el (muse-colors-markup): Remove note about
+	grouping elements, since that no longer applies.
+	(muse-colors-custom-tags): Explicitly match against
+	muse-tag-regexp to get the match-data set the way we want.  This
+	really fixes the <example> highlighting bug that Stefan reported.
+	(muse-configure-highlighting): Set the original value to the
+	symbol, not the modified value.  Re-use modified rules properly.
+
 	* lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Fix bug
 	introduced yesterday.
 
