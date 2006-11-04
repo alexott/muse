@@ -318,20 +318,32 @@ For an example of the use of this function, see
 (defun muse-project-page-file (page project &optional no-check-p)
   "Return a filename if PAGE exists within the given Muse PROJECT."
   (setq project (muse-project project))
-  (let ((dir (file-name-directory page)))
-    (when dir (setq page (file-name-nondirectory page)))
+  (let ((dir (file-name-directory page))
+        (expanded-path nil))
+    (when dir
+      (setq expanded-path (concat (expand-file-name
+                                   page
+                                   (file-name-directory (muse-current-file)))
+                                  (when muse-file-extension
+                                    (concat "." muse-file-extension))))
+      (setq page (file-name-nondirectory page)))
     (let ((files (muse-collect-alist
                   (muse-project-file-alist project no-check-p)
                   page))
           (matches nil))
       (if dir
-          (save-match-data
-            (dolist (file files)
-              (let ((pos (string-match (concat (regexp-quote dir) "\\'")
-                                       (file-name-directory (cdr file)))))
-                (when pos
-                  (setq matches (cons (cons pos (cdr file))
-                                      matches)))))
+          (catch 'done
+            (save-match-data
+              (dolist (file files)
+                (if (and expanded-path
+                         (string= expanded-path (cdr file)))
+                    (throw 'done (cdr file))
+                  (let ((pos (string-match (concat (regexp-quote dir) "\\'")
+                                           (file-name-directory (cdr file)))))
+                    (when pos
+                      (setq matches (cons (cons pos (cdr file))
+                                          matches)))))))
+            ;; if we haven't found an exact match, pick a candidate
             (car (muse-sort-by-rating matches)))
         (dolist (file files)
           (setq matches (cons (cons (length (cdr file)) (cdr file))

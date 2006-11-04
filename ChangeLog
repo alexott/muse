@@ -1,5 +1,8 @@
 2006-11-03  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-project.el (muse-project-page-file): Make relative
+	links work as expected, hopefully.
+
 	* lisp/muse-publish.el (muse-publish-this-file): Set the current
 	output style manually, since it will differ from anything in the
 	publishing style list.
