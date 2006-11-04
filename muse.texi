@@ -425,9 +425,6 @@ Display an index of all known Muse pages.
 @item C-c C-b (`muse-find-backlinks')
 Find all pages that link to this page.
 
-@item C-c C-c (`muse-follow-name-at-point')
-Visit the link at point.
-
 @item C-c C-e (`muse-edit-link-at-point')
 Edit link at point.
 
