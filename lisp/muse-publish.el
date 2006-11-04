@@ -684,9 +684,11 @@ Prompt for both the STYLE and OUTPUT-DIR if they are not
 supplied."
   (interactive (muse-publish-get-info))
   (if buffer-file-name
-      (unless (muse-publish-file buffer-file-name style output-dir force)
-        (message (concat "The published version is up-to-date; use"
-                         " C-u C-c C-T to force an update.")))
+      (let ((muse-current-output-style (list :base (car style)
+                                             :path output-dir)))
+        (unless (muse-publish-file buffer-file-name style output-dir force)
+          (message (concat "The published version is up-to-date; use"
+                           " C-u C-c C-T to force an update."))))
     (message "This buffer is not associated with any file")))
 
 (defun muse-batch-publish-files ()

@@ -165,7 +165,7 @@ If you want this replacement to happen, you must add
                                                    muse-wiki-interwiki-alist)))
                       (when interwiki-rules
                         (concat "\\|" (regexp-opt interwiki-rules)))))
-                  "\\)\\(?:\\(?:" muse-wiki-interwiki-delimiter
+                  "\\)\\(?:\\(" muse-wiki-interwiki-delimiter
                   "\\)\\("
                   (when muse-wiki-match-all-project-files
                   ;; append the files from the project
@@ -177,7 +177,7 @@ If you want this replacement to happen, you must add
                                      files)))
                       (when files
                         (concat (regexp-opt files) "\\|"))))
-                  "\\sw+\\)\\)?\\>"))
+                  "\\sw+\\)?\\)?\\>"))
     (when (featurep 'muse-colors)
       (muse-configure-highlighting 'muse-colors-markup muse-colors-markup))))
 
@@ -256,7 +256,7 @@ use the first style we find."
                    (concat page-path "." muse-file-extension)
                  page-path)))))))
 
-(defun muse-wiki-handle-interwiki (&optional string)
+(defun muse-wiki-handle-implicit-interwiki (&optional string)
   "If STRING or point has an interwiki link, resolve it and
 return the first match.
 
@@ -267,9 +267,9 @@ Match 2 is set to the description."
     (let* ((project (match-string 1 string))
            (subst (cdr (assoc project muse-wiki-interwiki-alist)))
            (word (if string
-                     (and (match-beginning 2)
-                          (substring string (match-beginning 2)))
-                   (match-string 2 string))))
+                     (and (match-beginning 3)
+                          (substring string (match-beginning 3)))
+                   (match-string 3 string))))
       (if subst
           (if (functionp subst)
               (funcall subst word)
@@ -277,6 +277,37 @@ Match 2 is set to the description."
         (and (assoc project muse-project-alist)
              (or word (not muse-wiki-ignore-bare-project-names))
              (muse-wiki-resolve-project-page project word))))))
+
+(defun muse-wiki-handle-explicit-interwiki (&optional string)
+  "If STRING or point has an interwiki link, resolve it and
+return the first match.
+
+Match 1 is set to the link.
+Match 2 is set to the description."
+  (let ((right-pos (if string (length string) (match-end 1))))
+    (when (if string (string-match muse-wiki-interwiki-regexp string)
+            (looking-at muse-wiki-interwiki-regexp))
+      (let* ((project (match-string 1 string))
+             (subst (cdr (assoc project muse-wiki-interwiki-alist)))
+             (word (when (match-end 2)
+                     (if string
+                         (substring string (match-end 2))
+                       (if right-pos
+                           (buffer-substring (match-end 2)
+                                             right-pos))))))
+        (if (and (null word)
+                 right-pos
+                 (not (= right-pos (match-end 1))))
+            ;; if only a project name was found, it must take up the
+            ;; entire string or link
+            nil
+          (if subst
+              (if (functionp subst)
+                  (funcall subst word)
+                (concat subst word))
+            (and (assoc project muse-project-alist)
+                 (or word (not muse-wiki-ignore-bare-project-names))
+                 (muse-wiki-resolve-project-page project word))))))))
 
 (defun muse-wiki-handle-wikiword (&optional string)
   "If STRING or point has a WikiWord, return it.
@@ -412,20 +443,20 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
 ;; Insinuate link handling
 
 (custom-add-option 'muse-implicit-link-functions
-                   'muse-wiki-handle-interwiki)
+                   'muse-wiki-handle-implicit-interwiki)
 (custom-add-option 'muse-implicit-link-functions
                    'muse-wiki-handle-wikiword)
 
 (custom-add-option 'muse-explicit-link-functions
-                   'muse-wiki-handle-interwiki)
+                   'muse-wiki-handle-explicit-interwiki)
 
 (add-to-list 'muse-implicit-link-functions
-             'muse-wiki-handle-interwiki t)
+             'muse-wiki-handle-implicit-interwiki t)
 (add-to-list 'muse-implicit-link-functions
              'muse-wiki-handle-wikiword t)
 
 (add-to-list 'muse-explicit-link-functions
-             'muse-wiki-handle-interwiki t)
+             'muse-wiki-handle-explicit-interwiki t)
 
 ;; Obsolete functions
 
