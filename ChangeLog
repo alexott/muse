@@ -1,3 +1,16 @@
+2006-11-04  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Make page
+	optional, and make interwiki delimiter a regular rather than shy
+	group.
+	(muse-wiki-handle-implicit-interwiki): Rename from
+	muse-wiki-handle-interwiki.  Use match group 3 to get the page.
+	(muse-wiki-handle-explicit-interwiki): New function that is
+	smarter about where an explicit link ends in a buffer.  This
+	allows you to refer to page names with invalid Wiki characters,
+	such as underscores and dashes, merely by enclosing them in double
+	brackets.
+
 2006-11-03  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-page-file): Make relative
