@@ -1,3 +1,9 @@
+2006-11-03  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-this-file): Set the current
+	output style manually, since it will differ from anything in the
+	publishing style list.
+
 2006-10-30  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el (muse-colors-markup): Remove note about
