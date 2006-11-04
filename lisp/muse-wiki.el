@@ -284,25 +284,30 @@ return the first match.
 
 Match 1 is set to the link.
 Match 2 is set to the description."
-  (let ((right-pos (unless string (match-end 1))))
+  (let ((right-pos (if string (length string) (match-end 1))))
     (when (if string (string-match muse-wiki-interwiki-regexp string)
             (looking-at muse-wiki-interwiki-regexp))
       (let* ((project (match-string 1 string))
              (subst (cdr (assoc project muse-wiki-interwiki-alist)))
-             (word (if right-pos
-                       (and (match-end 2)
-                            (buffer-substring (match-end 2) right-pos))
+             (word (when (match-end 2)
                      (if string
-                         (and (match-beginning 3)
-                              (substring string (match-beginning 3)))
-                       (match-string 3 string)))))
-        (if subst
-            (if (functionp subst)
-                (funcall subst word)
-              (concat subst word))
-          (and (assoc project muse-project-alist)
-               (or word (not muse-wiki-ignore-bare-project-names))
-               (muse-wiki-resolve-project-page project word)))))))
+                         (substring string (match-end 2))
+                       (if right-pos
+                           (buffer-substring (match-end 2)
+                                             right-pos))))))
+        (if (and (null word)
+                 right-pos
+                 (not (= right-pos (match-end 1))))
+            ;; if only a project name was found, it must take up the
+            ;; entire string or link
+            nil
+          (if subst
+              (if (functionp subst)
+                  (funcall subst word)
+                (concat subst word))
+            (and (assoc project muse-project-alist)
+                 (or word (not muse-wiki-ignore-bare-project-names))
+                 (muse-wiki-resolve-project-page project word))))))))
 
 (defun muse-wiki-handle-wikiword (&optional string)
   "If STRING or point has a WikiWord, return it.

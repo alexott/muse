@@ -9,7 +9,8 @@
 	smarter about where an explicit link ends in a buffer.  This
 	allows you to refer to page names with invalid Wiki characters,
 	such as underscores and dashes, merely by enclosing them in double
-	brackets.
+	brackets.  Also, a bug with recognizing project names too loosely
+	has been fixed.
 
 2006-11-03  Michael Olson  <mwolson@gnu.org>
 
