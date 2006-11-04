@@ -144,7 +144,6 @@ index at intervals."
 (defvar muse-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [(control ?c) (control ?a)] 'muse-index)
-    (define-key map [(control ?c) (control ?c)] 'muse-follow-name-at-point)
     (define-key map [(control ?c) (control ?e)] 'muse-edit-link-at-point)
     (define-key map [(control ?c) (control ?l)] 'font-lock-mode)
     (define-key map [(control ?c) (control ?t)]
