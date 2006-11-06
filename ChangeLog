@@ -9,6 +9,8 @@
 	muse-follow-name-at-point to reduce collisions with other
 	modes (Planner).
 
+	* muse.texi (Keystroke Summary): Remove C-c C-c binding.
+
 2006-11-04  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Make page
