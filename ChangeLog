@@ -3,6 +3,12 @@
 	* lisp/muse-project.el (muse-project-find-file): Fix bug when
 	following a relative link worked even when the path was incorrect.
 
+2006-11-04  John Sullivan  <john@wjsullivan.net>
+
+	* lisp/muse-mode.el (muse-mode-map): Remove C-c C-c binding for
+	muse-follow-name-at-point to reduce collisions with other
+	modes (Planner).
+
 2006-11-04  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Make page
