@@ -1,3 +1,10 @@
+2006-11-07  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-version): Make Emacs Muse 3.02.93, the third
+	release candidate for Muse 3.03, available.
+
+	* NEWS: Update.
+
 2006-11-06  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-find-file): Fix bug when

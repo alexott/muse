@@ -131,6 +131,9 @@ command for details.
 `C-c C-b' is now `muse-find-backlinks'
 `C-c C-v' is now `muse-browse-result'
 
+*** Remove the C-c C-c keybinding, since it conflicts with other
+modes like Planner.
+
 *** Don't require muse-publish.el, since publishing and viewing Muse
 files are supposed to be completely separable.
 
@@ -177,6 +180,9 @@ where the current page will be published.
 *** Handle muse-emphasis faces better.
 
 *** Make links blue by default, like most other Emacs modes do.
+
+*** Source-level change: The regexps in `muse-colors-markup' are now
+permitted to have non-shy groupings.
 
 ** New modules
 
@@ -233,6 +239,11 @@ disambiguate the link.  For example: "web/TestPage".
 *** New variable: muse-current-output-style.
 This holds the output style that is currently being used to publish a
 file.
+
+*** Permit non-Muse files in projects to be linked to.
+
+*** Handle relative links to other Muse pages.
+Relative links are prefixed with "./" or "../".
 
 ** Publishing (lisp/muse-publish.el)
 
@@ -353,6 +364,8 @@ to non-nil.  Note that this involved a change to the structure of
 `muse-publish-markup-tag', so be sure to change any custom tags
 appropriately.
 
+*** Fix bug with WikiName link descriptions and PDF output.
+
 *** New tags, see the Tag Summary section in the manual for details
 
 **** <comment> -- Designate entire regions as comments.
@@ -416,6 +429,11 @@ page, both when formatting and publishing.
 
 *** For interwiki links, prefer files that have the same file extension
 as the current file.
+
+*** Check the entire explicit link for a project name or complete
+interwiki link, not just part of it.  This allows page names with
+invalid WikiName characters to be referred to by using an explicit
+link.
 
 ** XML publishing (lisp/muse-xml.el)
 
