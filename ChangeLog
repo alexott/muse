@@ -1,3 +1,9 @@
+2006-11-11  Michael Olson  <mwolson@gnu.org>
+
+	* muse.texi (Markup Strings): Fix typo.  Thanks to Haiyong Zheng
+	for the report.
+	(Getting Help and Reporting Bugs): Fix emacswiki.org page URL.
+
 2006-11-07  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-version): Make Emacs Muse 3.02.93, the third
