@@ -214,7 +214,7 @@ For more on the structure of this list, see
     (begin-dl        . "\\begin{description}\n")
     (end-dl          . "\n\\end{description}")
     (begin-ddt       . "\\item[")
-    (end-ddt         . "] "))
+    (end-ddt         . "] \\mbox{}\n"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."

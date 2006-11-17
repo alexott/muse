@@ -87,6 +87,13 @@ fashion.
 *** New option: muse-latex-permit-contents-tag.
 This specifies whether we should take action on the <contents> tag.
 
+*** Allow for definitions to be separated from their terms,
+much like the way HTML does it by default, if the user puts a blank
+line or a line break between the term and the definition.
+
+If the term and definition are on the same line, they will be that way
+in the output as well.
+
 ** Muse Manual (muse.texi)
 
 *** Use better style for subsections.

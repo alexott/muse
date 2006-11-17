@@ -1,3 +1,13 @@
+2006-11-16  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-markup-strings): Make an ordered
+	list embedded in a definition list look right.  This also allows
+	for definitions to be separated from their terms, much like the
+	way HTML does it by default, if the user puts a blank line or a
+	line break between the term and the definition.  If the term and
+	definition are on the same line, they will be that way in the
+	output as well.
+
 2006-11-11  Michael Olson  <mwolson@gnu.org>
 
 	* muse.texi (Markup Strings): Fix typo.  Thanks to Haiyong Zheng
