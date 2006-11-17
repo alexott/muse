@@ -1,3 +1,9 @@
+2006-11-17  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-surround-text): Fix bug in
+	latex publishing where nested enumerated lists would be squashed
+	together at the end.
+
 2006-11-16  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-markup-strings): Make an ordered

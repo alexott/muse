@@ -1113,7 +1113,12 @@ The following contexts exist in Muse.
                                   "\\}"))
       (setq post-indent ""))
     (while continue
-      (muse-insert-markup beg-tag)
+      (if (or (not end-tag) (string= end-tag ""))
+          ;; if no end of list item markup exists, treat the beginning
+          ;; of list item markup as it if it were the end -- this
+          ;; prevents multiple-level lists from being confused
+          (muse-insert-markup-end-list beg-tag)
+        (muse-insert-markup beg-tag))
       (setq beg (point)
             ;; move past current item; continue is non-nil if there
             ;; are more like items to be processed
