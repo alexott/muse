@@ -644,9 +644,9 @@ The remote styles are usually populated by
                           link-suffix
                           #'muse-project-choose-style-by-link-suffix
                           remote-styles)))
-    (muse-publish-link-file
-     (if (null remote-style)
-         page
+    (if (null remote-style)
+        page
+      (muse-publish-link-file
        (let ((prefix (muse-style-element :base-url remote-style)))
          (if prefix
              (concat prefix page)
@@ -654,8 +654,8 @@ The remote styles are usually populated by
                                 (file-name-nondirectory page)
                                 (muse-style-element :path remote-style))
                                (expand-file-name
-                                (muse-style-element :path local-style))))))
-     nil remote-style)))
+                                (muse-style-element :path local-style)))))
+       remote-style))))
 
 (defun muse-project-current-output-style (&optional file project)
   (or muse-current-output-style

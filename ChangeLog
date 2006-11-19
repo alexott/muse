@@ -1,3 +1,13 @@
+2006-11-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-resolve-link): If no remote
+	style is found, which means that the link is not a Muse page, do
+	not add a suffix or prefix to it.  This should fix the
+	"[[thing.owl]]" bug that Phillip Lord reported.
+
+	* lisp/muse-publish.el (muse-publish-link-file): Simplify by
+	removing unused 2nd argument.
+
 2006-11-17  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-surround-text): Fix bug in
