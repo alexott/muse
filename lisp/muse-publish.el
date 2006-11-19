@@ -624,17 +624,12 @@ TITLE is used when indicating the publishing progress; it may be nil."
           (or (muse-style-element :link-suffix style)
               (muse-style-element :suffix style))))
 
-(defun muse-publish-link-file (file &optional output-dir style)
+(defsubst muse-publish-link-file (file &optional style)
   (setq style (muse-style style))
-  (if output-dir
-      (let ((link-name (expand-file-name file output-dir)))
-        (if (file-exists-p link-name)
-            link-name
-          (expand-file-name (muse-publish-link-name file style) output-dir)))
-    (if (file-exists-p file)
-        file
-      (concat (file-name-directory file)
-              (muse-publish-link-name file style)))))
+  (if (file-exists-p file)
+      file
+    (concat (file-name-directory file)
+            (muse-publish-link-name file style))))
 
 (defsubst muse-publish-link-page (page)
   (if (fboundp 'muse-project-link-page)
@@ -1113,7 +1108,12 @@ The following contexts exist in Muse.
                                   "\\}"))
       (setq post-indent ""))
     (while continue
-      (muse-insert-markup beg-tag)
+      (if (or (not end-tag) (string= end-tag ""))
+          ;; if no end of list item markup exists, treat the beginning
+          ;; of list item markup as it if it were the end -- this
+          ;; prevents multiple-level lists from being confused
+          (muse-insert-markup-end-list beg-tag)
+        (muse-insert-markup beg-tag))
       (setq beg (point)
             ;; move past current item; continue is non-nil if there
             ;; are more like items to be processed

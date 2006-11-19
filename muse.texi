@@ -12,7 +12,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for the Emacs Muse version 3.02.92 (3.03 RC2).
+This manual is for Emacs Muse version 3.02.93 (3.03 RC3).
 
 Copyright @copyright{} 2004, 2005, 2006 Free Software Foundation, Inc.
 
@@ -2443,7 +2443,7 @@ Beginning of section indicator line, where level is greater than 3.
 Argument 1: level of section.
 
 @item section-other-end
-Beginning of section indicator line, where level is greater than 3.
+End of section indicator line, where level is greater than 3.
 
 Argument 1: level of section.
 
@@ -2778,7 +2778,7 @@ go.
 @itemize @bullet
 
 @item
-@uref{http://www.emacswiki.org/cgi-bin/wiki/MuseMode} is the
+@uref{http://www.emacswiki.org/cgi-bin/wiki/EmacsMuse} is the
 emacswiki.org page, and anyone may add tips, hints, or bug descriptions
 to it.
 

@@ -1,3 +1,42 @@
+2006-11-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-resolve-link): If no remote
+	style is found, which means that the link is not a Muse page, do
+	not add a suffix or prefix to it.  This should fix the
+	"[[thing.owl]]" bug that Phillip Lord reported.
+
+	* lisp/muse-publish.el (muse-publish-link-file): Simplify by
+	removing unused 2nd argument.
+
+2006-11-17  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-surround-text): Fix bug in
+	latex publishing where nested enumerated lists would be squashed
+	together at the end.
+
+2006-11-16  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-markup-strings): Make an ordered
+	list embedded in a definition list look right.  This also allows
+	for definitions to be separated from their terms, much like the
+	way HTML does it by default, if the user puts a blank line or a
+	line break between the term and the definition.  If the term and
+	definition are on the same line, they will be that way in the
+	output as well.
+
+2006-11-11  Michael Olson  <mwolson@gnu.org>
+
+	* muse.texi (Markup Strings): Fix typo.  Thanks to Haiyong Zheng
+	for the report.
+	(Getting Help and Reporting Bugs): Fix emacswiki.org page URL.
+
+2006-11-07  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-version): Make Emacs Muse 3.02.93, the third
+	release candidate for Muse 3.03, available.
+
+	* NEWS: Update.
+
 2006-11-06  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-find-file): Fix bug when
