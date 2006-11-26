@@ -1,5 +1,7 @@
 2006-11-26  Michael Olson  <mwolson@gnu.org>
 
+	* NEWS: Bring up to date.
+
 	* lisp/muse-docbook.el (muse-docbook-markup-paragraph): Fix nested
 	list issues and multiple-stanza verse issues.  This takes care of
 	all of the markup issues I was worried about.
