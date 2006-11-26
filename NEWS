@@ -39,6 +39,10 @@ the link in a buffer of publishing it.  This allows brackets to be
 safely used in link descriptions and links, as long as you use `C-c
 TAB l', `C-c TAB u', `C-c C-e', or automatic Planner annotations.
 
+** DocBook publishing (lisp/muse-docbook.el)
+
+*** A bug with multiple-stanza verses has been fixed.
+
 ** HTML publishing (lisp/muse-html.el)
 
 *** Make sure spaces in URLs get escaped properly.
@@ -251,6 +255,12 @@ file.
 
 *** Handle relative links to other Muse pages.
 Relative links are prefixed with "./" or "../".
+
+*** New option: muse-project-publish-private-files
+If this is non-nil (the default), files will be published even if they
+have "o-r" permissions set (that is, if no one except the owner and
+possibly group are allowed to read them).  To get back the old
+behavior, set this to nil.
 
 ** Publishing (lisp/muse-publish.el)
 
