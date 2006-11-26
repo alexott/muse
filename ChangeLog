@@ -1,5 +1,9 @@
 2006-11-26  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-docbook.el (muse-docbook-markup-paragraph): Fix nested
+	list issues and multiple-stanza verse issues.  This takes care of
+	all of the markup issues I was worried about.
+
 	* lisp/muse-project.el (muse-project-ignore-regexp): Minor docfix.
 	(muse-project-publish-private-files): New option that indicates
 	whether files with private filesystem permissions should be

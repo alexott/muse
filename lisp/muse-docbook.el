@@ -208,30 +208,39 @@ found in `muse-docbook-encoding-map'."
    muse-docbook-charset-default))
 
 (defun muse-docbook-markup-paragraph ()
-  (let ((end (copy-marker (match-end 0) t)))
-    (goto-char (match-beginning 0))
-    (when (save-excursion
-            (save-match-data
-              (and (re-search-backward "<\\(/?\\)\\(para\\|footnote\\)[ >]"
-                                       nil t)
-                   (or (and (string= (match-string 2) "para")
-                            (not (string= (match-string 1) "/")))
-                       (and (string= (match-string 2) "footnote")
-                            (string= (match-string 1) "/"))))))
-      (when (get-text-property (1- (point)) 'end-list)
-        (goto-char (previous-single-property-change (1- (point)) 'end-list)))
-      (muse-insert-markup "</para>"))
-    (goto-char end))
-  (cond
-   ((eobp)
-    (unless (bolp)
-      (insert "\n")))
-   ((eq (char-after) ?\<)
-    (when (looking-at (concat "<\\(emphasis\\|systemitem\\|inlinemediaobject"
-                              "\\|u?link\\|anchor\\|email\\)[ >]"))
-      (muse-insert-markup "<para>")))
-   (t
-    (muse-insert-markup "<para>"))))
+  (catch 'bail-out
+    (let ((end (copy-marker (match-end 0) t)))
+      (goto-char (match-beginning 0))
+      (when (save-excursion
+              (save-match-data
+                (and (re-search-backward
+                      "<\\(/?\\)\\(para\\|footnote\\|literallayout\\)[ >]"
+                      nil t)
+                     (cond ((string= (match-string 2) "literallayout")
+                            (throw 'bail-out t))
+                           ((string= (match-string 2) "para")
+                            (and
+                             (not (string= (match-string 1) "/"))
+                             ;; don't mess up nested lists
+                             (not (and (muse-looking-back "<listitem>")
+                                       (throw 'bail-out t)))))
+                           ((string= (match-string 2) "footnote")
+                            (string= (match-string 1) "/"))
+                           (t nil)))))
+        (when (get-text-property (1- (point)) 'end-list)
+          (goto-char (previous-single-property-change (1- (point)) 'end-list)))
+        (muse-insert-markup "</para>"))
+      (goto-char end))
+    (cond
+     ((eobp)
+      (unless (bolp)
+        (insert "\n")))
+     ((eq (char-after) ?\<)
+      (when (looking-at (concat "<\\(emphasis\\|systemitem\\|inlinemediaobject"
+                                "\\|u?link\\|anchor\\|email\\)[ >]"))
+        (muse-insert-markup "<para>")))
+     (t
+      (muse-insert-markup "<para>")))))
 
 (defun muse-docbook-get-author (&optional author)
   "Split the AUTHOR directive into separate fields.
