@@ -1,3 +1,12 @@
+2006-11-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-ignore-regexp): Minor docfix.
+	(muse-project-publish-private-files): New option that indicates
+	whether files with private filesystem permissions should be
+	published.  The default is to publish them, since it avoids
+	confusion in new users.
+	(muse-project-private-p): Use it.
+
 2006-11-19  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-resolve-link): If no remote

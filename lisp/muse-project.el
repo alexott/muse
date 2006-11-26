@@ -237,10 +237,24 @@ when publishing files in that project."
           "_darcs\\)\\(/\\|\\'\\)")
   "A regexp matching files to be ignored in Muse directories.
 
-You should set case-fold-search to nil before using this regexp
+You should set `case-fold-search' to nil before using this regexp
 in code."
   :type 'regexp
   :group 'muse-regexp)
+
+(defcustom muse-project-publish-private-files t
+  "If this is non-nil, files will be published even if their permissions
+are set so that no one else on the filesystem can read them.
+
+Set this to nil if you would like to indicate that some files
+should not be published by manually doing \"chmod o-rwx\" on
+them.
+
+This setting has no effect under Windows (that is, all files are
+published regardless of permissions) because Windows lacks the
+needed filesystem attributes."
+  :type 'boolean
+  :group 'muse-project)
 
 (defun muse-project-recurse-directory (base)
   "Recusively retrieve all of the directories underneath BASE.
@@ -352,7 +366,8 @@ For an example of the use of this function, see
 
 (defun muse-project-private-p (file)
   "Return non-nil if NAME is a private page with PROJECT."
-  (unless muse-under-windows-p
+  (unless (or muse-under-windows-p
+              muse-project-publish-private-files)
     (setq file (file-truename file))
     (if (file-attributes file)  ; don't publish if no attributes exist
         (or (when (eq ?- (aref (nth 8 (file-attributes
