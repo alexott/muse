@@ -1,3 +1,9 @@
+2006-12-01  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-replace-regexp-in-string): In case someone is
+	using a very old Emacs, avoid an infinite loop that could occur
+	when the regexp is an empty string.
+
 2006-11-26  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Bring up to date.
