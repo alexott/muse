@@ -1,3 +1,9 @@
+2006-12-02  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-insert-contents): Tweak regexp so
+	that this can generate a proper table of contents for Planner HTML
+	publishing.
+
 2006-12-01  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-replace-regexp-in-string): In case someone is
