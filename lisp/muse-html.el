@@ -488,7 +488,7 @@ This will be used if no special characters are found."
       (goto-char (point-min))
       (search-forward "Page published by Emacs Muse begins here" nil t)
       (catch 'done
-        (while (re-search-forward "^<h\\([0-9]+\\)>\\(.+?\\)</h\\1>" nil t)
+        (while (re-search-forward "<h\\([0-9]+\\)>\\(.+?\\)</h\\1>$" nil t)
           (unless (get-text-property (point) 'read-only)
             (setq l (1- (string-to-number (match-string 1))))
             (if (null base)
