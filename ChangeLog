@@ -1,3 +1,11 @@
+2006-12-17  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-header, muse-latexcjk-header):
+	Remove the definition of \comment, since Latex already has comment
+	syntax.
+	(muse-latex-markup-strings): Use the Latex comment syntax, rather
+	than our own.  Thanks to Ryan Stutsman for pointing this out.
+
 2006-12-02  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-insert-contents): Tweak regexp so

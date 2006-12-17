@@ -64,8 +64,6 @@
 \\usepackage{hyperref}
 \\usepackage[pdftex]{graphicx}
 
-\\newcommand{\\comment}[1]{}
-
 \\begin{document}
 
 \\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
@@ -93,8 +91,6 @@
 \\usepackage{indentfirst}
 \\usepackage[CJKbookmarks=true]{hyperref}
 \\usepackage[pdftex]{graphicx}
-
-\\newcommand{\\comment}[1]{}
 
 \\begin{document}
 \\begin{CJK*}<lisp>(muse-latexcjk-encoding)</lisp>
@@ -164,8 +160,7 @@ For more on the structure of this list, see
     (email-addr      . "\\verb|%s|")
     (anchor          . "\\label{%s}")
     (emdash          . "---")
-    (comment-begin   . "\\comment{")
-    (comment-end     . "}")
+    (comment-begin   . "% ")
     (rule            . "\\bigskip")
     (no-break-space  . "~")
     (enddots         . "\\ldots{}")
