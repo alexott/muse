@@ -1,6 +1,6 @@
 ;;; muse-book.el --- publish entries into a compilation
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -122,17 +122,33 @@ pages has changed since it was last published."
                    (read-string "Basename of book (without extension): ")
                    (read-string "Title of book: "))
              (muse-publish-get-info))))
+  (setq project (muse-project project))
+  (let ((muse-current-project project))
+    ;; See if any of the project's files need saving first
+    (muse-project-save-buffers project)
+    ;; Publish the book
+    (muse-book-publish book style output-dir force title)))
+
+(defun muse-book-publish (file style &optional output-dir force title)
+  "Publish FILE as a book with the given TITLE and STYLE.
+The book is published to OUTPUT-DIR.  If FORCE is nil, the book
+is only published if at least one of its component pages has
+changed since it was last published."
   ;; Cleanup some of the arguments
-  (setq project (muse-project project)
-        style (muse-style style))
-  ;; See if any of the project's files need saving first
-  (muse-project-save-buffers project)
+  (let ((style-name style))
+    (setq style (muse-style style))
+    (unless style
+      (error "There is no style '%s' defined" style-name)))
+  (unless title
+    (setq title (muse-page-name file)))
   ;; Publish each page in the project as a chapter in one large book
-  (let* ((output-path (muse-publish-output-file book output-dir style))
+  (let* ((output-path (muse-publish-output-file file output-dir style))
          (output-suffix (muse-style-element :osuffix style))
          (target output-path)
+         (project muse-current-project)
          (pats (cadr project))
-         (publish force) published)
+         (publish force)
+         (published nil))
     (when output-suffix
       (setq target (concat (muse-path-sans-extension target)
                            output-suffix)))
@@ -152,7 +168,7 @@ pages has changed since it was last published."
           (setq pats (cdr pats)))))
     ;; Create the book from all its component parts
     (if (not publish)
-        (message "The book \"%s\" is up-to-date." book)
+        (message "The book \"%s\" is up-to-date." file)
       (muse-with-temp-buffer
         (let ((style-final  (muse-style-element :final  style t))
               (style-header (muse-style-element :header style))
@@ -212,27 +228,29 @@ pages has changed since it was last published."
                     (setq entries (cdr entries))))
                 (setq pats (cdr pats)))))
           (goto-char (point-min))
-          (if style-header (muse-insert-file-or-string style-header book))
+          (if style-header (muse-insert-file-or-string style-header file))
           (goto-char (point-max))
-          (if style-footer (muse-insert-file-or-string style-footer book))
+          (if style-footer (muse-insert-file-or-string style-footer file))
           (run-hooks 'muse-after-book-publish-hook)
           (let ((backup-inhibited t))
             (write-file output-path))
           (if style-final
-              (funcall style-final book output-path target)))))
+              (funcall style-final file output-path target)))))
     (if published
-        (message "The book \"%s\" has been published." book))
+        (message "The book \"%s\" has been published." file))
     published))
 
 ;;; Register the Muse BOOK Publishers
 
 (muse-derive-style "book-latex" "latex"
                    :header 'muse-book-latex-header
-                   :footer 'muse-book-latex-footer)
+                   :footer 'muse-book-latex-footer
+                   :publish 'muse-book-publish)
 
 (muse-derive-style "book-pdf" "pdf"
                    :header 'muse-book-latex-header
-                   :footer 'muse-book-latex-footer)
+                   :footer 'muse-book-latex-footer
+                   :publish 'muse-book-publish)
 
 (provide 'muse-book)
 

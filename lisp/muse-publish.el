@@ -649,7 +649,7 @@ the file is published no matter what."
   (let ((style-name style))
     (setq style (muse-style style))
     (unless style
-      (error "There is no style '%s' defined." style-name)))
+      (error "There is no style '%s' defined" style-name)))
   (let* ((output-path (muse-publish-output-file file output-dir style))
          (output-suffix (muse-style-element :osuffix style))
          (muse-publishing-current-file file)

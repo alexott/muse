@@ -181,6 +181,11 @@ Muse can make use of."
                         (list :tag "No chapters"
                               (const :tag ":nochapters" ":nochapters")
                               (const t))
+                        (list :tag "Project-level publishing function"
+                              (const :tag ":publish-project"
+                                     ":publish-project")
+                              (choice (function :tag "Function")
+                                      (sexp :tag "Unknown")))
                         (list :tag "Set variables"
                               (const :tag ":set" ":set")
                               (repeat (list :inline t
@@ -522,7 +527,7 @@ If PATHNAME is nil, the current buffer's filename is used."
   "Read a project name from the minibuffer, if it can't be figured
   out."
   (if (null muse-project-alist)
-      (error "There are no Muse projects defined; see `muse-project-alist'.")
+      (error "There are no Muse projects defined; see `muse-project-alist'")
     (or (unless no-check-p
           (muse-project-of-file))
         (if (and (not no-assume)
@@ -590,7 +595,7 @@ first directory within the project's fileset is used."
     ;; Open the file
     (if (cdr name)
         (funcall (or command 'find-file) (cdr name))
-      (error "There is no page %s in project %s."
+      (error "There is no page %s in project %s"
              (car name) project-name))))
 
 (defun muse-project-choose-style (closure test styles)
@@ -689,19 +694,24 @@ The remote styles are usually populated by
                                 (muse-project-page-file page project)
                                 (cddr project)))))
 
+(defun muse-project-publish-file-default (file style output-dir force)
+  ;; ensure the publishing location is available
+  (unless (file-exists-p output-dir)
+    (message "Creating publishing directory %s" output-dir)
+    (make-directory output-dir t))
+  ;; publish the member file!
+  (muse-publish-file file style output-dir force))
+
 (defun muse-project-publish-file (file styles &optional force ignore-regexp)
   (setq styles (muse-project-applicable-styles file styles ignore-regexp))
   (let (published)
     (dolist (style styles)
       (let ((output-dir (muse-style-element :path style))
-            (muse-current-output-style style))
-        ;; ensure the publishing location is available
-        (unless (file-exists-p output-dir)
-          (message "Creating publishing directory %s" output-dir)
-          (make-directory output-dir t))
-        ;; publish the member file!
-        (if (muse-publish-file file style output-dir force)
-            (setq published t))))
+            (muse-current-output-style style)
+            (fun (or (muse-style-element :publish style t)
+                     'muse-project-publish-file-default)))
+        (when (funcall fun file style output-dir force)
+          (setq published t))))
     published))
 
 ;;;###autoload
@@ -748,24 +758,10 @@ If FORCE is given, publish the file even if it is up-to-date."
    (if (boundp 'save-some-buffers-action-alist)
        save-some-buffers-action-alist)))
 
-;;;###autoload
-(defun muse-project-publish (project &optional force)
+(defun muse-project-publish-default (project styles &optional force)
   "Publish the pages of PROJECT that need publishing."
-  (interactive (list (muse-read-project "Publish project: " nil t)
-                     current-prefix-arg))
   (setq project (muse-project project))
-  (let ((styles (cddr project))
-        (muse-current-project project)
-        published)
-    ;; determine the style from the project, or else ask
-    (unless styles
-      (setq styles (list (muse-publish-get-style))))
-    (unless project
-      (error "Cannot find a project to publish"))
-    ;; prompt to save any buffers related to this project
-    (muse-project-save-buffers project)
-    ;; run hook before publishing begins
-    (run-hook-with-args 'muse-before-project-publish-hook project)
+  (let ((published nil))
     ;; publish all files in the project, for each style; the actual
     ;; publishing will only happen if the files are newer than the
     ;; last published output, or if the file is listed in
@@ -786,6 +782,28 @@ If FORCE is given, publish the file even if it is up-to-date."
         (message "All pages in %s have been published." (car project))
       (message "No pages in %s need publishing at this time."
                (car project)))))
+
+;;;###autoload
+(defun muse-project-publish (project &optional force)
+  "Publish the pages of PROJECT that need publishing."
+  (interactive (list (muse-read-project "Publish project: " nil t)
+                     current-prefix-arg))
+  (setq project (muse-project project))
+  (let ((styles (cddr project))
+        (muse-current-project project))
+    ;; determine the style from the project, or else ask
+    (unless styles
+      (setq styles (list (muse-publish-get-style))))
+    (unless project
+      (error "Cannot find a project to publish"))
+    ;; prompt to save any buffers related to this project
+    (muse-project-save-buffers project)
+    ;; run hook before publishing begins
+    (run-hook-with-args 'muse-before-project-publish-hook project)
+    ;; run the project-level publisher
+    (let ((fun (or (muse-get-keyword :publish-project (cadr project) t)
+                   'muse-project-publish-default)))
+      (funcall fun project styles force))))
 
 (defun muse-project-batch-publish ()
   "Publish Muse files in batch mode."
