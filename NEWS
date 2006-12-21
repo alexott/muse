@@ -100,6 +100,12 @@ in the output as well.
 
 ** Muse Manual (muse.texi)
 
+*** Re-license under the GFDL instead of the GPL.
+The rationale for this is that Muse may one day be included with
+Emacs, so it should use the same manual license that Emacs itself
+uses.  At this point, the matter is not open to debate, unless the FSF
+brings it up.
+
 *** Use better style for subsections.
 
 *** Make sure the PDF file for the manual is properly generated.
