@@ -1,3 +1,36 @@
+2006-12-20  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-docbook.el (muse-docbook-munge-buffer): Split out
+	content-modifying code from the rest of
+	muse-docbook-finalize-buffer.
+
+	* lisp/muse-groff.el (muse-groff-munge-buffer): Rename from
+	muse-groff-finalize-buffer, since it adds content to the buffer.
+
+	* lisp/muse-html.el (muse-html-munge-buffer): Split out
+	content-modifying code from the rest of muse-html-finalize-buffer.
+	This fixes a bug when using <include> with <content> tags.
+
+	* lisp/muse-journal.el (muse-journal-html-munge-buffer)
+	(muse-journal-latex-munge-buffer)
+	(muse-journal-rss-munge-buffer): Rename, since they add content to
+	the buffer.
+
+	* lisp/muse-latex.el (muse-latex-munge-buffer): Rename from
+	muse-latex-finalize-buffer, since it adds content to the buffer.
+
+	* lisp/muse-mode.el:
+	* lisp/muse-project.el:
+	* lisp/muse-publish.el:
+	* lisp/muse.el: Fix recursive load error.
+
+	* lisp/muse-texinfo.el (muse-texinfo-munge-buffer): Rename from
+	muse-texinfo-finalize-buffer, since it adds content to the buffer.
+
+	* lisp/muse-wiki.el: Comment cleanup.
+
+	* lisp/muse-xml.el (muse-xml-charset-default): Docfix.
+
 2006-12-17  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-header, muse-latexcjk-header):

@@ -168,7 +168,7 @@ If you want this replacement to happen, you must add
                   "\\)\\(?:\\(" muse-wiki-interwiki-delimiter
                   "\\)\\("
                   (when muse-wiki-match-all-project-files
-                  ;; append the files from the project
+                    ;; append the files from the project
                     (let ((files nil))
                       (dolist (proj muse-project-alist)
                         (setq files
@@ -337,7 +337,7 @@ Match 1 is set to the WikiWord."
               (t nil)))
     (match-string 1 string)))
 
-;; Prettifications
+;;; Prettifications
 
 (defcustom muse-wiki-publish-small-title-words
   '("the" "and" "at" "on" "of" "for" "in" "an" "a")
@@ -387,7 +387,7 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
                                    muse-wiki-interwiki-replacement
                                    desc)))
 
-;; Coloring setup
+;;; Coloring setup
 
 (eval-after-load "muse-colors"
   '(progn
@@ -418,7 +418,7 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
 
      (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
 
-;; Publishing setup
+;;; Publishing setup
 
 (eval-after-load "muse-publish"
   '(progn
@@ -440,7 +440,7 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
      (custom-add-option 'muse-publish-desc-transforms
                         'muse-wiki-publish-pretty-title)))
 
-;; Insinuate link handling
+;;; Insinuate link handling
 
 (custom-add-option 'muse-implicit-link-functions
                    'muse-wiki-handle-implicit-interwiki)
@@ -458,7 +458,7 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
 (add-to-list 'muse-explicit-link-functions
              'muse-wiki-handle-explicit-interwiki t)
 
-;; Obsolete functions
+;;; Obsolete functions
 
 (defun muse-wiki-update-custom-values ()
   (muse-display-warning

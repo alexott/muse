@@ -446,7 +446,9 @@ For more on the structure of this list, see
               (when (search-forward "<div class=\"entry-qotd\">" nil t)
                 (let ((beg (match-beginning 0)))
                   (re-search-forward "</div>\n*" nil t)
-                  (delete-region beg (point)))))))))))
+                  (delete-region beg (point))))))))))
+  ;; indicate that we are to continue the :before-end processing
+  nil)
 
 (defun muse-journal-latex-munge-buffer ()
   (goto-char (point-min))
@@ -516,7 +518,9 @@ For more on the structure of this list, see
           (muse-insert-markup muse-journal-latex-subsection)
           (goto-char (point-min))
           (while (search-forward "%title%" nil t)
-            (replace-match title nil t)))))))
+            (replace-match title nil t))))))
+  ;; indicate that we are to continue the :before-end processing
+  nil)
 
 (defun muse-journal-latex-qotd-tag (beg end)
   (goto-char beg)
@@ -652,56 +656,60 @@ For more on the structure of this list, see
                    (concat "webmaster@" (system-name)))
                nil t))))))
     (unless (eobp)
-      (delete-region (point) (point-max)))))
+      (delete-region (point) (point-max))))
+  ;; indicate that we are to continue the :before-end processing
+  nil)
 
-(unless (assoc "journal-html" muse-publishing-styles)
-  (muse-derive-style "journal-html" "html"
-                     :before-end 'muse-journal-html-munge-buffer)
 
-  (muse-derive-style "journal-xhtml" "xhtml"
-                     :before-end 'muse-journal-html-munge-buffer)
+;;; Register the Muse Journal Publishers
 
-  (muse-derive-style "journal-latex" "latex"
-                     :tags 'muse-journal-latex-markup-tags
-                     :before-end 'muse-journal-latex-munge-buffer)
+(muse-derive-style "journal-html" "html"
+                   :before-end 'muse-journal-html-munge-buffer)
 
-  (muse-derive-style "journal-pdf" "pdf"
-                     :tags 'muse-journal-latex-markup-tags
-                     :before-end 'muse-journal-latex-munge-buffer)
+(muse-derive-style "journal-xhtml" "xhtml"
+                   :before-end 'muse-journal-html-munge-buffer)
 
-  (muse-derive-style "journal-book-latex" "book-latex"
-                     ;;:nochapters
-                     :tags 'muse-journal-latex-markup-tags
-                     :before-end 'muse-journal-latex-munge-buffer)
+(muse-derive-style "journal-latex" "latex"
+                   :tags 'muse-journal-latex-markup-tags
+                   :before-end 'muse-journal-latex-munge-buffer)
 
-  (muse-derive-style "journal-book-pdf" "book-pdf"
-                     ;;:nochapters
-                     :tags 'muse-journal-latex-markup-tags
-                     :before-end 'muse-journal-latex-munge-buffer)
+(muse-derive-style "journal-pdf" "pdf"
+                   :tags 'muse-journal-latex-markup-tags
+                   :before-end 'muse-journal-latex-munge-buffer)
 
-  (muse-define-style "journal-rdf"
-                     :suffix         'muse-journal-rdf-extension
-                     :regexps        'muse-journal-rss-markup-regexps
-                     :functions      'muse-journal-rss-markup-functions
-                     :before         'muse-journal-rss-munge-buffer
-                     :header         'muse-journal-rdf-header
-                     :footer         'muse-journal-rdf-footer
-                     :date-format    'muse-journal-rdf-date-format
-                     :entry-template 'muse-journal-rdf-entry-template
-                     :base-url       'muse-journal-rdf-base-url
-                     :summarize      'muse-journal-rdf-summarize-entries)
+(muse-derive-style "journal-book-latex" "book-latex"
+                   ;;:nochapters
+                   :tags 'muse-journal-latex-markup-tags
+                   :before-end 'muse-journal-latex-munge-buffer)
 
-  (muse-define-style "journal-rss"
-                     :suffix         'muse-journal-rss-extension
-                     :regexps        'muse-journal-rss-markup-regexps
-                     :functions      'muse-journal-rss-markup-functions
-                     :before         'muse-journal-rss-munge-buffer
-                     :header         'muse-journal-rss-header
-                     :footer         'muse-journal-rss-footer
-                     :date-format    'muse-journal-rss-date-format
-                     :entry-template 'muse-journal-rss-entry-template
-                     :base-url       'muse-journal-rss-base-url
-                     :summarize      'muse-journal-rss-summarize-entries))
+(muse-derive-style "journal-book-pdf" "book-pdf"
+                   ;;:nochapters
+                   :tags 'muse-journal-latex-markup-tags
+                   :before-end 'muse-journal-latex-munge-buffer)
+
+(muse-define-style "journal-rdf"
+                   :suffix         'muse-journal-rdf-extension
+                   :regexps        'muse-journal-rss-markup-regexps
+                   :functions      'muse-journal-rss-markup-functions
+                   :before         'muse-journal-rss-munge-buffer
+                   :header         'muse-journal-rdf-header
+                   :footer         'muse-journal-rdf-footer
+                   :date-format    'muse-journal-rdf-date-format
+                   :entry-template 'muse-journal-rdf-entry-template
+                   :base-url       'muse-journal-rdf-base-url
+                   :summarize      'muse-journal-rdf-summarize-entries)
+
+(muse-define-style "journal-rss"
+                   :suffix         'muse-journal-rss-extension
+                   :regexps        'muse-journal-rss-markup-regexps
+                   :functions      'muse-journal-rss-markup-functions
+                   :before         'muse-journal-rss-munge-buffer
+                   :header         'muse-journal-rss-header
+                   :footer         'muse-journal-rss-footer
+                   :date-format    'muse-journal-rss-date-format
+                   :entry-template 'muse-journal-rss-entry-template
+                   :base-url       'muse-journal-rss-base-url
+                   :summarize      'muse-journal-rss-summarize-entries)
 
 (provide 'muse-journal)
 

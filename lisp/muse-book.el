@@ -224,14 +224,15 @@ pages has changed since it was last published."
         (message "The book \"%s\" has been published." book))
     published))
 
-(unless (assoc "book-latex" muse-publishing-styles)
-  (muse-derive-style "book-latex" "latex"
-                     :header 'muse-book-latex-header
-                     :footer 'muse-book-latex-footer)
+;;; Register the Muse BOOK Publishers
 
-  (muse-derive-style "book-pdf" "pdf"
-                     :header 'muse-book-latex-header
-                     :footer 'muse-book-latex-footer))
+(muse-derive-style "book-latex" "latex"
+                   :header 'muse-book-latex-header
+                   :footer 'muse-book-latex-footer)
+
+(muse-derive-style "book-pdf" "pdf"
+                   :header 'muse-book-latex-header
+                   :footer 'muse-book-latex-footer)
 
 (provide 'muse-book)
 

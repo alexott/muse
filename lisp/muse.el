@@ -67,6 +67,8 @@ familiar with Emacs."
 
 (defvar muse-under-windows-p (memq system-type '(ms-dos windows-nt)))
 
+(provide 'muse)
+
 (require 'wid-edit)
 (require 'muse-regexps)
 
@@ -759,7 +761,5 @@ may be nested inside of this tag, and skip past them."
             (setq nesting (1- nesting))
           (setq nesting (1+ nesting))))
       match-found)))
-
-(provide 'muse)
 
 ;;; muse.el ends here

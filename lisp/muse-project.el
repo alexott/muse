@@ -31,6 +31,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(provide 'muse-project)
+
 (require 'muse)
 (require 'muse-publish)
 (require 'cus-edit)
@@ -833,7 +835,5 @@ If FORCE is given, publish the file even if it is up-to-date."
                     path)))
         (if output-file
             (muse-delete-file-if-exists output-file))))))
-
-(provide 'muse-project)
 
 ;;; muse-project.el ends here

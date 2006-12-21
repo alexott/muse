@@ -40,6 +40,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(provide 'muse-publish)
+
 (require 'muse)
 (require 'muse-regexps)
 
@@ -1744,7 +1746,5 @@ This is useful for marking up content in headers and footers."
                          '(rear-nonsticky (read-only) read-only t)
                          string)
     string))
-
-(provide 'muse-publish)
 
 ;;; muse-publish.el ends here

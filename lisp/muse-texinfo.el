@@ -256,7 +256,7 @@ If no description exists for the link, use the link itself."
     (insert (muse-texinfo-remove-links orig-heading))
     (muse-texinfo-protect-wikiwords beg (point))))
 
-(defun muse-texinfo-finalize-buffer ()
+(defun muse-texinfo-munge-buffer ()
   (muse-latex-fixup-dquotes)
   (texinfo-insert-node-lines (point-min) (point-max) t)
   (texinfo-all-menus-update t))
@@ -300,29 +300,30 @@ If no description exists for the link, use the link itself."
       (= 0 (shell-command (concat "texi2pdf -q --clean --output="
                                   output-path " " file)))))))
 
-(unless (assoc "texi" muse-publishing-styles)
-  (muse-define-style "texi"
-                     :suffix    'muse-texinfo-extension
-                     :regexps   'muse-texinfo-markup-regexps
-                     :functions 'muse-texinfo-markup-functions
-                     :strings   'muse-texinfo-markup-strings
-                     :specials  'muse-texinfo-decide-specials
-                     :after     'muse-texinfo-finalize-buffer
-                     :header    'muse-texinfo-header
-                     :footer    'muse-texinfo-footer
-                     :browser   'find-file)
+;;; Register the Muse TEXINFO Publishers
 
-  (muse-derive-style "info" "texi"
-                     :final   'muse-texinfo-info-generate
-                     :link-suffix 'muse-texinfo-info-extension
-                     :osuffix 'muse-texinfo-info-extension
-                     :browser 'info)
+(muse-define-style "texi"
+                   :suffix    'muse-texinfo-extension
+                   :regexps   'muse-texinfo-markup-regexps
+                   :functions 'muse-texinfo-markup-functions
+                   :strings   'muse-texinfo-markup-strings
+                   :specials  'muse-texinfo-decide-specials
+                   :before-end 'muse-texinfo-munge-buffer
+                   :header    'muse-texinfo-header
+                   :footer    'muse-texinfo-footer
+                   :browser   'find-file)
 
-  (muse-derive-style "info-pdf" "texi"
-                     :final   'muse-texinfo-pdf-generate
-                     :link-suffix 'muse-texinfo-pdf-extension
-                     :osuffix 'muse-texinfo-pdf-extension
-                     :browser 'muse-texinfo-pdf-browse-file))
+(muse-derive-style "info" "texi"
+                   :final   'muse-texinfo-info-generate
+                   :link-suffix 'muse-texinfo-info-extension
+                   :osuffix 'muse-texinfo-info-extension
+                   :browser 'info)
+
+(muse-derive-style "info-pdf" "texi"
+                   :final   'muse-texinfo-pdf-generate
+                   :link-suffix 'muse-texinfo-pdf-extension
+                   :osuffix 'muse-texinfo-pdf-extension
+                   :browser 'muse-texinfo-pdf-browse-file)
 
 (provide 'muse-texinfo)
 

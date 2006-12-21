@@ -200,7 +200,7 @@ This will be used if no special characters are found."
   :group 'muse-xml)
 
 (defcustom muse-xml-charset-default "utf-8"
-  "The default Xml XML charset to use if no translation is
+  "The default XML charset to use if no translation is
 found in `muse-xml-encoding-map'."
   :type 'string
   :group 'muse-xml)
@@ -241,19 +241,18 @@ found in `muse-xml-encoding-map'."
       ;; make it agree with the default charset
       (setq buffer-file-coding-system muse-xml-encoding-default))))
 
-;; Register the Muse XML Publisher
+;;; Register the Muse XML Publisher
 
-(unless (assoc "xml" muse-publishing-styles)
-  (muse-define-style "xml"
-                     :suffix     'muse-xml-extension
-                     :regexps    'muse-xml-markup-regexps
-                     :functions  'muse-xml-markup-functions
-                     :strings    'muse-xml-markup-strings
-                     :specials   'muse-xml-decide-specials
-                     :after      'muse-xml-finalize-buffer
-                     :header     'muse-xml-header
-                     :footer     'muse-xml-footer
-                     :browser    'find-file))
+(muse-define-style "xml"
+                   :suffix     'muse-xml-extension
+                   :regexps    'muse-xml-markup-regexps
+                   :functions  'muse-xml-markup-functions
+                   :strings    'muse-xml-markup-strings
+                   :specials   'muse-xml-decide-specials
+                   :after      'muse-xml-finalize-buffer
+                   :header     'muse-xml-header
+                   :footer     'muse-xml-footer
+                   :browser    'find-file)
 
 (provide 'muse-xml)
 

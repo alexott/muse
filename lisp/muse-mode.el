@@ -46,6 +46,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(provide 'muse-mode)
+
 (require 'muse)
 (require 'muse-regexps)
 (require 'muse-project)
@@ -846,7 +848,5 @@ function, you might want to set this manually.")
     (when (nth 1 tag-entry)
       (insert (concat "\n\n</" tag ">\n"))
       (forward-line -2))))
-
-(provide 'muse-mode)
 
 ;;; muse-mode.el ends here

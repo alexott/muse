@@ -559,38 +559,41 @@ This will be used if no special characters are found."
          (concat muse-html-meta-content-type "; charset="
                  (muse-html-encoding)))))
 
-(defun muse-html-finalize-buffer ()
+(defun muse-html-munge-buffer ()
   (when muse-publish-generate-contents
     (goto-char (car muse-publish-generate-contents))
-    (muse-html-insert-contents (cdr muse-publish-generate-contents)))
+    (muse-html-insert-contents (cdr muse-publish-generate-contents))
+    (setq muse-publish-generate-contents nil)))
+
+(defun muse-html-finalize-buffer ()
   (when (and (boundp 'buffer-file-coding-system)
              (memq buffer-file-coding-system '(no-conversion undecided-unix)))
     ;; make it agree with the default charset
-    (setq buffer-file-coding-system muse-html-encoding-default))
-  ;; stop processing the :after functions
-  t)
+    (setq buffer-file-coding-system muse-html-encoding-default)))
 
-(unless (assoc "html" muse-publishing-styles)
-  (muse-define-style "html"
-                     :suffix    'muse-html-extension
-                     :regexps   'muse-html-markup-regexps
-                     :functions 'muse-html-markup-functions
-                     :strings   'muse-html-markup-strings
-                     :tags      'muse-html-markup-tags
-                     :specials  'muse-xml-decide-specials
-                     :before    'muse-html-prepare-buffer
-                     :after     'muse-html-finalize-buffer
-                     :header    'muse-html-header
-                     :footer    'muse-html-footer
-                     :style-sheet 'muse-html-style-sheet
-                     :browser   'muse-html-browse-file)
+;;; Register the Muse HTML and XHTML Publishers
 
-  (muse-derive-style "xhtml" "html"
-                     :suffix    'muse-xhtml-extension
-                     :strings   'muse-xhtml-markup-strings
-                     :header    'muse-xhtml-header
-                     :footer    'muse-xhtml-footer
-                     :style-sheet 'muse-xhtml-style-sheet))
+(muse-define-style "html"
+                   :suffix    'muse-html-extension
+                   :regexps   'muse-html-markup-regexps
+                   :functions 'muse-html-markup-functions
+                   :strings   'muse-html-markup-strings
+                   :tags      'muse-html-markup-tags
+                   :specials  'muse-xml-decide-specials
+                   :before    'muse-html-prepare-buffer
+                   :before-end 'muse-html-munge-buffer
+                   :after     'muse-html-finalize-buffer
+                   :header    'muse-html-header
+                   :footer    'muse-html-footer
+                   :style-sheet 'muse-html-style-sheet
+                   :browser   'muse-html-browse-file)
+
+(muse-derive-style "xhtml" "html"
+                   :suffix    'muse-xhtml-extension
+                   :strings   'muse-xhtml-markup-strings
+                   :header    'muse-xhtml-header
+                   :footer    'muse-xhtml-footer
+                   :style-sheet 'muse-xhtml-style-sheet)
 
 (provide 'muse-html)
 

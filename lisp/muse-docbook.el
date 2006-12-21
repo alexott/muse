@@ -276,26 +276,28 @@ and anything after `Firstname' is optional."
                             nil t)
     (replace-match (upcase (match-string 1)) t t nil 1)))
 
+(defun muse-docbook-munge-buffer ()
+  (muse-docbook-fixup-images))
+
 (defun muse-docbook-finalize-buffer ()
-  (muse-docbook-fixup-images)
   (when (boundp 'buffer-file-coding-system)
     (when (memq buffer-file-coding-system '(no-conversion undecided-unix))
       ;; make it agree with the default charset
       (setq buffer-file-coding-system muse-docbook-encoding-default))))
 
-;; Register the Muse DocBook XML Publisher
+;;; Register the Muse DocBook XML Publisher
 
-(unless (assoc "docbook" muse-publishing-styles)
-  (muse-define-style "docbook"
-                     :suffix     'muse-docbook-extension
-                     :regexps    'muse-docbook-markup-regexps
-                     :functions  'muse-docbook-markup-functions
-                     :strings    'muse-docbook-markup-strings
-                     :specials   'muse-xml-decide-specials
-                     :after      'muse-docbook-finalize-buffer
-                     :header     'muse-docbook-header
-                     :footer     'muse-docbook-footer
-                     :browser    'find-file))
+(muse-define-style "docbook"
+                   :suffix     'muse-docbook-extension
+                   :regexps    'muse-docbook-markup-regexps
+                   :functions  'muse-docbook-markup-functions
+                   :strings    'muse-docbook-markup-strings
+                   :specials   'muse-xml-decide-specials
+                   :before-end 'muse-docbook-munge-buffer
+                   :after      'muse-docbook-finalize-buffer
+                   :header     'muse-docbook-header
+                   :footer     'muse-docbook-footer
+                   :browser    'find-file)
 
 (provide 'muse-docbook)
 
