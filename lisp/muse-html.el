@@ -28,6 +28,15 @@
 ;; sample publishing header so that when editing the resulting XHTML
 ;; file, Emacs would use the proper encoding.
 
+;; Sun Jiyang (sunyijiang AT gmail DOT com) came up with the idea for
+;; the <src> tag and provided an implementation for emacs-wiki.
+
+;; Charles Wang (wcy123 AT gmail DOT com) provided an initial
+;; implementation of the <src> tag for Muse.
+
+;; Clinton Ebadi (clinton AT unknownlamer DOT org) provided further
+;; ideas for the implementation of the <src> tag.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -345,8 +354,9 @@ searched."
   :group 'muse-html)
 
 (defcustom muse-html-markup-tags
-  '(("class" t t t muse-html-class-tag))
-  "A list of tag specifications, for specially marking up HTML."
+  '(("class" t t   t muse-html-class-tag)
+    ("src"   t t nil muse-html-src-tag))
+ "A list of tag specifications, for specially marking up HTML."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
@@ -535,6 +545,44 @@ This will be used if no special characters are found."
   (muse-insert-markup "<span class=\"" (cdr (assoc "name" attrs)) "\">")
   (goto-char end)
   (muse-insert-markup "</span>"))
+
+(defun muse-html-src-tag (beg end attrs)
+  (if (condition-case nil
+          (progn
+            (require 'htmlize)
+            (if (fboundp 'htmlize-region-for-paste)
+                nil
+              (muse-display-warning
+               (concat "The `htmlize-region-for-paste' function was not"
+                       " found.\nThis is available in htmlize.el 1.34"
+                       " or later."))
+              t))
+        (error nil t))
+      ;; if htmlize.el was not found, treat this like an example tag
+      (muse-publish-example-tag beg end)
+    (let* ((mode (and (assoc "lang" attrs)
+                      (intern (concat (cdr (assoc "lang" attrs))
+                                      "-mode"))))
+           (text (delete-and-extract-region beg end))
+           (htmltext
+            (with-temp-buffer
+              (insert text)
+              (if (functionp mode)
+                  (funcall mode)
+                (fundamental-mode))
+              (font-lock-fontify-buffer)
+              ;; silence the byte-compiler
+              (when (fboundp 'htmlize-region-for-paste)
+                ;; transform the region to HTML
+                (htmlize-region-for-paste (point-min) (point-max))))))
+      (save-restriction
+        (narrow-to-region (point) (point))
+        (insert htmltext)
+        (goto-char (point-min))
+        (re-search-forward "<pre\\([^>]*\\)>" nil t)
+        (replace-match " class=\"src\"" t t nil 1)
+        (goto-char (point-max))
+        (muse-publish-mark-read-only (point-min) (point-max))))))
 
 ;; Register the Muse HTML Publisher
 

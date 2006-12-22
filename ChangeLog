@@ -1,3 +1,12 @@
+2006-12-22  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-markup-tags): Add <src> tag.
+	(muse-html-src-tag): New function which publishes the <src> tag.
+	Thanks to Clinton Ebadi and Charles Wang for the initial
+	implementations.
+
+	* lisp/muse-publish.el (muse-publish-markup-tags): Add <src> tag.
+
 2006-12-21  Michael Olson  <mwolson@gnu.org>
 
 	* examples/johnw/muse-johnw.el: Update for preferred

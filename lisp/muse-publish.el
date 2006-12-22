@@ -244,6 +244,7 @@ current style."
   '(("contents" nil t   nil muse-publish-contents-tag)
     ("verse"    t   nil nil muse-publish-verse-tag)
     ("example"  t   nil nil muse-publish-example-tag)
+    ("src"      t   t   nil muse-publish-example-tag)
     ("code"     t   nil nil muse-publish-code-tag)
     ("quote"    t   nil t   muse-publish-quote-tag)
     ("literal"  t   nil nil muse-publish-mark-read-only)

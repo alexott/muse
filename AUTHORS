@@ -24,6 +24,9 @@ Li Daobing: Author of muse-mathml.el,
             Contributor
             (assigned past and future changes)
 
+Clinton Ebadi: Contributor:
+                - muse-html.el: 4 lines changed
+
 Bastien Guerry: Contributor
                 (assigned past and future changes)
 
@@ -96,6 +99,10 @@ Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
 
 Sergey Vlasov: Contributor:
                 - muse-colors.el: 3 lines changed
+
+Charles Wang: Contributor:
+               - muse-html.el: 4 lines changed
+              (assigned past and future changes)
 
 Lan Yufeng: Contributor:
              - muse-colors.el: 1 line changed
