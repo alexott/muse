@@ -1360,9 +1360,51 @@ Each page will become a separate chapter in the book, unless the style
 keyword @option{:nochapters} is used, in which case they are all run
 together as if one giant chapter.
 
-You will need to call the @code{muse-book-publish-project} function in
-order to publish this style.  An example of this may be found in John
-Wiegley's configuration file at @file{examples/johnw/muse-johnw.el}.
+One way of publishing a book is to make a project for it, add the
+project to @code{muse-project-alist}, and use the @code{book-pdf} style
+with a very specific @code{:include} value to specify some page whose
+contents will be checked for the values of @code{#title} and
+@code{#date}, and whose name will be used in the output file.  Then to
+publish the book, visit the aforementioned page and use @kbd{C-c C-t} or
+@kbd{C-c C-p} to trigger the publishing process.  An example
+@code{muse-project-alist} for this method follows.
+
+@example
+(setq muse-project-alist
+      '(("MyNotes" (:nochapters t  ; do automatically add chapters
+                    :book-chapter "Computer Science"
+                    "~/Notes/cs"
+                    :book-chapter "Mathematics"
+                    "~/Notes/math"
+                    :book-chapter "Emacs"
+                    "~/Notes/emacs"
+                    :book-end t ; the rest will not be placed in the book
+                    "~/Notes"   ; so we can find the notes-anthology page
+                    "~/Notes/private"
+                    :force-publish ("index")
+                    :default "index")
+         (:base "book-pdf"
+                :include "/notes-anthology[^/]*$"
+                :path "~/public_html/notes")
+         ;; other publishing styles for each directory go here,
+         ;; if desired
+         )))
+@end example
+
+In this example, there would be a file called
+@file{~/Notes/notes-anthology.muse}, which would contain just the
+following.  The resulting book would be published to
+@file{~/public_html/notes/notes-anthology.pdf}.
+
+@example
+#title My Technology Ramblings
+@end example
+
+Another way is to call the @code{muse-book-publish-project} function
+manually, with a custom project entry.  An example of this may be found
+in John Wiegley's configuration file at
+@file{examples/johnw/muse-init.el}, in the @code{muse-publish-my-books}
+function.
 
 @subheading Styles provided
 

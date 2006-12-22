@@ -1,8 +1,18 @@
 2006-12-21  Michael Olson  <mwolson@gnu.org>
 
+	* examples/johnw/muse-johnw.el: Update for preferred
+	muse-derive-style usage.  Rename to muse-init.el.
+
+	* examples/mwolson/muse-init.el: Update.
+
 	* lisp/muse-book.el (muse-book-publish): New function split from
 	muse-book-publish-project.  This is used in the definitions for
 	the book-latex and book-pdf styles.
+	(muse-book-publish-p): New function split from muse-book-publish.
+	(muse-book-get-directives): New function that retrieves the
+	publishing directives from the given file.
+	(muse-book-publish): Use muse-book-get-directives to set the title
+	if no title was specified.
 
 	* lisp/muse-project.el (muse-project): Add :publish-project entry
 	to widget.
@@ -19,6 +29,9 @@
 	muse-project-publish-default.
 
 	* lisp/muse-publish.el (muse-publish-file): Message fix.
+
+	* texi/muse.texi (Book): Mention new way to publish books and
+	provide an example, since the process may be non-obvious.
 
 2006-12-20  Michael Olson  <mwolson@gnu.org>
 
