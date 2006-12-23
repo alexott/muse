@@ -368,6 +368,19 @@ If STYLE is not specified, use current style."
         (if base
             (muse-style-element elem base direct))))))
 
+(defun muse-style-derived-p (base &optional style)
+  "Return non-nil if STYLE is equal to or derived from BASE,
+non-nil otherwise.
+
+BASE should be a string."
+  (if (and (stringp style)
+           (string= style base))
+      t
+    (setq style (muse-style style))
+    (let ((value (muse-get-keyword :base style)))
+      (when value
+        (muse-style-derived-p base value)))))
+
 (defun muse-find-markup-element (keyword ident style)
   (let ((def (assq ident (muse-style-element keyword style))))
     (if def

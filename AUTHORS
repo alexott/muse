@@ -87,8 +87,9 @@ Dale P. Smith: Contributor
 John Sullivan: Contributor -- documentation
                (assigned past and future changes)
 
-Ganesh Swami: Author of muse-latex2png.el
-              (assignment pending)
+Ganesh Swami: Original author of latex2png.el, which was the basis for
+              muse-latex2png.el.  It has since been extensively
+              rewritten, so we no longer need an assignment.
 
 G. J. Teale: Contributor:
               - muse-project.el: 2 lines changed
