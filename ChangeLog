@@ -1,3 +1,11 @@
+2006-12-30  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Update.
+
+	* experimental/muse-mathml.el (muse-publish-mathml-tag): Rename
+	from muse-publish-math-tag to avoid conflict with
+	muse-latex2png.el.
+
 2006-12-23  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex2png.el: Update header, since this has been
