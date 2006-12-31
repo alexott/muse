@@ -24,6 +24,9 @@ Li Daobing: Author of muse-mathml.el,
             Contributor
             (assigned past and future changes)
 
+Clinton Ebadi: Contributor:
+                - muse-html.el: 4 lines changed
+
 Bastien Guerry: Contributor
                 (assigned past and future changes)
 
@@ -84,8 +87,9 @@ Dale P. Smith: Contributor
 John Sullivan: Contributor -- documentation
                (assigned past and future changes)
 
-Ganesh Swami: Author of muse-latex2png.el
-              (assignment pending)
+Ganesh Swami: Original author of latex2png.el, which was the basis for
+              muse-latex2png.el.  It has since been extensively
+              rewritten, so we no longer need an assignment.
 
 G. J. Teale: Contributor:
               - muse-project.el: 2 lines changed
@@ -96,6 +100,10 @@ Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
 
 Sergey Vlasov: Contributor:
                 - muse-colors.el: 3 lines changed
+
+Charles Wang: Contributor:
+               - muse-html.el: 4 lines changed
+              (assigned past and future changes)
 
 Lan Yufeng: Contributor:
              - muse-colors.el: 1 line changed

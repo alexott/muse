@@ -47,29 +47,28 @@
 (setcdr (assq 'url-with-image muse-latex-markup-strings)
 	"%% %s\n\\includegraphics[scale=0.6]{../%s}")
 
-(unless (assoc "site-html" muse-publishing-styles)
-  (muse-derive-style "site-html" "html"
-		     :maintainer "jwiegley@hotmail.com"
-		     :before 'muse-maybe-convert-poem
-		     :after 'muse-my-html-finalize-buffer
-		     :final 'muse-site-html-set-mode
-		     :header "~/Documents/site/header.html"
-		     :footer "~/Documents/site/footer.html")
-  (muse-derive-style "site-journal-html" "journal-html"
-		     :maintainer "jwiegley@hotmail.com"
-		     :before 'muse-my-journal-find-entries
-		     :after 'muse-my-journal-insert-contents
-		     :final 'muse-site-html-set-mode
-		     :header "~/Documents/site/header.html"
-		     :footer "~/Documents/site/footer.html")
-  (muse-derive-style "newartisans-html" "html"
-		     :maintainer "johnw@newartisans.com"
-		     :header "~/Sites/newartisans/header.html"
-		     :footer "~/Sites/newartisans/footer.html")
-  (muse-derive-style "newartisans-journal-html" "journal-html"
-		     :maintainer "johnw@newartisans.com"
-		     :header "~/Sites/newartisans/header.html"
-		     :footer "~/Sites/newartisans/footer.html"))
+(muse-derive-style "site-html" "html"
+		   :maintainer "jwiegley@hotmail.com"
+		   :before 'muse-maybe-convert-poem
+		   :after 'muse-my-html-finalize-buffer
+		   :final 'muse-site-html-set-mode
+		   :header "~/Documents/site/header.html"
+		   :footer "~/Documents/site/footer.html")
+(muse-derive-style "site-journal-html" "journal-html"
+		   :maintainer "jwiegley@hotmail.com"
+		   :before 'muse-my-journal-find-entries
+		   :after 'muse-my-journal-insert-contents
+		   :final 'muse-site-html-set-mode
+		   :header "~/Documents/site/header.html"
+		   :footer "~/Documents/site/footer.html")
+(muse-derive-style "newartisans-html" "html"
+		   :maintainer "johnw@newartisans.com"
+		   :header "~/Sites/newartisans/header.html"
+		   :footer "~/Sites/newartisans/footer.html")
+(muse-derive-style "newartisans-journal-html" "journal-html"
+		   :maintainer "johnw@newartisans.com"
+		   :header "~/Sites/newartisans/header.html"
+		   :footer "~/Sites/newartisans/footer.html")
 
 (custom-set-variables
  '(muse-project-alist

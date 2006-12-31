@@ -28,6 +28,15 @@
 ;; sample publishing header so that when editing the resulting XHTML
 ;; file, Emacs would use the proper encoding.
 
+;; Sun Jiyang (sunyijiang AT gmail DOT com) came up with the idea for
+;; the <src> tag and provided an implementation for emacs-wiki.
+
+;; Charles Wang (wcy123 AT gmail DOT com) provided an initial
+;; implementation of the <src> tag for Muse.
+
+;; Clinton Ebadi (clinton AT unknownlamer DOT org) provided further
+;; ideas for the implementation of the <src> tag.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -345,8 +354,9 @@ searched."
   :group 'muse-html)
 
 (defcustom muse-html-markup-tags
-  '(("class" t t t muse-html-class-tag))
-  "A list of tag specifications, for specially marking up HTML."
+  '(("class" t t   t muse-html-class-tag)
+    ("src"   t t nil muse-html-src-tag))
+ "A list of tag specifications, for specially marking up HTML."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
@@ -536,6 +546,44 @@ This will be used if no special characters are found."
   (goto-char end)
   (muse-insert-markup "</span>"))
 
+(defun muse-html-src-tag (beg end attrs)
+  (if (condition-case nil
+          (progn
+            (require 'htmlize)
+            (if (fboundp 'htmlize-region-for-paste)
+                nil
+              (muse-display-warning
+               (concat "The `htmlize-region-for-paste' function was not"
+                       " found.\nThis is available in htmlize.el 1.34"
+                       " or later."))
+              t))
+        (error nil t))
+      ;; if htmlize.el was not found, treat this like an example tag
+      (muse-publish-example-tag beg end)
+    (let* ((mode (and (assoc "lang" attrs)
+                      (intern (concat (cdr (assoc "lang" attrs))
+                                      "-mode"))))
+           (text (delete-and-extract-region beg end))
+           (htmltext
+            (with-temp-buffer
+              (insert text)
+              (if (functionp mode)
+                  (funcall mode)
+                (fundamental-mode))
+              (font-lock-fontify-buffer)
+              ;; silence the byte-compiler
+              (when (fboundp 'htmlize-region-for-paste)
+                ;; transform the region to HTML
+                (htmlize-region-for-paste (point-min) (point-max))))))
+      (save-restriction
+        (narrow-to-region (point) (point))
+        (insert htmltext)
+        (goto-char (point-min))
+        (re-search-forward "<pre\\([^>]*\\)>" nil t)
+        (replace-match " class=\"src\"" t t nil 1)
+        (goto-char (point-max))
+        (muse-publish-mark-read-only (point-min) (point-max))))))
+
 ;; Register the Muse HTML Publisher
 
 (defun muse-html-browse-file (file)
@@ -559,38 +607,41 @@ This will be used if no special characters are found."
          (concat muse-html-meta-content-type "; charset="
                  (muse-html-encoding)))))
 
-(defun muse-html-finalize-buffer ()
+(defun muse-html-munge-buffer ()
   (when muse-publish-generate-contents
     (goto-char (car muse-publish-generate-contents))
-    (muse-html-insert-contents (cdr muse-publish-generate-contents)))
+    (muse-html-insert-contents (cdr muse-publish-generate-contents))
+    (setq muse-publish-generate-contents nil)))
+
+(defun muse-html-finalize-buffer ()
   (when (and (boundp 'buffer-file-coding-system)
              (memq buffer-file-coding-system '(no-conversion undecided-unix)))
     ;; make it agree with the default charset
-    (setq buffer-file-coding-system muse-html-encoding-default))
-  ;; stop processing the :after functions
-  t)
+    (setq buffer-file-coding-system muse-html-encoding-default)))
 
-(unless (assoc "html" muse-publishing-styles)
-  (muse-define-style "html"
-                     :suffix    'muse-html-extension
-                     :regexps   'muse-html-markup-regexps
-                     :functions 'muse-html-markup-functions
-                     :strings   'muse-html-markup-strings
-                     :tags      'muse-html-markup-tags
-                     :specials  'muse-xml-decide-specials
-                     :before    'muse-html-prepare-buffer
-                     :after     'muse-html-finalize-buffer
-                     :header    'muse-html-header
-                     :footer    'muse-html-footer
-                     :style-sheet 'muse-html-style-sheet
-                     :browser   'muse-html-browse-file)
+;;; Register the Muse HTML and XHTML Publishers
 
-  (muse-derive-style "xhtml" "html"
-                     :suffix    'muse-xhtml-extension
-                     :strings   'muse-xhtml-markup-strings
-                     :header    'muse-xhtml-header
-                     :footer    'muse-xhtml-footer
-                     :style-sheet 'muse-xhtml-style-sheet))
+(muse-define-style "html"
+                   :suffix    'muse-html-extension
+                   :regexps   'muse-html-markup-regexps
+                   :functions 'muse-html-markup-functions
+                   :strings   'muse-html-markup-strings
+                   :tags      'muse-html-markup-tags
+                   :specials  'muse-xml-decide-specials
+                   :before    'muse-html-prepare-buffer
+                   :before-end 'muse-html-munge-buffer
+                   :after     'muse-html-finalize-buffer
+                   :header    'muse-html-header
+                   :footer    'muse-html-footer
+                   :style-sheet 'muse-html-style-sheet
+                   :browser   'muse-html-browse-file)
+
+(muse-derive-style "xhtml" "html"
+                   :suffix    'muse-xhtml-extension
+                   :strings   'muse-xhtml-markup-strings
+                   :header    'muse-xhtml-header
+                   :footer    'muse-xhtml-footer
+                   :style-sheet 'muse-xhtml-style-sheet)
 
 (provide 'muse-html)
 

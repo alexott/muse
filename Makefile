@@ -1,13 +1,12 @@
-.PHONY: all lisp contrib autoloads examples experimental doc clean realclean
-.PHONY: distclean fullclean install-info install-bin install test dist release
-.PHONY: debbuild debrevision debrelease upload
-.PRECIOUS: %.info %.html
+.PHONY: all lisp contrib autoloads examples experimental doc info-only
+.PHONY: clean realclean distclean fullclean install-info install-bin install
+.PHONY: test dist release debbuild debrevision debrelease upload
 
 include Makefile.defs
 
-SUBDIRS = lisp contrib examples experimental
+SUBDIRS = lisp contrib examples experimental texi
 
-all: autoloads lisp contrib $(MANUAL).info
+all: autoloads lisp contrib info-only
 
 lisp:
 	(cd lisp && $(MAKE))
@@ -24,27 +23,22 @@ examples:
 experimental:
 	(cd experimental && $(MAKE))
 
-%.info: %.texi
-	makeinfo $<
+info-only:
+	(cd texi && $(MAKE) info-only)
 
-%.html: %.texi
-	makeinfo --html --no-split $<
-
-doc: $(MANUAL).info $(MANUAL).html
+doc texi:
+	(cd texi && $(MAKE))
 
 clean:
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) clean); done
 
 realclean fullclean: clean
-	-rm -f $(MANUAL).info $(MANUAL).html
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) realclean); done
 
 install-info: $(MANUAL).info
-	[ -d $(INFODIR) ] || install -d $(INFODIR)
-	install -m 0644 $(MANUAL).info $(INFODIR)/$(MANUAL)
-	$(INSTALLINFO) $(INFODIR)/$(MANUAL)
+	(cd texi && $(MAKE) install)
 
 install-bin: autoloads lisp contrib
 	(cd lisp && $(MAKE) install)
@@ -57,7 +51,6 @@ test:
 	(cd lisp && $(MAKE) test)
 
 distclean:
-	-rm -f $(MANUAL).info $(MANUAL).html
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) distclean); done
 	-rm -fr ../$(PROJECT)-$(VERSION)

@@ -64,8 +64,6 @@
 \\usepackage{hyperref}
 \\usepackage[pdftex]{graphicx}
 
-\\newcommand{\\comment}[1]{}
-
 \\begin{document}
 
 \\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
@@ -93,8 +91,6 @@
 \\usepackage{indentfirst}
 \\usepackage[CJKbookmarks=true]{hyperref}
 \\usepackage[pdftex]{graphicx}
-
-\\newcommand{\\comment}[1]{}
 
 \\begin{document}
 \\begin{CJK*}<lisp>(muse-latexcjk-encoding)</lisp>
@@ -164,8 +160,7 @@ For more on the structure of this list, see
     (email-addr      . "\\verb|%s|")
     (anchor          . "\\label{%s}")
     (emdash          . "---")
-    (comment-begin   . "\\comment{")
-    (comment-end     . "}")
+    (comment-begin   . "% ")
     (rule            . "\\bigskip")
     (no-break-space  . "~")
     (enddots         . "\\ldots{}")
@@ -398,7 +393,7 @@ and it will do what you expect."
   :type 'boolean
   :group 'muse-latex)
 
-(defun muse-latex-finalize-buffer ()
+(defun muse-latex-munge-buffer ()
   (muse-latex-fixup-dquotes)
   (when (and muse-latex-permit-contents-tag
              muse-publish-generate-contents)
@@ -436,33 +431,34 @@ and it will do what you expect."
           nil))))
    ".aux" ".toc" ".out" ".log"))
 
-(unless (assoc "latex" muse-publishing-styles)
-  (muse-define-style "latex"
-                     :suffix    'muse-latex-extension
-                     :regexps   'muse-latex-markup-regexps
-                     :functions 'muse-latex-markup-functions
-                     :strings   'muse-latex-markup-strings
-                     :specials  'muse-latex-decide-specials
-                     :after     'muse-latex-finalize-buffer
-                     :header    'muse-latex-header
-                     :footer    'muse-latex-footer
-                     :browser   'find-file)
+;;; Register the Muse LATEX Publishers
 
-  (muse-derive-style "pdf" "latex"
-                     :final   'muse-latex-pdf-generate
-                     :browser 'muse-latex-pdf-browse-file
-                     :link-suffix 'muse-latex-pdf-extension
-                     :osuffix 'muse-latex-pdf-extension)
+(muse-define-style "latex"
+                   :suffix    'muse-latex-extension
+                   :regexps   'muse-latex-markup-regexps
+                   :functions 'muse-latex-markup-functions
+                   :strings   'muse-latex-markup-strings
+                   :specials  'muse-latex-decide-specials
+                   :before-end 'muse-latex-munge-buffer
+                   :header    'muse-latex-header
+                   :footer    'muse-latex-footer
+                   :browser   'find-file)
 
-  (muse-derive-style "latexcjk" "latex"
-                     :header    'muse-latexcjk-header
-                     :footer    'muse-latexcjk-footer)
+(muse-derive-style "pdf" "latex"
+                   :final   'muse-latex-pdf-generate
+                   :browser 'muse-latex-pdf-browse-file
+                   :link-suffix 'muse-latex-pdf-extension
+                   :osuffix 'muse-latex-pdf-extension)
 
-  (muse-derive-style "pdfcjk" "latexcjk"
-                     :final   'muse-latex-pdf-generate
-                     :browser 'muse-latex-pdf-browse-file
-                     :link-suffix 'muse-latex-pdf-extension
-                     :osuffix 'muse-latex-pdf-extension))
+(muse-derive-style "latexcjk" "latex"
+                   :header    'muse-latexcjk-header
+                   :footer    'muse-latexcjk-footer)
+
+(muse-derive-style "pdfcjk" "latexcjk"
+                   :final   'muse-latex-pdf-generate
+                   :browser 'muse-latex-pdf-browse-file
+                   :link-suffix 'muse-latex-pdf-extension
+                   :osuffix 'muse-latex-pdf-extension)
 
 (provide 'muse-latex)
 

@@ -1,10 +1,9 @@
 ;; muse-latex2png.el --- generate PNG images from inline LaTeX code
 
-;; Copyright (C) 2004, 2005 Ganesh Swami
 ;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
 
-;; Author: Ganesh Swami <ganesh AT iamganesh DOT com>
-;; Created: May 01 2004
+;; Author: Michael Olson (mwolson AT gnu DOT org)
+;; Created: 12-Oct-2005
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -25,15 +24,15 @@
 
 ;;; Commentary:
 
-;; Read The Fine Documentation at
-;; http://www.sfu.ca/~gswamina/EmacsWikiBlog.html
+;; This was taken from latex2png.el, by Ganesh Swami <ganesh AT
+;; iamganesh DOT com>, which was made for emacs-wiki.  It has since
+;; been extensively rewritten for Muse.
 
-;; Michael Olson adapted this for Muse.
+;;; To do
 
-;;; To Do:
-
-;; If we are publishing a LaTeX-based style, the
-;; muse-publish-latex-tag function should insert the LaTeX code as-is.
+;; Remove stale image files.  This could be done by making a function
+;; for `muse-before-publish-hook' that deletes according to
+;; (muse-page-name).
 
 ;;; Code
 
@@ -81,12 +80,6 @@ This is relative to the current publishing directory."
   :type 'string
   :group 'muse-latex2png)
 
-(defcustom muse-latex2png-use-xhtml nil
-  "Indicate whether the output must be valid XHTML.
-This is used for inserting the IMG tag."
-  :type 'boolean
-  :group 'muse-latex2png)
-
 (defun muse-latex2png-move2pubdir (file prefix pubdir)
   "Move FILE to the PUBDIR folder.
 
@@ -107,39 +100,6 @@ Old files with PREFIX in the name are deleted."
           (concat muse-latex2png-img-dest "/" (file-name-nondirectory file)))
       (message "Cannot find %s!" file))))
 
-(defun muse-publish-latex-tag (beg end attrs)
-  (let ((end-marker (set-marker (make-marker) (1+ end)))
-        (pubdir (expand-file-name
-                 muse-latex2png-img-dest
-                 (file-name-directory muse-publishing-current-output-path))))
-    (save-restriction
-      (narrow-to-region beg end)
-      (let* ((text (buffer-substring-no-properties beg end))
-             ;; the prefix given to the image file.
-             (prefix (cdr (assoc "prefix" attrs)))
-             ;; preamble (for extra options)
-             (preamble (cdr (assoc "preamble" attrs)))
-             ;; display inline or as a block
-             (display (car (assoc "inline" attrs))))
-        (delete-region beg end)
-        (goto-char (point-min))
-        (unless (file-directory-p pubdir)
-          (make-directory pubdir))
-        (let ((path (muse-latex2png-move2pubdir
-                     (muse-latex2png text prefix preamble)
-                     prefix pubdir)))
-          (when path
-            (muse-insert-markup
-             "<img src=\"" path
-             "\" alt=\"latex2png equation\" "
-             (if display (concat "class=\"latex-inline\"")
-               (concat "class=\"latex-display\""))
-             (if muse-latex2png-use-xhtml
-                 " />"
-               ">"))
-            (muse-insert-markup "<!-- " text "-->")
-            (goto-char (point-max))))))))
-
 (defun muse-latex2png (code prefix preamble)
   "Convert the LaTeX CODE into a png file beginning with PREFIX.
 PREAMBLE indicates extra packages and definitions to include."
@@ -153,7 +113,7 @@ PREAMBLE indicates extra packages and definitions to include."
                         (temp-directory))
                        (t "/tmp")))
          (texfile (expand-file-name
-                   (concat prefix "_"  (format "%d" (abs (sxhash code))))
+                   (concat prefix "__"  (format "%d" (abs (sxhash code))))
                    tmpdir))
          (defalt-directory default-directory))
     (with-temp-file (concat texfile ".tex")
@@ -187,10 +147,85 @@ PREAMBLE indicates extra packages and definitions to include."
       (message (concat "Failed to create dvi file " texfile))
       nil)))
 
+(defun muse-latex2png-region (beg end attrs)
+  "Generate an image for the Latex code between BEG and END.
+If a Muse page is currently being published, replace the given
+region with the appropriate markup that displays the image.
+Otherwise, just return the path of the generated image.
+
+Valid keys for the ATTRS alist are as follows.
+
+prefix: The prefix given to the image file.
+preamble: Extra text to add to the Latex preamble.
+inline: Display image as inline, instead of a block."
+  (let ((end-marker (set-marker (make-marker) (1+ end)))
+        (pubdir (expand-file-name
+                 muse-latex2png-img-dest
+                 (file-name-directory muse-publishing-current-output-path))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (let* ((text (buffer-substring-no-properties beg end))
+             ;; the prefix given to the image file.
+             (prefix (cdr (assoc "prefix" attrs)))
+             ;; preamble (for extra options)
+             (preamble (cdr (assoc "preamble" attrs)))
+             ;; display inline or as a block
+             (display (car (assoc "inline" attrs))))
+        (when muse-publishing-p
+          (delete-region beg end)
+          (goto-char (point-min)))
+        (unless (file-directory-p pubdir)
+          (make-directory pubdir))
+        (let ((path (muse-latex2png-move2pubdir
+                     (muse-latex2png text prefix preamble)
+                     prefix pubdir)))
+          (when path
+            (when muse-publishing-p
+              (muse-insert-markup
+               (if (muse-style-derived-p "html")
+                   (concat "<img src=\"" path
+                           "\" alt=\"latex2png equation\" "
+                           (if display (concat "class=\"latex-inline\"")
+                             (concat "class=\"latex-display\""))
+                           (if (muse-style-derived-p "xhtml")
+                               " />"
+                             ">")
+                           (muse-insert-markup "<!-- " text "-->"))
+                 (let ((ext (or (file-name-extension path) ""))
+                       (path (muse-path-sans-extension path)))
+                   (muse-markup-text 'image path ext))))
+              (goto-char (point-max)))
+            path))))))
+
+(defun muse-publish-latex-tag (beg end attrs)
+  "If the current style is not Latex-based, generate an image for the
+given Latex code.  Otherwise, don't do anything to the region.
+See `muse-latex2png-region' for valid keys for ATTRS."
+  (unless (assoc "prefix" attrs)
+    (setq attrs (cons (cons "prefix"
+                            (concat "latex2png-" (muse-page-name)))
+                      attrs)))
+  (unless (muse-style-derived-p "latex")
+    (muse-latex2png-region beg end attrs)))
+
+(defun muse-publish-math-tag (beg end)
+  "Surround the given region with \"$\" characters.  Then, if the
+current style is not Latex-based, generate an image for the given
+Latex math code."
+  (insert "$")
+  (goto-char end)
+  (insert "$")
+  (unless (muse-style-derived-p "latex")
+    (muse-latex2png-region beg (point) '(("inline" . t)))))
+
 ;;; Insinuate with muse-publish
 
 (add-to-list 'muse-publish-markup-tags
              '("latex" t t nil muse-publish-latex-tag)
+             t)
+
+(add-to-list 'muse-publish-markup-tags
+             '("math" t nil nil muse-publish-latex-tag)
              t)
 
 (provide 'muse-latex2png)

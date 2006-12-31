@@ -1,3 +1,122 @@
+2006-12-30  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Update.
+
+	* experimental/muse-mathml.el (muse-publish-mathml-tag): Rename
+	from muse-publish-math-tag to avoid conflict with
+	muse-latex2png.el.
+
+2006-12-23  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex2png.el: Update header, since this has been
+	rewritten sufficiently to not need an assignment from the original
+	author.
+	(muse-latex2png-use-xhtml): Remove, since we now autodetect this.
+	(muse-latex2png): Use two underscores to separate prefix and hash.
+	(muse-latex2png-region): New function split from
+	muse-publish-latex-tag that can be used easily by other code.
+	Detect whether we are using an HTML-based publishing style, and
+	insert a simpler markup if we are not.  If we are using a
+	Latex-based publishing style, do not generate an image, and leave
+	the region alone.  Return the path of the generated image, in case
+	other functions want to use this programmatically.
+	(muse-publish-latex-tag): Set a default prefix based on the name
+	of the current file.
+	(muse-publish-math-tag): New tag that surrounds the region with
+	"$" characters, so that it becomes a Latex math region, and then
+	publishes it.
+
+	* lisp/muse-publish.el (muse-style-derived-p): New function that
+	returns non-nil if a given style, or the current style if omitted,
+	is equal to or derived from the given base style.  This is useful
+	in <lisp> tags, because it allows the user to specify markup that
+	is only to be inserted for one particular style.
+
+2006-12-22  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-markup-tags): Add <src> tag.
+	(muse-html-src-tag): New function which publishes the <src> tag.
+	Thanks to Clinton Ebadi and Charles Wang for the initial
+	implementations.
+
+	* lisp/muse-publish.el (muse-publish-markup-tags): Add <src> tag.
+
+2006-12-21  Michael Olson  <mwolson@gnu.org>
+
+	* examples/johnw/muse-johnw.el: Update for preferred
+	muse-derive-style usage.  Rename to muse-init.el.
+
+	* examples/mwolson/muse-init.el: Update.
+
+	* lisp/muse-book.el (muse-book-publish): New function split from
+	muse-book-publish-project.  This is used in the definitions for
+	the book-latex and book-pdf styles.
+	(muse-book-publish-p): New function split from muse-book-publish.
+	(muse-book-get-directives): New function that retrieves the
+	publishing directives from the given file.
+	(muse-book-publish): Use muse-book-get-directives to set the title
+	if no title was specified.
+
+	* lisp/muse-project.el (muse-project): Add :publish-project entry
+	to widget.
+	(muse-read-project, muse-project-find-file): Message fix.
+	(muse-project-publish-file-default): New function split from
+	muse-project-publish-file.
+	(muse-project-publish-file): Allow file-level publishing function
+	to be specified by the :publish element.  The default is
+	muse-project-publish-file-default.
+	(muse-project-publish-default): New function split from
+	muse-project-publish.
+	(muse-project-publish): Allow project-level publishing function to
+	be specified by :publish-project element.  The default is
+	muse-project-publish-default.
+
+	* lisp/muse-publish.el (muse-publish-file): Message fix.
+
+	* texi/muse.texi (Book): Mention new way to publish books and
+	provide an example, since the process may be non-obvious.
+
+2006-12-20  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-docbook.el (muse-docbook-munge-buffer): Split out
+	content-modifying code from the rest of
+	muse-docbook-finalize-buffer.
+
+	* lisp/muse-groff.el (muse-groff-munge-buffer): Rename from
+	muse-groff-finalize-buffer, since it adds content to the buffer.
+
+	* lisp/muse-html.el (muse-html-munge-buffer): Split out
+	content-modifying code from the rest of muse-html-finalize-buffer.
+	This fixes a bug when using <include> with <content> tags.
+
+	* lisp/muse-journal.el (muse-journal-html-munge-buffer)
+	(muse-journal-latex-munge-buffer)
+	(muse-journal-rss-munge-buffer): Rename, since they add content to
+	the buffer.
+
+	* lisp/muse-latex.el (muse-latex-munge-buffer): Rename from
+	muse-latex-finalize-buffer, since it adds content to the buffer.
+
+	* lisp/muse-mode.el:
+	* lisp/muse-project.el:
+	* lisp/muse-publish.el:
+	* lisp/muse.el: Fix recursive load error.
+
+	* lisp/muse-texinfo.el (muse-texinfo-munge-buffer): Rename from
+	muse-texinfo-finalize-buffer, since it adds content to the buffer.
+
+	* lisp/muse-wiki.el: Comment cleanup.
+
+	* lisp/muse-xml.el (muse-xml-charset-default): Docfix.
+
+2006-12-17  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-header, muse-latexcjk-header):
+	Remove the definition of \comment, since Latex already has comment
+	syntax.
+	(muse-latex-markup-strings): Use the Latex comment syntax, rather
+	than our own.  Thanks to Ryan Stutsman for pointing this out.
+
 2006-12-02  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-insert-contents): Tweak regexp so

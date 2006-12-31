@@ -2,20 +2,6 @@ Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
 * Changes in Muse 3.03 (not yet released)
 
-** Blosxom publishing (lisp/muse-blosxom.el)
-
-*** New option: muse-blosxom-use-tags.
-This specifies whether or not we are using tags.  Tags allow a page to
-belong to multiple categories, but they do not rely on the directory
-structure for categorization.
-
-*** Use `find-file' as the browsing function.
-
-*** Improve internal documentation for the included pyblosxom plug-ins.
-
-*** New example script: contrib/pyblosxom/make-blog.
-This shows how to invoke contrib/pyblosxom/getstamps.py.
-
 ** Core functionality (lisp/muse.el)
 
 *** Fix an XEmacs beta byte-compiler issue.
@@ -39,6 +25,27 @@ the link in a buffer of publishing it.  This allows brackets to be
 safely used in link descriptions and links, as long as you use `C-c
 TAB l', `C-c TAB u', `C-c C-e', or automatic Planner annotations.
 
+*** Ensure that no recursive load situation can take place.
+
+** Blosxom publishing (lisp/muse-blosxom.el)
+
+*** New option: muse-blosxom-use-tags.
+This specifies whether or not we are using tags.  Tags allow a page to
+belong to multiple categories, but they do not rely on the directory
+structure for categorization.
+
+*** Use `find-file' as the browsing function.
+
+*** Improve internal documentation for the included pyblosxom plug-ins.
+
+*** New example script: contrib/pyblosxom/make-blog.
+This shows how to invoke contrib/pyblosxom/getstamps.py.
+
+** Book publishing (lisp/muse-book.el)
+
+*** It is now possible to publish a book using a muse-project-alist entry.
+See the "Book" section of the manual for details and an example.
+
 ** DocBook publishing (lisp/muse-docbook.el)
 
 *** A bug with multiple-stanza verses has been fixed.
@@ -50,13 +57,25 @@ TAB l', `C-c TAB u', `C-c C-e', or automatic Planner annotations.
 *** Make the Table of Contents CSS easier to customize.
 For an example, see examples/mwolson/stylesheets/screen.css.
 
+*** Make Table of Contents publishing work with Planner.
+
 *** Fix a paragraph detection bug for paragraphs that occur after
 verses.
 
+*** New tag: <src>
+This tag is used to colorize (using HTML) source code of any language
+for which Emacs has a mode available.  The "lang" attribute determines
+the mode to call on the region.  Muse will look for the LANG-mode
+function, call it, and then call htmlize.  You will need htmlize 1.34
+or later for this to work.
+
+If a non-HTML publishing style is used, this will be published the
+same as an <example> region.
+
 ** Importing LaTeX documents (lisp/muse-import-latex.el)
 
-*** Rename from muse-convert.el.
-There are plans for importing other formats into Muse as well.
+*** Rename from muse-convert.el, since Muse can now import
+other formats as well.
 
 ** Journal (lisp/muse-journal.el)
 
@@ -98,7 +117,27 @@ line or a line break between the term and the definition.
 If the term and definition are on the same line, they will be that way
 in the output as well.
 
+*** Publish comments using the "%" character, rather than a custom
+Latex command.
+
+** Publish embedded LaTeX content to a PNG file (lisp/muse-latex2png.el)
+
+*** The <latex> tag has been modified to work with styles
+other than just HTML.  It will even leave the region alone if you are
+publishing a Latex-based publishing style.
+
+*** New tag: <math>
+The <math> tag acts similarly to the <latex> tag, except that it
+surrounds the region with "$" characters first, and makes the
+resulting image inline.
+
 ** Muse Manual (muse.texi)
+
+*** Re-license under the GFDL instead of the GPL.
+The rationale for this is that Muse may one day be included with
+Emacs, so it should use the same manual license that Emacs itself
+uses.  At this point, the matter is not open to debate, unless the FSF
+brings it up.
 
 *** Use better style for subsections.
 
@@ -213,7 +252,7 @@ This introduces the <latex> tag.
 publishing styles, such as HTML, XML, and DocBook.
 
 *** experimental/muse-mathml.el -- This introduces the "mathml"
-publishing style and the <math> tag.
+publishing style and the <mathml> tag.
 
 *** experimental/muse-protocol-iw.el: Implements a simpler URL-like
 interwiki protocol that handles subdirectories.
@@ -261,6 +300,14 @@ If this is non-nil (the default), files will be published even if they
 have "o-r" permissions set (that is, if no one except the owner and
 possibly group are allowed to read them).  To get back the old
 behavior, set this to nil.
+
+*** Publishing functions can now be customized on per-project basis
+You can now use :publish-project and :publish to specify what function
+to call for publishing entire projects or just a single file.
+:publish-project is meant to be specified in the first part of a
+project entry, along with the directories.  :publish is meant to be
+used in a (optionally derived) publishing style: after specifying such
+a style, use its name in the latter part of a project entry.
 
 ** Publishing (lisp/muse-publish.el)
 
@@ -382,6 +429,14 @@ to non-nil.  Note that this involved a change to the structure of
 appropriately.
 
 *** Fix bug with WikiName link descriptions and PDF output.
+
+*** New convenience function: muse-style-derived-p
+The new muse-style-derived-p function allows you to make custom tags
+or inline <lisp> code that acts differently depending on whether the
+current style is derived from (or equal to) another style.
+
+For an example of its use, see `muse-publish-latex-tag' in
+lisp/muse-latex2png.el.
 
 *** New tags, see the Tag Summary section in the manual for details
 

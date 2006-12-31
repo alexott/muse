@@ -228,30 +228,31 @@ The form of usage is:
 
 (add-to-list 'muse-publish-markup-tags muse-poem-tag)
 
-(unless (assoc "poem-latex" muse-publishing-styles)
-  (muse-derive-style "poem-latex" "latex"
-                     :before  'muse-poem-prepare-buffer
-                     :strings 'muse-poem-markup-strings
-                     :header  'muse-poem-latex-header
-                     :footer  'muse-poem-latex-footer)
+;;; Register the Muse POEM Publishers
 
-  (muse-derive-style "poem-pdf" "pdf"
-                     :before  'muse-poem-prepare-buffer
-                     :strings 'muse-poem-markup-strings
-                     :header  'muse-poem-latex-header
-                     :footer  'muse-poem-latex-footer)
+(muse-derive-style "poem-latex" "latex"
+                   :before  'muse-poem-prepare-buffer
+                   :strings 'muse-poem-markup-strings
+                   :header  'muse-poem-latex-header
+                   :footer  'muse-poem-latex-footer)
 
-  (muse-derive-style "chapbook-latex" "latex"
-                     :before  'muse-poem-prepare-buffer
-                     :strings 'muse-poem-chapbook-strings
-                     :header  'muse-chapbook-latex-header
-                     :footer  'muse-chapbook-latex-footer)
+(muse-derive-style "poem-pdf" "pdf"
+                   :before  'muse-poem-prepare-buffer
+                   :strings 'muse-poem-markup-strings
+                   :header  'muse-poem-latex-header
+                   :footer  'muse-poem-latex-footer)
 
-  (muse-derive-style "chapbook-pdf" "pdf"
-                     :before  'muse-poem-prepare-buffer
-                     :strings 'muse-poem-chapbook-strings
-                     :header  'muse-chapbook-latex-header
-                     :footer  'muse-chapbook-latex-footer))
+(muse-derive-style "chapbook-latex" "latex"
+                   :before  'muse-poem-prepare-buffer
+                   :strings 'muse-poem-chapbook-strings
+                   :header  'muse-chapbook-latex-header
+                   :footer  'muse-chapbook-latex-footer)
+
+(muse-derive-style "chapbook-pdf" "pdf"
+                   :before  'muse-poem-prepare-buffer
+                   :strings 'muse-poem-chapbook-strings
+                   :header  'muse-chapbook-latex-header
+                   :footer  'muse-chapbook-latex-footer)
 
 (provide 'muse-poem)
 

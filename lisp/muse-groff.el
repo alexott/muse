@@ -1,6 +1,6 @@
 ;;; muse-groff.el --- publish groff -mom -mwww files
 
-;; Copyright (C) 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
 
 ;; Author: Andrew J. Korty (ajk AT iu DOT edu)
 ;; Date: Tue 5-Jul-2005
@@ -216,7 +216,7 @@ command characters."
   (goto-char (point-min))
   (muse-groff-protect-leading-chars))
 
-(defun muse-groff-finalize-buffer ()
+(defun muse-groff-munge-buffer ()
   (goto-char (point-min))
   (muse-groff-concat-lists))
 
@@ -239,24 +239,25 @@ command characters."
         (shell-command command))))
    ".ps"))
 
-(unless (assoc "groff" muse-publishing-styles)
-  (muse-define-style "groff"
-                     :suffix    'muse-groff-extension
-                     :regexps   'muse-groff-markup-regexps
-;;;		     :functions 'muse-groff-markup-functions
-                     :strings   'muse-groff-markup-strings
-                     :tags      'muse-groff-markup-tags
-                     :specials  'muse-groff-markup-specials
-                     :before    'muse-groff-prepare-buffer
-                     :after     'muse-groff-finalize-buffer
-                     :header    'muse-groff-header
-                     :footer    'muse-groff-footer
-                     :browser   'find-file)
+;;; Register the Muse GROFF Publisher
 
-  (muse-derive-style "groff-pdf" "groff"
-                     :final   'muse-groff-pdf-generate
-                     :browser 'muse-groff-pdf-browse-file
-                     :osuffix 'muse-groff-pdf-extension))
+(muse-define-style "groff"
+                   :suffix    'muse-groff-extension
+                   :regexps   'muse-groff-markup-regexps
+;;;		   :functions 'muse-groff-markup-functions
+                   :strings   'muse-groff-markup-strings
+                   :tags      'muse-groff-markup-tags
+                   :specials  'muse-groff-markup-specials
+                   :before    'muse-groff-prepare-buffer
+                   :before-end 'muse-groff-munge-buffer
+                   :header    'muse-groff-header
+                   :footer    'muse-groff-footer
+                   :browser   'find-file)
+
+(muse-derive-style "groff-pdf" "groff"
+                   :final   'muse-groff-pdf-generate
+                   :browser 'muse-groff-pdf-browse-file
+                   :osuffix 'muse-groff-pdf-extension)
 
 (provide 'muse-groff)
 

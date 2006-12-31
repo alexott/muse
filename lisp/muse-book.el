@@ -1,6 +1,6 @@
 ;;; muse-book.el --- publish entries into a compilation
 
-;; Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -34,6 +34,7 @@
 (require 'muse-publish)
 (require 'muse-project)
 (require 'muse-latex)
+(require 'muse-regexps)
 
 (defgroup muse-book nil
   "Module for publishing a series of Muse pages as a complete book.
@@ -109,6 +110,42 @@ but treating the page as if it were a single chapter within a book."
       (muse-style-run-hooks :after style))
     (goto-char end)))
 
+(defun muse-book-publish-p (project target)
+  "Determine whether the book in PROJECT is out-of-date."
+  (let ((pats (cadr project)))
+    (catch 'publish
+      (while pats
+        (if (symbolp (car pats))
+            (if (eq :book-end (car pats))
+                (throw 'publish nil)
+              ;; skip past symbol-value pair
+              (setq pats (cddr pats)))
+          (dolist (entry (muse-project-file-entries (car pats)))
+            (when (and (not (muse-project-private-p (cdr entry)))
+                       (file-newer-than-file-p (cdr entry) target))
+              (throw 'publish t)))
+          (setq pats (cdr pats)))))))
+
+(defun muse-book-get-directives (file)
+  "Interpret any publishing directives contained in FILE.
+This is meant to be called in a temp buffer that will later be
+used for publishing."
+  (save-restriction
+    (narrow-to-region (point) (point))
+    (unwind-protect
+        (progn
+          (insert-file-contents file)
+          (muse-publish-markup
+           "attributes"
+           `(;; Remove leading and trailing whitespace from the file
+             (100 "\\(\\`\n+\\|\n+\\'\\)" 0 "")
+             ;; Remove trailing whitespace from all lines
+             (200 ,(concat "[" muse-regexp-blank "]+$") 0 "")
+             ;; Handle any leading #directives
+             (300 "\\`#\\([a-zA-Z-]+\\)\\s-+\\(.+\\)\n+"
+                  0 muse-publish-markup-directive))))
+      (delete-region (point-min) (point-max)))))
+
 (defun muse-book-publish-project
   (project book title style &optional output-dir force)
   "Publish PROJECT under the name BOOK with the given TITLE and STYLE.
@@ -122,53 +159,56 @@ pages has changed since it was last published."
                    (read-string "Basename of book (without extension): ")
                    (read-string "Title of book: "))
              (muse-publish-get-info))))
+  (setq project (muse-project project))
+  (let ((muse-current-project project))
+    ;; See if any of the project's files need saving first
+    (muse-project-save-buffers project)
+    ;; Publish the book
+    (muse-book-publish book style output-dir force title)))
+
+(defun muse-book-publish (file style &optional output-dir force title)
+  "Publish FILE as a book with the given TITLE and STYLE.
+The book is published to OUTPUT-DIR.  If FORCE is nil, the book
+is only published if at least one of its component pages has
+changed since it was last published."
   ;; Cleanup some of the arguments
-  (setq project (muse-project project)
-        style (muse-style style))
-  ;; See if any of the project's files need saving first
-  (muse-project-save-buffers project)
+  (let ((style-name style))
+    (setq style (muse-style style))
+    (unless style
+      (error "There is no style '%s' defined" style-name)))
   ;; Publish each page in the project as a chapter in one large book
-  (let* ((output-path (muse-publish-output-file book output-dir style))
+  (let* ((output-path (muse-publish-output-file file output-dir style))
          (output-suffix (muse-style-element :osuffix style))
          (target output-path)
-         (pats (cadr project))
-         (publish force) published)
+         (project muse-current-project)
+         (published nil))
     (when output-suffix
       (setq target (concat (muse-path-sans-extension target)
                            output-suffix)))
     ;; Unless force is non-nil, determine if the book needs publishing
-    (unless force
-      (while pats
-        (if (symbolp (car pats))
-            (if (eq :book-end (car pats))
-                (setq pats nil)
-              (setq pats (cddr pats)))
-          (let ((entries (muse-project-file-entries (car pats))))
-            (while entries
-              (if (and (not (muse-project-private-p (cdar entries)))
-                       (file-newer-than-file-p (cdar entries) target))
-                  (setq publish t entries nil)
-                (setq entries (cdr entries)))))
-          (setq pats (cdr pats)))))
-    ;; Create the book from all its component parts
-    (if (not publish)
-        (message "The book \"%s\" is up-to-date." book)
+    (if (and (not force)
+             (not (muse-book-publish-p project target)))
+        (message "The book \"%s\" is up-to-date." file)
+      ;; Create the book from all its component parts
       (muse-with-temp-buffer
         (let ((style-final  (muse-style-element :final  style t))
               (style-header (muse-style-element :header style))
               (style-footer (muse-style-element :footer style))
               (muse-publishing-current-style style)
               (muse-publishing-directives
-               (list (cons "title" title)
+               (list (cons "title" (or title (muse-page-name file)))
                      (cons "date" (format-time-string "%B %e, %Y"))))
               (muse-publishing-p t)
               (muse-current-project project)
-              nochapters)
+              (pats (cadr project))
+              (nochapters nil))
           (run-hooks 'muse-before-book-publish-hook)
-          (setq pats (cadr project))
           (let ((style-final style-final)
                 (style-header style-header)
                 (style-footer style-footer))
+            (unless title
+              (muse-book-get-directives file)
+              (setq title (muse-publishing-directive "title")))
             (while pats
               (if (symbolp (car pats))
                   (cond
@@ -212,26 +252,29 @@ pages has changed since it was last published."
                     (setq entries (cdr entries))))
                 (setq pats (cdr pats)))))
           (goto-char (point-min))
-          (if style-header (muse-insert-file-or-string style-header book))
+          (if style-header (muse-insert-file-or-string style-header file))
           (goto-char (point-max))
-          (if style-footer (muse-insert-file-or-string style-footer book))
+          (if style-footer (muse-insert-file-or-string style-footer file))
           (run-hooks 'muse-after-book-publish-hook)
           (let ((backup-inhibited t))
             (write-file output-path))
           (if style-final
-              (funcall style-final book output-path target)))))
+              (funcall style-final file output-path target)))))
     (if published
-        (message "The book \"%s\" has been published." book))
+        (message "The book \"%s\" has been published." file))
     published))
 
-(unless (assoc "book-latex" muse-publishing-styles)
-  (muse-derive-style "book-latex" "latex"
-                     :header 'muse-book-latex-header
-                     :footer 'muse-book-latex-footer)
+;;; Register the Muse BOOK Publishers
 
-  (muse-derive-style "book-pdf" "pdf"
-                     :header 'muse-book-latex-header
-                     :footer 'muse-book-latex-footer))
+(muse-derive-style "book-latex" "latex"
+                   :header 'muse-book-latex-header
+                   :footer 'muse-book-latex-footer
+                   :publish 'muse-book-publish)
+
+(muse-derive-style "book-pdf" "pdf"
+                   :header 'muse-book-latex-header
+                   :footer 'muse-book-latex-footer
+                   :publish 'muse-book-publish)
 
 (provide 'muse-book)
 

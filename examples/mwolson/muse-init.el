@@ -32,17 +32,17 @@
 ;; Here is an example of making a customized version of your favorite
 ;; publisher.  All this does is run `my-muse-blosoxm-finalize' on the
 ;; published file immediately after saving it.
+(muse-derive-style "my-blosxom" "blosxom-xhtml"
+                   :final 'my-muse-blosxom-finalize)
 
-(unless (assoc "my-blosxom" muse-publishing-styles)
-  (muse-derive-style "my-blosxom" "blosxom-xhtml"
-                     :final 'my-muse-blosxom-finalize)
+;; This turns relative links into absolute links
+(muse-derive-style "my-pdf" "pdf"
+                   :before 'my-muse-pdf-prepare-buffer)
 
-  (muse-derive-style "my-pdf" "pdf"
-                     :before 'my-muse-pdf-prepare-buffer)
-
-  (muse-derive-style "my-xhtml" "xhtml"
-                     :header "~/personal-site/muse/header.html"
-                     :footer "~/personal-site/muse/footer.html"))
+;; This uses a different header and footer than normal
+(muse-derive-style "my-xhtml" "xhtml"
+                   :header "~/personal-site/muse/header.html"
+                   :footer "~/personal-site/muse/footer.html")
 
 ;; Here is my master project listing.
 
@@ -116,7 +116,7 @@
         ("ArchWiki" . "http://gnuarch.org/gnuarchwiki/")
         ;; abbreviations
         ("CERIAS" . "http://www.cerias.purdue.edu/")
-        ("PlannerMode" . "http://www.plannerlove.com/")
+        ("PlannerMode" . "http://www.emacswiki.org/cgi-bin/wiki/PlannerMode")
         ("RememberMode" . "http://www.emacswiki.org/cgi-bin/wiki/RememberMode")
         ("GP2X" . "http://www.gp2x.co.uk/")
         ("UbuntuLinux" . "http://ubuntulinux.org/")

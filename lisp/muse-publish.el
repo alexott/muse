@@ -40,6 +40,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(provide 'muse-publish)
+
 (require 'muse)
 (require 'muse-regexps)
 
@@ -242,6 +244,7 @@ current style."
   '(("contents" nil t   nil muse-publish-contents-tag)
     ("verse"    t   nil nil muse-publish-verse-tag)
     ("example"  t   nil nil muse-publish-example-tag)
+    ("src"      t   t   nil muse-publish-example-tag)
     ("code"     t   nil nil muse-publish-code-tag)
     ("quote"    t   nil t   muse-publish-quote-tag)
     ("literal"  t   nil nil muse-publish-mark-read-only)
@@ -364,6 +367,19 @@ If STYLE is not specified, use current style."
       (let ((base (muse-get-keyword :base style)))
         (if base
             (muse-style-element elem base direct))))))
+
+(defun muse-style-derived-p (base &optional style)
+  "Return non-nil if STYLE is equal to or derived from BASE,
+non-nil otherwise.
+
+BASE should be a string."
+  (if (and (stringp style)
+           (string= style base))
+      t
+    (setq style (muse-style style))
+    (let ((value (muse-get-keyword :base style)))
+      (when value
+        (muse-style-derived-p base value)))))
 
 (defun muse-find-markup-element (keyword ident style)
   (let ((def (assq ident (muse-style-element keyword style))))
@@ -647,7 +663,7 @@ the file is published no matter what."
   (let ((style-name style))
     (setq style (muse-style style))
     (unless style
-      (error "There is no style '%s' defined." style-name)))
+      (error "There is no style '%s' defined" style-name)))
   (let* ((output-path (muse-publish-output-file file output-dir style))
          (output-suffix (muse-style-element :osuffix style))
          (muse-publishing-current-file file)
@@ -1744,7 +1760,5 @@ This is useful for marking up content in headers and footers."
                          '(rear-nonsticky (read-only) read-only t)
                          string)
     string))
-
-(provide 'muse-publish)
 
 ;;; muse-publish.el ends here
