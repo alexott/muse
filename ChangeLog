@@ -1,3 +1,25 @@
+2007-01-03  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-src-tag): Document.
+
+	* lisp/muse-publish.el (muse-publish-call-tag-on-buffer): New
+	command that calls a given tag on the current buffer.  Attributes
+	may be passed.
+	(muse-publish-examplify-buffer, muse-publish-versify-buffer): Use
+	it.
+	(muse-publish-srcify-buffer): New function that allows
+	markup="src" in the <include> tag.
+	(muse-publish-get-and-delete-attr): New macro that gets an
+	attribute from a list and removes the first instance of that
+	attribute from said list.
+	(muse-publish-markup-attribute): Handle markup="src".
+	(muse-publish-command-tag, muse-publish-include-tag): Use
+	muse-publish-get-and-delete-attr.  This allows the remaining
+	attributes to be passed.
+
+	* texi/muse.texi (Tag Summary): Update for new <src> tag as well
+	as changes to <command> and <include>.
+
 2006-12-30  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Update.

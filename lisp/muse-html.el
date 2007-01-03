@@ -547,6 +547,13 @@ This will be used if no special characters are found."
   (muse-insert-markup "</span>"))
 
 (defun muse-html-src-tag (beg end attrs)
+  "Publish the region using htmlize.
+The language to use may be specified by the \"lang\" attribute.
+
+Muse will look for a function named LANG-mode, where LANG is the
+value of the \"lang\" attribute.
+
+This tag requires htmlize 1.34 or later in order to work."
   (if (condition-case nil
           (progn
             (require 'htmlize)
