@@ -244,7 +244,7 @@ current style."
   '(("contents" nil t   nil muse-publish-contents-tag)
     ("verse"    t   nil nil muse-publish-verse-tag)
     ("example"  t   nil nil muse-publish-example-tag)
-    ("src"      t   t   nil muse-publish-example-tag)
+    ("src"      t   t   nil muse-publish-src-tag)
     ("code"     t   nil nil muse-publish-code-tag)
     ("quote"    t   nil t   muse-publish-quote-tag)
     ("literal"  t   nil nil muse-publish-mark-read-only)
@@ -1534,6 +1534,9 @@ This is usually applied to explicit links."
   (goto-char end)
   (insert (muse-markup-text 'end-literal))
   (muse-publish-mark-read-only beg (point)))
+
+(defun muse-publish-src-tag (beg end attrs)
+  (muse-publish-example-tag beg end))
 
 (defun muse-publish-example-tag (beg end)
   (muse-publish-escape-specials beg end nil 'example)

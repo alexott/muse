@@ -586,8 +586,8 @@ This tag requires htmlize 1.34 or later in order to work."
         (narrow-to-region (point) (point))
         (insert htmltext)
         (goto-char (point-min))
-        (re-search-forward "<pre\\([^>]*\\)>" nil t)
-        (replace-match " class=\"src\"" t t nil 1)
+        (re-search-forward "<pre\\([^>]*\\)>\n?" nil t)
+        (replace-match "<pre class=\"src\">")
         (goto-char (point-max))
         (muse-publish-mark-read-only (point-min) (point-max))))))
 

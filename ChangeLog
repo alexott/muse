@@ -1,3 +1,14 @@
+2007-01-04  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-src-tag): Remove initial blank
+	line.
+
+	* lisp/muse-publish.el (muse-publish-markup-tags): Make "src"
+	point to muse-publish-src-tag by default, since <src> and
+	<example> have different parameters.
+	(muse-publish-src-tag): New barebones publishing function for
+	<src>, which is superseded when publishing in an HTML-based style.
+
 2007-01-03  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-src-tag): Document.
