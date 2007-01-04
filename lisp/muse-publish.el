@@ -244,7 +244,7 @@ current style."
   '(("contents" nil t   nil muse-publish-contents-tag)
     ("verse"    t   nil nil muse-publish-verse-tag)
     ("example"  t   nil nil muse-publish-example-tag)
-    ("src"      t   t   nil muse-publish-example-tag)
+    ("src"      t   t   nil muse-publish-src-tag)
     ("code"     t   nil nil muse-publish-code-tag)
     ("quote"    t   nil t   muse-publish-quote-tag)
     ("literal"  t   nil nil muse-publish-mark-read-only)
@@ -1535,6 +1535,9 @@ This is usually applied to explicit links."
   (insert (muse-markup-text 'end-literal))
   (muse-publish-mark-read-only beg (point)))
 
+(defun muse-publish-src-tag (beg end attrs)
+  (muse-publish-example-tag beg end))
+
 (defun muse-publish-example-tag (beg end)
   (muse-publish-escape-specials beg end nil 'example)
   (goto-char beg)
@@ -1549,18 +1552,57 @@ This is usually applied to explicit links."
 
 (defalias 'muse-publish-class-tag 'ignore)
 
-(defun muse-publish-examplify-buffer ()
-  "Transform the current buffer as if it were an <example> region."
-  (let ((end (progn (goto-char (point-max)) (point-marker))))
-    (muse-publish-example-tag (point-min) end)))
+(defun muse-publish-call-tag-on-buffer (tag &optional attrs)
+  "Transform the current buffer as if it were surrounded by the tag TAG.
+If attributes ATTRS are given, pass them to the tag function."
+  (let ((tag-info (if muse-inhibit-style-tags
+                      (assoc tag muse-publish-markup-tags)
+                    (muse-markup-tag-info tag))))
+    (when tag-info
+      (let* ((end (progn (goto-char (point-max)) (point-marker)))
+             (args (list (point-min) end))
+             (muse-inhibit-style-tags nil))
+        (when (nth 2 tag-info)
+          (nconc args (list attrs)))
+        (apply (nth 4 tag-info) args)))))
 
-(defun muse-publish-versify-buffer ()
+(defun muse-publish-examplify-buffer (&optional attrs)
+  "Transform the current buffer as if it were an <example> region."
+  (muse-publish-call-tag-on-buffer "example" attrs))
+
+(defun muse-publish-srcify-buffer (&optional attrs)
+  "Transform the current buffer as if it were a <src> region."
+  (muse-publish-call-tag-on-buffer "src" attrs))
+
+(defun muse-publish-versify-buffer (&optional attrs)
   "Transform the current buffer as if it were a <verse> region."
-  (muse-publish-verse-tag (point-min) (point-max))
+  (muse-publish-call-tag-on-buffer "verse" attrs)
   (muse-publish-markup ""
                        `((100 ,(concat "^[" muse-regexp-blank "]*> ") 0
                               muse-publish-markup-verse)))
   (goto-char (point-min)))
+
+(defmacro muse-publish-get-and-delete-attr (attr attrs)
+  "Delete attribute ATTR from ATTRS only once, destructively.
+
+This function returns the matching attribute value, if found."
+  (let ((last (make-symbol "last"))
+        (found (make-symbol "found"))
+        (vals (make-symbol "vals")))
+    `(let ((,vals ,attrs))
+       (if (string= (caar ,vals) ,attr)
+           (prog1 (cdar ,vals)
+             (setq ,attrs (cdr ,vals)))
+         (let ((,last ,vals)
+               (,found nil))
+           (while ,vals
+             (setq ,vals (cdr ,vals))
+             (when (string= (caar ,vals) ,attr)
+               (setq ,found (cdar ,vals))
+               (setcdr ,last (cdr ,vals))
+               (setq ,vals nil))
+             (setq ,last ,vals))
+           ,found)))))
 
 (defmacro muse-publish-markup-attribute (beg end attrs reinterp &rest body)
   "Evaluate BODY within the bounds of BEG and END.
@@ -1578,14 +1620,18 @@ being further interpreted by Muse.
 If \"example\", treat the region as if it was surrounded by the
 <example> tag.
 
+If \"src\", treat the region as if it was surrounded by the
+<src> tag.
+
 If \"verse\", treat the region as if it was surrounded by the
 <verse> tag, to preserve newlines.
 
 Otherwise, it should be the name of a function to call in the
-narrowed region after evaluating BODY."
+narrowed region after evaluating BODY.  The function should
+take the ATTRS parameter."
   (let ((markup (make-symbol "markup"))
         (markup-function (make-symbol "markup-function")))
-    `(let ((,markup (cdr (assoc "markup" ,attrs))))
+    `(let ((,markup (muse-publish-get-and-delete-attr "markup" ,attrs)))
        (save-restriction
          (narrow-to-region ,beg ,end)
          (goto-char (point-min))
@@ -1598,13 +1644,15 @@ narrowed region after evaluating BODY."
            (let ((,markup-function (read ,markup)))
              (cond ((eq ,markup-function 'example)
                     (setq ,markup-function #'muse-publish-examplify-buffer))
+                   ((eq ,markup-function 'src)
+                    (setq ,markup-function #'muse-publish-srcify-buffer))
                    ((eq ,markup-function 'verse)
                     (setq ,markup-function #'muse-publish-versify-buffer))
                    ((and ,markup-function (not (functionp ,markup-function)))
                     (error "Invalid markup function `%s'" ,markup))
                    (t nil))
              (if ,markup-function
-                 (funcall ,markup-function)
+                 (funcall ,markup-function ,attrs)
                (muse-publish-mark-read-only (point-min) (point-max))
                (goto-char (point-max)))))))))
 
@@ -1629,7 +1677,7 @@ narrowed region after evaluating BODY."
   (muse-publish-markup-attribute beg end attrs nil
     (while (looking-at "\\s-*$")
       (forward-line))
-    (let ((interp (cdr (assoc "interp" attrs))))
+    (let ((interp (muse-publish-get-and-delete-attr "interp" attrs)))
       (if interp
           (shell-command-on-region (point) (point-max) interp t t)
         (shell-command
@@ -1677,7 +1725,7 @@ narrowed region after evaluating BODY."
 The `markup' attribute controls how this file is marked up after
 being inserted.  See `muse-publish-markup-attribute' for an
 explanation of how it works."
-  (let ((filename (cdr (assoc "file" attrs)))
+  (let ((filename (muse-publish-get-and-delete-attr "file" attrs))
         (muse-publishing-directives muse-publishing-directives))
     (if filename
         (setq filename (expand-file-name

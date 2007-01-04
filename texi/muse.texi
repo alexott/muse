@@ -1064,6 +1064,10 @@ further interpreting it.
 If "example", treat the region as if it was surrounded by the
 @verb{|<example>|} tag.
 
+If "src", treat the included text as if it was surrounded by the
+@verb{|<src>|} tag.  You should also specify the ``lang'' attribute if
+doing this.
+
 If "verse", treat the region as if it was surrounded by the
 @verb{|<verse>|} tag, to preserve newlines.
 
@@ -1107,6 +1111,10 @@ If "nil", do not mark up the included text at all.
 
 If "example", treat the included text as if it was surrounded by the
 @verb{|<example>|} tag.
+
+If "src", treat the included text as if it was surrounded by the
+@verb{|<src>|} tag.  You should also specify the ``lang'' attribute if
+doing this.
 
 If "verse", treat the included text as if it was surrounded by the
 @verb{|<verse>|} tag, to preserve newlines.
@@ -1168,6 +1176,17 @@ region with the result of the command.
 
 This tag takes the ``markup'' argument.  See the description of
 @verb{|<command>|} for details.
+
+@item <src>
+Publish the region using htmlize.
+The language to use may be specified by the ``lang'' attribute.
+
+Muse will look for a function named @var{lang}-mode, where @var{lang} is
+the value of the ``lang'' attribute.
+
+This tag requires htmlize 1.34 or later in order to work.  If this is
+not satisfied, or the current publishing style is not HTML-based, Muse
+will publish the region like an @verb{|<example>|} tag.
 
 @item <verbatim>
 This is used when you want to prevent Muse from trying to interpret some
