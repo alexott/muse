@@ -77,21 +77,21 @@ debbuild:
 	  lintian -i ../$(DEBNAME)_$(VERSION)*.deb || : && \
 	  echo "Done running lintian." && \
 	  debsign)
-	cp ../$(DEBNAME)_$(VERSION)* ../../dist
+	cp ../$(DEBNAME)_$(VERSION)* ../../dist/$(DISTRIBUTOR)
 
-debrevision: dist
-	-rm -f ../../dist/$(DEBNAME)_*
-	-rm -f ../$(DEBNAME)_$(VERSION)-*
+debclean:
+	-rm -f ../../dist/$(DISTRIBUTOR)/$(DEBNAME)_*
 	-rm -fr ../$(DEBNAME)-$(VERSION)
+
+debrevision: debclean dist
+	-rm -f ../$(DEBNAME)_$(VERSION)-*
 	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
 	cp -r debian ../$(DEBNAME)-$(VERSION)
 	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
 	$(MAKE) debbuild
 
-debrelease: dist
-	-rm -f ../../dist/$(DEBNAME)_*
+debrelease: debclean dist
 	-rm -f ../$(DEBNAME)_$(VERSION)*
-	-rm -fr ../$(DEBNAME)-$(VERSION)
 	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
 	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
 	    $(DEBNAME)-$(VERSION))

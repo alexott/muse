@@ -1,3 +1,12 @@
+2007-01-06  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile (debclean): New rule split from debrevision and
+	debrelease.
+	(debbuild): Take distributor into account.
+
+	* Makefile.defs (DISTRIBUTOR): New field that tracks what
+	vendor/distributor we are building for.
+
 2007-01-04  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-src-tag): Remove initial blank
