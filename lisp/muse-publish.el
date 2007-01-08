@@ -426,7 +426,7 @@ to the text with ARGS as parameters."
 (defsubst muse-markup-tag-info (tagname &rest args)
   (let ((tag-info (muse-find-markup-tag :tags tagname (muse-style))))
     (or tag-info
-        (assoc (match-string 1) muse-publish-markup-tags))))
+        (assoc tagname muse-publish-markup-tags))))
 
 (defsubst muse-markup-function (category)
   (let ((func (muse-find-markup-element :functions category (muse-style))))
