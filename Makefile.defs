@@ -20,9 +20,10 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 #INSTALLINFO = install-info --section "Emacs" "emacs" --info-dir=$(INFODIR)
 
 # Useful only for the maintainer
-PROJECT    = muse
-DEBNAME    = muse-el
-VERSION    = 3.02.93
-MANUAL     = muse
-LASTUPLOAD = 3.02.8-1
-BUILDOPTS  =
+PROJECT     = muse
+DEBNAME     = muse-el
+VERSION     = 3.02.93.arch.265
+MANUAL      = muse
+LASTUPLOAD  = 3.02.8-1
+BUILDOPTS   =
+DISTRIBUTOR = debian
