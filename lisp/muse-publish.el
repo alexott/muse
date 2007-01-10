@@ -95,11 +95,11 @@ If non-nil, publish comments using the markup of the current style."
     ;; Handle any leading #directives
     (1200 "\\`#\\([a-zA-Z-]+\\)\\s-+\\(.+\\)\n+" 0 directive)
 
+    ;; commented lines
+    (1250 "^;\\s-+\\(.+\\)" 0 comment)
+
     ;; markup tags
     (1300 muse-tag-regexp 0 tag)
-
-    ;; commented lines
-    (1350 "^;\\s-+\\(.+\\)" 0 comment)
 
     ;; prevent emphasis characters in explicit links from being marked
     (1400 muse-explicit-link-regexp 0 muse-publish-mark-link)
