@@ -1,3 +1,9 @@
+2007-01-09  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-regexps): Make
+	comments higher priority than tags.  Thanks to Stefan van der Walt
+	for the report.
+
 2007-01-08  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-markup-tag-info): Use the given
