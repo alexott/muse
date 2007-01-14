@@ -368,11 +368,8 @@ If STYLE is not specified, use current style."
         (if base
             (muse-style-element elem base direct))))))
 
-(defun muse-style-derived-p (base &optional style)
-  "Return non-nil if STYLE is equal to or derived from BASE,
-non-nil otherwise.
-
-BASE should be a string."
+(defun muse-style-derived-p-1 (base style)
+  "Internal function used by `muse-style-derived-p'."
   (if (and (stringp style)
            (string= style base))
       t
@@ -380,6 +377,18 @@ BASE should be a string."
     (let ((value (muse-get-keyword :base style)))
       (when value
         (muse-style-derived-p base value)))))
+
+(defun muse-style-derived-p (base &optional style)
+  "Return non-nil if STYLE is equal to or derived from BASE,
+non-nil otherwise.
+
+BASE should be a string."
+  (unless style
+    (setq style (muse-style))
+    (when (and (consp style)
+               (stringp (car style)))
+      (setq style (car style))))
+  (muse-style-derived-p-1 base style))
 
 (defun muse-find-markup-element (keyword ident style)
   (let ((def (assq ident (muse-style-element keyword style))))
