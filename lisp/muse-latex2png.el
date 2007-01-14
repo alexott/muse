@@ -212,9 +212,9 @@ See `muse-latex2png-region' for valid keys for ATTRS."
   "Surround the given region with \"$\" characters.  Then, if the
 current style is not Latex-based, generate an image for the given
 Latex math code."
-  (insert "$")
+  (muse-insert-markup "$")
   (goto-char end)
-  (insert "$")
+  (muse-insert-markup "$")
   (unless (muse-style-derived-p "latex")
     (muse-latex2png-region beg (point) '(("inline" . t)))))
 
@@ -225,7 +225,7 @@ Latex math code."
              t)
 
 (add-to-list 'muse-publish-markup-tags
-             '("math" t nil nil muse-publish-latex-tag)
+             '("math" t nil nil muse-publish-math-tag)
              t)
 
 (provide 'muse-latex2png)
