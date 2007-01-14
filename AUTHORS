@@ -104,6 +104,9 @@ Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
 Sergey Vlasov: Contributor:
                 - muse-colors.el: 3 lines changed
 
+Valery V. Vorotyntsev: Contributor:
+                        - muse-protocols.el: 7 lines changed
+
 Charles Wang: Contributor:
                - muse-html.el: 4 lines changed
               (assigned past and future changes)
