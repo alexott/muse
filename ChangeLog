@@ -1,5 +1,7 @@
 2007-01-14  Michael Olson  <mwolson@gnu.org>
 
+	* AUTHORS: Bookkeeping.
+
 	* lisp/muse-latex2png.el: Associate <math> tag with
 	muse-publish-math-tag, not muse-publish-latex-tag.  Thanks to Jody
 	Klymak for the report.
@@ -11,6 +13,10 @@
 	(muse-style-derived-p): If the style is not provided, fetch it and
 	check to see if the car is a string.  This should fix the other
 	problem that was reported.
+
+	* texi/muse.texi (Projects): Apply patch from Bradley M. Kuhn that
+	explains a case where setting muse-file-extension to nil can cause
+	unexpected behavior.
 
 2007-01-09  Michael Olson  <mwolson@gnu.org>
 
