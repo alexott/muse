@@ -1,3 +1,11 @@
+2007-01-15  Valery V. Vorotyntsev  <valery.vv@gmail.com>
+
+	* lisp/muse-protocols.el (muse-url-protocols): Add "woman://"
+	protocol.
+	(muse-browse-url-man): Change man page URL format.  The code is
+	simpler when the section is left inside parentheses.
+	(muse-browse-url-woman): New function.
+
 2007-01-14  Michael Olson  <mwolson@gnu.org>
 
 	* AUTHORS: Bookkeeping.
