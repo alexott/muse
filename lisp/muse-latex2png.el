@@ -205,7 +205,8 @@ See `muse-latex2png-region' for valid keys for ATTRS."
     (setq attrs (cons (cons "prefix"
                             (concat "latex2png-" (muse-page-name)))
                       attrs)))
-  (unless (muse-style-derived-p "latex")
+  (if (muse-style-derived-p "latex")
+      (muse-publish-mark-read-only beg end)
     (muse-latex2png-region beg end attrs)))
 
 (defun muse-publish-math-tag (beg end)
@@ -215,7 +216,8 @@ Latex math code."
   (muse-insert-markup "$")
   (goto-char end)
   (muse-insert-markup "$")
-  (unless (muse-style-derived-p "latex")
+  (if (muse-style-derived-p "latex")
+      (muse-publish-mark-read-only beg (point))
     (muse-latex2png-region beg (point) '(("inline" . t)))))
 
 ;;; Insinuate with muse-publish

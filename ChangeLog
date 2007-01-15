@@ -1,3 +1,9 @@
+2007-01-15  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex2png.el (muse-publish-latex-tag)
+	(muse-publish-math-tag): Publish region read-only when current
+	style is Latex-derived, so that Muse does not escape it.
+
 2007-01-15  Valery V. Vorotyntsev  <valery.vv@gmail.com>
 
 	* lisp/muse-protocols.el (muse-url-protocols): Add "woman://"
