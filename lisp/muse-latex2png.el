@@ -212,13 +212,28 @@ See `muse-latex2png-region' for valid keys for ATTRS."
 (defun muse-publish-math-tag (beg end)
   "Surround the given region with \"$\" characters.  Then, if the
 current style is not Latex-based, generate an image for the given
-Latex math code."
-  (muse-insert-markup "$")
-  (goto-char end)
-  (muse-insert-markup "$")
-  (if (muse-style-derived-p "latex")
-      (muse-publish-mark-read-only beg (point))
-    (muse-latex2png-region beg (point) '(("inline" . t)))))
+Latex math code.
+
+If 6 or more spaces come before the tag, surrouund the region
+with \"$$\" instead."
+  (let* ((centered (and (re-search-backward
+                         (concat "^[" muse-regexp-blank "]\\{6,\\}\\=")
+                         nil t)
+                        (prog1 t
+                          (replace-match "")
+                          (delete-backward-char 1)
+                          (setq beg (point)))))
+         (dol (if centered "$$" "$"))
+         (attrs (nconc (list (cons "prefix"
+                                   (concat "latex2png-" (muse-page-name))))
+                       (if centered nil
+                         '(("inline" . t))))))
+    (muse-insert-markup dol)
+    (goto-char end)
+    (muse-insert-markup dol)
+    (if (muse-style-derived-p "latex")
+        (muse-publish-mark-read-only beg (point))
+      (muse-latex2png-region beg (point) attrs))))
 
 ;;; Insinuate with muse-publish
 

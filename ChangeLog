@@ -3,6 +3,9 @@
 	* lisp/muse-latex2png.el (muse-publish-latex-tag)
 	(muse-publish-math-tag): Publish region read-only when current
 	style is Latex-derived, so that Muse does not escape it.
+	(muse-publish-math-tag): If 6 or more spaces come before the tag,
+	surround the region with "$$" rather than "$".  This is the Muse
+	syntax for something centered, so it should be a good fit.
 
 2007-01-15  Valery V. Vorotyntsev  <valery.vv@gmail.com>
 
