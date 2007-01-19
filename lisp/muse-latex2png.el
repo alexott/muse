@@ -221,7 +221,8 @@ with \"$$\" instead."
                          nil t)
                         (prog1 t
                           (replace-match "")
-                          (unless (bobp)
+                          (when (and (muse-style-derived-p "latex")
+                                     (not (bobp)))
                             (backward-char 1)
                             (if (bolp)
                                 (delete-char 1)

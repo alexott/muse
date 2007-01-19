@@ -1,3 +1,9 @@
+2007-01-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex2png.el (muse-publish-math-tag): Only remove the
+	previous blank line if we are publishing in Latex.  Otherwise,
+	that wouldn't be the right thing, so leave it be.
+
 2007-01-17  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex2png.el (muse-publish-math-tag): Don't put
