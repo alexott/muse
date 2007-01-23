@@ -1471,6 +1471,17 @@ the cadr is the page name, and the cddr is the anchor."
   :type 'integer
   :group 'muse-publish)
 
+(defmacro muse-publish-ensure-block-tag (beg)
+  "Ensure that block-level tag at BEG is published with at least one
+blank line.  BEG is modified to be the new position."
+  `(progn
+     (goto-char ,beg)
+     (cond ((not (bolp)) (insert "\n\n"))
+           ((eq (point) (point-min)) nil)
+           ((prog2 (backward-char) (bolp) (forward-char)) nil)
+           (t (insert "\n")))
+     (setq ,beg (point))))
+
 (defun muse-publish-contents-tag (beg end attrs)
   (set (make-local-variable 'muse-publish-generate-contents)
        (cons (copy-marker (point) t)
@@ -1548,6 +1559,7 @@ This is usually applied to explicit links."
   (muse-publish-example-tag beg end))
 
 (defun muse-publish-example-tag (beg end)
+  (muse-publish-ensure-block-tag beg)
   (muse-publish-escape-specials beg end nil 'example)
   (goto-char beg)
   (insert (muse-markup-text 'begin-example))
