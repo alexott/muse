@@ -1,3 +1,12 @@
+2007-01-23  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-ensure-block-tag): New macro
+	that ensures that at least one blank line exists at the given
+	position.  This is used to avoid paragraph detection problems when
+	block-level tags like <example> immediately follow a paragraph.
+	Thanks to Hans Ekbrand for the report.
+	(muse-publish-example-tag): Use it.
+
 2007-01-19  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex2png.el (muse-publish-math-tag): Only remove the
