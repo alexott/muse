@@ -96,7 +96,8 @@ If non-nil, publish comments using the markup of the current style."
     (1200 "\\`#\\([a-zA-Z-]+\\)\\s-+\\(.+\\)\n+" 0 directive)
 
     ;; commented lines
-    (1250 "^;\\s-+\\(.+\\)" 0 comment)
+    (1250 ,(concat "^;\\(?:[" muse-regexp-blank "]+\\(.+\\)\\|$\\|'\\)")
+          0 comment)
 
     ;; markup tags
     (1300 muse-tag-regexp 0 tag)
@@ -782,8 +783,11 @@ supplied."
       ""
     (goto-char (match-end 0))
     (muse-insert-markup (muse-markup-text 'comment-end))
-    (muse-publish-mark-read-only (match-beginning 1) (match-end 1))
-    (delete-region (match-beginning 0) (match-beginning 1))
+    (if (match-beginning 1)
+        (progn
+          (muse-publish-mark-read-only (match-beginning 1) (match-end 1))
+          (delete-region (match-beginning 0) (match-beginning 1)))
+      (delete-region (match-beginning 0) (match-end 0)))
     (goto-char (match-beginning 0))
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
