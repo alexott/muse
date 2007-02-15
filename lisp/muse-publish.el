@@ -1365,10 +1365,10 @@ the cadr is the page name, and the cddr is the anchor."
   (save-match-data
     (cond ((or (null target) (string= target ""))
            nil)
-          ((string-match muse-url-regexp target)
-           (cons 'url (cons target nil)))
           ((string-match muse-image-regexp target)
            (cons 'image (cons target nil)))
+          ((string-match muse-url-regexp target)
+           (cons 'url (cons target nil)))
           ((string-match muse-file-regexp target)
            (cons 'file (cons target nil)))
           ((string-match "#" target)
