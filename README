@@ -40,6 +40,13 @@ texi :: The manual (muse.texi) and any supplemental sections.
 Getting started
 ===============
 
+Prerequisites
+-------------
+
+You need either Emacs (21.1 or greater), XEmacs (21.4 or greater), or
+SXEmacs (warning: Muse has not been tested with SXEmacs).  The current
+maintainer recommend using Emacs.
+
 Compilation
 -----------
 
@@ -141,7 +148,7 @@ C-u M-x info RET /path/to/muse/examples/QuickStart.info RET
 Further Documentation
 =====================
 
-Please consult http://www.emacswiki.org/cgi-bin/wiki/MuseMode to find
+Please consult http://www.emacswiki.org/cgi-bin/wiki/EmacsMuse to find
 more information on bugs, unimplemented features, and user-contributed
 tweaks.
 
