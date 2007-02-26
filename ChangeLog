@@ -1,3 +1,10 @@
+2007-02-25  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-date-format): New option that
+	specifies how to format the date when publishing Muse pages.
+	Thanks to Thomas Gehrlein for the suggestion.
+	(muse-publish-markup-buffer): Use it.
+
 2007-02-23  Michael Olson  <mwolson@gnu.org>
 
 	* README: Add Prerequisites section to mention which versions of
