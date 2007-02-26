@@ -1,3 +1,17 @@
+2007-02-25  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-date-format): New option that
+	specifies how to format the date when publishing Muse pages.
+	Thanks to Thomas Gehrlein for the suggestion.
+	(muse-publish-markup-buffer): Use it.
+
+2007-02-23  Michael Olson  <mwolson@gnu.org>
+
+	* README: Add Prerequisites section to mention which versions of
+	Emacs work with Muse.  Thanks to Exal de Jesus Garcia Carrillo for
+	the suggestion.  Update link destination for Muse's page on
+	emacswiki.org.
+
 2007-02-15  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-goto-tag-end): Modify regexp to allow tags to

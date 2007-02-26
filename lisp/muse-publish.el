@@ -74,6 +74,10 @@ be returned."
   :type 'hook
   :group 'muse-publish)
 
+(defcustom muse-publish-date-format "%B %e, %Y"
+  "Format string for the date, used by `muse-publish-markup-buffer'.
+See `format-time-string' for details on the format options.")
+
 (defcustom muse-publish-comments-p nil
   "If nil, remove comments before publishing.
 If non-nil, publish comments using the markup of the current style."
@@ -567,7 +571,7 @@ TITLE is used when indicating the publishing progress; it may be nil."
          (list (cons "title" title)
                (cons "author" (user-full-name))
                (cons "date" (format-time-string
-                             "%B %e, %Y"
+                             muse-publish-date-format
                              (if muse-publishing-current-file
                                  (nth 5 (file-attributes
                                          muse-publishing-current-file))
