@@ -389,10 +389,10 @@ non-nil otherwise.
 
 BASE should be a string."
   (unless style
-    (setq style (muse-style))
-    (when (and (consp style)
-               (stringp (car style)))
-      (setq style (car style))))
+    (setq style (muse-style)))
+  (when (and (consp style)
+             (stringp (car style)))
+    (setq style (car style)))
   (muse-style-derived-p-1 base style))
 
 (defun muse-find-markup-element (keyword ident style)

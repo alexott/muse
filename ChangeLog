@@ -1,3 +1,10 @@
+2007-03-31  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-style-derived-p): Fix bug where the
+	expression (muse-style-derived-p "latex" (muse-style "latex"))
+	yielded nil.  It now yields t, as expected.  Thanks to Jim Ottaway
+	for the catch.
+
 2007-02-25  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-date-format): New option that
