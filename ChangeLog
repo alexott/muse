@@ -1,3 +1,12 @@
+2007-04-01  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-date-format): Add
+	customization type ad group.
+	(muse-publish-region): New interactive function that publishes a
+	region to a new buffer.
+
+	* texi/muse.texi: Use "document" rather than "manual".
+
 2007-03-31  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-style-derived-p): Fix bug where the

@@ -76,7 +76,9 @@ be returned."
 
 (defcustom muse-publish-date-format "%B %e, %Y"
   "Format string for the date, used by `muse-publish-markup-buffer'.
-See `format-time-string' for details on the format options.")
+See `format-time-string' for details on the format options."
+  :type 'string
+  :group 'muse-publish)
 
 (defcustom muse-publish-comments-p nil
   "If nil, remove comments before publishing.
@@ -665,6 +667,24 @@ TITLE is used when indicating the publishing progress; it may be nil."
   (if (fboundp 'muse-project-link-page)
       (muse-project-link-page page)
     (muse-publish-link-file page)))
+
+;;;###autoload
+(defun muse-publish-region (beg end &optional title style)
+  "Apply the given STYLE's markup rules to the given region.
+The result is placed in a new buffer that includes TITLE in its name."
+  (interactive "r")
+  (when (interactive-p)
+    (unless title (setq title (read-string "Title: ")))
+    (unless style (setq style (muse-publish-get-style))))
+  (let ((muse-publishing-current-style style)
+        (muse-publishing-p t)
+        (text (buffer-substring beg end))
+        (buf (generate-new-buffer (concat "*Muse: " title "*"))))
+    (with-current-buffer buf
+      (insert text)
+      (muse-publish-markup-buffer title style)
+      (goto-char (point-min)))
+    (pop-to-buffer buf)))
 
 ;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
