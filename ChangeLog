@@ -1,3 +1,14 @@
+2007-04-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-heading): Make sure
+	that a blank line always exists after a heading.  This fixes a bug
+	in Docbook paragraph detection.  Thanks to Jean Magnan de Bornier
+	for the report.
+
+	* lisp/muse-xml.el (muse-xml-markup-regexps): Update paragraph
+	detection regexp to that which is used in Docbook and HTML
+	publishing styles.
+
 2007-04-02  Michael Olson  <mwolson@gnu.org>
 
 	* README (muse-el-announce): Make a listing of mailing lists,

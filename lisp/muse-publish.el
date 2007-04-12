@@ -994,6 +994,9 @@ The following contexts exist in Muse.
     (end-of-line)
     (when end
       (muse-insert-markup end))
+    (forward-line 1)
+    (unless (eq (char-after) ?\n)
+      (insert "\n"))
     (muse-publish-section-close len)))
 
 (defvar muse-publish-footnotes nil)
