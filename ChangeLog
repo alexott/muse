@@ -1,3 +1,22 @@
+2007-04-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-table-attributes): Fix typo in
+	docstring.
+
+	* lisp/muse-publish.el (muse-publish-markup-tags): Handle
+	<literal> tags with muse-publish-literal-tag, rather than
+	muse-publish-mark-read-only.
+	(muse-publish-literal-tag): New function that publishes the
+	<literal> tag.  It adds the ability to add the optional "style"
+	and "exact" elements, which cause text to only be included if the
+	current publishing style matches some criteria.  The text will be
+	removed otherwise.  Thanks to Jim Ottaway for the implementation.
+	(muse-publish-mark-up-tag): Let the <markup> tag take the
+	additional optional elements "style" and "exact", with much the
+	same effect as the <literal> improvements, but after calling
+	"function" or publishing the region first.  Make it possible to
+	put <content> tags in <markup> regions in HTML publishing.
+
 2007-04-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-markup-heading): Make sure

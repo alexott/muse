@@ -213,7 +213,7 @@ header style is different from your link style."
 (defcustom muse-html-table-attributes
   " class=\"muse-table\" border=\"2\" cellpadding=\"5\""
   "The attribute to be used with HTML <table> tags.
-Note that since Muse supports insertion of raw HTML tags, as long
+Note that Muse supports insertion of raw HTML tags, as long
 as you wrap the region in <literal></literal>."
   :type 'string
   :group 'muse-html)
