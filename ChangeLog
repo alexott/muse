@@ -1,5 +1,11 @@
 2007-04-19  Michael Olson  <mwolson@gnu.org>
 
+	* IDEAS.muse: New file containing a list of ideas we have for new
+	features, or patches that have yet to be applied.
+
+	* README: Call it "Emacs Muse", not "the Emacs Muse".  No need to
+	be so confusing.
+
 	* lisp/muse-html.el (muse-html-table-attributes): Fix typo in
 	docstring.
 
