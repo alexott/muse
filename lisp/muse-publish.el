@@ -544,16 +544,23 @@ See `muse-publish-markup-tags' for details."
               (throw 'handled t))))
         (setq style (muse-style-element :base style))))))
 
+(defvar muse-publish-inhibit-style-hooks nil
+  "If non-nil, do not call the :before or :before-end hooks when publishing.")
+
 (defun muse-publish-markup-region (beg end &optional title style)
   "Apply the given STYLE's markup rules to the given region.
-TITLE is used when indicating the publishing progress; it may be nil."
+TITLE is used when indicating the publishing progress; it may be nil.
+
+The point is guaranteed to be at END if the routine terminates
+normally."
   (unless title (setq title ""))
   (unless style
     (or (setq style muse-publishing-current-style)
         (error "Cannot find any publishing styles to use")))
   (save-restriction
     (narrow-to-region beg end)
-    (muse-style-run-hooks :before style)
+    (unless muse-publish-inhibit-style-hooks
+      (muse-style-run-hooks :before style))
     (muse-publish-markup
      title
      (sort (copy-alist (append muse-publish-markup-regexps
@@ -561,8 +568,10 @@ TITLE is used when indicating the publishing progress; it may be nil."
            (function
             (lambda (l r)
               (< (car l) (car r))))))
-    (muse-style-run-hooks :before-end style)
-    (muse-publish-escape-specials (point-min) (point-max) nil 'document)))
+    (unless muse-publish-inhibit-style-hooks
+      (muse-style-run-hooks :before-end style))
+    (muse-publish-escape-specials (point-min) (point-max) nil 'document)
+    (goto-char (point-max))))
 
 (defun muse-publish-markup-buffer (title style)
   "Apply the given STYLE's markup rules to the current buffer."
@@ -1839,22 +1848,13 @@ current style is exactly this style."
         (let* ((function (cdr (assoc "function" attrs)))
                (muse-publishing-directives muse-publishing-directives)
                (markup-function (and function (intern function))))
-          (save-restriction
-            (narrow-to-region beg end)
-            (if (and markup-function (functionp markup-function))
+          (if (and markup-function (functionp markup-function))
+              (save-restriction
+                (narrow-to-region beg end)
                 (funcall markup-function)
-              (muse-publish-markup
-               ""
-               (sort (copy-alist
-                      (append muse-publish-markup-regexps
-                              (muse-style-elements-list
-                               :regexps muse-publishing-current-style)))
-                     (function
-                      (lambda (l r)
-                        (< (car l) (car r))))))
-              (muse-publish-escape-specials (point-min) (point-max)
-                                            nil 'document))
-            (goto-char (point-max)))
+                (goto-char (point-max)))
+            (let ((muse-publish-inhibit-style-hooks t))
+              (muse-publish-markup-region beg end)))
           (muse-publish-mark-read-only beg (point)))
       (delete-region beg end))))
 
