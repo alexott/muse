@@ -1851,7 +1851,9 @@ current style is exactly this style."
                                :regexps muse-publishing-current-style)))
                      (function
                       (lambda (l r)
-                        (< (car l) (car r)))))))
+                        (< (car l) (car r))))))
+              (muse-publish-escape-specials (point-min) (point-max)
+                                            nil 'document))
             (goto-char (point-max)))
           (muse-publish-mark-read-only beg (point)))
       (delete-region beg end))))
