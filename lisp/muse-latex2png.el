@@ -215,7 +215,8 @@ current style is not Latex-based, generate an image for the given
 Latex math code.
 
 If 6 or more spaces come before the tag, surrouund the region
-with \"$$\" instead."
+with the equivalent of \"$$\" instead, which causes the region to
+be centered in the published output (among other things)."
   (let* ((centered (and (re-search-backward
                          (concat "^[" muse-regexp-blank "]\\{6,\\}\\=")
                          nil t)
@@ -228,8 +229,14 @@ with \"$$\" instead."
                                 (delete-char 1)
                               (forward-char 1)))
                           (setq beg (point)))))
-         (tag-beg (if centered "\\[ " "$"))
-         (tag-end (if centered " \\]" "$"))
+         (tag-beg (if centered
+                      (if (muse-style-derived-p "context")
+                          "$$" "\\[ ")
+                    "$"))
+         (tag-end (if centered
+                      (if (muse-style-derived-p "context")
+                          "$$" " \\]")
+                    "$"))
          (attrs (nconc (list (cons "prefix"
                                    (concat "latex2png-" (muse-page-name))))
                        (if centered nil
