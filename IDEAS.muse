@@ -13,7 +13,7 @@ to merge into Muse at some point.
      http://refdb.sourceforge.net/pre/muse-cite.patch
 
  - Jean Jean Magnan de Bornier (jean AT bornier.net)
-   - ConTeXt support (similar to LaTeX):
+   - ConTeX support (similar to LaTeX):
      http://jm.bornier.free.fr/muse.html
 
 ** Waiting for a new release

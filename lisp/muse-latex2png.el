@@ -230,11 +230,11 @@ be centered in the published output (among other things)."
                               (forward-char 1)))
                           (setq beg (point)))))
          (tag-beg (if centered
-                      (if (muse-style-derived-p "context")
+                      (if (muse-style-derived-p "contex")
                           "$$" "\\[ ")
                     "$"))
          (tag-end (if centered
-                      (if (muse-style-derived-p "context")
+                      (if (muse-style-derived-p "contex")
                           "$$" " \\]")
                     "$"))
          (attrs (nconc (list (cons "prefix"

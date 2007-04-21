@@ -1,7 +1,7 @@
 2007-04-21  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex2png.el (muse-publish-math-tag): If using the
-	yet-to-be-included "context" publishing style, use "$$" rather
+	yet-to-be-included "contex" publishing style, use "$$" rather
 	than "\[" and "\]".  Thanks to Jean Magnan de Bornier for pointing
 	this out.
 
