@@ -3,6 +3,13 @@
 	* IDEAS.muse: Add muse-slides.el to list of things to include
 	before release.
 
+	* lisp/muse-protocols.el (muse-url-protocols): Remove stray quote
+	character.
+	(muse-protocol-find): Find protocols correctly.  Rewrite to use
+	catch/throw.
+	(muse-browse-url): Don't concatenate "\`" here.  Together, this
+	fixes a bug with browsing woman:// links.
+
 	* lisp/muse-project.el (muse-project-alist-styles): Deal with case
 	where entry-dir has a trailing backslash.
 	(muse-project-publish-file): If a style is malformed, skip it and
