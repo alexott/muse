@@ -291,14 +291,17 @@ STYLE is the publishing style to use.
 
 For an example of the use of this function, see
 `examples/mwolson/muse-init.el' from the Muse distribution."
-  (cons `(:base ,style :path ,(expand-file-name output-dir)
-                :include ,(concat "/" (file-name-nondirectory entry-dir)
-                                  "/[^/]+$"))
-        (mapcar (lambda (dir)
-                  `(:base ,style
-                          :path ,(expand-file-name dir output-dir)
-                          :include ,(concat "/" dir "/[^/]+$")))
-                (muse-project-recurse-directory entry-dir))))
+  (let ((fnd (file-name-nondirectory entry-dir)))
+    (when (string= fnd "")
+      ;; deal with cases like "foo/" that have a trailing slash
+      (setq fnd (file-name-nondirectory (substring entry-dir 0 -1))))
+    (cons `(:base ,style :path ,(expand-file-name output-dir)
+                  :include ,(concat "/" fnd "/[^/]+$"))
+          (mapcar (lambda (dir)
+                    `(:base ,style
+                            :path ,(expand-file-name dir output-dir)
+                            :include ,(concat "/" dir "/[^/]+$")))
+                  (muse-project-recurse-directory entry-dir)))))
 
 (defun muse-project-alist-dirs (entry-dir)
   "Return a list of directories to use in a `muse-project-alist' entry.
