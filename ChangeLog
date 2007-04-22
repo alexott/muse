@@ -5,6 +5,9 @@
 
 	* lisp/muse-project.el (muse-project-alist-styles): Deal with case
 	where entry-dir has a trailing backslash.
+	(muse-project-publish-file): If a style is malformed, skip it and
+	display a warning message.  This should help people figure out
+	where the problem is.
 
 2007-04-21  Michael Olson  <mwolson@gnu.org>
 

@@ -709,12 +709,17 @@ The remote styles are usually populated by
   (setq styles (muse-project-applicable-styles file styles ignore-regexp))
   (let (published)
     (dolist (style styles)
-      (let ((output-dir (muse-style-element :path style))
-            (muse-current-output-style style)
-            (fun (or (muse-style-element :publish style t)
-                     'muse-project-publish-file-default)))
-        (when (funcall fun file style output-dir force)
-          (setq published t))))
+      (if (or (not (listp style))
+              (not (cdr style)))
+          (muse-display-warning
+           (concat "Skipping malformed muse-project-alist style."
+                   "\nPlease double-check your configuration,"))
+        (let ((output-dir (muse-style-element :path style))
+              (muse-current-output-style style)
+              (fun (or (muse-style-element :publish style t)
+                       'muse-project-publish-file-default)))
+          (when (funcall fun file style output-dir force)
+            (setq published t)))))
     published))
 
 ;;;###autoload
