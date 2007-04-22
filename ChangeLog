@@ -1,3 +1,8 @@
+2007-04-22  Michael Olson  <mwolson@gnu.org>
+
+	* IDEAS.muse: Add muse-slides.el to list of things to include
+	before release.
+
 2007-04-21  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex2png.el (muse-publish-math-tag): If using the
