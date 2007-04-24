@@ -1021,6 +1021,7 @@ The following contexts exist in Muse.
    (t
     (let ((footnote (save-match-data
                       (string-to-number (match-string 1))))
+          (oldtext (match-string 0))
           footnotemark)
       (delete-region (match-beginning 0) (match-end 0))
       (save-excursion
@@ -1061,7 +1062,9 @@ The following contexts exist in Muse.
             (goto-char end)
             (skip-chars-forward "\n")
             (delete-region start (point)))))
-      (muse-insert-markup (or footnotemark footnote))))))
+      (if footnotemark
+          (muse-insert-markup footnotemark)
+        (insert oldtext))))))
 
 (defun muse-publish-markup-fn-sep ()
   (delete-region (match-beginning 0) (match-end 0))

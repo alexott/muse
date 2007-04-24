@@ -1,3 +1,10 @@
+2007-04-23  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-footnote): If we can't
+	find the footnote that goes with a reference, leave the reference
+	as-is.  This fixes an error where control characters could be
+	placed in a published document.
+
 2007-04-22  Michael Olson  <mwolson@gnu.org>
 
 	* IDEAS.muse: Add muse-slides.el to list of things to include
