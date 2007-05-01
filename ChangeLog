@@ -1,3 +1,9 @@
+2007-05-01  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-region): Remove read-only
+	properties from the published buffer, so that the results can be
+	manually tweaked.
+
 2007-04-23  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-markup-footnote): If we can't

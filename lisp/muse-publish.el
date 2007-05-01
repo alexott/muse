@@ -693,7 +693,10 @@ The result is placed in a new buffer that includes TITLE in its name."
     (with-current-buffer buf
       (insert text)
       (muse-publish-markup-buffer title style)
-      (goto-char (point-min)))
+      (goto-char (point-min))
+      (let ((inhibit-read-only t))
+        (remove-text-properties (point-min) (point-max)
+                                '(rear-nonsticky nil read-only nil))))
     (pop-to-buffer buf)))
 
 ;;;###autoload
