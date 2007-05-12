@@ -1,3 +1,10 @@
+2007-05-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-blosxom.el (muse-blosxom-update-page-date-alist): Only
+	update the list if the current buffer is associated with a file.
+	This fixes a bug with M-x muse-publish-region in a temporary
+	buffer.
+
 2007-05-01  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-region): Remove read-only
