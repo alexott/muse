@@ -30,7 +30,8 @@
 ;; `muse-style-elements-list' function.
 
 ;; Jim Ottaway (j DOT ottaway AT lse DOT ac DOT uk) provided a
-;; reference implementation for nested lists.
+;; reference implementation for nested lists, as well as some code for
+;; the "style" element of the <literal> tag.
 
 ;;; Code:
 
@@ -76,7 +77,9 @@ be returned."
 
 (defcustom muse-publish-date-format "%B %e, %Y"
   "Format string for the date, used by `muse-publish-markup-buffer'.
-See `format-time-string' for details on the format options.")
+See `format-time-string' for details on the format options."
+  :type 'string
+  :group 'muse-publish)
 
 (defcustom muse-publish-comments-p nil
   "If nil, remove comments before publishing.
@@ -252,7 +255,7 @@ current style."
     ("src"      t   t   nil muse-publish-src-tag)
     ("code"     t   nil nil muse-publish-code-tag)
     ("quote"    t   nil t   muse-publish-quote-tag)
-    ("literal"  t   nil nil muse-publish-mark-read-only)
+    ("literal"  t   t   nil muse-publish-literal-tag)
     ("verbatim" t   nil nil muse-publish-verbatim-tag)
     ("lisp"     t   t   nil muse-publish-lisp-tag)
     ("class"    t   t   nil muse-publish-class-tag)
@@ -541,16 +544,23 @@ See `muse-publish-markup-tags' for details."
               (throw 'handled t))))
         (setq style (muse-style-element :base style))))))
 
+(defvar muse-publish-inhibit-style-hooks nil
+  "If non-nil, do not call the :before or :before-end hooks when publishing.")
+
 (defun muse-publish-markup-region (beg end &optional title style)
   "Apply the given STYLE's markup rules to the given region.
-TITLE is used when indicating the publishing progress; it may be nil."
+TITLE is used when indicating the publishing progress; it may be nil.
+
+The point is guaranteed to be at END if the routine terminates
+normally."
   (unless title (setq title ""))
   (unless style
     (or (setq style muse-publishing-current-style)
         (error "Cannot find any publishing styles to use")))
   (save-restriction
     (narrow-to-region beg end)
-    (muse-style-run-hooks :before style)
+    (unless muse-publish-inhibit-style-hooks
+      (muse-style-run-hooks :before style))
     (muse-publish-markup
      title
      (sort (copy-alist (append muse-publish-markup-regexps
@@ -558,8 +568,10 @@ TITLE is used when indicating the publishing progress; it may be nil."
            (function
             (lambda (l r)
               (< (car l) (car r))))))
-    (muse-style-run-hooks :before-end style)
-    (muse-publish-escape-specials (point-min) (point-max) nil 'document)))
+    (unless muse-publish-inhibit-style-hooks
+      (muse-style-run-hooks :before-end style))
+    (muse-publish-escape-specials (point-min) (point-max) nil 'document)
+    (goto-char (point-max))))
 
 (defun muse-publish-markup-buffer (title style)
   "Apply the given STYLE's markup rules to the current buffer."
@@ -665,6 +677,27 @@ TITLE is used when indicating the publishing progress; it may be nil."
   (if (fboundp 'muse-project-link-page)
       (muse-project-link-page page)
     (muse-publish-link-file page)))
+
+;;;###autoload
+(defun muse-publish-region (beg end &optional title style)
+  "Apply the given STYLE's markup rules to the given region.
+The result is placed in a new buffer that includes TITLE in its name."
+  (interactive "r")
+  (when (interactive-p)
+    (unless title (setq title (read-string "Title: ")))
+    (unless style (setq style (muse-publish-get-style))))
+  (let ((muse-publishing-current-style style)
+        (muse-publishing-p t)
+        (text (buffer-substring beg end))
+        (buf (generate-new-buffer (concat "*Muse: " title "*"))))
+    (with-current-buffer buf
+      (insert text)
+      (muse-publish-markup-buffer title style)
+      (goto-char (point-min))
+      (let ((inhibit-read-only t))
+        (remove-text-properties (point-min) (point-max)
+                                '(rear-nonsticky nil read-only nil))))
+    (pop-to-buffer buf)))
 
 ;;;###autoload
 (defun muse-publish-file (file style &optional output-dir force)
@@ -974,6 +1007,9 @@ The following contexts exist in Muse.
     (end-of-line)
     (when end
       (muse-insert-markup end))
+    (forward-line 1)
+    (unless (eq (char-after) ?\n)
+      (insert "\n"))
     (muse-publish-section-close len)))
 
 (defvar muse-publish-footnotes nil)
@@ -988,6 +1024,7 @@ The following contexts exist in Muse.
    (t
     (let ((footnote (save-match-data
                       (string-to-number (match-string 1))))
+          (oldtext (match-string 0))
           footnotemark)
       (delete-region (match-beginning 0) (match-end 0))
       (save-excursion
@@ -1028,7 +1065,9 @@ The following contexts exist in Muse.
             (goto-char end)
             (skip-chars-forward "\n")
             (delete-region start (point)))))
-      (muse-insert-markup (or footnotemark footnote))))))
+      (if footnotemark
+          (muse-insert-markup footnotemark)
+        (insert oldtext))))))
 
 (defun muse-publish-markup-fn-sep ()
   (delete-region (match-beginning 0) (match-end 0))
@@ -1575,6 +1614,27 @@ This is usually applied to explicit links."
   (insert (muse-markup-text 'end-example))
   (muse-publish-mark-read-only beg (point)))
 
+(defun muse-publish-literal-tag (beg end attrs)
+  "Ensure that the text between BEG and END is not interpreted later on.
+
+ATTRS is an alist of attributes.
+
+If it contains a \"style\" element, delete the region if the
+current style is neither derived from nor equal to this style.
+
+If it contains both a \"style\" element and an \"exact\" element
+with the value \"t\", delete the region only if the current style
+is exactly this style."
+  (let* ((style (cdr (assoc "style" attrs)))
+         (exact (cdr (assoc "exact" attrs)))
+         (exactp (and (stringp exact) (string= exact "t"))))
+    (if (or (not style)
+            (and exactp (equal (muse-style style)
+                               muse-publishing-current-style))
+            (and (not exactp) (muse-style-derived-p style)))
+        (muse-publish-mark-read-only beg end)
+      (delete-region beg end))))
+
 (defun muse-publish-verbatim-tag (beg end)
   (muse-publish-escape-specials beg end nil 'verbatim)
   (muse-publish-mark-read-only beg end))
@@ -1767,27 +1827,42 @@ explanation of how it works."
 (defun muse-publish-mark-up-tag (beg end attrs)
   "Run an Emacs Lisp function on the region delimted by this tag.
 
-<markup function=\"...\">
+<markup function=\"...\" style=\"...\" exact=\"...\">
 
-The optional `function' attribute controls how this section is
+The optional \"function\" attribute controls how this section is
 marked up.  If used, it should be the name of a function to call
 with the buffer narrowed to the delimited region.  Note that no
 further marking-up will be performed on this region.
 
-If `function' is ommitted, use the standard Muse markup function.
-This is useful for marking up content in headers and footers."
-  (let ((function (cdr (assoc "function" attrs)))
-        (muse-publishing-directives muse-publishing-directives))
-    (if function
-        (let ((markup-function (intern function)))
+If \"function\" is omitted, use the standard Muse markup function.
+This is useful for marking up content in headers and footers.
+
+The optional \"style\" attribute causes the region to be deleted
+if the current style is neither derived from nor equal to this
+style.
+
+If both a \"style\" attribute and an \"exact\" attribute are
+provided, and \"exact\" is \"t\", delete the region only if the
+current style is exactly this style."
+  (let* ((style (cdr (assoc "style" attrs)))
+         (exact (cdr (assoc "exact" attrs)))
+         (exactp (and (stringp exact) (string= exact "t"))))
+    (if (or (not style)
+            (and exactp (equal (muse-style style)
+                               muse-publishing-current-style))
+            (and (not exactp) (muse-style-derived-p style)))
+        (let* ((function (cdr (assoc "function" attrs)))
+               (muse-publishing-directives muse-publishing-directives)
+               (markup-function (and function (intern function))))
           (if (and markup-function (functionp markup-function))
               (save-restriction
                 (narrow-to-region beg end)
                 (funcall markup-function)
                 (goto-char (point-max)))
-            (error "Invalid markup function `%s'" function)))
-      (muse-publish-markup-region beg end))
-    (muse-publish-mark-read-only beg (point))))
+            (let ((muse-publish-inhibit-style-hooks t))
+              (muse-publish-markup-region beg end)))
+          (muse-publish-mark-read-only beg (point)))
+      (delete-region beg end))))
 
 ;; Miscellaneous helper functions
 

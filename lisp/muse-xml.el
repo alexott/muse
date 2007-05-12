@@ -88,9 +88,13 @@ This may be text or a filename."
 
 (defcustom muse-xml-markup-regexps
   `(;; Beginning of doc, end of doc, or plain paragraph separator
-    (10000 ,(concat "\\(\\(\n\\([" muse-regexp-blank "]*\n\\)+\\)"
+    (10000 ,(concat "\\(\\(\n\\(?:[" muse-regexp-blank "]*\n\\)*"
+                    "\\([" muse-regexp-blank "]*\n\\)\\)"
                     "\\|\\`\\s-*\\|\\s-*\\'\\)")
-           0 muse-xml-markup-paragraph))
+           ;; this is somewhat repetitive because we only require the
+           ;; line just before the paragraph beginning to be not
+           ;; read-only
+           3 muse-xml-markup-paragraph))
   "List of markup rules for publishing a Muse page to XML.
 For more on the structure of this list, see `muse-publish-markup-regexps'."
   :type '(repeat (choice
@@ -217,8 +221,7 @@ found in `muse-xml-encoding-map'."
     (goto-char (match-beginning 0))
     (when (save-excursion
             (save-match-data
-              (and (re-search-backward "<\\(/?\\)p[ >]"
-                                       nil t)
+              (and (re-search-backward "<\\(/?\\)p[ >]" nil t)
                    (not (string-equal (match-string 1) "/")))))
       (when (get-text-property (1- (point)) 'end-list)
         (goto-char (previous-single-property-change (1- (point)) 'end-list)))

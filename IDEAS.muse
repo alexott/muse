@@ -1,0 +1,69 @@
+This is the "Ideas" page for Emacs Muse.
+
+It lists various ideas for future enhancements to Emacs Muse.  It also
+serves to keep track of various changes that the maintainer would like
+to merge into Muse at some point.
+
+* Pending code
+
+** Waiting on copyright assignments
+
+ - Markus Hoenicka (markus.hoenicka AT mhoenicka.de)
+   - <cite> tag, which is for refDB and BibTeX both:
+     http://refdb.sourceforge.net/pre/muse-cite.patch
+
+ - Jean Jean Magnan de Bornier (jean AT bornier.net)
+   - ConTeX support (similar to LaTeX):
+     http://jm.bornier.free.fr/muse.html
+
+** Waiting for a new release
+
+ - Jim Ottaway
+   - jeho-latex.el: a rewrite of muse-latex.el which should replace it
+     at some point.
+   - muse-latex-labels.el: addition of cross-references to LaTeX.
+     Should be merged into muse-latex.el after replacing with
+     jeho-latex.el.
+
+** Before the 3.03 release
+
+ - Jim Ottaway
+    - three-part-link.el: allow links like "project#page#anchor" or
+      "project::page#anchor".
+    - muse-slides.el: support for using Beamer to make slides.  Should
+      be merged into muse-latex.el.
+
+* Ideas without code
+
+** After 3.03 release
+
+None of these ideas has been finalized yet.
+
+*** Support for different source markup formats
+
+For any of these to be done, we have to figure out how to determine
+which markup format to use, and parametrize the publishing functions
+somewhat.
+
+ - Markdown: http://daringfireball.net/projects/markdown/
+
+ - reStructuredText: http://docutils.sourceforge.net/rst.html
+
+ - Allow publishing in Org Mode's format, though this might not be
+   needed now that org-publish.el exists.
+
+ - Like Muse's default markup, but allow tags to be specified in
+   Texinfo style: namely, "@tagname{contents}" instead of
+   "<tagname>contents</tagname>" for small regions and
+   "@tagname\ncontents\n@end tagname" for large regions.
+
+ - Take markup features from phpBB and make a format out of it.  This
+   could interest the forum crowd in our work.
+
+*** Markup extensions
+
+ - Implement overstrike support, possibly by markup like "{-text-}",
+   as suggested by David D. Smith (dds).  It might also be good to
+   extend this to "{*text*}", "{**text**}", and "{=text=}" for times
+   when the normal markup symbols are ambiguous (i.e., math
+   equations).

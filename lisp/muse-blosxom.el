@@ -206,26 +206,27 @@ at http://pyblosxom.sourceforge.net/blog/registry/date/metadate."
 
 (defun muse-blosxom-update-page-date-alist ()
   "Add a date entry to `muse-blosxom-page-date-alist' for this page."
-  ;; Make current file be relative to base directory
-  (let ((rel-file
-         (concat
-          (file-name-as-directory
-           (or (muse-publishing-directive "category")
-               (file-relative-name
-                (file-name-directory
-                 (expand-file-name muse-publishing-current-file))
-                (file-truename muse-blosxom-base-directory))))
-          (file-name-nondirectory muse-publishing-current-file))))
-    ;; Strip the file extension
-    (when muse-ignored-extensions-regexp
-      (setq rel-file (save-match-data
-                       (and (string-match muse-ignored-extensions-regexp
-                                          rel-file)
-                            (replace-match "" t t rel-file)))))
-    ;; Add to page-date alist
-    (add-to-list
-     'muse-blosxom-page-date-alist
-     `(,rel-file . ,(muse-publishing-directive "date")))))
+  (when muse-publishing-current-file
+    ;; Make current file be relative to base directory
+    (let ((rel-file
+           (concat
+            (file-name-as-directory
+             (or (muse-publishing-directive "category")
+                 (file-relative-name
+                  (file-name-directory
+                   (expand-file-name muse-publishing-current-file))
+                  (file-truename muse-blosxom-base-directory))))
+            (file-name-nondirectory muse-publishing-current-file))))
+      ;; Strip the file extension
+      (when muse-ignored-extensions-regexp
+        (setq rel-file (save-match-data
+                         (and (string-match muse-ignored-extensions-regexp
+                                            rel-file)
+                              (replace-match "" t t rel-file)))))
+      ;; Add to page-date alist
+      (add-to-list
+       'muse-blosxom-page-date-alist
+       `(,rel-file . ,(muse-publishing-directive "date"))))))
 
 ;; Enter a new blog entry
 

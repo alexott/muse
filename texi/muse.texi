@@ -34,7 +34,7 @@ Documentation License.  If you want to distribute this document
 separately from the collection, you can do so by adding a copy of the
 license to the document, as described in section 6 of the license.
 
-All Emacs Lisp code contained in the manual may be used, distributed,
+All Emacs Lisp code contained in this document may be used, distributed,
 and modified without restriction.
 @end quotation
 @end copying

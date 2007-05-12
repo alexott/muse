@@ -1,3 +1,109 @@
+2007-05-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-blosxom.el (muse-blosxom-update-page-date-alist): Only
+	update the list if the current buffer is associated with a file.
+	This fixes a bug with M-x muse-publish-region in a temporary
+	buffer.
+
+2007-05-01  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-region): Remove read-only
+	properties from the published buffer, so that the results can be
+	manually tweaked.
+
+2007-04-23  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-footnote): If we can't
+	find the footnote that goes with a reference, leave the reference
+	as-is.  This fixes an error where control characters could be
+	placed in a published document.
+
+2007-04-22  Michael Olson  <mwolson@gnu.org>
+
+	* IDEAS.muse: Add muse-slides.el to list of things to include
+	before release.
+
+	* lisp/muse-protocols.el (muse-url-protocols): Remove stray quote
+	character.
+	(muse-protocol-find): Find protocols correctly.  Rewrite to use
+	catch/throw.
+	(muse-browse-url): Don't concatenate "\`" here.  Together, this
+	fixes a bug with browsing woman:// links.
+
+	* lisp/muse-project.el (muse-project-alist-styles): Deal with case
+	where entry-dir has a trailing backslash.
+	(muse-project-publish-file): If a style is malformed, skip it and
+	display a warning message.  This should help people figure out
+	where the problem is.
+
+2007-04-21  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex2png.el (muse-publish-math-tag): If using the
+	yet-to-be-included "contex" publishing style, use "$$" rather
+	than "\[" and "\]".  Thanks to Jean Magnan de Bornier for pointing
+	this out.
+
+2007-04-20  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-inhibit-style-hooks): New
+	variable that causes the :before and :before-end hooks to be
+	ignored when non-nil.
+	(muse-publish-markup-region): Use it.  Also, guarantee that point
+	is at end of region after publishing.
+	(muse-publish-mark-up-tag): Simplify, taking advantage of the new
+	variable.
+
+2007-04-19  Michael Olson  <mwolson@gnu.org>
+
+	* IDEAS.muse: New file containing a list of ideas we have for new
+	features, or patches that have yet to be applied.
+
+	* README: Call it "Emacs Muse", not "the Emacs Muse".  No need to
+	be so confusing.
+
+	* lisp/muse-html.el (muse-html-table-attributes): Fix typo in
+	docstring.
+
+	* lisp/muse-publish.el (muse-publish-markup-tags): Handle
+	<literal> tags with muse-publish-literal-tag, rather than
+	muse-publish-mark-read-only.
+	(muse-publish-literal-tag): New function that publishes the
+	<literal> tag.  It adds the ability to add the optional "style"
+	and "exact" elements, which cause text to only be included if the
+	current publishing style matches some criteria.  The text will be
+	removed otherwise.  Thanks to Jim Ottaway for the implementation.
+	(muse-publish-mark-up-tag): Let the <markup> tag take the
+	additional optional elements "style" and "exact", with much the
+	same effect as the <literal> improvements, but after calling
+	"function" or publishing the region first.  Make it possible to
+	put <content> tags in <markup> regions in HTML publishing.
+
+2007-04-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-heading): Make sure
+	that a blank line always exists after a heading.  This fixes a bug
+	in Docbook paragraph detection.  Thanks to Jean Magnan de Bornier
+	for the report.
+
+	* lisp/muse-xml.el (muse-xml-markup-regexps): Update paragraph
+	detection regexp to that which is used in Docbook and HTML
+	publishing styles.
+
+2007-04-02  Michael Olson  <mwolson@gnu.org>
+
+	* README (muse-el-announce): Make a listing of mailing lists,
+	rather than pointing to the old EmacsWikiMailingList page.  Thanks
+	to Andreas Roehler for noticing.
+
+2007-04-01  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-date-format): Add
+	customization type ad group.
+	(muse-publish-region): New interactive function that publishes a
+	region to a new buffer.
+
+	* texi/muse.texi: Use "document" rather than "manual".
+
 2007-03-31  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-style-derived-p): Fix bug where the

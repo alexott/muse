@@ -1,8 +1,8 @@
+                                                          -*- Text -*-
+This is the README file for Emacs Muse.
 
-This is the README file for the Emacs Muse.
-
-The terms "the Emacs Muse", "Emacs Muse", and "Muse" are used
-interchangeably throughout this document to refer to this software.
+The terms "Emacs Muse", and "Muse" are used interchangeably throughout
+this document to refer to this software.
 
 Synopsis
 ========
@@ -155,9 +155,42 @@ tweaks.
 The current maintainer's webpage for Muse is at
 http://www.mwolson.org/projects/EmacsMuse.html.
 
-A mailing list for Muse and some related software exists; consult
-http://www.emacswiki.org/cgi-bin/wiki/EmacsWikiMailingList for details
-on joining it or viewing its contents.
+Mailing Lists
+=============
+
+Mailing lists for Muse exist.
+
+muse-el-announce ::
+  Low-traffic list for Muse-related announcements.
+
+  You can join this mailing list (muse-el-announce@gna.org)
+  using the subscription form at
+  http://mail.gna.org/listinfo/muse-el-announce/.
+
+  This mailing list is also available via Gmane (http://gmane.org/).
+  The group is called
+  gmane.emacs.muse.announce.
+
+muse-el-discuss ::
+  Discussion, bugfixes, suggestions, tips, and the like for Muse.
+  This mailing list also includes the content of muse-el-announce.
+
+  You can join this mailing list (muse-el-discuss@gna.org)
+  using the subscription form at
+  http://mail.gna.org/listinfo/muse-el-discuss/.
+
+  This mailing list is also available via Gmane with the identifier
+  gmane.emacs.muse.general.
+
+muse-el-commits ::
+  Log messages for changes committed to Muse.
+
+  You can join this mailing list (muse-el-commits@gna.org) using
+  the subscription form at
+  http://mail.gna.org/listinfo/muse-el-commits/.
+
+  This mailing list is also available via Gmane with the identifier
+  gmane.emacs.muse.cvs.
 
 License
 =======
