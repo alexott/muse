@@ -1,3 +1,8 @@
+2007-05-13  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-protocols.el (muse-resolve-url): Don't concatenate
+	"\`" here.  This fixes a problem with publishing custom URLs.
+
 2007-05-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-blosxom.el (muse-blosxom-update-page-date-alist): Only

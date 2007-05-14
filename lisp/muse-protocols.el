@@ -146,7 +146,7 @@ If OTHER-WINDOW is non-nil, open in a different window."
 (defun muse-resolve-url (url &rest ignored)
   "Resolve URL with the function specified in `muse-url-protocols'."
   (when (string-match muse-url-regexp url)
-    (let* ((proto (concat "\\`" (match-string 1 url)))
+    (let* ((proto (match-string 1 url))
            (entry (muse-protocol-find proto muse-url-protocols)))
       (when entry
         (let ((func (car (cddr entry))))
