@@ -1,3 +1,8 @@
+2007-05-14  Michael Olson  <mwolson@gnu.org>
+
+	* README, texi/muse.texi (Getting Help and Reporting Bugs):
+	Mention the new muse-el-logs mailing list.
+
 2007-05-13  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-protocols.el (muse-resolve-url): Don't concatenate
