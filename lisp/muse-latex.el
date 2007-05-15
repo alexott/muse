@@ -31,6 +31,9 @@
 ;; Matthias Kegelmann (mathias DOT kegelmann AT sdm DOT de) provided a
 ;; scenario where we would need to respect the <contents> tag.
 
+;; Jean Magnan de Bornier (jean AT bornier DOT net) provided the
+;; markup string for link-and-anchor.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -156,7 +159,8 @@ For more on the structure of this list, see
     (url             . "\\url{%s}")
     (url-and-desc    . "\\href{%s}{%s}\\footnote{%1%}")
     (link            . "\\href{%s}{%s}\\footnote{%1%}")
-    (link-and-anchor . "\\href{%1%}{%3%}\\footnote{%1%}")
+    (link-and-anchor . "\\useexternaldocument[%4%][%4%][]
+\\at{%3%, page}{}[%1%::%2%]")
     (email-addr      . "\\verb|%s|")
     (anchor          . "\\label{%s}")
     (emdash          . "---")

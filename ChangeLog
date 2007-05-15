@@ -1,5 +1,12 @@
 2007-05-14  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-latex.el (muse-latex-markup-strings): Use better
+	link-and-anchor markup.  Thanks to Jean Magnan de Bornier for the
+	suggestion.
+
+	* lisp/muse-publish.el (muse-publish-url): Pass the url without a
+	file extension as the fourth argument.
+
 	* README, texi/muse.texi (Getting Help and Reporting Bugs):
 	Mention the new muse-el-logs mailing list.
 

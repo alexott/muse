@@ -1461,7 +1461,8 @@ the cadr is the page name, and the cddr is the anchor."
                (muse-markup-text 'image url ext))))
           ((eq type 'link-and-anchor)
            (muse-markup-text 'link-and-anchor url anchor
-                             (or desc orig-url)))
+                             (or desc orig-url)
+                             (muse-path-sans-extension url)))
           ((and desc (string-match muse-image-regexp desc))
            (let ((ext (or (file-name-extension desc) "")))
              (setq desc (muse-path-sans-extension desc))
