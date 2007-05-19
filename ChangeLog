@@ -1,3 +1,8 @@
+2007-05-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-markup-strings): Revert change to
+	link-and-anchor, on the recommendation of the original submitter.
+
 2007-05-14  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-markup-strings): Use better

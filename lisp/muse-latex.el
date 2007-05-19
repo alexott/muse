@@ -159,8 +159,7 @@ For more on the structure of this list, see
     (url             . "\\url{%s}")
     (url-and-desc    . "\\href{%s}{%s}\\footnote{%1%}")
     (link            . "\\href{%s}{%s}\\footnote{%1%}")
-    (link-and-anchor . "\\useexternaldocument[%4%][%4%][]
-\\at{%3%, page}{}[%1%::%2%]")
+    (link-and-anchor . "\\href{%1%}{%3%}\\footnote{%1%}")
     (email-addr      . "\\verb|%s|")
     (anchor          . "\\label{%s}")
     (emdash          . "---")
