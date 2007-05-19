@@ -1,3 +1,25 @@
+2007-05-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-markup-strings): Revert change to
+	link-and-anchor, on the recommendation of the original submitter.
+
+2007-05-14  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-markup-strings): Use better
+	link-and-anchor markup.  Thanks to Jean Magnan de Bornier for the
+	suggestion.
+
+	* lisp/muse-publish.el (muse-publish-url): Pass the url without a
+	file extension as the fourth argument.
+
+	* README, texi/muse.texi (Getting Help and Reporting Bugs):
+	Mention the new muse-el-logs mailing list.
+
+2007-05-13  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-protocols.el (muse-resolve-url): Don't concatenate
+	"\`" here.  This fixes a problem with publishing custom URLs.
+
 2007-05-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-blosxom.el (muse-blosxom-update-page-date-alist): Only

@@ -31,6 +31,9 @@
 ;; Matthias Kegelmann (mathias DOT kegelmann AT sdm DOT de) provided a
 ;; scenario where we would need to respect the <contents> tag.
 
+;; Jean Magnan de Bornier (jean AT bornier DOT net) provided the
+;; markup string for link-and-anchor.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

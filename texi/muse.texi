@@ -2900,8 +2900,19 @@ using the subscription form at
 list is also available via Gmane with the identifier
 @samp{gmane.emacs.muse.general}.
 
+@item muse-el-logs
+Log messages for commits made to Muse.
+
+You can join this mailing list (@email{muse-el-logs@@gna.org}) using
+the subscription form at
+@url{http://mail.gna.org/listinfo/muse-el-logs/}.  This mailing list
+is also available via Gmane with the identifier
+@samp{gmane.emacs.muse.scm}.
+
 @item muse-el-commits
-Log messages for changes committed to Muse.
+Generated bug reports for Emacs Muse.  If you use our bug-tracker at
+@url{https://gna.org/bugs/?group=muse-el}, the bug reports will be
+sent to this list automatically.
 
 You can join this mailing list (@email{muse-el-commits@@gna.org}) using
 the subscription form at
