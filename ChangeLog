@@ -1,5 +1,9 @@
 2007-05-19  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-html.el (muse-html-markup-footnote): Add class tags to
+	published footnotes and footnote references.  Thanks to Scott
+	Jaderholm for the idea.
+
 	* lisp/muse-latex.el (muse-latex-markup-strings): Revert change to
 	link-and-anchor, on the recommendation of the original submitter.
 
