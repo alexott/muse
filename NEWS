@@ -6,9 +6,6 @@ Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
 *** Fix an XEmacs beta byte-compiler issue.
 
-*** Make nested list manipulation accessible to both Muse Mode
-and Muse publishing.
-
 *** Fix failure to recognize the .muse file extension.
 Handle the case where the user customizes the file extension.
 
@@ -17,6 +14,11 @@ extension.  Just do the following.
 
 (setq muse-file-extension nil
       muse-mode-auto-p t)
+
+If you visit a Muse file in your .emacs, however, and do not want a
+file extension, then you must still do the following beforehand.
+
+(add-hook 'find-file-hooks 'muse-mode-maybe)
 
 *** Allow tab characters in explicit links.
 
@@ -35,8 +37,6 @@ belong to multiple categories, but they do not rely on the directory
 structure for categorization.
 
 *** Use `find-file' as the browsing function.
-
-*** Improve internal documentation for the included pyblosxom plug-ins.
 
 *** New example script: contrib/pyblosxom/make-blog.
 This shows how to invoke contrib/pyblosxom/getstamps.py.
@@ -211,8 +211,10 @@ mouse-yank-at-point is non-nil.
 ** Muse Mode highlighting (lisp/muse-colors.el)
 
 *** New option: muse-colors-inline-images.
-This determines whether or not to inline an image.  The default is to
-enable this behavior.
+This determines whether or not to inline an image when viewing Muse
+source.  The default is to enable this behavior.  This feature is
+currently considered to be in a beta state, because finding the real
+paths of images consistently has not been worked out.
 
 **** `C-c C-i' toggles whether images are inlined.
 
@@ -279,8 +281,8 @@ error message.  This fixes an infinite loop.
 *** Prevent infinite recursion when updating the file alist.
 
 *** In addition to Arch and CVS metadata directories, also ignore
-these for Darcs and SVN.  Also, don't erroneously ignore files with
-"#" in them.
+these for Darcs, SVN, Mercurial, and Bazaar.  Also, don't erroneously
+ignore files with "#" in them.
 
 *** Make links to subdirectories work.
 The idea is to include as much of the path that is needed in order to
@@ -320,6 +322,44 @@ around specials.
 Muse now realizes that URLs, normal document text, <example> regions,
 and the like have different special characters to escape.
 
+*** Support nested lists.
+Muse now determines the nested level of a list by its initial
+whitespace.  Ordered lists, unordered lists, and definition lists can
+all be nested.  It is even possible to force a line break in a list
+item by inserting a blank line on the same level between the lines.
+Blockquotes may also be nested inside of a list.
+
+*** Allow empty elements in tables.
+
+*** Allow initial and trailing whitespace in tables, but strip it
+out of the published result.
+
+*** If the #disable-tables publishing directive exists on the current
+Muse page, do not generate a table.
+
+*** Require at least once space after "::" in definition lists, so
+we avoid an ambiguity with interwiki link syntax.
+
+*** Handle nested emphasis types better.
+It should now publish exactly the way it looks in Muse Mode.
+
+*** Preserve whitespace around emdash.
+This allows for more flexibility, since some people seem to prefer to
+have the emdash directly against the surrounding text, while others
+like it to be spaced.
+
+*** Allow the <lisp> tag to take the "markup" attribute.
+see the Tag Summary section in the manual for details.
+
+*** Publish image links with descriptions as captioned images.
+This has been implemented for all Muse publishing styles.
+
+The major change is that image links with descriptions will be
+centered and the description will be displayed just below the image as
+a "caption".  Thus, it is meant to only be used as its own paragraph,
+not surrounded by other text.  Images without descriptions may still
+have surrounding text.
+
 *** Distinguish links and footnotes better.
 
 *** Simplify markup string for anchors.
@@ -328,25 +368,10 @@ and the like have different special characters to escape.
 This makes it much easier to re-use the same text or put strings in
 a different order.
 
-*** Support nested lists.
-Muse now determines the nested level of a list by its initial
-whitespace.  Ordered lists, unordered lists, and definition lists can
-all be nested.  It is even possible to force a line break in a list
-item by inserting a blank line on the same level between the lines.
-Blockquotes may also be nested inside of a list.
-
 *** Create parent directories when publishing for the first time.
-
-*** Allow empty elements in tables.
-
-*** Allow initial and trailing whitespace in tables, but strip it
-out of the published result.
 
 *** Handle case where we are trying to publish a file that has not
 been saved.
-
-*** Handle nested emphasis types better.
-It should now publish exactly the way it looks in Muse Mode.
 
 *** Fix XEmacs issue where text at beginning of buffer is read-only.
 
@@ -357,16 +382,6 @@ than normal characters.
 
 See `muse-xml-decide-specials' in muse-xml-common.el for details.
 This functionality already exists for escaping specials in strings.
-
-*** Fix an infinite loop problem.
-
-*** Preserve whitespace around emdash.
-This allows for more flexibility, since some people seem to prefer to
-have the emdash directly against the surrounding text, while others
-like it to be spaced.
-
-*** If the #disable-tables publishing directive exists on the current
-Muse page, do not generate a table.
 
 *** Don't give an error when trying to define or derive an existing
 style.  Just replace it.
@@ -381,9 +396,6 @@ incorrectly escaped.
 
 *** Improve the published descriptions for implicit links and explicit
 links with no provided description.
-
-*** Require at least once space after "::" in definition lists, so
-we avoid an ambiguity with interwiki link syntax.
 
 *** For headers and footers, use a better algorithm to detect whether
 we have been given a filename or the real contents.
@@ -400,18 +412,6 @@ This specifies the maximum depth of headings to include with
 is not associated with a file.
 
 *** Fix a compilation bug with XEmacs beta.
-
-*** Allow the <lisp> tag to take the "markup" attribute.
-see the Tag Summary section in the manual for details.
-
-*** Publish image links with descriptions as captioned images.
-This has been implemented for all Muse publishing styles.
-
-The major change is that image links with descriptions will be
-centered and the description will be displayed just below the image as
-a "caption".  Thus, it is meant to only be used as its own paragraph,
-not surrounded by other text.  Images without descriptions may still
-have surrounding text.
 
 *** Source-level change: Use 'image instead of 'image-link to indicate
 images without descriptions.  Use 'image-link instead of

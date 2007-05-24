@@ -1,3 +1,11 @@
+2007-05-24  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Drop vague entries and position interesting entries closer
+	to the top of each section.
+
+	* lisp/muse-project.el (muse-project-ignore-regexp): Add Mercurial
+	and bzr metadata directories to the list of things to ignore.
+
 2007-05-19  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-markup-footnote): Add class tags to
