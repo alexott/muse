@@ -678,6 +678,18 @@ normally."
       (muse-project-link-page page)
     (muse-publish-link-file page)))
 
+(defmacro muse-publish-ensure-block (beg)
+  "Ensure that block-level markup at BEG is published with at least one
+preceding blank line.  BEG is modified to be the new position.
+The point is left at the new value of BEG."
+  `(progn
+     (goto-char ,beg)
+     (cond ((not (bolp)) (insert "\n\n"))
+           ((eq (point) (point-min)) nil)
+           ((prog2 (backward-char) (bolp) (forward-char)) nil)
+           (t (insert "\n")))
+     (setq ,beg (point))))
+
 ;;;###autoload
 (defun muse-publish-region (beg end &optional title style)
   "Apply the given STYLE's markup rules to the given region.
@@ -1231,6 +1243,8 @@ and type, respecting the end-of-list property."
      ((eq type 'ul)
       (unless (eq (char-after (match-end 1)) ?-)
         (delete-region (match-beginning 0) (match-end 0))
+        (let ((beg (point)))
+          (muse-publish-ensure-block beg))
         (muse-insert-markup (muse-markup-text 'begin-uli))
         (save-excursion
           (muse-publish-surround-text
@@ -1243,6 +1257,8 @@ and type, respecting the end-of-list property."
         (forward-line 1)))
      ((eq type 'ol)
       (delete-region (match-beginning 0) (match-end 0))
+      (let ((beg (point)))
+        (muse-publish-ensure-block beg))
       (muse-insert-markup (muse-markup-text 'begin-oli))
       (save-excursion
         (muse-publish-surround-text
@@ -1256,6 +1272,8 @@ and type, respecting the end-of-list property."
      ((not (string= (match-string 2) ""))
       ;; must have an initial term
       (goto-char (match-beginning 0))
+      (let ((beg (point)))
+        (muse-publish-ensure-block beg))
       (muse-insert-markup (muse-markup-text 'begin-dl))
       (save-excursion
         (muse-publish-surround-dl indent post-indent)
@@ -1519,17 +1537,6 @@ the cadr is the page name, and the cddr is the anchor."
   :type 'integer
   :group 'muse-publish)
 
-(defmacro muse-publish-ensure-block-tag (beg)
-  "Ensure that block-level tag at BEG is published with at least one
-blank line.  BEG is modified to be the new position."
-  `(progn
-     (goto-char ,beg)
-     (cond ((not (bolp)) (insert "\n\n"))
-           ((eq (point) (point-min)) nil)
-           ((prog2 (backward-char) (bolp) (forward-char)) nil)
-           (t (insert "\n")))
-     (setq ,beg (point))))
-
 (defun muse-publish-contents-tag (beg end attrs)
   (set (make-local-variable 'muse-publish-generate-contents)
        (cons (copy-marker (point) t)
@@ -1538,6 +1545,7 @@ blank line.  BEG is modified to be the new position."
                    muse-publish-contents-depth)))))
 
 (defun muse-publish-verse-tag (beg end)
+  (muse-publish-ensure-block beg)
   (save-excursion
     (save-restriction
       (narrow-to-region beg end)
@@ -1567,6 +1575,7 @@ This is usually applied to explicit links."
   nil)
 
 (defun muse-publish-quote-tag (beg end)
+  (muse-publish-ensure-block beg)
   (save-excursion
     (save-restriction
       (narrow-to-region beg end)
@@ -1607,7 +1616,7 @@ This is usually applied to explicit links."
   (muse-publish-example-tag beg end))
 
 (defun muse-publish-example-tag (beg end)
-  (muse-publish-ensure-block-tag beg)
+  (muse-publish-ensure-block beg)
   (muse-publish-escape-specials beg end nil 'example)
   (goto-char beg)
   (insert (muse-markup-text 'begin-example))
@@ -1723,6 +1732,7 @@ take the ATTRS parameter."
         (markup-function (make-symbol "markup-function")))
     `(let ((,markup (muse-publish-get-and-delete-attr "markup" ,attrs)))
        (save-restriction
+         (muse-publish-ensure-block ,beg)
          (narrow-to-region ,beg ,end)
          (goto-char (point-min))
          ,@body

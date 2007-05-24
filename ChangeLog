@@ -6,6 +6,15 @@
 	* lisp/muse-project.el (muse-project-ignore-regexp): Add Mercurial
 	and bzr metadata directories to the list of things to ignore.
 
+	* lisp/muse-publish.el (muse-publish-ensure-block): Rename from
+	`muse-publish-ensure-block-tag', since we will use it for more
+	than just tags.
+	(muse-publish-markup-list, muse-publish-verse-tag)
+	(muse-publish-quote-tag, muse-publish-example-tag)
+	(muse-publish-markup-attribute): Use it.  This fixes a bug that
+	can occur when these types of markup occur immediately after a
+	paragraph.  It's good to have defined behavior!
+
 2007-05-19  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-markup-footnote): Add class tags to
