@@ -1727,7 +1727,9 @@ If \"verse\", treat the region as if it was surrounded by the
 
 Otherwise, it should be the name of a function to call in the
 narrowed region after evaluating BODY.  The function should
-take the ATTRS parameter."
+take the ATTRS parameter.
+
+BEG is modified to be the start of the published markup."
   (let ((markup (make-symbol "markup"))
         (markup-function (make-symbol "markup-function")))
     `(let ((,markup (muse-publish-get-and-delete-attr "markup" ,attrs)))
