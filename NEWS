@@ -337,6 +337,23 @@ all be nested.  It is even possible to force a line break in a list
 item by inserting a blank line on the same level between the lines.
 Blockquotes may also be nested inside of a list.
 
+*** New interactive function: muse-publish-region.
+This command publishes the current region, prompting for the title of
+the page (if any) and the style to use.
+
+This is handy for firing off quick blog entries and pasting the result
+into a web browser -- for this use case, it is recommended to use the
+blosxom-html or blosxom-xhtml styles, as they omit the large header
+and footer.
+
+*** Additional arguments for <literal> tag.
+The optional "style" and "exact" attributes may now be specified,
+which cause text to only be included if the current publishing style
+matches some criteria -- the text will be removed otherwise.
+
+Omitting these attributes causes <literal> to behave the same as
+usual.
+
 *** Allow empty elements in tables.
 
 *** Allow initial and trailing whitespace in tables, but strip it
@@ -375,7 +392,12 @@ have surrounding text.
 *** Make comments higher priority than tags when publishing,
 so that Muse comments within tags get stripped out.
 
+*** Handle properly comments that have no text.
+
 *** Distinguish links and footnotes better.
+
+*** Do the right thing when a footnote reference exists but has no
+corresponding footnote.
 
 *** Simplify markup string for anchors.
 
@@ -414,6 +436,9 @@ links with no provided description.
 
 *** For headers and footers, use a better algorithm to detect whether
 we have been given a filename or the real contents.
+
+*** New option: muse-publish-date-format.
+Format string of the date used when publishing files.
 
 *** New option: muse-publish-markup-header-footer-tags.
 This specifies which tags may be used when publishing headers and
@@ -487,6 +512,9 @@ This is used to look up terms on the Wikipedia website.
 
 **** New option: muse-wikipedia-country.
 This specified the country code to use for Wikipedia.
+
+*** Add support for "woman:" URLs.
+"woman" links are opened with Emacs' internal manpage viewer.
 
 ** Wiki (lisp/muse-wiki.el)
 

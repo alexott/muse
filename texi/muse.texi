@@ -2431,6 +2431,7 @@ A link to a page with an anchor, and a description.
 
 Argument 1: link.  Argument 2: anchor name.
 Argument 3: description if one exists, or the original link otherwise.
+Argument 4: link without an extension.
 
 @item email-addr
 A link to an email address.

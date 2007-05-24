@@ -1,7 +1,7 @@
 2007-05-24  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Drop vague entries and position interesting entries closer
-	to the top of each section.
+	to the top of each section.  Update for new changes.
 
 	* lisp/muse-project.el (muse-project-ignore-regexp): Add Mercurial
 	and bzr metadata directories to the list of things to ignore.
@@ -14,6 +14,9 @@
 	(muse-publish-markup-attribute): Use it.  This fixes a bug that
 	can occur when these types of markup occur immediately after a
 	paragraph.  It's good to have defined behavior!
+
+	* texi/muse.texi (Markup Strings): Mention new argument for
+	link-and-anchor.
 
 2007-05-19  Michael Olson  <mwolson@gnu.org>
 
@@ -141,7 +144,7 @@
 2007-04-01  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-date-format): Add
-	customization type ad group.
+`	customization type and group.
 	(muse-publish-region): New interactive function that publishes a
 	region to a new buffer.
 
