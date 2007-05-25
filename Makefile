@@ -78,8 +78,10 @@ debprepare:
 	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
 	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
 	    $(DEBNAME)-$(VERSION))
-	cp -r debian ../$(DEBNAME)-$(VERSION)
-	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
+	(cd debian && tla inventory -sB | tar -cf - --no-recursion -T- | \
+	  (mkdir -p ../../$(DEBNAME)-$(VERSION)/debian; \
+	    cd ../../$(DEBNAME)-$(VERSION)/debian && \
+	    tar xf -))
 
 debbuild:
 	(cd ../$(DEBNAME)-$(VERSION) && \

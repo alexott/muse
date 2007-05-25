@@ -308,7 +308,7 @@ If no description exists for the link, use the link itself."
                    :functions 'muse-texinfo-markup-functions
                    :strings   'muse-texinfo-markup-strings
                    :specials  'muse-texinfo-decide-specials
-                   :before-end 'muse-texinfo-munge-buffer
+                   :after     'muse-texinfo-munge-buffer
                    :header    'muse-texinfo-header
                    :footer    'muse-texinfo-footer
                    :browser   'find-file)
