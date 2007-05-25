@@ -69,6 +69,19 @@ release: dist
 	  gpg --detach $(PROJECT)-$(VERSION).tar.gz && \
 	  gpg --detach $(PROJECT)-$(VERSION).zip)
 
+debclean:
+	-rm -f ../../dist/$(DISTRIBUTOR)/$(DEBNAME)_*
+	-rm -fr ../$(DEBNAME)_$(VERSION)*
+
+debprepare:
+	-rm -rf ../$(DEBNAME)-$(VERSION)
+	(cd .. && tar -xzf ../$(PROJECT)-$(VERSION).tar.gz)
+	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
+	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
+	    $(DEBNAME)-$(VERSION))
+	cp -r debian ../$(DEBNAME)-$(VERSION)
+	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
+
 debbuild:
 	(cd ../$(DEBNAME)-$(VERSION) && \
 	  dpkg-buildpackage -v$(LASTUPLOAD) $(BUILDOPTS) \
@@ -76,28 +89,15 @@ debbuild:
 	  echo "Running lintian ..." && \
 	  lintian -i ../$(DEBNAME)_$(VERSION)*.deb || : && \
 	  echo "Done running lintian." && \
+	  echo "Running linda ..." && \
+	  linda -i ../$(DEBNAME)_$(VERSION)*.deb || : && \
+	  echo "Done running linda." && \
 	  debsign)
+
+debinstall:
 	cp ../$(DEBNAME)_$(VERSION)* ../../dist/$(DISTRIBUTOR)
 
-debclean:
-	-rm -f ../../dist/$(DISTRIBUTOR)/$(DEBNAME)_*
-	-rm -fr ../$(DEBNAME)-$(VERSION)
-
-debrevision: debclean dist
-	-rm -f ../$(DEBNAME)_$(VERSION)-*
-	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
-	cp -r debian ../$(DEBNAME)-$(VERSION)
-	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
-	$(MAKE) debbuild
-
-debrelease: debclean dist
-	-rm -f ../$(DEBNAME)_$(VERSION)*
-	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
-	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
-	    $(DEBNAME)-$(VERSION))
-	cp -r debian ../$(DEBNAME)-$(VERSION)
-	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
-	$(MAKE) debbuild
+deb: debclean debprepare debbuild debinstall
 
 upload: release
 	(cd .. && \
