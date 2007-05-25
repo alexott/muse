@@ -1,3 +1,10 @@
+2007-05-25  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile (debclean, debprepare, debbuild, debinstall, deb): New
+	way of building Debian packages that preserves the original
+	release tarball and is more modular.
+	(debrevision, debrelease): Remove.
+
 2007-05-24  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Drop vague entries and position interesting entries closer
