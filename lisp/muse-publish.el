@@ -1734,7 +1734,6 @@ BEG is modified to be the start of the published markup."
         (markup-function (make-symbol "markup-function")))
     `(let ((,markup (muse-publish-get-and-delete-attr "markup" ,attrs)))
        (save-restriction
-         (muse-publish-ensure-block ,beg)
          (narrow-to-region ,beg ,end)
          (goto-char (point-min))
          ,@body

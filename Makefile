@@ -60,7 +60,6 @@ dist: autoloads distclean
 	  (mkdir -p ../$(PROJECT)-$(VERSION); cd ../$(PROJECT)-$(VERSION) && \
 	  tar xf -)
 	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)/lisp
-	rm -fr ../$(PROJECT)-$(VERSION)/debian
 
 release: dist
 	(cd .. && tar -czf $(PROJECT)-$(VERSION).tar.gz \
@@ -75,12 +74,14 @@ debclean:
 
 debprepare:
 	-rm -rf ../$(DEBNAME)-$(VERSION)
-	(cd .. && tar -xzf ../$(PROJECT)-$(VERSION).tar.gz)
+	(cd .. && tar -xzf $(PROJECT)-$(VERSION).tar.gz)
 	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
 	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
 	    $(DEBNAME)-$(VERSION))
-	cp -r debian ../$(DEBNAME)-$(VERSION)
-	-rm -fr ../$(DEBNAME)-$(VERSION)/debian/.arch-ids
+	(cd debian && tla inventory -sB | tar -cf - --no-recursion -T- | \
+	  (mkdir -p ../../$(DEBNAME)-$(VERSION)/debian; \
+	    cd ../../$(DEBNAME)-$(VERSION)/debian && \
+	    tar xf -))
 
 debbuild:
 	(cd ../$(DEBNAME)-$(VERSION) && \

@@ -4,6 +4,16 @@
 	way of building Debian packages that preserves the original
 	release tarball and is more modular.
 	(debrevision, debrelease): Remove.
+	(dist): No need to remove the debian/ directory, since it is now
+	in its own branch.
+	(debprepare): Copy over debian/ directory properly.
+
+	* examples/Makefile (clean): Remove QuickStart.texi, in case
+	something went wrong during the build.
+
+	* lisp/muse-texinfo.el ("texi"): Make muse-texinfo-munge-buffer
+	occur after full-document escaping, rather than before.  This
+	prevents automatically-inserted Texinfo code from being escaped.
 
 2007-05-24  Michael Olson  <mwolson@gnu.org>
 
