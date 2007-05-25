@@ -74,7 +74,7 @@ debclean:
 
 debprepare:
 	-rm -rf ../$(DEBNAME)-$(VERSION)
-	(cd .. && tar -xzf ../$(PROJECT)-$(VERSION).tar.gz)
+	(cd .. && tar -xzf $(PROJECT)-$(VERSION).tar.gz)
 	mv ../$(PROJECT)-$(VERSION) ../$(DEBNAME)-$(VERSION)
 	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
 	    $(DEBNAME)-$(VERSION))
