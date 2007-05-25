@@ -60,7 +60,6 @@ dist: autoloads distclean
 	  (mkdir -p ../$(PROJECT)-$(VERSION); cd ../$(PROJECT)-$(VERSION) && \
 	  tar xf -)
 	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)/lisp
-	rm -fr ../$(PROJECT)-$(VERSION)/debian
 
 release: dist
 	(cd .. && tar -czf $(PROJECT)-$(VERSION).tar.gz \

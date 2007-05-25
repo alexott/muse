@@ -4,6 +4,8 @@
 	way of building Debian packages that preserves the original
 	release tarball and is more modular.
 	(debrevision, debrelease): Remove.
+	(dist): No need to remove the debian/ directory, since it is now
+	in its own branch.
 
 2007-05-24  Michael Olson  <mwolson@gnu.org>
 
