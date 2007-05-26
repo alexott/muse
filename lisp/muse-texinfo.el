@@ -293,12 +293,10 @@ If no description exists for the link, use the link itself."
                       output-path " " file))))))))
 
 (defun muse-texinfo-pdf-generate (file output-path final-target)
-  (muse-publish-transform-output
-   file output-path final-target "PDF"
-   (function
-    (lambda (file output-path)
-      (= 0 (shell-command (concat "texi2pdf -q --clean --output="
-                                  output-path " " file)))))))
+  (let ((muse-latex-pdf-program "pdftex")
+        (muse-latex-pdf-cruft '(".aux" ".cp" ".fn" ".ky" ".log" ".pg" ".toc"
+                                ".tp" ".vr")))
+    (muse-latex-pdf-generate file output-path final-target)))
 
 ;;; Register the Muse TEXINFO Publishers
 

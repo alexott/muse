@@ -1,6 +1,6 @@
 ;;; muse-latex.el --- publish entries in LaTex or PDF format
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -55,6 +55,16 @@
 
 (defcustom muse-latex-pdf-extension ".pdf"
   "Default file extension for publishing LaTeX files to PDF."
+  :type 'string
+  :group 'muse-latex)
+
+(defcustom muse-latex-pdf-program "pdflatex"
+  "The program that is called to generate PDF content from LaTeX content."
+  :type 'string
+  :group 'muse-latex)
+
+(defcustom muse-latex-pdf-cruft '(".aux" ".toc" ".out" ".log")
+  "Extensions of files to remove after generating PDF output successfully."
   :type 'string
   :group 'muse-latex)
 
@@ -407,14 +417,17 @@ and it will do what you expect."
   (shell-command (concat "open " file)))
 
 (defun muse-latex-pdf-generate (file output-path final-target)
-  (muse-publish-transform-output
+  (apply
+   #'muse-publish-transform-output
    file output-path final-target "PDF"
    (function
     (lambda (file output-path)
-      (let ((command (format "cd \"%s\"; pdflatex \"%s\""
-                             (file-name-directory output-path) file))
-            (times 0)
-            result)
+      (let* ((fnd (file-name-directory output-path))
+             (command (format "cd \"%s\"; %s \"%s\""
+                              fnd muse-latex-pdf-program
+                              (file-relative-name file fnd)))
+             (times 0)
+             result)
         ;; XEmacs can sometimes return a non-number result.  We'll err
         ;; on the side of caution by continuing to attempt to generate
         ;; the PDF if this happens and treat the final result as
@@ -432,7 +445,7 @@ and it will do what you expect."
                 (eq result 0))
             t
           nil))))
-   ".aux" ".toc" ".out" ".log"))
+   muse-latex-pdf-cruft))
 
 ;;; Register the Muse LATEX Publishers
 
