@@ -11,6 +11,17 @@
 	* examples/Makefile (clean): Remove QuickStart.texi, in case
 	something went wrong during the build.
 
+	* lisp/muse-latex.el (muse-latex-pdf-program): New option that
+	specifies the program to call in order to generate PDF content
+	from LaTeX content.
+	(muse-latex-pdf-cruft): New option that specifies the extensions
+	of files to remove after generating PDF output successfully.
+	(muse-latex-pdf-generate): Use these new options.  Work around the
+	annoying edge case where a tilde character exists in the filename
+	or directory path -- now this can only error out when the relative
+	path from the output file to the source file contains a tilde,
+	which is far less likely.
+
 	* lisp/muse-publish.el (muse-publish-markup-attribute): Don't use
 	muse-publish-ensure-block here after all, because <lisp> et al may
 	occur inline as part of other things.
@@ -18,6 +29,10 @@
 	* lisp/muse-texinfo.el ("texi"): Make muse-texinfo-munge-buffer
 	occur after full-document escaping, rather than before.  This
 	prevents automatically-inserted Texinfo code from being escaped.
+	(muse-texinfo-pdf-generate): Rewrite to call
+	`muse-latex-pdf-generate' with pdftex as the generating binary,
+	because texi2pdf suffers irredeemably from the tilde edge case
+	mentioned above.
 
 2007-05-24  Michael Olson  <mwolson@gnu.org>
 
