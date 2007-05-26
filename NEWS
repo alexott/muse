@@ -87,6 +87,14 @@ can handle.
 
 ** LaTeX publishing (lisp/muse-latex.el)
 
+*** New option: muse-latex-pdf-program.
+The program to call in order to generate PDF content from LaTeX
+content.
+
+*** New option: muse-latex-pdf-cruft.
+The extensions of files to remove after generating PDF output
+successfully.
+
 *** Improve escaping of specials.
 
 *** Use \label{} and \ref{} for anchors and anchor references.
@@ -98,6 +106,12 @@ can handle.
 *** Use \url{} to publish bare URLs.
 
 *** Handle case where a Muse page begins with a quote character.
+
+*** Handle case where the path to the Muse source contains a tilde
+character in one of the parent directories.  It is still possible to
+run into this problem if you publish outside of a directory that has a
+tilde, but with a source file that does have one -- this was deemed to
+be a very unlikely case.
 
 *** Display footnotes when we have both a URL and description.
 This makes the URLs show up on printed documents in a sensible
@@ -500,6 +514,12 @@ lisp/muse-latex2png.el.
 
 *** Make it so that links to other info or PDF documents use the proper
 suffix.
+
+*** Handle case where the path to the Muse source contains a tilde
+character in one of the parent directories.  It is still possible to
+run into this problem if you publish outside of a directory that has a
+tilde, but with a source file that does have one -- this was deemed to
+be a very unlikely case.
 
 ** URL protocols (lisp/muse-protocols.el)
 
