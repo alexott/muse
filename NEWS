@@ -375,7 +375,7 @@ like it to be spaced.
 
 *** Fix paragraph detection when block-level markup comes immediately
 after a paragraph.  Examples of block-level markup are: <example>,
-<src>, <lisp>, verses, lists.
+verses, lists.
 
 *** Allow the <lisp> tag to take the "markup" attribute.
 see the Tag Summary section in the manual for details.

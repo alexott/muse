@@ -8,8 +8,16 @@
 	in its own branch.
 	(debprepare): Copy over debian/ directory properly.
 
+	* NEWS: Update.
+
 	* examples/Makefile (clean): Remove QuickStart.texi, in case
 	something went wrong during the build.
+
+	* lisp/muse-html.el (muse-html-src-tag): Ensure that we have
+	sufficient blank lines before the tag.
+
+	* lisp/muse-journal.el (muse-journal-latex-qotd-tag): Ensure that
+	we have sufficient blank lines before the tag.
 
 	* lisp/muse-latex.el (muse-latex-pdf-program): New option that
 	specifies the program to call in order to generate PDF content
