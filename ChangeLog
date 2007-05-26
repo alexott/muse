@@ -12,6 +12,10 @@
 
 	* examples/Makefile (clean): Remove QuickStart.texi, in case
 	something went wrong during the build.
+	(%.pdf): Publish the example using the normal pdf style, rather
+	than info-pdf.
+
+	* examples/QuickStart.muse: Add myself to the authors list.
 
 	* lisp/muse-html.el (muse-html-src-tag): Ensure that we have
 	sufficient blank lines before the tag.
