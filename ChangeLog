@@ -1,3 +1,11 @@
+2007-05-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-alist-styles): Allow for
+	other things to be added to each generated style as well.  For
+	example, this permits me to add
+	:base-url "http://blog.mwolson.org/"
+	for my blog.
+
 2007-05-25  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (debclean, debprepare, debbuild, debinstall, deb): New
