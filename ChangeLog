@@ -1,3 +1,32 @@
+2007-05-30  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Update.
+
+	* lisp/muse-latex.el (muse-latex-markup-table): Deal with
+	horizontal separators in tables.
+
+	* lisp/muse-publish.el (muse-publish-markup-regexps): Recognize
+	horizontal separators in tables.
+	(muse-publish-trim-table): New function to remove initial and
+	final blank columns from a table.
+	(muse-publish-table-fields): Call `muse-publish-trim-table'.  Deal
+	with horizontal separators, aka "hlines".
+
+	* lisp/muse-regexps.el (muse-table-hline-regexp): New regexp that
+	defines the syntax of a horizontal separator in a table.
+
+	* lisp/muse-texinfo.el (muse-texinfo-markup-table): Deal with
+	horizontal separators.  Publish header lines correctly.
+
+	* lisp/muse-xml-common.el (muse-xml-sort-table): Deal with case
+	where we have nonnumbers as a row type.  This ignores sorting for
+	hlines.
+	(muse-xml-markup-table): Deal with horizontal separators.  If the
+	markup supports table groups, make hlines separate table groups.
+	Otherwise, ignore them, since they cannot be marked up.  Together,
+	these changes allow us to support orgtbl-mode tables.  Thanks to
+	Carsten Dominik for the suggestion.
+
 2007-05-26  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-alist-styles): Allow for

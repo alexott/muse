@@ -172,6 +172,13 @@ The first match string must contain the term."
   :type 'regexp
   :group 'muse-regexp)
 
+(defcustom muse-table-hline-regexp (concat "^[" muse-regexp-blank
+                                           "]*|[-+]+|[" muse-regexp-blank
+                                           "]*")
+  "Regexp used to match a horizontal separator line in a table."
+  :type 'regexp
+  :group 'muse-regexp)
+
 (defcustom muse-tag-regexp
   (concat "<\\([^/" muse-regexp-blank "\n][^" muse-regexp-blank
           "</>\n]*\\)\\(\\s-+[^<>\n]+[^</>\n]\\)?\\(/\\)?>")

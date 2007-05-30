@@ -368,12 +368,23 @@ matches some criteria -- the text will be removed otherwise.
 Omitting these attributes causes <literal> to behave the same as
 usual.
 
-*** Allow empty elements in tables.
+*** Table improvements
 
-*** Allow initial and trailing whitespace in tables, but strip it
+**** Support orgtbl-mode style tables.
+Here is an quick example of what they look like.  For additional
+information, consult the Org Mode manual.
+
+   | Name | Phone | Age |
+   |------+-------+-----|
+   | Pete |  1234 |  25 |
+   | Sara |  4321 |  22 |
+
+**** Allow empty elements in tables.
+
+**** Allow initial and trailing whitespace in tables, but strip it
 out of the published result.
 
-*** If the #disable-tables publishing directive exists on the current
+**** If the #disable-tables publishing directive exists on the current
 Muse page, do not generate a table.
 
 *** Require at least once space after "::" in definition lists, so
@@ -514,6 +525,8 @@ lisp/muse-latex2png.el.
 
 *** Make it so that links to other info or PDF documents use the proper
 suffix.
+
+*** Publish table headings properly.
 
 *** Handle case where the path to the Muse source contains a tilde
 character in one of the parent directories.  It is still possible to

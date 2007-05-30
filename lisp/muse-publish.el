@@ -153,7 +153,8 @@ If non-nil, publish comments using the markup of the current style."
     ;; separate cells, || to separate header cells, and ||| for footer
     ;; cells
     (2300 ,(concat "\\(\\([" muse-regexp-blank "]*\n\\)?"
-                   "\\(" muse-table-line-regexp "\\(?:\n\\|\\'\\)\\)\\)+")
+                   "\\(\\(?:" muse-table-line-regexp "\\|"
+                   muse-table-hline-regexp "\\)\\(?:\n\\|\\'\\)\\)\\)+")
           0 table)
 
     ;; blockquote and centered text
@@ -1346,18 +1347,41 @@ like read-only from being inadvertently deleted."
   (muse-insert-markup (muse-markup-text 'end-verse))
   (insert ?\n))
 
+(defun muse-publish-trim-table (table)
+  "Remove completely blank columns from table, if at start or end of row."
+  ;; remove first
+  (catch 'found
+    (dolist (row (cdr table))
+      (let ((el (cadr row)))
+        (when (and (stringp el) (not (string= el "")))
+          (throw 'found t))))
+    (dolist (row (cdr table))
+      (setcdr row (cddr row)))
+    (setcar table (1- (car table))))
+  ;; remove last
+  (catch 'found
+    (dolist (row (cdr table))
+      (let ((el (car (last row))))
+        (when (and (stringp el) (not (string= el "")))
+          (throw 'found t))))
+    (dolist (row (cdr table))
+      (setcdr (last row 2) nil))
+    (setcar table (1- (car table))))
+  table)
+
 (defun muse-publish-table-fields (beg end)
   "Parse given region as a table, returning a cons cell.
 The car is the length of the longest row.
 
 The cdr is a list of the fields of the table, with the first
 element indicating the type of the row:
-  1: body, 2: header, 3: footer.
+  1: body, 2: header, 3: footer, hline: separator.
 
 The existing region will be removed, except for initial blank lines."
   (unless (muse-publishing-directive "disable-tables")
     (let ((longest 0)
           (left 0)
+          (seen-hline nil)
           fields field-list)
       (save-restriction
         (narrow-to-region beg end)
@@ -1366,18 +1390,30 @@ The existing region will be removed, except for initial blank lines."
           (forward-line 1))
         (setq beg (point))
         (while (= left 0)
-          (when (looking-at muse-table-line-regexp)
+          (cond
+           ((looking-at muse-table-hline-regexp)
+            (when field-list  ; skip if at the beginning of table
+              (if seen-hline
+                  (setq field-list (cons (cons 'hline nil) field-list))
+                (dolist (field field-list)
+                  ;; the preceding fields are header lines
+                  (setcar field 2))
+                (setq seen-hline t))))
+           ((looking-at muse-table-line-regexp)
             (setq fields (cons (length (match-string 1))
                                (mapcar #'muse-trim-whitespace
                                        (split-string (match-string 0)
                                                      muse-table-field-regexp)))
                   field-list (cons fields field-list)
-                  longest (max (length fields) longest)))
+                  longest (max (length fields) longest))))
           (setq left (forward-line 1))))
       (delete-region beg end)
       (if (= longest 0)
           (cons 0 nil)
-        (cons (1- longest) (nreverse field-list))))))
+        ;; if the last line was an hline, remove it
+        (when (eq (caar field-list) 'hline)
+          (setq field-list (cdr field-list)))
+        (muse-publish-trim-table (cons (1- longest) (nreverse field-list)))))))
 
 (defun muse-publish-markup-table ()
   "Style does not support tables.")
