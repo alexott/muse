@@ -140,6 +140,8 @@ if not escaped."
                               (nth (1- (car l)) decisions)))))))
 
 (defun muse-xml-markup-table (&optional attributes)
+  "Publish the matched region into a table.
+If a string ATTRIBUTES is given, pass it to the markup string begin-table."
   (let* ((table-info (muse-publish-table-fields (match-beginning 0)
                                                 (match-end 0)))
          (row-len (car table-info))
@@ -164,22 +166,16 @@ if not escaped."
           (setq fields (cdr fields))
           (unless (and part last-part (string= part last-part))
             (when last-part
-              (when (or part supports-group)
-                (muse-insert-markup "  </" last-part ">\n"))
+              (muse-insert-markup "  </" last-part ">\n")
               (when (eq type 'hline)
                 ;; horizontal separators are represented by closing
                 ;; the current table group and opening a new one
                 (muse-insert-markup (muse-markup-text 'end-table-group))
                 (muse-insert-markup (muse-markup-text 'begin-table-group
                                                       row-len))))
-            (if part
-                (progn
-                  (muse-insert-markup "  <" part ">\n")
-                  (setq last-part part))
-              ;; if the markup does not support groups, and we are
-              ;; given a blank part (e.g. hline), just skip it
-              (when supports-group
-                (setq last-part part))))
+            (when part
+              (muse-insert-markup "  <" part ">\n"))
+            (setq last-part part))
           (unless (eq type 'hline)
             (muse-insert-markup (muse-markup-text 'begin-table-row))
             (dolist (field fields)

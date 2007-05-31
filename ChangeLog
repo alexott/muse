@@ -1,3 +1,9 @@
+2007-05-31  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-xml-common.el (muse-xml-markup-table): Add docstring.
+	Publish multiple tbody tags if there is a horizontal separator
+	after the heading, because that is valid HTML after all.
+
 2007-05-30  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Update.
