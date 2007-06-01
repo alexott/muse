@@ -371,7 +371,7 @@ usual.
 *** Table improvements
 
 **** Support orgtbl-mode style tables.
-Here is an quick example of what they look like.  For additional
+Here is a quick example of what they look like.  For additional
 information, consult the Org Mode manual.
 
    | Name | Phone | Age |
