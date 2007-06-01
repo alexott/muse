@@ -379,6 +379,13 @@ information, consult the Org Mode manual.
    | Pete |  1234 |  25 |
    | Sara |  4321 |  22 |
 
+If you are used to the way that Org Mode publishes these tables, then
+customize `muse-html-table-attributes' to:
+
+  border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"
+
+in order to get a similar kind of output.
+
 **** Allow empty elements in tables.
 
 **** Allow initial and trailing whitespace in tables, but strip it
