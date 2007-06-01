@@ -211,13 +211,16 @@ These are applied to URLs."
         (muse-insert-markup " " (number-to-string (/ 1.0 row-len))))
       (dolist (fields field-list)
         (let ((type (car fields)))
-          (setq fields (cdr fields))
-          (muse-insert-markup "\n@item ")
-          (insert (car fields))
-          (setq fields (cdr fields))
-          (dolist (field fields)
-            (muse-insert-markup " @tab ")
-            (insert field))))
+          (unless (eq type 'hline)
+            (setq fields (cdr fields))
+            (if (= type 2)
+                (muse-insert-markup "\n@headitem ")
+              (muse-insert-markup "\n@item "))
+            (insert (car fields))
+            (setq fields (cdr fields))
+            (dolist (field fields)
+              (muse-insert-markup " @tab ")
+              (insert field)))))
       (muse-insert-markup "\n@end multitable")
       (insert ?\n))))
 
@@ -293,12 +296,10 @@ If no description exists for the link, use the link itself."
                       output-path " " file))))))))
 
 (defun muse-texinfo-pdf-generate (file output-path final-target)
-  (muse-publish-transform-output
-   file output-path final-target "PDF"
-   (function
-    (lambda (file output-path)
-      (= 0 (shell-command (concat "texi2pdf -q --clean --output="
-                                  output-path " " file)))))))
+  (let ((muse-latex-pdf-program "pdftex")
+        (muse-latex-pdf-cruft '(".aux" ".cp" ".fn" ".ky" ".log" ".pg" ".toc"
+                                ".tp" ".vr")))
+    (muse-latex-pdf-generate file output-path final-target)))
 
 ;;; Register the Muse TEXINFO Publishers
 
@@ -308,7 +309,7 @@ If no description exists for the link, use the link itself."
                    :functions 'muse-texinfo-markup-functions
                    :strings   'muse-texinfo-markup-strings
                    :specials  'muse-texinfo-decide-specials
-                   :before-end 'muse-texinfo-munge-buffer
+                   :after     'muse-texinfo-munge-buffer
                    :header    'muse-texinfo-header
                    :footer    'muse-texinfo-footer
                    :browser   'find-file)

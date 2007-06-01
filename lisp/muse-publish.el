@@ -153,7 +153,8 @@ If non-nil, publish comments using the markup of the current style."
     ;; separate cells, || to separate header cells, and ||| for footer
     ;; cells
     (2300 ,(concat "\\(\\([" muse-regexp-blank "]*\n\\)?"
-                   "\\(" muse-table-line-regexp "\\(?:\n\\|\\'\\)\\)\\)+")
+                   "\\(\\(?:" muse-table-line-regexp "\\|"
+                   muse-table-hline-regexp "\\)\\(?:\n\\|\\'\\)\\)\\)+")
           0 table)
 
     ;; blockquote and centered text
@@ -677,6 +678,18 @@ normally."
   (if (fboundp 'muse-project-link-page)
       (muse-project-link-page page)
     (muse-publish-link-file page)))
+
+(defmacro muse-publish-ensure-block (beg)
+  "Ensure that block-level markup at BEG is published with at least one
+preceding blank line.  BEG is modified to be the new position.
+The point is left at the new value of BEG."
+  `(progn
+     (goto-char ,beg)
+     (cond ((not (bolp)) (insert "\n\n"))
+           ((eq (point) (point-min)) nil)
+           ((prog2 (backward-char) (bolp) (forward-char)) nil)
+           (t (insert "\n")))
+     (setq ,beg (point))))
 
 ;;;###autoload
 (defun muse-publish-region (beg end &optional title style)
@@ -1231,6 +1244,8 @@ and type, respecting the end-of-list property."
      ((eq type 'ul)
       (unless (eq (char-after (match-end 1)) ?-)
         (delete-region (match-beginning 0) (match-end 0))
+        (let ((beg (point)))
+          (muse-publish-ensure-block beg))
         (muse-insert-markup (muse-markup-text 'begin-uli))
         (save-excursion
           (muse-publish-surround-text
@@ -1243,6 +1258,8 @@ and type, respecting the end-of-list property."
         (forward-line 1)))
      ((eq type 'ol)
       (delete-region (match-beginning 0) (match-end 0))
+      (let ((beg (point)))
+        (muse-publish-ensure-block beg))
       (muse-insert-markup (muse-markup-text 'begin-oli))
       (save-excursion
         (muse-publish-surround-text
@@ -1256,6 +1273,8 @@ and type, respecting the end-of-list property."
      ((not (string= (match-string 2) ""))
       ;; must have an initial term
       (goto-char (match-beginning 0))
+      (let ((beg (point)))
+        (muse-publish-ensure-block beg))
       (muse-insert-markup (muse-markup-text 'begin-dl))
       (save-excursion
         (muse-publish-surround-dl indent post-indent)
@@ -1328,18 +1347,41 @@ like read-only from being inadvertently deleted."
   (muse-insert-markup (muse-markup-text 'end-verse))
   (insert ?\n))
 
+(defun muse-publish-trim-table (table)
+  "Remove completely blank columns from table, if at start or end of row."
+  ;; remove first
+  (catch 'found
+    (dolist (row (cdr table))
+      (let ((el (cadr row)))
+        (when (and (stringp el) (not (string= el "")))
+          (throw 'found t))))
+    (dolist (row (cdr table))
+      (setcdr row (cddr row)))
+    (setcar table (1- (car table))))
+  ;; remove last
+  (catch 'found
+    (dolist (row (cdr table))
+      (let ((el (car (last row))))
+        (when (and (stringp el) (not (string= el "")))
+          (throw 'found t))))
+    (dolist (row (cdr table))
+      (setcdr (last row 2) nil))
+    (setcar table (1- (car table))))
+  table)
+
 (defun muse-publish-table-fields (beg end)
   "Parse given region as a table, returning a cons cell.
 The car is the length of the longest row.
 
 The cdr is a list of the fields of the table, with the first
 element indicating the type of the row:
-  1: body, 2: header, 3: footer.
+  1: body, 2: header, 3: footer, hline: separator.
 
 The existing region will be removed, except for initial blank lines."
   (unless (muse-publishing-directive "disable-tables")
     (let ((longest 0)
           (left 0)
+          (seen-hline nil)
           fields field-list)
       (save-restriction
         (narrow-to-region beg end)
@@ -1348,18 +1390,30 @@ The existing region will be removed, except for initial blank lines."
           (forward-line 1))
         (setq beg (point))
         (while (= left 0)
-          (when (looking-at muse-table-line-regexp)
+          (cond
+           ((looking-at muse-table-hline-regexp)
+            (when field-list  ; skip if at the beginning of table
+              (if seen-hline
+                  (setq field-list (cons (cons 'hline nil) field-list))
+                (dolist (field field-list)
+                  ;; the preceding fields are header lines
+                  (setcar field 2))
+                (setq seen-hline t))))
+           ((looking-at muse-table-line-regexp)
             (setq fields (cons (length (match-string 1))
                                (mapcar #'muse-trim-whitespace
                                        (split-string (match-string 0)
                                                      muse-table-field-regexp)))
                   field-list (cons fields field-list)
-                  longest (max (length fields) longest)))
+                  longest (max (length fields) longest))))
           (setq left (forward-line 1))))
       (delete-region beg end)
       (if (= longest 0)
           (cons 0 nil)
-        (cons (1- longest) (nreverse field-list))))))
+        ;; if the last line was an hline, remove it
+        (when (eq (caar field-list) 'hline)
+          (setq field-list (cdr field-list)))
+        (muse-publish-trim-table (cons (1- longest) (nreverse field-list)))))))
 
 (defun muse-publish-markup-table ()
   "Style does not support tables.")
@@ -1519,17 +1573,6 @@ the cadr is the page name, and the cddr is the anchor."
   :type 'integer
   :group 'muse-publish)
 
-(defmacro muse-publish-ensure-block-tag (beg)
-  "Ensure that block-level tag at BEG is published with at least one
-blank line.  BEG is modified to be the new position."
-  `(progn
-     (goto-char ,beg)
-     (cond ((not (bolp)) (insert "\n\n"))
-           ((eq (point) (point-min)) nil)
-           ((prog2 (backward-char) (bolp) (forward-char)) nil)
-           (t (insert "\n")))
-     (setq ,beg (point))))
-
 (defun muse-publish-contents-tag (beg end attrs)
   (set (make-local-variable 'muse-publish-generate-contents)
        (cons (copy-marker (point) t)
@@ -1538,6 +1581,7 @@ blank line.  BEG is modified to be the new position."
                    muse-publish-contents-depth)))))
 
 (defun muse-publish-verse-tag (beg end)
+  (muse-publish-ensure-block beg)
   (save-excursion
     (save-restriction
       (narrow-to-region beg end)
@@ -1567,6 +1611,7 @@ This is usually applied to explicit links."
   nil)
 
 (defun muse-publish-quote-tag (beg end)
+  (muse-publish-ensure-block beg)
   (save-excursion
     (save-restriction
       (narrow-to-region beg end)
@@ -1607,7 +1652,7 @@ This is usually applied to explicit links."
   (muse-publish-example-tag beg end))
 
 (defun muse-publish-example-tag (beg end)
-  (muse-publish-ensure-block-tag beg)
+  (muse-publish-ensure-block beg)
   (muse-publish-escape-specials beg end nil 'example)
   (goto-char beg)
   (insert (muse-markup-text 'begin-example))
@@ -1718,7 +1763,9 @@ If \"verse\", treat the region as if it was surrounded by the
 
 Otherwise, it should be the name of a function to call in the
 narrowed region after evaluating BODY.  The function should
-take the ATTRS parameter."
+take the ATTRS parameter.
+
+BEG is modified to be the start of the published markup."
   (let ((markup (make-symbol "markup"))
         (markup-function (make-symbol "markup-function")))
     `(let ((,markup (muse-publish-get-and-delete-attr "markup" ,attrs)))

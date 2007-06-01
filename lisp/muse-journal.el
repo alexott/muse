@@ -523,7 +523,7 @@ For more on the structure of this list, see
   nil)
 
 (defun muse-journal-latex-qotd-tag (beg end)
-  (goto-char beg)
+  (muse-publish-ensure-block beg)
   (muse-insert-markup (muse-markup-text 'begin-quote))
   (goto-char end)
   (muse-insert-markup (muse-markup-text 'end-quote)))

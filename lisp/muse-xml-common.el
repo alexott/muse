@@ -135,13 +135,19 @@ if not escaped."
                      (t nil t)          ; header stays where it is
                      (t nil nil))))     ; footer < header
     (sort table #'(lambda (l r)
-                    (nth (1- (car r))
-                         (nth (1- (car l)) decisions))))))
+                    (and (integerp (car l)) (integerp (cdr l))
+                         (nth (1- (car r))
+                              (nth (1- (car l)) decisions)))))))
 
 (defun muse-xml-markup-table (&optional attributes)
+  "Publish the matched region into a table.
+If a string ATTRIBUTES is given, pass it to the markup string begin-table."
   (let* ((table-info (muse-publish-table-fields (match-beginning 0)
                                                 (match-end 0)))
          (row-len (car table-info))
+         (supports-group (not (string= (muse-markup-text 'begin-table-group
+                                                         row-len)
+                                       "")))
          (field-list (muse-xml-sort-table (cdr table-info)))
          last-part)
     (when table-info
@@ -149,24 +155,34 @@ if not escaped."
       (muse-insert-markup (muse-markup-text 'begin-table-group row-len))
       (dolist (fields field-list)
         (let* ((type (car fields))
-               (part (cond ((= type 1) "tbody")
+               (part (cond ((eq type 'hline) nil)
+                           ((= type 1) "tbody")
                            ((= type 2) "thead")
                            ((= type 3) "tfoot")))
-               (col (cond ((= type 1) "td")
+               (col (cond ((eq type 'hline) nil)
+                          ((= type 1) "td")
                           ((= type 2) "th")
                           ((= type 3) "td"))))
           (setq fields (cdr fields))
-          (unless (and last-part (string= part last-part))
+          (unless (and part last-part (string= part last-part))
             (when last-part
-              (muse-insert-markup "  </" last-part ">\n"))
-            (muse-insert-markup "  <" part ">\n")
+              (muse-insert-markup "  </" last-part ">\n")
+              (when (eq type 'hline)
+                ;; horizontal separators are represented by closing
+                ;; the current table group and opening a new one
+                (muse-insert-markup (muse-markup-text 'end-table-group))
+                (muse-insert-markup (muse-markup-text 'begin-table-group
+                                                      row-len))))
+            (when part
+              (muse-insert-markup "  <" part ">\n"))
             (setq last-part part))
-          (muse-insert-markup (muse-markup-text 'begin-table-row))
-          (dolist (field fields)
-            (muse-insert-markup (muse-markup-text 'begin-table-entry  col))
-            (insert field)
-            (muse-insert-markup (muse-markup-text 'end-table-entry  col)))
-          (muse-insert-markup (muse-markup-text 'end-table-row))))
+          (unless (eq type 'hline)
+            (muse-insert-markup (muse-markup-text 'begin-table-row))
+            (dolist (field fields)
+              (muse-insert-markup (muse-markup-text 'begin-table-entry  col))
+              (insert field)
+              (muse-insert-markup (muse-markup-text 'end-table-entry  col)))
+            (muse-insert-markup (muse-markup-text 'end-table-row)))))
       (when last-part
         (muse-insert-markup "  </" last-part ">\n"))
       (muse-insert-markup (muse-markup-text 'end-table-group))

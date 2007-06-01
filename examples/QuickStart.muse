@@ -1,4 +1,4 @@
-#author John Wiegley
+#author John Wiegley and Michael Olson
 #title The Emacs Muse
 
 Emacs Muse is an authoring and publishing environment for Emacs.  It

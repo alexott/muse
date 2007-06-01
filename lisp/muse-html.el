@@ -464,7 +464,8 @@ This will be used if no special characters are found."
         (let ((text (match-string 1)))
           (muse-insert-markup
            (concat "<p class=\"footnote\">"
-                   "<a name=\"fn." text "\" href=\"#fnr." text "\">"
+                   "<a class=\"footnum\" name=\"fn." text
+                   "\" href=\"#fnr." text "\">"
                    text ".</a>")))
       (save-excursion
         (save-match-data
@@ -481,7 +482,8 @@ This will be used if no special characters are found."
       (replace-match "")))
    (t (let ((text (match-string 1)))
         (muse-insert-markup
-         (concat "<sup><a name=\"fnr." text "\" href=\"#fn." text "\">"
+         (concat "<sup><a class=\"footref\" name=\"fnr." text
+                 "\" href=\"#fn." text "\">"
                  text "</a></sup>")))
       (replace-match ""))))
 
@@ -567,6 +569,7 @@ This tag requires htmlize 1.34 or later in order to work."
         (error nil t))
       ;; if htmlize.el was not found, treat this like an example tag
       (muse-publish-example-tag beg end)
+    (muse-publish-ensure-block beg)
     (let* ((mode (and (assoc "lang" attrs)
                       (intern (concat (cdr (assoc "lang" attrs))
                                       "-mode"))))

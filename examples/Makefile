@@ -13,13 +13,13 @@ examples: $(EXAMPLES)
 	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish html $<
 
 %.pdf: %.muse
-	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish info-pdf $<
+	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish pdf $<
 
 %.info: %.muse
 	EMACS=$(EMACS) SITEFLAG=$(SITEFLAG) ../scripts/publish info $<
 
 clean:
-	-rm -f missfont.log
+	-rm -f missfont.log QuickStart.texi
 
 realclean distclean fullclean: clean
 	-rm -f $(EXAMPLES)

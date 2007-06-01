@@ -1,4 +1,121 @@
+2007-05-31  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Add example for setting `muse-html-table-attributes'.
+
+	* lisp/muse-xml-common.el (muse-xml-markup-table): Add docstring.
+	Publish multiple tbody tags if there is a horizontal separator
+	after the heading, because that is valid HTML after all.
+
+2007-05-30  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Update.
+
+	* lisp/muse-latex.el (muse-latex-markup-table): Deal with
+	horizontal separators in tables.
+
+	* lisp/muse-publish.el (muse-publish-markup-regexps): Recognize
+	horizontal separators in tables.
+	(muse-publish-trim-table): New function to remove initial and
+	final blank columns from a table.
+	(muse-publish-table-fields): Call `muse-publish-trim-table'.  Deal
+	with horizontal separators, aka "hlines".
+
+	* lisp/muse-regexps.el (muse-table-hline-regexp): New regexp that
+	defines the syntax of a horizontal separator in a table.
+
+	* lisp/muse-texinfo.el (muse-texinfo-markup-table): Deal with
+	horizontal separators.  Publish header lines correctly.
+
+	* lisp/muse-xml-common.el (muse-xml-sort-table): Deal with case
+	where we have nonnumbers as a row type.  This ignores sorting for
+	hlines.
+	(muse-xml-markup-table): Deal with horizontal separators.  If the
+	markup supports table groups, make hlines separate table groups.
+	Otherwise, ignore them, since they cannot be marked up.  Together,
+	these changes allow us to support orgtbl-mode tables.  Thanks to
+	Carsten Dominik for the suggestion.
+
+2007-05-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-alist-styles): Allow for
+	other things to be added to each generated style as well.  For
+	example, this permits me to add
+	:base-url "http://blog.mwolson.org/"
+	for my blog.
+
+2007-05-25  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile (debclean, debprepare, debbuild, debinstall, deb): New
+	way of building Debian packages that preserves the original
+	release tarball and is more modular.
+	(debrevision, debrelease): Remove.
+	(dist): No need to remove the debian/ directory, since it is now
+	in its own branch.
+	(debprepare): Copy over debian/ directory properly.
+
+	* NEWS: Update.
+
+	* examples/Makefile (clean): Remove QuickStart.texi, in case
+	something went wrong during the build.
+	(%.pdf): Publish the example using the normal pdf style, rather
+	than info-pdf.
+
+	* examples/QuickStart.muse: Add myself to the authors list.
+
+	* lisp/muse-html.el (muse-html-src-tag): Ensure that we have
+	sufficient blank lines before the tag.
+
+	* lisp/muse-journal.el (muse-journal-latex-qotd-tag): Ensure that
+	we have sufficient blank lines before the tag.
+
+	* lisp/muse-latex.el (muse-latex-pdf-program): New option that
+	specifies the program to call in order to generate PDF content
+	from LaTeX content.
+	(muse-latex-pdf-cruft): New option that specifies the extensions
+	of files to remove after generating PDF output successfully.
+	(muse-latex-pdf-generate): Use these new options.  Work around the
+	annoying edge case where a tilde character exists in the filename
+	or directory path -- now this can only error out when the relative
+	path from the output file to the source file contains a tilde,
+	which is far less likely.
+
+	* lisp/muse-publish.el (muse-publish-markup-attribute): Don't use
+	muse-publish-ensure-block here after all, because <lisp> et al may
+	occur inline as part of other things.
+
+	* lisp/muse-texinfo.el ("texi"): Make muse-texinfo-munge-buffer
+	occur after full-document escaping, rather than before.  This
+	prevents automatically-inserted Texinfo code from being escaped.
+	(muse-texinfo-pdf-generate): Rewrite to call
+	`muse-latex-pdf-generate' with pdftex as the generating binary,
+	because texi2pdf suffers irredeemably from the tilde edge case
+	mentioned above.
+
+2007-05-24  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Drop vague entries and position interesting entries closer
+	to the top of each section.  Update for new changes.
+
+	* lisp/muse-project.el (muse-project-ignore-regexp): Add Mercurial
+	and bzr metadata directories to the list of things to ignore.
+
+	* lisp/muse-publish.el (muse-publish-ensure-block): Rename from
+	`muse-publish-ensure-block-tag', since we will use it for more
+	than just tags.
+	(muse-publish-markup-list, muse-publish-verse-tag)
+	(muse-publish-quote-tag, muse-publish-example-tag)
+	(muse-publish-markup-attribute): Use it.  This fixes a bug that
+	can occur when these types of markup occur immediately after a
+	paragraph.  It's good to have defined behavior!
+
+	* texi/muse.texi (Markup Strings): Mention new argument for
+	link-and-anchor.
+
 2007-05-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-markup-footnote): Add class tags to
+	published footnotes and footnote references.  Thanks to Scott
+	Jaderholm for the idea.
 
 	* lisp/muse-latex.el (muse-latex-markup-strings): Revert change to
 	link-and-anchor, on the recommendation of the original submitter.
@@ -120,7 +237,7 @@
 2007-04-01  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-date-format): Add
-	customization type ad group.
+`	customization type and group.
 	(muse-publish-region): New interactive function that publishes a
 	region to a new buffer.
 

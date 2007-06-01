@@ -241,7 +241,7 @@ when publishing files in that project."
 (defcustom muse-project-ignore-regexp
   (concat "\\`\\(#.*#\\|.*,v\\|.*~\\|\\.\\.?\\|\\.#.*\\|,.*\\)\\'\\|"
           "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\|\\.svn\\|"
-          "_darcs\\)\\(/\\|\\'\\)")
+          "\\.hg\\|\\.bzr\\|_darcs\\)\\(/\\|\\'\\)")
   "A regexp matching files to be ignored in Muse directories.
 
 You should set `case-fold-search' to nil before using this regexp
@@ -283,11 +283,13 @@ which match `muse-project-ignore-regexp'."
                               (muse-project-recurse-directory file)))))
       list)))
 
-(defun muse-project-alist-styles (entry-dir output-dir style)
+(defun muse-project-alist-styles (entry-dir output-dir style &rest other)
   "Return a list of styles to use in a `muse-project-alist' entry.
 ENTRY-DIR is the top-level directory of the project.
 OUTPUT-DIR is where Muse files are published, keeping directory structure.
 STYLE is the publishing style to use.
+
+OTHER contains other definitions to add to each style.  It is optional.
 
 For an example of the use of this function, see
 `examples/mwolson/muse-init.el' from the Muse distribution."
@@ -296,11 +298,13 @@ For an example of the use of this function, see
       ;; deal with cases like "foo/" that have a trailing slash
       (setq fnd (file-name-nondirectory (substring entry-dir 0 -1))))
     (cons `(:base ,style :path ,(expand-file-name output-dir)
-                  :include ,(concat "/" fnd "/[^/]+$"))
+                  :include ,(concat "/" fnd "/[^/]+$")
+                  ,@other)
           (mapcar (lambda (dir)
                     `(:base ,style
                             :path ,(expand-file-name dir output-dir)
-                            :include ,(concat "/" dir "/[^/]+$")))
+                            :include ,(concat "/" dir "/[^/]+$")
+                            ,@other))
                   (muse-project-recurse-directory entry-dir)))))
 
 (defun muse-project-alist-dirs (entry-dir)
