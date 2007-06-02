@@ -729,6 +729,7 @@ file."
   (save-match-data
     (and (or (fboundp 'create-image)
              (fboundp 'make-glyph))
+         (not (string-match "\\`[uU][rR][lL]:" link))
          (string-match muse-image-regexp link))))
 
 (defun muse-make-file-glyph (filename)

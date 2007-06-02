@@ -68,11 +68,13 @@ Each is passed the URL.  The transformed URL should be returned."
   :options '(muse-resolve-url)
   :group 'muse-publish)
 
-(defcustom muse-publish-desc-transforms nil
+(defcustom muse-publish-desc-transforms
+  '(muse-publish-strip-URL)
   "A list of functions used to prepare URL desciptions for publication.
 Each is passed the description.  The modified description should
 be returned."
   :type 'hook
+  :options '(muse-publish-strip-URL)
   :group 'muse-publish)
 
 (defcustom muse-publish-date-format "%B %e, %Y"
@@ -1462,6 +1464,8 @@ of link, the cadr is the page name, and the cddr is the anchor."
   (save-match-data
     (cond ((or (null target) (string= target ""))
            nil)
+          ((string-match "\\`[uU][rR][lL]:\\(.+\\)\\'" target)
+           (cons 'url (cons (match-string 1 target) nil)))
           ((string-match muse-image-regexp target)
            (cons 'image (cons target nil)))
           ((string-match muse-url-regexp target)
@@ -1913,6 +1917,13 @@ current style is exactly this style."
       (delete-region beg end))))
 
 ;; Miscellaneous helper functions
+
+(defun muse-publish-strip-URL (string &rest ignored)
+  "If the text \"URL:\" exists at the beginning of STRING, remove it.
+The text is removed regardless of whether and part of it is uppercase."
+  (save-match-data
+    (when (string-match "\\`[uU][rR][lL]:\\(.+\\)\\'" string)
+      (match-string 1 string))))
 
 (defun muse-publish-strip-tags (string)
   "Remove all tags from the string."

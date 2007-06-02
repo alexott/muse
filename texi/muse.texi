@@ -895,6 +895,17 @@ points to @url{http://www.mwolson.org/}.
 [[http://www.mwolson.org/][/static/logos/site-logo.png]]
 @end example
 
+Normally, images in the link part will be inlined.
+
+If you want these images to be published as links instead, place the
+text ``URL:'' immediately in front of the link text.  An example
+follows.
+
+@example
+[[URL:http://www.mwolson.org/static/logos/site-logo.png]]
+@end example
+
+
 @cindex images, displaying
 @cindex images, local
 @subheading Displaying images in Muse mode
