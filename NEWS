@@ -351,6 +351,12 @@ all be nested.  It is even possible to force a line break in a list
 item by inserting a blank line on the same level between the lines.
 Blockquotes may also be nested inside of a list.
 
+*** It is now possible to force images to not be inlined.
+To accomplish this, place the text "URL:" immediately in front of the
+link text.
+
+Example: [[URL:http://example.org/image.png]]
+
 *** New interactive function: muse-publish-region.
 This command publishes the current region, prompting for the title of
 the page (if any) and the style to use.

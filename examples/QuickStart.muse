@@ -284,10 +284,15 @@ Click [[#example][here]] to go back to the previous paragraph.
 ** URLs and E-mail addresses
 
 A URL or e-mail address encountered in the input text is published as
-a hyperlink if the output style supports it.  If it is an image URL,
-it will be inlined if possible.  For example, the latest Muse source
-can be downloaded at http://download.gna.org/muse-el and mail may be
-sent to mwolson@gnu.org.
+a hyperlink if the output style supports it.  For example, the latest
+Muse source can be downloaded at http://download.gna.org/muse-el and
+mail may be sent to mwolson@gnu.org.
+
+** Images
+
+If a URL has an extension of a known image format, it will be inlined
+if possible.  To create a link to an image, rather than inlining it,
+put the text "URL:" immediately in front of the link.
 
 ** Links
 

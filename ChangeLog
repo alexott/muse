@@ -1,3 +1,39 @@
+2007-06-02  Michael Olson  <mwolson@gnu.org>
+
+	* NEWS: Update for non-inlined image change.
+
+	* examples/Makefile (clean): Clean backup files.
+
+	* examples/QuickStart.muse (Images): New section that describes
+	how to inline and not inline images.
+
+	* lisp/muse-colors.el (muse-colors-resolve-image-file): Don't
+	touch images that have "URL:" in front of them.
+
+	* lisp/muse-protocols.el (muse-url-protocols): Add handler for
+	"URL:".  Use the identity function to resolve, since we don't want
+	to rip "URL:" out while publishing, due to some magic that depends
+	on that text.
+	(muse-browse-url-url): New function that browses URLs that have
+	"URL:" in front of them, by removing the "URL:" part and
+	reprocessing the remainder.
+
+	* lisp/muse-publish.el (muse-publish-classify-url): Docfix.
+	(muse-publish-url): Recognize images in the description before
+	images in the link.  Fixes bug #5112.  Thanks to Thomas Kappler
+	for the suggested workaround.
+	(muse-publish-desc-transforms): Add `muse-publish-strip-URL' as a
+	default value.
+	(muse-publish-classify-url): If target begins with "URL:" return
+	type url.
+	(muse-publish-strip-URL): New function that strips "URL:" from the
+	beginning of a string.  This is used to remove URL: from the link
+	description.  * texi/muse.texi (Markup Strings): Clarify the
+	meanings of image-link, link, and link-and-anchor.
+
+	* texi/muse.texi (Images): Update for new non-inlined image
+	ability and provide example.
+
 2007-05-31  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Add example for setting `muse-html-table-attributes'.
