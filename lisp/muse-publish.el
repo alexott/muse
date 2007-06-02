@@ -1457,8 +1457,8 @@ function for the list of available contexts."
 
 (defun muse-publish-classify-url (target)
   "Transform anchors and get published name, if TARGET is a page.
-The return value is a cons cell.  The car is the type of link,
-the cadr is the page name, and the cddr is the anchor."
+The return value is two linked cons cells.  The car is the type
+of link, the cadr is the page name, and the cddr is the anchor."
   (save-match-data
     (cond ((or (null target) (string= target ""))
            nil)
@@ -1505,6 +1505,10 @@ the cadr is the page name, and the cddr is the anchor."
                     (cddr target) 'url)))
     (cond ((eq type 'anchor-ref)
            (muse-markup-text 'anchor-ref anchor (or desc orig-url)))
+          ((and desc (string-match muse-image-regexp desc))
+           (let ((ext (or (file-name-extension desc) "")))
+             (setq desc (muse-path-sans-extension desc))
+             (muse-markup-text 'image-link url desc ext)))
           ((string= url "")
            desc)
           ((eq type 'image)
@@ -1517,10 +1521,6 @@ the cadr is the page name, and the cddr is the anchor."
            (muse-markup-text 'link-and-anchor url anchor
                              (or desc orig-url)
                              (muse-path-sans-extension url)))
-          ((and desc (string-match muse-image-regexp desc))
-           (let ((ext (or (file-name-extension desc) "")))
-             (setq desc (muse-path-sans-extension desc))
-             (muse-markup-text 'image-link url desc ext)))
           ((eq type 'link)
            (muse-markup-text 'link url (or desc orig-url)))
           (t

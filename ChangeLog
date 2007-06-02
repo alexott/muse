@@ -1,3 +1,10 @@
+2007-06-02  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-classify-url): Docfix.
+	(muse-publish-url): Recognize images in the description before
+	images in the link.  Fixes bug #5112.  Thanks to Thomas Kappler
+	for the suggested workaround.
+
 2007-05-31  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Add example for setting `muse-html-table-attributes'.
