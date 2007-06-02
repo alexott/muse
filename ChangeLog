@@ -5,6 +5,9 @@
 	images in the link.  Fixes bug #5112.  Thanks to Thomas Kappler
 	for the suggested workaround.
 
+	* texi/muse.texi (Markup Strings): Clarify the meanings of
+	image-link, link, and link-and-anchor.
+
 2007-05-31  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Add example for setting `muse-html-table-attributes'.
