@@ -1,6 +1,7 @@
 2007-06-02  Michael Olson  <mwolson@gnu.org>
 
-	* NEWS: Update for non-inlined image change.
+	* NEWS: Update for non-inlined image change and support for
+	table.el style tables.
 
 	* examples/Makefile (clean): Clean backup files.
 
@@ -30,6 +31,21 @@
 	beginning of a string.  This is used to remove URL: from the link
 	description.  * texi/muse.texi (Markup Strings): Clarify the
 	meanings of image-link, link, and link-and-anchor.
+	(muse-publish-markup-regexps): Move normal table rule to 2350.
+	Rule 2300 is now a regexp that matches table.el-style tables.
+	(muse-publish-markup-functions): Add table-el entry.
+	(muse-publish-table-el-table): New function that given a variant,
+	publishes a table.el-style table using the table in the matched
+	region.
+	(muse-publish-markup-table-el): New function that determines
+	whether the table.el-style table can be published, and what
+	variant to use.
+
+	* lisp/muse-regexps.el (muse-tag-regexp): New regexp that matches
+	the borders of table.el-style tables.
+
+	* lisp/muse-xml-common.el (muse-xml-markup-table): Make sure that
+	the table has sufficient whitespace in front of it.
 
 	* texi/muse.texi (Images): Update for new non-inlined image
 	ability and provide example.

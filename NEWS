@@ -392,6 +392,13 @@ customize `muse-html-table-attributes' to:
 
 in order to get a similar kind of output.
 
+**** Support table.el-style tables.
+If you have table.el somewhere in your load-path, Muse will publish
+tables that are in the format used by table.el.
+
+Currently, table.el tables can only be published for publishing styles
+based on HTML, LaTeX, or DocBook.
+
 **** Allow empty elements in tables.
 
 **** Allow initial and trailing whitespace in tables, but strip it
