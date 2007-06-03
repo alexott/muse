@@ -179,6 +179,13 @@ The first match string must contain the term."
   :type 'regexp
   :group 'muse-regexp)
 
+(defcustom muse-table-el-border-regexp (concat "^[" muse-regexp-blank "]*"
+                                               "\\+\\(-*\\+\\)+"
+                                               "[" muse-regexp-blank "]*")
+  "Regexp used to match the beginning and end of a table.el-style table."
+  :type 'regexp
+  :group 'muse-regexp)
+
 (defcustom muse-tag-regexp
   (concat "<\\([^/" muse-regexp-blank "\n][^" muse-regexp-blank
           "</>\n]*\\)\\(\\s-+[^<>\n]+[^</>\n]\\)?\\(/\\)?>")

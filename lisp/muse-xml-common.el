@@ -151,6 +151,8 @@ If a string ATTRIBUTES is given, pass it to the markup string begin-table."
          (field-list (muse-xml-sort-table (cdr table-info)))
          last-part)
     (when table-info
+      (let ((beg (point)))
+        (muse-publish-ensure-block beg))
       (muse-insert-markup (muse-markup-text 'begin-table (or attributes "")))
       (muse-insert-markup (muse-markup-text 'begin-table-group row-len))
       (dolist (fields field-list)

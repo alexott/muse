@@ -151,10 +151,17 @@ If non-nil, publish comments using the markup of the current style."
     (2200 ,(format muse-list-item-regexp (concat "[" muse-regexp-blank "]*"))
           0 list)
 
+    ;; support table.el style tables
+    (2300 ,(concat muse-table-el-border-regexp "\n"
+                   "\\(\\(" muse-table-line-regexp "\n\\)+"
+                   "\\(" muse-table-el-border-regexp "\\)"
+                   "\\(\n\\|\\'\\)\\)+")
+          0 table-el)
+
     ;; simple table markup is supported, nothing fancy.  use | to
     ;; separate cells, || to separate header cells, and ||| for footer
     ;; cells
-    (2300 ,(concat "\\(\\([" muse-regexp-blank "]*\n\\)?"
+    (2350 ,(concat "\\(\\([" muse-regexp-blank "]*\n\\)?"
                    "\\(\\(?:" muse-table-line-regexp "\\|"
                    muse-table-hline-regexp "\\)\\(?:\n\\|\\'\\)\\)\\)+")
           0 table)
@@ -233,6 +240,7 @@ while processing the markup rules."
     (quote     . muse-publish-markup-quote)
     (verse     . muse-publish-markup-verse)
     (table     . muse-publish-markup-table)
+    (table-el  . muse-publish-markup-table-el)
     (email     . muse-publish-markup-email)
     (link      . muse-publish-markup-link)
     (url       . muse-publish-markup-url))
@@ -1419,6 +1427,37 @@ The existing region will be removed, except for initial blank lines."
 
 (defun muse-publish-markup-table ()
   "Style does not support tables.")
+
+(defun muse-publish-table-el-table (variant)
+  "Publish table.el-style tables in the format given by VARIANT."
+  (when (condition-case nil
+            (progn (require 'table)
+                   t)
+          (error nil))
+    (let ((muse-buf (current-buffer)))
+      (save-restriction
+        (narrow-to-region (match-beginning 0) (match-end 0))
+        (goto-char (point-min))
+        (forward-line 1)
+        (search-forward "|" nil t)
+        (with-temp-buffer
+          (let ((temp-buf (current-buffer)))
+            (with-current-buffer muse-buf
+              (table-generate-source variant temp-buf))
+            (with-current-buffer muse-buf
+              (delete-region (point-min) (point-max))
+              (insert-buffer-substring temp-buf)
+              (muse-publish-mark-read-only (point-min) (point-max)))))))))
+
+(defun muse-publish-markup-table-el ()
+  "Mark up table.el-style tables."
+  (cond ((muse-style-derived-p 'html)
+         (muse-publish-table-el-table 'html))
+        ((muse-style-derived-p 'latex)
+         (muse-publish-table-el-table 'latex))
+        ((muse-style-derived-p 'docbook)
+         (muse-publish-table-el-table 'cals))
+        (t "Style does not support table.el tables.")))
 
 (defun muse-publish-escape-specials-in-string (string &optional context)
   "Escape specials in STRING using style-specific :specials.
