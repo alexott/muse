@@ -570,18 +570,19 @@ normally."
         (error "Cannot find any publishing styles to use")))
   (save-restriction
     (narrow-to-region beg end)
-    (unless muse-publish-inhibit-style-hooks
-      (muse-style-run-hooks :before style))
-    (muse-publish-markup
-     title
-     (sort (copy-alist (append muse-publish-markup-regexps
-                               (muse-style-elements-list :regexps style)))
-           (function
-            (lambda (l r)
-              (< (car l) (car r))))))
-    (unless muse-publish-inhibit-style-hooks
-      (muse-style-run-hooks :before-end style))
-    (muse-publish-escape-specials (point-min) (point-max) nil 'document)
+    (let ((muse-publish-generate-contents nil))
+      (unless muse-publish-inhibit-style-hooks
+        (muse-style-run-hooks :before style))
+      (muse-publish-markup
+       title
+       (sort (copy-alist (append muse-publish-markup-regexps
+                                 (muse-style-elements-list :regexps style)))
+             (function
+              (lambda (l r)
+                (< (car l) (car r))))))
+      (unless muse-publish-inhibit-style-hooks
+        (muse-style-run-hooks :before-end style))
+      (muse-publish-escape-specials (point-min) (point-max) nil 'document))
     (goto-char (point-max))))
 
 (defun muse-publish-markup-buffer (title style)

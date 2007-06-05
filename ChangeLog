@@ -1,3 +1,27 @@
+2007-06-04  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-colors.el (muse-link-face): If the link is to a remote
+	-- that is, Tramp or ange-ftp -- file, then do not call
+	file-exists-p on it.  Thanks to Jim Ottaway for the suggestion.
+	Fixes bug #5115.
+
+	* lisp/muse-html.el (muse-html-insert-contents): Add
+	documentation.  Handle case where heading is read-only, but has
+	muse-contents property.  Remove the muse-contents property for any
+	heading we come across so as to avoid double-including an item in
+	an outer table of contents.
+	(muse-html-denote-headings): New function that denotes whether a
+	heading is not read-only by adding the muse-contents property to
+	it.
+	(muse-html-munge-buffer): If we are not to generate contents,
+	still denote headings, in case some outer layer wants to generate
+	contents for our headings.  This should fix a bug with table of
+	contents and the <include> tag.  Thanks to thorne for the report.
+
+	* lisp/muse-publish.el (muse-publish-markup-region): Let-bind
+	muse-publish-generate-contents and set it to nil.  This should
+	do the right thing when using <include> tags.
+
 2007-06-02  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Update for non-inlined image change and support for
