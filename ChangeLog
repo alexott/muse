@@ -1,3 +1,9 @@
+2007-06-05  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-journal.el (muse-journal-html-munge-buffer): Add
+	read-only properties to qotd contents, so that they don't get
+	double-escaped.  Thanks to Leo for the report.
+
 2007-06-04  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el (muse-link-face): If the link is to a remote
