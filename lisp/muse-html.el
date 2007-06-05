@@ -1,6 +1,6 @@
 ;;; muse-html.el --- publish to HTML and XHTML
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -493,6 +493,8 @@ This will be used if no special characters are found."
 ;; Handling of tags for HTML
 
 (defun muse-html-insert-contents (depth)
+  "Scan the current document and generate a table of contents at point.
+DEPTH indicates how many levels of headings to include.  The default is 2."
   (let ((max-depth (or depth 2))
         (index 1)
         base contents l)
@@ -501,7 +503,11 @@ This will be used if no special characters are found."
       (search-forward "Page published by Emacs Muse begins here" nil t)
       (catch 'done
         (while (re-search-forward "<h\\([0-9]+\\)>\\(.+?\\)</h\\1>$" nil t)
-          (unless (get-text-property (point) 'read-only)
+          (unless (and (get-text-property (point) 'read-only)
+                       (not (get-text-property (match-beginning 0)
+                                               'muse-contents)))
+            (remove-text-properties (match-beginning 0) (match-end 0)
+                                    '(muse-contents nil))
             (setq l (1- (string-to-number (match-string 1))))
             (if (null base)
                 (setq base l)
@@ -541,6 +547,18 @@ This will be used if no special characters are found."
         (setq sub-open (1- sub-open)))
       (muse-insert-markup "</dl>\n</div>\n")
       (muse-publish-mark-read-only p (point)))))
+
+(defun muse-html-denote-headings ()
+  "Place a text property on any headings in the current buffer.
+This allows the headings to be picked up later on if publishing a
+table of contents."
+  (save-excursion
+    (goto-char (point-min))
+    (search-forward "Page published by Emacs Muse begins here" nil t)
+    (while (re-search-forward "<h\\([0-9]+\\)>\\(.+?\\)</h\\1>$" nil t)
+      (unless (get-text-property (point) 'read-only)
+        (add-text-properties (match-beginning 0) (match-end 0)
+                             '(muse-contents t))))))
 
 (defun muse-html-class-tag (beg end attrs)
   (goto-char beg)
@@ -618,10 +636,12 @@ This tag requires htmlize 1.34 or later in order to work."
                  (muse-html-encoding)))))
 
 (defun muse-html-munge-buffer ()
-  (when muse-publish-generate-contents
-    (goto-char (car muse-publish-generate-contents))
-    (muse-html-insert-contents (cdr muse-publish-generate-contents))
-    (setq muse-publish-generate-contents nil)))
+  (if muse-publish-generate-contents
+      (progn
+        (goto-char (car muse-publish-generate-contents))
+        (muse-html-insert-contents (cdr muse-publish-generate-contents))
+        (setq muse-publish-generate-contents nil))
+    (muse-html-denote-headings)))
 
 (defun muse-html-finalize-buffer ()
   (when (and (boundp 'buffer-file-coding-system)
