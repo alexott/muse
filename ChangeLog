@@ -1,5 +1,10 @@
 2007-06-04  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-colors.el (muse-link-face): If the link is to a remote
+	-- that is, Tramp or ange-ftp -- file, then do not call
+	file-exists-p on it.  Thanks to Jim Ottaway for the suggestion.
+	Fixes bug #5115.
+
 	* lisp/muse-html.el (muse-html-insert-contents): Add
 	documentation.  Handle case where heading is read-only, but has
 	muse-contents property.  Remove the muse-contents property for any

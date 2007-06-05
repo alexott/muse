@@ -697,6 +697,8 @@ ignored."
       (when link
         (cond ((string-match muse-url-regexp link)
                'muse-link)
+              ((muse-file-remote-p link)
+               'muse-link)
               ((string-match muse-file-regexp link)
                (if (file-exists-p link)
                    'muse-link
