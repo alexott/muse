@@ -5,8 +5,12 @@
 	regexps so that they work with XEmacs 21.  Thanks to Adrian
 	Tritschler for the report.
 
-	* texi/muse.texi (HTML): Document muse-xhtml-style-sheet.  Thanks
+	* texi/muse.texi: Update copyright years.
+	(HTML): Document muse-xhtml-style-sheet.  Thanks
 	to thorne for noticing.
+	(Development): Change archive year to 2006.  Thanks to Adrian
+	Tritschler for noticing.  So *that's* why some people had the 2005
+	version ....
 
 2007-06-05  Michael Olson  <mwolson@gnu.org>
 
