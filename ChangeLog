@@ -1,3 +1,10 @@
+2007-06-06  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-regexps.el (muse-table-line-regexp)
+	(muse-table-hline-regexp, muse-table-el-border-regexp): Fix
+	regexps so that they work with XEmacs 21.  Thanks to Adrian
+	Tritschler for the report.
+
 2007-06-05  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (install-info): Remove $(MANUAL).info part, since this
