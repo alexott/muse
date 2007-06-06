@@ -437,7 +437,10 @@ For more on the structure of this list, see
                              nil t))
             (goto-char (point-min))
             (while (search-forward "%qotd%" nil t)
-              (replace-match (or qotd "") nil t))
+              (save-restriction
+                (narrow-to-region (match-beginning 0) (match-end 0))
+                (delete-region (point-min) (point-max))
+                (when qotd (muse-insert-markup qotd))))
             (goto-char (point-min))
             (while (search-forward "%text%" nil t)
               (replace-match text nil t))

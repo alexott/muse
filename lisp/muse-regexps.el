@@ -167,19 +167,19 @@ The first match string must contain the term."
   :type 'regexp
   :group 'muse-regexp)
 
-(defcustom muse-table-line-regexp (concat "^.*" muse-table-field-regexp ".*")
+(defcustom muse-table-line-regexp (concat ".*" muse-table-field-regexp ".*")
   "Regexp used to match a table line when publishing."
   :type 'regexp
   :group 'muse-regexp)
 
-(defcustom muse-table-hline-regexp (concat "^[" muse-regexp-blank
+(defcustom muse-table-hline-regexp (concat "[" muse-regexp-blank
                                            "]*|[-+]+|[" muse-regexp-blank
                                            "]*")
   "Regexp used to match a horizontal separator line in a table."
   :type 'regexp
   :group 'muse-regexp)
 
-(defcustom muse-table-el-border-regexp (concat "^[" muse-regexp-blank "]*"
+(defcustom muse-table-el-border-regexp (concat "[" muse-regexp-blank "]*"
                                                "\\+\\(-*\\+\\)+"
                                                "[" muse-regexp-blank "]*")
   "Regexp used to match the beginning and end of a table.el-style table."

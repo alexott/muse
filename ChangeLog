@@ -1,3 +1,23 @@
+2007-06-06  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-regexps.el (muse-table-line-regexp)
+	(muse-table-hline-regexp, muse-table-el-border-regexp): Fix
+	regexps so that they work with XEmacs 21.  Thanks to Adrian
+	Tritschler for the report.
+
+	* texi/muse.texi (HTML): Document muse-xhtml-style-sheet.  Thanks
+	to thorne for noticing.
+
+2007-06-05  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile (install-info): Remove $(MANUAL).info part, since this
+	is taken care of already by texi/Makefile.  Thanks to Leo for the
+	report.
+
+	* lisp/muse-journal.el (muse-journal-html-munge-buffer): Add
+	read-only properties to qotd contents, so that they don't get
+	double-escaped.  Thanks to Leo for the report.
+
 2007-06-04  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el (muse-link-face): If the link is to a remote
