@@ -1586,8 +1586,15 @@ This is used in @code{muse-html-header}.  You can put raw CSS in here or
 a @verb{|<link>|} tag to an external stylesheet.  This text may contain
 @verb{|<lisp>|} markup tags.
 
-If you are using XHTML, make sure to close the @verb{|<link>|} tag
-properly.
+If you are publishing to XHTML, then customize the
+@code{muse-xhtml-style-sheet} option instead.
+
+@item muse-xhtml-style-sheet
+Store your stylesheet definitions here.
+
+This is used in @code{muse-xhtml-header}.  You can put raw CSS in here
+or a @verb{|<link>|} tag to an external stylesheet.  This text may
+contain @verb{|<lisp>|} markup tags.
 
 @item muse-html-header
 Header used for publishing HTML files.

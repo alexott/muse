@@ -5,6 +5,9 @@
 	regexps so that they work with XEmacs 21.  Thanks to Adrian
 	Tritschler for the report.
 
+	* texi/muse.texi (HTML): Document muse-xhtml-style-sheet.  Thanks
+	to thorne for noticing.
+
 2007-06-05  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (install-info): Remove $(MANUAL).info part, since this
