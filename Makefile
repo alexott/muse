@@ -37,7 +37,7 @@ realclean fullclean: clean
 	for i in $(SUBDIRS); do \
 	 (cd $$i && $(MAKE) realclean); done
 
-install-info: $(MANUAL).info
+install-info:
 	(cd texi && $(MAKE) install)
 
 install-bin: autoloads lisp contrib

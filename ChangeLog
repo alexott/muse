@@ -1,5 +1,9 @@
 2007-06-05  Michael Olson  <mwolson@gnu.org>
 
+	* Makefile (install-info): Remove $(MANUAL).info part, since this
+	is taken care of already by texi/Makefile.  Thanks to Leo for the
+	report.
+
 	* lisp/muse-journal.el (muse-journal-html-munge-buffer): Add
 	read-only properties to qotd contents, so that they don't get
 	double-escaped.  Thanks to Leo for the report.
