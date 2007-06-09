@@ -1,3 +1,16 @@
+2007-06-09  Markus Hoenicka <markus.hoenicka@mhoenicka.de>
+
+	* lisp/muse-book.el
+	* lisp/muse-docbook.el
+	* lisp/muse-latex.el
+	* lisp/muse-publish.el: added support for <cite> element which
+	denotes in-text citations
+	
+	* lisp/muse-html.el
+	* lisp/muse-groff.el
+	* lisp/muse-texinfo.el
+	* lisp/muse-xml.el: added support for <cite> element (stub)
+	
 2007-06-06  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-regexps.el (muse-table-line-regexp)

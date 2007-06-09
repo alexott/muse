@@ -73,7 +73,7 @@ together as if one giant chapter."
   :type 'string
   :group 'muse-book)
 
-(defcustom muse-book-latex-footer "\n\\end{document}"
+(defcustom muse-book-latex-footer "<lisp>(muse-latex-bibliography)</lisp>\n\\end{document}"
   "Footer used for publishing books to LaTeX.  This may be text or a filename."
   :type 'string
   :group 'muse-book)

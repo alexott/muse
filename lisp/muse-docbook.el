@@ -52,7 +52,7 @@ See `muse-docbook' for more information."
   "<?xml version=\"1.0\" encoding=\"<lisp>
   (muse-docbook-encoding)</lisp>\"?>
 <!DOCTYPE article PUBLIC \"-//OASIS//DTD DocBook V4.2//EN\"
-                  \"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd\">
+                  \"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd\"<lisp>(muse-docbook-entities)</lisp>>
 <article>
   <articleinfo>
     <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
@@ -68,7 +68,7 @@ This may be text or a filename."
 
 (defcustom muse-docbook-footer "
   <!-- Page published by Emacs Muse ends here -->
-</article>\n"
+<lisp>(muse-docbook-bibliography)</lisp></article>\n"
   "Footer used for publishing DocBook XML files.
 This may be text or a filename."
   :type 'string
@@ -156,6 +156,10 @@ For more on the structure of this list, see
     (end-center      . "\n</para>")
     (begin-quote     . "<blockquote>\n")
     (end-quote       . "\n</blockquote>")
+    (begin-cite      . "<citation role=\"%s\">")
+    (begin-cite-author . "<citation role=\"%s\">A:")
+    (begin-cite-year . "<citation role=\"%s\">Y:")
+    (end-cite        . "</citation>")
     (begin-quote-item . "<para>")
     (end-quote-item  . "</para>")
     (begin-uli       . "<itemizedlist mark=\"bullet\">\n")
@@ -276,8 +280,53 @@ and anything after `Firstname' is optional."
                             nil t)
     (replace-match (upcase (match-string 1)) t t nil 1)))
 
+(defun muse-docbook-fixup-citations ()
+  ;; remove the role attribute if there is no role
+  (save-restriction)
+  (goto-char (point-min))
+  (while (re-search-forward "<\\(citation role=\"nil\"\\)>" nil t)
+    (replace-match "citation" t t nil 1)
+    )
+  ;; replace colons in multi-head citations with semicolons
+  (goto-char (point-min))
+  (while (re-search-forward "<citation.*>" nil t)
+    (let ((start (point))
+	  (end (re-search-forward "</citation>")))
+      (narrow-to-region start end)
+      (goto-char start)
+      (while (re-search-forward "," nil t)
+	(replace-match ";"))
+      (widen)))
+  )
+
 (defun muse-docbook-munge-buffer ()
-  (muse-docbook-fixup-images))
+  (muse-docbook-fixup-images)
+  (muse-docbook-fixup-citations))
+
+(defun muse-docbook-entities ()
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (if (re-search-forward "<citation" nil t)
+	  (concat
+	   " [\n<!ENTITY bibliography SYSTEM \""
+	   (if (string-match ".short$" (muse-page-name))
+	       (substring (muse-page-name) 0 -6)
+	     (muse-page-name))
+	   ".bib.xml\">\n]")
+	"")
+      )))
+
+(defun muse-docbook-bibliography ()
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (if (re-search-forward "<citation" nil t)
+	  "&bibliography;\n"
+	"")
+      )))
 
 (defun muse-docbook-finalize-buffer ()
   (when (boundp 'buffer-file-coding-system)
