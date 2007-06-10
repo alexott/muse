@@ -14,7 +14,7 @@
 @copying
 This manual is for Emacs Muse version 3.02.93 (3.03 RC3).
 
-Copyright @copyright{} 2004, 2005, 2006 Free Software Foundation, Inc.
+Copyright @copyright{} 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -251,13 +251,13 @@ the following steps.
 
 @item Register the archive.
 @example
-tla register-archive -f http://www.mwolson.org/archives/2005
+tla register-archive -f http://www.mwolson.org/archives/2006
 @end example
 
 @item Download the Muse package.
 @example
 # Download Muse into the @file{muse} directory.
-tla get mwolson@@gnu.org--2005/muse--main--1.0 muse
+tla get mwolson@@gnu.org--2006/muse--main--1.0 muse
 @end example
 
 @item List upstream changes that are missing from your local copy.

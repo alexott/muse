@@ -1,3 +1,9 @@
+2007-06-10  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-strip-URL): Fix bug where
+	URLs were being removed during publishing.  Thanks to everyone who
+	reported this.
+
 2007-06-09  Markus Hoenicka <markus.hoenicka@mhoenicka.de>
 
 	* lisp/muse-book.el
@@ -5,12 +11,12 @@
 	* lisp/muse-latex.el
 	* lisp/muse-publish.el: added support for <cite> element which
 	denotes in-text citations
-	
+
 	* lisp/muse-html.el
 	* lisp/muse-groff.el
 	* lisp/muse-texinfo.el
 	* lisp/muse-xml.el: added support for <cite> element (stub)
-	
+
 2007-06-06  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-regexps.el (muse-table-line-regexp)
@@ -18,8 +24,12 @@
 	regexps so that they work with XEmacs 21.  Thanks to Adrian
 	Tritschler for the report.
 
-	* texi/muse.texi (HTML): Document muse-xhtml-style-sheet.  Thanks
+	* texi/muse.texi: Update copyright years.
+	(HTML): Document muse-xhtml-style-sheet.  Thanks
 	to thorne for noticing.
+	(Development): Change archive year to 2006.  Thanks to Adrian
+	Tritschler for noticing.  So *that's* why some people had the 2005
+	version ....
 
 2007-06-05  Michael Olson  <mwolson@gnu.org>
 
