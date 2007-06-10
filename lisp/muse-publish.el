@@ -1962,8 +1962,9 @@ current style is exactly this style."
   "If the text \"URL:\" exists at the beginning of STRING, remove it.
 The text is removed regardless of whether and part of it is uppercase."
   (save-match-data
-    (when (string-match "\\`[uU][rR][lL]:\\(.+\\)\\'" string)
-      (match-string 1 string))))
+    (if (string-match "\\`[uU][rR][lL]:\\(.+\\)\\'" string)
+        (match-string 1 string)
+      string)))
 
 (defun muse-publish-strip-tags (string)
   "Remove all tags from the string."
