@@ -80,7 +80,11 @@ It is run just before colorizing or publishing a buffer.")
 ;; Default file extension
 
 ;; By default, use the .muse file extension.
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.muse\\'" . 'muse-mode-choose-mode))
+;;;###autoload (add-to-list 'auto-mode-alist '("\\.muse\\'" . muse-mode-choose-mode))
+
+;; We need to have this at top-level, as well, so that any Muse or
+;; Planner documents opened during init will just work.
+(add-to-list 'auto-mode-alist '("\\.muse\\'" . muse-mode-choose-mode))
 
 (eval-when-compile
   (defvar muse-ignored-extensions))
