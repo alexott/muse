@@ -1,3 +1,10 @@
+2007-06-11  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el: Make the add-to-list 'auto-mode-alist part an
+	autoload, rather than having it exist at top-level.  Thanks to Leo
+	for the suggestion.
+	(muse-update-file-extension): Docfix.
+
 2007-06-10  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-strip-URL): Fix bug where
