@@ -30,8 +30,6 @@ to merge into Muse at some point.
  - Jim Ottaway
     - three-part-link.el: allow links like "project#page#anchor" or
       "project::page#anchor".
-    - muse-slides.el: support for using Beamer to make slides.  Should
-      be merged into muse-latex.el.
 
 * Ideas without code
 

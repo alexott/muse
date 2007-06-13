@@ -1,10 +1,24 @@
 2007-06-12  Michael Olson  <mwolson@gnu.org>
 
-	* IDEAS.muse: Install things from new contributors just after the
-	3.03 release, since I won't have time to review the code before
-	the release.  Move to new etc/ directory.
-
 	* README: Document new etc/ directory.
+
+	* etc/IDEAS.muse: Install things from new contributors just after
+	the 3.03 release, since I won't have time to review the code
+	before the release.  Move to new etc/ directory.  Slides
+	publishing has been installed.
+
+	* lisp/muse-latex.el (muse-latex-slides-header): New option that
+	determines the header to use for publishing slides.
+	(muse-latex-lecture-notes-header): New option that determines the
+	header to use for publishing lecture notes.
+	(muse-latex-slides-markup-tags): New option containing tags to use
+	when publishing slides.
+	(muse-latex-permit-contents-tag): Move higher in file.
+	(muse-latex-slide-tag): New function to publish the <slide> tag.
+	("slides", "slides-pdf"): New publishing styles that create slides
+	using Beamer.
+	("lecture-notes", "lecture-notes-pdf"): New publishing styles that
+	create lecture notes using Beamer.
 
 	* lisp/muse.el: Re-add the auto-mode-alist part to top-level,
 	since otherwise Planner is not happy when `plan' is called during
