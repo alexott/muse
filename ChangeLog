@@ -1,5 +1,9 @@
 2007-06-12  Michael Olson  <mwolson@gnu.org>
 
+	* IDEAS.muse: Install things from new contributors just after the
+	3.03 release, since I won't have time to review the code before
+	the release.  Move to new etc/ directory.
+
 	* lisp/muse.el: Re-add the auto-mode-alist part to top-level,
 	since otherwise Planner is not happy when `plan' is called during
 	init.  Remove stray quote from autoload snippet.
