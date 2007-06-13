@@ -4,6 +4,8 @@
 	3.03 release, since I won't have time to review the code before
 	the release.  Move to new etc/ directory.
 
+	* README: Document new etc/ directory.
+
 	* lisp/muse.el: Re-add the auto-mode-alist part to top-level,
 	since otherwise Planner is not happy when `plan' is called during
 	init.  Remove stray quote from autoload snippet.
