@@ -765,8 +765,11 @@ in place of an image link defined by BEG and END."
     (when (stringp image-file)
       (if (fboundp 'create-image)
           ;; use create-image and display property
-          (add-text-properties beg end
-                               (list 'display (create-image image-file)))
+          (let ((display-stuff (condition-case nil
+                                   (create-image image-file)
+                                 (error nil))))
+            (when display-stuff
+              (add-text-properties beg end (list 'display display-stuff))))
         ;; use make-glyph and invisible property
         (and (setq glyph (muse-make-file-glyph image-file))
              (progn

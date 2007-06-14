@@ -7,6 +7,8 @@
 	make implicit interwiki links work properly again.
 	(muse-link-face): Strip anchor from end of a path, so that this
 	works with anchors in interwiki links.
+	(muse-colors-insert-image): Catch error that occurs in Emacs 21
+	when an image does not exist.
 
 	* lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Permit
 	anchors.
@@ -20,6 +22,8 @@
 	about match 0.
 	(muse-handle-explicit-link): Docfix: this does not modify the
 	match data.
+	(muse-file-remote-p): In Emacs 21, ange-ftp-name-format is a list
+	that has the regexp in its car.
 
 2007-06-12  Michael Olson  <mwolson@gnu.org>
 

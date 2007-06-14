@@ -490,7 +490,7 @@ on the system \"/user@host:\"."
         ((fboundp 'tramp-handle-file-remote-p)
          (tramp-handle-file-remote-p file))
         ((and (boundp 'ange-ftp-name-format)
-              (string-match ange-ftp-name-format file))
+              (string-match (car ange-ftp-name-format) file))
          t)
         (t nil)))
 
