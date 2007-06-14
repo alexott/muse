@@ -243,11 +243,12 @@ whether progress messages should be displayed to the user."
         (when value
           (setq rules (cons rule rules))
           (setq regexps (cons value regexps)))))
+    (setq rules (nreverse rules)
+          regexps (nreverse regexps))
     (setq muse-colors-regexp (concat "\\("
                                      (mapconcat #'identity regexps "\\|")
                                      "\\)")
           muse-colors-vector (make-vector 128 nil))
-    (setq rules (nreverse rules))
     (while rules
       (if (eq (cadr (car rules)) t)
           (let ((i 0) (l 128))
