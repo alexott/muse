@@ -85,9 +85,30 @@ Here is an example:
 Generating an Index page
 ------------------------
 
+In emacs-wiki, the page specified by `emacs-wiki-index-page' is an
+automatically generated index page.
 
+Muse does not automatically create this file.  If you want an
+automatic index file to be generated, then create a file and place the
+following contents (between the lines of underscores) in it.
+
+_____
+#title Index
+
+<lisp>(muse-index-as-string t t t)</lisp>
+_____
+
+Then, add a :force-publish tag to the paths part of the project entry
+in muse-project-alist.  Example:
+
+    ("Website" ("~/Web/"
+                :force-publish ("WikiIndex")
+                :default "WelcomePage")
+     (:base "xhtml"
+            :base-url "http://mydomain.org/"
+            :path "~/public_html"))
 
 License
 =======
 
-This file is in the public domain.
+This file may be used, distributed, and modified without restriction.
