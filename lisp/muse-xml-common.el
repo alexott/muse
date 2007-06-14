@@ -1,6 +1,6 @@
 ;;; muse-xml-common.el --- common routines for XML-like publishing styles
 
-;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 

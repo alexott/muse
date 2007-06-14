@@ -233,19 +233,18 @@ function to `message-send-hook'."
          (buffer-substring-no-properties (point-min) (point-max)))
        "<#/multipart>\n"))))
 
-(unless (assoc "message" muse-publishing-styles)
-  (muse-define-style "message"
-                     :functions 'muse-message-markup-functions
-                     :strings   'muse-message-markup-strings
-                     :tags      'muse-message-markup-tags)
+(muse-define-style "message"
+                   :functions 'muse-message-markup-functions
+                   :strings   'muse-message-markup-strings
+                   :tags      'muse-message-markup-tags)
 
-  (muse-derive-style "message-html" "html"
-                     :header 'muse-message-html-header
-                     :footer 'muse-message-html-footer)
+(muse-derive-style "message-html" "html"
+                   :header 'muse-message-html-header
+                   :footer 'muse-message-html-footer)
 
-  (muse-derive-style "message-xhtml" "xhtml"
-                     :header 'muse-message-html-header
-                     :footer 'muse-message-html-footer))
+(muse-derive-style "message-xhtml" "xhtml"
+                   :header 'muse-message-html-header
+                   :footer 'muse-message-html-footer)
 
 (provide 'muse-message)
 

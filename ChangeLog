@@ -2,6 +2,9 @@
 
 	* etc/IDEAS.muse: Mark three-part-links item as done.
 
+	* experimental/muse-message.el: Remove guard for muse-define-style
+	calls.
+
 	* lisp/muse-colors.el (muse-configure-highlighting): Fix bug where
 	markup rules were being interpreted in reverse order.  This should
 	make implicit interwiki links work properly again.

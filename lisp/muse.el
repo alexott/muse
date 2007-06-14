@@ -1,6 +1,6 @@
 ;;; muse.el --- an authoring and publishing tool for Emacs
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
@@ -10,7 +10,7 @@
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
 ;; Description: An authoring and publishing tool for Emacs
-;; URL: http://www.mwolson.org/projects/EmacsMuse.html
+;; URL: http://mwolson.org/projects/EmacsMuse.html
 ;; Compatibility: Emacs21 XEmacs21 Emacs22
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
