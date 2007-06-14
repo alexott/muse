@@ -1,5 +1,8 @@
 2007-06-14  Michael Olson  <mwolson@gnu.org>
 
+	* etc/emacs-wiki-migration.txt: New document that explains how to
+	migrate from emacs-wiki to Muse.
+
 	* lisp/muse-mode.el (muse-mode-map): Permit C-c C-M-t to do the
 	same thing as C-c C-S-t, since the former works better in the
 	console.  Thanks to Leo for the suggestion.
