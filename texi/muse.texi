@@ -476,7 +476,7 @@ Find text in all files of the current project.
 Publish the currently-visited file.  Prompt for the style if the current
 file can be published using more than one style.
 
-@item C-c C-T (`muse-publish-this-file')
+@item C-c C-S-t, or C-c C-M-t (`muse-publish-this-file')
 Publish the currently-visited file.  Prompt for both the style and
 output directory.
 

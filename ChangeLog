@@ -1,3 +1,12 @@
+2007-06-14  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-mode-map): Permit C-c C-M-t to do the
+	same thing as C-c C-S-t, since the former works better in the
+	console.  Thanks to Leo for the suggestion.
+
+	* texi/muse.texi (Keystroke Summary): Document the C-c C-M-t
+	keybinding.
+
 2007-06-13  Michael Olson  <mwolson@gnu.org>
 
 	* etc/IDEAS.muse: Mark three-part-links item as done.
