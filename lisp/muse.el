@@ -251,7 +251,10 @@ All this means is that certain extensions, like .gz, are removed."
 See also `with-temp-file' and `with-output-to-string'.
 
 Unlike `with-temp-buffer', this will never attempt to save the temp buffer.
-It is meant to be used along with `insert-file-contents'."
+It is meant to be used along with `insert-file-contents'.
+
+Additionally, if `debug-on-error' is set to t, keep the buffer
+around for debugging purposes rather than removing it."
   (let ((temp-buffer (make-symbol "temp-buffer")))
     `(let ((,temp-buffer (generate-new-buffer " *muse-temp*")))
        (unwind-protect

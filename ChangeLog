@@ -4,6 +4,8 @@
 	same thing as C-c C-S-t, since the former works better in the
 	console.  Thanks to Leo for the suggestion.
 
+	* lisp/muse.el (muse-with-temp-buffer): Docfix.
+
 	* texi/muse.texi (Keystroke Summary): Document the C-c C-M-t
 	keybinding.
 
