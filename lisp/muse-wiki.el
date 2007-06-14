@@ -177,7 +177,7 @@ If you want this replacement to happen, you must add
                                      files)))
                       (when files
                         (concat (regexp-opt files) "\\|"))))
-                  "\\sw+\\)?\\)?\\>"))
+                  "\\sw+\\)\\(#\\S-+\\)?\\)?\\>"))
     (when (featurep 'muse-colors)
       (muse-configure-highlighting 'muse-colors-markup muse-colors-markup))))
 
@@ -257,57 +257,63 @@ use the first style we find."
                  page-path)))))))
 
 (defun muse-wiki-handle-implicit-interwiki (&optional string)
-  "If STRING or point has an interwiki link, resolve it and
-return the first match.
+  "If STRING or point has an interwiki link, resolve it to a filename.
 
-Match 1 is set to the link.
-Match 2 is set to the description."
+Match string 0 is set to the link."
   (when (if string (string-match muse-wiki-interwiki-regexp string)
           (looking-at muse-wiki-interwiki-regexp))
     (let* ((project (match-string 1 string))
            (subst (cdr (assoc project muse-wiki-interwiki-alist)))
-           (word (if string
-                     (and (match-beginning 3)
-                          (substring string (match-beginning 3)))
-                   (match-string 3 string))))
+           (word (match-string 3 string))
+           (anchor (if (match-beginning 4)
+                       (match-string 4 string)
+                     "")))
       (if subst
           (if (functionp subst)
-              (funcall subst word)
-            (concat subst word))
+              (and (setq word (funcall subst word))
+                   (concat word anchor))
+            (concat subst word anchor))
         (and (assoc project muse-project-alist)
              (or word (not muse-wiki-ignore-bare-project-names))
-             (muse-wiki-resolve-project-page project word))))))
+             (setq word (muse-wiki-resolve-project-page project word))
+             (concat word anchor))))))
 
 (defun muse-wiki-handle-explicit-interwiki (&optional string)
-  "If STRING or point has an interwiki link, resolve it and
-return the first match.
-
-Match 1 is set to the link.
-Match 2 is set to the description."
+  "If STRING or point has an interwiki link, resolve it to a filename."
   (let ((right-pos (if string (length string) (match-end 1))))
     (when (if string (string-match muse-wiki-interwiki-regexp string)
             (looking-at muse-wiki-interwiki-regexp))
       (let* ((project (match-string 1 string))
              (subst (cdr (assoc project muse-wiki-interwiki-alist)))
+             (anchor (and (match-beginning 4)
+                          (match-string 4 string)))
              (word (when (match-end 2)
-                     (if string
-                         (substring string (match-end 2))
-                       (if right-pos
-                           (buffer-substring (match-end 2)
-                                             right-pos))))))
+                     (cond (anchor (match-string 3 string))
+                           (string (substring string (match-end 2)))
+                           (right-pos (buffer-substring (match-end 2)
+                                                        right-pos))
+                           (t nil)))))
         (if (and (null word)
                  right-pos
                  (not (= right-pos (match-end 1))))
             ;; if only a project name was found, it must take up the
             ;; entire string or link
             nil
+          (unless anchor
+            (if (or (null word)
+                    (not (string-match "#[^#]+\\'" word)))
+                (setq anchor "")
+              (setq anchor (match-string 0 word))
+              (setq word (substring word 0 (match-beginning 0)))))
           (if subst
               (if (functionp subst)
-                  (funcall subst word)
-                (concat subst word))
+                  (and (setq word (funcall subst word))
+                       (concat word anchor))
+                (concat subst word anchor))
             (and (assoc project muse-project-alist)
                  (or word (not muse-wiki-ignore-bare-project-names))
-                 (muse-wiki-resolve-project-page project word))))))))
+                 (setq word (muse-wiki-resolve-project-page project word))
+                 (concat word anchor))))))))
 
 (defun muse-wiki-handle-wikiword (&optional string)
   "If STRING or point has a WikiWord, return it.

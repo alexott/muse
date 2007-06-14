@@ -579,9 +579,8 @@ An implicit link is one that is not surrounded by brackets.
 By default, Muse handles URLs only.
 If you want to handle WikiWords, load muse-wiki.el.
 
-This function modifies the match data so that match 1 is the
-link.  Match 2 will usually be nil, unless the description is
-embedded in the text of the buffer.
+This function modifies the match data so that match 0 is the
+link.
 
 The match data is restored after each unsuccessful handler
 function call.  If LINK is specified, only restore at very end.
@@ -611,11 +610,7 @@ An explicit link is one [[like][this]] or [[this]]."
   "Handle explicit links.  If LINK is not specified, look at point.
 An explicit link is one that looks [[like][this]] or [[this]].
 
-This function modifies the match data so that match 1 is the link
-and match 2 is the description.  Perhaps someday match 3 might be
-the text to use for the alt element of an <a> or <img> tag.
-
-The match data is saved.  If no handlers are able to process
+The match data is preserved.  If no handlers are able to process
 LINK, return LINK (if specified) or the 1st match string.  If
 LINK is not specified, it is assumed that Muse has matched
 against `muse-explicit-link-regexp' before calling this

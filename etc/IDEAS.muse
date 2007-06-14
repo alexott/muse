@@ -25,12 +25,6 @@ to merge into Muse at some point.
    - ConTeX support (similar to LaTeX):
      http://jm.bornier.free.fr/muse.html
 
-** Before the 3.03 release
-
- - Jim Ottaway
-    - three-part-link.el: allow links like "project#page#anchor" or
-      "project::page#anchor".
-
 * Ideas without code
 
 ** After 3.03 release

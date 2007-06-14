@@ -1,8 +1,25 @@
 2007-06-13  Michael Olson  <mwolson@gnu.org>
 
+	* etc/IDEAS.muse: Mark three-part-links item as done.
+
 	* lisp/muse-colors.el (muse-configure-highlighting): Fix bug where
 	markup rules were being interpreted in reverse order.  This should
 	make implicit interwiki links work properly again.
+	(muse-link-face): Strip anchor from end of a path, so that this
+	works with anchors in interwiki links.
+
+	* lisp/muse-wiki.el (muse-wiki-update-interwiki-regexp): Permit
+	anchors.
+	(muse-wiki-handle-implicit-interwiki): Docfix.  Make anchors in
+	interwiki links work.  Thanks to Jim Ottaway for the initial
+	implementation.
+	(muse-wiki-handle-explicit-interwiki): Make anchors in interwiki
+	links work.
+
+	* lisp/muse.el (muse-handle-implicit-link): Docfix: only care
+	about match 0.
+	(muse-handle-explicit-link): Docfix: this does not modify the
+	match data.
 
 2007-06-12  Michael Olson  <mwolson@gnu.org>
 

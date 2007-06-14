@@ -701,6 +701,9 @@ ignored."
               ((muse-file-remote-p link)
                'muse-link)
               ((string-match muse-file-regexp link)
+               (when (string-match "/[^/]+#[^#./]+\\'" link)
+                 ;; strip anchor from the end of a path
+                 (setq link (substring link 0 (match-beginning 0))))
                (if (file-exists-p link)
                    'muse-link
                  'muse-bad-link))
