@@ -422,17 +422,17 @@ omitted, a default message listing FORM itself is used."
     (save-excursion
       (re-search-backward (concat "\\(?:" regexp "\\)\\=") limit t))))
 
-(if (fboundp 'line-end-position)
-    (defalias 'muse-line-end-position 'line-end-position)
-  (defun muse-line-end-position (&optional n)
-    (save-excursion (end-of-line n) (point))))
-
-(if (fboundp 'line-beginning-position)
-    (defalias 'muse-line-beginning-position 'line-beginning-position)
-  (defun muse-line-beginning-position (&optional n)
-    (save-excursion (beginning-of-line n) (point))))
-
 (eval-and-compile
+  (if (fboundp 'line-end-position)
+      (defalias 'muse-line-end-position 'line-end-position)
+    (defun muse-line-end-position (&optional n)
+      (save-excursion (end-of-line n) (point))))
+
+  (if (fboundp 'line-beginning-position)
+      (defalias 'muse-line-beginning-position 'line-beginning-position)
+    (defun muse-line-beginning-position (&optional n)
+      (save-excursion (beginning-of-line n) (point))))
+
   (if (fboundp 'match-string-no-properties)
       (defalias 'muse-match-string-no-properties 'match-string-no-properties)
     (defun muse-match-string-no-properties (num &optional string)
@@ -635,22 +635,20 @@ function."
 
 (defun muse-list-item-type (str)
   "Determine the type of list given STR.
-Returns either 'ul, 'ol, 'dl-term, or 'dl-entry."
-  (cond ((or (string= str "")
-             (< (length str) 2))
-         nil)
-        ((and (= (aref str 0) ?\  )
-              (= (aref str 1) ?-))
-         'ul)
-        ((save-match-data
-           (string-match (concat "\\`[" muse-regexp-blank "][0-9]+\\.") str))
-         'ol)
-        ((save-match-data
-           (not (string-match (concat "\\`[" muse-regexp-blank "]*::") str)))
-         ;; if str is not any kind of list, it will be interpreted as
-         ;; a dl-term
-         'dl-term)
-        (t 'dl-entry)))
+Returns either 'ul, 'ol, 'dl-term, 'dl-entry, or nil."
+  (save-match-data
+    (cond ((or (string= str "")
+               (< (length str) 2))
+           nil)
+          ((string-match muse-dl-entry-regexp str)
+           'dl-entry)
+          ((string-match muse-dl-term-regexp str)
+           'dl-term)
+          ((string-match muse-ol-item-regexp str)
+           'ol)
+          ((string-match muse-ul-item-regexp str)
+           'ul)
+          (t nil))))
 
 (defun muse-list-item-critical-point (&optional offset)
   "Figure out where the important markup character for the
@@ -735,8 +733,13 @@ provide a very liberal INDENT value, such as
                (>= (point) (point-max)))
            ;; at a list boundary, so stop
            nil)
-          ((and (match-string 2)
-                (eq type (muse-list-item-type (match-string 2))))
+          ((let ((str (when (match-beginning 2)
+                        ;; get the entire line
+                        (save-excursion
+                          (goto-char (match-beginning 2))
+                          (buffer-substring (muse-line-beginning-position)
+                                            (muse-line-end-position))))))
+             (and str (eq type (muse-list-item-type str))))
            ;; same type, so indicate that there are more items to be
            ;; parsed
            (goto-char (match-beginning 1)))

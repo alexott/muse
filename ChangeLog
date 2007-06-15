@@ -1,3 +1,25 @@
+2007-06-15  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-regexps.el (muse-list-item-regexp): Put definition
+	list regexp part before other parts.
+	(muse-ol-item-regexp): New regexp that specifies how to match an
+	ordered list item.
+	(muse-ul-item-regexp): New regexp that specifies how to match an
+	unordered list item.
+	(muse-table-field-regexp): New regexp that specifies how to match
+	a definition list entry.
+
+	* lisp/muse.el: Wrap muse-line-beginning-position and
+	muse-line-end-position in `eval-and-compile', since they are now
+	used in muse.el.
+	(muse-list-item-type): Use a simpler algorithm for detecting which
+	kind of list item we have.  This fixes a bug where a number in a
+	definition list term was being detected incorrectly as an ordered
+	list item.  Fixes bug #6250.
+	(muse-forward-list-item): Get the entire line with the list item.
+	For some reason, Emacs 21 was not populating match 2 correctly,
+	unlike Emacs 22, so this workaround was needed.
+
 2007-06-14  Michael Olson  <mwolson@gnu.org>
 
 	* README: Mention that RelaxNG schema is in etc/ directory.
