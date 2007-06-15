@@ -14,7 +14,8 @@
 @copying
 This manual is for Emacs Muse version 3.02.93 (3.03 RC3).
 
-Copyright @copyright{} 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+Copyright @copyright{} 2004, 2005, 2006,
+2007 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -460,8 +461,14 @@ Edit link at point.
 @item C-c C-f (`muse-project-find-file')
 Open another Muse page.  Prompt for the name.
 
-@item C-c C-i (`muse-insert-tag')
+@item C-c C-i l, C-c TAB l (`muse-insert-relative-link-to-file')
+Insert a link to a file interactively.
+
+@item C-c C-i t, C-c TAB t (`muse-insert-tag')
 Insert a tag interactively.
+
+@item C-c C-i u, C-c TAB u (`muse-insert-url')
+Insert a URL interactively.
 
 @item C-c C-l (`font-lock-mode')
 Toggle font lock / highlighting for the current buffer.
@@ -486,15 +493,6 @@ Show the published result of this page.
 @item C-c = (`muse-what-changed')
 Diff this page against the last backup version.
 
-@item C-c TAB l (`muse-insert-relative-link-to-file')
-Insert a link to a file interactively.
-
-@item C-c TAB t (`muse-insert-tag')
-Insert a tag interactively.
-
-@item C-c TAB u (`muse-insert-url')
-Insert a URL interactively.
-
 @item TAB
 Move to the next Wiki reference.
 
@@ -512,6 +510,9 @@ Decrease the indentation of the list item at point.
 
 @item C->
 Increase the indentation of the list item at point.
+
+@item M-x muse-colors-toggle-inline-images RET
+Toggle display of inlined images on/off.
 
 @end table
 

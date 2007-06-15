@@ -178,6 +178,7 @@ index at intervals."
     (define-key map [(control ?c) (control ?f)] 'muse-project-find-file)
     (define-key map [(control ?c) (control ?p)] 'muse-project-publish)
 
+    (define-key map [(control ?c) (control ?i)] 'muse-insert-thing)
     (define-key map [(control ?c) tab] 'muse-insert-thing)
 
     ;; Searching functions

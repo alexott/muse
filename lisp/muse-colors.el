@@ -107,7 +107,7 @@ used as the filename of the image."
 
 ;;;###autoload
 (defun muse-colors-toggle-inline-images ()
-  "Toggle inlined images on/off."
+  "Toggle display of inlined images on/off."
   (interactive)
   ;; toggle the custom setting
   (if (not muse-colors-inline-images)
@@ -115,9 +115,6 @@ used as the filename of the image."
     (setq muse-colors-inline-images nil))
   ;; reprocess the buffer
   (muse-colors-buffer))
-
-(define-key muse-mode-map [(control ?c) (control ?i)]
-  'muse-colors-toggle-inline-images)
 
 (defvar muse-colors-outline-faces-list
   (if (facep 'outline-1)

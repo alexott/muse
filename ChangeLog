@@ -1,5 +1,13 @@
 2007-06-15  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-colors.el (muse-colors-toggle-inline-images): Docfix.
+	Remove C-c C-i keybinding, since it conflicts with C-c TAB in the
+	terminal, and C-c TAB is more important.  Most people will not
+	want to toggle images on and off that often.
+
+	* lisp/muse-mode.el (muse-mode-map): Bind muse-insert-thing to C-c
+	C-i as well, so that it works in the terminal.
+
 	* lisp/muse-regexps.el (muse-list-item-regexp): Put definition
 	list regexp part before other parts.
 	(muse-ol-item-regexp): New regexp that specifies how to match an
@@ -19,6 +27,11 @@
 	(muse-forward-list-item): Get the entire line with the list item.
 	For some reason, Emacs 21 was not populating match 2 correctly,
 	unlike Emacs 22, so this workaround was needed.
+
+	* texi/muse.texi: (Keystroke Summary): Remove C-c
+	C-i (`muse-insert-tag') documentation, and mention C-c C-i as an
+	alternative keybinding to the C-c TAB stuff.  Mention
+	muse-colors-toggle-inline-images.
 
 2007-06-14  Michael Olson  <mwolson@gnu.org>
 
