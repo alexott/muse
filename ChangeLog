@@ -1,5 +1,7 @@
 2007-06-15  Michael Olson  <mwolson@gnu.org>
 
+	* NEWS: Update.
+
 	* lisp/muse-colors.el (muse-colors-toggle-inline-images): Docfix.
 	Remove C-c C-i keybinding, since it conflicts with C-c TAB in the
 	terminal, and C-c TAB is more important.  Most people will not
