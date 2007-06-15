@@ -36,6 +36,8 @@ authoring mode, and the styles you wish to publish to.  For example:
 (require 'muse-latex)
 (require 'muse-texinfo)
 (require 'muse-docbook)
+
+(require 'muse-project)  ; group files in projects
 </example>
 
 Once loaded, the command =M-x muse-publish-this-file= will publish an
@@ -51,11 +53,8 @@ allows for the creations of "projects".  Here is a sample project, to
 be defined in your =.emacs= file:
 
 <example>
-(require 'muse-project)
-
 (setq muse-project-alist
-      '(("website"                      ; my various writings
-         ("~/Pages" :default "index")
+      '(("website" ("~/Pages" :default "index")
          (:base "html" :path "~/public_html")
          (:base "pdf" :path "~/public_html/pdf"))))
 </example>
@@ -200,6 +199,26 @@ any characters special to the output style escaped.
 There is also the =<literal><literal></literal>= tag, which causes a
 marked block to be entirely left alone.  This can be used for
 inserting a hand-coded HTML blocks into HTML output, for example.
+
+If you want some text to only be inserted when publishing to a
+particular format, use the =style= attribute for the
+=<literal><literal></literal>= tag.  Some examples follow.
+
+<literal style="html">
+You are reading the HTML version of this document.
+</literal>
+
+<literal style="pdf">
+You are reading the PDF version of this document.
+</literal>
+
+<literal style="latex">
+LaTeX was used in the publishing of this document.
+</literal>
+
+<literal style="info">
+You are reading the Info version of this document.
+</literal>
 
 ** Lists
 

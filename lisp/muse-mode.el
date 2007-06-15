@@ -150,7 +150,7 @@ index at intervals."
     (define-key map [(control ?c) (control ?l)] 'font-lock-mode)
     (define-key map [(control ?c) (control ?t)]
       'muse-project-publish-this-file)
-    (define-key map [(control ?c) (shift control ?t)] 'muse-publish-this-file)
+    (define-key map [(control ?c) (control ?T)] 'muse-publish-this-file)
     (define-key map [(control ?c) (meta control ?t)] 'muse-publish-this-file)
     (define-key map [(control ?c) (control ?v)] 'muse-browse-result)
 

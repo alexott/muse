@@ -2,6 +2,8 @@
 
 	* NEWS: Update.
 
+	* examples/QuickStart.muse: Mention new features.
+
 	* lisp/muse-colors.el (muse-colors-toggle-inline-images): Docfix.
 	Remove C-c C-i keybinding, since it conflicts with C-c TAB in the
 	terminal, and C-c TAB is more important.  Most people will not
@@ -18,6 +20,9 @@
 	unordered list item.
 	(muse-table-field-regexp): New regexp that specifies how to match
 	a definition list entry.
+
+	* lisp/muse-texinfo.el (muse-texinfo-info-generate): Work around
+	lack of support for @headitem in texinfmt.el.
 
 	* lisp/muse.el: Wrap muse-line-beginning-position and
 	muse-line-end-position in `eval-and-compile', since they are now

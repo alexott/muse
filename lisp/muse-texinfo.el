@@ -274,6 +274,10 @@ If no description exists for the link, use the link itself."
              (eq emacs-major-version 21))
     (put 'documentencoding 'texinfo-format
          'texinfo-discard-line-with-args))
+  ;; Most versions of `texinfmt.el' do not support @headitem, so hack
+  ;; it in.
+  (unless (get 'headitem 'texinfo-format)
+    (put 'headitem 'texinfo-format 'texinfo-multitable-item))
   (muse-publish-transform-output
    file output-path final-target "Info"
    (function
