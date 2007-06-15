@@ -20,8 +20,8 @@ Directory contents
 
 The directory structure is as follows.
 
-etc :: Miscellaneous files like the emacs-wiki migration guide and the
-  list of ideas for the future.
+etc :: Miscellaneous files like the emacs-wiki migration guide, the
+  list of ideas for the future, and a RelaxNG schema for Muse XML.
 
 contrib :: Files that are not a part of Muse proper, but are useful
   enough to be bundled with Muse.

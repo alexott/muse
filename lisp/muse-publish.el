@@ -1427,7 +1427,7 @@ The existing region will be removed, except for initial blank lines."
         (muse-publish-trim-table (cons (1- longest) (nreverse field-list)))))))
 
 (defun muse-publish-markup-table ()
-  "Style does not support tables.")
+  "Style does not support tables.\n")
 
 (defun muse-publish-table-el-table (variant)
   "Publish table.el-style tables in the format given by VARIANT."
@@ -1458,7 +1458,7 @@ The existing region will be removed, except for initial blank lines."
          (muse-publish-table-el-table 'latex))
         ((muse-style-derived-p 'docbook)
          (muse-publish-table-el-table 'cals))
-        (t "Style does not support table.el tables.")))
+        (t "Style does not support table.el tables.\n")))
 
 (defun muse-publish-escape-specials-in-string (string &optional context)
   "Escape specials in STRING using style-specific :specials.

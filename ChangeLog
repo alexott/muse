@@ -1,11 +1,21 @@
 2007-06-14  Michael Olson  <mwolson@gnu.org>
 
+	* README: Mention that RelaxNG schema is in etc/ directory.
+
 	* etc/emacs-wiki-migration.txt: New document that explains how to
 	migrate from emacs-wiki to Muse.
+
+	* etc/muse.rnc: Increment version number to 1.0.  Fix several
+	nested emphasis and nested lists edge cases.  Move here from
+	examples/.
 
 	* lisp/muse-mode.el (muse-mode-map): Permit C-c C-M-t to do the
 	same thing as C-c C-S-t, since the former works better in the
 	console.  Thanks to Leo for the suggestion.
+
+	* lisp/muse-publish.el (muse-publish-markup-table)
+	(muse-publish-markup-table-el): Include a newline in the return
+	string, so that paragraph detection does not get confused.
 
 	* lisp/muse.el (muse-with-temp-buffer): Docfix.
 

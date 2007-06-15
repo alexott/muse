@@ -1,8 +1,8 @@
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace rng = "http://relaxng.org/ns/structure/1.0"
 
-#   Emacs Muse RELAX NG Schema v. 0.3
-#   Copyright (C) 2005, 2006 Free Software Foundation, Inc.
+#   Emacs Muse RELAX NG Schema v. 1.0
+#   Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
 
 #   Author: Brad Collins (brad AT chenla DOT org)
 #   Maintainer: Michael Olson (mwolson AT gnu DOT org)
@@ -42,6 +42,14 @@ namespace rng = "http://relaxng.org/ns/structure/1.0"
 #
 #   Version 0.3:
 #    - Permit lists to be nested.
+#
+#   Version 1.0:
+#    - Permit paragraph-level markup, such as links, to appear in
+#      table lines.
+#    - Support multiple definitions in a definition list.
+#    - Permit a list to be nested inside of a definition.
+#    - Permit a link to be inside of a title.
+#    - Permit emphasis to be inside of other emphasis.
 
 # Contributors:
 
@@ -76,7 +84,9 @@ muse.element.pageinfo = element pageinfo {
    & muse.element.pubdate? }?
 
    ## page title element
-muse.element.title = element title { text }?
+muse.element.title = element title {
+   muse.element.link*
+   & text }?
 
    ## page author element
 muse.element.author = element author { text }?
@@ -150,7 +160,7 @@ muse.element.list = element list {
 
 muse.element.item = element item {
    muse.element.term?
-   & muse.element.definition?
+   & muse.element.definition*
    & muse.element.code*
    & muse.element.format*
    & muse.element.image*
@@ -182,6 +192,7 @@ muse.element.definition = element definition {
    & muse.element.image*
    & muse.element.link*
    & muse.element.image*
+   & muse.element.list*
    & text }?
 
 # ------------------------------------------------
@@ -193,6 +204,8 @@ muse.element.definition = element definition {
 muse.element.format = element format {
    muse.attribute.type?
    & muse.attribute.level?
+   & muse.element.code*
+   & muse.element.format*
    & text }?
 
   ## code element
@@ -254,10 +267,26 @@ muse.element.tfoot = element tfoot { muse.element.tr* }?
   ## table row element
 muse.element.tr = element tr {
    muse.element.td*
- & muse.element.th*}?
+ & muse.element.th* }?
 
   ## td element
-muse.element.td = element td { text }?
+muse.element.td = element td {
+   muse.element.code*
+   & muse.element.format*
+   & muse.element.image*
+   & muse.element.link*
+   & muse.element.image*
+   & muse.element.anchor*
+   & muse.element.footnote*
+   & text }?
 
   ## th element
-muse.element.th = element th { text }?
+muse.element.th = element th {
+   muse.element.code*
+   & muse.element.format*
+   & muse.element.image*
+   & muse.element.link*
+   & muse.element.image*
+   & muse.element.anchor*
+   & muse.element.footnote*
+   & text }?

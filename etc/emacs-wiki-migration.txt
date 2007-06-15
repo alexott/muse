@@ -7,12 +7,28 @@ Features
 Muse only
 ---------
 
+Features that exist in Muse, but not emacs-wiki:
+
  - Nested lists.
 
- - Publishing to other formats, such as LaTeX and Docbook.
+ - Publishing to multiple other formats, such as LaTeX and Docbook.
 
  - Escaping special characters automatically throughout the entire
    document, so that you don't have to.
+
+ - Ability to use a different header and footer in different projects,
+   by creating your own publishing style.
+
+ - Ability to surround some Muse markup with the <verbatim> tag, which
+   causes is to not be treated as markup.  This is useful for
+   publishing the "|" character as-is, without turning the current
+   line into a table.
+
+ - Improved detection of paragraphs, which results in HTML that meets
+   various W3C standards.
+
+ - Journalling mode that is capable of publishing to RSS 2.0 or RSS
+   1.0 (RDF).
 
 emacs-wiki only
 ---------------
@@ -50,6 +66,52 @@ for them.
 
 Specifying Projects
 ===================
+
+Here is an example emacs-wiki-projects setting.
+
+(setq emacs-wiki-projects
+      '(("WebWiki" .
+         ((emacs-wiki-directories . ("~/WebWiki"))
+          (emacs-wiki-project-server-prefix . "/web/")
+          (emacs-wiki-publishing-directory
+           . "~/public_html/web")))
+        ("ProjectsWiki" .
+         ((emacs-wiki-directories . ("~/ProjectsWiki"))
+          (emacs-wiki-project-server-prefix . "/projects/")
+          (emacs-wiki-publishing-directory
+           . "~/public_html/projects")))))
+
+And here is the corresponding muse-project-alist setting.
+
+(setq muse-project-alist
+      '(("Website" ("~/WebWiki"
+                    :default "WelcomePage")
+         (:base "html"
+                :path "~/public_html/web"))
+        ("Projects" ("~/ProjectsWiki"
+                     :default "WelcomePage")
+         (:base "html"
+                :path "~/public_html/projects"))))
+
+Note that there is no need to specify a prefix.  Muse will
+automatically figure out what the relative paths in links to Muse
+files should be.
+
+If you want to be able to link to another project entry that is on a
+different domain, then you must use :base-url in every project entry.
+An example of this follows.
+
+(setq muse-project-alist
+      '(("Website" ("~/WebWiki"
+                    :default "WelcomePage")
+         (:base "html"
+                :base-url "http://web.example.org/web"
+                :path "~/public_html_1/web"))
+        ("Projects" ("~/ProjectsWiki"
+                     :default "WelcomePage")
+         (:base "html"
+                :base-url "http://projects.example.org/projects"
+                :path "~/public_html_2/projects"))))
 
 Special Topics
 ==============
