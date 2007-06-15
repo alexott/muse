@@ -30,6 +30,9 @@ Features that exist in Muse, but not emacs-wiki:
  - Journalling mode that is capable of publishing to RSS 2.0 or RSS
    1.0 (RDF).
 
+ - Embedding LaTeX code into a document by turning it into an image.
+   This is in muse-latex2png.el.
+
 emacs-wiki only
 ---------------
 
