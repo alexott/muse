@@ -1718,6 +1718,16 @@ is exactly this style."
   (let* ((style (cdr (assoc "style" attrs)))
          (exact (cdr (assoc "exact" attrs)))
          (exactp (and (stringp exact) (string= exact "t"))))
+    (unless (= beg (marker-position end))
+      ;; if <literal> or </literal> is by itself on a line, remove the
+      ;; line
+      (goto-char end)
+      (when (and (bolp) (eolp) (not (eobp)))
+        (delete-char 1))
+      (goto-char beg)
+      (when (and (bolp) (eolp) (not (bobp)))
+        (delete-backward-char 1)
+        (unless (eobp) (forward-char 1))))
     (if (or (not style)
             (and exactp (equal (muse-style style)
                                muse-publishing-current-style))

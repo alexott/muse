@@ -204,20 +204,14 @@ If you want some text to only be inserted when publishing to a
 particular format, use the =style= attribute for the
 =<literal><literal></literal>= tag.  Some examples follow.
 
-<literal style="html">
-You are reading the HTML version of this document.
-</literal>
-
-<literal style="pdf">
-You are reading the PDF version of this document.
-</literal>
+You are reading the
+<literal style="html">HTML</literal>
+<literal style="pdf">PDF</literal>
+<literal style="info">Info</literal>
+version of this document.
 
 <literal style="latex">
 LaTeX was used in the publishing of this document.
-</literal>
-
-<literal style="info">
-You are reading the Info version of this document.
 </literal>
 
 ** Lists
