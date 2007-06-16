@@ -150,7 +150,7 @@ Making your own publishing styles
 
 Common functionality shared by styles
 
-* Markup Functions::            Specifying functions to marking up text.
+* Markup Functions::            Specifying functions to mark up text.
 * Markup Regexps::              Markup rules for publishing.
 * Markup Strings::              Strings specific to a publishing style.
 * Markup Tags::                 Tag specifications for special markup.
@@ -549,7 +549,7 @@ file.
 
 @lisp
 (setq muse-project-alist
-      '(("website" ("~/Pages" :default "index")
+      '(("Website" ("~/Pages" :default "index")
          (:base "html" :path "~/public_html")
          (:base "pdf" :path "~/public_html/pdf"))))
 @end lisp
@@ -571,22 +571,75 @@ project, you may use a regexp in place of @file{~/Pages} in the example.
 
 It is possible to specify multiple projects.  Here is an example of
 three projects: a generic website, a projects area, and a day-planner
-(requires Planner Mode---see
-@uref{http://wjsullivan.net/PlannerMode.html}).
+(the day-planner part requires Planner Mode---see
+@uref{http://wjsullivan.net/PlannerMode.html} to get it).
 
 @lisp
 (setq muse-project-alist
-      '(("website" ("~/Pages" :default "index")
-         (:base "html" :path "~/public_html")
-         (:base "pdf" :path "~/public_html/pdf"))))
+      '(("Website" ("~/Pages" :default "index")
+         (:base "html" :path "~/public_html"))
+        (("Projects" ("~/Projects" :default "index")
+         (:base "xhtml"
+                :path "~/public_html/projects"
+                :exclude "/TopSecret")
+         (:base "pdf"
+                :path "~/public_html/projects/pdf"
+                :exclude "/TopSecret")))
+        ("Plans" ("~/Plans"
+                  :default "TaskPool"
+                  :major-mode planner-mode
+                  :visit-link planner-visit-link)
+         (:base "planner-xhtml"
+                :path "~/public_html/plans"))))
 @end lisp
+
+The @samp{:major-mode} attribute specifies which major to use when
+visiting files in this directory.
+
+The @samp{:visit-link} attribute specifies the function to call when
+visiting links.
+
+The @samp{:exclude} attribute has a regexp that matches files to never
+publish.
 
 @node Projects and Subdirectories, Options for Projects, Multiple Projects, Projects
 @comment  node-name,  next,  previous,  up
 @section Publishing Subdirectories in Projects
 @cindex projects, subdirectories
 
-@c PRE3_03: Give more examples
+If you want to publish a directory and all of its subdirectories, Muse
+provides two convenience functions that together generate the proper
+rules for you.  Note that we use the backtick to begin this
+muse-project-alist definition, rather than a single quote.
+
+@lisp
+(setq muse-project-alist
+      `(("Website" ("~/Pages" :default "index")
+         (:base "html" :path "~/public_html"))
+        ("Blog" (,@@(muse-project-alist-dirs "~/Blog")
+                 :default "index")
+         ;; Publish this directory and its subdirectories.  Arguments
+         ;; are as follows.  The above `muse-project-alist-dirs' part
+         ;; is also needed.
+         ;;   1. Source directory
+         ;;   2. Output directory
+         ;;   3. Publishing style
+         ;;   remainder: Other things to put in every generated style
+         ,@@(muse-project-alist-styles "~/Blog"
+                                      "~/public_html/blog"
+                                      "blosxom"))
+@end lisp
+
+The @code{muse-project-alist-dirs} function takes a directory and
+returns it and all of its subdirectories in a list.
+
+The @code{muse-project-alist-styles} function is explained by the
+comments above.
+
+The ``blosxom'' text is the name of another publishing style, much like
+``html''.  @xref{Blosxom} for further information about it.  You can use
+any publishing style you like for the third argument to
+@code{muse-project-alist-styles}.
 
 @node Options for Projects, , Projects and Subdirectories, Projects
 @comment  node-name,  next,  previous,  up
@@ -2363,7 +2416,7 @@ A table of characters which must be represented specially.
 @cindex publishing styles, common
 
 @menu
-* Markup Functions::            Specifying functions to marking up text.
+* Markup Functions::            Specifying functions to mark up text.
 * Markup Regexps::              Markup rules for publishing.
 * Markup Strings::              Strings specific to a publishing style.
 * Markup Tags::                 Tag specifications for special markup.
