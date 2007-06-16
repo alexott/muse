@@ -195,7 +195,7 @@ Muse can make use of."
                               (const :tag ":visit-link" ":visit-link")
                               (choice (function)
                                       (sexp :tag "Unknown")))))
-               (repeat :tag "Styles" :format "%{%t%}:\n%v%i\n\n"
+               (repeat :tag "Output styles" :format "%{%t%}:\n%v%i\n\n"
                        (set :tag "Style"
                             (list :inline t
                                   :tag "Publishing style"

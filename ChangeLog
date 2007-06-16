@@ -4,6 +4,9 @@
 
 	* examples/QuickStart.muse: Overhaul.
 
+	* lisp/muse-project.el (muse-project): Call the last part of a
+	muse-project-alist entry "Output styles" rather than "styles".
+
 	* lisp/muse-publish.el (muse-publish-table-fields): Handle case
 	where we have a pipe character at the beginning of line.
 

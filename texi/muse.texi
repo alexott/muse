@@ -163,8 +163,8 @@ Common functionality shared by styles
 @comment  node-name,  next,  previous,  up
 @chapter About the documentation
 
-This document describes Muse, which was written by John Wiegley
-and is now maintained by Michael Olson.  Several versions of it are
+This document describes Muse, which was written by John Wiegley and is
+now maintained by Michael Olson.  Several versions of this manual are
 available on-line.
 
 @itemize @bullet
@@ -658,11 +658,14 @@ Each muse-project-alist entry looks like this:
     OUTPUTS)
 @end example
 
-We refer to these names below.  Note that each of these attributes must
-be a pair of values.  The first value is a keyword, like
-@option{:default}.  The second is the value associated with that
-keyword, such as the text ``index''.  If you are familiar with Emacs
-Lisp property lists, the concept is similar to that.
+We refer to these names below.
+
+``Attributes'', which compose SOURCES and OUTPUTS, are a pair of values.
+The first value is a keyword, like @option{:default}.  The second part
+is the value associated with that keyword, such as the text ``index''.
+If you are familiar with Emacs Lisp property lists, the concept is
+similar to that, except that in the SOURCES section, single directories
+can be interspersed with two-value attributes.
 
 @subheading Project Name
 
@@ -672,11 +675,20 @@ primarily used for publishing interwiki links with the
 
 @subheading Sources
 
-This part of a muse-project-alist entry consists of pairs of attributes,
-and also directory names.  If you are publishing a book, the order of
-directories and attributes is significant.
+This part of a muse-project-alist entry consists of two-value
+attributes, and also directory names.  If you are publishing a book, the
+order of directories and attributes is significant.
 
 @table @option
+
+@item :book-chapter
+Indicates a new chapter of a book.  The text of the title of the chapter
+comes immediately after this keyword.
+
+@item :book-end
+Indicates the end of a book.  Directories listed after this one are
+ignored when publishing a book.  The value ``t'' (without quotes) should
+come immediately after this keyword.
 
 @item :book-funcall
 A function to call while publishing a book.  This is useful for doing
@@ -691,13 +703,44 @@ Indicate a particular publishing style to use for this part of the book.
 If this is specified, it should come just after a @option{:part}
 attribute.
 
-@item :book-end
-Indicates the end of a book.  Directories listed after this one.
-
 @item :default
 The default page to visit when browsing a project.  Also, if you are
 using the @file{muse-wiki.el} module, publishing a link to just a
 project's name will cause it to link to this default file.
+
+@item :force-publish
+This specifies a list of pages which should be published every time a
+project is published (by using @kbd{C-c C-p}, for example), regardless
+of whether their contents have changed.  This is useful for updating
+Index pages, pages that use the @verb{|<include>|} tag, and other pages
+that have dynamically-generated content.
+
+@item :major-mode
+This specifies the major mode to use when visiting files in this
+project.  The default is @code{muse-mode}.
+
+@item :nochapters
+This indicates that while publishing a book, do not automatically create
+chapters.  Values which may follow this are nil (the default, which
+means that we automatically create chapters), or non-nil, which means
+that we manually specify chapters with the @option{:book-chapter}
+attribute,
+
+@item :publish-project
+Indicates which function we should call when publishing a project.
+
+@item :set
+This specifies a list of variables and values to set when publishing a
+project.  The list should be a property list, which is in the form:
+
+@example
+(VAR1 VALUE1 VAR2 VALUE2 ...)
+@end example
+
+@item :visit-link
+Specifies the function to call when visiting a link.  The default is
+@code{muse-visit-link-default}.  The arguments for that function should
+be (1) the link and (2) whether to visit the link in a new window.
 
 @end table
 
