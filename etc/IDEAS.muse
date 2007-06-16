@@ -6,6 +6,9 @@ to merge into Muse at some point.
 
 * Pending code
 
+This is code that may or may not be already approved, but should be
+checked out at some point.
+
 ** Waiting for a new release
 
  - Jim Ottaway
@@ -14,6 +17,12 @@ to merge into Muse at some point.
    - muse-latex-labels.el: addition of cross-references to LaTeX.
      Should be merged into muse-latex.el after replacing with
      jeho-latex.el.
+
+ - David D. Smith
+   - dds-emphasis-bits.el
+     - New syntax for explicitly specifying emphasis:
+       {[_-=*] some emphasized text}.
+     - Using -strike- to do strikethrough.
 
 ** Just after the 3.03 release
 

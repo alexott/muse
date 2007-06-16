@@ -1,5 +1,7 @@
 2007-06-16  Michael Olson  <mwolson@gnu.org>
 
+	* etc/IDEAS.muse: Add some ideas from David D. Smith.
+
 	* examples/QuickStart.muse: Overhaul.
 
 	* lisp/muse-publish.el (muse-publish-table-fields): Handle case
