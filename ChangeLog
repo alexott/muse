@@ -12,9 +12,8 @@
 	* lisp/muse-mode.el (muse-mode-map): Bind muse-insert-thing to C-c
 	C-i as well, so that it works in the terminal.
 
-	* lisp/muse-publish.el (muse-publish-literal-tag): If <literal> or
-	</literal> are on their own line, remove the line.  This makes the
-	output look a bit tidier.
+	* lisp/muse-publish.el (muse-publish-literal-tag): Make the output
+	look a bit tidier when removing the region.
 
 	* lisp/muse-regexps.el (muse-list-item-regexp): Put definition
 	list regexp part before other parts.
