@@ -185,21 +185,22 @@ Muse consists of two main parts: an enhanced text-mode for authoring
 documents and navigating within Muse projects, and a set of publishing
 styles for generating different kinds of output.
 
-This idea is not in any way new. Numerous systems exist -- even one
-other for Emacs itself (Bhl Mode). What Muse adds to the picture is a
-more modular environment, with a rather simple core, in which "styles"
-are derived from to create new styles. Much of Muse's overall
-functionality is optional. For example, you can use the publisher
-without the major-mode, or the mode without doing any publishing; or if
-you don't load the Texinfo or LaTeX modules, those styles won't be
-available.
+What makes Muse distinct from other text-publishing systems is a modular
+environment, with a rather simple core, in which "styles" are derived
+from to create new styles.  Much of Muse's overall functionality is
+optional.  For example, you can use the publisher without the
+major-mode, or the mode without doing any publishing; or if you don't
+load the Texinfo or LaTeX modules, those styles won't be available.
 
 The Muse codebase is a departure from emacs-wiki.el version 2.44. The
 code has been restructured and rewritten, especially its publishing
-functions. The focus in this revision is on the authoring and publishing
-aspects, and the "wikiness" has been removed as a default behavior
-(available in the optional @file{muse-wiki} module). CamelCase words are
-no longer special by default.
+functions.  The focus in this revision is on the authoring and
+publishing aspects, and the "wikiness" has been removed as a default
+behavior (available in the optional @file{muse-wiki} module).  CamelCase
+words are no longer special by default.
+
+One of the principal aims in the development of Muse is to make it very
+easy to produce good-looking, standards-compliant documents.
 
 @node Obtaining Muse, Installation, Introduction, Top
 @comment  node-name,  next,  previous,  up
@@ -627,7 +628,7 @@ muse-project-alist definition, rather than a single quote.
          ;;   remainder: Other things to put in every generated style
          ,@@(muse-project-alist-styles "~/Blog"
                                       "~/public_html/blog"
-                                      "blosxom"))
+                                      "blosxom"))))
 @end lisp
 
 The @code{muse-project-alist-dirs} function takes a directory and
@@ -637,16 +638,78 @@ The @code{muse-project-alist-styles} function is explained by the
 comments above.
 
 The ``blosxom'' text is the name of another publishing style, much like
-``html''.  @xref{Blosxom} for further information about it.  You can use
-any publishing style you like for the third argument to
+``html''.  @xref{Blosxom}, for further information about it.  You can
+use any publishing style you like for the third argument to
 @code{muse-project-alist-styles}.
 
 @node Options for Projects, , Projects and Subdirectories, Projects
 @comment  node-name,  next,  previous,  up
 @section Listing of Available Options for Projects
 @cindex projects, options
+@cindex muse-project-alist, reference
 
-@c PRE3_03: Describe :set and other options fully
+This is a listing of all of the various options (or, more accurately:
+attributes) that may be specified in @code{muse-project-alist}.
+
+Each muse-project-alist entry looks like this:
+
+@example
+  (PROJECT-NAME (SOURCES)
+    OUTPUTS)
+@end example
+
+We refer to these names below.  Note that each of these attributes must
+be a pair of values.  The first value is a keyword, like
+@option{:default}.  The second is the value associated with that
+keyword, such as the text ``index''.  If you are familiar with Emacs
+Lisp property lists, the concept is similar to that.
+
+@subheading Project Name
+
+This is a string that indicates the name of the project.  It is
+primarily used for publishing interwiki links with the
+@file{muse-wiki.el} module.
+
+@subheading Sources
+
+This part of a muse-project-alist entry consists of pairs of attributes,
+and also directory names.  If you are publishing a book, the order of
+directories and attributes is significant.
+
+@table @option
+
+@item :book-funcall
+A function to call while publishing a book.  This is useful for doing
+something just after a particular chapter.
+
+@item :book-part
+Indicates the beginning of a new part of the book.  The text of the
+title should come immediately after this keyword.
+
+@item :book-style
+Indicate a particular publishing style to use for this part of the book.
+If this is specified, it should come just after a @option{:part}
+attribute.
+
+@item :book-end
+Indicates the end of a book.  Directories listed after this one.
+
+@item :default
+The default page to visit when browsing a project.  Also, if you are
+using the @file{muse-wiki.el} module, publishing a link to just a
+project's name will cause it to link to this default file.
+
+@end table
+
+@subheading Outputs
+
+@table @option
+
+@item :book-funcall
+Foobar.
+
+@end table
+
 
 @node Keystroke Summary, Markup Rules, Projects, Top
 @comment  node-name,  next,  previous,  up
