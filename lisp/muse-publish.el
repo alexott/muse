@@ -1416,7 +1416,11 @@ The existing region will be removed, except for initial blank lines."
                                        (split-string (match-string 0)
                                                      muse-table-field-regexp)))
                   field-list (cons fields field-list)
-                  longest (max (length fields) longest))))
+                  longest (max (length fields) longest))
+            ;; strip initial bars, if they exist
+            (let ((first (cadr fields)))
+              (when (and first (string-match "\\`|+\\s-*" first))
+                (setcar (cdr fields) (replace-match "" t t first))))))
           (setq left (forward-line 1))))
       (delete-region beg end)
       (if (= longest 0)

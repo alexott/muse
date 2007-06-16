@@ -132,10 +132,10 @@ if not escaped."
   ;; elements with the same type will be reversed with respect to each
   ;; other.
   (let ((decisions '((nil nil nil)      ; body < header, body < footer
-                     (t nil t)          ; header stays where it is
-                     (t nil nil))))     ; footer < header
+                     (t   nil t)        ; header stays where it is
+                     (t   nil nil))))   ; footer < header
     (sort table #'(lambda (l r)
-                    (and (integerp (car l)) (integerp (cdr l))
+                    (and (integerp (car l)) (integerp (car r))
                          (nth (1- (car r))
                               (nth (1- (car l)) decisions)))))))
 

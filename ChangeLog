@@ -1,3 +1,13 @@
+2007-06-16  Michael Olson  <mwolson@gnu.org>
+
+	* examples/QuickStart.muse: Overhaul.
+
+	* lisp/muse-publish.el (muse-publish-table-fields): Handle case
+	where we have a pipe character at the beginning of line.
+
+	* lisp/muse-xml-common.el (muse-xml-sort-table): Fix typo that was
+	causing tables to not be sorted at all.
+
 2007-06-15  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Update.
