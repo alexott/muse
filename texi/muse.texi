@@ -679,6 +679,8 @@ This part of a muse-project-alist entry consists of two-value
 attributes, and also directory names.  If you are publishing a book, the
 order of directories and attributes is significant.
 
+The minimal content for the sources section is a list of directories.
+
 @table @option
 
 @item :book-chapter
@@ -746,10 +748,40 @@ be (1) the link and (2) whether to visit the link in a new window.
 
 @subheading Outputs
 
+This part of a muse-project-alist entry is composed of lists of
+attributes.  Each list is called an ``output style''.
+
+The minimal content for an output style is a @option{:base} attribute
+and a @option{:path} attribute.
+
 @table @option
 
-@item :book-funcall
-Foobar.
+@item :base
+Publishing style to use, such as ``html'', ``docbook'', or ``pdf''.
+
+@item :base-url
+An external URL which can be used to access published files.  This is
+mainly used by the @file{muse-wiki} module when publishing links between
+two separate projects, if the projects are served on different domains.
+
+It is also used by the @file{muse-journal} module to create the RSS or
+RDF output.
+
+@item :exclude
+Exclude items matching a regexp from being published.  The regexp should
+usually begin with "/".
+
+@item :include
+Only include items matching a regexp when publishing.  The regexp should
+usually begin with "/".
+
+@item :path
+The directory in which to store published files.
+
+@item :timestamps
+A file containing the timestamps (that is, time of creation) for files
+in this project.  It might eventually used by the @file{muse-blosxom}
+module, but this option is not currently in use by any Muse code.
 
 @end table
 
