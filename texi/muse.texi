@@ -69,7 +69,7 @@ and modified without restriction.
 * Obtaining Muse::              How to get Muse releases and development
                                   changes.
 * Installation::                Compiling and installing Muse.
-* Getting Started::             Settings for Muse.
+* Getting Started::             Setting up Muse and editing files.
 * Projects::                    Creating and managing Muse projects.
 * Keystroke Summary::           Keys used in Muse mode.
 * Markup Rules::                Rules for using markup.
@@ -88,6 +88,20 @@ How to Get Muse Releases and Development Changes
 
 * Releases::                    Released versions of Muse.
 * Development::                 Latest unreleased development changes.
+
+Getting Started
+
+* Loading Muse::                How to load Muse.
+* Using Muse Mode::             How to edit files in Muse.
+* Publishing Files Overview::   Publishing a single file or project.
+* File Extensions::             Using a different file extension.
+
+Creating and Managing Muse Projects
+
+* Single Project::              A single-project example.
+* Multiple Projects::           A multiple-project example.
+* Projects and Subdirectories::  Publishing subdirectories in projects.
+* Options for Projects::        Listing of available options for projects.
 
 Rules for Using Markup
 
@@ -154,9 +168,9 @@ and is now maintained by Michael Olson.  Several versions of it are
 available on-line.
 
 @itemize @bullet
-@item PDF: http://www.mwolson.org/static/doc/muse.pdf
-@item HTML (single file): http://www.mwolson.org/static/doc/muse.html
-@item HTML (multiple files): http://www.mwolson.org/static/doc/muse/
+@item PDF: http://mwolson.org/static/doc/muse.pdf
+@item HTML (single file): http://mwolson.org/static/doc/muse.html
+@item HTML (multiple files): http://mwolson.org/static/doc/muse/
 @end itemize
 
 @node Introduction, Obtaining Muse, Preface, Top
@@ -208,19 +222,35 @@ announced on the @email{muse-el-discuss@@gna.org} mailing list.
 
 @cindex releases, Debian package
 @cindex Debian package for Muse
-Debian and Ubuntu users can get Muse via apt-get.  The @file{muse-el}
-package is available both at Michael Olson's APT repository and the
-official Debian and Ubuntu repositories.  To make use of the former, add
-the following line to your @file{/etc/apt/sources.list} file and run
-@code{apt-get install muse}.
+Debian users can get Muse via apt-get.  The @file{muse-el} package is
+available both at Michael Olson's APT repository and the official Debian
+repository.  To make use of the former, add the following line to your
+@file{/etc/apt/sources.list} file and run @code{apt-get install muse}.
 
 @example
-deb http://www.mwolson.org/debian/ ./
+deb http://mwolson.org/debian/ ./
 @end example
+
+@cindex releases, Ubuntu package
+@cindex Ubuntu package for Muse
+Ubuntu users can also get Muse via apt-get.  The @file{muse-el} package
+is available both at Michael Olson's APT repository and the official
+Ubuntu repository.  To make use of the former, add the following line to
+your @file{/etc/apt/sources.list} file and run @code{apt-get install
+muse}.
+
+@example
+deb http://mwolson.org/ubuntu/ ./
+@end example
+
+The reason for making separate Debian and Ubuntu packages is that this
+manual is under the GFDL, and Debian will not allow it to be distributed
+in its main repository.  Ubuntu, on the other hand, permits this manual
+to be included with the @file{muse-el} package.
 
 @cindex releases, from source
 Alternatively, you can download the latest release from
-@uref{http://www.mwolson.org/static/dist/muse/} .
+@uref{http://mwolson.org/static/dist/muse/} .
 
 @node Development,  , Releases, Obtaining Muse
 @comment  node-name,  next,  previous,  up
@@ -237,7 +267,7 @@ to contribute to Muse development, it is highly recommended that you use
 Arch, but this is not a requirement.
 
 If you are new to Arch, you might find this tutorial helpful:
-@uref{http://www.mwolson.org/projects/ArchTutorial.html}.
+@uref{http://mwolson.org/projects/ArchTutorial.html}.
 
 Downloading the Muse module with Arch and staying up-to-date involves
 the following steps.
@@ -247,13 +277,19 @@ the following steps.
 
 @itemize @bullet
 @item Debian and Ubuntu: @kbd{apt-get install tla}.
-@item Other distributions: see @uref{http://regexps.srparish.net/www/}.
+@item Other distributions: see @uref{http://www.gnuarch.org/gnuarchwiki/Getting_Arch}.
 @end itemize
 
 @item Register the archive.
 @example
-tla register-archive -f http://www.mwolson.org/archives/2006
+tla register-archive -f http://mwolson.org/archives/2006
 @end example
+
+You might ask why there is a mention of the year ``2006'' in the name of
+the archive.  This year is not very significant---it only means that I
+created this archive in 2006.  I used to create a new archive every
+year, but this was a hassle for people who were trying to track
+development of Muse, so I have stopped doing it.
 
 @item Download the Muse package.
 @example
@@ -277,7 +313,7 @@ tla missing --summary
 @item Update to the latest version by replaying missing changes.
 @example
 cd muse
-tla replay
+tla update
 @end example
 
 @end enumerate
@@ -285,8 +321,9 @@ tla replay
 There are other ways to interact with the Muse archive.
 
 @itemize
-@item Browse arch repository: @uref{http://www.mwolson.org/archives/}
-@item Latest development snapshot: @uref{http://www.mwolson.org/static/dist/muse-latest.tar.gz}
+@item Browse arch repository: @uref{http://archzoom.mwolson.org/}
+@item Latest development snapshot: @uref{http://mwolson.org/static/dist/muse-latest.tar.gz}
+@item Latest development snapshot (zip file): @uref{http://mwolson.org/static/dist/muse-latest.zip}
 @end itemize
 
 The latest development snapshot will be kept up-to-date since it is
@@ -301,11 +338,11 @@ Muse may be compiled and installed on your machine.
 @subheading Compilation
 
 This is an optional step, since Emacs Lisp source code does not
-necessarily have to be byte-compiled.  It will yield a speed increase,
-though.
+necessarily have to be byte-compiled.  Byte-compilation may yield a very
+slight speed increase.
 
-A working copy of Emacs or XEmacs is needed in order to compile the
-Emacs Muse.  By default, the program that is installed with the name
+A working copy of Emacs or XEmacs is needed in order to compile Emacs
+Muse.  By default, the program that is installed with the name
 @command{emacs} will be used.
 
 If you want to use the @command{xemacs} binary to perform the
@@ -319,8 +356,9 @@ EMACS    = xemacs
 SITEFLAG = -no-site-file
 @end example
 
-Running @code{make} should compile the Muse source files in the
-@file{lisp} directory.
+Running @code{make} in the top-level directory should compile the Muse
+source files in the @file{lisp} directory, and generate an autoloads
+file in @file{lisp/muse-autoloads.el}.
 
 @subheading Installation
 
@@ -328,9 +366,9 @@ Muse may be installed into your file hierarchy by doing the following.
 
 Edit the @file{Makefile.defs} file so that @env{ELISPDIR} points to
 where you want the source and compiled Muse files to be installed and
-@env{INFODIR} indicates where to put the Muse manual.  Of course, you
-will want to edit @env{EMACS} and @env{SITEFLAG} as shown in the
-Compilation section if you are using XEmacs.
+@env{INFODIR} indicates where to put the Muse manual.  As mentioned
+earlier, you will want to edit @env{EMACS} and @env{SITEFLAG} as shown
+in the Compilation section if you are using XEmacs.
 
 If you are installing Muse on a Debian or Ubuntu system, you might want
 to change the value of @env{INSTALLINFO} as specified in
@@ -342,13 +380,25 @@ specify, edit @file{Makefile.defs} accordingly.
 Run @code{make} as a normal user.
 
 Run @code{make install} as the root user if you have chosen installation
-locations that require this.
+locations that require root permissions.
 
 
 @node Getting Started, Projects, Installation, Top
 @comment  node-name,  next,  previous,  up
 @chapter Getting Started
 @cindex settings
+
+@menu
+* Loading Muse::                How to load Muse.
+* Using Muse Mode::             How to edit files in Muse.
+* Publishing Files Overview::   Publishing a single file or project.
+* File Extensions::             Using a different file extension.
+@end menu
+
+@node Loading Muse, Using Muse Mode, Getting Started, Getting Started
+@comment  node-name,  next,  previous,  up
+@section How to Load Muse
+@cindex settings, init file
 
 To use Muse, add the directory containing its files to your
 @code{load-path} variable, in your @file{.emacs} file.  Then, load in
@@ -364,49 +414,84 @@ follows.
 (require 'muse-latex)
 (require 'muse-texinfo)
 (require 'muse-docbook)
+
+(require 'muse-project)  ; publish files in projects
 @end lisp
 
-Once loaded, the command @kbd{M-x muse-publish-this-file} will publish
-an input document to any available style.  If you enable
-@file{muse-mode} within a buffer, by typing @kbd{M-x muse-mode}, this
-command will be bound to @kbd{C-c C-t}.
+An easy way of seeing which settings are available and changing settings
+is to use the Muse customization interface.  To do this, type
+@kbd{M-x customize-group muse RET}.  Each of the options has its own
+documentation.  Options are grouped logically according to what effect
+they have.
+
+@node Using Muse Mode, Publishing Files Overview, Loading Muse, Getting Started
+@comment  node-name,  next,  previous,  up
+@section How to Edit Files in Muse
+@cindex editing Muse files
+
+Muse Mode should automatically be activated when you visit a file with a
+``.muse'' extension.  One such file is @file{QuickStart.muse}, which is
+available in the @file{examples} directory of the Muse distribution.
+You can tell that Muse Mose has been activated by checking for the text
+``Muse'' in your mode line.  If Muse Mode has not been activated, you
+may activate it by type @kbd{M-x muse-mode RET}.
+
+You will notice that Muse files are highlighted very simply.  Links are
+colored blue, headings are large and bold text, and @verb{|<example>|}
+tags are colored in grey.
+
+There are several different ways to edit things like links, which hide
+the underlying Muse markup.  One way is to toggle font-locking off by
+hitting @kbd{C-c C-l}, which is also @kbd{M-x font-lock-mode}, make
+changes, and then hit @kbd{C-c C-l} again to toggle font-locking back
+on.  Another way is just to move into the text and edit it.  Markup can
+also be removed by normal deletion methods, though some side effects
+might require a second deletion.
+
+For the particular case of editing links, it is easiest to move to the
+link and do @kbd{C-c C-e}, which is also @kbd{M-x
+muse-edit-link-at-point}.  This prompts you for the link and its
+description, using the previous contents of the link as initial values.
+A link to another Muse file may be created by hitting @kbd{C-c TAB l}.
+A link to a URL may be created by hitting @kbd{C-c TAB u}.  Links may be
+followed by hitting @kbd{RET} on them.
+
+If you want to add a new list item, this may by accomplished by hitting
+@kbd{M-RET}.  This will put a dash and some spaces on the screen.  The
+dash is the Muse markup that indicates a list item.  It is also possible
+to created ``nested'' lists with this command, by adjusting the number
+of spaces in front of the dashes.  If you have lists with long lines,
+you can move to a list item and hit @kbd{M-q} to wrap it onto multiple
+lines.
+
+@node Publishing Files Overview, File Extensions, Using Muse Mode, Getting Started
+@comment  node-name,  next,  previous,  up
+@section Publishing a Single File or Project
+@cindex editing Muse files
+
+The command @kbd{M-x muse-project-publish-this-file} will publish the
+current document to any available publishing style (a publishing style
+is an output format, like HTML or Docbook), placing the output in the
+current directory.  If you are in Muse Mode, this command will be bound
+to @kbd{C-c C-t}.  If the file has been published recently, and its
+contents have not changed, running @kbd{C-c C-t} again will not publish
+the file.  To force publishing in this case, do @kbd{C-u C-c C-t}.
+
+If you have set up projects and are visiting a file that is part of a
+project, then @kbd{C-c C-t} will restrict the output formats to those
+which are used by the project, and will automatically publish to the
+output directory defined by the project.  If you want to publish to a
+different directory or use a different format, then use @kbd{C-c M-C-t},
+which is also @kbd{M-x muse-publish-this-file}.
 
 If the currently opened file is part of a defined project in
-@code{muse-project-alist}, it may be published using @kbd{C-c C-p}.
+@code{muse-project-alist}, it (and the rest of the changed files in a
+project) may be published using @kbd{C-c C-p}.
 
-You should also type @kbd{M-x customize-group}, and give the name
-@samp{muse}.  Each of the options has its own documentation.
-
-
-@node Projects, Keystroke Summary, Getting Started, Top
+@node File Extensions, , Publishing Files Overview, Getting Started
 @comment  node-name,  next,  previous,  up
-@chapter Creating and Managing Muse Projects
-@cindex projects
-
-Often you will want to publish all the files within a directory to a
-particular set of output styles automatically.  To support, Muse
-allows for the creations of "projects".  Here is a sample project, to
-be defined in your @file{.emacs} file.
-
-@lisp
-(require 'muse-project)
-
-(setq muse-project-alist
-      '(("website"			; my various writings
-         ("~/Pages" :default "index")
-         (:base "html" :path "~/public_html")
-         (:base "pdf" :path "~/public_html/pdf"))))
-@end lisp
-
-The above defines a project named "website", whose files are located
-in the directory @file{~/Pages}.  The default page to visit is
-@file{index}.  When this project is published, each page will be
-output as HTML to the directory @file{~/public_html}, and as PDF to
-the directory @file{~/public_html/pdf}.  Within any project page, you
-may create a link to other pages using the syntax @samp{[[pagename]]}.
-
-If you would like to include only some files from a directory in a Muse
-project, you may use a regexp in place of @file{~/Pages} in the example.
+@section Using a Different File Extension
+@cindex file extension, specifying
 
 By default, Muse expects all project files to have the file extension
 @file{.muse}. Files without this extension will not be associated with
@@ -437,7 +522,77 @@ any such visits happen:
 (add-hook 'find-file-hooks 'muse-mode-maybe)
 @end lisp
 
+
+@node Projects, Keystroke Summary, Getting Started, Top
+@comment  node-name,  next,  previous,  up
+@chapter Creating and Managing Muse Projects
+@cindex projects
+
+Often you will want to publish all the files within a directory to a
+particular set of output styles automatically.  To support, Muse
+allows for the creation of "projects".
+
+@menu
+* Single Project::              A single-project example.
+* Multiple Projects::           A multiple-project example.
+* Projects and Subdirectories::  Publishing subdirectories in projects.
+* Options for Projects::        Listing of available options for projects.
+@end menu
+
+@node Single Project, Multiple Projects, Projects, Projects
+@comment  node-name,  next,  previous,  up
+@section A Single-Project Example
+@cindex projects, single
+
+Here is a sample project, which may be defined in your @file{.emacs}
+file.
+
+@lisp
+(setq muse-project-alist
+      '(("website" ("~/Pages" :default "index")
+         (:base "html" :path "~/public_html")
+         (:base "pdf" :path "~/public_html/pdf"))))
+@end lisp
+
+The above defines a project named "website", whose files are located
+in the directory @file{~/Pages}.  The default page to visit is
+@file{index}.  When this project is published, each page will be
+output as HTML to the directory @file{~/public_html}, and as PDF to
+the directory @file{~/public_html/pdf}.  Within any project page, you
+may create a link to other pages using the syntax @samp{[[pagename]]}.
+
+If you would like to include only some files from a directory in a Muse
+project, you may use a regexp in place of @file{~/Pages} in the example.
+
+@node Multiple Projects, Projects and Subdirectories, Single Project, Projects
+@comment  node-name,  next,  previous,  up
+@section A Multiple-Project Example
+@cindex projects, multiple
+
+It is possible to specify multiple projects.  Here is an example of
+three projects: a generic website, a projects area, and a day-planner
+(requires Planner Mode---see
+@uref{http://wjsullivan.net/PlannerMode.html}).
+
+@lisp
+(setq muse-project-alist
+      '(("website" ("~/Pages" :default "index")
+         (:base "html" :path "~/public_html")
+         (:base "pdf" :path "~/public_html/pdf"))))
+@end lisp
+
+@node Projects and Subdirectories, Options for Projects, Multiple Projects, Projects
+@comment  node-name,  next,  previous,  up
+@section Publishing Subdirectories in Projects
+@cindex projects, subdirectories
+
 @c PRE3_03: Give more examples
+
+@node Options for Projects, , Projects and Subdirectories, Projects
+@comment  node-name,  next,  previous,  up
+@section Listing of Available Options for Projects
+@cindex projects, options
+
 @c PRE3_03: Describe :set and other options fully
 
 @node Keystroke Summary, Markup Rules, Projects, Top
@@ -822,8 +977,8 @@ link descriptions.  The syntax is as follows.
 @end example
 
 Thus, the current maintainer's homepage for Muse can be found
-@samp{[[http://www.mwolson.org/projects/EmacsMuse.html][here]]},
-or at @samp{[[http://www.mwolson.org/projects/EmacsMuse.html]]}.
+@samp{[[http://mwolson.org/projects/EmacsMuse.html][here]]},
+or at @samp{[[http://mwolson.org/projects/EmacsMuse.html]]}.
 
 @node Implicit Links, Images, Explicit Links, Markup Rules
 @comment  node-name,  next,  previous,  up
@@ -890,10 +1045,10 @@ Customization of interwiki links may be accomplished by editing the
 
 Links to images may be used in either the target or the description, or
 both.  Thus, the following code will publish as a clickable image that
-points to @url{http://www.mwolson.org/}.
+points to @url{http://mwolson.org/}.
 
 @example
-[[http://www.mwolson.org/][/static/logos/site-logo.png]]
+[[http://mwolson.org/][/static/logos/site-logo.png]]
 @end example
 
 Normally, images in the link part will be inlined.
@@ -903,7 +1058,7 @@ text ``URL:'' immediately in front of the link text.  An example
 follows.
 
 @example
-[[URL:http://www.mwolson.org/static/logos/site-logo.png]]
+[[URL:http://mwolson.org/static/logos/site-logo.png]]
 @end example
 
 
@@ -2893,7 +3048,7 @@ emacswiki.org page, and anyone may add tips, hints, or bug descriptions
 to it.
 
 @item
-@uref{http://www.mwolson.org/projects/EmacsMuse.html} is the web page
+@uref{http://mwolson.org/projects/EmacsMuse.html} is the web page
 that Michael Olson (the current maintainer) made for Muse.
 
 @item

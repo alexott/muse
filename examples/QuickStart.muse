@@ -37,7 +37,7 @@ authoring mode, and the styles you wish to publish to.  For example:
 (require 'muse-texinfo)
 (require 'muse-docbook)
 
-(require 'muse-project)  ; group files in projects
+(require 'muse-project)  ; publish files in projects
 </example>
 
 Once loaded, the command =M-x muse-publish-this-file= will publish an

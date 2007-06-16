@@ -8,6 +8,10 @@
 	* lisp/muse-xml-common.el (muse-xml-sort-table): Fix typo that was
 	causing tables to not be sorted at all.
 
+	* texi/muse.texi: Overhaul.  It would be too time-consuming to
+	list all of the changes here.  The "Getting Started" and
+	"Projects" chapters, in particular, were heavily revised.
+
 2007-06-15  Michael Olson  <mwolson@gnu.org>
 
 	* NEWS: Update.
