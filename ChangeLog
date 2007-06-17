@@ -1,5 +1,11 @@
 2007-06-17  Michael Olson  <mwolson@gnu.org>
 
+	* Makefile: Add elpa target, which is used for building an ELPA
+	package for Muse.
+
+	* Makefile.defs (ELPADIR, ELPADESC): New variables used for
+	building ELPA packages.
+
 	* lisp/muse-latex.el (muse-latex-slides-header)
 	(muse-latex-lecture-notes-header): Docfix.
 
