@@ -1,6 +1,6 @@
 ;;; muse-texinfo.el --- publish entries to Texinfo format or PDF
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -39,7 +39,7 @@
   "Rules for marking up a Muse file as a Texinfo article."
   :group 'muse-publish)
 
-(defcustom muse-texinfo-process-natively t
+(defcustom muse-texinfo-process-natively nil
   "If non-nil, use the Emacs `texinfmt' module to make Info files."
   :type 'boolean
   :require 'texinfmt
@@ -155,8 +155,8 @@ For more on the structure of this list, see
     (end-verse-line  . "")
     (verse-space     . "@ @ ")
     (end-verse       . "\n@end display")
-    (begin-example   . "@example")
-    (end-example     . "@end example")
+    (begin-example   . "@example\n")
+    (end-example     . "\n@end example")
     (begin-center    . "@quotation\n")
     (end-center      . "\n@end quotation")
     (begin-quote     . "@quotation\n")
@@ -200,7 +200,7 @@ These are applied to URLs."
 
 (defun muse-texinfo-decide-specials (context)
   "Determine the specials to escape, depending on CONTEXT."
-  (cond ((memq context '(url image))
+  (cond ((memq context '(underline literal emphasis email url url-desc image))
          muse-texinfo-markup-specials-url)
         (t muse-texinfo-markup-specials)))
 
@@ -278,6 +278,10 @@ If no description exists for the link, use the link itself."
              (eq emacs-major-version 21))
     (put 'documentencoding 'texinfo-format
          'texinfo-discard-line-with-args))
+  ;; Most versions of `texinfmt.el' do not support @headitem, so hack
+  ;; it in.
+  (unless (get 'headitem 'texinfo-format)
+    (put 'headitem 'texinfo-format 'texinfo-multitable-item))
   (muse-publish-transform-output
    file output-path final-target "Info"
    (function

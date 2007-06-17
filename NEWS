@@ -2,6 +2,12 @@ Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
 * Changes in Muse 3.03 (not yet released)
 
+** An emacs-wiki migration guide is available in
+etc/emacs-wiki-migration.txt.
+
+** Ideas for the future and planned time of implementation can be
+found in etc/IDEAS.muse.
+
 ** Core functionality (lisp/muse.el)
 
 *** Fix an XEmacs beta byte-compiler issue.
@@ -86,6 +92,13 @@ Determine the regexp to use when searching for an RSS heading.
 can handle.
 
 ** LaTeX publishing (lisp/muse-latex.el)
+
+*** New publishing styles: slides and slides-pdf.
+This allows you to use Beamer to publish slides.
+
+*** New publishing styles: lecture-notes and lecture-notes-pdf.
+These are similar to the slides styles, but are suitable for
+publishing lecture notes.
 
 *** New option: muse-latex-pdf-program.
 The program to call in order to generate PDF content from LaTeX
@@ -188,7 +201,7 @@ that the prompt you get when you hit `C-c TAB' will not change.
 `C->' increases list item indentation.
 `C-<' decreases list item indentation.
 
-*** Slightly improvement speed of flyspell integration
+*** Slightly improved speed of flyspell integration
 
 *** Implement searching through Muse files.
 
@@ -202,6 +215,9 @@ command for details.
 *** Changed keybindings:
 `C-c C-b' is now `muse-find-backlinks'
 `C-c C-v' is now `muse-browse-result'
+
+*** The `C-c C-M-t' keybinding can be used in place of `C-c C-S-t',
+since the latter is not available on some terminals.
 
 *** Remove the C-c C-c keybinding, since it conflicts with other
 modes like Planner.
@@ -238,13 +254,19 @@ source.  The default is to enable this behavior.  This feature is
 currently considered to be in a beta state, because finding the real
 paths of images consistently has not been worked out.
 
-**** `C-c C-i' toggles whether images are inlined.
-
 **** New option: muse-colors-inline-image-method.
 This determines how to find an image that we want to inline.  The
 default is to look in the current directory.  If set to
 'muse-colors-use-publishing-directory, it will look in the directory
 where the current page will be published.
+
+**** New function: muse-colors-toggle-inline-images.
+This toggles whether images are inlined.
+
+*** Make links blue by default, like most other Emacs modes do.
+
+*** Don't cause a long delay when highlighting remote (Tramp,
+ange-ftp) links.
 
 *** Make faces conform the namespace better.
 `muse-link-face' is renamed to `muse-link'.
@@ -252,8 +274,6 @@ where the current page will be published.
 `muse-verbatim-face' is renamed to `muse-verbatim'.
 
 *** Handle muse-emphasis faces better.
-
-*** Make links blue by default, like most other Emacs modes do.
 
 *** Source-level change: The regexps in `muse-colors-markup' are now
 permitted to have non-shy groupings.
@@ -571,10 +591,7 @@ This specified the country code to use for Wikipedia.
 
 ** Wiki (lisp/muse-wiki.el)
 
-*** If the document does not have a valid title string, use the
-empty string.
-
-*** Fix some bugs.
+*** Three-part links (example: Project::File#anchor) now work.
 
 *** New option: muse-wiki-wikiword-match-project-files.
 Whether to extend WikiName functionality to also match
@@ -583,11 +600,6 @@ WikiWord format.
 
 If non-nil, Muse will color and publish implicit links to any
 file in your project.  The default is nil.
-
-*** Match filenames in the project before the general WikiWord
-regexp.
-
-*** Take the value of `muse-wiki-hide-nop-tag' into account.
 
 *** New option: muse-wiki-ignore-implicit-links-to-current-page.
 Whether to ignore implicit links to the current page.
@@ -603,9 +615,22 @@ interwiki link, not just part of it.  This allows page names with
 invalid WikiName characters to be referred to by using an explicit
 link.
 
+*** If the document does not have a valid title string, use the
+empty string.
+
+*** Take the value of `muse-wiki-hide-nop-tag' into account.
+
+*** Match filenames in the project before the general WikiWord
+regexp.
+
+*** Fix some bugs.
+
 ** XML publishing (lisp/muse-xml.el)
 
-*** Update examples/muse.rnc to handle nested list items.
+*** The Muse XML schema has been moved from examples/muse.rnc
+to etc/muse.rnc.
+
+*** Update muse.rnc to handle nested list items.
 
 *** Fix table generation when some attributes are not given.
 

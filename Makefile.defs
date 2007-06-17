@@ -23,8 +23,13 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 # Useful only for the maintainer
 PROJECT     = muse
 DEBNAME     = muse-el
-VERSION     = 3.02.93.arch.265
+VERSION     = 3.03
 MANUAL      = muse
 LASTUPLOAD  = 3.02.8-1
 BUILDOPTS   =
 DISTRIBUTOR = debian
+
+# Location of Emacs Lisp Package Archive entries
+ELPADIR  = ../../elpa
+# Description of ELPA package
+ELPADESC = Authoring and publishing tool

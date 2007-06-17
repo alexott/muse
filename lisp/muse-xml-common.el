@@ -1,6 +1,6 @@
 ;;; muse-xml-common.el --- common routines for XML-like publishing styles
 
-;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -46,7 +46,7 @@
   "An alist mapping Emacs coding systems to appropriate XML charsets.
 Use the base name of the coding system (i.e. without the -unix)."
   :type '(alist :key-type coding-system :value-type string)
-  :group 'muse-publish)
+  :group 'muse-xml)
 
 (defun muse-xml-transform-content-type (content-type default)
   "Using `muse-xml-encoding-map', try and resolve an Emacs coding
@@ -132,10 +132,10 @@ if not escaped."
   ;; elements with the same type will be reversed with respect to each
   ;; other.
   (let ((decisions '((nil nil nil)      ; body < header, body < footer
-                     (t nil t)          ; header stays where it is
-                     (t nil nil))))     ; footer < header
+                     (t   nil t)        ; header stays where it is
+                     (t   nil nil))))   ; footer < header
     (sort table #'(lambda (l r)
-                    (and (integerp (car l)) (integerp (cdr l))
+                    (and (integerp (car l)) (integerp (car r))
                          (nth (1- (car r))
                               (nth (1- (car l)) decisions)))))))
 

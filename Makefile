@@ -1,6 +1,6 @@
 .PHONY: all lisp contrib autoloads examples experimental doc info-only
 .PHONY: clean realclean distclean fullclean install-info install-bin install
-.PHONY: test dist release debbuild debrevision debrelease upload
+.PHONY: test dist release debbuild debrevision debrelease upload elpa
 
 include Makefile.defs
 
@@ -104,3 +104,23 @@ upload: release
 	(cd .. && \
 	  scp $(PROJECT)-$(VERSION).zip* $(PROJECT)-$(VERSION).tar.gz* \
 	    mwolson@download.gna.org:/upload/muse-el)
+
+elpa: realclean info-only
+	rm -fR $(ELPADIR)/$(PROJECT)-$(VERSION)
+	rm -f $(ELPADIR)/$(PROJECT)-$(VERSION).tar
+	mkdir -p $(ELPADIR)/$(PROJECT)-$(VERSION)
+	cp lisp/*.el $(ELPADIR)/$(PROJECT)-$(VERSION)
+	cp contrib/*.el $(ELPADIR)/$(PROJECT)-$(VERSION)
+	echo '(define-package "$(PROJECT)" "$(VERSION)"' > \
+	  $(ELPADIR)/$(PROJECT)-$(VERSION)/$(PROJECT)-pkg.el
+	echo '  "$(ELPADESC)")' >> \
+	  $(ELPADIR)/$(PROJECT)-$(VERSION)/$(PROJECT)-pkg.el
+	cp texi/$(MANUAL).info $(ELPADIR)/$(PROJECT)-$(VERSION)
+	echo '* Menu:' > $(ELPADIR)/$(PROJECT)-$(VERSION)/dir
+	echo >> $(ELPADIR)/$(PROJECT)-$(VERSION)/dir
+	install-info --section "Emacs" "Emacs" \
+	  --info-dir=$(ELPADIR)/$(PROJECT)-$(VERSION) \
+	  $(ELPADIR)/$(PROJECT)-$(VERSION)/$(MANUAL).info
+	rm -f $(ELPADIR)/$(PROJECT)-$(VERSION)/dir.old
+	(cd $(ELPADIR) && tar cf $(PROJECT)-$(VERSION).tar \
+	  $(PROJECT)-$(VERSION))

@@ -1,10 +1,16 @@
 ;;; muse-init.el --- Initialize Emacs Muse
 
-;; Author: Michael Olson
+;; This file is part of Michael Olson's Emacs settings.
+
+;; The code in this file may be used, distributed, and modified
+;; without restriction.
+
+;; I use initsplit.el to separate customize settings on a per-project
+;; basis.
 
 ;; In order to see the scripts that I use to publish my website to a
 ;; remote webserver, check out
-;; http://www.mwolson.org/projects/SiteScripts.html.
+;; http://mwolson.org/projects/SiteScripts.html.
 
 ;;; Setup
 
@@ -44,6 +50,25 @@
                    :header "~/personal-site/muse/header.html"
                    :footer "~/personal-site/muse/footer.html")
 
+;; Define a draft style which provides extra space between sections
+
+(defvar muse-latex-draft-markup-strings
+  (nconc
+   '((chapter      . "\\bigskip\n\\bigskip\n\\chapter{")
+     (section      . "\\bigskip\n\\bigskip\n\\section{")
+     (subsection   . "\\bigskip\n\\bigskip\n\\subsection{")
+     (subsubsection . "\\bigskip\n\\bigskip\n\\subsubsection{"))
+   muse-latex-markup-strings)
+  "Strings used for marking up Latex draft text.")
+
+(muse-derive-style "latex-draft" "latex"
+                   :strings 'muse-latex-draft-markup-strings)
+(muse-derive-style "pdf-draft" "latex-draft"
+                   :final   'muse-latex-pdf-generate
+                   :browser 'muse-latex-pdf-browse-file
+                   :link-suffix 'muse-latex-pdf-extension
+                   :osuffix 'muse-latex-pdf-extension)
+
 ;; Here is my master project listing.
 
 (setq muse-project-alist
@@ -52,44 +77,50 @@
                     :force-publish ("WikiIndex")
                     :default "WelcomePage")
          (:base "my-xhtml"
+                :base-url "http://mwolson.org/web/"
                 :include "/web/[^/]+"
                 :path "~/personal-site/site/web")
          (:base "my-xhtml"
+                :base-url "http://mwolson.org/web/"
                 :include "/testdir/[^/]+"
                 :path "~/personal-site/site/web/testdir")
          (:base "my-pdf"
+                :base-url "http://mwolson.org/web/"
                 :path "~/personal-site/site/web"
-                :include "/CurriculumVitae[^/]*$"))
+                :include "/\\(CurriculumVitae\\|BriefResume\\)[^/]*$"))
 
         ("Projects" ("~/proj/wiki/projects/"
-                     :force-publish ("WikiIndex")
+                     :force-publish ("WikiIndex" "MuseQuickStart")
                      :default "WelcomePage")
          (:base "my-xhtml"
+                :base-url "http://mwolson.org/projects/"
                 :path "~/personal-site/site/projects"))
 
         ("Blog" (,@(muse-project-alist-dirs "~/proj/wiki/blog")
                  :default "index")
-
          ;; Publish this directory and its subdirectories.  Arguments
          ;; are as follows.  The above `muse-project-alist-dirs' part
-         ;; is also needed, using Argument 1.
-         ;;
-         ;;  1. Source directory
-         ;;  2. Output directory
-         ;;  3. Publishing style
+         ;; is also needed.
+         ;;   1. Source directory
+         ;;   2. Output directory
+         ;;   3. Publishing style
+         ;;   remainder: Other things to put in every generated style
          ,@(muse-project-alist-styles "~/proj/wiki/blog"
                                       "~/personal-site/site/blog"
-                                      "my-blosxom"))
+                                      "my-blosxom"
+                                      :base-url "http://blog.mwolson.org/"))
 
         ("MyNotes" ("~/proj/wiki/notes/"
                     :force-publish ("index")
                     :default "index")
          (:base "xhtml"
+                :base-url "http://mwolson.org/notes/"
                 :path "~/personal-site/site/notes")
          (:base "my-pdf"
+                :base-url "http://mwolson.org/notes/"
                 :path "~/personal-site/site/notes"))
 
-        ("Private" ("~/Documents" "~/Documents/work-school"
+        ("Private" ("~/Documents"
                     :default "movielist")
          ,@(muse-project-alist-styles "~/Documents"
                                       "~/Documents"
@@ -101,6 +132,14 @@
                                       "~/personal-site/site/classes"
                                       "xhtml"))
 
+        ("MA453" ("~/proj/classes/ma453")
+         (:base "pdf"
+                :path "~/proj/classes/ma453"))
+
+        ("CS565" ("~/proj/classes/cs565")
+         (:base "pdf"
+                :path "~/proj/classes/cs565"))
+
         ("Plans" ("~/proj/wiki/plans/"
                   :default "TaskPool"
                   :major-mode planner-mode
@@ -111,7 +150,7 @@
 
 ;; Wiki settings
 (setq muse-wiki-interwiki-alist
-      '(("PlugWiki" . "http://plug.student-orgs.purdue.edu/wiki/")
+      '(("PlugWiki" . "http://purduelug.org/wiki/")
         ("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
         ("ArchWiki" . "http://gnuarch.org/gnuarchwiki/")
         ;; abbreviations
@@ -120,7 +159,7 @@
         ("RememberMode" . "http://www.emacswiki.org/cgi-bin/wiki/RememberMode")
         ("GP2X" . "http://www.gp2x.co.uk/")
         ("UbuntuLinux" . "http://ubuntulinux.org/")
-        ("PLUG" . "http://plug.student-orgs.purdue.edu/wiki/")
+        ("PLUG" . "http://purduelug.org/")
         ("PAC" . "http://web.ics.purdue.edu/~pac/")))
 
 ;;; Functions
@@ -131,7 +170,7 @@
   (when str
     (save-match-data
       (if (string-match "\\`[/.]+" str)
-          (replace-match "http://www.mwolson.org/" nil t str)
+          (replace-match "http://mwolson.org/" nil t str)
         str))))
 
 ;; Make sure my interproject links become absolute when published in
@@ -145,11 +184,6 @@
   (interactive)
   (let ((muse-current-project (muse-project project)))
     (call-interactively 'muse-project-find-file)))
-
-;; Determine whether we are publishing a certain kind of output
-(defun my-muse-format-p (format)
-  (let ((base (muse-get-keyword :base muse-publishing-current-style)))
-    (when base (string-match format base))))
 
 (defun my-muse-blosxom-finalize (file output-path target)
 ;;  (my-muse-prepare-entry-for-xanga output-path)
@@ -207,7 +241,7 @@ If FILE is not specified, use the published version of the current file."
       ;; make relative links work
       (goto-char (point-min))
       (while (re-search-forward "href=\"[/.]+" nil t)
-        (replace-match "href=\"http://www.mwolson.org/" nil t))
+        (replace-match "href=\"http://mwolson.org/" nil t))
       ;; copy entry to clipboard
       (clipboard-kill-ring-save (point-min) (point-max))
       (message "Copied blog entry to clipboard"))))
@@ -220,6 +254,23 @@ If FILE is not specified, use the published version of the current file."
     (delete-region beg end)
     (insert "[[" link "][" text "]]")))
 
+(defun my-muse-surround-math (beg end)
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region beg end)
+    (goto-char (point-min))
+    (insert "<math>")
+    (goto-char (point-max))
+    (insert "</math>")))
+
+(defun my-muse-cdotize-region (beg end)
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region beg end)
+    (goto-char (point-min))
+    (while (re-search-forward " *\\* *" nil t)
+      (replace-match " \\\\cdot "))))
+
 ;;; Key customizations
 
 (global-set-key "\C-cpl" 'muse-blosxom-new-entry)
@@ -227,6 +278,8 @@ If FILE is not specified, use the published version of the current file."
                              (my-muse-project-find-file "Blog")))
 (global-set-key "\C-cpi" #'(lambda () (interactive)
                              (my-muse-project-find-file "Private")))
+(global-set-key "\C-cpm" #'(lambda () (interactive)
+                             (my-muse-project-find-file "MA453")))
 (global-set-key "\C-cpn" #'(lambda () (interactive)
                              (my-muse-project-find-file "MyNotes")))
 (global-set-key "\C-cpp" #'(lambda () (interactive)
@@ -237,8 +290,10 @@ If FILE is not specified, use the published version of the current file."
                              (my-muse-project-find-file "Classes")))
 (global-set-key "\C-cpw" #'(lambda () (interactive)
                              (my-muse-project-find-file "Website")))
-(global-set-key "\C-cpW" 'my-muse-dictize)
-(global-set-key "\C-cpx" 'my-muse-prepare-entry-for-xanga)
+(global-set-key "\C-cpC" #'my-muse-cdotize-region)
+(global-set-key "\C-cpM" #'my-muse-surround-math)
+(global-set-key "\C-cpW" #'my-muse-dictize)
+(global-set-key "\C-cpx" #'my-muse-prepare-entry-for-xanga)
 
 ;;; Custom variables
 
@@ -257,7 +312,7 @@ If FILE is not specified, use the published version of the current file."
  '(muse-latex-header "~/personal-site/muse/header.tex")
  '(muse-mode-hook (quote (flyspell-mode footnote-mode)))
  '(muse-publish-comments-p t)
- '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki)))
+ '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki muse-publish-strip-URL)))
  '(muse-wiki-publish-small-title-words (quote ("the" "and" "at" "on" "of" "for" "in" "an" "a" "page")))
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")
  '(muse-xhtml-header "~/personal-site/muse/generic-header.html")

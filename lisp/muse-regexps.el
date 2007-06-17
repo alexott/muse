@@ -1,6 +1,6 @@
 ;;; muse-regexps.el --- define regexps used by Muse
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -143,12 +143,22 @@ the time."
 ;;; Regexps used to define Muse publishing syntax
 
 (defcustom muse-list-item-regexp
-  (concat "^%s\\([" muse-regexp-blank "]-[" muse-regexp-blank
-          "]*\\|[" muse-regexp-blank "][0-9]+\\.["
-          muse-regexp-blank "]*\\|\\([^\n" muse-regexp-blank "].*?\\)?"
-          "::\\(?:[" muse-regexp-blank "]+\\|$\\)\\)")
+  (concat "^%s\\(\\([^\n" muse-regexp-blank "].*?\\)?::"
+          "\\(?:[" muse-regexp-blank "]+\\|$\\)"
+          "\\|[" muse-regexp-blank "]-[" muse-regexp-blank "]*"
+          "\\|[" muse-regexp-blank "][0-9]+\\.[" muse-regexp-blank "]*\\)")
   "Regexp used to match the beginning of a list item.
 The '%s' will be replaced with a whitespace regexp when publishing."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-ol-item-regexp (concat "\\`[" muse-regexp-blank "]+[0-9]+\\.")
+  "Regexp used to match an ordered list item."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-ul-item-regexp (concat "\\`[" muse-regexp-blank "]+-")
+  "Regexp used to match an unordered list item."
   :type 'regexp
   :group 'muse-regexp)
 
@@ -157,6 +167,11 @@ The '%s' will be replaced with a whitespace regexp when publishing."
           muse-regexp-blank "]+::\\(?:[" muse-regexp-blank "]+\\|$\\)")
   "Regexp used to match a definition list term.
 The first match string must contain the term."
+  :type 'regexp
+  :group 'muse-regexp)
+
+(defcustom muse-dl-entry-regexp (concat "\\`[" muse-regexp-blank "]*::")
+  "Regexp used to match a definition list entry."
   :type 'regexp
   :group 'muse-regexp)
 

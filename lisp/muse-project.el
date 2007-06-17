@@ -1,6 +1,6 @@
 ;;; muse-project.el --- handle Muse projects
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -195,7 +195,7 @@ Muse can make use of."
                               (const :tag ":visit-link" ":visit-link")
                               (choice (function)
                                       (sexp :tag "Unknown")))))
-               (repeat :tag "Styles" :format "%{%t%}:\n%v%i\n\n"
+               (repeat :tag "Output styles" :format "%{%t%}:\n%v%i\n\n"
                        (set :tag "Style"
                             (list :inline t
                                   :tag "Publishing style"
@@ -241,7 +241,7 @@ when publishing files in that project."
 (defcustom muse-project-ignore-regexp
   (concat "\\`\\(#.*#\\|.*,v\\|.*~\\|\\.\\.?\\|\\.#.*\\|,.*\\)\\'\\|"
           "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\|\\.svn\\|"
-          "\\.hg\\|\\.bzr\\|_darcs\\)\\(/\\|\\'\\)")
+          "\\.hg\\|\\.git\\|\\.bzr\\|_darcs\\)\\(/\\|\\'\\)")
   "A regexp matching files to be ignored in Muse directories.
 
 You should set `case-fold-search' to nil before using this regexp

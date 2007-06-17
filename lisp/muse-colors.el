@@ -1,6 +1,6 @@
 ;;; muse-colors.el --- coloring and highlighting used by Muse
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Keywords: hypermedia
@@ -107,7 +107,7 @@ used as the filename of the image."
 
 ;;;###autoload
 (defun muse-colors-toggle-inline-images ()
-  "Toggle inlined images on/off."
+  "Toggle display of inlined images on/off."
   (interactive)
   ;; toggle the custom setting
   (if (not muse-colors-inline-images)
@@ -115,9 +115,6 @@ used as the filename of the image."
     (setq muse-colors-inline-images nil))
   ;; reprocess the buffer
   (muse-colors-buffer))
-
-(define-key muse-mode-map [(control ?c) (control ?i)]
-  'muse-colors-toggle-inline-images)
 
 (defvar muse-colors-outline-faces-list
   (if (facep 'outline-1)
@@ -243,11 +240,12 @@ whether progress messages should be displayed to the user."
         (when value
           (setq rules (cons rule rules))
           (setq regexps (cons value regexps)))))
+    (setq rules (nreverse rules)
+          regexps (nreverse regexps))
     (setq muse-colors-regexp (concat "\\("
                                      (mapconcat #'identity regexps "\\|")
                                      "\\)")
           muse-colors-vector (make-vector 128 nil))
-    (setq rules (nreverse rules))
     (while rules
       (if (eq (cadr (car rules)) t)
           (let ((i 0) (l 128))
@@ -700,6 +698,9 @@ ignored."
               ((muse-file-remote-p link)
                'muse-link)
               ((string-match muse-file-regexp link)
+               (when (string-match "/[^/]+#[^#./]+\\'" link)
+                 ;; strip anchor from the end of a path
+                 (setq link (substring link 0 (match-beginning 0))))
                (if (file-exists-p link)
                    'muse-link
                  'muse-bad-link))
@@ -761,8 +762,11 @@ in place of an image link defined by BEG and END."
     (when (stringp image-file)
       (if (fboundp 'create-image)
           ;; use create-image and display property
-          (add-text-properties beg end
-                               (list 'display (create-image image-file)))
+          (let ((display-stuff (condition-case nil
+                                   (create-image image-file)
+                                 (error nil))))
+            (when display-stuff
+              (add-text-properties beg end (list 'display display-stuff))))
         ;; use make-glyph and invisible property
         (and (setq glyph (muse-make-file-glyph image-file))
              (progn

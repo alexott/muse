@@ -34,6 +34,9 @@
 ;; Jean Magnan de Bornier (jean AT bornier DOT net) provided the
 ;; markup string for link-and-anchor.
 
+;; Jim Ottaway (j DOT ottaway AT lse DOT ac DOT uk) implemented slides
+;; and lecture notes.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -127,6 +130,57 @@ filename."
 \\end{document}\n"
   "Footer used for publishing LaTeX files (CJK).  This may be text or a
 filename."
+  :type 'string
+  :group 'muse-latex)
+
+(defcustom muse-latex-slides-header
+  "\\documentclass[ignorenonframetext]{beamer}
+
+\\usepackage[english]{babel}
+\\usepackage[latin1]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage{hyperref}
+
+\\begin{document}
+
+\\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
+\\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
+\\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
+
+\\maketitle
+
+<lisp>(and muse-publish-generate-contents
+           \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
+  "Header for publishing of slides using LaTeX.
+This may be text or a filename.
+
+You must have the Beamer extension for LaTeX installed for this to work."
+  :type 'string
+  :group 'muse-latex)
+
+(defcustom muse-latex-lecture-notes-header
+  "\\documentclass{article}
+\\usepackage{beamerarticle}
+
+\\usepackage[english]{babel}
+\\usepackage[latin1]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage{hyperref}
+
+\\begin{document}
+
+\\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
+\\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
+\\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
+
+\\maketitle
+
+<lisp>(and muse-publish-generate-contents
+           \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
+  "Header for publishing of lecture notes using LaTeX.
+This may be text or a filename.
+
+You must have the Beamer extension for LaTeX installed for this to work."
   :type 'string
   :group 'muse-latex)
 
@@ -231,6 +285,16 @@ For more on the structure of this list, see
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
   :type '(alist :key-type symbol :value-type string)
+  :group 'muse-latex)
+
+(defcustom muse-latex-slides-markup-tags
+  '(("slide" t t nil muse-latex-slide-tag))
+ "A list of tag specifications, for specially marking up LaTeX slides."
+  :type '(repeat (list (string :tag "Markup tag")
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
+                       function))
   :group 'muse-latex)
 
 (defcustom muse-latexcjk-encoding-map
@@ -359,6 +423,19 @@ These are applied to image filenames."
          muse-latex-markup-specials-example)
         (t (error "Invalid context '%s' in muse-latex" context))))
 
+(defcustom muse-latex-permit-contents-tag nil
+  "If nil, ignore <contents> tags.  Otherwise, insert table of contents.
+
+Most of the time, it is best to have a table of contents on the
+first page, with a new page immediately following.  To make this
+work with documents published in both HTML and LaTeX, we need to
+ignore the <contents> tag.
+
+If you don't agree with this, then set this option to non-nil,
+and it will do what you expect."
+  :type 'boolean
+  :group 'muse-latex)
+
 (defun muse-latex-markup-table ()
   (let* ((table-info (muse-publish-table-fields (match-beginning 0)
                                                 (match-end 0)))
@@ -383,6 +460,23 @@ These are applied to image filenames."
               (muse-insert-markup "\\hline\n")))))
       (muse-insert-markup "\\end{tabular}"))))
 
+;;; Tags for LaTeX
+
+(defun muse-latex-slide-tag (beg end attrs)
+  "Publish the <slide> tag in LaTeX.
+This is used by the slides and lecture-notes publishing styles."
+  (let ((title (cdr (assoc "title" attrs))))
+    (goto-char beg)
+    (muse-insert-markup "\\begin{frame}\n")
+    (when title
+      (muse-insert-markup "\\frametitle{")
+      (insert title)
+      (muse-insert-markup "}\n"))
+    (goto-char end)
+    (muse-insert-markup "\n\\end{frame}")))
+
+;;; Post-publishing functions
+
 (defun muse-latex-fixup-dquotes ()
   "Fixup double quotes."
   (goto-char (point-min))
@@ -399,6 +493,7 @@ These are applied to image filenames."
           (replace-match "''")
           (setq open t))))))
 
+<<<<<<< TREE
 (defcustom muse-latex-permit-contents-tag nil
   "If nil, ignore <contents> tags.  Otherwise, insert table of contents.
 
@@ -426,6 +521,8 @@ and it will do what you expect."
       (widen)))
   )
 
+=======
+>>>>>>> MERGE-SOURCE
 (defun muse-latex-munge-buffer ()
   (muse-latex-fixup-dquotes)
   (muse-latex-fixup-citations)
@@ -509,6 +606,20 @@ and it will do what you expect."
                    :browser 'muse-latex-pdf-browse-file
                    :link-suffix 'muse-latex-pdf-extension
                    :osuffix 'muse-latex-pdf-extension)
+
+(muse-derive-style "slides" "latex"
+                   :header 'muse-latex-slides-header
+                   :tags 'muse-latex-slides-markup-tags)
+
+(muse-derive-style "slides-pdf" "pdf"
+                   :header 'muse-latex-slides-header
+                   :tags 'muse-latex-slides-markup-tags)
+
+(muse-derive-style "lecture-notes" "slides"
+                   :header 'muse-latex-lecture-notes-header)
+
+(muse-derive-style "lecture-notes-pdf" "slides-pdf"
+                   :header 'muse-latex-lecture-notes-header)
 
 (provide 'muse-latex)
 

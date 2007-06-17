@@ -6,15 +6,8 @@ to merge into Muse at some point.
 
 * Pending code
 
-** Waiting on copyright assignments
-
- - Markus Hoenicka (markus.hoenicka AT mhoenicka.de)
-   - <cite> tag, which is for refDB and BibTeX both:
-     http://refdb.sourceforge.net/pre/muse-cite.patch
-
- - Jean Jean Magnan de Bornier (jean AT bornier.net)
-   - ConTeX support (similar to LaTeX):
-     http://jm.bornier.free.fr/muse.html
+This is code that may or may not be already approved, but should be
+checked out at some point.
 
 ** Waiting for a new release
 
@@ -25,13 +18,21 @@ to merge into Muse at some point.
      Should be merged into muse-latex.el after replacing with
      jeho-latex.el.
 
-** Before the 3.03 release
+ - David D. Smith
+   - dds-emphasis-bits.el
+     - New syntax for explicitly specifying emphasis:
+       {[_-=*] some emphasized text}.
+     - Using -strike- to do strikethrough.
 
- - Jim Ottaway
-    - three-part-link.el: allow links like "project#page#anchor" or
-      "project::page#anchor".
-    - muse-slides.el: support for using Beamer to make slides.  Should
-      be merged into muse-latex.el.
+** Just after the 3.03 release
+
+ - Markus Hoenicka (markus.hoenicka AT mhoenicka.de)
+   - <cite> tag, which is for refDB and BibTeX both:
+     http://refdb.sourceforge.net/pre/muse-cite.patch
+
+ - Jean Jean Magnan de Bornier (jean AT bornier.net)
+   - ConTeX support (similar to LaTeX):
+     http://jm.bornier.free.fr/muse.html
 
 * Ideas without code
 

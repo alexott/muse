@@ -1,8 +1,8 @@
 ;;; muse-xml.el --- publish XML files
 
-;; Copyright (C) 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
 
-;; Author: Michael Olson (mwolson AT gnu DOT org)
+;; Author: Michael Olson <mwolson@gnu.org>
 ;; Date: Sat 23-Jul-2005
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
@@ -81,7 +81,7 @@ This may be text or a filename."
 (defcustom muse-xml-footer "
   <!-- Page published by Emacs Muse ends here -->
 </MUSE>\n"
-  "Footer used for publishing Xml XML files.
+  "Footer used for publishing XML files.
 This may be text or a filename."
   :type 'string
   :group 'muse-xml)

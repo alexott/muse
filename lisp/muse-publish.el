@@ -1,6 +1,6 @@
 ;;; muse-publish.el --- base publishing implementation
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -1247,8 +1247,7 @@ and type, respecting the end-of-list property."
          (type (muse-list-item-type str))
          (indent (buffer-substring (muse-line-beginning-position)
                                    (match-beginning 1)))
-         (post-indent (length str))
-         (last (match-beginning 0)))
+         (post-indent (length str)))
     (cond
      ((or (get-text-property (muse-list-item-critical-point) 'read-only)
           (get-text-property (muse-list-item-critical-point) 'muse-link))
@@ -1417,7 +1416,11 @@ The existing region will be removed, except for initial blank lines."
                                        (split-string (match-string 0)
                                                      muse-table-field-regexp)))
                   field-list (cons fields field-list)
-                  longest (max (length fields) longest))))
+                  longest (max (length fields) longest))
+            ;; strip initial bars, if they exist
+            (let ((first (cadr fields)))
+              (when (and first (string-match "\\`|+\\s-*" first))
+                (setcar (cdr fields) (replace-match "" t t first))))))
           (setq left (forward-line 1))))
       (delete-region beg end)
       (if (= longest 0)
@@ -1428,7 +1431,7 @@ The existing region will be removed, except for initial blank lines."
         (muse-publish-trim-table (cons (1- longest) (nreverse field-list)))))))
 
 (defun muse-publish-markup-table ()
-  "Style does not support tables.")
+  "Style does not support tables.\n")
 
 (defun muse-publish-table-el-table (variant)
   "Publish table.el-style tables in the format given by VARIANT."
@@ -1459,7 +1462,7 @@ The existing region will be removed, except for initial blank lines."
          (muse-publish-table-el-table 'latex))
         ((muse-style-derived-p 'docbook)
          (muse-publish-table-el-table 'cals))
-        (t "Style does not support table.el tables.")))
+        (t "Style does not support table.el tables.\n")))
 
 (defun muse-publish-escape-specials-in-string (string &optional context)
   "Escape specials in STRING using style-specific :specials.
@@ -1740,7 +1743,9 @@ is exactly this style."
                                muse-publishing-current-style))
             (and (not exactp) (muse-style-derived-p style)))
         (muse-publish-mark-read-only beg end)
-      (delete-region beg end))))
+      (delete-region beg end)
+      (when (and (bolp) (eolp) (not (eobp)))
+        (delete-char 1)))))
 
 (defun muse-publish-verbatim-tag (beg end)
   (muse-publish-escape-specials beg end nil 'verbatim)

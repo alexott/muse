@@ -1,6 +1,6 @@
 ;;; muse-mode.el --- mode for editing Muse files; has font-lock support
 
-;; Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -151,6 +151,7 @@ index at intervals."
     (define-key map [(control ?c) (control ?t)]
       'muse-project-publish-this-file)
     (define-key map [(control ?c) (control ?T)] 'muse-publish-this-file)
+    (define-key map [(control ?c) (meta control ?t)] 'muse-publish-this-file)
     (define-key map [(control ?c) (control ?v)] 'muse-browse-result)
 
     (define-key map [(control ?c) ?=]           'muse-what-changed)
@@ -177,6 +178,7 @@ index at intervals."
     (define-key map [(control ?c) (control ?f)] 'muse-project-find-file)
     (define-key map [(control ?c) (control ?p)] 'muse-project-publish)
 
+    (define-key map [(control ?c) (control ?i)] 'muse-insert-thing)
     (define-key map [(control ?c) tab] 'muse-insert-thing)
 
     ;; Searching functions

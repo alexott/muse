@@ -20,20 +20,22 @@ Directory contents
 
 The directory structure is as follows.
 
+etc :: Miscellaneous files like the emacs-wiki migration guide, the
+  list of ideas for the future, and a RelaxNG schema for Muse XML.
+
 contrib :: Files that are not a part of Muse proper, but are useful
-           enough to be bundled with Muse.
+  enough to be bundled with Muse.
 
 examples :: Example configuration files for use with Muse, a
-            publishable quickstart guide, and miscellaneous helper
-            stuff.
+  publishable quickstart guide, and miscellaneous helper stuff.
 
 experimental :: Source code that is not yet considered stable.
 
 lisp :: Muse source code.
 
 scripts :: Scripts that are used when compiling Muse and publishing
-           the QuickStart document; they might prove useful if you
-           want to automate the building of Muse documents.
+  the QuickStart document; they might prove useful if you want to
+  automate the building of Muse documents.
 
 texi :: The manual (muse.texi) and any supplemental sections.
 
@@ -230,3 +232,6 @@ copy of the license is included in the section entitled "GNU Free
 Documentation License" in the Muse manual.  All Emacs Lisp code
 contained in the manual may be used, distributed, and modified without
 restriction.
+
+The PNG images included in the examples/ directory may be used,
+distributed, and modified without restriction.
