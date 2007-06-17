@@ -241,7 +241,7 @@ when publishing files in that project."
 (defcustom muse-project-ignore-regexp
   (concat "\\`\\(#.*#\\|.*,v\\|.*~\\|\\.\\.?\\|\\.#.*\\|,.*\\)\\'\\|"
           "/\\(CVS\\|RCS\\|\\.arch-ids\\|{arch}\\|,.*\\|\\.svn\\|"
-          "\\.hg\\|\\.bzr\\|_darcs\\)\\(/\\|\\'\\)")
+          "\\.hg\\|\\.git\\|\\.bzr\\|_darcs\\)\\(/\\|\\'\\)")
   "A regexp matching files to be ignored in Muse directories.
 
 You should set `case-fold-search' to nil before using this regexp

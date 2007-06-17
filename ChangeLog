@@ -20,6 +20,9 @@
 	* lisp/muse-latex.el (muse-latex-slides-header)
 	(muse-latex-lecture-notes-header): Docfix.
 
+	* lisp/muse-project.el (muse-project-ignore-regexp): Add .git to
+	the list of things to ignore.
+
 	* lisp/muse-publish.el (muse-publish-markup-list): Remove unused
 	variable.
 
