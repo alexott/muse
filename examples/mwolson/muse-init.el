@@ -90,7 +90,7 @@
                 :include "/\\(CurriculumVitae\\|BriefResume\\)[^/]*$"))
 
         ("Projects" ("~/proj/wiki/projects/"
-                     :force-publish ("WikiIndex")
+                     :force-publish ("WikiIndex" "MuseQuickStart")
                      :default "WelcomePage")
          (:base "my-xhtml"
                 :base-url "http://mwolson.org/projects/"

@@ -39,7 +39,7 @@
   "Rules for marking up a Muse file as a Texinfo article."
   :group 'muse-publish)
 
-(defcustom muse-texinfo-process-natively t
+(defcustom muse-texinfo-process-natively nil
   "If non-nil, use the Emacs `texinfmt' module to make Info files."
   :type 'boolean
   :require 'texinfmt
@@ -155,8 +155,8 @@ For more on the structure of this list, see
     (end-verse-line  . "")
     (verse-space     . "@ @ ")
     (end-verse       . "\n@end display")
-    (begin-example   . "@example")
-    (end-example     . "@end example")
+    (begin-example   . "@example\n")
+    (end-example     . "\n@end example")
     (begin-center    . "@quotation\n")
     (end-center      . "\n@end quotation")
     (begin-quote     . "@quotation\n")
@@ -196,7 +196,7 @@ These are applied to URLs."
 
 (defun muse-texinfo-decide-specials (context)
   "Determine the specials to escape, depending on CONTEXT."
-  (cond ((memq context '(url image))
+  (cond ((memq context '(underline literal emphasis email url url-desc image))
          muse-texinfo-markup-specials-url)
         (t muse-texinfo-markup-specials)))
 

@@ -204,11 +204,29 @@ If you want some text to only be inserted when publishing to a
 particular format, use the =style= attribute for the
 =<literal><literal></literal>= tag.  Some examples follow.
 
+<example>
 You are reading the
 <literal style="html">HTML</literal>
 <literal style="pdf">PDF</literal>
 <literal style="info">Info</literal>
 version of this document.
+</example>
+
+Produces:
+
+You are reading the
+<literal style="html">HTML</literal>
+<literal style="pdf">PDF</literal>
+<literal style="info">Info</literal>
+version of this document.
+
+<example>
+<literal style="latex">
+LaTeX was used in the publishing of this document.
+</literal>
+</example>
+
+Produces:
 
 <literal style="latex">
 LaTeX was used in the publishing of this document.
@@ -344,22 +362,22 @@ put the text "URL:" immediately in front of the link.
 This is an inlined image example:
 
 <example>
-Made with [[http://mwolson.org/static/logos/muse-made-with.png]] Emacs Muse.
+Made with [[muse-made-with.png]] Emacs Muse.
 </example>
 
 This publishes as:
 
-Made with [[http://mwolson.org/static/logos/muse-made-with.png]] Emacs Muse.
+Made with [[muse-made-with.png]] Emacs Muse.
 
 Here is an example of a captioned image:
 
 <example>
-[[http://mwolson.org/static/logos/emacs-muse.png][Muse, the publishing choice of Great Thinkers]]
+[[emacs-muse.png][Muse, the publishing choice of Great Thinkers]]
 </example>
 
 This publishes as:
 
-[[http://mwolson.org/static/logos/emacs-muse.png][Emacs Muse, the publishing choice of (a subset of) Great Thinkers]]
+[[emacs-muse.png][Emacs Muse, the publishing choice of (a subset of) Great Thinkers]]
 
 The following will be published as a link only.
 

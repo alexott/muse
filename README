@@ -232,3 +232,6 @@ copy of the license is included in the section entitled "GNU Free
 Documentation License" in the Muse manual.  All Emacs Lisp code
 contained in the manual may be used, distributed, and modified without
 restriction.
+
+The PNG images included in the examples/ directory may be used,
+distributed, and modified without restriction.
