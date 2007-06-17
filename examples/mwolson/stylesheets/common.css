@@ -58,6 +58,11 @@ body {
   margin-top: 1%;
 }
 
+code {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
 dt {
   font-weight: bold;
   margin-top: .5em;
@@ -134,6 +139,14 @@ pre.example {
   margin-left: 3%;
   margin-top: 1.2em;
   margin-bottom: 1.2em;
+  clear: right;
+}
+
+pre.src {
+  margin-left: 0%;
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+  clear: right;  
 }
 
 pre.verse {
@@ -160,6 +173,10 @@ table {
   overflow: hidden;             /* don't crowd the menu */
 }
 
+table.image {
+  clear: right;
+}
+
 ul {
   list-style-type: disc;
   margin-bottom: 1.5em;
@@ -168,18 +185,18 @@ ul {
 /* Menu */
 
 .menu {
-  background-color: #D3D3D3;    /* light gray */
+  background-color: #BEBEBE;    /* gray */
   border: 1px solid black;
   display: inline;
   float: right;
   clear: both;
-  margin-left: 5px;
+  margin-left: 10px;
   margin-bottom: 5px;
   padding: 3px;
 }
 
 .menuitem {
-  background-color: #F5F5F5;    /* white smoke */
+  background-color: #D3D3D3;    /* light gray */
   margin: 0;
   padding-top: 2px;
   padding-bottom: 3px;
@@ -189,7 +206,7 @@ ul {
 }
 
 .menuitem a:link, .menuitem a:visited {
-  color: #006400;               /* dark green */
+  color: #0000CD;               /* blue */
   display: block;
   margin: 0;
   padding-top: 2px;
@@ -199,7 +216,7 @@ ul {
 }
 
 .menuitem a:link:hover, .menuitem a:visited:hover { 
-  background-color: #D3D3D3;    /* light gray */
+  background-color: #F5F5F5;    /* white smoke */
 }
 
 .menuother {
