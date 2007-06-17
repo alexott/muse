@@ -4,11 +4,11 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.02.93 (3.03 RC3)
-;; Date: Fri 7-Apr-2006
+;; Version: 3.03
+;; Date: Sun 17-Jun-2007
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
-;; Maintainer: Michael Olson (mwolson AT gnu DOT org)
+;; Maintainer: Michael Olson <mwolson@gnu.org>
 ;; Description: An authoring and publishing tool for Emacs
 ;; URL: http://mwolson.org/projects/EmacsMuse.html
 ;; Compatibility: Emacs21 XEmacs21 Emacs22
@@ -48,7 +48,7 @@
 ;; Indicate that this version of Muse supports nested tags
 (provide 'muse-nested-tags)
 
-(defvar muse-version "3.02.93"
+(defvar muse-version "3.03"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)

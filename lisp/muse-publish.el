@@ -1246,8 +1246,7 @@ and type, respecting the end-of-list property."
          (type (muse-list-item-type str))
          (indent (buffer-substring (muse-line-beginning-position)
                                    (match-beginning 1)))
-         (post-indent (length str))
-         (last (match-beginning 0)))
+         (post-indent (length str)))
     (cond
      ((or (get-text-property (muse-list-item-critical-point) 'read-only)
           (get-text-property (muse-list-item-critical-point) 'muse-link))

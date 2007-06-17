@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
-;; Author: Michael Olson (mwolson AT gnu DOT org)
+;; Author: Michael Olson <mwolson@gnu.org>
 ;; Date: Wed, 23 March 2005
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.

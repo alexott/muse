@@ -20,6 +20,9 @@
 	* lisp/muse-latex.el (muse-latex-slides-header)
 	(muse-latex-lecture-notes-header): Docfix.
 
+	* lisp/muse-publish.el (muse-publish-markup-list): Remove unused
+	variable.
+
 	* lisp/muse-texinfo.el (muse-texinfo-process-natively): Set
 	default to nil, since texinfmt.el is a serious nuisance.
 	(muse-texinfo-markup-strings): Add newlines to begin-example and
@@ -31,6 +34,8 @@
 	muse-xml.
 
 	* lisp/muse-xml.el (muse-xml-footer): Docfix.
+
+	* lisp/muse.el (muse-version): Release Emacs Muse version 3.03.
 
 2007-06-16  Michael Olson  <mwolson@gnu.org>
 
