@@ -1,3 +1,13 @@
+2007-06-17  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-slides-header)
+	(muse-latex-lecture-notes-header): Docfix.
+
+	* lisp/muse-xml-common.el (muse-xml-encoding-map): Change group to
+	muse-xml.
+
+	* lisp/muse-xml.el (muse-xml-footer): Docfix.
+
 2007-06-16  Michael Olson  <mwolson@gnu.org>
 
 	* etc/IDEAS.muse: Add some ideas from David D. Smith.

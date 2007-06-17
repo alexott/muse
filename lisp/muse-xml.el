@@ -81,7 +81,7 @@ This may be text or a filename."
 (defcustom muse-xml-footer "
   <!-- Page published by Emacs Muse ends here -->
 </MUSE>\n"
-  "Footer used for publishing Xml XML files.
+  "Footer used for publishing XML files.
 This may be text or a filename."
   :type 'string
   :group 'muse-xml)

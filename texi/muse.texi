@@ -135,6 +135,7 @@ Publishing Various Types of Documents
 * LaTeX::                       Publishing LaTeX documents.
 * Poem::                        Publish a poem to LaTex or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
+* XML::                         Publish entries to XML.
 
 Integrating Muse and pyblosxom.cgi
 
@@ -935,6 +936,22 @@ There is also the @verb{|<literal>|} tag, which causes a marked block to
 be entirely left alone.  This can be used for inserting a hand-coded
 HTML blocks into HTML output, for example.
 
+If you want some text to only be inserted when publishing to a
+particular publishing style, use the @option{style} attribute for the
+@verb{|<literal>|} tag.  An example follows.
+
+@example
+<literal style="latex">
+A LaTeX-based style was used in the publishing of this document.
+</literal>
+@end example
+
+This will leave the region alone if the current publishing style is
+``latex'' or based on ``latex'', such as ``pdf'', and delete the region
+otherwise.  It is also possible to leave the text alone only for one
+particular style, rather than its derivations, by adding
+@code{exact="t"} to the tag.
+
 @node Headings, Directives, Paragraphs, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Levels of headings
@@ -1102,16 +1119,20 @@ from the possibility of those characters occurring in a real sentence.
 These are rendered as a bullet list.
 
 @example
-- bullet item one
-- bullet item two
+Normal text.
+
+ - bullet item one
+ - bullet item two
 @end example
 
 @cindex lists, enumerated
 An enumerated list follows.
 
 @example
-1. Enum item one
-2. Enum item two
+Normal text.
+
+ 1. Enum item one
+ 2. Enum item two
 @end example
 
 @cindex lists, definitions
@@ -1123,8 +1144,46 @@ Term1 ::
   And it has two lines;
   no, make that three.
 
-Term2 ::
-  This is a second definition
+Term2 :: This is a second definition
+@end example
+
+@subheading Nested lists
+
+@cindex lists, nested
+It is possible to nest lists of the same or different kinds.  The
+``level'' of the list is determined by the amount of initial whitespace.
+
+@example
+Normal text.
+
+ - Level 1, bullet item one
+   1. Level 2, enum item one
+   2. Level 2, enum item two
+ - Level 1, bullet item two
+   1. Level 2, enum item three
+   2. Level 2, enum item four
+      term :: definition
+@end example
+
+@subheading Breaking list items
+
+@cindex lists, breaking lines
+If you want to break up a line within any list type, just put one blank
+line between the end of the previous line and the beginning of the next
+line, using the same amount of initial indentation.
+
+@example
+ - bullet item 1, line 1
+
+   bullet item 1, line 2
+
+   1. Enum line 1
+
+      Enum line 2
+
+ - bullet item 2, line 1
+
+   bullet item 2, line 2
 @end example
 
 @node Tables, Explicit Links, Lists, Markup Rules
@@ -1151,6 +1210,46 @@ publish-time.
 
 If you wish to disable table generation for one Muse file, add the
 directive @samp{#disable-tables t} to the top of the file.
+
+@subheading Other table formats
+
+@cindex tables, orgtbl-mode style
+It is possible to publish very basic Orgtbl-mode style tables.
+
+@example
+| org  | style | table |
+|------+-------+-------|
+| one  |       | one   |
+| two  | two   |       |
+|      | three | three |
+|------+-------+-------|
+| more | stuff |       |
+@end example
+
+If you are used to the way that Org Mode publishes these tables, then
+customize `muse-html-table-attributes' to the following, in order to get
+a similar kind of output.
+
+@example
+border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"
+@end example
+
+@cindex tables, table.el style
+@file{table.el} style tables are also supported, as long as
+@file{table.el} itself supports outputting tables for a particular
+publishing style.  At the time of this writing, the ``html'', ``latex'',
+and ``docbook'' styles are supported by @file{table.el}.  Styles derived
+from these styles will also work.
+
+@example
++---+-----+---+
+|   | one | 1 |
++---+-----+---+
+| b | two |   |
++---+-----+---+
+| c |     | 3 |
++---+-----+---+
+@end example
 
 @node Explicit Links, Implicit Links, Tables, Markup Rules
 @comment  node-name,  next,  previous,  up
@@ -1227,6 +1326,14 @@ project.
 Customization of interwiki links may be accomplished by editing the
 @code{muse-wiki-interwiki-alist} option.
 
+It is also possible to link to an anchor in an interwiki document.  This
+is called a ``three-part link''.  Examples of this follow.
+
+@example
+Blog::DocumentingMuse#anchor1
+Projects#EmacsMuse#anchor2
+@end example
+
 @node Images, Horizontal Rules and Anchors, Implicit Links, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Publishing and displaying images
@@ -1251,7 +1358,6 @@ follows.
 @example
 [[URL:http://mwolson.org/static/logos/site-logo.png]]
 @end example
-
 
 @cindex images, displaying
 @cindex images, local
@@ -1342,6 +1448,20 @@ Note that you should not use the @code{insert} command within a set of
 @verb{|<lisp>|} tags, since the return value from the @verb{|<lisp>|}
 tags will be automatically inserted into the document.
 
+It is also possible to treat the output as if it were surrounded by the
+@verb{|<example>|}, @verb{|<src>|}, or @verb{|<verse>|} tags, by
+specifying ``example'', ``src'', or ``verse'' as the @option{markup}
+attribute of the @verb{|<lisp>|} tag.
+
+@example
+<lisp markup="example">
+(concat "Insert" " me")
+</lisp>
+@end example
+
+Other languages also have tags that cause source code to be evaluated.
+@xref{Tag Summary}, for details.
+
 @node Comments, Tag Summary, Embedded Lisp, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Lines to omit from published output
@@ -1357,6 +1477,13 @@ published.
 
 That is, only a semi-colon at the beginning of a line, followed by a
 literal space, will cause that line to be treated as a comment.
+
+You can alternatively surround the region with the @verb{|<comment>|}
+tag.
+
+If you wish the comment to be published, but just commented out using
+the comment syntax of the output format, then set
+@option{muse-publish-comments-p} to non-nil.
 
 @node Tag Summary, , Comments, Markup Rules
 @comment  node-name,  next,  previous,  up
@@ -1593,6 +1720,7 @@ easy to create new styles, or derive from an existing style.
 * LaTeX::                       Publishing LaTeX documents.
 * Poem::                        Publish a poem to LaTex or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
+* XML::                         Publish entries to XML.
 @end menu
 
 @node Blosxom, Book, Publishing Styles, Publishing Styles
@@ -1845,10 +1973,14 @@ This publishing style is used to generate DocBook XML files.
 
 @cindex publishing styles, docbook
 @item docbook
+Publish a file in Docbook form.
 
 @end table
 
 @subheading Options provided
+
+This publishing style uses the same options for markup up special
+characters as the ``xml'' publishing style.  @xref{XML}, for details.
 
 @table @code
 
@@ -1877,20 +2009,13 @@ Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles.
 
-@item muse-docbook-markup-specials
-A table of characters which must be represented specially.
-
 @item muse-docbook-encoding-default
 The default Emacs buffer encoding to use in published files.
 This will be used if no special characters are found.
 
 @item muse-docbook-charset-default
 The default DocBook XML charset to use if no translation is
-found in @code{muse-docbook-encoding-map}.
-
-@item muse-docbook-encoding-map
-An alist mapping emacs coding systems to appropriate DocBook charsets.
-Use the base name of the coding system (i.e. without the -unix).
+found in @code{muse-xml-encoding-map}.
 
 @end table
 
@@ -1917,6 +2042,9 @@ Supports publishing to XHTML 1.0 and XHTML 1.1, Strict or Transitional.
 
 If an HTML option does not have a corresponding XHTML option, it will
 be used for both of these publishing styles.
+
+These publishing styles use the same options for markup up special
+characters as the ``xml'' publishing style.  @xref{XML}, for details.
 
 @table @code
 
@@ -1998,10 +2126,6 @@ differs little between the various styles.
 A list of tag specifications, for specially marking up HTML.
 @xref{muse-publish-markup-tags}, for more information.
 
-@item muse-html-markup-specials
-A table of characters which must be represented specially.  By default,
-this includes @samp{"}, @samp{<}, @samp{>}, and @samp{&}.
-
 @item muse-html-meta-http-equiv
 The http-equiv attribute used for the HTML @verb{|<meta>|} tag.
 
@@ -2014,21 +2138,17 @@ this to ``application/xhtml+xml''.
 @item muse-html-meta-content-encoding
 The charset to append to the HTML @verb{|<meta>|} tag.
 
-If set to the symbol 'detect, use @code{muse-html-encoding-map} to try
+If set to the symbol 'detect, use @code{muse-xml-encoding-map} to try
 and determine the HTML charset from emacs's coding.  If set to a string,
 this string will be used to force a particular charset.
 
 @item muse-html-charset-default
 The default HTML meta charset to use if no translation is found in
-@code{muse-html-encoding-map}.
+@code{muse-xml-encoding-map}.
 
 @item muse-html-encoding-default
 The default Emacs buffer encoding to use in published files.
 This will be used if no special characters are found.
-
-@item muse-html-encoding-map
-An alist mapping emacs coding systems to appropriate HTML charsets.
-Use the base name of the coding system (i.e. without the -unix).
 
 @end table
 
@@ -2187,6 +2307,12 @@ Template used to publish individual journal entries as RDF.
 @item muse-journal-rdf-summarize-entries
 If non-nil, include only summaries in the RDF file, not the full data.
 
+@item muse-journal-rss-heading-regexp
+A regexp that matches a journal heading from an HTML document.
+
+Paren group 1 is the ISO date, group 2 is the optional category,
+and group 3 is the optional heading for the entry.
+
 @item muse-journal-rss-extension
 Default file extension for publishing RSS 2.0 files.
 
@@ -2268,6 +2394,39 @@ Publish a LaTeX document with CJK (Chinese) encodings.
 Publish a PDF document with CJK (Chinese) encodings, using an external
 LaTeX document conversion tool.
 
+@cindex publishing styles, slides
+@item slides
+Publish a LaTeX document that uses the Beamer extension.  This is
+suitable for producing slides.
+
+Here is an example of a slide.
+
+@example
+<slide title="First Slide">
+Everything between the slide tags composes this slide.
+
+[[Some-sort-of-cute-image.png]]
+
+ - A bullet point.
+ - Another bullet point.
+</slide>
+@end example
+
+@cindex publishing styles, slides-pdf
+@item slides-pdf
+Publish a PDF document of slides, using the Beamer extension.
+
+@cindex publishing styles, lecture-nodes
+@item lecture-notes
+Publish a LaTeX document that uses the Beamer extension.  This is
+suitable for producing lecture notes.
+
+This can also use the @verb{|<slide>|} tag.
+
+@cindex publishing styles, lecture-nodes-pdf
+@item lecture-notes-pdf
+Publish a PDF document of lecture notes, using the Beamer extension.
+
 @end table
 
 @subheading Options provided
@@ -2279,6 +2438,12 @@ Default file extension for publishing LaTeX files.
 
 @item muse-latex-pdf-extension
 Default file extension for publishing LaTeX files to PDF.
+
+@item muse-latex-pdf-program
+The program that is called to generate PDF content from LaTeX content.
+
+@item muse-latex-pdf-cruft
+Extensions of files to remove after generating PDF output successfully.
 
 @item muse-latex-header
 Header used for publishing LaTeX files.
@@ -2300,6 +2465,20 @@ Footer used for publishing LaTeX files (CJK).
 
 This may be text or a filename.
 
+@item muse-latex-slides-header
+Header for publishing of slides using LaTeX.
+
+This may be text or a filename.
+
+You must have the Beamer extension for LaTeX installed for this to work.
+
+@item muse-latex-lecture-notes-header
+Header publishing of lecture notes using LaTeX.
+
+This may be text or a filename.
+
+You must have the Beamer extension for LaTeX installed for this to work.
+
 @item muse-latex-markup-regexps
 List of markup regexps for identifying regions in a Muse page.
 
@@ -2318,6 +2497,9 @@ Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles.
 
+@item muse-latex-slides-markup-tags
+A list of tag specifications, for specially marking up LaTeX slides.
+
 @item muse-latexcjk-encoding-map
 An alist mapping emacs coding systems to appropriate CJK codings.
 Use the base name of the coding system (ie, without the -unix).
@@ -2327,17 +2509,17 @@ The default Emacs buffer encoding to use in published files.
 
 This will be used if no special characters are found.
 
+@item muse-latex-markup-specials-document
+A table of characters which must be represented specially.
+These are applied to the entire document, sans already-escaped
+regions.
+
 @item muse-latex-markup-specials-example
 A table of characters which must be represented specially.
 These are applied to @verb{|example>|} regions.
 
 With the default interpretation of @verb{|<example>|} regions, no
 specials need to be escaped.
-
-@item muse-latex-markup-specials-document
-A table of characters which must be represented specially.
-These are applied to the entire document, sans already-escaped
-regions.
 
 @item muse-latex-markup-specials-literal
 A table of characters which must be represented specially.
@@ -2346,6 +2528,10 @@ This applies to =monospaced text= and @verb{|<code>|} regions.
 @item muse-latex-markup-specials-url
 A table of characters which must be represented specially.
 These are applied to URLs.
+
+@item muse-latex-markup-specials-image
+A table of characters which must be represented specially.
+These are applied to image filenames.
 
 @item muse-latex-permit-contents-tag
 If nil, ignore @verb{|<contents>|} tags.  Otherwise, insert table of
@@ -2462,7 +2648,7 @@ differs little between the various styles.
 
 @end table
 
-@node Texinfo, , Poem, Publishing Styles
+@node Texinfo, XML, Poem, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Publish entries to Texinfo format or PDF
 
@@ -2523,7 +2709,7 @@ For more on the structure of this list,
 @item muse-texinfo-markup-functions
 An alist of style types to custom functions for that kind of text.
 
-For more on the structure of this list, see
+For more on the structure of this list,
 @xref{muse-publish-markup-functions}.
 
 @item muse-texinfo-markup-strings
@@ -2534,6 +2720,91 @@ differs little between the various styles.
 
 @item muse-texinfo-markup-specials
 A table of characters which must be represented specially.
+
+@item muse-texinfo-markup-specials
+A table of characters which must be represented specially.
+These are applied to URLs.
+
+@end table
+
+@node XML, , Texinfo, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Publish entries to XML
+
+Muse is capable of publishing XML documents, with the help of the
+@file{muse-xml.el} module.
+
+A RelaxNG schema is available as part of the Muse distribution in the
+@file{etc/muse.rnc} file.
+
+@subheading Styles provided
+
+@table @code
+
+@cindex publishing styles, xml
+@item xml
+Publish a file in XML form.
+
+@end table
+
+@subheading Options provided
+
+@table @code
+
+@cindex muse-xml-encoding-map
+@item muse-xml-encoding-map
+An alist mapping Emacs coding systems to appropriate XML charsets.
+Use the base name of the coding system (i.e. without the -unix).
+
+@item muse-xml-markup-specials
+A table of characters which must be represented specially in all
+XML-like markup formats.
+
+@item muse-xml-markup-specials-url-extra
+A table of characters which must be represented specially in all
+XML-like markup formats.
+
+These are extra characters that are escaped within URLs.
+
+@item muse-xml-extension
+Default file extension used for publishing XML files.
+
+@item muse-xml-header
+Header used for publishing XML files.
+
+This may be text or a filename.
+
+@item muse-xml-footer
+Footer used for publishing XML files.
+
+This may be text or a filename.
+
+@item muse-xml-markup-regexps
+List of markup rules for publishing a Muse page to XML.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-regexps}.
+
+@item muse-xml-markup-functions
+An alist of style types to custom functions for that kind of text.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-functions}.
+
+@item muse-xml-markup-strings
+Strings used for marking up text.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@item muse-xml-encoding-default
+The default Emacs buffer encoding to use in published files.
+
+This will be used if no special characters are found.
+
+@item muse-xml-charset-default
+The default XML charset to use if no translation is found in
+@code{muse-xml-encoding-map}.
 
 @end table
 
@@ -2649,14 +2920,14 @@ Remove trailing and leading whitespace from a file.
 
 This is only recognized at the beginning of a file.
 
+@item comment
+@samp{; a commented line}
+
 @item tag
 @samp{<tag>}
 
 @item comment
 @samp{; comment}
-
-@item anchor
-@samp{#anchor}
 
 @item explicit links
 Prevent emphasis characters in explicit links from being marked up.
@@ -2669,11 +2940,6 @@ Whitespace-delimited word, possibly with emphasis characters
 
 This function is responsible for marking up emphasis and escaping some
 specials.
-
-@item emdash
-@samp{--}
-
-2-wide dash
 
 @item heading
 @samp{** Heading}
@@ -2694,6 +2960,11 @@ Ellipses.
 @samp{----}
 
 Horizontal rule or section separator.
+
+@item no-break-space
+@samp{~~}
+
+Prevent lines from being split before or after these characters.
 
 @item fn-sep
 @samp{Footnotes:}
@@ -2720,16 +2991,30 @@ definition.
 
 Numbered list, item list, or term definition list.
 
+@item table-el
+
+@file{table.el} style tables
+
+@item table
+@samp{table | cells}
+
+Muse tables or orgtbl-mode style tables.
+
 @item quote
 spaces before beginning of text
 
 Blockquotes.
 
+@item emdash
+@samp{--}
+
+2-wide dash
+
 @item verse
 @samp{> verse text}
 
-@item table
-@samp{table | cells}
+@item anchor
+@samp{#anchor}
 
 @item link
 @samp{[[explicit][links]]}
@@ -2802,6 +3087,11 @@ Argument 4: link without an extension.
 A link to an email address.
 
 Argument 1: email address.  Argument 2: email address.
+
+@item anchor
+An anchor.
+
+Argument 1: name of anchor.
 
 @item emdash
 A 2-length dash.
@@ -2976,6 +3266,12 @@ Begin a quoted region.
 
 @item end-quote
 End a quoted region.
+
+@item begin-quote-item
+Begin a quote paragraph.
+
+@item end-quote-item
+End a quote paragraph.
 
 @item begin-uli
 Begin an unordered list.
@@ -3243,7 +3539,7 @@ to it.
 that Michael Olson (the current maintainer) made for Muse.
 
 @item
-Muse has four mailing lists.
+Muse has several different mailing lists.
 
 @table @samp
 

@@ -46,7 +46,7 @@
   "An alist mapping Emacs coding systems to appropriate XML charsets.
 Use the base name of the coding system (i.e. without the -unix)."
   :type '(alist :key-type coding-system :value-type string)
-  :group 'muse-publish)
+  :group 'muse-xml)
 
 (defun muse-xml-transform-content-type (content-type default)
   "Using `muse-xml-encoding-map', try and resolve an Emacs coding

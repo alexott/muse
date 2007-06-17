@@ -154,7 +154,7 @@ filename."
   "Header for publishing of slides using LaTeX.
 This may be text or a filename.
 
-You must have Beamer installed for this to work."
+You must have the Beamer extension for LaTeX installed for this to work."
   :type 'string
   :group 'muse-latex)
 
@@ -180,7 +180,7 @@ You must have Beamer installed for this to work."
   "Header for publishing of lecture notes using LaTeX.
 This may be text or a filename.
 
-You must have Beamer installed for this to work."
+You must have the Beamer extension for LaTeX installed for this to work."
   :type 'string
   :group 'muse-latex)
 
