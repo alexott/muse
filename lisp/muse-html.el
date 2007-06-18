@@ -261,6 +261,7 @@ For more on the structure of this list, see
     (link            . "<a href=\"%s\">%s</a>")
     (link-and-anchor . "<a href=\"%s#%s\">%s</a>")
     (email-addr      . "<a href=\"mailto:%s\">%s</a>")
+    (anchor          . "<a name=\"%1%\" id=\"%1%\">")
     (emdash          . "%s&mdash;%s")
     (comment-begin   . "<!-- ")
     (comment-end     . " -->")
@@ -353,6 +354,17 @@ searched."
   :type '(alist :key-type symbol :value-type string)
   :group 'muse-html)
 
+(defcustom muse-xhtml1.1-markup-strings
+  '((anchor          . "<a id=\"%s\">"))
+  "Strings used for marking up text as XHTML 1.1.
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+If a markup rule is not found here, `muse-xhtml-markup-strings'
+and `muse-html-markup-strings' are searched."
+  :type '(alist :key-type symbol :value-type string)
+  :group 'muse-html)
+
 (defcustom muse-html-markup-tags
   '(("class" t t   t muse-html-class-tag)
     ("src"   t t nil muse-html-src-tag))
@@ -404,14 +416,14 @@ This will be used if no special characters are found."
   (if (looking-at (concat "<\\([^" muse-regexp-blank "/>\n]+\\)>"))
       (let ((tag (match-string 1)))
         (goto-char (match-end 0))
-        (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
+        (muse-insert-markup (muse-markup-text 'anchor anchor))
         (when muse-html-anchor-on-word
           (or (and (search-forward (format "</%s>" tag)
                                    (muse-line-end-position) t)
                    (goto-char (match-beginning 0)))
               (forward-word 1)))
         (muse-insert-markup "</a>"))
-    (muse-insert-markup "<a name=\"" anchor "\" id=\"" anchor "\">")
+    (muse-insert-markup (muse-markup-text 'anchor anchor))
     (when muse-html-anchor-on-word
       (forward-word 1))
     (muse-insert-markup "</a>\n")))
@@ -672,6 +684,13 @@ This tag requires htmlize 1.34 or later in order to work."
                    :header    'muse-xhtml-header
                    :footer    'muse-xhtml-footer
                    :style-sheet 'muse-xhtml-style-sheet)
+
+;; xhtml1.0 is an alias for xhtml
+(muse-derive-style "xhtml1.0" "xhtml")
+
+;; xhtml1.1 has some quirks that need attention from us
+(muse-derive-style "xhtml1.1" "xhtml"
+                   :strings   'muse-xhtml1.1-markup-strings)
 
 (provide 'muse-html)
 
