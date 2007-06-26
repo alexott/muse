@@ -276,7 +276,8 @@ current style."
     ("ruby"     t   t   nil muse-publish-ruby-tag)
     ("comment"  t   nil nil muse-publish-comment-tag)
     ("include"  nil t   nil muse-publish-include-tag)
-    ("markup"   t   t   nil muse-publish-mark-up-tag))
+    ("markup"   t   t   nil muse-publish-mark-up-tag)
+    ("cite"     t   t   nil muse-publish-cite-tag))
   "A list of tag specifications, for specially marking up text.
 XML-style tags are the best way to add custom markup to Muse.
 This is easily accomplished by customizing this list of markup tags.
@@ -1694,6 +1695,22 @@ This is usually applied to explicit links."
   (goto-char end)
   (insert (muse-markup-text 'end-literal))
   (muse-publish-mark-read-only beg (point)))
+
+(defun muse-publish-cite-tag (beg end attrs)
+  (let* ((type (muse-publish-get-and-delete-attr "type" attrs))
+	 (muse-publishing-directives muse-publishing-directives)
+	 (citetag
+	  (cond ((string-equal type "author")
+		 'begin-cite-author)
+		((string-equal type "year")
+		 'begin-cite-year)
+		(t
+		 'begin-cite))))
+    (goto-char beg)
+    (insert (muse-markup-text citetag (muse-publishing-directive "bibsource")))
+    (goto-char end)
+    (insert (muse-markup-text 'end-cite))
+    (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-src-tag (beg end attrs)
   (muse-publish-example-tag beg end))

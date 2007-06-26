@@ -95,7 +95,7 @@
   :type 'string
   :group 'muse-latex)
 
-(defcustom muse-latex-footer "\n\\end{document}\n"
+(defcustom muse-latex-footer "<lisp>(muse-latex-bibliography)</lisp>\n\\end{document}\n"
   "Footer used for publishing LaTeX files.  This may be text or a filename."
   :type 'string
   :group 'muse-latex)
@@ -267,6 +267,10 @@ For more on the structure of this list, see
     (end-center      . "\n\\end{center}")
     (begin-quote     . "\\begin{quote}\n")
     (end-quote       . "\n\\end{quote}")
+    (begin-cite     . "\\cite{")
+    (begin-cite-author . "\\citet{")
+    (begin-cite-year . "\\citet{")
+    (end-cite        . "}")
     (begin-uli       . "\\begin{itemize}\n")
     (end-uli         . "\n\\end{itemize}")
     (begin-uli-item  . "\\item ")
@@ -489,12 +493,40 @@ This is used by the slides and lecture-notes publishing styles."
           (replace-match "''")
           (setq open t))))))
 
+(defun muse-latex-fixup-citations ()
+  ;; replace semicolons in multi-head citations with colons
+  (save-restriction)
+  (goto-char (point-min))
+  (while (re-search-forward "\\\\cite.?{" nil t)
+    (let ((start (point))
+	  (end (re-search-forward "}")))
+      (narrow-to-region start end)
+      (goto-char start)
+      (while (re-search-forward ";" nil t)
+	(replace-match ","))
+      (widen)))
+  )
+
 (defun muse-latex-munge-buffer ()
   (muse-latex-fixup-dquotes)
+  (muse-latex-fixup-citations)
   (when (and muse-latex-permit-contents-tag
              muse-publish-generate-contents)
     (goto-char (car muse-publish-generate-contents))
     (muse-insert-markup "\\tableofcontents")))
+
+(defun muse-latex-bibliography ()
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (if (re-search-forward "\\\\cite.?{" nil t)
+	  (concat
+	   "\\bibliography{"
+	   (muse-publishing-directive "bibsource")
+	   "}\n")
+	"")
+      )))
 
 (defun muse-latex-pdf-browse-file (file)
   (shell-command (concat "open " file)))
