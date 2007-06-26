@@ -1,3 +1,13 @@
+2007-06-18  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-markup-strings): Add anchor.
+	(muse-xhtml1.1-markup-strings): New option that specifies XHTML
+	1.1 specific markup strings.
+	(muse-html-insert-anchor): Use 'anchor string, rather than
+	hard-coding it.  Thanks to Chris Corsair for the suggestion.
+	("xhtml1.0"): New style that is an alias for the xhtml style.
+	("xhtml1.1"): New style that publishes XHTML 1.1 compliant output.
+
 2007-06-17  Michael Olson  <mwolson@gnu.org>
 
 	* examples/QuickStart.muse: Make images local so that the Info

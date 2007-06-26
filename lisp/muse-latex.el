@@ -493,20 +493,6 @@ This is used by the slides and lecture-notes publishing styles."
           (replace-match "''")
           (setq open t))))))
 
-<<<<<<< TREE
-(defcustom muse-latex-permit-contents-tag nil
-  "If nil, ignore <contents> tags.  Otherwise, insert table of contents.
-
-Most of the time, it is best to have a table of contents on the
-first page, with a new page immediately following.  To make this
-work with documents published in both HTML and LaTeX, we need to
-ignore the <contents> tag.
-
-If you don't agree with this, then set this option to non-nil,
-and it will do what you expect."
-  :type 'boolean
-  :group 'muse-latex)
-
 (defun muse-latex-fixup-citations ()
   ;; replace semicolons in multi-head citations with colons
   (save-restriction)
@@ -521,8 +507,6 @@ and it will do what you expect."
       (widen)))
   )
 
-=======
->>>>>>> MERGE-SOURCE
 (defun muse-latex-munge-buffer ()
   (muse-latex-fixup-dquotes)
   (muse-latex-fixup-citations)

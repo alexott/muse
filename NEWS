@@ -1,6 +1,6 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
-* Changes in Muse 3.03 (not yet released)
+* Changes in Muse 3.03
 
 ** An emacs-wiki migration guide is available in
 etc/emacs-wiki-migration.txt.
