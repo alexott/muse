@@ -1,6 +1,7 @@
 .PHONY: all lisp contrib autoloads examples experimental doc info-only
 .PHONY: clean realclean distclean fullclean install-info install-bin install
-.PHONY: test dist release debbuild debrevision debrelease upload elpa
+.PHONY: test dist release debclean debprepare debbuild debinstall deb upload
+.PHONY: elpa
 
 include Makefile.defs
 

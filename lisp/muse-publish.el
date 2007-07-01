@@ -831,6 +831,28 @@ supplied."
 (defsubst muse-publishing-directive (name)
   (cdr (assoc name muse-publishing-directives)))
 
+(defmacro muse-publish-get-and-delete-attr (attr attrs)
+  "Delete attribute ATTR from ATTRS only once, destructively.
+
+This function returns the matching attribute value, if found."
+  (let ((last (make-symbol "last"))
+        (found (make-symbol "found"))
+        (vals (make-symbol "vals")))
+    `(let ((,vals ,attrs))
+       (if (string= (caar ,vals) ,attr)
+           (prog1 (cdar ,vals)
+             (setq ,attrs (cdr ,vals)))
+         (let ((,last ,vals)
+               (,found nil))
+           (while ,vals
+             (setq ,vals (cdr ,vals))
+             (when (string= (caar ,vals) ,attr)
+               (setq ,found (cdar ,vals))
+               (setcdr ,last (cdr ,vals))
+               (setq ,vals nil))
+             (setq ,last ,vals))
+           ,found)))))
+
 (defun muse-publish-markup-anchor ()
   (unless (get-text-property (match-end 1) 'muse-link)
     (let ((text (muse-markup-text 'anchor (match-string 2))))
@@ -1698,14 +1720,14 @@ This is usually applied to explicit links."
 
 (defun muse-publish-cite-tag (beg end attrs)
   (let* ((type (muse-publish-get-and-delete-attr "type" attrs))
-	 (muse-publishing-directives muse-publishing-directives)
-	 (citetag
-	  (cond ((string-equal type "author")
-		 'begin-cite-author)
-		((string-equal type "year")
-		 'begin-cite-year)
-		(t
-		 'begin-cite))))
+         (muse-publishing-directives muse-publishing-directives)
+         (citetag
+          (cond ((string-equal type "author")
+                 'begin-cite-author)
+                ((string-equal type "year")
+                 'begin-cite-year)
+                (t
+                 'begin-cite))))
     (goto-char beg)
     (insert (muse-markup-text citetag (muse-publishing-directive "bibsource")))
     (goto-char end)
@@ -1782,28 +1804,6 @@ If attributes ATTRS are given, pass them to the tag function."
                        `((100 ,(concat "^[" muse-regexp-blank "]*> ") 0
                               muse-publish-markup-verse)))
   (goto-char (point-min)))
-
-(defmacro muse-publish-get-and-delete-attr (attr attrs)
-  "Delete attribute ATTR from ATTRS only once, destructively.
-
-This function returns the matching attribute value, if found."
-  (let ((last (make-symbol "last"))
-        (found (make-symbol "found"))
-        (vals (make-symbol "vals")))
-    `(let ((,vals ,attrs))
-       (if (string= (caar ,vals) ,attr)
-           (prog1 (cdar ,vals)
-             (setq ,attrs (cdr ,vals)))
-         (let ((,last ,vals)
-               (,found nil))
-           (while ,vals
-             (setq ,vals (cdr ,vals))
-             (when (string= (caar ,vals) ,attr)
-               (setq ,found (cdar ,vals))
-               (setcdr ,last (cdr ,vals))
-               (setq ,vals nil))
-             (setq ,last ,vals))
-           ,found)))))
 
 (defmacro muse-publish-markup-attribute (beg end attrs reinterp &rest body)
   "Evaluate BODY within the bounds of BEG and END.

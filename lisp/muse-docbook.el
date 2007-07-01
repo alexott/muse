@@ -282,22 +282,19 @@ and anything after `Firstname' is optional."
 
 (defun muse-docbook-fixup-citations ()
   ;; remove the role attribute if there is no role
-  (save-restriction)
   (goto-char (point-min))
   (while (re-search-forward "<\\(citation role=\"nil\"\\)>" nil t)
-    (replace-match "citation" t t nil 1)
-    )
+    (replace-match "citation" t t nil 1))
   ;; replace colons in multi-head citations with semicolons
   (goto-char (point-min))
   (while (re-search-forward "<citation.*>" nil t)
     (let ((start (point))
-	  (end (re-search-forward "</citation>")))
-      (narrow-to-region start end)
-      (goto-char start)
-      (while (re-search-forward "," nil t)
-	(replace-match ";"))
-      (widen)))
-  )
+          (end (re-search-forward "</citation>")))
+      (save-restriction
+        (narrow-to-region start end)
+        (goto-char (point-min))
+        (while (re-search-forward "," nil t)
+          (replace-match ";"))))))
 
 (defun muse-docbook-munge-buffer ()
   (muse-docbook-fixup-images)
@@ -309,14 +306,13 @@ and anything after `Firstname' is optional."
       (widen)
       (goto-char (point-min))
       (if (re-search-forward "<citation" nil t)
-	  (concat
-	   " [\n<!ENTITY bibliography SYSTEM \""
-	   (if (string-match ".short$" (muse-page-name))
-	       (substring (muse-page-name) 0 -6)
-	     (muse-page-name))
-	   ".bib.xml\">\n]")
-	"")
-      )))
+          (concat
+           " [\n<!ENTITY bibliography SYSTEM \""
+           (if (string-match ".short$" (muse-page-name))
+               (substring (muse-page-name) 0 -6)
+             (muse-page-name))
+           ".bib.xml\">\n]")
+        ""))))
 
 (defun muse-docbook-bibliography ()
   (save-excursion
@@ -324,9 +320,8 @@ and anything after `Firstname' is optional."
       (widen)
       (goto-char (point-min))
       (if (re-search-forward "<citation" nil t)
-	  "&bibliography;\n"
-	"")
-      )))
+          "&bibliography;\n"
+        ""))))
 
 (defun muse-docbook-finalize-buffer ()
   (when (boundp 'buffer-file-coding-system)
