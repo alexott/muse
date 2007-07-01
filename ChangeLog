@@ -1,5 +1,7 @@
 2007-07-01  Michael Olson  <mwolson@gnu.org>
 
+	* Makefile (.PHONY): Update for new debian package rules.
+
 	* lisp/muse-wiki.el (muse-wiki-handle-explicit-interwiki): Narrow
 	to the end of the link part, so as to exclude the description from
 	the match.  This fixes a bug with three-part links that have
