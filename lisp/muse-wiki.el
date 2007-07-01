@@ -282,7 +282,9 @@ Match string 0 is set to the link."
   "If STRING or point has an interwiki link, resolve it to a filename."
   (let ((right-pos (if string (length string) (match-end 1))))
     (when (if string (string-match muse-wiki-interwiki-regexp string)
-            (looking-at muse-wiki-interwiki-regexp))
+            (save-restriction
+              (narrow-to-region (point) right-pos)
+              (looking-at muse-wiki-interwiki-regexp)))
       (let* ((project (match-string 1 string))
              (subst (cdr (assoc project muse-wiki-interwiki-alist)))
              (anchor (and (match-beginning 4)

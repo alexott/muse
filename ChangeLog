@@ -1,3 +1,10 @@
+2007-07-01  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el (muse-wiki-handle-explicit-interwiki): Narrow
+	to the end of the link part, so as to exclude the description from
+	the match.  This fixes a bug with three-part links that have
+	descriptions.  Thanks to everyone who pointed it out.
+
 2007-06-18  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-markup-strings): Add anchor.
