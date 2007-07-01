@@ -95,7 +95,8 @@
   :type 'string
   :group 'muse-latex)
 
-(defcustom muse-latex-footer "<lisp>(muse-latex-bibliography)</lisp>\n\\end{document}\n"
+(defcustom muse-latex-footer "<lisp>(muse-latex-bibliography)</lisp>
+\\end{document}\n"
   "Footer used for publishing LaTeX files.  This may be text or a filename."
   :type 'string
   :group 'muse-latex)
@@ -495,17 +496,15 @@ This is used by the slides and lecture-notes publishing styles."
 
 (defun muse-latex-fixup-citations ()
   ;; replace semicolons in multi-head citations with colons
-  (save-restriction)
   (goto-char (point-min))
   (while (re-search-forward "\\\\cite.?{" nil t)
     (let ((start (point))
-	  (end (re-search-forward "}")))
-      (narrow-to-region start end)
-      (goto-char start)
-      (while (re-search-forward ";" nil t)
-	(replace-match ","))
-      (widen)))
-  )
+          (end (re-search-forward "}")))
+      (save-restriction
+        (narrow-to-region start end)
+        (goto-char (point-min))
+        (while (re-search-forward ";" nil t)
+          (replace-match ","))))))
 
 (defun muse-latex-munge-buffer ()
   (muse-latex-fixup-dquotes)
@@ -521,12 +520,11 @@ This is used by the slides and lecture-notes publishing styles."
       (widen)
       (goto-char (point-min))
       (if (re-search-forward "\\\\cite.?{" nil t)
-	  (concat
-	   "\\bibliography{"
-	   (muse-publishing-directive "bibsource")
-	   "}\n")
-	"")
-      )))
+          (concat
+           "\\bibliography{"
+           (muse-publishing-directive "bibsource")
+           "}\n")
+        ""))))
 
 (defun muse-latex-pdf-browse-file (file)
   (shell-command (concat "open " file)))

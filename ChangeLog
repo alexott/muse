@@ -2,6 +2,22 @@
 
 	* Makefile (.PHONY): Update for new debian package rules.
 
+	* lisp/muse-book.el (muse-book-latex-footer): Wrap long line.
+
+	* lisp/muse-docbook.el (muse-docbook-fixup-citations): Re-indent.
+	Use save-restriction properly.
+	(muse-docbook-entities, muse-docbook-bibliography): : Re-indent.
+
+	* lisp/muse-latex.el (muse-latex-footer): Wrap long line.
+	(muse-latex-fixup-citations): Re-indent.  Use save-restriction
+	properly.
+	(muse-latex-bibliography): Re-indent.
+
+	* lisp/muse-publish.el (muse-publish-get-and-delete-attr): Move
+	higher.  This fixes an error at startup with some versions of
+	Emacs.
+	(muse-publish-cite-tag): Re-indent.
+
 	* lisp/muse-wiki.el (muse-wiki-handle-explicit-interwiki): Narrow
 	to the end of the link part, so as to exclude the description from
 	the match.  This fixes a bug with three-part links that have
