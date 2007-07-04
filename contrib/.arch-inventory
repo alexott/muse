@@ -1,0 +1,2 @@
+precious ^(.*\.elc)$
+# arch-tag: fa42c166-7f13-43b6-8ecd-dc03db822d7a
