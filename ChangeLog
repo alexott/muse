@@ -13,6 +13,11 @@
 	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): Deal with
 	case where muse-project-alist is nil.
 
+	* lisp/muse.el (muse-replace-regexp-in-string): Explicitly check
+	for XEmacs, since color-theme.el is poorly behaved, and defines
+	its own replace-in-string.  Bad color-theme.el -- no cookie for
+	you.
+
 2007-07-01  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (.PHONY): Update for new debian package rules.

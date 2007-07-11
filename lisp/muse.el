@@ -446,7 +446,7 @@ Return a new string containing the replacements.
 If fourth arg FIXEDCASE is non-nil, do not alter case of replacement text.
 If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
   (cond
-   ((fboundp 'replace-in-string)
+   ((and (featurep 'xemacs) (fboundp 'replace-in-string))
     (replace-in-string text regexp replacement literal))
    ((fboundp 'replace-regexp-in-string)
     (replace-regexp-in-string regexp replacement text fixedcase literal))
