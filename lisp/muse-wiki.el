@@ -238,9 +238,10 @@ use the first style we find."
                     (car muse-project-alist))
         page (or page (muse-get-keyword :default
                                         (cadr project))))
-  (let* ((page-path (muse-project-page-file page project))
-         (remote-styles (when page-path (muse-project-applicable-styles
-                                         page-path (cddr project))))
+  (let* ((page-path (and muse-project-alist
+                         (muse-project-page-file page project)))
+         (remote-styles (and page-path (muse-project-applicable-styles
+                                        page-path (cddr project))))
          (local-style (muse-project-current-output-style)))
     (cond ((and remote-styles local-style muse-publishing-p)
            (muse-project-resolve-link page local-style remote-styles))

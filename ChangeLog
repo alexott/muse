@@ -1,3 +1,18 @@
+2007-07-10  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-grep): Abort search if the current
+	project contains no directories.
+
+	* lisp/muse-project.el (muse-project-file-alist): If
+	muse-project-alist is not defined, or project is nil, return nil
+	right away.  This ought to fix a bug that occurred when using Muse
+	with muse-project-alist set to nil.
+	(muse-project-of-file): Make sure muse-project-alist is not nil.
+	(muse-project-save-buffers): Make sure project is not nil.
+
+	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): Deal with
+	case where muse-project-alist is nil.
+
 2007-07-01  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (.PHONY): Update for new debian package rules.

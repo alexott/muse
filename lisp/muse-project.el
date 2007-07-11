@@ -436,58 +436,59 @@ On UNIX, this list is only updated if one of the directories'
 contents have changed.  On Windows, it is always reread from
 disk."
   (setq project (muse-project project))
-  (let* ((file-alist (assoc (car project) muse-project-file-alist))
-         (last-mod (cdr (cdr file-alist))))
-    ;; Determine the last modified of any directory mentioned in the
-    ;; project's pattern list
-    (unless (or muse-under-windows-p no-check-p)
-      (let ((pats (cadr project)))
-        (while pats
-          (if (symbolp (car pats))
-              (setq pats (cddr pats))
-            (let* ((fnd (file-name-directory (car pats)))
-                   (dir (cond ((file-directory-p (car pats))
-                               (car pats))
-                              ((and (not (file-readable-p (car pats)))
-                                    fnd
-                                    (file-directory-p fnd))
-                               fnd))))
-              (when dir
-                (let ((mod-time (nth 5 (file-attributes dir))))
-                  (when (or (null last-mod)
-                            (and mod-time
-                                 (muse-time-less-p last-mod mod-time)))
-                    (setq last-mod mod-time)))))
-            (setq pats (cdr pats))))))
-    ;; Either return the currently known list, or read it again from
-    ;; disk
-    (if (or (and no-check-p (cadr file-alist))
-            muse-updating-file-alist-p
-            (not (or muse-under-windows-p
-                     (null (cddr file-alist))
-                     (null last-mod)
-                     (muse-time-less-p (cddr file-alist) last-mod))))
-        (cadr file-alist)
-      (if file-alist
-          (setcdr (cdr file-alist) last-mod)
-        (setq file-alist (cons (car project) (cons nil last-mod))
-              muse-project-file-alist
-              (cons file-alist muse-project-file-alist)))
-      ;; Read in all of the file entries
-      (let ((muse-updating-file-alist-p t))
-        (prog1
-            (save-match-data
-              (setcar
-               (cdr file-alist)
-               (let* ((names (list t))
-                      (pats (cadr project)))
-                 (while pats
-                   (if (symbolp (car pats))
-                       (setq pats (cddr pats))
-                     (nconc names (muse-project-file-entries (car pats)))
-                     (setq pats (cdr pats))))
-                 (cdr names))))
-          (run-hooks 'muse-project-file-alist-hook))))))
+  (when (and project muse-project-alist)
+    (let* ((file-alist (assoc (car project) muse-project-file-alist))
+           (last-mod (cdr (cdr file-alist))))
+      ;; Determine the last modified of any directory mentioned in the
+      ;; project's pattern list
+      (unless (or muse-under-windows-p no-check-p)
+        (let ((pats (cadr project)))
+          (while pats
+            (if (symbolp (car pats))
+                (setq pats (cddr pats))
+              (let* ((fnd (file-name-directory (car pats)))
+                     (dir (cond ((file-directory-p (car pats))
+                                 (car pats))
+                                ((and (not (file-readable-p (car pats)))
+                                      fnd
+                                      (file-directory-p fnd))
+                                 fnd))))
+                (when dir
+                  (let ((mod-time (nth 5 (file-attributes dir))))
+                    (when (or (null last-mod)
+                              (and mod-time
+                                   (muse-time-less-p last-mod mod-time)))
+                      (setq last-mod mod-time)))))
+              (setq pats (cdr pats))))))
+      ;; Either return the currently known list, or read it again from
+      ;; disk
+      (if (or (and no-check-p (cadr file-alist))
+              muse-updating-file-alist-p
+              (not (or muse-under-windows-p
+                       (null (cddr file-alist))
+                       (null last-mod)
+                       (muse-time-less-p (cddr file-alist) last-mod))))
+          (cadr file-alist)
+        (if file-alist
+            (setcdr (cdr file-alist) last-mod)
+          (setq file-alist (cons (car project) (cons nil last-mod))
+                muse-project-file-alist
+                (cons file-alist muse-project-file-alist)))
+        ;; Read in all of the file entries
+        (let ((muse-updating-file-alist-p t))
+          (prog1
+              (save-match-data
+                (setcar
+                 (cdr file-alist)
+                 (let* ((names (list t))
+                        (pats (cadr project)))
+                   (while pats
+                     (if (symbolp (car pats))
+                         (setq pats (cddr pats))
+                       (nconc names (muse-project-file-entries (car pats)))
+                       (setq pats (cdr pats))))
+                   (cdr names))))
+            (run-hooks 'muse-project-file-alist-hook)))))))
 
 (defun muse-project-of-file (&optional pathname)
   "Determine which project the given PATHNAME relates to.
@@ -497,6 +498,7 @@ If PATHNAME is nil, the current buffer's filename is used."
     (unless pathname (setq pathname (muse-current-file)))
     (save-match-data
       (when (and (stringp pathname)
+                 muse-project-alist
                  (not (string= pathname ""))
                  (not (let ((case-fold-search nil))
                         (or (string-match muse-project-ignore-regexp
@@ -742,33 +744,34 @@ If FORCE is given, publish the file even if it is up-to-date."
 
 (defun muse-project-save-buffers (&optional project)
   (setq project (muse-project project))
-  (map-y-or-n-p
-   (function
-    (lambda (buffer)
-      (and (buffer-modified-p buffer)
-           (not (buffer-base-buffer buffer))
-           (or (buffer-file-name buffer)
-               (progn
-                 (set-buffer buffer)
-                 (and buffer-offer-save
-                      (> (buffer-size) 0))))
-           (with-current-buffer buffer
-             (let ((proj (muse-project-of-file)))
-               (and proj (string= (car proj)
-                                  (car project)))))
-           (if (buffer-file-name buffer)
-               (format "Save file %s? "
-                       (buffer-file-name buffer))
-             (format "Save buffer %s? "
-                     (buffer-name buffer))))))
-   (function
-    (lambda (buffer)
-      (set-buffer buffer)
-      (save-buffer)))
-   (buffer-list)
-   '("buffer" "buffers" "save")
-   (if (boundp 'save-some-buffers-action-alist)
-       save-some-buffers-action-alist)))
+  (when project
+    (map-y-or-n-p
+     (function
+      (lambda (buffer)
+        (and (buffer-modified-p buffer)
+             (not (buffer-base-buffer buffer))
+             (or (buffer-file-name buffer)
+                 (progn
+                   (set-buffer buffer)
+                   (and buffer-offer-save
+                        (> (buffer-size) 0))))
+             (with-current-buffer buffer
+               (let ((proj (muse-project-of-file)))
+                 (and proj (string= (car proj)
+                                    (car project)))))
+             (if (buffer-file-name buffer)
+                 (format "Save file %s? "
+                         (buffer-file-name buffer))
+               (format "Save buffer %s? "
+                       (buffer-name buffer))))))
+     (function
+      (lambda (buffer)
+        (set-buffer buffer)
+        (save-buffer)))
+     (buffer-list)
+     '("buffer" "buffers" "save")
+     (if (boundp 'save-some-buffers-action-alist)
+         save-some-buffers-action-alist))))
 
 (defun muse-project-publish-default (project styles &optional force)
   "Publish the pages of PROJECT that need publishing."
