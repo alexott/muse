@@ -1,3 +1,16 @@
+2007-07-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el (muse-wiki-interwiki-regexp): Set to nil by
+	default, rather than the empty string.  This really fixes the bug
+	that occurred when using Muse with muse-project-alist set to nil.
+	Thanks to Jonathan Underwood for the report.
+	(muse-wiki-update-interwiki-regexp): Set
+	muse-wiki-interwiki-regexp to nil if muse-project-alist is not
+	defined.
+	(muse-wiki-handle-implicit-interwiki)
+	(muse-wiki-handle-explicit-interwiki): Handle case where
+	muse-wiki-interwiki-regexp is nil.
+
 2007-07-10  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-mode.el (muse-grep): Abort search if the current
