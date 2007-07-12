@@ -1,3 +1,36 @@
+2007-07-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el (muse-wiki-interwiki-regexp): Set to nil by
+	default, rather than the empty string.  This really fixes the bug
+	that occurred when using Muse with muse-project-alist set to nil.
+	Thanks to Jonathan Underwood for the report.
+	(muse-wiki-update-interwiki-regexp): Set
+	muse-wiki-interwiki-regexp to nil if muse-project-alist is not
+	defined.
+	(muse-wiki-handle-implicit-interwiki)
+	(muse-wiki-handle-explicit-interwiki): Handle case where
+	muse-wiki-interwiki-regexp is nil.
+
+2007-07-10  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-grep): Abort search if the current
+	project contains no directories.
+
+	* lisp/muse-project.el (muse-project-file-alist): If
+	muse-project-alist is not defined, or project is nil, return nil
+	right away.  This ought to fix a bug that occurred when using Muse
+	with muse-project-alist set to nil.
+	(muse-project-of-file): Make sure muse-project-alist is not nil.
+	(muse-project-save-buffers): Make sure project is not nil.
+
+	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): Deal with
+	case where muse-project-alist is nil.
+
+	* lisp/muse.el (muse-replace-regexp-in-string): Explicitly check
+	for XEmacs, since color-theme.el is poorly behaved, and defines
+	its own replace-in-string.  Bad color-theme.el -- no cookie for
+	you.
+
 2007-07-01  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (.PHONY): Update for new debian package rules.

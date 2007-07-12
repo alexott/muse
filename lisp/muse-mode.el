@@ -722,16 +722,19 @@ GREP-COMMAND if passed will supplant `muse-grep-command'."
                             (shell-quote-argument
                              (expand-file-name dir)))
                           muse-directories " ")))
-    (while (string-match "%W" str)
-      (setq str (replace-match string t t str)))
-    (while (string-match "%D" str)
-      (setq str (replace-match dirs t t str)))
-    (if (fboundp 'compilation-start)
-        (compilation-start str nil (lambda (&rest args) "*search*")
-                           grep-regexp-alist)
-      (and (fboundp 'compile-internal)
-           (compile-internal str "No more search hits" "search"
-                             nil grep-regexp-alist)))))
+    (if (string= dirs "")
+        (muse-display-warning
+         "No directories were found in the current project; aborting search")
+      (while (string-match "%W" str)
+        (setq str (replace-match string t t str)))
+      (while (string-match "%D" str)
+        (setq str (replace-match dirs t t str)))
+      (if (fboundp 'compilation-start)
+          (compilation-start str nil (lambda (&rest args) "*search*")
+                             grep-regexp-alist)
+        (and (fboundp 'compile-internal)
+             (compile-internal str "No more search hits" "search"
+                               nil grep-regexp-alist))))))
 
 ;;;###autoload
 (defun muse-search-with-command (text)
