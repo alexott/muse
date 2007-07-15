@@ -11,6 +11,26 @@
 	Use muse-insert-file-or-string for the entry templates, rather
 	than muse-insert-markup.  This allows <lisp> and <markup> tags to
 	be acted on.  Thanks to Scott Hyde for the report.
+	(muse-journal-html-munge-buffer): Escape quote of the day using
+	entire-document specials before snarfing it.  Mark entire template
+	as read-only -- this fixes an incorrect escaping bug.  Remove
+	read-only properties before replacing template matches so that
+	they can still be escaped with entire-document specials later on.
+	(muse-journal-rss-munge-buffer): Make sure that title is escaped
+	properly.
+	(muse-journal-markup-tags): Rename from
+	muse-journal-latex-markup-tags, because we will use it for
+	journal-rss-entry as well.
+	(muse-journal-qotd-tag): Move higher.  Use begin-quote-item and
+	end-quote-item.
+	(muse-journal-rss-munge-buffer): Use journal-rss-entry rather than
+	html.
+	("journal-latex", "journal-pdf", "journal-book-latex")
+	("journal-book-pdf"): Use muse-journal-markup-tags rather than
+	muse-journal-latex-markup-tags.
+	("journal-rss-entry"): New style that is used by journal-rss and
+	journal-rdf to mark up individual entries.  It is needed so that
+	we can do something meaningful with the qotd tag.
 
 	* lisp/muse-publish.el (muse-insert-file-or-string): Use
 	muse-publish-markup-header-footer-tags.  I'm not quite sure how
