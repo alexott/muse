@@ -11,6 +11,11 @@
 	Use muse-insert-file-or-string for the entry templates, rather
 	than muse-insert-markup.  This allows <lisp> and <markup> tags to
 	be acted on.  Thanks to Scott Hyde for the report.
+	(muse-journal-html-munge-buffer): Escape quote of the day using
+	entire-document specials before snarfing it.  Mark entire template
+	as read-only -- this fixes an incorrect escaping bug.  Remove
+	read-only properties before replacing template matches so that
+	they can still be escaped with entire-document specials later on.
 
 	* lisp/muse-publish.el (muse-insert-file-or-string): Use
 	muse-publish-markup-header-footer-tags.  I'm not quite sure how
