@@ -1,3 +1,9 @@
+2007-07-15  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-insert-file-or-string): Use
+	muse-publish-markup-header-footer-tags.  I'm not quite sure how
+	this change got reverted.
+
 2007-07-14  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-journal.el (muse-journal-rss-munge-buffer): Don't
