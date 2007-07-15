@@ -630,7 +630,7 @@ For more on the structure of this list, see
                 (insert (or title "Untitled"))
                 (remove-text-properties (match-beginning 0) (match-end 0)
                                         '(read-only nil rear-nonsticky nil))
-                (let ((muse-publishing-current-style (muse-style "xml")))
+                (let ((muse-publishing-current-style (muse-style "html")))
                   (muse-publish-escape-specials (point-min) (point-max)
                                                 nil 'document))))
             (goto-char (point-min))
