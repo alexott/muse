@@ -1,5 +1,17 @@
 2007-07-15  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-journal.el (muse-journal-html-entry-template)
+	(muse-journal-rdf-entry-template)
+	(muse-journal-rss-entry-template): Mention that this can be text
+	or a filename.
+	(muse-journal-rdf-entry-template, muse-journal-rss-header)
+	(muse-journal-rss-footer, muse-journal-rss-entry-template): Add
+	newlines to make the output look nicer.
+	(muse-journal-html-munge-buffer, muse-journal-rss-munge-buffer):
+	Use muse-insert-file-or-string for the entry templates, rather
+	than muse-insert-markup.  This allows <lisp> and <markup> tags to
+	be acted on.  Thanks to Scott Hyde for the report.
+
 	* lisp/muse-publish.el (muse-insert-file-or-string): Use
 	muse-publish-markup-header-footer-tags.  I'm not quite sure how
 	this change got reverted.
