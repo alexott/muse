@@ -31,10 +31,15 @@
 	("journal-rss-entry"): New style that is used by journal-rss and
 	journal-rdf to mark up individual entries.  It is needed so that
 	we can do something meaningful with the qotd tag.
+	(muse-journal-rdf-summarize-entries): Set this to nil by default,
+	because it is annoying.  Update docs to mention this.
+	(muse-journal-rss-summarize-entries): Docfix.
 
 	* lisp/muse-publish.el (muse-insert-file-or-string): Use
 	muse-publish-markup-header-footer-tags.  I'm not quite sure how
 	this change got reverted.
+
+	* texi/muse.texi (Journal): Update for recent changes.
 
 2007-07-14  Michael Olson  <mwolson@gnu.org>
 

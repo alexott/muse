@@ -2247,6 +2247,11 @@ Publish journal entries as an RDF file (RSS 1.0).
 @item journal-rss
 Publish journal entries as an RSS file (RSS 2.0).
 
+@cindex publishing styles, journal-rss-entry
+@item journal-rss-entry
+Used internally by @code{journal-rss} and @code{journal-rdf} for
+publishing individual entries.
+
 @end table
 
 @subheading Options provided
@@ -2271,16 +2276,22 @@ group 3 is the optional heading for the entry.
 @item muse-journal-html-entry-template
 Template used to publish individual journal entries as HTML.
 
+This may be text or a filename.
+
 @item muse-journal-latex-section
 Template used to publish a LaTeX section.
 
 @item muse-journal-latex-subsection
 Template used to publish a LaTeX subsection.
 
-@item muse-journal-latex-markup-tags
-A list of tag specifications, for specially marking up LaTeX.
+@item muse-journal-markup-tags
+A list of tag specifications, for specially marking up Journal entries.
 
 @xref{muse-publish-markup-tags}, for more information.
+
+This is used by @code{journal-latex} and its related styles, as well as
+the @code{journal-rss-entry} style, which both @code{journal-rdf} and
+@code{journal-rss} use.
 
 @item muse-journal-rdf-extension
 Default file extension for publishing RDF (RSS 1.0) files.
@@ -2304,8 +2315,12 @@ Date format to use for RDF entries.
 @item muse-journal-rdf-entry-template
 Template used to publish individual journal entries as RDF.
 
+This may be text or a filename.
+
 @item muse-journal-rdf-summarize-entries
 If non-nil, include only summaries in the RDF file, not the full data.
+
+The default is nil, because this annoys some subscribers.
 
 @item muse-journal-rss-heading-regexp
 A regexp that matches a journal heading from an HTML document.
@@ -2335,6 +2350,8 @@ Date format to use for RSS 2.0 entries.
 @item muse-journal-rss-entry-template
 Template used to publish individual journal entries as RSS 2.0.
 
+This may be text or a filename.
+
 @item muse-journal-rss-enclosure-types-alist
 File types that are accepted as RSS enclosures.
 
@@ -2345,7 +2362,7 @@ Useful for podcasting.
 @item muse-journal-rss-summarize-entries
 If non-nil, include only summaries in the RSS file, not the full data.
 
-Many RSS subscribers find this annoying.
+The default is nil, because this annoys some subscribers.
 
 @item muse-journal-rss-markup-regexps
 List of markup rules for publishing a Muse journal page to RSS.

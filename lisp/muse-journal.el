@@ -248,8 +248,10 @@ This may be text or a filename."
   :type 'string
   :group 'muse-journal)
 
-(defcustom muse-journal-rdf-summarize-entries t
-  "If non-nil, include only summaries in the RDF file, not the full data."
+(defcustom muse-journal-rdf-summarize-entries nil
+  "If non-nil, include only summaries in the RDF file, not the full data.
+
+The default is nil, because this annoys some subscribers."
   :type 'boolean
   :group 'muse-journal)
 
@@ -317,7 +319,8 @@ Useful for podcasting."
 
 (defcustom muse-journal-rss-summarize-entries nil
   "If non-nil, include only summaries in the RSS file, not the full data.
-Many RSS subscribers find this annoying."
+
+The default is nil, because this annoys some subscribers."
   :type 'boolean
   :group 'muse-journal)
 
