@@ -140,7 +140,8 @@ and group 3 is the optional heading for the entry."
     </div>
   </div>
 </div>\n\n"
-  "Template used to publish individual journal entries as HTML."
+  "Template used to publish individual journal entries as HTML.
+This may be text or a filename."
   :type 'string
   :group 'muse-journal)
 
@@ -229,7 +230,7 @@ This may be text or a filename."
   :group 'muse-journal)
 
 (defcustom muse-journal-rdf-entry-template
-  "  <item rdf:about=\"%link%#%anchor%\">
+  "\n  <item rdf:about=\"%link%#%anchor%\">
     <title>%title%</title>
     <description>
       %desc%
@@ -238,7 +239,8 @@ This may be text or a filename."
     <dc:date>%date%</dc:date>
     <dc:creator>%maintainer%</dc:creator>
   </item>\n"
-  "Template used to publish individual journal entries as RDF."
+  "Template used to publish individual journal entries as RDF.
+This may be text or a filename."
   :type 'string
   :group 'muse-journal)
 
@@ -268,13 +270,13 @@ This may be text or a filename."
                                 muse-html-extension))</lisp></link>
     <description><lisp>(muse-publishing-directive \"desc\")</lisp></description>
     <language>en-us</language>
-    <generator>Emacs Muse</generator>"
+    <generator>Emacs Muse</generator>\n\n"
   "Header used for publishing RSS 2.0 files.  This may be text or a filename."
   :type 'string
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-footer
-  "  </channel>
+  "\n\n  </channel>
 </rss>\n"
   "Footer used for publishing RSS 2.0 files.  This may be text or a filename."
   :type 'string
@@ -287,7 +289,7 @@ This may be text or a filename."
   :group 'muse-journal)
 
 (defcustom muse-journal-rss-entry-template
-  "    <item>
+  "\n    <item>
       <title>%title%</title>
       <link>%link%#%anchor%</link>
       <description>%desc%</description>
@@ -296,7 +298,8 @@ This may be text or a filename."
       <guid>%link%#%anchor%</guid>
       %enclosure%
     </item>\n"
-  "Template used to publish individual journal entries as RSS 2.0."
+  "Template used to publish individual journal entries as RSS 2.0.
+This may be text or a filename."
   :type 'string
   :group 'muse-journal)
 
@@ -423,7 +426,7 @@ For more on the structure of this list, see
           (setq text (buffer-string))
           (delete-region (point-min) (point-max))
           (let ((entry muse-journal-html-entry-template))
-            (muse-insert-markup entry)
+            (muse-insert-file-or-string entry)
             (goto-char (point-min))
             (while (search-forward "%date%" nil t)
               (replace-match (or date "") nil t))
@@ -602,7 +605,7 @@ For more on the structure of this list, see
                                    "]]>")))))
           (delete-region (point-min) (point-max))
           (let ((entry (muse-style-element :entry-template)))
-            (muse-insert-markup entry)
+            (muse-insert-file-or-string entry)
             (goto-char (point-min))
             (while (search-forward "%date%" nil t)
               (replace-match (or date "") nil t))

@@ -538,7 +538,8 @@ See `muse-publish-markup-tags' for details."
       (remove-text-properties (point-min) (point-max)
                               '(read-only nil rear-nonsticky nil))
       (goto-char (point-min))
-      (let ((muse-inhibit-style-tags t))
+      (let ((muse-inhibit-style-tags t)
+            (muse-publish-markup-tags muse-publish-markup-header-footer-tags))
         (muse-publish-markup (or title "")
                              '((100 muse-tag-regexp 0
                                     muse-publish-markup-tag)))))))
