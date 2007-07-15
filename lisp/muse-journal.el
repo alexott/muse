@@ -159,10 +159,14 @@ This may be text or a filename."
   :type 'string
   :group 'muse-journal)
 
-(defcustom muse-journal-latex-markup-tags
-  '(("qotd" t nil nil muse-journal-latex-qotd-tag))
-  "A list of tag specifications, for specially marking up LaTeX.
-See `muse-publish-markup-tags' for more info."
+(defcustom muse-journal-markup-tags
+  '(("qotd" t nil nil muse-journal-qotd-tag))
+  "A list of tag specifications, for specially marking up Journal entries.
+See `muse-publish-markup-tags' for more info.
+
+This is used by journal-latex and its related styles, as well as
+the journal-rss-entry style, which both journal-rdf and
+journal-rss use."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
@@ -370,6 +374,14 @@ For more on the structure of this list, see
     (lambda ()
       (end-of-line)))))
 
+(defun muse-journal-qotd-tag (beg end)
+  (muse-publish-ensure-block beg)
+  (muse-insert-markup (muse-markup-text 'begin-quote))
+  (muse-insert-markup (muse-markup-text 'begin-quote-item))
+  (goto-char end)
+  (muse-insert-markup (muse-markup-text 'end-quote-item))
+  (muse-insert-markup (muse-markup-text 'end-quote)))
+
 (defun muse-journal-html-munge-buffer ()
   (goto-char (point-min))
   (let ((heading-regexp muse-journal-html-heading-regexp)
@@ -541,12 +553,6 @@ For more on the structure of this list, see
   ;; indicate that we are to continue the :before-end processing
   nil)
 
-(defun muse-journal-latex-qotd-tag (beg end)
-  (muse-publish-ensure-block beg)
-  (muse-insert-markup (muse-markup-text 'begin-quote))
-  (goto-char end)
-  (muse-insert-markup (muse-markup-text 'end-quote)))
-
 (defun muse-journal-rss-munge-buffer ()
   (goto-char (point-min))
   (let ((heading-regexp muse-journal-rss-heading-regexp)
@@ -597,7 +603,7 @@ For more on the structure of this list, see
                   (forward-sentence 2)
                   (setq desc (concat (buffer-substring beg (point)) "...")))
               (save-restriction
-                (muse-publish-markup-buffer "rss-entry" "html")
+                (muse-publish-markup-buffer "rss-entry" "journal-rss-entry")
                 (goto-char (point-min))
                 (if (re-search-forward "Page published by Emacs Muse" nil t)
                     (goto-char (muse-line-end-position))
@@ -695,21 +701,21 @@ For more on the structure of this list, see
                    :before-end 'muse-journal-html-munge-buffer)
 
 (muse-derive-style "journal-latex" "latex"
-                   :tags 'muse-journal-latex-markup-tags
+                   :tags 'muse-journal-markup-tags
                    :before-end 'muse-journal-latex-munge-buffer)
 
 (muse-derive-style "journal-pdf" "pdf"
-                   :tags 'muse-journal-latex-markup-tags
+                   :tags 'muse-journal-markup-tags
                    :before-end 'muse-journal-latex-munge-buffer)
 
 (muse-derive-style "journal-book-latex" "book-latex"
                    ;;:nochapters
-                   :tags 'muse-journal-latex-markup-tags
+                   :tags 'muse-journal-markup-tags
                    :before-end 'muse-journal-latex-munge-buffer)
 
 (muse-derive-style "journal-book-pdf" "book-pdf"
                    ;;:nochapters
-                   :tags 'muse-journal-latex-markup-tags
+                   :tags 'muse-journal-markup-tags
                    :before-end 'muse-journal-latex-munge-buffer)
 
 (muse-define-style "journal-rdf"
@@ -735,6 +741,10 @@ For more on the structure of this list, see
                    :entry-template 'muse-journal-rss-entry-template
                    :base-url       'muse-journal-rss-base-url
                    :summarize      'muse-journal-rss-summarize-entries)
+
+;; Used by `muse-journal-rss-munge-buffer' to mark up individual entries
+(muse-derive-style "journal-rss-entry" "html"
+                   :tags 'muse-journal-markup-tags)
 
 (provide 'muse-journal)
 
