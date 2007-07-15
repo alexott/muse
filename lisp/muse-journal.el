@@ -657,9 +657,7 @@ For more on the structure of this list, see
               (replace-match
                (or (muse-style-element :maintainer)
                    (concat "webmaster@" (system-name)))
-               nil t))))))
-    (unless (eobp)
-      (delete-region (point) (point-max))))
+               nil t)))))))
   ;; indicate that we are to continue the :before-end processing
   nil)
 

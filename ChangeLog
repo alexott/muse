@@ -1,5 +1,10 @@
 2007-07-14  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-journal.el (muse-journal-rss-munge-buffer): Don't
+	delete the remainder of the buffer, since this causes the
+	resulting RDF to have invalid syntax.  Thanks to Phillip Lord for
+	the report and the suggested fix.
+
 	* lisp/muse-publish.el (muse-publish-markup-regexps): Add "^" to
 	beginning of table-el regexp.  This fixes a bug where Muse stalls
 	when trying to publish a malformed table.  Thanks to Ye Wenbin for
