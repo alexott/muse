@@ -152,7 +152,7 @@ If non-nil, publish comments using the markup of the current style."
           0 list)
 
     ;; support table.el style tables
-    (2300 ,(concat muse-table-el-border-regexp "\n"
+    (2300 ,(concat "^" muse-table-el-border-regexp "\n"
                    "\\(\\(" muse-table-line-regexp "\n\\)+"
                    "\\(" muse-table-el-border-regexp "\\)"
                    "\\(\n\\|\\'\\)\\)+")
