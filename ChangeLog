@@ -1,3 +1,10 @@
+2007-07-14  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-regexps): Add "^" to
+	beginning of table-el regexp.  This fixes a bug where Muse stalls
+	when trying to publish a malformed table.  Thanks to Ye Wenbin for
+	the report and the suggested fix.
+
 2007-07-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-wiki.el (muse-wiki-interwiki-regexp): Set to nil by
