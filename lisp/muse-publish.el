@@ -308,6 +308,18 @@ in-between."
                        function))
   :group 'muse-publish)
 
+(defcustom muse-publish-markup-header-footer-tags
+  '(("lisp"     t   t   nil muse-publish-lisp-tag)
+    ("markup"   t   t   nil muse-publish-mark-up-tag))
+  "Tags used when publishing headers and footers.
+See `muse-publish-markup-tags' for details."
+  :type '(repeat (list (string :tag "Markup tag")
+                       (boolean :tag "Expect closing tag" :value t)
+                       (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
+                       function))
+  :group 'muse-publish)
+
 (defcustom muse-publish-markup-specials nil
   "A table of characters which must be represented specially."
   :type '(alist :key-type character :value-type string)
@@ -336,6 +348,17 @@ contents were requested.")
 (defvar muse-publishing-last-position nil
   "Last position of the point when publishing.
 This is used to make sure that publishing doesn't get stalled.")
+
+(defvar muse-publish-inhibit-style-hooks nil
+  "If non-nil, do not call the :before or :before-end hooks when publishing.")
+
+(defvar muse-publish-use-header-footer-tags nil
+  "If non-nil, use `muse-publish-markup-header-footer-tags' for looking up
+tags.  Otherwise, use `muse-publish-markup-tags'.")
+
+(defvar muse-inhibit-style-tags nil
+  "If non-nil, do not search for style-specific tags.
+This is used when publishing headers and footers.")
 
 ;; Functions for handling style information
 
@@ -452,10 +475,14 @@ to the text with ARGS as parameters."
           (if base
               (muse-find-markup-tag keyword tagname base))))))
 
-(defsubst muse-markup-tag-info (tagname &rest args)
-  (let ((tag-info (muse-find-markup-tag :tags tagname (muse-style))))
+(defun muse-markup-tag-info (tagname &rest args)
+  (let ((tag-info (and (not muse-inhibit-style-tags)
+                       (muse-find-markup-tag :tags tagname (muse-style)))))
     (or tag-info
-        (assoc tagname muse-publish-markup-tags))))
+        (assoc tagname
+               (if muse-publish-use-header-footer-tags
+                   muse-publish-markup-header-footer-tags
+                 muse-publish-markup-tags)))))
 
 (defsubst muse-markup-function (category)
   (let ((func (muse-find-markup-element :functions category (muse-style))))
@@ -513,18 +540,6 @@ to the text with ARGS as parameters."
     (if (and verbose (not muse-batch-publishing-p))
         (message "Publishing %s...done" name))))
 
-(defcustom muse-publish-markup-header-footer-tags
-  '(("lisp"     t   t   nil muse-publish-lisp-tag)
-    ("markup"   t   t   nil muse-publish-mark-up-tag))
-  "Tags used when publishing headers and footers.
-See `muse-publish-markup-tags' for details."
-  :type '(repeat (list (string :tag "Markup tag")
-                       (boolean :tag "Expect closing tag" :value t)
-                       (boolean :tag "Parse attributes" :value nil)
-                       (boolean :tag "Nestable" :value nil)
-                       function))
-  :group 'muse-publish)
-
 (defun muse-insert-file-or-string (file-or-string &optional title)
   (let ((beg (point)) end)
     (if (and (not (string-equal file-or-string ""))
@@ -539,7 +554,7 @@ See `muse-publish-markup-tags' for details."
                               '(read-only nil rear-nonsticky nil))
       (goto-char (point-min))
       (let ((muse-inhibit-style-tags t)
-            (muse-publish-markup-tags muse-publish-markup-header-footer-tags))
+            (muse-publish-use-header-footer-tags t))
         (muse-publish-markup (or title "")
                              '((100 muse-tag-regexp 0
                                     muse-publish-markup-tag)))))))
@@ -556,9 +571,6 @@ See `muse-publish-markup-tags' for details."
             (when (apply func args)
               (throw 'handled t))))
         (setq style (muse-style-element :base style))))))
-
-(defvar muse-publish-inhibit-style-hooks nil
-  "If non-nil, do not call the :before or :before-end hooks when publishing.")
 
 (defun muse-publish-markup-region (beg end &optional title style)
   "Apply the given STYLE's markup rules to the given region.
@@ -876,14 +888,8 @@ This function returns the matching attribute value, if found."
     (goto-char (match-beginning 0))
     (muse-insert-markup (muse-markup-text 'comment-begin))))
 
-(defvar muse-inhibit-style-tags nil
-  "If non-nil, do not search for style-specific tags.
-This is used when publishing headers and footers.")
-
 (defun muse-publish-markup-tag ()
-  (let ((tag-info (if muse-inhibit-style-tags
-                      (assoc (match-string 1) muse-publish-markup-tags)
-                    (muse-markup-tag-info (match-string 1)))))
+  (let ((tag-info (muse-markup-tag-info (match-string 1))))
     (when (and tag-info
                (not (get-text-property (match-beginning 0) 'read-only)))
       (let ((closed-tag (match-string 3))
@@ -1779,9 +1785,7 @@ is exactly this style."
 (defun muse-publish-call-tag-on-buffer (tag &optional attrs)
   "Transform the current buffer as if it were surrounded by the tag TAG.
 If attributes ATTRS are given, pass them to the tag function."
-  (let ((tag-info (if muse-inhibit-style-tags
-                      (assoc tag muse-publish-markup-tags)
-                    (muse-markup-tag-info tag))))
+  (let ((tag-info (muse-markup-tag-info tag)))
     (when tag-info
       (let* ((end (progn (goto-char (point-max)) (point-marker)))
              (args (list (point-min) end))
@@ -1967,6 +1971,7 @@ current style is exactly this style."
                                muse-publishing-current-style))
             (and (not exactp) (muse-style-derived-p style)))
         (let* ((function (cdr (assoc "function" attrs)))
+               (muse-publish-use-header-footer-tags nil)
                (muse-publishing-directives muse-publishing-directives)
                (markup-function (and function (intern function))))
           (if (and markup-function (functionp markup-function))
