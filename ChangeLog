@@ -38,6 +38,21 @@
 	* lisp/muse-publish.el (muse-insert-file-or-string): Use
 	muse-publish-markup-header-footer-tags.  I'm not quite sure how
 	this change got reverted.
+	(muse-markup-tag-info): Make into a function.  Move common code
+	here, rather than duplicating it in two places.  Deal with case
+	where muse-publish-use-header-footer-tags is non-nil.
+	(muse-publish-markup-specials, muse-publish-inhibit-style-hooks)
+	(muse-inhibit-style-tags): Move higher to avoid byte-compiler
+	warning.
+	(muse-publish-use-header-footer-tags): New variable that indicates
+	whether we should use just the header and footer tags, rather than
+	the full set.
+	(muse-insert-file-or-string): Bind
+	muse-publish-use-header-footer-tags to t.
+	(muse-publish-markup-tag, muse-publish-call-tag-on-buffer):
+	Simplify call to muse-markup-tag-info.
+	(muse-publish-mark-up-tag): Bind
+	muse-publish-use-header-footer-tags to nil.
 
 	* texi/muse.texi (Journal): Update for recent changes.
 
