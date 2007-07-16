@@ -1877,7 +1877,8 @@ BEG is modified to be the start of the published markup."
                               (buffer-substring-no-properties (point-min)
                                                               (point-max))
                               ")")
-                    (delete-region beg end)))))
+                    (delete-region (point-min) (point-max))
+                    (widen)))))
         (set-text-properties 0 (length str) nil str)
         (insert str)))))
 
