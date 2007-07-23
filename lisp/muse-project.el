@@ -542,15 +542,17 @@ If PATHNAME is nil, the current buffer's filename is used."
         (if (and (not no-assume)
                  (= 1 (length muse-project-alist)))
             (car muse-project-alist)
-          (assoc (completing-read prompt muse-project-alist)
+          (assoc (funcall muse-completing-read-function
+                          prompt muse-project-alist)
                  muse-project-alist)))))
 
 (defvar muse-project-page-history nil)
 
 (defun muse-read-project-file (project prompt &optional default)
-  (let ((name (completing-read prompt (muse-project-file-alist project)
-                               nil nil nil 'muse-project-page-history
-                               default)))
+  (let ((name (funcall muse-completing-read-function
+                       prompt (muse-project-file-alist project)
+                       nil nil nil 'muse-project-page-history
+                       default)))
     (cons name (muse-project-page-file name project))))
 
 ;;;###autoload

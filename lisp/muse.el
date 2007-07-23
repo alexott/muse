@@ -130,6 +130,12 @@ If you don't want Muse files to have an extension, set this to nil."
   :set 'muse-update-file-extension
   :group 'muse)
 
+(defcustom muse-completing-read-function 'completing-read
+  "Function to call when prompting user to choose between a list of options.
+This should take the same arguments as `completing-read'."
+  :type 'function
+  :group 'muse)
+
 (defun muse-update-ignored-extensions-regexp (sym val)
   "Update the value of `muse-ignored-extensions-regexp'."
   (set sym val)

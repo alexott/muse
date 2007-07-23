@@ -651,7 +651,8 @@ normally."
                   (throw 'different t)))))
       (setq styles (muse-collect-alist
                     styles
-                    (completing-read "Publish with style: " styles nil t))))
+                    (funcall muse-completing-read-function
+                             "Publish with style: " styles nil t))))
     (if (or (= 1 (length styles))
             (not (muse-get-keyword :path (car styles))))
         (car styles)
@@ -659,7 +660,8 @@ normally."
                              (cons (muse-get-keyword :path style)
                                    style))
                            styles))
-      (cdr (assoc (completing-read "Publish to directory: " styles nil t)
+      (cdr (assoc (funcall muse-completing-read-function
+                           "Publish to directory: " styles nil t)
                   styles)))))
 
 (defsubst muse-publish-get-output-dir (style)

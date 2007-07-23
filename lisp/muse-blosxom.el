@@ -256,9 +256,10 @@ The page will be initialized with the current date and TITLE."
                         (not (string= tag "")))
             (add-to-list 'tags tag t))
           tags)
-      (completing-read "Category: "
-                       (mapcar 'list (muse-project-recurse-directory
-                                      muse-blosxom-base-directory))))
+      (funcall muse-completing-read-function
+               "Category: "
+               (mapcar 'list (muse-project-recurse-directory
+                              muse-blosxom-base-directory))))
     (read-string "Title: ")))
   (let ((file (muse-blosxom-title-to-file title)))
     (muse-project-find-file

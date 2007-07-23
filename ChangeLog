@@ -1,8 +1,18 @@
 2007-07-22  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-blosxom.el (muse-blosxom-new-entry):
+	* lisp/muse-mode.el (muse-insert-tag):
+	* lisp/muse-project.el (muse-read-project)
+	(muse-read-project-file):
+	* lisp/muse-publish.el (muse-publish-get-style): Use
+	muse-completing-read-function.
+
 	* lisp/muse-latex2png.el (muse-publish-latex-tag)
 	(muse-publish-math-tag): Allow the contex style -- which I plan to
 	include soon -- to work with these tags.
+
+	* lisp/muse.el (muse-completing-read-function): New option that
+	determines which function to call when doing a completing-read.
 
 2007-07-15  Michael Olson  <mwolson@gnu.org>
 
