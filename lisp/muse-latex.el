@@ -516,14 +516,13 @@ This is used by the slides and lecture-notes publishing styles."
 
 (defun muse-latex-bibliography ()
   (save-excursion
-    (save-restriction
-      (goto-char (point-min))
-      (if (re-search-forward "\\\\cite.?{" nil t)
-          (concat
-           "\\bibliography{"
-           (muse-publishing-directive "bibsource")
-           "}\n")
-        ""))))
+    (goto-char (point-min))
+    (if (re-search-forward "\\\\cite.?{" nil t)
+        (concat
+         "\\bibliography{"
+         (muse-publishing-directive "bibsource")
+         "}\n")
+      "")))
 
 (defun muse-latex-pdf-browse-file (file)
   (shell-command (concat "open " file)))
