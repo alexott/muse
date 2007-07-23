@@ -1,3 +1,9 @@
+2007-07-22  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex2png.el (muse-publish-latex-tag)
+	(muse-publish-math-tag): Allow the contex style -- which I plan to
+	include soon -- to work with these tags.
+
 2007-07-15  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-journal.el (muse-journal-html-entry-template)

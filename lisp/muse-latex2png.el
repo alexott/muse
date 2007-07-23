@@ -205,7 +205,7 @@ See `muse-latex2png-region' for valid keys for ATTRS."
     (setq attrs (cons (cons "prefix"
                             (concat "latex2png-" (muse-page-name)))
                       attrs)))
-  (if (muse-style-derived-p "latex")
+  (if (or (muse-style-derived-p "latex") (muse-style-derived-p "contex"))
       (muse-publish-mark-read-only beg end)
     (muse-latex2png-region beg end attrs)))
 
@@ -222,7 +222,8 @@ be centered in the published output (among other things)."
                          nil t)
                         (prog1 t
                           (replace-match "")
-                          (when (and (muse-style-derived-p "latex")
+                          (when (and (or (muse-style-derived-p "latex")
+                                         (muse-style-derived-p "contex"))
                                      (not (bobp)))
                             (backward-char 1)
                             (if (bolp)
@@ -244,7 +245,7 @@ be centered in the published output (among other things)."
     (muse-insert-markup tag-beg)
     (goto-char end)
     (muse-insert-markup tag-end)
-    (if (muse-style-derived-p "latex")
+    (if (or (muse-style-derived-p "latex") (muse-style-derived-p "contex"))
         (muse-publish-mark-read-only beg (point))
       (muse-latex2png-region beg (point) attrs))))
 
