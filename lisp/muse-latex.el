@@ -495,7 +495,7 @@ This is used by the slides and lecture-notes publishing styles."
           (setq open t))))))
 
 (defun muse-latex-fixup-citations ()
-  ;; replace semicolons in multi-head citations with colons
+  "Replace semicolons in multi-head citations with colons."
   (goto-char (point-min))
   (while (re-search-forward "\\\\cite.?{" nil t)
     (let ((start (point))
@@ -517,7 +517,6 @@ This is used by the slides and lecture-notes publishing styles."
 (defun muse-latex-bibliography ()
   (save-excursion
     (save-restriction
-      (widen)
       (goto-char (point-min))
       (if (re-search-forward "\\\\cite.?{" nil t)
           (concat
@@ -591,11 +590,11 @@ This is used by the slides and lecture-notes publishing styles."
 
 (muse-derive-style "slides" "latex"
                    :header 'muse-latex-slides-header
-                   :tags 'muse-latex-slides-markup-tags)
+                   :tags   'muse-latex-slides-markup-tags)
 
 (muse-derive-style "slides-pdf" "pdf"
                    :header 'muse-latex-slides-header
-                   :tags 'muse-latex-slides-markup-tags)
+                   :tags   'muse-latex-slides-markup-tags)
 
 (muse-derive-style "lecture-notes" "slides"
                    :header 'muse-latex-lecture-notes-header)

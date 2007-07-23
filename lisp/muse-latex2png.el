@@ -205,7 +205,7 @@ See `muse-latex2png-region' for valid keys for ATTRS."
     (setq attrs (cons (cons "prefix"
                             (concat "latex2png-" (muse-page-name)))
                       attrs)))
-  (if (or (muse-style-derived-p "latex") (muse-style-derived-p "contex"))
+  (if (or (muse-style-derived-p "latex") (muse-style-derived-p "context"))
       (muse-publish-mark-read-only beg end)
     (muse-latex2png-region beg end attrs)))
 
@@ -223,7 +223,7 @@ be centered in the published output (among other things)."
                         (prog1 t
                           (replace-match "")
                           (when (and (or (muse-style-derived-p "latex")
-                                         (muse-style-derived-p "contex"))
+                                         (muse-style-derived-p "context"))
                                      (not (bobp)))
                             (backward-char 1)
                             (if (bolp)
@@ -231,11 +231,11 @@ be centered in the published output (among other things)."
                               (forward-char 1)))
                           (setq beg (point)))))
          (tag-beg (if centered
-                      (if (muse-style-derived-p "contex")
+                      (if (muse-style-derived-p "context")
                           "$$" "\\[ ")
                     "$"))
          (tag-end (if centered
-                      (if (muse-style-derived-p "contex")
+                      (if (muse-style-derived-p "context")
                           "$$" " \\]")
                     "$"))
          (attrs (nconc (list (cons "prefix"
@@ -245,7 +245,7 @@ be centered in the published output (among other things)."
     (muse-insert-markup tag-beg)
     (goto-char end)
     (muse-insert-markup tag-end)
-    (if (or (muse-style-derived-p "latex") (muse-style-derived-p "contex"))
+    (if (or (muse-style-derived-p "latex") (muse-style-derived-p "context"))
         (muse-publish-mark-read-only beg (point))
       (muse-latex2png-region beg (point) attrs))))
 
