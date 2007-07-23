@@ -4,12 +4,15 @@
 	publishing documents to the ConTeXt format.  Thanks to Jean Magnan
 	de Bornier for his work on this.
 
+	* lisp/muse-docbook.el (muse-docbook-entities)
+	(muse-docbook-bibliography): Remove unneeded save-restriction use.
+
 	* lisp/muse-latex2png.el (muse-publish-latex-tag):
 	s/contex/context/.
 
 	* lisp/muse-latex.el (muse-latex-fixup-citations): Add docstring.
 	(muse-latex-bibliography): Remove call to `widen', since it is not
-	needed anymore.
+	needed anymore.  Remove unneeded save-restriction use.
 	("slides", "slides-pdf"): Indent elements uniformly.
 
 2007-07-22  Michael Olson  <mwolson@gnu.org>

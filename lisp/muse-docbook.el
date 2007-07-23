@@ -302,26 +302,22 @@ and anything after `Firstname' is optional."
 
 (defun muse-docbook-entities ()
   (save-excursion
-    (save-restriction
-      (widen)
-      (goto-char (point-min))
-      (if (re-search-forward "<citation" nil t)
-          (concat
-           " [\n<!ENTITY bibliography SYSTEM \""
-           (if (string-match ".short$" (muse-page-name))
-               (substring (muse-page-name) 0 -6)
-             (muse-page-name))
-           ".bib.xml\">\n]")
-        ""))))
+    (goto-char (point-min))
+    (if (re-search-forward "<citation" nil t)
+        (concat
+         " [\n<!ENTITY bibliography SYSTEM \""
+         (if (string-match ".short$" (muse-page-name))
+             (substring (muse-page-name) 0 -6)
+           (muse-page-name))
+         ".bib.xml\">\n]")
+      "")))
 
 (defun muse-docbook-bibliography ()
   (save-excursion
-    (save-restriction
-      (widen)
-      (goto-char (point-min))
-      (if (re-search-forward "<citation" nil t)
-          "&bibliography;\n"
-        ""))))
+    (goto-char (point-min))
+    (if (re-search-forward "<citation" nil t)
+        "&bibliography;\n"
+      "")))
 
 (defun muse-docbook-finalize-buffer ()
   (when (boundp 'buffer-file-coding-system)

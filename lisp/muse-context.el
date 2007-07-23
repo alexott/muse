@@ -371,21 +371,19 @@ and it will do what you expect."
 
 (defun muse-context-bibliography ()
   (save-excursion
-    (save-restriction
-      (goto-char (point-min))
-      (if (re-search-forward "\\\\cite.?\\[" nil t)
-          "\\completepublications[criterium=all]"
-        ""))))
+    (goto-char (point-min))
+    (if (re-search-forward "\\\\cite.?\\[" nil t)
+        "\\completepublications[criterium=all]"
+      "")))
 
 (defun muse-context-setup-bibliography ()
   (save-excursion
-    (save-restriction
-      (goto-char (point-min))
-      (if (re-search-forward "\\\\cite.?\\[" nil t)
-          (concat
-           "\\usemodule[bibltx]\n\\setupbibtex [database="
-           (muse-publishing-directive "bibsource") "]")
-        ""))))
+    (goto-char (point-min))
+    (if (re-search-forward "\\\\cite.?\\[" nil t)
+        (concat
+         "\\usemodule[bibltx]\n\\setupbibtex [database="
+         (muse-publishing-directive "bibsource") "]")
+      "")))
 
 (defun muse-context-pdf-browse-file (file)
   (shell-command (concat "open " file)))
