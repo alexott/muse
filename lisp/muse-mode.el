@@ -824,7 +824,8 @@ function, you might want to set this manually.")
   "Insert a tag interactively with a blank line after it."
   (interactive
    (list
-    (completing-read
+    (funcall
+     muse-completing-read-function
      (concat "Tag: "
              (when muse-tag-history
                (concat "(default: " (car muse-tag-history) ") ")))
