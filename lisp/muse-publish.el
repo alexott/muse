@@ -1873,16 +1873,17 @@ BEG is modified to be the start of the published markup."
 (defun muse-publish-lisp-tag (beg end attrs)
   (muse-publish-markup-attribute beg end attrs nil
     (save-excursion
-      (let ((str (muse-eval-lisp
-                  (prog1
-                      (concat "(progn "
-                              (buffer-substring-no-properties (point-min)
-                                                              (point-max))
-                              ")")
-                    (delete-region (point-min) (point-max))
-                    (widen)))))
-        (set-text-properties 0 (length str) nil str)
-        (insert str)))))
+      (save-restriction
+        (let ((str (muse-eval-lisp
+                    (prog1
+                        (concat "(progn "
+                                (buffer-substring-no-properties (point-min)
+                                                                (point-max))
+                                ")")
+                      (delete-region (point-min) (point-max))
+                      (widen)))))
+          (set-text-properties 0 (length str) nil str)
+          (insert str))))))
 
 (defun muse-publish-command-tag (beg end attrs)
   (muse-publish-markup-attribute beg end attrs nil
