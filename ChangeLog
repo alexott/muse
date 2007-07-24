@@ -3,9 +3,20 @@
 	* examples/QuickStart.muse (Images): Fix typo where some text
 	existed in the output but not in the example region.
 
+	* lisp/muse-context.el (muse-context-pdf-program): New option that
+	determines the program to use for generating PDF files for
+	ConTeXt.
+	(muse-context-pdf-cruft): New option that specifies the extensions
+	of files to remove after generating PDF output successfully.
+	(muse-context-slides-header): Docfix.
+	(muse-context-pdf-generate): Use new options.
+
 	* lisp/muse-publish.el (muse-publish-lisp-tag): Add missing
 	save-restriction call.  This was causing a world of hurt when
 	using <lisp> inside of <include>.
+
+	* texi/muse.texi (ConTeXt): New section that documents how to use
+	the ConTeXt publishing styles.
 
 2007-07-23  Michael Olson  <mwolson@gnu.org>
 

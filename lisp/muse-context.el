@@ -47,6 +47,16 @@
   :type 'string
   :group 'muse-context)
 
+(defcustom muse-context-pdf-program "texexec --pdf"
+  "The program that is called to generate PDF content from ConTeXt content."
+  :type 'string
+  :group 'muse-context)
+
+(defcustom muse-context-pdf-cruft '(".aux" ".toc" ".out" ".log")
+  "Extensions of files to remove after generating PDF output successfully."
+  :type 'string
+  :group 'muse-context)
+
 (defcustom muse-context-header
   "\\starttext
 \\setupinteraction [state=start]
@@ -187,8 +197,10 @@ differs little between the various styles."
   "Header for publishing a presentation (slides) using ConTeXt.
 You can use any of the predefined modules, which are available in
 the tex/context/base of your distribution, provided it has
-TitlePage and Topic defined.  Alternatively you can use your own
-style (mystyle) by replacing \\usemodule[] by \\input mystyle."
+TitlePage and Topic defined.  Alternatively, you can use your own
+style (mystyle) by replacing \"\\usemodule[]\" with \"\\input mystyle\".
+
+This may be text or a filename."
   :type 'string
   :group 'muse-context)
 
@@ -389,14 +401,17 @@ and it will do what you expect."
   (shell-command (concat "open " file)))
 
 (defun muse-context-pdf-generate (file output-path final-target)
-  (muse-publish-transform-output
+  (apply
+   #'muse-publish-transform-output
    file output-path final-target "PDF"
    (function
     (lambda (file output-path)
-      (let ((command (format "cd \"%s\"; texexec --pdf \"%s\""
-                             (file-name-directory output-path) file))
-            (times 0)
-            result)
+      (let* ((fnd (file-name-directory output-path))
+             (command (format "cd \"%s\"; %s \"%s\""
+                              fnd muse-context-pdf-program
+                              (file-relative-name file fnd)))
+             (times 0)
+             result)
         ;; XEmacs can sometimes return a non-number result.  We'll err
         ;; on the side of caution by continuing to attempt to generate
         ;; the PDF if this happens and treat the final result as
@@ -415,7 +430,7 @@ and it will do what you expect."
                 (eq result 0))
             t
           nil))))
-   ".aux" ".toc" ".out" ".log"))
+   muse-context-pdf-cruft))
 
 (muse-define-style "context"
                    :suffix    'muse-context-extension
