@@ -129,6 +129,7 @@ Publishing Various Types of Documents
 
 * Blosxom::                     Integrating Muse and pyblosxom.cgi.
 * Book::                        Publishing entries into a compilation.
+* ConTeXt::                     Publishing ConTeXt documents.
 * DocBook::                     Publishing in DocBook XML form.
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
@@ -1714,6 +1715,7 @@ easy to create new styles, or derive from an existing style.
 @menu
 * Blosxom::                     Integrating Muse and pyblosxom.cgi.
 * Book::                        Publishing entries into a compilation.
+* ConTeXt::                     Publishing ConTeXt documents.
 * DocBook::                     Publishing in DocBook XML form.
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
@@ -1866,7 +1868,7 @@ locally.
 
 @end table
 
-@node Book, DocBook, Blosxom, Publishing Styles
+@node Book, ConTeXt, Blosxom, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Publishing entries into a compilation
 
@@ -1960,8 +1962,152 @@ Footer used for publishing books to LaTeX.
 This may be text or a filename.
 
 @end table
+@node ConTeXt, DocBook, Book, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Publishing ConTeXt documents
 
-@node DocBook, HTML, Book, Publishing Styles
+This publishing style is capable of producing ConTeXt or PDF documents.
+
+If you wish to publish PDF documents based on ConTeXt, you will need to
+have it installed.  For Debian and Ubuntu, this can be accomplished by
+installing the ``texlive'' package.
+
+@subheading Styles provided
+
+@table @code
+
+@cindex publishing styles, context
+@item context
+Publish a ConTeXt document.
+
+@cindex publishing styles, context-pdf
+@item context-pdf
+Publish a PDF document, using an external ConTeXt document conversion
+tool.
+
+@cindex publishing styles, context-slides
+@item context-slides
+Produce slides from a ConTeXt document.
+
+Here is an example of a slide.
+
+@example
+* First Slide
+
+[[Some-sort-of-cute-image.png]]
+
+** A subheading
+
+ - A bullet point.
+ - Another bullet point.
+
+* Second Slide
+
+... and so on
+@end example
+
+@cindex publishing styles, context-slides-pdf
+@item context-slides-pdf
+Publish a PDF document of ConTeXt slides.
+
+@end table
+
+@subheading Options provided
+
+@table @code
+
+@item muse-context-extension
+Default file extension for publishing ConTeXt files.
+
+@item muse-context-pdf-extension
+Default file extension for publishing ConTeXt files to PDF.
+
+@item muse-context-pdf-program
+The program that is called to generate PDF content from ConTeXt content.
+
+@item muse-context-pdf-cruft
+Extensions of files to remove after generating PDF output successfully.
+
+@item muse-context-header
+Header used for publishing ConTeXt files.
+
+This may be text or a filename.
+
+@item muse-context-footer
+Footer used for publishing ConTeXt files.
+
+This may be text or a filename.
+
+@item muse-context-markup-regexps
+List of markup regexps for identifying regions in a Muse page.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-regexps}.
+
+@item muse-context-markup-functions
+An alist of style types to custom functions for that kind of text.
+
+For more on the structure of this list,
+@xref{muse-publish-markup-functions}.
+
+@item muse-context-markup-strings
+Strings used for marking up text.
+
+These cover the most basic kinds of markup, the handling of which
+differs little between the various styles.
+
+@item muse-context-slides-header
+Header for publishing a presentation (slides) using ConTeXt.
+
+You can use any of the predefined modules, which are available in the
+tex/context/base of your distribution, provided it has TitlePage and
+Topic defined.  Alternatively, you can use your own style (mystyle) by
+replacing ``\\usemodule[]'' with ``\\input mystyle''.
+
+This may be text or a filename.
+
+@item muse-context-slides-markup-strings
+Strings used for marking up text in ConTeXt slides.
+
+@item muse-context-markup-specials-document
+A table of characters which must be represented specially.
+These are applied to the entire document, sans already-escaped
+regions.
+
+@item muse-context-markup-specials-example
+A table of characters which must be represented specially.
+These are applied to @verb{|example>|} regions.
+
+With the default interpretation of @verb{|<example>|} regions, no
+specials need to be escaped.
+
+@item muse-context-markup-specials-literal
+A table of characters which must be represented specially.
+This applies to =monospaced text= and @verb{|<code>|} regions.
+
+@item muse-context-markup-specials-url
+A table of characters which must be represented specially.
+These are applied to URLs.
+
+@item muse-context-markup-specials-image
+A table of characters which must be represented specially.
+These are applied to image filenames.
+
+@item muse-context-permit-contents-tag
+If nil, ignore @verb{|<contents>|} tags.  Otherwise, insert table of
+contents.
+
+Most of the time, it is best to have a table of contents on the
+first page, with a new page immediately following.  To make this
+work with documents published in both HTML and ConTeXt, we need to
+ignore the @verb{|<contents>|} tag.
+
+If you don't agree with this, then set this option to non-nil,
+and it will do what you expect.
+
+@end table
+
+@node DocBook, HTML, ConTeXt, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Publishing in DocBook XML form
 
@@ -2433,14 +2579,14 @@ Everything between the slide tags composes this slide.
 @item slides-pdf
 Publish a PDF document of slides, using the Beamer extension.
 
-@cindex publishing styles, lecture-nodes
+@cindex publishing styles, lecture-notes
 @item lecture-notes
 Publish a LaTeX document that uses the Beamer extension.  This is
 suitable for producing lecture notes.
 
 This can also use the @verb{|<slide>|} tag.
 
-@cindex publishing styles, lecture-nodes-pdf
+@cindex publishing styles, lecture-notes-pdf
 @item lecture-notes-pdf
 Publish a PDF document of lecture notes, using the Beamer extension.
 
