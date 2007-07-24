@@ -2,6 +2,8 @@
 
 	* examples/QuickStart.muse (Images): Fix typo where some text
 	existed in the output but not in the example region.
+	(Source Code): Fix another typo.  Explain that publishing from
+	console or X can make a difference.
 
 	* lisp/muse-context.el (muse-context-pdf-program): New option that
 	determines the program to use for generating PDF files for

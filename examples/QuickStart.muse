@@ -437,14 +437,16 @@ int main (int argc, char *argv[])
 </example>
 
 Here is the colorized output.  This may look different if you have
-customized some faces.
+customized some faces.  Also, it may look different depending on
+whether you are publishing from Emacs on the console, or Emacs on X --
+what you see when viewing (in this case) a C file is what you get.
 
 <src lang="c">
 #include <stdlib.h>
 
 char *unused;
 
-int main (int argc, char *argv[3])
+int main (int argc, char *argv[])
 {
     puts("Hello, world!\n");
 }
