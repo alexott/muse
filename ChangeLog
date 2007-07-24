@@ -1,5 +1,8 @@
 2007-07-24  Michael Olson  <mwolson@gnu.org>
 
+	* examples/QuickStart.muse (Images): Fix typo where some text
+	existed in the output but not in the example region.
+
 	* lisp/muse-publish.el (muse-publish-lisp-tag): Add missing
 	save-restriction call.  This was causing a world of hurt when
 	using <lisp> inside of <include>.

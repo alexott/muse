@@ -372,7 +372,7 @@ Made with [[muse-made-with.png]] Emacs Muse.
 Here is an example of a captioned image:
 
 <example>
-[[emacs-muse.png][Muse, the publishing choice of Great Thinkers]]
+[[emacs-muse.png][Muse, the publishing choice of (a subset of) Great Thinkers]]
 </example>
 
 This publishes as:
