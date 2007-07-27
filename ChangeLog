@@ -1,3 +1,8 @@
+2007-07-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-xml-common.el (muse-xml-escape-url): Do not escape
+	parentheses in URLs.
+
 2007-07-24  Michael Olson  <mwolson@gnu.org>
 
 	* examples/QuickStart.muse (Images): Fix typo where some text
