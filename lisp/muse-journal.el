@@ -378,7 +378,7 @@ For more on the structure of this list, see
       (end-of-line)))))
 
 (defun muse-journal-qotd-tag (beg end)
-  (muse-publish-ensure-block beg)
+  (muse-publish-ensure-block beg end)
   (muse-insert-markup (muse-markup-text 'begin-quote))
   (muse-insert-markup (muse-markup-text 'begin-quote-item))
   (goto-char end)

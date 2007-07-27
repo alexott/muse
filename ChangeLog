@@ -1,4 +1,14 @@
-2007-07-27    <jean@bornier.net>
+2007-07-27  Michael Olson  <mwolson@gnu.org>
+
+	* README: Permit Muse to be called "Emacs-Muse".
+
+	* lisp/muse-publish.el (muse-publish-surround-text): Fix bug
+	involving list items that have an extra blank line in front.
+
+	* texi/muse.texi (Introduction): Mention that Emacs Muse, Muse,
+	and Emacs-Muse are the same thing.
+
+2007-07-27  Jean Magnan de Bornier  <jean@bornier.net>
 
 	* lisp/muse-context.el (muse-context-header): Put
 	starttext after the modules who must be in preamble.
@@ -9,10 +19,17 @@
 	math environment in ConTeXt when centered: "$$ $$" has to be
 	"\startformula \stopformula".
 
+2007-07-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-xml-common.el (muse-xml-escape-url): Do not escape
+	parentheses in URLs.
+
 2007-07-24  Michael Olson  <mwolson@gnu.org>
 
 	* examples/QuickStart.muse (Images): Fix typo where some text
 	existed in the output but not in the example region.
+	(Source Code): Fix another typo.  Explain that publishing from
+	console or X can make a difference.
 
 	* lisp/muse-context.el (muse-context-pdf-program): New option that
 	determines the program to use for generating PDF files for

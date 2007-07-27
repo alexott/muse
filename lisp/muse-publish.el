@@ -706,17 +706,32 @@ normally."
       (muse-project-link-page page)
     (muse-publish-link-file page)))
 
-(defmacro muse-publish-ensure-block (beg)
+(defmacro muse-publish-ensure-block (beg &optional end)
   "Ensure that block-level markup at BEG is published with at least one
-preceding blank line.  BEG is modified to be the new position.
-The point is left at the new value of BEG."
+preceding blank line.  BEG must be an unquoted symbol that contains a
+position or marker.  BEG is modified to be the new position.
+The point is left at the new value of BEG.
+
+Additionally, make sure that BEG is placed on a blank line.
+
+If END is given, make sure that it is placed on a blank line.  In
+order to achieve this, END must be an unquoted symbol that
+contains a marker.  This is the case with Muse tag functions."
   `(progn
      (goto-char ,beg)
      (cond ((not (bolp)) (insert "\n\n"))
            ((eq (point) (point-min)) nil)
            ((prog2 (backward-char) (bolp) (forward-char)) nil)
            (t (insert "\n")))
-     (setq ,beg (point))))
+     (unless (and (bolp) (eolp))
+       (insert "\n")
+       (backward-char))
+     (setq ,beg (point))
+     (when (markerp ,end)
+       (goto-char ,end)
+       (unless (and (bolp) (eolp))
+         (insert-before-markers "\n")))
+     (goto-char ,beg)))
 
 ;;;###autoload
 (defun muse-publish-region (beg end &optional title style)
@@ -1255,10 +1270,15 @@ The following contexts exist in Muse.
           ;; same type
           (replace-match "" t t nil 1))
       (save-restriction
-        (narrow-to-region beg (point))
         ;; narrow to current item
+        (narrow-to-region beg (point))
+        ;; move to second line of text
         (goto-char (point-min))
+        (while (and (< (point) (point-max))
+                    (looking-at empty-line))
+          (forward-line 1))
         (forward-line 1)
+        ;; strip list indentation
         (muse-publish-strip-list-indentation list-item empty-line
                                              indent post-indent)
         (skip-chars-backward (concat muse-regexp-blank "\n"))
@@ -1660,7 +1680,7 @@ of link, the cadr is the page name, and the cddr is the anchor."
                    muse-publish-contents-depth)))))
 
 (defun muse-publish-verse-tag (beg end)
-  (muse-publish-ensure-block beg)
+  (muse-publish-ensure-block beg end)
   (save-excursion
     (save-restriction
       (narrow-to-region beg end)
@@ -1747,7 +1767,7 @@ This is usually applied to explicit links."
   (muse-publish-example-tag beg end))
 
 (defun muse-publish-example-tag (beg end)
-  (muse-publish-ensure-block beg)
+  (muse-publish-ensure-block beg end)
   (muse-publish-escape-specials beg end nil 'example)
   (goto-char beg)
   (insert (muse-markup-text 'begin-example))
