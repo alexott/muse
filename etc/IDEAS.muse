@@ -22,21 +22,12 @@ checked out at some point.
    - dds-emphasis-bits.el
      - New syntax for explicitly specifying emphasis:
        {[_-=*] some emphasized text}.
+       Also, {** some text **} and {*** some text ***} should work.
      - Using -strike- to do strikethrough.
-
-** Just after the 3.03 release
-
- - Markus Hoenicka (markus.hoenicka AT mhoenicka.de)
-   - <cite> tag, which is for refDB and BibTeX both:
-     http://refdb.sourceforge.net/pre/muse-cite.patch
-
- - Jean Jean Magnan de Bornier (jean AT bornier.net)
-   - ConTeX support (similar to LaTeX):
-     http://jm.bornier.free.fr/muse.html
 
 * Ideas without code
 
-** After 3.03 release
+** After 3.10 release
 
 None of these ideas has been finalized yet.
 
@@ -60,11 +51,3 @@ somewhat.
 
  - Take markup features from phpBB and make a format out of it.  This
    could interest the forum crowd in our work.
-
-*** Markup extensions
-
- - Implement overstrike support, possibly by markup like "{-text-}",
-   as suggested by David D. Smith (dds).  It might also be good to
-   extend this to "{*text*}", "{**text**}", and "{=text=}" for times
-   when the normal markup symbols are ambiguous (i.e., math
-   equations).

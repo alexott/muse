@@ -8,6 +8,10 @@ John Wiegley: Original author
 
 Michael Olson: Current maintainer
 
+Jean Magnan de Bornier: Author of muse-context.el,
+                        Contributor
+                        (assigned past and future changes)
+
 Trent Buck: Contributor:
              - muse-latex.el: 4 lines changed
 
@@ -33,6 +37,9 @@ Bastien Guerry: Contributor
 Yann Hodique: Author of muse-wiki.el,
               Contributor
               (assigned past and future changes)
+
+Markus Hoenicka: Contributor
+                 (assigned past and future changes)
 
 Andrew J. Korty: Author of muse-groff.el
                  (assigned past and future changes)
