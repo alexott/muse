@@ -52,20 +52,19 @@
   :type 'string
   :group 'muse-context)
 
-(defcustom muse-context-pdf-cruft '(".aux" ".toc" ".out" ".log")
+(defcustom muse-context-pdf-cruft '(".pgf" ".tmp" ".tui" ".tuo" ".toc"  ".log")
   "Extensions of files to remove after generating PDF output successfully."
   :type 'string
   :group 'muse-context)
 
 (defcustom muse-context-header
-  "\\starttext
-\\setupinteraction [state=start]
+  "\\setupinteraction [state=start]
 \\usemodule[tikz]
-\\usetikzlibrary[arrows,snakes,backgrounds]
 \\usemodule[bib]\n
 <lisp>(muse-context-setup-bibliography)</lisp>
  \\setuppublications[]\n
 \\setuppublicationlist[]\n\\setupcite[]\n
+\\starttext
 \\startalignment[center]
   \\blank[2*big]
     {\\tfd <lisp>(muse-publishing-directive \"title\")</lisp>}
@@ -157,8 +156,8 @@ For more on the structure of this list, see
     (end-more-emph   . "}")
     (begin-most-emph . "{\\bf {\\em ")
     (end-most-emph   . "}}")
-    (begin-example   . "\\startquotation\n\\type{")
-    (end-example     . "}\n\\stopquotation")
+    (begin-example   . "\\starttyping")
+    (end-example     . "\\stoptyping")
     (begin-center    . "\\startalignment[center]\n")
     (end-center      . "\n\\stopalignment")
     (begin-quote     . "\\startquotation\n")

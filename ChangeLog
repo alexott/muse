@@ -1,3 +1,14 @@
+2007-07-27  Jean Magnan de Bornier  <jean@bornier.net>
+
+	* lisp/muse-context.el (muse-context-header): Put
+	starttext after the modules who must be in preamble.
+	(muse-context-markup-strings): Fixed mistake in begin-example and
+	end-example.
+
+	* lisp/muse-latex2png.el (muse-publish-math-tag): Replaced the
+	math environment in ConTeXt when centered: "$$ $$" has to be
+	"\startformula \stopformula".
+
 2007-07-26  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-xml-common.el (muse-xml-escape-url): Do not escape

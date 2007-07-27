@@ -232,11 +232,11 @@ be centered in the published output (among other things)."
                           (setq beg (point)))))
          (tag-beg (if centered
                       (if (muse-style-derived-p "context")
-                          "$$" "\\[ ")
+                          "\\startformula " "\\[ ")
                     "$"))
          (tag-end (if centered
                       (if (muse-style-derived-p "context")
-                          "$$" " \\]")
+                          " \\stopformula" " \\]")
                     "$"))
          (attrs (nconc (list (cons "prefix"
                                    (concat "latex2png-" (muse-page-name))))
