@@ -1270,10 +1270,15 @@ The following contexts exist in Muse.
           ;; same type
           (replace-match "" t t nil 1))
       (save-restriction
-        (narrow-to-region beg (point))
         ;; narrow to current item
+        (narrow-to-region beg (point))
+        ;; move to second line of text
         (goto-char (point-min))
+        (while (and (< (point) (point-max))
+                    (looking-at empty-line))
+          (forward-line 1))
         (forward-line 1)
+        ;; strip list indentation
         (muse-publish-strip-list-indentation list-item empty-line
                                              indent post-indent)
         (skip-chars-backward (concat muse-regexp-blank "\n"))

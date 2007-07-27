@@ -1,3 +1,8 @@
+2007-07-27  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-surround-text): Fix bug
+	involving list items that have an extra blank line in front.
+
 2007-07-27  Jean Magnan de Bornier  <jean@bornier.net>
 
 	* lisp/muse-context.el (muse-context-header): Put
