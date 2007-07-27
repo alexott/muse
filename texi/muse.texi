@@ -179,9 +179,9 @@ available on-line.
 @comment  node-name,  next,  previous,  up
 @chapter What is Muse?
 
-Emacs Muse is an authoring and publishing environment for Emacs.  It
-simplifies the process of writing documents and publishing them to
-various output formats.
+Emacs Muse (also known as ``Muse'' or ``Emacs-Muse'') is an authoring
+and publishing environment for Emacs.  It simplifies the process of
+writing documents and publishing them to various output formats.
 
 Muse consists of two main parts: an enhanced text-mode for authoring
 documents and navigating within Muse projects, and a set of publishing
