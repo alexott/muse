@@ -922,7 +922,7 @@ The standard Muse keybindings for editing lists are also provided."
   :init-value nil
   :lighter ""
   :keymap muse-list-edit-minor-mode-map
-  :global t
+  :global nil
   :group 'muse-mode
   (if (not muse-list-edit-minor-mode)
       ;; deactivate
