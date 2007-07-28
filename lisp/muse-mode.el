@@ -143,6 +143,8 @@ index at intervals."
 
     map))
 
+;;; Muse mode
+
 (defvar muse-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [(control ?c) (control ?a)] 'muse-index)
@@ -197,8 +199,6 @@ index at intervals."
     map)
   "Keymap used by Emacs Muse mode.")
 
-;; Code:
-
 ;;;###autoload
 (define-derived-mode muse-mode text-mode "Muse"
   "Muse is an Emacs mode for authoring and publishing documents.
@@ -225,13 +225,13 @@ index at intervals."
       (add-to-list 'fill-nobreak-predicate
                    'muse-mode-fill-nobreak-p)))
   ;; Make fill work nicely with item lists
-  (set (make-local-variable 'adaptive-fill-regexp)
-       (concat "\\s-+\\(-\\|[0-9]+\\.\\)\\s-+\\|\\[[0-9]+\\]\\s-*"
-               "\\|.*\\s-*::\\s-+\\|\\s-*"))
-  (set (make-local-variable 'paragraph-start)
-       (concat paragraph-start
-               "\\|\\s-+\\(-\\|[0-9]+\\.\\)\\s-+\\|\\[[0-9]+\\]\\s-*"
-               "\\|.*\\s-*::\\s-+"))
+  (let ((regexp (concat "\\s-+\\(-\\|[0-9]+\\.\\)\\s-+"
+                        "\\|\\[[0-9]+\\]\\s-*"
+                        "\\|.*\\s-*::\\s-+")))
+    (set (make-local-variable 'adaptive-fill-regexp)
+         (concat regexp "\\|\\s-*"))
+    (set (make-local-variable 'paragraph-start)
+         (concat paragraph-start "\\|" regexp)))
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
        "; ")
@@ -856,5 +856,106 @@ function, you might want to set this manually.")
     (when (nth 1 tag-entry)
       (insert (concat "\n\n</" tag ">\n"))
       (forward-line -2))))
+
+;;; Muse list edit minor mode
+
+(defvar muse-list-edit-minor-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [(meta return)] 'muse-l-e-m-m-insert-list-item)
+    (define-key map [(control ?>)] 'muse-l-e-m-m-i-list-item-indentation)
+    (define-key map [(control ?<)] 'muse-l-e-m-m-d-list-item-indentation)
+
+    map)
+  "Keymap used by Muse list edit minor mode.")
+
+(defvar muse-l-e-m-m-list-item-regexp
+  (concat "^%s\\(\\([^\n" muse-regexp-blank "].*?\\)?::"
+          "\\(?:[" muse-regexp-blank "]+\\|$\\)"
+          "\\|[" muse-regexp-blank "]?[-*+][" muse-regexp-blank "]*"
+          "\\|[" muse-regexp-blank "][0-9]+\\.[" muse-regexp-blank "]*\\)")
+  "Regexp used to match the beginning of a list item.
+This is used by `muse-list-edit-minor-mode'.
+The '%s' will be replaced with a whitespace regexp when publishing.")
+
+(defun muse-l-e-m-m-insert-list-item ()
+  "See `muse-insert-list-item' for documentation."
+  (interactive)
+  (let ((muse-list-item-regexp muse-l-e-m-m-list-item-regexp))
+    (call-interactively 'muse-insert-list-item)))
+
+(defun muse-l-e-m-m-i-list-item-indentation ()
+  "See `muse-increase-list-item-indentation' for documentation."
+  (interactive)
+  (let ((muse-list-item-regexp muse-l-e-m-m-list-item-regexp))
+    (call-interactively 'muse-increase-list-item-indentation)))
+
+(defun muse-l-e-m-m-d-list-item-indentation ()
+  "See `muse-decrease-list-item-indentation' for documentation."
+  (interactive)
+  (let ((muse-list-item-regexp muse-l-e-m-m-list-item-regexp))
+    (call-interactively 'muse-decrease-list-item-indentation)))
+
+(defvar muse-l-e-m-m-data nil
+  "A list of data that was changed by Muse list edit minor mode.")
+(make-variable-buffer-local 'muse-l-e-m-m-data)
+
+;;;###autoload
+(define-minor-mode muse-list-edit-minor-mode
+  "This is a global minor mode for editing files with lists.
+It is meant to be used with other major modes, and not with Muse mode.
+
+Interactively, with no prefix argument, toggle the mode.
+With universal prefix ARG turn mode on.
+With zero or negative ARG turn mode off.
+
+This recognizes not only Muse-style lists, which use the \"-\"
+character or numbers, but also lists that use asterisks or plus
+signs.  This should make the minor mode generally useful.
+
+Definition lists and footnotes are also recognized.
+
+Note that list items may omit leading spaces, for compatibility
+with modes that set `left-margin', such as
+`debian-changelog-mode'.
+
+The standard Muse keybindings for editing lists are also provided."
+  :init-value nil
+  :lighter ""
+  :keymap muse-list-edit-minor-mode-map
+  :global t
+  :group 'muse-mode
+  (if (not muse-list-edit-minor-mode)
+      ;; deactivate
+      (when muse-l-e-m-m-data
+        (setq adaptive-fill-regexp (cdr (assoc "a-f-r" muse-l-e-m-m-data))
+              paragraph-start (cdr (assoc "p-s" muse-l-e-m-m-data))
+              fill-prefix (cdr (assoc "f-p" muse-l-e-m-m-data)))
+        (setq muse-l-e-m-m-data nil))
+    ;; activate
+    (unless muse-l-e-m-m-data
+      ;; save previous fill-related data so we can restore it later
+      (setq muse-l-e-m-m-data
+            (list (cons "a-f-r" adaptive-fill-regexp)
+                  (cons "p-s" paragraph-start)
+                  (cons "f-p" fill-prefix))))
+    ;; make fill work nicely with item lists
+    (let ((regexp (concat "\\s-*\\([-*+]\\|[0-9]+\\.\\)\\s-+"
+                          "\\|\\[[0-9]+\\]\\s-*"
+                          "\\|.*\\s-*::\\s-+")))
+      (set (make-local-variable 'adaptive-fill-regexp)
+           (concat regexp "\\|\\s-*"))
+      (set (make-local-variable 'paragraph-start)
+           (concat paragraph-start "\\|" regexp)))
+    ;; force fill-prefix to be nil, because if it is a string that has
+    ;; initial spaces, it messes up fill-paragraph's algorithm
+    (set (make-local-variable 'fill-prefix) nil)))
+
+(defun turn-on-muse-list-edit-minor-mode ()
+  "Unconditionally turn on Muse list edit minor mode."
+  (muse-list-edit-minor-mode 1))
+
+(defun turn-off-muse-list-edit-minor-mode ()
+  "Unconditionally turn off Muse list edit minor mode."
+  (muse-list-edit-minor-mode -1))
 
 ;;; muse-mode.el ends here

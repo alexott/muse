@@ -2,6 +2,25 @@
 
 	* lisp/muse-mode.el (muse-browse-result): Set
 	muse-current-output-style.
+	(muse-mode): Don't duplicate the paragraph-start regexp
+	unnecessarily.
+	(muse-list-edit-minor-mode-map): New variable containing the
+	keymap for Muse list edit minor mode.
+	(muse-l-e-m-m-list-item-regexp): New variable that matches list
+	items for Muse list edit minor mode.
+	(muse-l-e-m-m-insert-list-item,
+	muse-l-e-m-m-i-list-item-indentation)
+	(muse-l-e-m-m-d-list-item-indentation): Variants of existing list
+	item functions that change the list item regexp before calling the
+	existing function.
+	(muse-l-e-m-m-data): New variable that keeps track of the fill
+	data that we overwrite when activating Muse list edit minor mode,
+	so that we can restore it if the minor mode is toggled off.
+	(muse-list-edit-minor-mode): New minor mode that is useful for
+	editing lists in other major modes.
+	(turn-on-muse-list-edit-minor-mode)
+	(turn-off-muse-list-edit-minor-mode): New interactive functions
+	that turn Muse list edit minor mode on and off, respectively.
 
 	* lisp/muse-project.el (muse-project-publish-this-file): Set
 	muse-current-output-style.  This fixes a bug when publishing to a
