@@ -1,3 +1,10 @@
+2007-07-28  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): If the
+	project argument is nil, default to the current project instead of
+	the first project entry in muse-project-alist.  This seems much
+	more sane to me.
+
 2007-07-27  Michael Olson  <mwolson@gnu.org>
 
 	* AUTHORS: Add new authors.
