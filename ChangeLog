@@ -21,6 +21,8 @@
 	(turn-on-muse-list-edit-minor-mode)
 	(turn-off-muse-list-edit-minor-mode): New interactive functions
 	that turn Muse list edit minor mode on and off, respectively.
+	(muse-on-blank-line, muse-get-paragraph-start): Simplify some
+	regexps.
 
 	* lisp/muse-project.el (muse-project-publish-this-file): Set
 	muse-current-output-style.  This fixes a bug when publishing to a
@@ -31,6 +33,12 @@
 	project argument is nil, default to the current project instead of
 	the first project entry in muse-project-alist.  This seems much
 	more sane to me.
+
+	* lisp/muse.el (muse-forward-list-item): Only check the 'face
+	property if we are in Muse mode or one of its derivatives.  This
+	allows movement on nested lists to work in other modes, and fixes
+	an issue with altering list indentation in
+	muse-list-edit-minor-mode.
 
 2007-07-27  Michael Olson  <mwolson@gnu.org>
 
