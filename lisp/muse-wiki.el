@@ -226,7 +226,8 @@ this."
 
 If PAGE is not specified, use the value of :default in PROJECT.
 
-If PROJECT is not specified, default to first project of
+If PROJECT is not specified, default to the current project.  If
+no project is current, use the first project of
 `muse-projects-alist'.
 
 Note that PAGE can have several output directories.  If this is
@@ -236,6 +237,7 @@ style has the same link suffix as the current publishing style,
 use the first style we find."
   (setq project (or (and project
                          (muse-project project))
+                    (muse-project)
                     (car muse-project-alist))
         page (or page (muse-get-keyword :default
                                         (cadr project))))
