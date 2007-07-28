@@ -301,13 +301,13 @@ This is used to keep links from being improperly colorized by flyspell."
   "See if point is on a blank line"
   (save-excursion
     (beginning-of-line)
-    (looking-at (concat "[" muse-regexp-blank "]?[\n]+"))))
+    (looking-at (concat "[" muse-regexp-blank "]*$"))))
 
 (defun muse-get-paragraph-start ()
   "Return the start of the current paragraph. This function will
 return nil if there are no prior paragraphs and the beginning of
 the line if point is on a blank line."
-  (let ((para-start (concat "[\n]+[" muse-regexp-blank "]?[\n]+")))
+  (let ((para-start (concat "^[" muse-regexp-blank "]*$")))
     ;; search back to start of paragraph
     (save-excursion
       (save-match-data
