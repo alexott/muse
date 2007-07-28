@@ -1,5 +1,13 @@
 2007-07-28  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-mode.el (muse-browse-result): Set
+	muse-current-output-style.
+
+	* lisp/muse-project.el (muse-project-publish-this-file): Set
+	muse-current-output-style.  This fixes a bug when publishing to a
+	style that is not first in the list of styles.  Thanks to Jean
+	Magnan de Bornier for the report.
+
 	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): If the
 	project argument is nil, default to the current project instead of
 	the first project entry in muse-project-alist.  This seems much

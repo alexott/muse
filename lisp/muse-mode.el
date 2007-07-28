@@ -578,9 +578,11 @@ in `muse-project-alist'."
                                             (cddr muse-current-project))
          current-prefix-arg))
   (setq style (muse-style style))
-  (let ((result-path
-         (muse-publish-output-file buffer-file-name
-                                   (muse-style-element :path style) style)))
+  (let* ((output-dir (muse-style-element :path style))
+         (result-path (muse-publish-output-file buffer-file-name output-dir
+                                                style))
+         (muse-current-output-style (list :base (car style)
+                                          :path output-dir)))
     (if (not (file-readable-p result-path))
         (error "Cannot open output file '%s'" result-path)
       (if other-window

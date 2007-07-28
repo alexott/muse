@@ -739,7 +739,9 @@ If FORCE is given, publish the file even if it is up-to-date."
   (interactive (list current-prefix-arg))
   (let* ((style (muse-project-get-applicable-style
                 buffer-file-name (cddr muse-current-project)))
-         (output-dir (muse-style-element :path style)))
+         (output-dir (muse-style-element :path style))
+         (muse-current-output-style (list :base (car style)
+                                          :path output-dir)))
     (unless (muse-publish-file buffer-file-name style output-dir force)
       (message (concat "The published version is up-to-date; use"
                        " C-u C-c C-t to force an update.")))))
