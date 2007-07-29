@@ -127,7 +127,7 @@ For more on the structure of this list, see
     (emdash          . "---")
     (comment-begin   . "\\doifmode{comment}{")
     (comment-end     . "}")
-    (rule            . "\\bigskip")
+    (rule            . "\\blank[medium]\\hrule\\blank[medium]")
     (no-break-space  . "~")
     (enddots         . "\\ldots ")
     (dots            . "\\dots ")
@@ -175,7 +175,11 @@ For more on the structure of this list, see
     (begin-dl        . "\\startitemize\n")
     (end-dl          . "\n\\stopitemize")
     (begin-ddt       . "\\head ")
-    (end-ddt         . "\n"))
+    (end-ddt         . "\n")
+    (begin-verse     . "\\blank[big]")
+    (end-verse-line  . "\\par")
+    (verse-space     . "\\fixedspaces ~~")
+    (end-verse       . "\\blank[big]"))
   "Strings used for marking up text.
 These cover the most basic kinds of markup, the handling of which
 differs little between the various styles."
@@ -242,18 +246,7 @@ need to be escaped."
   :group 'muse-context)
 
 (defcustom muse-context-markup-specials-literal
-  '((?\n . "\\\n")
-    (?_  . "\\textunderscore")
-    (?\< . "\\switchtobodyfont[small]")
-    (?\> . "\\switchtobodyfont[big]")
-    (?^  . "\\type{^}")
-    (?\~ . "\\type{~}")
-    (?\$ . "\\type{$}")
-    (?\% . "\\type{%}")
-    (?\{ . "\\type{{}")
-    (?\} . "\\type{}}")
-    (?\& . "\\type{&}")
-    (?\# . "\\type{#}"))
+  '()
   "A table of characters which must be represented specially.
 This applies to =monospaced text= and <code> regions."
   :type '(alist :key-type character :value-type string)

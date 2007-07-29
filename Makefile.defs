@@ -8,8 +8,8 @@ SITEFLAG = --no-site-file
 
 # Installation options
 # PREFIX is only used here.
-PREFIX   = /usr/local
-ELISPDIR = $(PREFIX)/share/emacs/site-lisp/muse
+PREFIX   = /home/jean/.emacs.d/lisp
+ELISPDIR = $(PREFIX)/muse
 INFODIR  = $(PREFIX)/info
 
 # Command to use to install the Info dir entry
@@ -23,13 +23,8 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 # Useful only for the maintainer
 PROJECT     = muse
 DEBNAME     = muse-el
-VERSION     = 3.03
+VERSION     = 3.02.93.arch.265
 MANUAL      = muse
 LASTUPLOAD  = 3.02.8-1
 BUILDOPTS   =
 DISTRIBUTOR = debian
-
-# Location of Emacs Lisp Package Archive entries
-ELPADIR  = ../../elpa
-# Description of ELPA package
-ELPADESC = Authoring and publishing tool
