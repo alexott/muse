@@ -1290,6 +1290,14 @@ The following contexts exist in Muse.
         (when continue
           (goto-char (point-max)))))))
 
+(defun muse-publish-ensure-blank-line ()
+  "Make sure that a blank line exists on the line before point."
+  (save-excursion
+    (beginning-of-line)
+    (cond ((eq (point) (point-min)) nil)
+          ((prog2 (backward-char) (bolp) (forward-char)) nil)
+          (t (insert "\n")))))
+
 (defun muse-publish-markup-list ()
   "Markup a list entry.
 This function works by marking up items of the same list level
@@ -1306,8 +1314,7 @@ and type, respecting the end-of-list property."
      ((eq type 'ul)
       (unless (eq (char-after (match-end 1)) ?-)
         (delete-region (match-beginning 0) (match-end 0))
-        (let ((beg (point)))
-          (muse-publish-ensure-block beg))
+        (muse-publish-ensure-blank-line)
         (muse-insert-markup (muse-markup-text 'begin-uli))
         (save-excursion
           (muse-publish-surround-text
@@ -1320,8 +1327,7 @@ and type, respecting the end-of-list property."
         (forward-line 1)))
      ((eq type 'ol)
       (delete-region (match-beginning 0) (match-end 0))
-      (let ((beg (point)))
-        (muse-publish-ensure-block beg))
+      (muse-publish-ensure-blank-line)
       (muse-insert-markup (muse-markup-text 'begin-oli))
       (save-excursion
         (muse-publish-surround-text
@@ -1335,8 +1341,7 @@ and type, respecting the end-of-list property."
      ((not (string= (match-string 2) ""))
       ;; must have an initial term
       (goto-char (match-beginning 0))
-      (let ((beg (point)))
-        (muse-publish-ensure-block beg))
+      (muse-publish-ensure-blank-line)
       (muse-insert-markup (muse-markup-text 'begin-dl))
       (save-excursion
         (muse-publish-surround-dl indent post-indent)
