@@ -1,4 +1,4 @@
-2007-07-29  cordier   <jean@bornier.net>
+2007-07-29  Jean Magnan de Bornier  <jean@bornier.net>
 
 	* lisp/muse-latex.el (muse-latex-markup-strings): Change rule
 	command which did not work correctly
