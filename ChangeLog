@@ -1,3 +1,12 @@
+2007-07-29  cordier   <jean@bornier.net>
+
+	* lisp/muse-latex.el (muse-latex-markup-strings): Change rule
+	command which did not work correctly
+
+	* lisp/muse-context.el (muse-context-markup-strings): Change rule
+	command which did not work correctly; defined verse commands
+	(muse-context-markup-specials-literal): Eliminate all unuseful entries
+
 2007-07-29  Michael Olson  <mwolson@gnu.org>
 
 	* contrib/httpd.el (httpd-send-file): Use

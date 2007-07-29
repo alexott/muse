@@ -229,7 +229,7 @@ For more on the structure of this list, see
     (anchor          . "\\label{%s}")
     (emdash          . "---")
     (comment-begin   . "% ")
-    (rule            . "\\bigskip")
+    (rule            . "\\vspace{.5cm}\\hrule\\vspace{.5cm}")
     (no-break-space  . "~")
     (enddots         . "\\ldots{}")
     (dots            . "\\dots{}")
