@@ -52,6 +52,7 @@
 	definition list item bug.
 	(muse-publish-markup-list): Since people do seem to want
 	definition lists with no terms, allow this.
+	(muse-batch-publish-files): Set muse-current-output-style.
 
 	* lisp/muse.el (muse-with-temp-buffer): Mention
 	`insert-file-contents-literally'.
