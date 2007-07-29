@@ -443,7 +443,8 @@ For more on the structure of this list, see
                                                 nil 'document)
                   (setq qotd (buffer-substring-no-properties
                               (point-min) (point-max))))
-                (delete-region tag-beg end))))
+                (delete-region tag-beg end)
+                (set-marker end nil))))
           (setq text (buffer-string))
           (delete-region (point-min) (point-max))
           (let ((entry muse-journal-html-entry-template))

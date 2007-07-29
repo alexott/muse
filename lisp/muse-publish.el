@@ -941,7 +941,8 @@ This function returns the matching attribute value, if found."
                 (nconc args (list attrs)))
             (let ((muse-inhibit-style-tags nil))
               ;; remove the inhibition
-              (apply (nth 4 tag-info) args)))))))
+              (apply (nth 4 tag-info) args)))
+          (set-marker end nil)))))
   nil)
 
 (defun muse-publish-escape-specials (beg end &optional ignore-read-only context)
@@ -1026,7 +1027,8 @@ The following contexts exist in Muse.
           (setq beg (point))
           (when mark-read-only
             (muse-publish-escape-specials beg end t context)
-            (muse-publish-mark-read-only beg end)))
+            (muse-publish-mark-read-only beg end))
+          (set-marker end nil))
       (backward-char))
     nil))
 
@@ -1135,7 +1137,8 @@ The following contexts exist in Muse.
                   (aset muse-publish-footnotes footnote footnotemark))))
             (goto-char end)
             (skip-chars-forward "\n")
-            (delete-region start (point)))))
+            (delete-region start (point))
+            (set-marker end nil))))
       (if footnotemark
           (muse-insert-markup footnotemark)
         (insert oldtext))))))
@@ -1819,7 +1822,8 @@ If attributes ATTRS are given, pass them to the tag function."
              (muse-inhibit-style-tags nil))
         (when (nth 2 tag-info)
           (nconc args (list attrs)))
-        (apply (nth 4 tag-info) args)))))
+        (apply (nth 4 tag-info) args)
+        (set-marker end nil)))))
 
 (defun muse-publish-examplify-buffer (&optional attrs)
   "Transform the current buffer as if it were an <example> region."

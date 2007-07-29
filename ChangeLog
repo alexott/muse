@@ -1,3 +1,19 @@
+2007-07-29  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-import-latex.el (muse-import-latex): Set marker to
+	nowhere when done, since they can slow things down.
+
+	* lisp/muse-journal.el (muse-journal-html-munge-buffer): Set
+	marker to nowhere when done, since they can slow things down.
+
+	* lisp/muse-poem.el (muse-poem-markup-tag): Set marker to nowhere
+	when done, since they can slow things down.
+
+	* lisp/muse-publish.el (muse-publish-markup-tag)
+	(muse-publish-markup-word, muse-publish-markup-footnote)
+	(muse-publish-call-tag-on-buffer): Set markers to nowhere when
+	done, since they can slow things down.
+
 2007-07-28  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-mode.el (muse-browse-result): Set
