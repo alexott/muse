@@ -1,3 +1,52 @@
+2007-07-29  Michael Olson  <mwolson@gnu.org>
+
+	* contrib/httpd.el (httpd-send-file): Use
+	insert-file-contents-literally instead of insert-file-contents.
+
+	* examples/mwolson/muse-init.el (my-muse-prepare-entry-for-xanga):
+	Use insert-file-contents-literally instead of
+	insert-file-contents.
+
+	* experimental/muse-split.el (muse-publish-file)
+	(muse-publish-presplit-publish, muse-publish-no-split-function)
+	(muse-journal-split-by-entry, muse-journal-split-by-month): Use
+	insert-file-contents-literally instead of insert-file-contents.
+
+	* lisp/muse-book.el (muse-book-publish-chapter)
+	(muse-book-get-directives): Use insert-file-contents-literally
+	instead of insert-file-contents.
+
+	* lisp/muse-http.el (muse-http-render-page): Use
+	insert-file-contents-literally instead of insert-file-contents.
+
+	* lisp/muse-import-latex.el (muse-import-latex): Set marker to
+	nowhere when done, since they can slow things down.
+
+	* lisp/muse-journal.el (muse-journal-html-munge-buffer): Set
+	marker to nowhere when done, since they can slow things down.
+
+	* lisp/muse-poem.el (muse-poem-markup-tag): Set marker to nowhere
+	when done, since they can slow things down.  Use
+	insert-file-contents-literally instead of insert-file-contents.
+
+	* lisp/muse-publish.el (muse-publish-markup-tag)
+	(muse-publish-markup-word, muse-publish-markup-footnote)
+	(muse-publish-call-tag-on-buffer): Set markers to nowhere when
+	done, since they can slow things down.
+	(muse-insert-file-or-string, muse-publish-file)
+	(muse-publish-include-tag, muse-published-contents): Use
+	insert-file-contents-literally instead of insert-file-contents.
+	(muse-publish-surround-dl): Remove unused variable.  Track whether
+	a term has been found, and handle that case well.
+	(muse-publish-ensure-blank-line): Use a marker, so that we don't
+	lose our place when adding a newline.  This really fixes the
+	definition list item bug.
+	(muse-publish-markup-list): Since people do seem to want
+	definition lists with no terms, allow this.
+
+	* lisp/muse.el (muse-with-temp-buffer): Mention
+	`insert-file-contents-literally'.
+
 2007-07-28  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-mode.el (muse-browse-result): Set

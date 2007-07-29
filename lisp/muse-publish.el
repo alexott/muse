@@ -545,7 +545,8 @@ to the text with ARGS as parameters."
     (if (and (not (string-equal file-or-string ""))
              (not (string-match "\n" file-or-string))
              (file-readable-p file-or-string))
-        (setq end (+ beg (cadr (insert-file-contents file-or-string))))
+        (setq end (+ beg
+                     (cadr (insert-file-contents-literally file-or-string))))
       (insert file-or-string)
       (setq end (point)))
     (save-restriction
@@ -783,7 +784,7 @@ the file is published no matter what."
                     muse-publish-report-threshhold))
             (message "Publishing %s ..." file))
         (muse-with-temp-buffer
-          (insert-file-contents file)
+          (insert-file-contents-literally file)
           (muse-publish-markup-buffer (muse-page-name file) style)
           (let ((backup-inhibited t))
             (write-file output-path))
@@ -941,7 +942,8 @@ This function returns the matching attribute value, if found."
                 (nconc args (list attrs)))
             (let ((muse-inhibit-style-tags nil))
               ;; remove the inhibition
-              (apply (nth 4 tag-info) args)))))))
+              (apply (nth 4 tag-info) args)))
+          (set-marker end nil)))))
   nil)
 
 (defun muse-publish-escape-specials (beg end &optional ignore-read-only context)
@@ -1026,7 +1028,8 @@ The following contexts exist in Muse.
           (setq beg (point))
           (when mark-read-only
             (muse-publish-escape-specials beg end t context)
-            (muse-publish-mark-read-only beg end)))
+            (muse-publish-mark-read-only beg end))
+          (set-marker end nil))
       (backward-char))
     nil))
 
@@ -1135,7 +1138,8 @@ The following contexts exist in Muse.
                   (aset muse-publish-footnotes footnote footnotemark))))
             (goto-char end)
             (skip-chars-forward "\n")
-            (delete-region start (point)))))
+            (delete-region start (point))
+            (set-marker end nil))))
       (if footnotemark
           (muse-insert-markup footnotemark)
         (insert oldtext))))))
@@ -1174,14 +1178,16 @@ The following contexts exist in Muse.
          (beg-dde (muse-markup-text 'begin-dde)) ;; definition
          (end-dde (muse-markup-text 'end-dde))
          (continue t)
-         def-on-same-line beg)
+         (no-terms t)
+         beg)
     (while continue
       ;; envelope this as one term+definitions unit -- HTML does not
       ;; need this, but DocBook and Muse's custom XML format do
       (muse-insert-markup beg-item)
       (when (looking-at muse-dl-term-regexp)
         ;; find the term and wrap it with published markup
-        (setq beg (point))
+        (setq beg (point)
+              no-terms nil)
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup-end-list end-ddt)
@@ -1192,6 +1198,15 @@ The following contexts exist in Muse.
           (goto-char beg)
           (delete-region (point) (match-beginning 1))
           (muse-insert-markup beg-ddt)))
+      ;; handle pathological edge case where there is no term -- I
+      ;; would prefer to just disallow this, but people seem to want
+      ;; this behavior
+      (when (and no-terms
+                 (looking-at (concat "[" muse-regexp-blank "]*::"
+                                     "[" muse-regexp-blank "]*")))
+        (delete-region (point) (match-end 0))
+        ;; but only do this once
+        (setq no-terms nil))
       (setq beg (point)
             ;; move past current item
             continue (muse-forward-list-item 'dl-term indent))
@@ -1292,11 +1307,13 @@ The following contexts exist in Muse.
 
 (defun muse-publish-ensure-blank-line ()
   "Make sure that a blank line exists on the line before point."
-  (save-excursion
+  (let ((pt (point-marker)))
     (beginning-of-line)
     (cond ((eq (point) (point-min)) nil)
           ((prog2 (backward-char) (bolp) (forward-char)) nil)
-          (t (insert "\n")))))
+          (t (insert-before-markers "\n")))
+    (goto-char pt)
+    (set-marker pt nil)))
 
 (defun muse-publish-markup-list ()
   "Markup a list entry.
@@ -1338,8 +1355,7 @@ and type, respecting the end-of-list property."
          indent post-indent)
         (muse-insert-markup-end-list (muse-markup-text 'end-oli)))
       (forward-line 1))
-     ((not (string= (match-string 2) ""))
-      ;; must have an initial term
+     (t
       (goto-char (match-beginning 0))
       (muse-publish-ensure-blank-line)
       (muse-insert-markup (muse-markup-text 'begin-dl))
@@ -1819,7 +1835,8 @@ If attributes ATTRS are given, pass them to the tag function."
              (muse-inhibit-style-tags nil))
         (when (nth 2 tag-info)
           (nconc args (list attrs)))
-        (apply (nth 4 tag-info) args)))))
+        (apply (nth 4 tag-info) args)
+        (set-marker end nil)))))
 
 (defun muse-publish-examplify-buffer (&optional attrs)
   "Transform the current buffer as if it were an <example> region."
@@ -1970,7 +1987,7 @@ explanation of how it works."
                         (file-name-directory muse-publishing-current-file)))
       (error "No file attribute specified in <include> tag"))
     (muse-publish-markup-attribute beg end attrs t
-      (insert-file-contents filename))))
+      (insert-file-contents-literally filename))))
 
 (defun muse-publish-mark-up-tag (beg end attrs)
   "Run an Emacs Lisp function on the region delimted by this tag.
@@ -2045,7 +2062,7 @@ The text is removed regardless of whether and part of it is uppercase."
 (defun muse-published-contents (file)
   (when (file-readable-p file)
     (muse-with-temp-buffer
-      (insert-file-contents file)
+      (insert-file-contents-literally file)
       (muse-published-buffer-contents (current-buffer)))))
 
 (defun muse-publish-transform-output

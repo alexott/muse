@@ -256,8 +256,9 @@ All this means is that certain extensions, like .gz, are removed."
   "Create a temporary buffer, and evaluate BODY there like `progn'.
 See also `with-temp-file' and `with-output-to-string'.
 
-Unlike `with-temp-buffer', this will never attempt to save the temp buffer.
-It is meant to be used along with `insert-file-contents'.
+Unlike `with-temp-buffer', this will never attempt to save the
+temp buffer.  It is meant to be used along with
+`insert-file-contents' or `insert-file-contents-literally'.
 
 Additionally, if `debug-on-error' is set to t, keep the buffer
 around for debugging purposes rather than removing it."

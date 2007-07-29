@@ -205,7 +205,7 @@ The form of usage is:
       (setq beg (point))
       (insert
        (muse-with-temp-buffer
-         (insert-file-contents page)
+         (insert-file-contents-literally page)
          (goto-char (point-min))
          (if (assoc "nohead" attrs)
              (progn
@@ -224,7 +224,8 @@ The form of usage is:
         (forward-line 2))
       (while (< (point) end)
         (insert "> ")
-        (forward-line 1)))))
+        (forward-line 1))
+      (set-marker end nil))))
 
 (add-to-list 'muse-publish-markup-tags muse-poem-tag)
 
