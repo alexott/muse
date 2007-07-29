@@ -205,7 +205,7 @@ The form of usage is:
       (setq beg (point))
       (insert
        (muse-with-temp-buffer
-         (insert-file-contents page)
+         (insert-file-contents-literally page)
          (goto-char (point-min))
          (if (assoc "nohead" attrs)
              (progn

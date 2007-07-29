@@ -205,7 +205,7 @@ If FILE is not specified, use the published version of the current file."
                                    (cddr (muse-project-of-file))))))))
   (save-match-data
     (muse-with-temp-buffer
-      (insert-file-contents file)
+      (insert-file-contents-literally file)
       ;; surround first line in <h3></h3>
       (goto-char (point-min))
       (insert "<h3>")

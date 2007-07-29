@@ -90,7 +90,7 @@ but treating the page as if it were a single chapter within a book."
   (let ((muse-publishing-directives (list (cons "title" title)))
         (muse-publishing-current-file (cdr entry))
         (beg (point)) end)
-    (insert-file-contents (cdr entry))
+    (insert-file-contents-literally (cdr entry))
     (setq end (copy-marker (point-max) t))
     (muse-publish-markup-region beg end (car entry) style)
     (goto-char beg)
@@ -136,7 +136,7 @@ used for publishing."
     (narrow-to-region (point) (point))
     (unwind-protect
         (progn
-          (insert-file-contents file)
+          (insert-file-contents-literally file)
           (muse-publish-markup
            "attributes"
            `(;; Remove leading and trailing whitespace from the file

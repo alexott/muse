@@ -545,7 +545,8 @@ to the text with ARGS as parameters."
     (if (and (not (string-equal file-or-string ""))
              (not (string-match "\n" file-or-string))
              (file-readable-p file-or-string))
-        (setq end (+ beg (cadr (insert-file-contents file-or-string))))
+        (setq end (+ beg
+                     (cadr (insert-file-contents-literally file-or-string))))
       (insert file-or-string)
       (setq end (point)))
     (save-restriction
@@ -783,7 +784,7 @@ the file is published no matter what."
                     muse-publish-report-threshhold))
             (message "Publishing %s ..." file))
         (muse-with-temp-buffer
-          (insert-file-contents file)
+          (insert-file-contents-literally file)
           (muse-publish-markup-buffer (muse-page-name file) style)
           (let ((backup-inhibited t))
             (write-file output-path))
@@ -1974,7 +1975,7 @@ explanation of how it works."
                         (file-name-directory muse-publishing-current-file)))
       (error "No file attribute specified in <include> tag"))
     (muse-publish-markup-attribute beg end attrs t
-      (insert-file-contents filename))))
+      (insert-file-contents-literally filename))))
 
 (defun muse-publish-mark-up-tag (beg end attrs)
   "Run an Emacs Lisp function on the region delimted by this tag.
@@ -2049,7 +2050,7 @@ The text is removed regardless of whether and part of it is uppercase."
 (defun muse-published-contents (file)
   (when (file-readable-p file)
     (muse-with-temp-buffer
-      (insert-file-contents file)
+      (insert-file-contents-literally file)
       (muse-published-buffer-contents (current-buffer)))))
 
 (defun muse-publish-transform-output
