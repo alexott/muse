@@ -558,7 +558,7 @@ interested in including your work in future versions of Muse.
 
 This QuickStart document may be redistributed and/or modified under
 the terms of the GNU General Public License as published by the Free
-Software Foundation; either version 2, or (at your option) any later
+Software Foundation; either version 3, or (at your option) any later
 version.
 
 
