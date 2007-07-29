@@ -1,7 +1,10 @@
 .PHONY: all contrib clean realclean distclean fullclean install
 .PRECIOUS: %.elc
 
-include ../Makefile.defs
+DEFS = $(shell test -f ../Makefile.defs && echo ../Makefile.defs \
+	|| echo ../Makefile.defs.default)
+
+include $(DEFS)
 
 EL  = $(wildcard *.el)
 ELC = $(patsubst %.el,%.elc,$(EL))

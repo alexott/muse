@@ -1,4 +1,16 @@
-2007-07-29  cordier   <jean@bornier.net>
+2007-07-29  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile.defs.default: Rename from Makefile.defs.  This allows
+	people to copy this file to Makefile.defs and make changes,
+	without having the changes be accidentally committed.  If
+	Makefile.defs does not exist, this file is read instead, in order
+	to minimize inconvenience to the casual user.
+
+	* Makefile, contrib/Makefile, examples/Makefile,
+	experimental/Makefile, lisp/Makefile, texi/Makefile: Use either
+	Makefile.defs.default or Makefile.defs.
+
+2007-07-29  Jean Magnan de Bornier  <jean@bornier.net>
 
 	* lisp/muse-latex.el (muse-latex-markup-strings): Change rule
 	command which did not work correctly
@@ -52,6 +64,7 @@
 	definition list item bug.
 	(muse-publish-markup-list): Since people do seem to want
 	definition lists with no terms, allow this.
+	(muse-batch-publish-files): Set muse-current-output-style.
 
 	* lisp/muse.el (muse-with-temp-buffer): Mention
 	`insert-file-contents-literally'.

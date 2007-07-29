@@ -808,6 +808,7 @@ supplied."
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
   (let ((muse-batch-publishing-p t)
+        muse-current-output-style
         style output-dir)
     (setq style (car command-line-args-left)
           command-line-args-left (cdr command-line-args-left)
@@ -816,7 +817,8 @@ supplied."
           (if (string-match "\\`--output-dir=" output-dir)
               (prog1
                   (substring output-dir (match-end 0))
-                (setq command-line-args-left (cdr command-line-args-left)))))
+                (setq command-line-args-left (cdr command-line-args-left))))
+          muse-current-output-style (list :base style :path output-dir))
     (setq auto-mode-alist
           (delete (cons (concat "\\." muse-file-extension "\\'")
                         'muse-mode-choose-mode)

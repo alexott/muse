@@ -1,4 +1,10 @@
 # -*- Makefile -*-
+#
+# If you wish to modify this file, first copy it to a file called
+# Makefile.defs.  The resulting Makefile.defs file may then be
+# modified.
+
+# Emacs options
 EMACS    = emacs
 SITEFLAG = --no-site-file
 
@@ -8,8 +14,8 @@ SITEFLAG = --no-site-file
 
 # Installation options
 # PREFIX is only used here.
-PREFIX   = /home/jean/.emacs.d/lisp
-ELISPDIR = $(PREFIX)/muse
+PREFIX   = /usr/local
+ELISPDIR = $(PREFIX)/share/emacs/site-lisp/muse
 INFODIR  = $(PREFIX)/info
 
 # Command to use to install the Info dir entry
@@ -23,8 +29,13 @@ INSTALLINFO = install-info --info-dir=$(INFODIR)
 # Useful only for the maintainer
 PROJECT     = muse
 DEBNAME     = muse-el
-VERSION     = 3.02.93.arch.265
+VERSION     = 3.03
 MANUAL      = muse
 LASTUPLOAD  = 3.02.8-1
 BUILDOPTS   =
 DISTRIBUTOR = debian
+
+# Location of Emacs Lisp Package Archive entries
+ELPADIR  = ../../elpa
+# Description of ELPA package
+ELPADESC = Authoring and publishing tool
