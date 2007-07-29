@@ -1,7 +1,10 @@
 .PHONY: all examples clean realclean distclean fullclean
 .PRECIOUS: %.html %.pdf %.info
 
-include ../Makefile.defs
+DEFS = $(shell test -f ../Makefile.defs && echo ../Makefile.defs \
+	|| echo ../Makefile.defs.default)
+
+include $(DEFS)
 
 EXAMPLES = QuickStart.html QuickStart.pdf QuickStart.info
 

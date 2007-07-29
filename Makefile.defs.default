@@ -1,4 +1,10 @@
 # -*- Makefile -*-
+#
+# If you wish to modify this file, first copy it to a file called
+# Makefile.defs.  The resulting Makefile.defs file may then be
+# modified.
+
+# Emacs options
 EMACS    = emacs
 SITEFLAG = --no-site-file
 

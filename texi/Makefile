@@ -1,7 +1,10 @@
 .PHONY: all info-only doc clean realclean distclean fullclean install
 .PRECIOUS: %.info %.html
 
-include ../Makefile.defs
+DEFS = $(shell test -f ../Makefile.defs && echo ../Makefile.defs \
+	|| echo ../Makefile.defs.default)
+
+include $(DEFS)
 
 all: doc
 

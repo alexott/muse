@@ -1,7 +1,10 @@
 .PHONY: all lisp autoloads clean realclean distclean fullclean install test
 .PRECIOUS: %.elc
 
-include ../Makefile.defs
+DEFS = $(shell test -f ../Makefile.defs && echo ../Makefile.defs \
+	|| echo ../Makefile.defs.default)
+
+include $(DEFS)
 
 EL  = $(filter-out $(PROJECT)-autoloads.el,$(wildcard *.el))
 ELC = $(patsubst %.el,%.elc,$(EL))

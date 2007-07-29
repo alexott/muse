@@ -3,7 +3,10 @@
 .PHONY: test dist release debclean debprepare debbuild debinstall deb upload
 .PHONY: elpa
 
-include Makefile.defs
+DEFS = $(shell test -f Makefile.defs && echo Makefile.defs \
+	|| echo Makefile.defs.default)
+
+include $(DEFS)
 
 SUBDIRS = lisp contrib examples experimental texi
 
