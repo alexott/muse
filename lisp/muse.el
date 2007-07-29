@@ -729,8 +729,10 @@ provide a very liberal INDENT value, such as
                   (or (and (match-beginning 1)
                            (or (get-text-property
                                 (muse-list-item-critical-point 1) 'muse-link)
-                               (get-text-property
-                                (muse-list-item-critical-point 1) 'face)))
+                               (and (derived-mode-p 'muse-mode)
+                                    (get-text-property
+                                     (muse-list-item-critical-point 1)
+                                     'face))))
                       ;; skip nested items
                       (and (not no-skip-nested)
                            (muse-forward-list-item-1 type empty-line
