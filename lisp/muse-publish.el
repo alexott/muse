@@ -1178,14 +1178,16 @@ The following contexts exist in Muse.
          (beg-dde (muse-markup-text 'begin-dde)) ;; definition
          (end-dde (muse-markup-text 'end-dde))
          (continue t)
-         def-on-same-line beg)
+         (no-terms t)
+         beg)
     (while continue
       ;; envelope this as one term+definitions unit -- HTML does not
       ;; need this, but DocBook and Muse's custom XML format do
       (muse-insert-markup beg-item)
       (when (looking-at muse-dl-term-regexp)
         ;; find the term and wrap it with published markup
-        (setq beg (point))
+        (setq beg (point)
+              no-terms nil)
         (goto-char (match-end 1))
         (delete-region (point) (match-end 0))
         (muse-insert-markup-end-list end-ddt)
@@ -1196,6 +1198,15 @@ The following contexts exist in Muse.
           (goto-char beg)
           (delete-region (point) (match-beginning 1))
           (muse-insert-markup beg-ddt)))
+      ;; handle pathological edge case where there is no term -- I
+      ;; would prefer to just disallow this, but people seem to want
+      ;; this behavior
+      (when (and no-terms
+                 (looking-at (concat "[" muse-regexp-blank "]*::"
+                                     "[" muse-regexp-blank "]*")))
+        (delete-region (point) (match-end 0))
+        ;; but only do this once
+        (setq no-terms nil))
       (setq beg (point)
             ;; move past current item
             continue (muse-forward-list-item 'dl-term indent))
@@ -1296,11 +1307,13 @@ The following contexts exist in Muse.
 
 (defun muse-publish-ensure-blank-line ()
   "Make sure that a blank line exists on the line before point."
-  (save-excursion
+  (let ((pt (point-marker)))
     (beginning-of-line)
     (cond ((eq (point) (point-min)) nil)
           ((prog2 (backward-char) (bolp) (forward-char)) nil)
-          (t (insert "\n")))))
+          (t (insert-before-markers "\n")))
+    (goto-char pt)
+    (set-marker pt nil)))
 
 (defun muse-publish-markup-list ()
   "Markup a list entry.
@@ -1342,8 +1355,7 @@ and type, respecting the end-of-list property."
          indent post-indent)
         (muse-insert-markup-end-list (muse-markup-text 'end-oli)))
       (forward-line 1))
-     ((not (string= (match-string 2) ""))
-      ;; must have an initial term
+     (t
       (goto-char (match-beginning 0))
       (muse-publish-ensure-blank-line)
       (muse-insert-markup (muse-markup-text 'begin-dl))

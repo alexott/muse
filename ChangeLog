@@ -36,6 +36,13 @@
 	(muse-insert-file-or-string, muse-publish-file)
 	(muse-publish-include-tag, muse-published-contents): Use
 	insert-file-contents-literally instead of insert-file-contents.
+	(muse-publish-surround-dl): Remove unused variable.  Track whether
+	a term has been found, and handle that case well.
+	(muse-publish-ensure-blank-line): Use a marker, so that we don't
+	lose our place when adding a newline.  This really fixes the
+	definition list item bug.
+	(muse-publish-markup-list): Since people do seem to want
+	definition lists with no terms, allow this.
 
 	* lisp/muse.el (muse-with-temp-buffer): Mention
 	`insert-file-contents-literally'.
