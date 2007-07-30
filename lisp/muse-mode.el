@@ -862,8 +862,8 @@ function, you might want to set this manually.")
 (defvar muse-list-edit-minor-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [(meta return)] 'muse-l-e-m-m-insert-list-item)
-    (define-key map [(control ?>)] 'muse-l-e-m-m-i-list-item-indentation)
-    (define-key map [(control ?<)] 'muse-l-e-m-m-d-list-item-indentation)
+    (define-key map [(control ?>)] 'muse-l-e-m-m-increase-list-item-indent)
+    (define-key map [(control ?<)] 'muse-l-e-m-m-decrease-list-item-indent)
 
     map)
   "Keymap used by Muse list edit minor mode.")
@@ -878,19 +878,20 @@ This is used by `muse-list-edit-minor-mode'.
 The '%s' will be replaced with a whitespace regexp when publishing.")
 
 (defun muse-l-e-m-m-insert-list-item ()
-  "See `muse-insert-list-item' for documentation."
+  "Insert a list item at the current point, taking into account
+your current list type and indentation level."
   (interactive)
   (let ((muse-list-item-regexp muse-l-e-m-m-list-item-regexp))
     (call-interactively 'muse-insert-list-item)))
 
-(defun muse-l-e-m-m-i-list-item-indentation ()
-  "See `muse-increase-list-item-indentation' for documentation."
+(defun muse-l-e-m-m-increase-list-item-indent ()
+  "Increase the indentation of the current list item."
   (interactive)
   (let ((muse-list-item-regexp muse-l-e-m-m-list-item-regexp))
     (call-interactively 'muse-increase-list-item-indentation)))
 
-(defun muse-l-e-m-m-d-list-item-indentation ()
-  "See `muse-decrease-list-item-indentation' for documentation."
+(defun muse-l-e-m-m-decrease-list-item-indent ()
+  "Decrease the indentation of the current list item."
   (interactive)
   (let ((muse-list-item-regexp muse-l-e-m-m-list-item-regexp))
     (call-interactively 'muse-decrease-list-item-indentation)))
@@ -908,6 +909,9 @@ Interactively, with no prefix argument, toggle the mode.
 With universal prefix ARG turn mode on.
 With zero or negative ARG turn mode off.
 
+This minor mode provides the Muse keybindings for editing lists,
+and support for filling lists properly.
+
 This recognizes not only Muse-style lists, which use the \"-\"
 character or numbers, but also lists that use asterisks or plus
 signs.  This should make the minor mode generally useful.
@@ -918,7 +922,7 @@ Note that list items may omit leading spaces, for compatibility
 with modes that set `left-margin', such as
 `debian-changelog-mode'.
 
-The standard Muse keybindings for editing lists are also provided."
+\\{muse-list-edit-minor-mode-map}"
   :init-value nil
   :lighter ""
   :keymap muse-list-edit-minor-mode-map
