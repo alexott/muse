@@ -12,6 +12,14 @@
 	experimental/Makefile, lisp/Makefile, texi/Makefile: Use either
 	Makefile.defs.default or Makefile.defs.
 
+	* lisp/muse-mode.el (muse-list-edit-minor-mode-map): Use new
+	function names.
+	(muse-l-e-m-m-insert-list-item): Add real documentation.
+	(muse-l-e-m-m-increase-list-item-indent)
+	(muse-l-e-m-m-decrease-list-item-indent): Rename for clarity.  Add
+	real documentation.
+	(muse-list-edit-minor-mode): Improve documentation.
+
 	* texi/doclicense.texi (GNU Free Documentation License): Use
 	pristine copy from Emacs source tree.
 
