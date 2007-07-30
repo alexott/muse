@@ -6,7 +6,7 @@
 
 ;; Emacs Muse is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
-;; by the Free Software Foundation; either version 2, or (at your
+;; by the Free Software Foundation; either version 3, or (at your
 ;; option) any later version.
 
 ;; Emacs Muse is distributed in the hope that it will be useful, but
@@ -786,9 +786,8 @@ the file is published no matter what."
         (muse-with-temp-buffer
           (insert-file-contents-literally file)
           (muse-publish-markup-buffer (muse-page-name file) style)
-          (let ((backup-inhibited t))
-            (write-file output-path))
-          (muse-style-run-hooks :final style file output-path target))
+          (when (muse-write-file output-path)
+            (muse-style-run-hooks :final style file output-path target)))
         t))))
 
 ;;;###autoload

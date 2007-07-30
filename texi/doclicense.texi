@@ -1,7 +1,4 @@
 @c -*-texinfo-*-
-@node GNU Free Documentation License, Concept Index, Contributors, Top
-
-@appendix GNU Free Documentation License
 @center Version 1.2, November 2002
 
 @display
@@ -415,5 +412,5 @@ free software license, such as the GNU General Public License,
 to permit their use in free software.
 
 @ignore
-   arch-tag: 9014cf6e-f3c4-401d-b8da-4fe52723984c
+   arch-tag: c1679162-1d8a-4f02-bc52-2e71765f0165
 @end ignore

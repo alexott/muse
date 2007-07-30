@@ -6,7 +6,7 @@
 
 ;; Emacs Muse is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
-;; by the Free Software Foundation; either version 2, or (at your
+;; by the Free Software Foundation; either version 3, or (at your
 ;; option) any later version.
 
 ;; Emacs Muse is distributed in the hope that it will be useful, but
@@ -258,10 +258,10 @@ changed since it was last published."
           (goto-char (point-max))
           (if style-footer (muse-insert-file-or-string style-footer file))
           (run-hooks 'muse-after-book-publish-hook)
-          (let ((backup-inhibited t))
-            (write-file output-path))
-          (if style-final
-              (funcall style-final file output-path target)))))
+          (if (muse-write-file output-path)
+              (if style-final
+                  (funcall style-final file output-path target))
+            (setq published nil)))))
     (if published
         (message "The book \"%s\" has been published." file))
     published))

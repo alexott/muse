@@ -17,7 +17,7 @@
 
 ;; Emacs Muse is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
-;; by the Free Software Foundation; either version 2, or (at your
+;; by the Free Software Foundation; either version 3, or (at your
 ;; option) any later version.
 
 ;; Emacs Muse is distributed in the hope that it will be useful, but
@@ -280,7 +280,7 @@ around for debugging purposes rather than removing it."
                       (backtrace))
                   (muse-display-warning
                    (format (concat "An error occurred while publishing"
-                                   " %s: %s\n\nSet debug-on-error to"
+                                   " %s:\n  %s\n\nSet debug-on-error to"
                                    " `t' if you would like a backtrace.")
                                  (muse-page-name) err))))))
          (when (buffer-live-p ,temp-buffer)
@@ -290,6 +290,34 @@ around for debugging purposes rather than removing it."
 
 (put 'muse-with-temp-buffer 'lisp-indent-function 0)
 (put 'muse-with-temp-buffer 'edebug-form-spec '(body))
+
+(defun muse-write-file (filename)
+  "Write current buffer into file FILENAME.
+Unlike `write-file', this does not visit the file, try to back it
+up, or interact with vc.el in any way.
+
+If the file was not written successfully, return nil.  Otherwise,
+return non-nil."
+  (let ((backup-inhibited t)
+        (buffer-file-name filename)
+        (buffer-file-truename (file-truename filename)))
+    (save-current-buffer
+      (save-restriction
+        (widen)
+        (if (not (file-writable-p buffer-file-name))
+            (prog1 nil
+              (muse-display-warning
+               (format "Cannot write file %s:\n  %s" buffer-file-name
+                       (let ((dir (file-name-directory buffer-file-name)))
+                         (if (not (file-directory-p dir))
+                             (if (file-exists-p dir)
+                                 (format "%s is not a directory" dir)
+                               (format "No directory named %s exists" dir))
+                           (if (not (file-exists-p buffer-file-name))
+                               (format "Directory %s write-protected" dir)
+                             "File is write-protected"))))))
+          (write-region (point-min) (point-max) buffer-file-name)
+          t)))))
 
 (defun muse-collect-alist (list element &optional test)
   "Collect items from LIST whose car is equal to ELEMENT.

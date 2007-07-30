@@ -1,5 +1,7 @@
 2007-07-29  Michael Olson  <mwolson@gnu.org>
 
+	* Relicense to GPLv3.
+
 	* Makefile.defs.default: Rename from Makefile.defs.  This allows
 	people to copy this file to Makefile.defs and make changes,
 	without having the changes be accidentally committed.  If
@@ -9,6 +11,12 @@
 	* Makefile, contrib/Makefile, examples/Makefile,
 	experimental/Makefile, lisp/Makefile, texi/Makefile: Use either
 	Makefile.defs.default or Makefile.defs.
+
+	* texi/doclicense.texi (GNU Free Documentation License): Use
+	pristine copy from Emacs source tree.
+
+	* texi/muse.texi (Contributors): Move node and appendix indicators
+	here, rather than doclicense.texi.
 
 2007-07-29  Jean Magnan de Bornier  <jean@bornier.net>
 
