@@ -786,9 +786,8 @@ the file is published no matter what."
         (muse-with-temp-buffer
           (insert-file-contents-literally file)
           (muse-publish-markup-buffer (muse-page-name file) style)
-          (let ((backup-inhibited t))
-            (write-file output-path))
-          (muse-style-run-hooks :final style file output-path target))
+          (when (muse-write-file output-path)
+            (muse-style-run-hooks :final style file output-path target)))
         t))))
 
 ;;;###autoload

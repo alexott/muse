@@ -258,10 +258,10 @@ changed since it was last published."
           (goto-char (point-max))
           (if style-footer (muse-insert-file-or-string style-footer file))
           (run-hooks 'muse-after-book-publish-hook)
-          (let ((backup-inhibited t))
-            (write-file output-path))
-          (if style-final
-              (funcall style-final file output-path target)))))
+          (if (muse-write-file output-path)
+              (if style-final
+                  (funcall style-final file output-path target))
+            (setq published nil)))))
     (if published
         (message "The book \"%s\" has been published." file))
     published))
