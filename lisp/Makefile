@@ -39,3 +39,57 @@ install: autoloads $(ELC)
 test: $(ELC)
 	$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
 		-f $(PROJECT)-elint-files $(EL)
+
+# Dependencies
+#
+# This allows us to recompile Muse safely after an update.
+
+muse-backlink.elc: muse-mode.elc muse-publish.elc muse.elc
+
+muse-blosxom.elc: muse-html.elc muse-project.elc muse-publish.elc
+
+muse-book.elc: muse-latex.elc muse-project.elc muse-publish.elc
+muse-book.elc: muse-regexps.elc
+
+muse-colors.elc: muse-mode.elc muse-regexps.elc
+
+muse-context.elc: muse-publish.elc
+
+muse-docbook.elc: muse-publish.elc muse-regexps.elc muse-xml-common.elc
+
+muse-groff.elc: muse-publish.elc
+
+muse-html.elc: muse-publish.elc muse-regexps.elc muse-xml-common.elc
+
+muse-http.elc: muse-html.elc muse-project.elc
+
+muse-import-docbook.elc: muse-import-xml.elc
+
+muse-import-latex.elc: muse-regexps.elc muse.elc
+
+muse-journal.elc: muse-book.elc muse-html.elc muse-latex.elc
+muse-journal.elc: muse-publish.elc
+
+muse-latex.elc: muse-publish.elc
+
+muse-latex2png.elc: muse-publish.elc
+
+muse-mode.elc: muse-regexps.elc muse-project.elc
+
+muse-poem.elc: muse-latex.elc muse-project.elc
+
+muse-project.elc: muse-publish.elc muse.elc
+
+muse-protocols.elc: muse-regexps.elc
+
+muse-publish.elc: muse-regexps.elc muse.elc
+
+muse-texinfo.elc: muse-latex.elc muse-publish.elc
+
+muse-wiki.elc: muse-colors.elc muse-regexps.elc muse-mode.elc
+
+muse-xml-common.elc: muse-publish.elc muse-regexps.elc
+
+muse-xml.elc: muse-publish.elc muse-regexps.elc muse-xml-common.elc
+
+muse.elc: muse-protocols.elc muse-regexps.elc
