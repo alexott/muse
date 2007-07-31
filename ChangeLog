@@ -4,6 +4,12 @@
 	that Muse can be recompiled without running "make clean" after an
 	update.
 
+	* lisp/muse-publish.el (muse-publish-verse-tag): Unconditionally
+	delete forward one character, since we are guaranteed to be on a
+	blank line.  Don't delete all initial whitespace of the first
+	line.  This fixes an issue where the output from the verse tag did
+	not match the output from Muse's verse syntax.
+
 2007-07-29  Michael Olson  <mwolson@gnu.org>
 
 	* Relicense to GPLv3.
