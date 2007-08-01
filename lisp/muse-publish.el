@@ -1707,8 +1707,7 @@ of link, the cadr is the page name, and the cddr is the anchor."
     (save-restriction
       (narrow-to-region beg end)
       (goto-char (point-min))
-      (while (eq ?\  (char-syntax (char-after)))
-        (delete-char 1))
+      (delete-char 1)
       (while (< (point) (point-max))
         (insert "> ")
         (forward-line))
