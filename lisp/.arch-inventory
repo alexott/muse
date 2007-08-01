@@ -1,2 +1,0 @@
-precious ^(.*\.elc)$
-precious ^(muse-autoloads\.el)$

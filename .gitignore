@@ -1,0 +1,7 @@
+# Files that we ignore when using git.
+
+*~
+*.elc
+/Makefile.defs
+/lisp/muse-autoloads.el
+/texi/muse.info
