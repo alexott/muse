@@ -809,6 +809,8 @@ supplied."
   (let ((muse-batch-publishing-p t)
         muse-current-output-style
         style output-dir)
+    ;; don't activate VC when publishing files
+    (setq vc-handled-backends nil)
     (setq style (car command-line-args-left)
           command-line-args-left (cdr command-line-args-left)
           output-dir (car command-line-args-left)

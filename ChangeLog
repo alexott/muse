@@ -1,3 +1,9 @@
+2007-08-02  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-batch-publish-files): Don't activate
+	VC when publishing files in batch.  This avoids some annoying
+	messages when building QuickStart in the examples directory.
+
 2007-07-31  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/Makefile: Add dependencies between Emacs Lisp files, so
