@@ -237,6 +237,8 @@ index at intervals."
        "; ")
   (set (make-local-variable 'comment-start-skip)
        "^;\\s-+")
+  (set (make-local-variable 'indent-line-function)
+       #'ignore)
   ;; If we're using Emacs21, this makes flyspell work like it should
   (when (boundp 'flyspell-generic-check-word-p)
     (set (make-local-variable 'flyspell-generic-check-word-p)

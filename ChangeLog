@@ -1,3 +1,8 @@
+2007-08-02  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-mode): Don't try to indent line before
+	inserting a comment.
+
 2007-07-31  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/Makefile: Add dependencies between Emacs Lisp files, so
