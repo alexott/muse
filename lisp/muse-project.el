@@ -629,7 +629,7 @@ return non-nil."
     (and (stringp link-suffix)
          (string= given-suffix link-suffix))))
 
-(defun muse-project-applicable-styles (file styles &optional ignore-regexp)
+(defun muse-project-applicable-styles (file styles)
   "Given STYLES, return a list of the ones that are considered for FILE.
 The name of a project may be used for STYLES."
   (when (stringp styles)
@@ -640,14 +640,13 @@ The name of a project may be used for STYLES."
         (let ((include-regexp (muse-style-element :include style))
               (exclude-regexp (muse-style-element :exclude style))
               (rating nil))
-          (when (and (or ignore-regexp
-                         (and (null include-regexp)
+          (when (and (or (and (null include-regexp)
                               (null exclude-regexp))
                          (if include-regexp
                              (setq rating (string-match include-regexp file))
                            (not (string-match exclude-regexp file))))
-                     (or (not (file-exists-p file))
-                         (not (muse-project-private-p file))))
+                     (file-exists-p file)
+                     (not (muse-project-private-p file)))
             (setq used-styles (cons (cons rating style) used-styles)))))
       (muse-sort-by-rating (nreverse used-styles)))))
 
@@ -713,8 +712,8 @@ The remote styles are usually populated by
   ;; publish the member file!
   (muse-publish-file file style output-dir force))
 
-(defun muse-project-publish-file (file styles &optional force ignore-regexp)
-  (setq styles (muse-project-applicable-styles file styles ignore-regexp))
+(defun muse-project-publish-file (file styles &optional force)
+  (setq styles (muse-project-applicable-styles file styles))
   (let (published)
     (dolist (style styles)
       (if (or (not (listp style))

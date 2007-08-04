@@ -1,8 +1,19 @@
+2007-08-03  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-applicable-styles): Remove
+	useless argument ignore-regexp.  Use saner logic.  This fixes a
+	bug where a file could potentially not exist but still appear in
+	the used-styles list.  Thanks to John Wiegley for the fix.
+	(muse-project-publish-file): Don't take ignore-reegxp argument.
+
 2007-08-02  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-batch-publish-files): Don't activate
 	VC when publishing files in batch.  This avoids some annoying
 	messages when building QuickStart in the examples directory.
+
+	* lisp/muse-mode.el (muse-mode): Don't try to indent line before
+	inserting a comment.
 
 2007-07-31  Michael Olson  <mwolson@gnu.org>
 
