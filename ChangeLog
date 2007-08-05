@@ -1,11 +1,19 @@
 2007-08-05  Michael Olson  <mwolson@gnu.org>
 
-	* .gitignore: Add texi/muse.html.
+	* .gitignore: Add texi/muse.html and the DVC log edit file.
 
 	* Makefile.defs.default (install_info): Rename from INSTALLINFO.
 	Turn this into something that can be called like a command, due to
 	needing to deal with XEmacs, which has different argument order.
 	Thanks to Terrence Brannon for the report.
+
+	* lisp/muse-project.el (muse-project-of-file): Simplify by using
+	catch, throw, and dolist.  Look for exact matches before
+	considering any subdirectories.  If no exact matches are found,
+	then pick the longest match.
+
+	* lisp/muse.el (muse-sort-by-rating): Mention default test in
+	documentation.
 
 	* scripts/muse-build.el: Avoid interference from VC.el in the
 	build process.

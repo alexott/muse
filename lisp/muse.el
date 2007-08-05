@@ -345,7 +345,7 @@ before the second."
 The rating is stripped out in the returned list.
 Default sorting is highest-first.
 
-If TEST if specified, use it to sort the list."
+If TEST if specified, use it to sort the list.  The default test is '>."
   (unless test (setq test '>))
   (mapcar (function cdr)
           (muse-sort-with-closure
