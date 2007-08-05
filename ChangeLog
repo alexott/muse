@@ -1,3 +1,17 @@
+2007-08-05  Michael Olson  <mwolson@gnu.org>
+
+	* .gitignore: Add texi/muse.html.
+
+	* Makefile.defs.default (install_info): Rename from INSTALLINFO.
+	Turn this into something that can be called like a command, due to
+	needing to deal with XEmacs, which has different argument order.
+	Thanks to Terrence Brannon for the report.
+
+	* scripts/muse-build.el: Avoid interference from VC.el in the
+	build process.
+
+	* texi/Makefile (install): Call install_info.
+
 2007-08-03  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-applicable-styles): Remove
