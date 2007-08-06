@@ -26,4 +26,4 @@ distclean realclean fullclean: clean
 install: $(MANUAL).info
 	[ -d $(INFODIR) ] || install -d $(INFODIR)
 	install -m 0644 $(MANUAL).info $(INFODIR)/$(MANUAL)
-	$(INSTALLINFO) $(INFODIR)/$(MANUAL)
+	$(call install_info,$(MANUAL))

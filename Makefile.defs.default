@@ -19,12 +19,19 @@ ELISPDIR = $(PREFIX)/share/emacs/site-lisp/muse
 INFODIR  = $(PREFIX)/info
 
 # Command to use to install the Info dir entry
-INSTALLINFO = install-info --info-dir=$(INFODIR)
+install_info = install-info --info-dir=$(INFODIR) $(1) || :
 
-# If you're using Debian or Ubuntu, uncomment the following line and
-# comment out the above line.
+# If you're using Debian or Ubuntu, uncomment the following rule and
+# comment out the previous rule.
 #
-#INSTALLINFO = install-info --section "Emacs" "emacs" --info-dir=$(INFODIR)
+#install_info = install-info --section "Emacs" "emacs" --info-dir=$(INFODIR) \
+#	$(INFODIR)/$(1) || :
+
+# If you're using XEmacs, use something like the following instead of
+# the above two rules.
+#
+#install_info = install-info --section "XEmacs 21.4" $(1).info \
+#	$(INFODIR)/dir || :
 
 # Useful only for the maintainer
 PROJECT     = muse

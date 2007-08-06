@@ -2,6 +2,9 @@
 (add-to-list 'load-path "../experimental")
 (add-to-list 'load-path "../lisp")
 
+;; Avoid interference from VC.el
+(setq vc-handled-backends nil)
+
 (defun muse-elint-files ()
   (require 'elint)
   (elint-initialize)

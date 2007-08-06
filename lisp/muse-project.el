@@ -508,21 +508,25 @@ If PATHNAME is nil, the current buffer's filename is used."
                                            pathname))))))
         (let* ((file (file-truename pathname))
                (dir  (file-name-directory file))
-               (project-entry muse-project-alist)
-               found)
-          (while (and project-entry (not found))
-            (let ((pats (car (cdar project-entry))))
-              (while (and pats (not found))
-                (if (symbolp (car pats))
-                    (setq pats (cddr pats))
-                  (let ((truename (file-truename (car pats))))
-                    (if (or (string= truename file)
-                            (string= truename dir)
-                            (string-match (regexp-quote truename) file))
-                        (setq found (car project-entry))))
-                  (setq pats (cdr pats))))
-              (setq project-entry (cdr project-entry))))
-          found)))))
+               found rating matches)
+          (catch 'found
+            (dolist (project-entry muse-project-alist)
+              (let ((pats (cadr project-entry)))
+                (while pats
+                  (if (symbolp (car pats))
+                      (setq pats (cddr pats))
+                    (let ((tname (file-truename (car pats))))
+                      (cond ((or (string= tname file)
+                                 (string= tname dir))
+                             (throw 'found project-entry))
+                            ((string-match (concat "\\`" (regexp-quote tname))
+                                           file)
+                             (setq matches (cons (cons (match-end 0)
+                                                       project-entry)
+                                                 matches)))))
+                    (setq pats (cdr pats))))))
+            ;; if we haven't found an exact match, pick a candidate
+            (car (muse-sort-by-rating matches))))))))
 
 (defun muse-project-after-save-hook ()
   "Update Muse's file-alist if we are saving a Muse file."
@@ -629,7 +633,7 @@ return non-nil."
     (and (stringp link-suffix)
          (string= given-suffix link-suffix))))
 
-(defun muse-project-applicable-styles (file styles &optional ignore-regexp)
+(defun muse-project-applicable-styles (file styles)
   "Given STYLES, return a list of the ones that are considered for FILE.
 The name of a project may be used for STYLES."
   (when (stringp styles)
@@ -640,14 +644,13 @@ The name of a project may be used for STYLES."
         (let ((include-regexp (muse-style-element :include style))
               (exclude-regexp (muse-style-element :exclude style))
               (rating nil))
-          (when (and (or ignore-regexp
-                         (and (null include-regexp)
+          (when (and (or (and (null include-regexp)
                               (null exclude-regexp))
                          (if include-regexp
                              (setq rating (string-match include-regexp file))
                            (not (string-match exclude-regexp file))))
-                     (or (not (file-exists-p file))
-                         (not (muse-project-private-p file))))
+                     (file-exists-p file)
+                     (not (muse-project-private-p file)))
             (setq used-styles (cons (cons rating style) used-styles)))))
       (muse-sort-by-rating (nreverse used-styles)))))
 
@@ -713,8 +716,8 @@ The remote styles are usually populated by
   ;; publish the member file!
   (muse-publish-file file style output-dir force))
 
-(defun muse-project-publish-file (file styles &optional force ignore-regexp)
-  (setq styles (muse-project-applicable-styles file styles ignore-regexp))
+(defun muse-project-publish-file (file styles &optional force)
+  (setq styles (muse-project-applicable-styles file styles))
   (let (published)
     (dolist (style styles)
       (if (or (not (listp style))
