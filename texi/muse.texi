@@ -596,13 +596,13 @@ three projects: a generic website, a projects area, and a day-planner
                 :path "~/public_html/plans"))))
 @end lisp
 
-The @samp{:major-mode} attribute specifies which major to use when
+The @option{:major-mode} attribute specifies which major to use when
 visiting files in this directory.
 
-The @samp{:visit-link} attribute specifies the function to call when
+The @option{:visit-link} attribute specifies the function to call when
 visiting links.
 
-The @samp{:exclude} attribute has a regexp that matches files to never
+The @option{:exclude} attribute has a regexp that matches files to never
 publish.
 
 @node Projects and Subdirectories, Options for Projects, Multiple Projects, Projects
@@ -1881,7 +1881,7 @@ together as if one giant chapter.
 
 One way of publishing a book is to make a project for it, add the
 project to @code{muse-project-alist}, and use the @code{book-pdf} style
-with a very specific @code{:include} value to specify some page whose
+with a very specific @option{:include} value to specify some page whose
 contents will be checked for the values of @code{#title} and
 @code{#date}, and whose name will be used in the output file.  Then to
 publish the book, visit the aforementioned page and use @kbd{C-c C-t} or
@@ -2354,6 +2354,21 @@ Also, an .RDF file can be generated from your journal by publishing it
 with the "rdf" style.  It uses the first two sentences of the first
 paragraph of each entry as its "description", and auto-generates tags
 for linking to the various entries.
+
+@subheading muse-project-alist considerations
+
+If you wish to publish an RDF or RSS feed, it is important to include
+the @option{:base-url} attribute in your @code{muse-project-alist} entry
+for your Journal projects.  An example follows.
+
+@example
+(setq muse-project-alist
+      '(("Journal" ("~/Journal/"
+                    :default "journal")
+        (:base "journal-rss"
+               :base-url "http://example.org/journal/"
+               :path "~/public_html/journal"))))
+@end example
 
 @subheading Styles provided
 

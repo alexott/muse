@@ -1,3 +1,10 @@
+2007-08-06  Michael Olson  <mwolson@gnu.org>
+
+	* texi/muse.texi: Make sure that attributes are marked up with
+	@option{} rather than @code{} or @samp{} for consistency.
+	(Journal): Add "muse-project-alist-considerations" subheading,
+	along with a mention of :base-url.
+
 2007-08-05  Michael Olson  <mwolson@gnu.org>
 
 	* .gitignore: Add texi/muse.html and the DVC log edit file.
