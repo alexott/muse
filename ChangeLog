@@ -1,3 +1,10 @@
+2007-08-09  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-write-file): Pay attention to
+	coding-system-for-write and save-buffer-coding-system.  This
+	should fix a recently-introduced bug with writing Muse pages in
+	different coding systems.
+
 2007-08-08  Michael Olson  <mwolson@gnu.org>
 
 	* README (Prerequisites): Fix typo.

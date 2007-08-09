@@ -316,7 +316,18 @@ return non-nil."
                            (if (not (file-exists-p buffer-file-name))
                                (format "Directory %s write-protected" dir)
                              "File is write-protected"))))))
-          (write-region (point-min) (point-max) buffer-file-name)
+          (let ((coding-system-for-write
+                 (or (and (boundp 'save-buffer-coding-system)
+                          save-buffer-coding-system)
+                     coding-system-for-write)))
+            (write-region (point-min) (point-max) buffer-file-name))
+          (when (boundp 'last-file-coding-system-used)
+            (when (boundp 'buffer-file-coding-system-explicit)
+              (setq buffer-file-coding-system-explicit
+                    last-coding-system-used))
+            (if save-buffer-coding-system
+                (setq save-buffer-coding-system last-coding-system-used)
+              (setq buffer-file-coding-system last-coding-system-used)))
           t)))))
 
 (defun muse-collect-alist (list element &optional test)
