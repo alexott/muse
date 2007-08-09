@@ -253,7 +253,7 @@ to be included with the @file{muse-el} package.
 
 @cindex releases, from source
 Alternatively, you can download the latest release from
-@uref{http://mwolson.org/static/dist/muse/} .
+@uref{http://download.gna.org/muse-el/} .
 
 @node Development,  , Releases, Obtaining Muse
 @comment  node-name,  next,  previous,  up
@@ -278,16 +278,17 @@ Downloading the Muse module with git and staying up-to-date involves
 the following steps.
 
 @enumerate
-@item Install git
+@item Install git.
 
 @itemize @bullet
 @item Debian and Ubuntu: @kbd{apt-get install git-core}.
-@item Other distributions: download, compile, and install the source
-from @uref{http://www.kernel.org/pub/software/scm/git/}, or find a
-package.
+@item Windows: @uref{http://git.or.cz/gitwiki/WindowsInstall}.
+@item Other operating systems: download, compile, and install the source
+from @uref{http://www.kernel.org/pub/software/scm/git/}, or find a git
+package for your operating system.
 @end itemize
 
-@item Download the Muse development branch
+@item Download the Muse development branch.
 
 If you have developer access to Muse, do:
 
@@ -303,35 +304,48 @@ git clone git://repo.or.cz/muse-el.git muse
 
 @item List upstream changes that are missing from your local copy.
 Do this whenever you want to see whether new changes have been committed
-to Muse.
+to Muse.  If you wish, you may skip this step and proceed directly to
+the ``update'' step.
 
 @example
 # Change to the source directory you are interested in.
-cd muse/
+cd muse
 
-# Display the summary of changes
+# Fetch new changes from the repository, but don't apply them yet
+git fetch origin
+
+# Display log messages for the new changes
 git log HEAD..origin
 @end example
 
-@cindex updating Muse with Arch
-@item Update to the latest version by replaying missing changes.
+``origin'' is git's name for the location where you originally got Muse
+from.  You can change this location at any time by editing the
+@file{.git/config} file in the directory where the Muse source was
+placed.
+
+@cindex updating Muse with git
+@item Update to the latest version by pulling in any missing changes.
+
 @example
 cd muse
-tla update
+git pull origin
 @end example
+
+git will show how many files changed, and will provide a visual display
+for how many lines were changed in each file.
 
 @end enumerate
 
-There are other ways to interact with the Muse archive.
+There are other ways to interact with the Muse repository.
 
 @itemize
-@item Browse arch repository: @uref{http://archzoom.mwolson.org/}
+@item Browse git repo: @uref{http://repo.or.cz/w/muse-el.git}
 @item Latest development snapshot: @uref{http://mwolson.org/static/dist/muse-latest.tar.gz}
 @item Latest development snapshot (zip file): @uref{http://mwolson.org/static/dist/muse-latest.zip}
 @end itemize
 
-The latest development snapshot will be kept up-to-date since it is
-updated at the same time as the Arch repository.
+The latest development snapshot can lag behind the git repo by as much
+as 20 minutes, but never more than that.
 
 @node Installation, Getting Started, Obtaining Muse, Top
 @comment  node-name,  next,  previous,  up
@@ -340,6 +354,7 @@ updated at the same time as the Arch repository.
 Muse may be compiled and installed on your machine.
 
 @subheading Compilation
+@cindex compiling Muse
 
 This is an optional step, since Emacs Lisp source code does not
 necessarily have to be byte-compiled.  Byte-compilation may yield a very
@@ -350,14 +365,19 @@ Muse.  By default, the program that is installed with the name
 @command{emacs} will be used.
 
 If you want to use the @command{xemacs} binary to perform the
-compilation, you would need to edit @file{Makefile.defs} in the
-top-level directory as follows.  You can put either a full path to an
+compilation, you copy @file{Makefile.defs.default} to
+@file{Makefile.defs} in the top-level directory, and then edit
+@file{Makefile.defs} as follows.  You can put either a full path to an
 Emacs or XEmacs binary or just the command name, as long as it is in the
-@env{PATH}.
+@env{PATH}.  Depending on your setup, changes to @option{PREFIX},
+@option{ELISPDIR}, and @option{INFODIR} may also need to be made.
 
 @example
 EMACS    = xemacs
 SITEFLAG = -no-site-file
+# Edit the section as necessary
+install_info = install-info --section "XEmacs 21.4" $(1).info \
+        $(INFODIR)/dir || :
 @end example
 
 Running @code{make} in the top-level directory should compile the Muse
@@ -365,11 +385,14 @@ source files in the @file{lisp} directory, and generate an autoloads
 file in @file{lisp/muse-autoloads.el}.
 
 @subheading Installation
+@cindex installing Muse
 
 Muse may be installed into your file hierarchy by doing the following.
 
-Edit the @file{Makefile.defs} file so that @env{ELISPDIR} points to
-where you want the source and compiled Muse files to be installed and
+Copy @file{Makefile.defs.default} to @file{Makefile.defs} in the
+top-level directory, if you haven't done so already.  Then edit the
+@file{Makefile.defs} file so that @env{ELISPDIR} points to where you
+want the source and compiled Muse files to be installed and
 @env{INFODIR} indicates where to put the Muse manual.  As mentioned
 earlier, you will want to edit @env{EMACS} and @env{SITEFLAG} as shown
 in the Compilation section if you are using XEmacs.
@@ -381,11 +404,20 @@ to change the value of @env{INSTALLINFO} as specified in
 If you wish to install Muse to different locations than the defaults
 specify, edit @file{Makefile.defs} accordingly.
 
-Run @code{make} as a normal user.
+Run @code{make} as a normal user, if you haven't done so already.
 
 Run @code{make install} as the root user if you have chosen installation
 locations that require root permissions.
 
+@subheading ELPA
+@cindex ELPA package for Muse
+
+For those used to installing software packages, there will be a
+@code{muse} package available in the Emacs Lisp Package Archive
+(abbreviated ``ELPA'') as of the 3.10 release of Muse.  This package
+will be compiled and installed automatically in a user-specific
+location.  For more information on ELPA, see
+@uref{http://tromey.com/elpa/}.
 
 @node Getting Started, Projects, Installation, Top
 @comment  node-name,  next,  previous,  up
