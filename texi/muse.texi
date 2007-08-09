@@ -263,41 +263,42 @@ Alternatively, you can download the latest release from
 Choose the development version if you want to live on the bleeding edge
 of Muse development or try out new features before release.
 
-@cindex arch revision control system, using
-The Arch revision control system allows you to retrieve previous
-versions and select specific features and bug fixes.  If you would like
-to contribute to Muse development, it is highly recommended that you use
-Arch, but this is not a requirement.
+@cindex git version control system, using
+The git version control system allows you to keep up-to-date with the
+latest changes to the development version of Muse.  It also allows you
+to contribute changes (via commits, if you are have developer access to
+the repository, or via patches, otherwise).  If you would like to
+contribute to Muse development, it is highly recommended that you use
+git.
 
-If you are new to Arch, you might find this tutorial helpful:
-@uref{http://mwolson.org/projects/ArchTutorial.html}.
+If you are new to git, you might find this tutorial helpful:
+@uref{http://www.kernel.org/pub/software/scm/git/docs/tutorial.html}.
 
-Downloading the Muse module with Arch and staying up-to-date involves
+Downloading the Muse module with git and staying up-to-date involves
 the following steps.
 
 @enumerate
-@item Install arch
+@item Install git
 
 @itemize @bullet
-@item Debian and Ubuntu: @kbd{apt-get install tla}.
-@item Other distributions: see @uref{http://www.gnuarch.org/gnuarchwiki/Getting_Arch}.
+@item Debian and Ubuntu: @kbd{apt-get install git-core}.
+@item Other distributions: download, compile, and install the source
+from @uref{http://www.kernel.org/pub/software/scm/git/}, or find a
+package.
 @end itemize
 
-@item Register the archive.
+@item Download the Muse development branch
+
+If you have developer access to Muse, do:
+
 @example
-tla register-archive -f http://mwolson.org/archives/2006
+git clone ssh://repo.or.cz/srv/git/muse-el.git muse
 @end example
 
-You might ask why there is a mention of the year ``2006'' in the name of
-the archive.  This year is not very significant---it only means that I
-created this archive in 2006.  I used to create a new archive every
-year, but this was a hassle for people who were trying to track
-development of Muse, so I have stopped doing it.
+otherwise, do:
 
-@item Download the Muse package.
 @example
-# Download Muse into the @file{muse} directory.
-tla get mwolson@@gnu.org--2006/muse--main--1.0 muse
+git clone git://repo.or.cz/muse-el.git muse
 @end example
 
 @item List upstream changes that are missing from your local copy.
@@ -309,7 +310,7 @@ to Muse.
 cd muse/
 
 # Display the summary of changes
-tla missing --summary
+git log HEAD..origin
 @end example
 
 @cindex updating Muse with Arch
