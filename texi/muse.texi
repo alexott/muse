@@ -347,6 +347,21 @@ There are other ways to interact with the Muse repository.
 The latest development snapshot can lag behind the git repo by as much
 as 20 minutes, but never more than that.
 
+@subheading Becoming a Muse developer
+@cindex developer, becoming
+
+If you want commit access to the shared Muse repository, then register
+an account at @uref{http://repo.or.cz} (be sure to add an SSH key), and
+contact the current maintainer at @email{mwolson@@gnu.org}.  It would be
+best to send some patches to the @email{muse-el-discuss@@gna.org}
+mailing list first, so that he knows that you know what you are doing.
+@xref{Getting Help and Reporting Bugs}, for instructions on subscribing
+to the mailing list.
+
+You must also be willing to sign a copyright assignment for your changes
+to Muse, since Muse is a GNU project.  The current maintainer will
+assist you in this process if you contact him.
+
 @node Installation, Getting Started, Obtaining Muse, Top
 @comment  node-name,  next,  previous,  up
 @chapter Compiling and Installing Muse
@@ -365,12 +380,13 @@ Muse.  By default, the program that is installed with the name
 @command{emacs} will be used.
 
 If you want to use the @command{xemacs} binary to perform the
-compilation, you copy @file{Makefile.defs.default} to
+compilation, you must copy @file{Makefile.defs.default} to
 @file{Makefile.defs} in the top-level directory, and then edit
 @file{Makefile.defs} as follows.  You can put either a full path to an
 Emacs or XEmacs binary or just the command name, as long as it is in the
-@env{PATH}.  Depending on your setup, changes to @option{PREFIX},
-@option{ELISPDIR}, and @option{INFODIR} may also need to be made.
+@env{PATH}.  Depending on your setup, changes to the @option{PREFIX},
+@option{ELISPDIR}, and/or @option{INFODIR} variables may also need to be
+made.
 
 @example
 EMACS    = xemacs

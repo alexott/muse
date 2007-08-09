@@ -1,3 +1,22 @@
+2007-08-08  Michael Olson  <mwolson@gnu.org>
+
+	* README (Prerequisites): Fix typo.
+	(Compilation, Installation): Update.
+	(Documentation, Further Documentation): Update URLs.
+	(Further Documentation): Add quick blurb on how to participate in
+	Muse development or track changes.
+
+	* texi/muse.texi (Releases): Use gna.org URL for downloading the
+	latest release, rather than my website.
+	(Development): Change instructions to use git instead of
+	Arch. Mention where to get a Windows binary for git.  Improve the
+	look of the listing.  Add section with instructions for Becoming a
+	Muse developer.
+	(Installation): Update instructions for Makefile.defs.default and
+	XEmacs.  Add index entries.  Add section for ELPA, since Muse
+	ought to be distributed in ELPA after the 3.10 release.  Fix typo
+	and clarify wording.
+
 2007-08-06  Michael Olson  <mwolson@gnu.org>
 
 	* texi/muse.texi: Make sure that attributes are marked up with

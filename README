@@ -47,38 +47,47 @@ Prerequisites
 
 You need either Emacs (21.1 or greater), XEmacs (21.4 or greater), or
 SXEmacs (warning: Muse has not been tested with SXEmacs).  The current
-maintainer recommend using Emacs.
+maintainer recommends using Emacs.
 
 Compilation
 -----------
 
 This is an optional step, since Emacs Lisp source code does not
-necessarily have to be byte-compiled.  It will yield a speed increase,
-though.
+necessarily have to be byte-compiled.  It may yield a slight speed
+increase, however.
 
 A working copy of Emacs or XEmacs is needed in order to compile the
 Emacs Muse.  By default, the program that is installed with the name
 `emacs' will be used.
 
 If you want to use the `xemacs' binary to perform the compilation, you
-would need to edit `Makefile.defs' in the top-level directory as
-follows.  You can put either a full path to an Emacs or XEmacs binary
-or just the command name, as long as it is in the PATH.
+must copy `Makefile.defs.default' to `Makefile.defs' in the top-level
+directory, and then edit `Makefile.defs' as follows.  You can put
+either a full path to an Emacs or XEmacs binary or just the command
+name, as long as it is in the PATH.  Depending on your setup, changes
+to the PREFIX, ELISPDIR, and/or INFODIR variables may also need to be
+made.
 
 EMACS    = xemacs
 SITEFLAG = -no-site-file
+# Edit the section as necessary
+install_info = install-info --section "XEmacs 21.4" $(1).info \
+        $(INFODIR)/dir || :
 
-Running `make' should compile the Muse source files in the `lisp'
-directory.
+Running `make' in the top-level directory should compile the Muse
+source files in the `lisp' directory, and generate an autoloads
+file in `lisp/muse-autoloads.el'.
 
 Installation
 ------------
 
 Muse may be installed into your file hierarchy by doing the following.
 
-Edit the `Makefile.defs' file so that ELISPDIR points to where you
-want the source and compiled Muse files to be installed and INFODIR
-indicates where to put the Muse manual.  Of course, you will want to
+Copy `Makefile.defs.default' to `Makefile.defs' in the top-level
+directory, if you haven't done so already.  Then edit the
+`Makefile.defs' file so that ELISPDIR points to where you want the
+source and compiled Muse files to be installed and INFODIR indicates
+where to put the Muse manual.  As mentioned earlier, you will want to
 edit EMACS and SITEFLAG as shown in the Compilation section if you are
 using XEmacs.
 
@@ -89,7 +98,7 @@ want to change the value of INSTALLINFO as specified in
 If you wish to install Muse to different locations than the defaults
 specify, edit `Makefile.defs' accordingly.
 
-Run `make' as a normal user.
+Run `make' as a normal user, if you haven't done so already.
 
 Run `make install' as the root user if you have chosen installation
 locations that require this.
@@ -124,9 +133,9 @@ document called `muse.html'.  Both of these will be created in the
 
 This manual is also available online in several forms.
 
- - PDF: http://www.mwolson.org/static/doc/muse.pdf
- - HTML (single file): http://www.mwolson.org/static/doc/muse.html
- - HTML (multiple files): http://www.mwolson.org/static/doc/muse/
+ - PDF: http://mwolson.org/static/doc/muse.pdf
+ - HTML (single file): http://mwolson.org/static/doc/muse.html
+ - HTML (multiple files): http://mwolson.org/static/doc/muse/
 
 QuickStart
 ----------
@@ -155,7 +164,11 @@ more information on bugs, unimplemented features, and user-contributed
 tweaks.
 
 The current maintainer's webpage for Muse is at
-http://www.mwolson.org/projects/EmacsMuse.html.
+http://mwolson.org/projects/EmacsMuse.html.
+
+If you wish to participate in the development of Muse, or track the
+latest development changes, please read the `Development' section of
+the Muse manual (in the `Obtaining Muse' chapter) for instructions.
 
 Mailing Lists
 =============
