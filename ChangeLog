@@ -1,3 +1,7 @@
+2007-08-10  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile (dist, debprepare): Use git instead of tla.
+
 2007-08-09  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-write-file): Pay attention to
