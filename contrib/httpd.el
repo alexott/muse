@@ -153,7 +153,7 @@ content.")
 
 (defun httpd-send-file (filename)
   (with-temp-buffer
-    (insert-file-contents-literally filename)
+    (insert-file-contents filename)
     (httpd-send-data (buffer-string))))
 
 (defun httpd-lose (code msg)

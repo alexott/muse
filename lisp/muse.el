@@ -258,7 +258,7 @@ See also `with-temp-file' and `with-output-to-string'.
 
 Unlike `with-temp-buffer', this will never attempt to save the
 temp buffer.  It is meant to be used along with
-`insert-file-contents' or `insert-file-contents-literally'.
+`insert-file-contents' or `muse-insert-file-contents'.
 
 Additionally, if `debug-on-error' is set to t, keep the buffer
 around for debugging purposes rather than removing it."
@@ -290,6 +290,33 @@ around for debugging purposes rather than removing it."
 
 (put 'muse-with-temp-buffer 'lisp-indent-function 0)
 (put 'muse-with-temp-buffer 'edebug-form-spec '(body))
+
+(defun muse-insert-file-contents (filename &optional visit)
+  "Insert the contents of file FILENAME after point.
+Do character code conversion, but none of the other unnecessary
+things like format decoding or `find-file-hook'.
+
+If VISIT is non-nil, the buffer's visited filename
+and last save file modtime are set, and it is marked unmodified.
+If visiting and the file does not exist, visiting is completed
+before the error is signaled."
+  (let ((format-alist nil)
+        (after-insert-file-functions nil)
+        (find-buffer-file-type-function
+         (if (fboundp 'find-buffer-file-type)
+             (symbol-function 'find-buffer-file-type)
+           nil))
+        (inhibit-file-name-handlers
+         (append '(jka-compr-handler image-file-handler)
+                 inhibit-file-name-handlers))
+        (inhibit-file-name-operation 'insert-file-contents))
+    (unwind-protect
+         (progn
+           (fset 'find-buffer-file-type (lambda (filename) t))
+           (insert-file-contents filename visit))
+      (if find-buffer-file-type-function
+          (fset 'find-buffer-file-type find-buffer-file-type-function)
+        (fmakunbound 'find-buffer-file-type)))))
 
 (defun muse-write-file (filename)
   "Write current buffer into file FILENAME.

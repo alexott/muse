@@ -153,7 +153,7 @@ cached in memory to speed up serving time."
             (setq muse-buffer-mtime modified-time))
           (goto-char (point-max))
           (when (bobp)
-            (insert-file-contents-literally file t)
+            (muse-insert-file-contents file t)
             (let ((styles (cddr (muse-project muse-http-serving-p)))
                   style)
               (while (and styles (null style))

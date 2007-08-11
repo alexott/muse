@@ -2,6 +2,36 @@
 
 	* Makefile (dist, debprepare): Use git instead of tla.
 
+	* contrib/httpd.el (httpd-send-file): Use insert-file-contents.
+
+	* examples/mwolson/muse-init.el (my-muse-prepare-entry-for-xanga):
+	Use muse-insert-file-contents.
+
+	* experimental/muse-split.el (muse-publish-file)
+	(muse-publish-presplit-publish, muse-publish-no-split-function)
+	(muse-journal-split-by-entry, muse-journal-split-by-month): Use
+	muse-insert-file-contents.
+
+	* lisp/muse-book.el (muse-book-publish-chapter)
+	(muse-book-get-directives): Use muse-insert-file-contents.
+
+	* lisp/muse-http.el (muse-http-render-page): Use
+	muse-insert-file-contents.
+
+	* lisp/muse-poem.el (muse-poem-markup-tag): Use
+	muse-insert-file-contents.
+
+	* lisp/muse-publish.el (muse-insert-file-or-string)
+	(muse-publish-file, muse-publish-include-tag)
+	(muse-published-contents): Use muse-insert-file-contents.
+
+	* lisp/muse.el (muse-insert-file-contents): New function that
+	inserts a file with character code conversion, but none of the
+	other frivolities.  Since insert-file-contents-literally does not
+	do character code conversion, it is not suitable for us.
+	(muse-with-temp-buffer): Mention muse-insert-file-contents rather
+	than insert-file-contents-literally.
+
 2007-08-09  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-write-file): Pay attention to
