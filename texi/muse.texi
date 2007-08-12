@@ -302,6 +302,13 @@ otherwise, do:
 git clone git://repo.or.cz/muse-el.git muse
 @end example
 
+If you are behind a restrictive firewall, and do not have developer
+access, then do the following instead:
+
+@example
+git clone http://repo.or.cz/r/muse-el.git muse
+@end example
+
 @item List upstream changes that are missing from your local copy.
 Do this whenever you want to see whether new changes have been committed
 to Muse.  If you wish, you may skip this step and proceed directly to

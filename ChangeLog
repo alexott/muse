@@ -1,3 +1,8 @@
+2007-08-12  Michael Olson  <mwolson@gnu.org>
+
+	* texi/muse.texi (Development): Mention the http method for
+	anonymous git access to the shared repo.
+
 2007-08-10  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (dist, debprepare): Use git instead of tla.
