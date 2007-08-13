@@ -2064,12 +2064,6 @@ The text is removed regardless of whether and part of it is uppercase."
         (match-string 1 string)
       string)))
 
-(defun muse-publish-strip-tags (string)
-  "Remove all tags from the string."
-  (while (string-match "<.*?>" string)
-    (setq string (replace-match "" nil t string)))
-  string)
-
 (defun muse-publish-markup-type (category default-func)
   (let ((rule (muse-find-markup-element :overrides category (muse-style))))
     (funcall (or rule default-func))))

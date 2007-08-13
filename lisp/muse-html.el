@@ -508,6 +508,10 @@ This will be used if no special characters are found."
 
 ;; Handling of tags for HTML
 
+(defun muse-html-strip-links (string)
+  "Remove all HTML links from STRING."
+  (muse-replace-regexp-in-string "\\(<a .*?>\\|</a>\\)" "" string nil t))
+
 (defun muse-html-insert-contents (depth)
   "Scan the current document and generate a table of contents at point.
 DEPTH indicates how many levels of headings to include.  The default is 2."
@@ -541,7 +545,7 @@ DEPTH indicates how many levels of headings to include.  The default is 2."
       (while contents
         (muse-insert-markup "<dt>\n"
                             "<a href=\"#sec" (int-to-string index) "\">"
-                            (muse-publish-strip-tags (cdar contents))
+                            (muse-html-strip-links (cdar contents))
                             "</a>\n"
                             "</dt>\n")
         (setq index (1+ index)
