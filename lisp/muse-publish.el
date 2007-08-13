@@ -1794,14 +1794,12 @@ This is usually applied to explicit links."
 
 (defun muse-publish-cite-tag (beg end attrs)
   (let* ((type (muse-publish-get-and-delete-attr "type" attrs))
-         (muse-publishing-directives muse-publishing-directives)
-         (citetag
-          (cond ((string-equal type "author")
-                 'begin-cite-author)
-                ((string-equal type "year")
-                 'begin-cite-year)
-                (t
-                 'begin-cite))))
+         (citetag (cond ((string-equal type "author")
+                         'begin-cite-author)
+                        ((string-equal type "year")
+                         'begin-cite-year)
+                        (t
+                         'begin-cite))))
     (goto-char beg)
     (insert (muse-markup-text citetag (muse-publishing-directive "bibsource")))
     (goto-char end)
@@ -1905,9 +1903,11 @@ narrowed region after evaluating BODY.  The function should
 take the ATTRS parameter.
 
 BEG is modified to be the start of the published markup."
-  (let ((markup (make-symbol "markup"))
+  (let ((attrs-sym (make-symbol "attrs"))
+        (markup (make-symbol "markup"))
         (markup-function (make-symbol "markup-function")))
-    `(let ((,markup (muse-publish-get-and-delete-attr "markup" ,attrs)))
+    `(let* ((,attrs-sym ,attrs)
+            (,markup (muse-publish-get-and-delete-attr "markup" ,attrs-sym)))
        (save-restriction
          (narrow-to-region ,beg ,end)
          (goto-char (point-min))
@@ -1928,13 +1928,13 @@ BEG is modified to be the start of the published markup."
                     (error "Invalid markup function `%s'" ,markup))
                    (t nil))
              (if ,markup-function
-                 (funcall ,markup-function ,attrs)
+                 (funcall ,markup-function ,attrs-sym)
                (muse-publish-mark-read-only (point-min) (point-max))
                (goto-char (point-max)))))))))
 
 (put 'muse-publish-markup-attribute 'lisp-indent-function 4)
 (put 'muse-publish-markup-attribute 'edebug-form-spec
-     '(form form form form body))
+     '(sexp sexp sexp sexp body))
 
 (defun muse-publish-lisp-tag (beg end attrs)
   (muse-publish-markup-attribute beg end attrs nil
@@ -2004,7 +2004,7 @@ The `markup' attribute controls how this file is marked up after
 being inserted.  See `muse-publish-markup-attribute' for an
 explanation of how it works."
   (let ((filename (muse-publish-get-and-delete-attr "file" attrs))
-        (muse-publishing-directives muse-publishing-directives))
+        (muse-publishing-directives (copy-tree muse-publishing-directives)))
     (if filename
         (setq filename (expand-file-name
                         filename
@@ -2042,7 +2042,6 @@ current style is exactly this style."
             (and (not exactp) (muse-style-derived-p style)))
         (let* ((function (cdr (assoc "function" attrs)))
                (muse-publish-use-header-footer-tags nil)
-               (muse-publishing-directives muse-publishing-directives)
                (markup-function (and function (intern function))))
           (if (and markup-function (functionp markup-function))
               (save-restriction
