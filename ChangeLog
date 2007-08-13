@@ -7,6 +7,13 @@
 	function.  Don't call muse-publish-link-file, because that does
 	the wrong thing when we have muse-file-extension set to nil.
 	Thanks to Sebastian Obermanns for the report.
+	(muse-project-publish-this-file): Let-bind muse-current-project.
+	Also, if the file is not associated with a project, fall back to
+	muse-publish-this-file.
+	(muse-project-set-variables): Add this to
+	muse-before-publish-hook, so that it gets called.  This fixes a
+	bug where project-specific variables were being used in Muse mode,
+	but ignored when publishing.
 
 	* lisp/muse-publish.el (muse-publish-link-name)
 	(muse-publish-link-file, muse-publish-link-page): Add docstrings

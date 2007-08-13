@@ -757,14 +757,19 @@ prompting if more than one style applies.
 
 If FORCE is given, publish the file even if it is up-to-date."
   (interactive (list current-prefix-arg))
-  (let* ((style (muse-project-get-applicable-style
-                buffer-file-name (cddr muse-current-project)))
-         (output-dir (muse-style-element :path style))
-         (muse-current-output-style (list :base (car style)
-                                          :path output-dir)))
-    (unless (muse-publish-file buffer-file-name style output-dir force)
-      (message (concat "The published version is up-to-date; use"
-                       " C-u C-c C-t to force an update.")))))
+  (let ((muse-current-project (muse-project-of-file)))
+    (if (not muse-current-project)
+        ;; file is not part of a project, so fall back to muse-publish
+        (if (interactive-p) (call-interactively 'muse-publish-this-file)
+          (muse-publish-this-file nil nil force))
+      (let* ((style (muse-project-get-applicable-style
+                     buffer-file-name (cddr muse-current-project)))
+             (output-dir (muse-style-element :path style))
+             (muse-current-output-style (list :base (car style)
+                                              :path output-dir)))
+        (unless (muse-publish-file buffer-file-name style output-dir force)
+          (message (concat "The published version is up-to-date; use"
+                           " C-u C-c C-t to force an update.")))))))
 
 (defun muse-project-save-buffers (&optional project)
   (setq project (muse-project project))
@@ -872,6 +877,9 @@ If FORCE is given, publish the file even if it is up-to-date."
                   (make-local-variable sym)))
       (funcall custom-set var (car (cdr vars)))
       (setq vars (cdr (cdr vars))))))
+
+(custom-add-option 'muse-before-publish-hook 'muse-project-set-variables)
+(add-to-list 'muse-before-publish-hook 'muse-project-set-variables)
 
 (defun muse-project-delete-output-files (project)
   (interactive
