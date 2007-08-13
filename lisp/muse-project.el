@@ -662,15 +662,38 @@ The user is prompted if several styles are found."
              (cons (muse-get-keyword :base style) style))
            (muse-project-applicable-styles file styles))))
 
+(defun muse-project-resolve-directory (page local-style remote-style)
+  "Figure out the directory part of the path that provides a link to PAGE.
+LOCAL-STYLE is the style of the current Muse file, and
+REMOTE-STYLE is the style associated with PAGE.
+
+If REMOTE-STYLE has a :base-url element, concatenate it and PAGE.
+Otherwise, return a relative link."
+  (let ((prefix (muse-style-element :base-url remote-style)))
+    (if prefix
+        (concat prefix page)
+      (file-relative-name (expand-file-name
+                           (file-name-nondirectory page)
+                           (muse-style-element :path remote-style))
+                          (expand-file-name
+                           (muse-style-element :path local-style))))))
+
 (defun muse-project-resolve-link (page local-style remote-styles)
-  "Return a published relative link from the output path of one file
-to another file.
+  "Return a published link from the output path of one file to another file.
 
 The best match for PAGE is determined by comparing the link
 suffix of the given local style and that of the remote styles.
 
 The remote styles are usually populated by
-`muse-project-applicable-styles'."
+`muse-project-applicable-styles'.
+
+If no remote style is found, return PAGE verbatim
+
+If PAGE has a :base-url associated with it, return the
+concatenation of the :base-url value and PAGE.
+
+Otherwise, return a relative path from the directory of
+LOCAL-STYLE to the best directory among REMOTE-STYLES."
   (let ((link-suffix (or (muse-style-element :link-suffix local-style)
                          (muse-style-element :suffix local-style)))
         remote-style)
@@ -682,16 +705,10 @@ The remote styles are usually populated by
                           remote-styles)))
     (if (null remote-style)
         page
-      (muse-publish-link-file
-       (let ((prefix (muse-style-element :base-url remote-style)))
-         (if prefix
-             (concat prefix page)
-           (file-relative-name (expand-file-name
-                                (file-name-nondirectory page)
-                                (muse-style-element :path remote-style))
-                               (expand-file-name
-                                (muse-style-element :path local-style)))))
-       remote-style))))
+      (setq page (muse-project-resolve-directory
+                  page local-style remote-style))
+      (concat (file-name-directory page)
+              (muse-publish-link-name page remote-style)))))
 
 (defun muse-project-current-output-style (&optional file project)
   (or muse-current-output-style

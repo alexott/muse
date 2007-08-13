@@ -203,7 +203,10 @@ understand that it is part of a regexp."
 
 (defun muse-page-name (&optional name)
   "Return the canonical form of a Muse page name.
-All this means is that certain extensions, like .gz, are removed."
+
+What this means is that the directory part of NAME is removed,
+and the file extensions in `muse-ignored-extensions' are also
+removed from NAME."
   (save-match-data
     (unless (and name (not (string= name "")))
       (setq name (muse-current-file)))

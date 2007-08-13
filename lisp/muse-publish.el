@@ -689,6 +689,11 @@ normally."
             (muse-publish-output-name file style))))
 
 (defsubst muse-publish-link-name (&optional file style)
+  "Take FILE and add :prefix and either :link-suffix or :suffix from STYLE.
+We assume that FILE is a Muse file.
+
+We call `muse-page-name' on FILE to remove the directory part of
+FILE and any extensions that are in `muse-ignored-extensions'."
   (setq style (muse-style style))
   (concat (muse-style-element :prefix style)
           (muse-page-name file)
@@ -696,6 +701,16 @@ normally."
               (muse-style-element :suffix style))))
 
 (defsubst muse-publish-link-file (file &optional style)
+  "Turn FILE into a URL.
+
+If FILE exists on the system as-is, return it without
+modification.  In the case of wanting to link to Muse files when
+`muse-file-extension' is nil, you should load muse-project.el.
+
+Otherwise, assume that it is a Muse file and call
+`muse-publish-link-name' to add :prefix, :link-suffix, :suffix,
+and removing ignored file extensions, but preserving the
+directory part of FILE."
   (setq style (muse-style style))
   (if (file-exists-p file)
       file
@@ -703,6 +718,13 @@ normally."
             (muse-publish-link-name file style))))
 
 (defsubst muse-publish-link-page (page)
+  "Turn PAGE into a URL.
+
+This is called by `muse-publish-classify-url' to figure out what
+a link to another file or Muse page should look like.
+
+If muse-project.el is loaded, call `muse-project-link-page' for this.
+Otherwise, call `muse-publish-link-file'."
   (if (fboundp 'muse-project-link-page)
       (muse-project-link-page page)
     (muse-publish-link-file page)))

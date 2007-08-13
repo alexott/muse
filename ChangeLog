@@ -1,5 +1,19 @@
 2007-08-12  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-project.el (muse-project-resolve-directory): New
+	function that figures out the directory part of the path that
+	provides a link to a page.
+	(muse-project-resolve-link): Expand docstring.  Use the new
+	function.  Don't call muse-publish-link-file, because that does
+	the wrong thing when we have muse-file-extension set to nil.
+	Thanks to Sebastian Obermanns for the report.
+
+	* lisp/muse-publish.el (muse-publish-link-name)
+	(muse-publish-link-file, muse-publish-link-page): Add docstrings
+	so that I can remember what each of these things do.
+
+	* lisp/muse.el (muse-page-name): Improve docstring.
+
 	* texi/muse.texi (Development): Mention the http method for
 	anonymous git access to the shared repo.
 
