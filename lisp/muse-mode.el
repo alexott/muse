@@ -914,7 +914,7 @@ With zero or negative ARG turn mode off.
 This minor mode provides the Muse keybindings for editing lists,
 and support for filling lists properly.
 
-This recognizes not only Muse-style lists, which use the \"-\"
+It recognizes not only Muse-style lists, which use the \"-\"
 character or numbers, but also lists that use asterisks or plus
 signs.  This should make the minor mode generally useful.
 

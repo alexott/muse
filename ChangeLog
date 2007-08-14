@@ -1,5 +1,8 @@
 2007-08-14  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-mode.el (muse-list-edit-minor-mode): Grammar fix in
+	docstring.
+
 	* lisp/muse-publish.el (muse-publish-markup-heading): Escape
 	specials in heading now, rather than waiting on the whole-document
 	pass later on.  This lets <contents> generation work without
@@ -385,8 +388,8 @@
 	muse-completing-read-function.
 
 	* lisp/muse-latex2png.el (muse-publish-latex-tag)
-	(muse-publish-math-tag): Allow the contex style -- which I plan to
-	include soon -- to work with these tags.
+	(muse-publish-math-tag): Allow the context style -- which I plan
+	to include soon -- to work with these tags.
 
 	* lisp/muse.el (muse-completing-read-function): New option that
 	determines which function to call when doing a completing-read.
