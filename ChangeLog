@@ -9,6 +9,10 @@
 	validation errors.  Thanks to Reid van Melle for the report.
 
 	* texi/muse.texi (Tag Summary): Document <cite> tag.
+	(Miscellaneous): New chapter containing "Muse List Edit Minor
+	Mode" section.
+	(Muse List Edit Minor Mode): New section that documents
+	muse-list-edit-minor-mode.
 
 2007-08-12  Michael Olson  <mwolson@gnu.org>
 

@@ -75,6 +75,7 @@ and modified without restriction.
 * Markup Rules::                Rules for using markup.
 * Publishing Styles::           Publishing various types of documents.
 * Extending Muse::              Making your own publishing styles.
+* Miscellaneous::               Miscellaneous add-ons, like a minor mode.
 * Getting Help and Reporting Bugs::  
 * History::                     History of this document.
 * Contributors::                Contributors to this documentation.
@@ -157,6 +158,10 @@ Common functionality shared by styles
 * Markup Strings::              Strings specific to a publishing style.
 * Markup Tags::                 Tag specifications for special markup.
 * Style Elements::              Parameters used for defining styles.
+
+Miscellaneous add-ons, like a minor mode
+
+* Muse List Edit Minor Mode::   Edit lists easily in other major modes.
 
 @end detailmenu
 @end menu
@@ -3053,7 +3058,7 @@ The default XML charset to use if no translation is found in
 @end table
 
 
-@node Extending Muse, Getting Help and Reporting Bugs, Publishing Styles, Top
+@node Extending Muse, Miscellaneous, Publishing Styles, Top
 @comment  node-name,  next,  previous,  up
 @chapter Making your own publishing styles
 
@@ -3760,8 +3765,87 @@ base style's string list will be queried.
 
 @end table
 
+@node Miscellaneous, Getting Help and Reporting Bugs, Extending Muse, Top
+@comment  node-name,  next,  previous,  up
+@chapter Miscellaneous add-ons, like a minor mode
 
-@node Getting Help and Reporting Bugs, History, Extending Muse, Top
+@menu
+* Muse List Edit Minor Mode::   Edit lists easily in other major modes.
+@end menu
+
+@node Muse List Edit Minor Mode, , , Miscellaneous
+@comment  node-name,  next,  previous,  up
+@section Edit lists easily in other major modes
+@cindex muse-list-edit-minor-mode
+
+@code{muse-list-edit-minor-mode} is meant to be used with other major
+modes, such as Message (for composing email) and debian-changelog-mode
+(for editing debian/changelog files).
+
+It implements practically perfect support for editing and filling lists.
+It can even handle nested lists.  In addition to Muse-specific list
+items ("-", numbers, definition lists, footnotes), it can also handle
+items that begin with "*" or "+".  Filling list items behaves in the
+same way that it does in Muse, regardless of whether filladapt is also
+enabled, which is the primary reason to use this tool.
+
+@subheading Installation
+
+To use it, add ``(require 'muse-mode)'' to your Emacs customization file
+and add the function @code{turn-on-muse-list-edit-minor-mode} to any
+mode hooks where you wish to enable this minor mode.
+
+@subheading Keybindings
+
+@code{muse-list-edit-minor-mode} uses the following keybindings.
+
+@table @kbd
+
+@item M-RET (`muse-l-e-m-m-insert-list-item')
+Insert a new list item at point, using the indentation level of the
+current list item.
+
+@item C-< (`muse-l-e-m-m-decrease-list-item-indent')
+Decrease indentation of the current list item.
+
+@item C-> (`muse-l-e-m-m-increase-list-item-indent')
+Increase indentation of the current list item.
+
+@end table
+
+@subheading Functions
+
+@defun muse-list-edit-minor-mode
+This is a global minor mode for editing files with lists.
+It is meant to be used with other major modes, and not with Muse mode.
+
+Interactively, with no prefix argument, toggle the mode.
+With universal prefix @var{arg} turn mode on.
+With zero or negative @var{arg} turn mode off.
+
+This minor mode provides the Muse keybindings for editing lists,
+and support for filling lists properly.
+
+It recognizes not only Muse-style lists, which use the "-"
+character or numbers, but also lists that use asterisks or plus
+signs.  This should make the minor mode generally useful.
+
+Definition lists and footnotes are also recognized.
+
+Note that list items may omit leading spaces, for compatibility
+with modes that set @code{left-margin}, such as
+@code{debian-changelog-mode}.
+@end defun
+
+@defun turn-on-muse-list-edit-minor-mode
+Unconditionally turn on Muse list edit minor mode.
+@end defun
+
+@defun turn-off-muse-list-edit-minor-mode
+Unconditionally turn off Muse list edit minor mode.
+@end defun
+
+@node Getting Help and Reporting Bugs, History, Miscellaneous, Top
 @comment  node-name,  next,  previous,  up
 @chapter Getting Help and Reporting Bugs
 @cindex help, getting
