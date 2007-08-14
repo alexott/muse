@@ -1592,6 +1592,16 @@ that were mentioned in previous sections.
 
 @table @samp
 
+@item <cite>
+Insert a citation to another source.
+
+This takes the argument @option{type}, which indicates the type of
+citation.  The valid types are "author" and "year".  If this argument is
+omitted, include both author and year in the citation.
+
+The bibliography to use for the citation may be specified by the
+@option{#bibsource} directive.
+
 @item <class>
 If publishing to HTML, surround the given text with a @verb{|<span>|}
 tag.  It takes one argument called ``name'' that specifies the class
