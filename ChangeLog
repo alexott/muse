@@ -1,3 +1,10 @@
+2007-08-14  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-heading): Escape
+	specials in heading now, rather than waiting on the whole-document
+	pass later on.  This lets <contents> generation work without
+	validation errors.  Thanks to Reid van Melle for the report.
+
 2007-08-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-strip-links): New function that
