@@ -374,6 +374,10 @@ You must also be willing to sign a copyright assignment for your changes
 to Muse, since Muse is a GNU project.  The current maintainer will
 assist you in this process if you contact him.
 
+For information on committing changes to Muse and performing
+development, please consult
+@uref{http://emacswiki.org/cgi-bin/wiki/MuseDevelopment}.
+
 @node Installation, Getting Started, Obtaining Muse, Top
 @comment  node-name,  next,  previous,  up
 @chapter Compiling and Installing Muse

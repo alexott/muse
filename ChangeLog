@@ -13,6 +13,7 @@
 	Mode" section.
 	(Muse List Edit Minor Mode): New section that documents
 	muse-list-edit-minor-mode.
+	(Development): Mention the MuseDevlopment page on emacswiki.org.
 
 2007-08-12  Michael Olson  <mwolson@gnu.org>
 
