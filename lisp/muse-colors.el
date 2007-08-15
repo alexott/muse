@@ -276,7 +276,8 @@ whether progress messages should be displayed to the user."
          (e1 (match-end 0))
          (leader (- e1 beg))
          b2 e2 multiline)
-    (unless (eq (get-text-property beg 'invisible) 'muse)
+    (unless (or (eq (get-text-property beg 'invisible) 'muse)
+                (get-text-property beg 'muse-directive-or-comment))
       ;; check if it's a header
       (if (eq (char-after e1) ?\ )
           (when (or (= beg (point-min))
@@ -321,7 +322,8 @@ whether progress messages should be displayed to the user."
 (defun muse-colors-underlined ()
   (let ((start (match-beginning 0))
         multiline)
-    (unless (eq (get-text-property start 'invisible) 'muse)
+    (unless (or (eq (get-text-property start 'invisible) 'muse)
+                (get-text-property start 'muse-directive-or-comment))
       ;; beginning of line or space or symbol
       (when (or (= start (point-min))
                 (eq (char-syntax (char-before start)) ?\ )
@@ -352,7 +354,8 @@ whether progress messages should be displayed to the user."
 (defun muse-colors-verbatim ()
   (let ((start (match-beginning 0))
         multiline)
-    (unless (eq (get-text-property start 'invisible) 'muse)
+    (unless (or (eq (get-text-property start 'invisible) 'muse)
+                (get-text-property start 'muse-directive-or-comment))
       ;; beginning of line or space or symbol
       (when (or (= start (point-min))
                 (eq (char-syntax (char-before start)) ?\ )
@@ -399,6 +402,9 @@ whether progress messages should be displayed to the user."
 
     ;; highlight any markup tags encountered
     (muse-tag-regexp ?\< muse-colors-custom-tags)
+
+    ;; display comments
+    (,(concat "^;[" muse-regexp-blank "]") ?\; muse-colors-comment)
 
     ;; this has to come later since it doesn't have a special
     ;; character in the second cell
@@ -564,7 +570,9 @@ Functions should not modify the contents of the buffer."
     (goto-char (match-beginning 0))
     (looking-at muse-tag-regexp))
   (let ((tag-info (muse-colors-tag-info (match-string 1))))
-    (when tag-info
+    (when (and tag-info
+               (not (get-text-property (match-beginning 0)
+                                       'muse-directive-or-comment)))
       (let ((closed-tag (match-string 3))
             (start (match-beginning 0))
             end attrs)
@@ -777,7 +785,9 @@ in place of an image link defined by BEG and END."
 
 (defun muse-colors-explicit-link ()
   "Color explicit links."
-  (when (eq ?\[ (char-after (match-beginning 0)))
+  (when (and (eq ?\[ (char-after (match-beginning 0)))
+             (not (get-text-property (match-beginning 0)
+                                     'muse-directive-or-comment)))
     ;; remove flyspell overlays
     (when (fboundp 'flyspell-unhighlight-at)
       (let ((cur (match-beginning 0)))
@@ -832,15 +842,18 @@ in place of an image link defined by BEG and END."
 
 (defun muse-colors-implicit-link ()
   "Color implicit links."
-  ;; remove flyspell overlays
-  (when (fboundp 'flyspell-unhighlight-at)
-    (let ((cur (match-beginning 0)))
-      (while (> (match-end 0) cur)
-        (flyspell-unhighlight-at cur)
-        (setq cur (1+ cur)))))
   (unless (or (eq (get-text-property (match-beginning 0) 'invisible) 'muse)
+              (get-text-property (match-beginning 0)
+                                 'muse-directive-or-comment)
               (eq (char-before (match-beginning 0)) ?\")
               (eq (char-after (match-end 0)) ?\"))
+    ;; remove flyspell overlays
+    (when (fboundp 'flyspell-unhighlight-at)
+      (let ((cur (match-beginning 0)))
+        (while (> (match-end 0) cur)
+          (flyspell-unhighlight-at cur)
+          (setq cur (1+ cur)))))
+    ;; colorize link
     (let ((link (muse-match-string-no-properties 1))
           (face (muse-link-face (match-string 1))))
       (when face
@@ -849,9 +862,15 @@ in place of an image link defined by BEG and END."
                               (muse-match-string-no-properties 1) face))))))
 
 (defun muse-colors-title ()
-  (add-text-properties (+ 7 (match-beginning 0))
-                       (muse-line-end-position)
-                       '(face muse-header-1)))
+  (add-text-properties (+ 7 (match-beginning 0)) (muse-line-end-position)
+                       (list 'face 'muse-header-1
+                             'muse-directive-or-comment t)))
+
+(defun muse-colors-comment ()
+  (add-text-properties (match-beginning 0) (muse-line-end-position)
+                       (list 'face 'font-lock-comment-face
+                             'muse-directive-or-comment t)))
+
 
 (provide 'muse-colors)
 

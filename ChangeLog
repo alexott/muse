@@ -1,5 +1,17 @@
 2007-08-14  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-colors.el (muse-colors-emphasized)
+	(muse-colors-underlined. muse-colors-verbatim)
+	(muse-colors-custom-tags. muse-colors-explicit-link)
+	(muse-colors-implicit-link): Don't trod on comments or the #title
+	directive.
+	(muse-colors-markup): Add comment rule.
+	(muse-colors-implicit-link): Only remove flyspell overlay after we
+	decide whether this is an implicit link, rather than before.
+	(muse-colors-title): Add the muse-directive-or-comment property.
+	(muse-colors-comment): New function that colorizes comments using
+	font-lock-comment-face.
+
 	* lisp/muse-mode.el (muse-list-edit-minor-mode): Grammar fix in
 	docstring.
 
