@@ -130,6 +130,7 @@ used as the filename of the image."
   "Outline faces to use when assigning Muse header faces.")
 
 (defun muse-make-faces-default (&optional later)
+  "Generate the default face definitions for headers."
   (dolist (num '(1 2 3 4 5))
     (let ((newsym (intern (concat "muse-header-" (int-to-string num)))))
       ;; put in the proper group and give documentation
@@ -155,6 +156,7 @@ used as the filename of the image."
 (progn (muse-make-faces-default))
 
 (defun muse-make-faces (&optional frame)
+  "Generate face definitions for headers based the user's preferences."
   (cond
    ((not muse-colors-autogen-headings)
     nil)
@@ -227,10 +229,16 @@ whether progress messages should be displayed to the user."
   :type 'hook
   :group 'muse-colors)
 
-(defvar muse-colors-regexp nil)
-(defvar muse-colors-vector nil)
+(defvar muse-colors-regexp nil
+  "Regexp matching each car of `muse-colors-markup'.")
+(defvar muse-colors-vector nil
+  "Vector of all characters that are part of Muse markup.
+This is composed of the 2nd element of each `muse-colors-markup'
+entry.")
 
 (defun muse-configure-highlighting (sym val)
+  "Extract color markup information from VAL and set to SYM.
+This is usually called with `muse-colors-markup' as both arguments."
   (let ((regexps nil)
         (rules nil))
     (dolist (rule val)
@@ -261,6 +269,7 @@ whether progress messages should be displayed to the user."
   (set sym val))
 
 (defun muse-colors-emphasized ()
+  "Color emphasized text and headings."
   ;; Here we need to check four different points - the start and end
   ;; of the leading *s, and the start and end of the trailing *s.  We
   ;; allow the outsides to be surrounded by whitespace or punctuation,
@@ -319,6 +328,7 @@ whether progress messages should be displayed to the user."
                  beg e2 '(font-lock-multiline t))))))))))
 
 (defun muse-colors-underlined ()
+  "Color underlined text."
   (let ((start (match-beginning 0))
         multiline)
     (unless (or (eq (get-text-property start 'invisible) 'muse)
@@ -351,6 +361,7 @@ whether progress messages should be displayed to the user."
                '(font-lock-multiline t)))))))))
 
 (defun muse-colors-verbatim ()
+  "Render in teletype and suppress further parsing."
   (let ((start (match-beginning 0))
         multiline)
     (unless (or (eq (get-text-property start 'invisible) 'muse)
@@ -454,6 +465,7 @@ fontification in that area."
   (defvar font-lock-multiline nil))
 
 (defun muse-use-font-lock ()
+  "Set up font-locking for Muse."
   (muse-add-to-invisibility-spec 'muse)
   (set (make-local-variable 'font-lock-multiline) 'undecided)
   (set (make-local-variable 'font-lock-defaults)
@@ -562,6 +574,7 @@ Functions should not modify the contents of the buffer."
   :group 'muse-colors)
 
 (defsubst muse-colors-tag-info (tagname &rest args)
+  "Get tag info associated with TAGNAME, ignoring ARGS."
   (assoc tagname muse-colors-tags))
 
 (defun muse-colors-custom-tags ()
@@ -637,6 +650,7 @@ Functions should not modify the contents of the buffer."
     (add-text-properties beg end `(font-lock-multiline ,multi))))
 
 (defun muse-colors-lisp-tag (beg end attrs)
+  "Color the region enclosed by a <lisp> tag."
   (if (not muse-colors-evaluate-lisp-tags)
       (muse-colors-literal-tag beg end)
     (muse-unhighlight-region beg end)
@@ -682,9 +696,11 @@ Functions should not modify the contents of the buffer."
   (if (or (featurep 'xemacs)
           (>= emacs-major-version 21))
       'keymap
-    'local-map))
+    'local-map)
+  "The name of the keymap or local-map property.")
 
 (defsubst muse-link-properties (help-str &optional face)
+  "Determine text properties to use for a link."
   (append (if face
               (list 'face face 'mouse-face 'highlight 'muse-link t)
             (list 'invisible 'muse 'intangible t))
@@ -862,11 +878,13 @@ in place of an image link defined by BEG and END."
                               (muse-match-string-no-properties 1) face))))))
 
 (defun muse-colors-title ()
+  "Color #title directives."
   (add-text-properties (+ 7 (match-beginning 0)) (muse-line-end-position)
                        (list 'face 'muse-header-1
                              'muse-directive-or-comment t)))
 
 (defun muse-colors-comment ()
+  "Color comments."
   (add-text-properties (match-beginning 0) (muse-line-end-position)
                        (list 'face 'font-lock-comment-face
                              'muse-directive-or-comment t)))

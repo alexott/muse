@@ -1,10 +1,10 @@
 2007-08-14  Michael Olson  <mwolson@gnu.org>
 
-	* lisp/muse-colors.el (muse-colors-emphasized)
-	(muse-colors-underlined. muse-colors-verbatim)
-	(muse-colors-custom-tags. muse-colors-explicit-link)
-	(muse-colors-implicit-link): Don't trod on comments or the #title
-	directive.
+	* lisp/muse-colors.el: Document all functions and variables.
+	(muse-colors-emphasized, muse-colors-underlined)
+	(muse-colors-verbatim, muse-colors-custom-tags)
+	(muse-colors-explicit-link, muse-colors-implicit-link): Don't trod
+	on comments or the #title directive.
 	(muse-colors-markup): Add comment rule.
 	(muse-colors-implicit-link): Only remove flyspell overlay after we
 	decide whether this is an implicit link, rather than before.
