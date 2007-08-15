@@ -1,5 +1,166 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.10
+
+** Relicense to GPLv3.
+
+** Muse's source code development is now being managed with git.
+Instructions for participating in Muse development using git are
+available in the "Development" section of the Muse manual.
+
+This yields not only speed improvements, but also space efficiency
+improvements.  One person has found that Arch took 300MB to store one
+of Muse's branches, but git takes only 4MB.  The information to store
+the entire Muse development history only takes up 8.6MB.
+
+If you are a Muse developer, please consult
+http://emacswiki.org/cgi-bin/wiki/MuseDevelopment for instructions on
+using git, and how to gain access to the shared Muse repository.
+
+** Remove unused markers when we are done with them.
+This can speed up the publishing process.
+
+** Build system
+
+*** Rename Makefile.defs to Makefile.defs.default.
+Now, there is a Makefile.defs.default file included with Muse, rather
+than Makefile.defs.  If you want to make changes to this file, first
+copy it to Makefile.defs, and then make your changes there.  If you do
+not need to make any changes, there is no need to copy the file.
+
+*** Indicate dependencies between Emacs Lisp files, so that Muse can be
+recompiled without running "make clean" after an update.
+
+*** Don't activate VC when publishing files.
+This avoids some annoying messages when building QuickStart in the
+examples directory.
+
+*** Make installing info files easier for XEmacs users.
+There is now a commented-out install-info definition in
+Makefile.defs.default, along with commented instructions.
+
+** Quickstart guide (examples/QuickStart.muse)
+
+*** Fix some typos.
+
+** Core functionality (lisp/muse.el)
+
+*** Work around a bad bug in color-theme.el involving its
+overwriting of the `replace-in-string' function.
+
+*** Fix a bug where Muse would lock up if muse-project-alist is nil.
+
+*** New option: muse-completing-read-function.
+Function to call when prompting user to choose between a list of options.
+This should take the same arguments as `completing-read'.
+
+One possible value for this is 'ido-completing-read.  The default
+value is 'completing-read.
+
+*** Make inserting file contents and writing files to be faster.
+This involves defining the functions `muse-insert-file-contents' and
+`muse-write-file'.  Consult their documentation for details.
+
+** ConTeXt publishing (lisp/muse-context.el)
+
+*** New file courtesy of Jean Magnan de Bornier that publishes files in
+the ConTeXt format.  See the ConTeXt section of the Muse manual for
+details on its use.
+
+** Journal (lisp/muse-journal.el)
+
+*** Fix bug causing RDF output to have invalid syntax.
+
+*** Make RSS output look nicer by adding some newlines.
+
+*** Allow <lisp> and <markup> tags to be used in entry templates.
+
+*** Fix escaping bugs in entry template text, quote-of-the-day, and title.
+
+*** Mark up the <qotd> tag as if it <quote> were used.
+
+*** New style journal-rss-entry indicates how we are to mark up
+individual RSS and RDF entries.
+
+*** Set `muse-journal-rdf-summarize-entries' to nil by default.
+
+** HTML publishing (lisp/muse-html.el)
+
+*** Add xhtml1.0 style, which is an alias for the xhtml style.
+
+*** Add xhtml1.1 style for those who want XHTML 1.1 compliant output.
+
+*** When publishing <contents>, only strip links from titles, rather
+than every tag.
+
+** Muse Mode (lisp/muse-mode.el)
+
+*** Add new minor mode called muse-list-edit-minor-mode.
+See the "Muse List Edit Minor Mode" section of the manual for details.
+
+*** Don't try to indent line before inserting a comment.
+
+** Publish embedded LaTeX content to a PNG file (lisp/muse-latex2png.el)
+
+*** Support ConTeXt.
+
+** Project settings (lisp/muse-project.el)
+
+*** Handle nested projects correctly.
+Now it is possible to have the directories of a project be the
+subdirectories of another project.  Previously, it depended on the
+order that the projects were defined.
+
+*** Set project-specific variables at publish time as well as display time.
+Previously, the variable settings specified by the :set attribute in
+muse-project-alist projects were being ignored at publish time, but
+applied in Muse mode.  Now they are applied at both times.
+
+*** Fix bug when publishing a file that has multiple styles.
+
+*** Fix bug when trying to publish a file in a project with multiple
+directories.
+
+*** Fix bug where links between files did not work if muse-file-extension
+is nil.
+
+*** Ignore .git metadata directories when looking for project files.
+
+** Publishing (lisp/muse-publish.el)
+
+*** Add <cite> tag.  See "Tag Summary" in the manual for details on its use.
+
+*** Fix bug where Muse locks up when trying to publish a malformed table.
+
+*** Fix bug where tags other than <markup> and <lisp> were being acted on
+in headers and footers.
+
+*** Fix bug involving use of <lisp> inside of an <include> file.
+
+*** Fix bug with nested list items that have an extra blank in front.
+This was causing Muse to lock up when publishing some files.
+
+*** Fix bug with definition list publishing when there are empty terms.
+
+*** Fix bug where output from <verse> did not match output from verse
+syntax.
+
+*** Fix bug where directives were leaking out of <include> regions.
+
+*** [Developers] Automatically widen before evaluating <lisp> contents.
+
+** Wiki (lisp/muse-wiki.el)
+
+*** Fix a bug with three-part links that have descriptions.
+
+*** (muse-wiki-resolve-project-page): If the project argument is nil,
+default to the current project instead of the first project entry in
+muse-project-alist.
+
+** Common functionality used by XML-based styles (lisp/muse-xml-common.el)
+
+*** Don't escape parentheses in URLs.
+
 * Changes in Muse 3.03
 
 ** An emacs-wiki migration guide is available in
