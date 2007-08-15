@@ -104,6 +104,8 @@ used as the filename of the image."
                  (function :tag "Custom function"))
   :group 'muse-colors)
 
+(defvar muse-colors-region-end nil
+  "Indicate the end of the region that is currently being font-locked.")
 
 ;;;###autoload
 (defun muse-colors-toggle-inline-images ()
@@ -258,9 +260,6 @@ whether progress messages should be displayed to the user."
       (setq rules (cdr rules))))
   (set sym val))
 
-(eval-when-compile
-  (defvar end))
-
 (defun muse-colors-emphasized ()
   ;; Here we need to check four different points - the start and end
   ;; of the leading *s, and the start and end of the trailing *s.  We
@@ -292,12 +291,12 @@ whether progress messages should be displayed to the user."
                   (memq (char-before beg)
                         '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
           (save-excursion
-            (skip-chars-forward "^*<>\n" end)
+            (skip-chars-forward "^*<>\n" muse-colors-region-end)
             (when (eq (char-after) ?\n)
               (setq multiline t)
-              (skip-chars-forward "^*<>" end))
+              (skip-chars-forward "^*<>" muse-colors-region-end))
             (setq b2 (point))
-            (skip-chars-forward "*" end)
+            (skip-chars-forward "*" muse-colors-region-end)
             (setq e2 (point))
             ;; Abort if space exists just before end
             ;; or bad leader
@@ -330,10 +329,10 @@ whether progress messages should be displayed to the user."
                 (memq (char-before start)
                       '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
         (save-excursion
-          (skip-chars-forward "^_<>\n" end)
+          (skip-chars-forward "^_<>\n" muse-colors-region-end)
           (when (eq (char-after) ?\n)
             (setq multiline t)
-            (skip-chars-forward "^_<>" end))
+            (skip-chars-forward "^_<>" muse-colors-region-end))
           ;; Abort if space exists just before end
           ;; or no '_' at end
           ;; or word constituent follows
@@ -362,10 +361,10 @@ whether progress messages should be displayed to the user."
                 (memq (char-before start)
                       '(?\- ?\[ ?\< ?\( ?\' ?\` ?\" ?\n)))
         (let ((pos (point)))
-          (skip-chars-forward "^=\n" end)
+          (skip-chars-forward "^=\n" muse-colors-region-end)
           (when (eq (char-after) ?\n)
             (setq multiline t)
-            (skip-chars-forward "^=" end))
+            (skip-chars-forward "^=" muse-colors-region-end))
           ;; Abort if space exists just before end
           ;; or no '=' at end
           ;; or word constituent follows
@@ -489,6 +488,7 @@ of the functions listed in `muse-colors-markup'."
         (inhibit-modification-hooks t)
         (modified-p (buffer-modified-p))
         (muse-colors-fontifying-p t)
+        (muse-colors-region-end end)
         deactivate-mark)
     (unwind-protect
         (save-excursion

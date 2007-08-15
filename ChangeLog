@@ -11,6 +11,12 @@
 	(muse-colors-title): Add the muse-directive-or-comment property.
 	(muse-colors-comment): New function that colorizes comments using
 	font-lock-comment-face.
+	(muse-colors-region-end): New variable indicating the end of the
+	region that is currently being font-locked.  This removes the need
+	for an ugly "defvar end" hack.
+	(muse-colors-emphasized, muse-colors-underlined)
+	(muse-colors-verbatim): Use it.
+	(muse-colors-region): Let-bind it.
 
 	* lisp/muse-mode.el (muse-list-edit-minor-mode): Grammar fix in
 	docstring.
