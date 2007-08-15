@@ -2,6 +2,32 @@
 
 	* NEWS: Document items through 2007-08-12.
 
+	* lisp/muse-colors.el: Split the muse-directive-or-comment
+	property into two separate properties that are muse-directive and
+	muse-comment.
+	(muse-colors-region-end): Make buffer-local.
+	(muse-colors-delayed-commands): New variable that contains a list
+	of commands to run immediately after highlighting.  This is meant
+	to allow highlighting functions to delay code until later.
+	(muse-colors-region): Apply commands in
+	muse-colors-delayed-commands.
+	(muse-colors-inhibit-tags-in-directives): New variable that
+	determines whether tags are allowed in directives.
+	(muse-colors-custom-tags): Take
+	muse-colors-inhibit-tags-in-directives into account.
+	(muse-unhighlight-region): Remove muse-directive and muse-comment
+	properties.
+	(muse-colors-title): Modify muse-colors-delayed-commands.
+	(muse-colors-title-lisp): New command that gets called after
+	highlighting other things.  This interprets <lisp> tags, and is
+	passed arguments specifying the beginning and end of the region.
+	Thanks to Junichi Uekawa for the report.  The reason we want to do
+	things this way is because this is the behavior we get already
+	when publishing the page.
+
+	* lisp/muse.el (muse-goto-tag-end): Change to use muse-comment
+	property rather than muse-directive-or-comment.
+
 2007-08-14  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el: Document all functions and variables.

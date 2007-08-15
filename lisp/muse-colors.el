@@ -106,6 +106,7 @@ used as the filename of the image."
 
 (defvar muse-colors-region-end nil
   "Indicate the end of the region that is currently being font-locked.")
+(make-variable-buffer-local 'muse-colors-region-end)
 
 ;;;###autoload
 (defun muse-colors-toggle-inline-images ()
@@ -285,7 +286,8 @@ This is usually called with `muse-colors-markup' as both arguments."
          (leader (- e1 beg))
          b2 e2 multiline)
     (unless (or (eq (get-text-property beg 'invisible) 'muse)
-                (get-text-property beg 'muse-directive-or-comment))
+                (get-text-property beg 'muse-comment)
+                (get-text-property beg 'muse-directive))
       ;; check if it's a header
       (if (eq (char-after e1) ?\ )
           (when (or (= beg (point-min))
@@ -332,7 +334,8 @@ This is usually called with `muse-colors-markup' as both arguments."
   (let ((start (match-beginning 0))
         multiline)
     (unless (or (eq (get-text-property start 'invisible) 'muse)
-                (get-text-property start 'muse-directive-or-comment))
+                (get-text-property start 'muse-comment)
+                (get-text-property start 'muse-directive))
       ;; beginning of line or space or symbol
       (when (or (= start (point-min))
                 (eq (char-syntax (char-before start)) ?\ )
@@ -365,7 +368,8 @@ This is usually called with `muse-colors-markup' as both arguments."
   (let ((start (match-beginning 0))
         multiline)
     (unless (or (eq (get-text-property start 'invisible) 'muse)
-                (get-text-property start 'muse-directive-or-comment))
+                (get-text-property start 'muse-comment)
+                (get-text-property start 'muse-directive))
       ;; beginning of line or space or symbol
       (when (or (= start (point-min))
                 (eq (char-syntax (char-before start)) ?\ )
@@ -490,6 +494,16 @@ fontification in that area."
   "Indicate whether Muse is fontifying the current buffer.")
 (make-variable-buffer-local 'muse-colors-fontifying-p)
 
+(defvar muse-colors-delayed-commands nil
+  "Commands to be run immediately after highlighting a region.
+
+This is meant to accommodate highlighting <lisp> in #title
+directives after everything else.
+
+It may be modified by Muse functions during highlighting, but not
+the user.")
+(make-variable-buffer-local 'muse-colors-delayed-commands)
+
 (defun muse-colors-region (beg end &optional verbose)
   "Apply highlighting according to `muse-colors-markup'.
 Note that this function should NOT change the buffer, nor should any
@@ -501,6 +515,7 @@ of the functions listed in `muse-colors-markup'."
         (modified-p (buffer-modified-p))
         (muse-colors-fontifying-p t)
         (muse-colors-region-end end)
+        (muse-colors-delayed-commands nil)
         deactivate-mark)
     (unwind-protect
         (save-excursion
@@ -539,6 +554,8 @@ of the functions listed in `muse-colors-markup'."
                       (aref muse-colors-vector
                             (char-after (match-beginning 0))))
                 (when markup-func (funcall markup-func)))
+              (dolist (command muse-colors-delayed-commands)
+                (apply (car command) (cdr command)))
               (run-hook-with-args 'muse-colors-buffer-hook
                                   beg end verbose)
               (if verbose (message "Highlighting buffer...done")))))
@@ -573,6 +590,11 @@ Functions should not modify the contents of the buffer."
                        function))
   :group 'muse-colors)
 
+(defvar muse-colors-inhibit-tags-in-directives t
+  "If non-nil, don't allow tags to be interpreted in directives.
+This is used to delay highlighting of <lisp> tags in #title until later.")
+(make-variable-buffer-local 'muse-colors-inhibit-tags-in-directives)
+
 (defsubst muse-colors-tag-info (tagname &rest args)
   "Get tag info associated with TAGNAME, ignoring ARGS."
   (assoc tagname muse-colors-tags))
@@ -583,9 +605,10 @@ Functions should not modify the contents of the buffer."
     (goto-char (match-beginning 0))
     (looking-at muse-tag-regexp))
   (let ((tag-info (muse-colors-tag-info (match-string 1))))
-    (when (and tag-info
-               (not (get-text-property (match-beginning 0)
-                                       'muse-directive-or-comment)))
+    (unless (or (not tag-info)
+                (get-text-property (match-beginning 0) 'muse-comment)
+                (and muse-colors-inhibit-tags-in-directives
+                     (get-text-property (match-beginning 0) 'muse-directive)))
       (let ((closed-tag (match-string 3))
             (start (match-beginning 0))
             end attrs)
@@ -627,7 +650,7 @@ Functions should not modify the contents of the buffer."
          begin end '(face nil font-lock-multiline nil end-glyph nil
                           invisible nil intangible nil display nil
                           mouse-face nil keymap nil help-echo nil
-                          muse-link nil))
+                          muse-link nil muse-directive nil muse-comment nil))
       (set-buffer-modified-p modified-p))))
 
 (defun muse-colors-example-tag (beg end)
@@ -802,8 +825,8 @@ in place of an image link defined by BEG and END."
 (defun muse-colors-explicit-link ()
   "Color explicit links."
   (when (and (eq ?\[ (char-after (match-beginning 0)))
-             (not (get-text-property (match-beginning 0)
-                                     'muse-directive-or-comment)))
+             (not (get-text-property (match-beginning 0) 'muse-comment))
+             (not (get-text-property (match-beginning 0) 'muse-directive)))
     ;; remove flyspell overlays
     (when (fboundp 'flyspell-unhighlight-at)
       (let ((cur (match-beginning 0)))
@@ -859,8 +882,8 @@ in place of an image link defined by BEG and END."
 (defun muse-colors-implicit-link ()
   "Color implicit links."
   (unless (or (eq (get-text-property (match-beginning 0) 'invisible) 'muse)
-              (get-text-property (match-beginning 0)
-                                 'muse-directive-or-comment)
+              (get-text-property (match-beginning 0) 'muse-comment)
+              (get-text-property (match-beginning 0) 'muse-directive)
               (eq (char-before (match-beginning 0)) ?\")
               (eq (char-after (match-end 0)) ?\"))
     ;; remove flyspell overlays
@@ -879,15 +902,32 @@ in place of an image link defined by BEG and END."
 
 (defun muse-colors-title ()
   "Color #title directives."
-  (add-text-properties (+ 7 (match-beginning 0)) (muse-line-end-position)
-                       (list 'face 'muse-header-1
-                             'muse-directive-or-comment t)))
+  (let ((beg (+ 7 (match-beginning 0))))
+    (add-text-properties beg (muse-line-end-position) '(muse-directive t))
+    ;; colorize <lisp> tags in #title after other <lisp> tags have had a
+    ;; chance to run, so that we can have behavior that is consistent
+    ;; with how the document is published
+    (setq muse-colors-delayed-commands
+          (cons (list 'muse-colors-title-lisp beg (muse-line-end-position))
+                muse-colors-delayed-commands))))
+
+(defun muse-colors-title-lisp (beg end)
+  "Called after other highlighting is done for a region in order to handle
+<lisp> tags that exist in #title directives."
+  (save-restriction
+    (narrow-to-region beg end)
+    (goto-char (point-min))
+    (let ((muse-colors-inhibit-tags-in-directives nil)
+          (muse-colors-tags '(("lisp" t t nil muse-colors-lisp-tag))))
+      (while (re-search-forward muse-tag-regexp nil t)
+        (muse-colors-custom-tags))))
+  (add-text-properties beg end '(face muse-header-1)))
 
 (defun muse-colors-comment ()
   "Color comments."
   (add-text-properties (match-beginning 0) (muse-line-end-position)
                        (list 'face 'font-lock-comment-face
-                             'muse-directive-or-comment t)))
+                             'muse-comment t)))
 
 
 (provide 'muse-colors)
