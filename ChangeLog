@@ -33,6 +33,10 @@
 	muse-list-edit-minor-mode.
 	(Development): Mention the MuseDevlopment page on emacswiki.org.
 
+	* lisp/muse.el (muse-goto-tag-end): Deal with case where we are
+	font-locking and the end or beginning of a tag is in a comment or
+	directive.
+
 2007-08-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-strip-links): New function that
