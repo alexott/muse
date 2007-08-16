@@ -61,6 +61,14 @@ value is 'completing-read.
 This involves defining the functions `muse-insert-file-contents' and
 `muse-write-file'.  Consult their documentation for details.
 
+** Muse Mode highlighting (lisp/muse-colors.el)
+
+*** Comments are now colored.
+
+*** Fix bug with using <lisp> tags in #title directives.
+Now any <lisp> tags in #title directives are guaranteed to be
+evaluated after any other <lisp> tags that are nearby.
+
 ** ConTeXt publishing (lisp/muse-context.el)
 
 *** New file courtesy of Jean Magnan de Bornier that publishes files in
@@ -146,6 +154,8 @@ This was causing Muse to lock up when publishing some files.
 syntax.
 
 *** Fix bug where directives were leaking out of <include> regions.
+
+*** Fix escaping bug involving headings and the <contents> tag.
 
 *** [Developers] Automatically widen before evaluating <lisp> contents.
 
