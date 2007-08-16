@@ -1,5 +1,10 @@
 2007-08-16  Michael Olson  <mwolson@gnu.org>
 
+	* Release Emacs Muse 3.10.
+
+	* Makefile (dist, debprepare): Pass HEAD argument to git-archive.
+	(upload): Don't depend on release rule.
+
 	* NEWS: Document remaining changes.
 
 2007-08-15  Michael Olson  <mwolson@gnu.org>

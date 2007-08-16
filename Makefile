@@ -60,7 +60,7 @@ distclean:
 	-rm -fr ../$(PROJECT)-$(VERSION)
 
 dist: autoloads distclean
-	git archive --format=tar --prefix=$(PROJECT)-$(VERSION)/ | \
+	git archive --format=tar --prefix=$(PROJECT)-$(VERSION)/ HEAD | \
 	  (cd .. && tar xf -)
 	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)/lisp
 
@@ -82,7 +82,7 @@ debprepare:
 	(cd .. && tar -czf $(DEBNAME)_$(VERSION).orig.tar.gz \
 	    $(DEBNAME)-$(VERSION))
 	(cd debian && git archive --format=tar \
-	  --prefix=$(DEBNAME)-$(VERSION)/debian/ | \
+	  --prefix=$(DEBNAME)-$(VERSION)/debian/ HEAD | \
 	  (cd ../.. && tar xf -))
 
 debbuild:
@@ -102,7 +102,7 @@ debinstall:
 
 deb: debclean debprepare debbuild debinstall
 
-upload: release
+upload:
 	(cd .. && \
 	  scp $(PROJECT)-$(VERSION).zip* $(PROJECT)-$(VERSION).tar.gz* \
 	    mwolson@download.gna.org:/upload/muse-el)

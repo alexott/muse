@@ -36,9 +36,9 @@ install_info = install-info --info-dir=$(INFODIR) $(1) || :
 # Useful only for the maintainer
 PROJECT     = muse
 DEBNAME     = muse-el
-VERSION     = 3.03
+VERSION     = 3.10
 MANUAL      = muse
-LASTUPLOAD  = 3.02.8-1
+LASTUPLOAD  = 3.03-1
 BUILDOPTS   =
 DISTRIBUTOR = debian
 

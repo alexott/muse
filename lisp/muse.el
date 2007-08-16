@@ -4,8 +4,8 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.03
-;; Date: Sun 17-Jun-2007
+;; Version: 3.10
+;; Date: Thu 16-Aug-2007
 ;; Keywords: hypermedia
 ;; Author: John Wiegley (johnw AT gnu DOT org)
 ;; Maintainer: Michael Olson <mwolson@gnu.org>
@@ -48,7 +48,7 @@
 ;; Indicate that this version of Muse supports nested tags
 (provide 'muse-nested-tags)
 
-(defvar muse-version "3.03"
+(defvar muse-version "3.10"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)
