@@ -62,6 +62,7 @@ distclean:
 dist: autoloads distclean
 	git archive --format=tar --prefix=$(PROJECT)-$(VERSION)/ HEAD | \
 	  (cd .. && tar xf -)
+	rm -f ../$(PROJECT)-$(VERSION)/.gitignore
 	cp lisp/$(PROJECT)-autoloads.el ../$(PROJECT)-$(VERSION)/lisp
 
 release: dist
