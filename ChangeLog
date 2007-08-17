@@ -2,6 +2,10 @@
 
 	* etc/muse.rnc: Add the <cite> tag.
 
+	* lisp/muse-xml.el (muse-xml-markup-strings): Mark up citations as
+	<cite type="something">.  We'll leave it to the post processing
+	tools to interpret that.
+
 2007-08-16  Michael Olson  <mwolson@gnu.org>
 
 	* Release Emacs Muse 3.10.

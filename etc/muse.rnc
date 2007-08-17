@@ -219,7 +219,9 @@ muse.element.format = element format {
 
   ## cite element
   ## used for citing sources
-muse.element.cite = element cite { text }?
+muse.element.cite = element cite {
+   muse.attribute.type?
+   & text }?
 
   ## code element
   ## used for small pieces of monospace text, like commands
