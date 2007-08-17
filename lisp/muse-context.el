@@ -187,7 +187,7 @@ differs little between the various styles."
   :group 'muse-context)
 
 (defcustom muse-context-slides-header
-  "\\usemodule[pre-63]
+  "\\usemodule[<lisp>(if (string-equal (muse-publishing-directive \"module\") nil) \"pre-01\" (muse-publishing-directive \"module\"))</lisp>]
 \\usemodule[tikz]
 \\usemodule[newmat]
 \\setupinteraction [state=start]
@@ -198,10 +198,12 @@ differs little between the various styles."
  \\blank[2*medium]
   \\tfa <lisp>(muse-publishing-directive \"date\")</lisp>}"
   "Header for publishing a presentation (slides) using ConTeXt.
-You can use any of the predefined modules, which are available in
-the tex/context/base of your distribution, provided it has
-TitlePage and Topic defined.  Alternatively, you can use your own
-style (mystyle) by replacing \"\\usemodule[]\" with \"\\input mystyle\".
+Any of the predefined modules, which are available in the
+tex/context/base directory, can be used by writing a \"module\"
+directive at the top of the muse file; if no such directive is
+provided, module pre-01 is used.  Alternatively, you can use your
+own style (mystyle) by replacing \"\\usemodule[]\" with \"\\input
+mystyle\".
 
 This may be text or a filename."
   :type 'string
