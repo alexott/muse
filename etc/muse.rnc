@@ -1,7 +1,7 @@
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace rng = "http://relaxng.org/ns/structure/1.0"
 
-#   Emacs Muse RELAX NG Schema v. 1.0
+#   Emacs Muse RELAX NG Schema v. 1.1
 #   Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
 
 #   Author: Brad Collins (brad AT chenla DOT org)
@@ -50,6 +50,9 @@ namespace rng = "http://relaxng.org/ns/structure/1.0"
 #    - Permit a list to be nested inside of a definition.
 #    - Permit a link to be inside of a title.
 #    - Permit emphasis to be inside of other emphasis.
+#
+#   Version 1.1:
+#    - Add the <cite> tag.
 
 # Contributors:
 
@@ -124,6 +127,7 @@ muse.element.blockquote = element blockquote {
    ## paragraph element
 muse.element.p = element p {
    muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
@@ -142,6 +146,7 @@ muse.element.verse = element verse {
   ## verse line element
 muse.element.line = element line {
    muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
@@ -162,6 +167,7 @@ muse.element.item = element item {
    muse.element.term?
    & muse.element.definition*
    & muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
@@ -179,6 +185,7 @@ muse.element.item = element item {
 
 muse.element.term = element term {
    muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
@@ -188,6 +195,7 @@ muse.element.term = element term {
    ## def
 muse.element.definition = element definition {
    muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
@@ -205,8 +213,13 @@ muse.element.format = element format {
    muse.attribute.type?
    & muse.attribute.level?
    & muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & text }?
+
+  ## cite element
+  ## used for citing sources
+muse.element.cite = element cite { text }?
 
   ## code element
   ## used for small pieces of monospace text, like commands
@@ -272,6 +285,7 @@ muse.element.tr = element tr {
   ## td element
 muse.element.td = element td {
    muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*
@@ -283,6 +297,7 @@ muse.element.td = element td {
   ## th element
 muse.element.th = element th {
    muse.element.code*
+   & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
    & muse.element.link*

@@ -1,3 +1,7 @@
+2007-08-17  Michael Olson  <mwolson@gnu.org>
+
+	* etc/muse.rnc: Add the <cite> tag.
+
 2007-08-16  Michael Olson  <mwolson@gnu.org>
 
 	* Release Emacs Muse 3.10.
