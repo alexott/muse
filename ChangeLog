@@ -2,6 +2,9 @@
 
 	* etc/muse.rnc: Add the <cite> tag.
 
+	* lisp/muse-context.el (muse-context-slides-header): Clarify what
+	"mystyle" is.
+
 	* lisp/muse-xml.el (muse-xml-markup-strings): Mark up citations as
 	<cite type="something">.  We'll leave it to the post processing
 	tools to interpret that.
@@ -14,6 +17,14 @@
 	modified.
 	(Tag Summary): Link to the Citations section in the entry for
 	<cite>.
+	(ConTeXt): Update the documentation for
+	muse-context-slides-header.
+
+2007-08-17  Jean Magnan de Bornier  <jean@bornier.net>
+
+	* lisp/muse-context.el (muse-context-slides-header): Use #module
+	directive, if it is provided.
+	(muse-context-slides-header): Mention how to use #module.
 
 2007-08-16  Michael Olson  <mwolson@gnu.org>
 

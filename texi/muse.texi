@@ -2212,10 +2212,11 @@ differs little between the various styles.
 @item muse-context-slides-header
 Header for publishing a presentation (slides) using ConTeXt.
 
-You can use any of the predefined modules, which are available in the
-tex/context/base of your distribution, provided it has TitlePage and
-Topic defined.  Alternatively, you can use your own style (mystyle) by
-replacing ``\\usemodule[]'' with ``\\input mystyle''.
+Any of the predefined modules, which are available in the
+tex/context/base directory, can be used by writing a "module" directive
+at the top of the Muse file; if no such directive is provided, module
+pre-01 is used.  Alternatively, you can use your own style ("mystyle",
+in this example) by replacing "\usemodule[]" with "\input mystyle".
 
 This may be text or a filename.
 

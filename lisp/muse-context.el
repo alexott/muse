@@ -202,8 +202,8 @@ Any of the predefined modules, which are available in the
 tex/context/base directory, can be used by writing a \"module\"
 directive at the top of the muse file; if no such directive is
 provided, module pre-01 is used.  Alternatively, you can use your
-own style (mystyle) by replacing \"\\usemodule[]\" with \"\\input
-mystyle\".
+own style (\"mystyle\", in this example) by replacing
+\"\\usemodule[]\" with \"\\input mystyle\".
 
 This may be text or a filename."
   :type 'string
