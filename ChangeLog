@@ -6,6 +6,15 @@
 	<cite type="something">.  We'll leave it to the post processing
 	tools to interpret that.
 
+	* texi/muse.texi (Directives, Blosxom Entries): Use @code{} for
+	directives.
+	(Citations): New section that explains further how to use the
+	<cite> tag.  The text was taken from Marcus Hoenicka's
+	documentation at http://refdb.sourceforge.net/muse.html and
+	modified.
+	(Tag Summary): Link to the Citations section in the entry for
+	<cite>.
+
 2007-08-16  Michael Olson  <mwolson@gnu.org>
 
 	* Release Emacs Muse 3.10.

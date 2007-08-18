@@ -123,6 +123,7 @@ Rules for Using Markup
 * Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
+* Citations::                   Support for citing other resources.
 * Comments::                    Lines to omit from published output.
 * Tag Summary::                 Tags that Muse recognizes.
 
@@ -961,6 +962,7 @@ than formatting.
 * Horizontal Rules and Anchors::  Inserting a horizontal line or anchor.
 * Embedded Lisp::               Evaluating Emacs Lisp code in documents
                                   for extensibility.
+* Citations::                   Support for citing other resources.
 * Comments::                    Lines to omit from published output.
 * Tag Summary::                 Tags that Muse recognizes.
 @end menu
@@ -1054,7 +1056,7 @@ the directive is not in the list below.
 
 The @code{muse-publishing-directive} function may be used in header and
 footer text to access directives.  For example, to access the
-@samp{#title} directive, use @code{(muse-publishing-directive "title")}.
+@code{#title} directive, use @code{(muse-publishing-directive "title")}.
 
 The following is a list of directives that Muse uses.
 
@@ -1494,7 +1496,7 @@ that doesn't contain whitespace -- it defines an anchor at that point
 into the document.  This point can be referenced using "page#anchor" as
 the target in a Muse link.
 
-@node Embedded Lisp, Comments, Horizontal Rules and Anchors, Markup Rules
+@node Embedded Lisp, Citations, Horizontal Rules and Anchors, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Evaluating Emacs Lisp code in documents for extensibility
 @cindex lisp, embedded
@@ -1528,7 +1530,81 @@ attribute of the @verb{|<lisp>|} tag.
 Other languages also have tags that cause source code to be evaluated.
 @xref{Tag Summary}, for details.
 
-@node Comments, Tag Summary, Embedded Lisp, Markup Rules
+@node Citations, Comments, Embedded Lisp, Markup Rules
+@comment  node-name,  next,  previous,  up
+@section Support for citing other resources
+@cindex citations
+@cindex tags, <cite>
+
+@subheading Example
+
+Here is an example of what citations look like in a Muse document.
+
+@example
+#bibsource REFDB
+
+* Title
+** Subtitle
+
+Some text before <cite>Miller1999</cite> and after the citation.
+
+This is an author-only citation <cite type="author">Miller1999</cite>.
+
+And this is a year-only citation <cite type="year">Miller1999</cite>.
+
+Finally, this is a multi-head citation
+<cite>Miller1999,Andrews2005</cite>.
+@end example
+
+@subheading Overview
+
+The @code{#bibsource} directive defines the source of the
+bibliographies.  The following sources are possible.
+
+@itemize @bullet
+@item DocBook + RefDB:
+the string "REFDB"
+
+@item LaTeX + bibtex:
+the name of an appropriate bibtex file
+
+@item LaTeX + RefDB:
+if the input file is called "foo.muse", then set this to "foo.bib"
+@end itemize
+
+Citations are encoded as @verb{|<cite>|} elements which enclose the
+citation keys as they are defined in the bibliography file or database.
+In multi-head citations, the citation keys have to be separated by
+colons or semicolons.  The @code{latex} and @code{docbook} styles
+translate these to the proper separator automatically.
+
+The @verb{|<cite>|} elements take an optional ``type'' attribute that
+defines how the citation is rendered.  If the attribute is missing,
+you'll get a regular citation according to the bibliography style,
+e.g.'' (Miller et al., 1999)''.  If the attribute is set to "author",
+only the name of the author(s) will be rendered.  Accordingly, "year"
+will cause the year to be printed.  This is useful to create citations
+like this:
+
+@example
+Miller et al. had already shown in a previous publication (1999) that
+this is not going to work.
+@end example
+
+Remember that refdb-mode (the Emacs interface to RefDB) can retrieve
+references by simply marking the citation key and running the
+@code{refdb-getref-by-field-on-region} command.  Later versions of
+@code{refdb-mode} will also allow to insert references as Muse citations
+(which is already implemented for DocBook, TEI, and LaTeX documents).
+
+You may have noticed that there is no element to indicate the position
+of the bibliography.  The latter is always created at a valid position
+close to the end of the document.  The functions
+@code{muse-docbook-bibliography} and @code{muse-latex-bibliography} are
+called in the header or footer to generate this content, so it is
+possible to change the exact position.
+
+@node Comments, Tag Summary, Citations, Markup Rules
 @comment  node-name,  next,  previous,  up
 @section Lines to omit from published output
 @cindex comments
@@ -1611,9 +1687,11 @@ omitted, include both author and year in the citation.
 The bibliography to use for the citation may be specified by the
 @option{#bibsource} directive.
 
+@xref{Citations}, for additional information.
+
 @item <class>
 If publishing to HTML, surround the given text with a @verb{|<span>|}
-tag.  It takes one argument called ``name'' that specifies the class
+tag.  It takes one argument called ``name'' that specifies the ``class''
 attribute of the @verb{|<span>|} tag.
 
 If publishing to a different format, do nothing extra to the text.
@@ -1860,8 +1938,8 @@ then move the generated timestamps file to your publishing directory.
 @subsection Format of a Blosxom entry and automation
 
 Each Blosxom file must include `#date yyyy-mm-dd', or optionally the
-longer `#date yyyy-mm-dd-hh-mm', a title (using the #title directive),
-plus whatever normal content is desired.
+longer `#date yyyy-mm-dd-hh-mm', a title (using the @code{#title}
+directive), plus whatever normal content is desired.
 
 The date directive is not used directly by @command{pyblosxom.cgi} or
 this program.  You need to have the two additional items from the former
