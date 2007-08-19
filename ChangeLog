@@ -2,6 +2,11 @@
 
 	* examples/mwolson: Update my example settings.
 
+	* lisp/muse-colors.el (muse-colors-region): Bind
+	muse-colors-region-end to the end of the last line.  This avoids a
+	bug where lines that had emphasis would suddenly become
+	unhighlighted when moving around the buffer.
+
 	* lisp/muse-docbook.el (muse-docbook-markup-paragraph): Fix bug
 	involving paragraphs after literallayout markup, which is used in
 	<verse> tags.  Thanks to Shunsuke OKANO for the report.

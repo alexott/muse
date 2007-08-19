@@ -514,7 +514,7 @@ of the functions listed in `muse-colors-markup'."
         (inhibit-modification-hooks t)
         (modified-p (buffer-modified-p))
         (muse-colors-fontifying-p t)
-        (muse-colors-region-end end)
+        (muse-colors-region-end (muse-line-end-position end))
         (muse-colors-delayed-commands nil)
         deactivate-mark)
     (unwind-protect
