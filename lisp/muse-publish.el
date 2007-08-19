@@ -1314,12 +1314,14 @@ The following contexts exist in Muse.
       (save-restriction
         ;; narrow to current item
         (narrow-to-region beg (point))
-        ;; move to second line of text
         (goto-char (point-min))
-        (while (and (< (point) (point-max))
-                    (looking-at empty-line))
+        (if (looking-at empty-line)
+            ;; if initial line is blank, move to first non-blank line
+            (while (progn (forward-line 1)
+                          (and (< (point) (point-max))
+                               (looking-at empty-line))))
+          ;; otherwise, move to second line of text
           (forward-line 1))
-        (forward-line 1)
         ;; strip list indentation
         (muse-publish-strip-list-indentation list-item empty-line
                                              indent post-indent)
