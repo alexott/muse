@@ -2,6 +2,13 @@
 
 	* AUTHORS: Update.
 
+	* lisp/muse-publish.el (muse-publish-include-tag): Switch from
+	copy-tree to copy-alist, since Emacs21 does not have the former,
+	and the latter does what we want.
+
+	* lisp/muse.el: Force-require 'derived, since Emacs21 does not
+	have derived-mode-p in subr.el like Emacs22 does.
+
 2007-08-17  Michael Olson  <mwolson@gnu.org>
 
 	* etc/muse.rnc: Add the <cite> tag.

@@ -69,6 +69,9 @@ familiar with Emacs."
 
 (provide 'muse)
 
+(condition-case nil
+    (require 'derived)
+  (error nil))
 (require 'wid-edit)
 (require 'muse-regexps)
 

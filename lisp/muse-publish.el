@@ -2006,7 +2006,7 @@ The `markup' attribute controls how this file is marked up after
 being inserted.  See `muse-publish-markup-attribute' for an
 explanation of how it works."
   (let ((filename (muse-publish-get-and-delete-attr "file" attrs))
-        (muse-publishing-directives (copy-tree muse-publishing-directives)))
+        (muse-publishing-directives (copy-alist muse-publishing-directives)))
     (if filename
         (setq filename (expand-file-name
                         filename
