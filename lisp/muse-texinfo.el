@@ -299,9 +299,13 @@ If no description exists for the link, use the link itself."
                   (set-buffer-modified-p nil)
                   (kill-buffer (current-buffer))))
               t))
-        (= 0 (shell-command
-              (concat "makeinfo --enable-encoding --output="
-                      output-path " " file))))))))
+        (let ((result (shell-command
+                       (concat "makeinfo --enable-encoding --output="
+                               output-path " " file))))
+          (if (or (not (numberp result))
+                  (eq result 0))
+              t
+            nil)))))))
 
 (defun muse-texinfo-pdf-generate (file output-path final-target)
   (let ((muse-latex-pdf-program "pdftex")
