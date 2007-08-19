@@ -1,5 +1,7 @@
 2007-08-19  Michael Olson  <mwolson@gnu.org>
 
+	* examples/mwolson: Update my example settings.
+
 	* lisp/muse-html.el (muse-html-src-tag): Use
 	muse-delete-and-extract-region.
 

@@ -15,8 +15,8 @@
 ;;; Setup
 
 ;; Add to load path
-(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/mwolson/lisp")
-(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/mwolson/experimental")
+(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/master/lisp")
+(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/master/experimental")
 
 ;; Initialize
 (require 'outline)       ; I like outline-style faces
@@ -28,6 +28,7 @@
 (require 'muse-html)     ; load (X)HTML publishing style
 (require 'muse-latex)    ; load LaTeX/PDF publishing styles
 (require 'muse-latex2png) ; publish <latex> tags
+(require 'muse-project)  ; load support for projects
 (require 'muse-texinfo)  ; load Info publishing style
 (require 'muse-wiki)     ; load Wiki support
 (require 'muse-xml)      ; load XML support
@@ -53,12 +54,10 @@
 ;; Define a draft style which provides extra space between sections
 
 (defvar muse-latex-draft-markup-strings
-  (nconc
-   '((chapter      . "\\bigskip\n\\bigskip\n\\chapter{")
-     (section      . "\\bigskip\n\\bigskip\n\\section{")
-     (subsection   . "\\bigskip\n\\bigskip\n\\subsection{")
-     (subsubsection . "\\bigskip\n\\bigskip\n\\subsubsection{"))
-   muse-latex-markup-strings)
+  '((chapter      . "\\bigskip\n\\bigskip\n\\chapter{")
+    (section      . "\\bigskip\n\\bigskip\n\\section{")
+    (subsection   . "\\bigskip\n\\bigskip\n\\subsection{")
+    (subsubsection . "\\bigskip\n\\bigskip\n\\subsubsection{"))
   "Strings used for marking up Latex draft text.")
 
 (muse-derive-style "latex-draft" "latex"
@@ -150,7 +149,7 @@
 
 ;; Wiki settings
 (setq muse-wiki-interwiki-alist
-      '(("PlugWiki" . "http://purduelug.org/wiki/")
+      '(("PlugWiki" . "http://wiki.purduelug.org/")
         ("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/")
         ("ArchWiki" . "http://gnuarch.org/gnuarchwiki/")
         ;; abbreviations
@@ -301,6 +300,7 @@ If FILE is not specified, use the published version of the current file."
  '(muse-blosxom-base-directory "~/proj/wiki/blog/")
  '(muse-colors-autogen-headings (quote outline))
  '(muse-colors-inline-image-method (quote muse-colors-use-publishing-directory))
+ '(muse-completing-read-function (quote ido-completing-read))
  '(muse-html-charset-default "utf-8")
  '(muse-html-encoding-default (quote utf-8))
  '(muse-html-footer "~/personal-site/muse/generic-footer.html")
