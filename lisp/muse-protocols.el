@@ -235,11 +235,13 @@ used in the publishing industry."
 
 (defun muse-browse-url-man (url)
   "If this in a manpage URL, jump to it."
+  (require 'man)
   (when (string-match "\\`man://\\([^(]+\\(([^)]+)\\)?\\)" url)
     (man (match-string 1 url))))
 
 (defun muse-browse-url-woman (url)
   "If this is a WoMan URL, jump to it."
+  (require 'woman)
   (when (string-match "\\`woman://\\(.+\\)" url)
     (woman (match-string 1 url))))
 

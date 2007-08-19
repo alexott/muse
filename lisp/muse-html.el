@@ -611,7 +611,7 @@ This tag requires htmlize 1.34 or later in order to work."
     (let* ((mode (and (assoc "lang" attrs)
                       (intern (concat (cdr (assoc "lang" attrs))
                                       "-mode"))))
-           (text (delete-and-extract-region beg end))
+           (text (muse-delete-and-extract-region beg end))
            (htmltext
             (with-temp-buffer
               (insert text)

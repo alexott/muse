@@ -576,6 +576,13 @@ on the system \"/user@host:\"."
          t)
         (t nil)))
 
+(if (fboundp 'delete-and-extract-region)
+    (defalias 'muse-delete-and-extract-region 'delete-and-extract-region)
+  (defun muse-delete-and-extract-region (start end)
+    "Delete the text between START and END and return it."
+    (prog1 (buffer-substring start end)
+      (delete-region start end))))
+
 ;; Set face globally in a predictable fashion
 (defun muse-copy-face (old new)
   "Copy face OLD to NEW."

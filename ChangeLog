@@ -1,9 +1,23 @@
 2007-08-19  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-html.el (muse-html-src-tag): Use
+	muse-delete-and-extract-region.
+
+	* lisp/muse-import-xml.el (muse-import-xml-parse-node): Use
+	muse-replace-regexp-in-string.
+
+	* lisp/muse-protocols.el (muse-browse-url-man): Add require
+	statement.
+	(muse-browse-url-woman): Add require statement.
+
 	* lisp/muse-publish.el (muse-publish-surround-text): Fix serious
 	bug in definition list publishing.  We were skipping past the
 	initial indented line, and that was causing an erroneous
 	blockquote to be inserted.  This alone merits a new release.
+
+	* lisp/muse.el (muse-delete-and-extract-region): New compatibility
+	function to deal with XEmacs' lack of the
+	delete-and-extract-region function.
 
 2007-08-18  Michael Olson  <mwolson@gnu.org>
 
