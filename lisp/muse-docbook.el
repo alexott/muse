@@ -221,7 +221,8 @@ found in `muse-docbook-encoding-map'."
                       "<\\(/?\\)\\(para\\|footnote\\|literallayout\\)[ >]"
                       nil t)
                      (cond ((string= (match-string 2) "literallayout")
-                            (throw 'bail-out t))
+                            (and (not (string= (match-string 1) "/"))
+                                 (throw 'bail-out t)))
                            ((string= (match-string 2) "para")
                             (and
                              (not (string= (match-string 1) "/"))

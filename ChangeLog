@@ -2,6 +2,10 @@
 
 	* examples/mwolson: Update my example settings.
 
+	* lisp/muse-docbook.el (muse-docbook-markup-paragraph): Fix bug
+	involving paragraphs after literallayout markup, which is used in
+	<verse> tags.  Thanks to Shunsuke OKANO for the report.
+
 	* lisp/muse-html.el (muse-html-src-tag): Use
 	muse-delete-and-extract-region.
 
