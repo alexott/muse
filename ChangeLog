@@ -3,8 +3,8 @@
 	* lisp/muse-html.el (muse-html-src-tag): Use
 	muse-delete-and-extract-region.
 
-	* lisp/muse-import-xml.el (muse-import-xml-parse-node): Use
-	muse-replace-regexp-in-string.
+	* lisp/muse-import-xml.el: Add require statement.
+	(muse-import-xml-parse-node): Use muse-replace-regexp-in-string.
 
 	* lisp/muse-protocols.el (muse-browse-url-man): Add require
 	statement.

@@ -30,6 +30,7 @@
 (provide 'muse-import-xml)
 
 (require 'xml)
+(require 'muse)
 
 (defvar muse-import-xml-prefix ""
   "The name prefix for tag functions")
