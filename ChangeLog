@@ -17,6 +17,9 @@
 	initial indented line, and that was causing an erroneous
 	blockquote to be inserted.  This alone merits a new release.
 
+	* lisp/muse-texinfo.el (muse-texinfo-info-generate): Fix bug with
+	XEmacs' return value for shell-command.
+
 	* lisp/muse.el (muse-delete-and-extract-region): New compatibility
 	function to deal with XEmacs' lack of the
 	delete-and-extract-region function.
