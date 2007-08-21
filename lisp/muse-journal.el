@@ -349,12 +349,29 @@ For more on the structure of this list, see
   :group 'muse-journal)
 
 (defun muse-journal-anchorize-title (title)
+  "This strips tags from TITLE, truncates TITLE at begin parenthesis,
+and escapes any remaining non-alphanumeric characters."
   (save-match-data
     (if (string-match "(" title)
         (setq title (substring title 0 (match-beginning 0))))
     (if (string-match "<[^>]+>" title)
         (setq title (replace-match "" nil nil title)))
-    (downcase (muse-replace-regexp-in-string "[^a-zA-Z0-9_]" "" title))))
+    (let (pos code len ch)
+      (while (setq pos (string-match (concat "[^" muse-regexp-alnum "_]")
+                                     title pos))
+          (setq ch (aref title pos)
+                code (format "%%%02X" (cond ((fboundp 'char-to-ucs)
+                                             (char-to-ucs ch))
+                                            ((fboundp 'char-to-int)
+                                             (char-to-int ch))
+                                            (t ch)))
+                len (length code)
+                title (concat (substring title 0 pos)
+                              code
+                              (when (< pos (length title))
+                                (substring title (1+ pos) nil)))
+                pos (+ len pos)))
+        title)))
 
 (defun muse-journal-sort-entries (&optional direction)
   (interactive "P")
@@ -624,8 +641,9 @@ For more on the structure of this list, see
                     "Cannot find 'Page published by Emacs Muse ends here'.\n"
                     "You will probably need this text in your footer."))
                   (goto-char (point-max)))
-                (setq desc (concat "<![CDATA[" (buffer-substring beg (point))
-                                   "]]>")))))
+                (setq desc (buffer-substring beg (point))))))
+          (unless (string= desc "")
+            (setq desc (concat "<![CDATA[" desc "]]>")))
           (delete-region (point-min) (point-max))
           (let ((entry (muse-style-element :entry-template)))
             (muse-insert-file-or-string entry)
