@@ -1103,8 +1103,6 @@ The following contexts exist in Muse.
                  len)))
     (delete-region (match-beginning 0) (match-end 0))
     (muse-insert-markup start)
-    (muse-publish-escape-specials (point) (muse-line-end-position) nil
-                                  'document)
     (end-of-line)
     (when end
       (muse-insert-markup end))

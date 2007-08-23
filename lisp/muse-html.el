@@ -517,7 +517,7 @@ This will be used if no special characters are found."
 DEPTH indicates how many levels of headings to include.  The default is 2."
   (let ((max-depth (or depth 2))
         (index 1)
-        base contents l)
+        base contents l end)
     (save-excursion
       (goto-char (point-min))
       (search-forward "Page published by Emacs Muse begins here" nil t)
@@ -534,8 +534,18 @@ DEPTH indicates how many levels of headings to include.  The default is 2."
               (if (< l base)
                   (throw 'done t)))
             (when (<= l max-depth)
-              (setq contents (cons (cons l (muse-match-string-no-properties 2))
+              ;; escape specials now before copying the text, so that we
+              ;; can deal sanely with both emphasis in titles and
+              ;; special characters
+              (goto-char (match-end 2))
+              (setq end (point-marker))
+              (muse-publish-escape-specials (match-beginning 2) end
+                                            nil 'document)
+              (muse-publish-mark-read-only (match-beginning 2) end)
+              (setq contents (cons (cons l (buffer-substring-no-properties
+                                            (match-beginning 2) end))
                                    contents))
+              (set-marker end nil)
               (goto-char (match-beginning 2))
               (muse-html-insert-anchor (concat "sec" (int-to-string index)))
               (setq index (1+ index)))))))
