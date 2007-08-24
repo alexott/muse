@@ -1,5 +1,7 @@
 2007-08-24  Michael Olson  <mwolson@gnu.org>
 
+	* NEWS: Add entries for Muse 3.11.
+
 	* lisp/muse-wiki.el (muse-wiki-project-file-regexp): Fix typo in
 	docstring.
 
