@@ -67,7 +67,7 @@ page, both when formatting and publishing."
   "Regexp used to match the files in the current project.
 
 This is set by `muse-wiki-update-project-file-regexp' automatically
-when `muse-wiki-martch-all-project-files' is non-nil.")
+when `muse-wiki-match-all-project-files' is non-nil.")
 (make-variable-buffer-local 'muse-wiki-project-file-regexp)
 
 (defun muse-wiki-update-project-file-regexp ()
