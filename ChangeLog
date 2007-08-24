@@ -11,6 +11,13 @@
 	* lisp/muse-publish.el (muse-publish-markup-heading): Don't escape
 	specials here.  This fixes a bug involving links in headings.
 
+	* lisp/muse.el (muse-update-file-extension): Simplify, and handle
+	some edge cases.
+	(muse-update-file-extension-after-init): Temporarily bind
+	muse-file-extension to "muse", so that muse-update-file-extension
+	knows what the old value was.  This should fix a bug reported by
+	Jean Magnan de Bornier.
+
 2007-08-21  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-texinfo.el (muse-texinfo-markup-strings): Try to make
