@@ -1,9 +1,14 @@
 2007-08-23  Michael Olson  <mwolson@gnu.org>
 
-	* muse-html.el (muse-html-insert-contents): Escape heading title
-	just before extracting it.
+	* lisp/muse-html.el (muse-html-insert-contents): Escape heading
+	title just before extracting it.
 
-	* muse-publish.el (muse-publish-markup-heading): Don't escape
+	* lisp/muse-latex.el (muse-latex-fixup-headings): New function
+	that removes footnotes from headers, since they are invalid in
+	LaTeX.
+	(muse-latex-munge-buffer): Call it.
+
+	* lisp/muse-publish.el (muse-publish-markup-heading): Don't escape
 	specials here.  This fixes a bug involving links in headings.
 
 2007-08-21  Michael Olson  <mwolson@gnu.org>

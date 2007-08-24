@@ -506,9 +506,24 @@ This is used by the slides and lecture-notes publishing styles."
         (while (re-search-forward ";" nil t)
           (replace-match ","))))))
 
+(defun muse-latex-fixup-headings ()
+  "Remove footnotes in headings, since LaTeX does not permit them to exist.
+
+This can happen if there is a link in a heading, because by
+default Muse will add a footnote for each link."
+  (goto-char (point-min))
+  (while (re-search-forward "^\\\\section.?{" nil t)
+    (save-restriction
+      (narrow-to-region (match-beginning 0) (muse-line-end-position))
+      (goto-char (point-min))
+      (while (re-search-forward "\\\\footnote{[^}\n]+}" nil t)
+        (replace-match ""))
+      (forward-line 1))))
+
 (defun muse-latex-munge-buffer ()
   (muse-latex-fixup-dquotes)
   (muse-latex-fixup-citations)
+  (muse-latex-fixup-headings)
   (when (and muse-latex-permit-contents-tag
              muse-publish-generate-contents)
     (goto-char (car muse-publish-generate-contents))
