@@ -136,7 +136,7 @@ Publishing Various Types of Documents
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
-* Poem::                        Publish a poem to LaTex or PDF.
+* Poem::                        Publish a poem to LaTeX or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
 * XML::                         Publish entries to XML.
 
@@ -1873,7 +1873,7 @@ easy to create new styles, or derive from an existing style.
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
-* Poem::                        Publish a poem to LaTex or PDF.
+* Poem::                        Publish a poem to LaTeX or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
 * XML::                         Publish entries to XML.
 @end menu
@@ -2937,7 +2937,7 @@ and it will do what you expect.
 
 @node Poem, Texinfo, LaTeX, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Publish a poem to LaTex or PDF
+@section Publish a poem to LaTeX or PDF
 
 The @code{muse-poem} module makes it easy to attractively publish and
 reference poems in the following format, using the "memoir" module for
