@@ -1,9 +1,20 @@
 2007-08-24  Michael Olson  <mwolson@gnu.org>
 
+	* AUTHORS: Add new authors for contrib files.
+
 	* NEWS: Add entries for Muse 3.11.
 
 	* README: Mention that contents of contrib/blosxom and
 	contrib/pyblosxom have different licenses than the rest of Muse.
+
+	* contrib/blosxom/getstamps.pl: New file that implements fetching
+	timestamps from published Muse files and placing them in a single
+	timestamps file.  That file can then be used by blosxom's metadate
+	plugin.  Thanks to Michael Welle for providing this file, as well
+	as instructions on how to use Muse with Blosxom.
+
+	* contrib/blosxom/metadate_0_0_3: New file implementing the
+	metadate plugin for blosxom.
 
 	* contrib/pyblosxom/getstamps.py: Add license text.  It seems safe
 	to assume that the original author wanted this to be distributed
@@ -27,7 +38,7 @@
 
 	* texi/muse.texi (Blosxom Requirements): Organize information by
 	subheading and subsubheading, and document how to use the metadate
-	plugin.
+	plugin.  Briefly document using Blosxom to serve Muse entries.
 
 2007-08-23  Michael Olson  <mwolson@gnu.org>
 

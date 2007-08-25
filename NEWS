@@ -10,6 +10,13 @@ muse-mode-auto-p set to non-nil, please set muse-mode-auto-p to nil
 from now on.  This was a workaround that some people used to deal with
 a bug that has now been fixed.
 
+** Support for serving published Muse files with Blosxom.
+See the end of the Blosxom Requirements section of the Muse manual for
+details.
+
+** The metadate plugin for PyBlosxom is now included with Muse
+in contrib/pyblosxom/metadate.py.
+
 ** Compatibility fixes for Emacs21 and XEmacs
 
 *** Use copy-tree instead of copy-alist.
@@ -81,6 +88,9 @@ produced by Muse.
 ** Muse Manual (texi/muse.texi)
 
 *** Document support for citations in new Citations section.
+
+*** Document how to use the Pyblosxom metadate plugin in the
+Blosxom Requirements section.
 
 * Changes in Muse 3.10
 
