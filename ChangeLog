@@ -3,6 +3,9 @@
 	* examples/QuickStart.muse: Fix typo in first paragraph.  Thanks
 	to Karl Berry for reporting this.
 
+	* lisp/muse-mode.el (muse-visit-link-default): Fix bug with
+	browsing anchors that come after a link to them.
+
 	* texi/muse.texi (Poem): Fix typo in spelling of LaTeX.  Thanks to
 	Karl Berry for reporting this.
 
