@@ -2,6 +2,19 @@
 
 	* NEWS: Add entries for Muse 3.11.
 
+	* README: Mention that contents of contrib/blosxom and
+	contrib/pyblosxom have different licenses than the rest of Muse.
+
+	* contrib/pyblosxom/getstamps.py: Add license text.  It seems safe
+	to assume that the original author wanted this to be distributed
+	with Pyblosxom, and hence use the MIT license like the rest of
+	Pyblosxom.
+
+	* contrib/pyblosxom/hardcodedates.py: Add license text.
+
+	* contrib/pyblosxom/make-blog: Change license text to be "This
+	file may be used, distributed, and modified without restriction."
+
 	* lisp/muse-wiki.el (muse-wiki-project-file-regexp): Fix typo in
 	docstring.
 
