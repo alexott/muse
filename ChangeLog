@@ -15,8 +15,19 @@
 	* contrib/pyblosxom/make-blog: Change license text to be "This
 	file may be used, distributed, and modified without restriction."
 
+	* contrib/pyblosxom/metadate.py: New file that implements the
+	PyBlosxom metadate plugin.  Since this can no longer be found at
+	the original author's website, I have included it with Muse.
+
+	* lisp/muse-blosxom.el: Update location of metadate plugin in
+	header.
+
 	* lisp/muse-wiki.el (muse-wiki-project-file-regexp): Fix typo in
 	docstring.
+
+	* texi/muse.texi (Blosxom Requirements): Organize information by
+	subheading and subsubheading, and document how to use the metadate
+	plugin.
 
 2007-08-23  Michael Olson  <mwolson@gnu.org>
 
