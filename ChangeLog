@@ -6,10 +6,60 @@
 
 	* texi/muse.texi (Keystroke Summary): Document it.
 
+2007-08-25  Michael Olson  <mwolson@gnu.org>
+
+	* examples/QuickStart.muse: Fix typo in first paragraph.  Thanks
+	to Karl Berry for reporting this.
+
+	* lisp/muse-mode.el (muse-visit-link-default): Fix bug with
+	browsing anchors that come after a link to them.
+
+	* texi/muse.texi (Poem): Fix typo in spelling of LaTeX.  Thanks to
+	Karl Berry for reporting this.
+
 2007-08-24  Michael Olson  <mwolson@gnu.org>
+
+	* Release Emacs Muse 3.11.
+
+	* AUTHORS: Add new authors for contrib files.
+
+	* NEWS: Add entries for Muse 3.11.
+
+	* README: Mention that contents of contrib/blosxom and
+	contrib/pyblosxom have different licenses than the rest of Muse.
+
+	* contrib/blosxom/getstamps.pl: New file that implements fetching
+	timestamps from published Muse files and placing them in a single
+	timestamps file.  That file can then be used by blosxom's metadate
+	plugin.  Thanks to Michael Welle for providing this file, as well
+	as instructions on how to use Muse with Blosxom.
+
+	* contrib/blosxom/metadate_0_0_3: New file implementing the
+	metadate plugin for blosxom.
+
+	* contrib/pyblosxom/getstamps.py: Add license text.  It seems safe
+	to assume that the original author wanted this to be distributed
+	with Pyblosxom, and hence use the MIT license like the rest of
+	Pyblosxom.
+
+	* contrib/pyblosxom/hardcodedates.py: Add license text.
+
+	* contrib/pyblosxom/make-blog: Change license text to be "This
+	file may be used, distributed, and modified without restriction."
+
+	* contrib/pyblosxom/metadate.py: New file that implements the
+	PyBlosxom metadate plugin.  Since this can no longer be found at
+	the original author's website, I have included it with Muse.
+
+	* lisp/muse-blosxom.el: Update location of metadate plugin in
+	header.
 
 	* lisp/muse-wiki.el (muse-wiki-project-file-regexp): Fix typo in
 	docstring.
+
+	* texi/muse.texi (Blosxom Requirements): Organize information by
+	subheading and subsubheading, and document how to use the metadate
+	plugin.  Briefly document using Blosxom to serve Muse entries.
 
 2007-08-23  Michael Olson  <mwolson@gnu.org>
 

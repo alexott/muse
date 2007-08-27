@@ -128,9 +128,13 @@ Contributed software
 
 This is a listing of authors of software in the `contrib' directory.
 
-Nathan Kent Bullock: getstamps.py, hardcodedates.py
-  (No license was included, so the intent was most likely to use the
-   same license as that of pyblosxom, which is the MIT license)
+Nathan Kent Bullock: pyblosxom/getstamps.py, pyblosxom/hardcodedates.py
+
+Cameron Desautels: pyblosxom/metadate.py
+
+Mark Ivey: blosxom/metadate_0_0_3
 
 Eric Marsden: cgi.el, httpd.el
   (assigned past and future changes to FSF)
+
+Michael Welle: blosxom/getstamps.pl

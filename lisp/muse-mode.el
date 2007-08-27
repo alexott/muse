@@ -557,12 +557,15 @@ in `muse-project-alist'."
                   (find-file-other-window link)
                 (find-file link))))))
       (when anchor
-        (let ((pos (point)))
+        (let ((pos (point))
+              (regexp (concat "^\\W*" (regexp-quote anchor) "\\b"))
+              last)
           (goto-char (point-min))
-          (unless (re-search-forward (concat "^\\W*" (regexp-quote anchor)
-                                             "\\b")
-                                     nil t)
-            (goto-char pos)))))))
+          (while (and (setq last (re-search-forward regexp nil t))
+                      (muse-link-at-point)))
+          (unless last
+            (goto-char pos)
+            (message "Could not find anchor `%s'" anchor)))))))
 
 (defun muse-visit-link (link &optional other-window)
   "Visit the URL or link named by LINK."

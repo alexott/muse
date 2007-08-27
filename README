@@ -248,3 +248,7 @@ restriction.
 
 The PNG images included in the examples/ directory may be used,
 distributed, and modified without restriction.
+
+The contents of the contrib/blosxom and contrib/pyblosxom directories
+are available under the terms of other licenses.  Please consult the
+header of each file for the appropriate license text.

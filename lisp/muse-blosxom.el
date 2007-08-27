@@ -50,16 +50,19 @@
 ;; `hardcodedates.py' provides the second service.  Eventually it is
 ;; hoped that a blosxom plugin and script will be found/written.
 ;;
-;; Alternately, the pyblosxom metadate plugin may be used.  Set the
-;; value of muse-blosxom-use-metadate to non-nil to enable adding a
-;; #postdate directive to all published files.  You can do this by:
+;; Alternately, the pyblosxom metadate plugin may be used.  On the
+;; plus side, there is no need to run a script to gather the date.  On
+;; the downside, each entry is read twice rather than once when the
+;; page is rendered.  Set the value of muse-blosxom-use-metadate to
+;; non-nil to enable adding a #postdate directive to all published
+;; files.  You can do this by:
 ;;
 ;; M-x customize-variable RET muse-blosxom-use-metadate RET
 ;;
 ;; With the metadate plugin installed in pyblosxom, the date set in
 ;; this directive will be used instead of the file's modification
-;; time.  The plugin is available at:
-;; http://pyblosxom.sourceforge.net/blog/registry/date/metadate
+;; time.  The plugin is included with Muse at
+;; contrib/pyblosxom/metadate.py.
 ;;
 ;; Generating a Muse project entry
 ;; -------------------------------

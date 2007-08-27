@@ -1,5 +1,97 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.11
+
+** Update my example settings in examples/mwolson.
+
+** Fix several bugs with setting muse-file-extension to something else.
+If you have both muse-file-extension set to some string, and
+muse-mode-auto-p set to non-nil, please set muse-mode-auto-p to nil
+from now on.  This was a workaround that some people used to deal with
+a bug that has now been fixed.
+
+** Support for serving published Muse files with Blosxom.
+See the end of the Blosxom Requirements section of the Muse manual for
+details.
+
+** The metadate plugin for PyBlosxom is now included with Muse
+in contrib/pyblosxom/metadate.py.
+
+** Compatibility fixes for Emacs21 and XEmacs
+
+*** Use copy-tree instead of copy-alist.
+
+*** Correctly require derived.el.
+
+*** Deal with the lack of a `delete-and-extract-region' function in XEmacs
+by making `muse-delete-and-extract-region'.
+
+*** Fix XEmacs and Texinfo publishing bug.
+
+*** Deal with lack of autoloads for the `man' function in some Emacs variants.
+
+*** Fix XEmacs compilation error in muse-import-xml.el.
+
+** Muse Mode highlighting (lisp/muse-colors.el)
+
+*** Fix display bug where emphasis becomes unhighlighted when moving
+around the buffer.
+
+** ConTeXt publishing (lisp/muse-context.el)
+
+*** Add support for #module directive.
+Consult the ConTeXt section of the Muse manual for details.
+
+** DocBook publishing (lisp/muse-docbook.el)
+
+*** Fix bug with paragraphs after <verse> tags.
+
+** HTML publishing (lisp/muse-html.el)
+
+*** Fix bug with links not being interpreted in titles.
+This fix also takes care of some additional escaping issues that were
+addressed in the previous release by a different means.
+
+** Journal (lisp/muse-journal.el)
+
+*** Fix bug with title anchors and CJK.
+
+*** Fix bug with summarized entries.
+
+** LaTeX publishing (lisp/muse-latex.el)
+
+*** Remove footnote references from headings.
+The reason for this is that LaTeX will throw errors during the publishing
+process if they exist.
+
+** Publishing (lisp/muse-publish.el)
+
+*** Fix serious bug in definition list publishing.
+We were skipping past the initial indented line, and that was causing
+an erroneous blockquote to be inserted.
+
+*** Revert fix for escaping bug involving headings and the <contents> tag,
+because it was buggy.  This is instead handled by muse-html.el now.
+
+** Texinfo publishing (lisp/muse-texinfo.el)
+
+*** Make url, link, and link-and-anchor output look better in texi2html
+output, for people who want to run that command on texi output
+produced by Muse.
+
+** XML publishing (lisp/muse-xml.el)
+
+*** Add support for <cite> tag.
+
+*** Bump the version of etc/muse.rnc to 1.1 to reflect support for <cite>.
+
+** Muse Manual (texi/muse.texi)
+
+*** Document support for citations in new Citations section.
+
+*** Document how to use the Pyblosxom metadate plugin in the
+Blosxom Requirements section.
+
 * Changes in Muse 3.10
 
 ** Relicense to GPLv3.

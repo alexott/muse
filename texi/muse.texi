@@ -12,7 +12,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for Emacs Muse version 3.10.
+This manual is for Emacs Muse version 3.11.
 
 Copyright @copyright{} 2004, 2005, 2006,
 2007 Free Software Foundation, Inc.
@@ -136,7 +136,7 @@ Publishing Various Types of Documents
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
-* Poem::                        Publish a poem to LaTex or PDF.
+* Poem::                        Publish a poem to LaTeX or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
 * XML::                         Publish entries to XML.
 
@@ -1877,7 +1877,7 @@ easy to create new styles, or derive from an existing style.
 * HTML::                        Publishing in HTML or XHTML form.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
-* Poem::                        Publish a poem to LaTex or PDF.
+* Poem::                        Publish a poem to LaTeX or PDF.
 * Texinfo::                     Publish entries to Texinfo format or PDF.
 * XML::                         Publish entries to XML.
 @end menu
@@ -1904,6 +1904,25 @@ In other words, each blog entry corresponds with one file.
 You will need to have @command{pyblosxom.cgi} or @command{blosxom.cgi}
 installed on a machine that you have upload access to.
 
+The major difficulty in both of these programs is specifying the date of
+the entries.  Both programs rely on the file modification time rather
+than any data contained in the entries themselves.  A plugin is needed
+in order for these programs to be able to get the correct date.
+
+@subheading PyBlosxom
+
+There are two different ways of accomplishing this in pyblosxom.  The
+first way involves gathering the timestamps (as specified by the
+@code{#date} directive) into one file and then sending that file along
+with published entries to the webserver.
+
+The second will read each file at render time and parse the
+@code{#postdate} directive.  Muse will translate the @code{#date}
+directive into @code{#postdate} at publish time, so you don't have to do
+any extra work.
+
+@subsubheading Placing timestamps in one file
+
 The following additional components are required in order to make the
 date of blog entries display as something sensible.
 
@@ -1919,8 +1938,7 @@ A plugin for (py)blosxom that reads this file.
 These 2 things are provided for @command{pyblosxom.cgi} in the
 @file{contrib/pyblosxom} subdirectory.  @file{getstamps.py} provides the
 former service, while @file{hardcodedates.py} provides the latter
-service.  Eventually it is hoped that a @command{blosxom.cgi} plugin and
-script will be found/written.
+service.
 
 Here is a sample listing from my @file{timestamps} file, which maps
 each file to a date.  This can really be in any format, as long as your
@@ -1936,6 +1954,44 @@ The script @file{contrib/pyblosxom/make-blog} demonstrates how to call
 @file{getstamps.py}.  Note that you will need to set the current
 directory to where your Muse files are, execute @file{getstamps.py}, and
 then move the generated timestamps file to your publishing directory.
+
+@subsubheading Getting timestamp from entry while rendering
+
+Alternately, the pyblosxom metadate plugin may be used.  On the plus
+side, there is no need to run a script to gather the date.  On the
+downside, each entry is read twice rather than once when the page is
+rendered.  Set the value of @code{muse-blosxom-use-metadate} to non-nil
+to enable adding a @code{#postdate} directive to all published files.
+You can do this by:
+
+@example
+M-x customize-variable RET muse-blosxom-use-metadate RET
+@end example
+
+With the metadate plugin installed in pyblosxom, the date set in this
+directive will be used instead of the file's modification time.  The
+plugin is included with Muse at @file{contrib/pyblosxom/metadate.py}.
+
+@subheading Blosxom
+
+It is also possible to use Blosxom, which is written in Perl, to serve
+blog entries that were published with Muse.  The steps are as follows.
+
+@enumerate
+@item
+Download and install blosxom from @url{http://blosxom.sourceforge.net/}.
+
+@item
+Install the metadate plugin.  It is available in
+@file{contrib/blosxom/metadate_0_0_3}.
+
+@item
+Every time you make a new blog entry, change to the blosxom data
+directory and execute the @file{contrib/blosxom/getstamps.pl} script.
+This script has only recently been made, and may still have some bugs,
+so use with caution.
+
+@end enumerate
 
 @node Blosxom Entries, Blosxom Options, Blosxom Requirements, Blosxom
 @comment  node-name,  next,  previous,  up
@@ -2885,7 +2941,7 @@ and it will do what you expect.
 
 @node Poem, Texinfo, LaTeX, Publishing Styles
 @comment  node-name,  next,  previous,  up
-@section Publish a poem to LaTex or PDF
+@section Publish a poem to LaTeX or PDF
 
 The @code{muse-poem} module makes it easy to attractively publish and
 reference poems in the following format, using the "memoir" module for
