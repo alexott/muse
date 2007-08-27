@@ -928,6 +928,10 @@ Increase the indentation of the list item at point.
 @item M-x muse-colors-toggle-inline-images RET
 Toggle display of inlined images on/off.
 
+@item M-x muse-update-values RET
+Update various values that are automatically generated.
+
+Call this after changing @code{muse-project-alist}.
 @end table
 
 

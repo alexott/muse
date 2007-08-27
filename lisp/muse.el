@@ -80,6 +80,13 @@ familiar with Emacs."
 This is to be used by add-on modules for Muse.
 It is run just before colorizing or publishing a buffer.")
 
+(defun muse-update-values ()
+  "Update various values that are automatically generated.
+
+Call this after changing `muse-project-alist'."
+  (interactive)
+  (run-hooks 'muse-update-values-hook))
+
 ;; Default file extension
 
 ;; By default, use the .muse file extension.
