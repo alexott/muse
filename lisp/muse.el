@@ -85,7 +85,14 @@ It is run just before colorizing or publishing a buffer.")
 
 Call this after changing `muse-project-alist'."
   (interactive)
-  (run-hooks 'muse-update-values-hook))
+  (run-hooks 'muse-update-values-hook)
+  (dolist (buffer (buffer-list))
+    (when (buffer-live-p buffer)
+      (with-current-buffer buffer
+        (when (and (derived-mode-p 'muse-mode)
+                   muse-current-project)
+          (setq muse-current-project nil)
+          (setq muse-current-project (muse-project-of-file)))))))
 
 ;; Default file extension
 

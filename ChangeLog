@@ -1,3 +1,10 @@
+2007-08-29  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-update-values): Reset the value of
+	muse-current-project in all Muse buffers.  This updates the rules
+	in case you want to publish a file after changing its associated
+	muse-project-alist entry.
+
 2007-08-27  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-update-values): New function that the user
