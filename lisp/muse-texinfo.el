@@ -200,7 +200,8 @@ These are applied to URLs."
 
 (defun muse-texinfo-decide-specials (context)
   "Determine the specials to escape, depending on CONTEXT."
-  (cond ((memq context '(underline literal emphasis email url url-desc image))
+  (cond ((memq context '(underline literal emphasis email url url-desc image
+                                   footnote))
          muse-texinfo-markup-specials-url)
         (t muse-texinfo-markup-specials)))
 

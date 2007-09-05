@@ -1,3 +1,19 @@
+2007-09-05  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-context.el (muse-context-decide-specials): Add
+	footnote.
+
+	* lisp/muse-latex.el (muse-latex-decide-specials): Add footnote.
+
+	* lisp/muse-publish.el (muse-publish-escape-specials): Mention
+	'footnote in docstring.
+	(muse-publish-markup-footnote): Minor docstring fix.  Escape
+	footnote text properly.  Thanks to Jean Magnan de Bornier for
+	noticing.
+
+	* lisp/muse-texinfo.el (muse-texinfo-decide-specials): Add
+	footnote.
+
 2007-08-29  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-update-values): Reset the value of

@@ -412,7 +412,8 @@ These are applied to image filenames."
 
 (defun muse-latex-decide-specials (context)
   "Determine the specials to escape, depending on CONTEXT."
-  (cond ((memq context '(underline emphasis document url-desc verbatim))
+  (cond ((memq context '(underline emphasis document url-desc verbatim
+                                   footnote))
          muse-latex-markup-specials-document)
         ((eq context 'image)
          muse-latex-markup-specials-image)

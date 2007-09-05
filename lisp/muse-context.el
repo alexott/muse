@@ -288,7 +288,8 @@ These are applied to image filenames."
 
 (defun muse-context-decide-specials (context)
   "Determine the specials to escape, depending on the CONTEXT argument."
-  (cond ((memq context '(underline emphasis document url-desc verbatim))
+  (cond ((memq context '(underline emphasis document url-desc verbatim
+                                   footnote))
          muse-context-markup-specials-document)
         ((eq context 'image)
          muse-context-markup-specials-image)

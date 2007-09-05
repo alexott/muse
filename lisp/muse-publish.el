@@ -986,6 +986,7 @@ The following contexts exist in Muse.
 'image      [[image.png]]
 'example    <example> region (monospaced, block context, escaped)
 'verbatim   <verbatim> region (escaped)
+'footnote   footnote text
 'document   normal text"
   (let ((specials (muse-style-element :specials nil t)))
     (cond ((functionp specials)
@@ -1114,7 +1115,7 @@ The following contexts exist in Muse.
 (defvar muse-publish-footnotes nil)
 
 (defun muse-publish-markup-footnote ()
-  "Scan ahead and snarf up the footnote body"
+  "Scan ahead and snarf up the footnote body."
   (cond
    ((get-text-property (match-beginning 0) 'muse-link)
     nil)
@@ -1145,7 +1146,9 @@ The following contexts exist in Muse.
               (if (string= "" footnotemark-cmd)
                   (setq footnotemark
                         (concat (muse-markup-text 'footnote)
-                                (buffer-substring-no-properties beg end)
+                                (muse-publish-escape-specials-in-string
+                                 (buffer-substring-no-properties beg end)
+                                 'footnote)
                                 (muse-markup-text 'footnote-end)))
                 (setq footnotemark (format footnotemark-cmd footnote
                                            footnotemark-end-cmd))
