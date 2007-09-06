@@ -1638,7 +1638,9 @@ of link, the cadr is the page name, and the cddr is the anchor."
 
 (defun muse-publish-url (url &optional desc orig-url explicit)
   "Resolve a URL into its final <a href> form."
-  (let (type anchor)
+  (let ((unesc-url url)
+        (unesc-orig-url orig-url)
+        type anchor)
     (dolist (transform muse-publish-url-transforms)
       (setq url (save-match-data (when url (funcall transform url explicit)))))
     (if desc
@@ -1675,7 +1677,9 @@ of link, the cadr is the page name, and the cddr is the anchor."
            (muse-markup-text 'link url (or desc orig-url)))
           (t
            (or (and (or desc
-                        (not (string= url orig-url)))
+                        ;; compare the not-escaped versions of url and
+                        ;; orig-url
+                        (not (string= unesc-url unesc-orig-url)))
                     (let ((text (muse-markup-text 'url-and-desc url
                                                   (or desc orig-url))))
                       (and (not (string= text ""))

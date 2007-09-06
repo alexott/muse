@@ -10,6 +10,10 @@
 	(muse-publish-markup-footnote): Minor docstring fix.  Escape
 	footnote text properly.  Thanks to Jean Magnan de Bornier for
 	noticing.
+	(muse-publish-url): When checking to see if this is just a plain
+	URL without a description, compare the strings as they were before
+	doing escaping.  This fixes a bug where plain URLs could sometimes
+	be published as if they were URLs with descriptions.
 
 	* lisp/muse-texinfo.el (muse-texinfo-decide-specials): Add
 	footnote.
