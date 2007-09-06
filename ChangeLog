@@ -3,7 +3,10 @@
 	* lisp/muse-html.el (muse-html-class-tag): Fix bug where nested
 	class tags were not working.  We move to just after the beginning
 	of the first class tag, so that we can detect any remaining class
-	tags.  Thanks to Florian Beck for the report.
+	tags.  Thanks to Florian Beck for the report.  Fix error that
+	occurred when class tag has no name element.  Thanks to Peter
+	Baranyi for the report.  The correct behavior in this case is to
+	not publish the tag at all.
 
 	* lisp/muse.el (muse-goto-tag-end): Fix bug where nested tags with
 	arguments were not being detected properly.

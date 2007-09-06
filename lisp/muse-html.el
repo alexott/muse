@@ -591,11 +591,13 @@ table of contents."
                              '(muse-contents t))))))
 
 (defun muse-html-class-tag (beg end attrs)
-  (goto-char beg)
-  (muse-insert-markup "<span class=\"" (cdr (assoc "name" attrs)) "\">")
-  (save-excursion
-    (goto-char end)
-    (muse-insert-markup "</span>")))
+  (let ((name (cdr (assoc "name" attrs))))
+    (when name
+      (goto-char beg)
+      (muse-insert-markup "<span class=\"" name "\">")
+      (save-excursion
+        (goto-char end)
+        (muse-insert-markup "</span>")))))
 
 (defun muse-html-src-tag (beg end attrs)
   "Publish the region using htmlize.
