@@ -1,3 +1,13 @@
+2007-09-06  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-class-tag): Fix bug where nested
+	class tags were not working.  We move to just after the beginning
+	of the first class tag, so that we can detect any remaining class
+	tags.  Thanks to Florian Beck for the report.
+
+	* lisp/muse.el (muse-goto-tag-end): Fix bug where nested tags with
+	arguments were not being detected properly.
+
 2007-09-05  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-context.el (muse-context-decide-specials): Add

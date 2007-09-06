@@ -593,8 +593,9 @@ table of contents."
 (defun muse-html-class-tag (beg end attrs)
   (goto-char beg)
   (muse-insert-markup "<span class=\"" (cdr (assoc "name" attrs)) "\">")
-  (goto-char end)
-  (muse-insert-markup "</span>"))
+  (save-excursion
+    (goto-char end)
+    (muse-insert-markup "</span>")))
 
 (defun muse-html-src-tag (beg end attrs)
   "Publish the region using htmlize.

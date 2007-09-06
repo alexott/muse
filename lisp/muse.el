@@ -858,14 +858,15 @@ may be nested inside of this tag, and skip past them."
   (if (not nested)
       (search-forward (concat "</" tag ">") nil t)
     (let ((nesting 1)
-          (tag-regexp (concat "\\(<\\(/?\\)" tag ">\\)"))
+          (tag-regexp (concat "\\(<\\(/?\\)" tag "\\([ >]\\)\\)"))
           (match-found nil))
       (while (and (> nesting 0)
                   (setq match-found (re-search-forward tag-regexp nil t)))
         ;; for the sake of font-locking code, skip matches in comments
         (unless (get-text-property (match-beginning 0) 'muse-comment)
           (if (string-equal (match-string 2) "/")
-              (setq nesting (1- nesting))
+              (and (string-equal (match-string 3) ">")
+                   (setq nesting (1- nesting)))
             (setq nesting (1+ nesting)))))
       match-found)))
 
