@@ -1,3 +1,12 @@
+2007-09-10  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile (elpa): Use texi/dir-template rather than echoing lines
+	to the ELPA dir file for Muse.
+
+	* texi/dir-template: New file containing template to use when
+	making ELPA dir files.  This fixes a corrupt dir file bug for the
+	Muse ELPA package.  Thanks to Tom Tromey for the report.
+
 2007-09-06  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-class-tag): Fix bug where nested

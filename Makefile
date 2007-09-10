@@ -119,8 +119,7 @@ elpa: realclean info-only
 	echo '  "$(ELPADESC)")' >> \
 	  $(ELPADIR)/$(PROJECT)-$(VERSION)/$(PROJECT)-pkg.el
 	cp texi/$(MANUAL).info $(ELPADIR)/$(PROJECT)-$(VERSION)
-	echo '* Menu:' > $(ELPADIR)/$(PROJECT)-$(VERSION)/dir
-	echo >> $(ELPADIR)/$(PROJECT)-$(VERSION)/dir
+	cp texi/dir-template $(ELPADIR)/$(PROJECT)-$(VERSION)/dir
 	install-info --section "Emacs" "Emacs" \
 	  --info-dir=$(ELPADIR)/$(PROJECT)-$(VERSION) \
 	  $(ELPADIR)/$(PROJECT)-$(VERSION)/$(MANUAL).info
