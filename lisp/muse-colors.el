@@ -117,7 +117,11 @@ used as the filename of the image."
       (setq muse-colors-inline-images t)
     (setq muse-colors-inline-images nil))
   ;; reprocess the buffer
-  (muse-colors-buffer))
+  (muse-colors-buffer)
+  ;; display informative message
+  (if muse-colors-inline-images
+      (message "Images are now displayed inline")
+    (message "Images are now displayed as links")))
 
 (defvar muse-colors-outline-faces-list
   (if (facep 'outline-1)

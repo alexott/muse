@@ -1,3 +1,8 @@
+2007-09-17  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-colors.el (muse-colors-toggle-inline-images): Display
+	message about how images are now displayed.
+
 2007-09-06  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-class-tag): Fix bug where nested
