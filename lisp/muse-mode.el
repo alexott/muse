@@ -38,6 +38,9 @@
 ;; muse-next-reference and muse-previous-reference involving links
 ;; that begin at point 1.
 
+;; Gregory Collins (greg AT gregorycollins DOT net) fixed a bug with
+;; paragraph separation and headings when filling.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -227,11 +230,15 @@ index at intervals."
   ;; Make fill work nicely with item lists
   (let ((regexp (concat "\\s-+\\(-\\|[0-9]+\\.\\)\\s-+"
                         "\\|\\[[0-9]+\\]\\s-*"
-                        "\\|.*\\s-*::\\s-+")))
+                        "\\|.*\\s-*::\\s-+"
+                        "\\|\\*+\\s-+")))
     (set (make-local-variable 'adaptive-fill-regexp)
          (concat regexp "\\|\\s-*"))
     (set (make-local-variable 'paragraph-start)
-         (concat paragraph-start "\\|" regexp)))
+         (concat paragraph-start "\\|" regexp))
+    (set (make-local-variable 'paragraph-separate)
+         (concat paragraph-separate "\\|\\*+\\s-+")))
+
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
        "; ")

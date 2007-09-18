@@ -1,3 +1,9 @@
+2007-09-18  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-mode): Fix bug involving filling and
+	paragraphs next to headings.  Thanks to Gregory Collins for the
+	initial patch, which I modified.
+
 2007-09-10  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (elpa): Use texi/dir-template rather than echoing lines
