@@ -4,6 +4,11 @@
 	paragraphs next to headings.  Thanks to Gregory Collins for the
 	initial patch, which I modified.
 
+2007-09-17  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-colors.el (muse-colors-toggle-inline-images): Display
+	message about how images are now displayed.
+
 2007-09-10  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile (elpa): Use texi/dir-template rather than echoing lines
