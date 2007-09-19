@@ -542,15 +542,8 @@ If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
     (replace-in-string text regexp replacement literal))
    ((fboundp 'replace-regexp-in-string)
     (replace-regexp-in-string regexp replacement text fixedcase literal))
-   (t (let ((repl-len (length replacement))
-            start)
-        (unless (string= regexp "")
-          (save-match-data
-            (while (setq start (string-match regexp text start))
-              (setq start (+ start repl-len)
-                    text (replace-match replacement fixedcase literal
-                                        text))))))
-      text)))
+   (t (error (concat "Neither `replace-in-string' nor "
+                     "`replace-regexp-in-string' was found")))))
 
 (if (fboundp 'add-to-invisibility-spec)
     (defalias 'muse-add-to-invisibility-spec 'add-to-invisibility-spec)

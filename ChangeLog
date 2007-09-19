@@ -1,3 +1,10 @@
+2007-09-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-replace-regexp-in-string): Remove fallback
+	code, since it is not needed in any version of Emacs we support,
+	and it also has a couple of bugs that I don't want to waste time
+	fixing.
+
 2007-09-18  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-mode.el (muse-mode): Fix bug involving filling and
