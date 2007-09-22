@@ -30,6 +30,14 @@
 \usepackage{hyperref}
 \usepackage[pdftex]{graphicx}
 
+\def\museincludegraphics{%
+  \begingroup
+  \catcode`\|=0
+  \catcode`\\=12
+  \catcode`\#=12
+  \includegraphics[width=0.75\textwidth]
+}
+
 % One-inch margins
 \usepackage{fullpage}
 
@@ -50,7 +58,8 @@
 \begin{document}
 
 <lisp>(unless (muse-publishing-directive "latex-omit-title")
-(concat "\\title{" (muse-wiki-publish-pretty-title) "}
+(concat "\\title{" (muse-publish-escape-specials-in-string
+  (muse-wiki-publish-pretty-title) 'document) "}
 \\author{" (muse-publishing-directive "author") "}
 \\date{" (muse-publishing-directive "date") "}
 

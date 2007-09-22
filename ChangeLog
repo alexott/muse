@@ -4,6 +4,9 @@
 
 	* NEWS: Add entry for the LaTeX image filename escaping changes.
 
+	* examples/mwolson/templates/header.tex: Update for recent
+	changes.
+
 	* lisp/muse-latex2png.el (muse-publish-math-tag): Detect whether
 	the tag ends at the end of a line.  If not, do not use "$$" to
 	publish it.  Thanks to Darlan Cavalcante Moreira for the
