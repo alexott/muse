@@ -2759,10 +2759,19 @@ For more on the structure of this list,
 
 This publishing style is capable of producing LaTeX or PDF documents.
 
-If you wish to publish PDF documents, you will need to have a good TeX
+If you wish to publish PDF documents, you will need to have a good LaTeX
 installation.  For Debian and Ubuntu, this can be accomplished by
 installing the ``tetex-bin'' and ``tetex-extra'' packages.  TeX fonts
 are also a must.
+
+If your LaTeX installation has the file @file{grffile.sty}, which may be
+found in the @file{texlive-latex-recommended} package for Debian and
+Ubuntu, then consider using it by adding the following to your header
+file.  This allows spaces in filenames to work.
+
+@example
+\usepackage@{grffile@}
+@end example
 
 @subheading Styles provided
 

@@ -35,6 +35,9 @@
 	value to be nil.
 	(muse-replace-regexp-in-string): Fix byte-compiler warning.
 
+	* texi/muse.texi (LaTeX): Mention grffile.sty.  Thanks to Karl
+	Berry for the tip.
+
 2007-09-19  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-replace-regexp-in-string): Remove fallback
