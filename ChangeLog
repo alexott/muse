@@ -1,3 +1,10 @@
+2007-09-22  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex2png.el (muse-publish-math-tag): Detect whether
+	the tag ends at the end of a line.  If not, do not use "$$" to
+	publish it.  Thanks to Darlan Cavalcante Moreira for the
+	suggestion.
+
 2007-09-19  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-replace-regexp-in-string): Remove fallback

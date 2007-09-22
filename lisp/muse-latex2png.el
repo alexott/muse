@@ -214,12 +214,17 @@ See `muse-latex2png-region' for valid keys for ATTRS."
 current style is not Latex-based, generate an image for the given
 Latex math code.
 
-If 6 or more spaces come before the tag, surrouund the region
-with the equivalent of \"$$\" instead, which causes the region to
-be centered in the published output (among other things)."
+If 6 or more spaces come before the tag, and the end of the tag
+is at the end of a line, then surround the region with the
+equivalent of \"$$\" instead.  This causes the region to be
+centered in the published output, among other things."
   (let* ((centered (and (re-search-backward
                          (concat "^[" muse-regexp-blank "]\\{6,\\}\\=")
                          nil t)
+                        (save-excursion
+                          (save-match-data
+                            (goto-char end)
+                            (looking-at (concat "[" muse-regexp-blank "]*$"))))
                         (prog1 t
                           (replace-match "")
                           (when (and (or (muse-style-derived-p "latex")
