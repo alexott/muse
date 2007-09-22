@@ -1,9 +1,26 @@
 2007-09-22  Michael Olson  <mwolson@gnu.org>
 
+	* AUTHORS: Bookkeeping.
+
+	* NEWS: Add entry for the LaTeX image filename escaping changes.
+
 	* lisp/muse-latex2png.el (muse-publish-math-tag): Detect whether
 	the tag ends at the end of a line.  If not, do not use "$$" to
 	publish it.  Thanks to Darlan Cavalcante Moreira for the
 	suggestion.
+
+	* lisp/muse-latex.el (muse-latex-header, muse-latexcjk-header)
+	(muse-latex-slides-header, muse-latex-lecture-notes-header):
+	Escape specials in the title.  Define a museincludegraphics
+	command, which is able to handle escaped special characters in
+	image filenames.  Thanks to Karl Berry for providing this.
+	(muse-latex-markup-strings): Use museincludegraphics instead of
+	includegraphics in all image-related markup.  Move the width
+	specification over to the museincludegraphics command, rather than
+	specifying it explicitly.  This allows people to change this
+	information in their headers.
+	(muse-latex-markup-specials-image): Escape backslashes, "#", and
+	pipe characters in image filenames.
 
 	* lisp/muse-wiki.el (muse-wiki-project-files-with-spaces): Fix
 	byte-compiler warning.

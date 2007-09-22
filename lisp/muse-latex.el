@@ -37,6 +37,9 @@
 ;; Jim Ottaway (j DOT ottaway AT lse DOT ac DOT uk) implemented slides
 ;; and lecture notes.
 
+;; Karl Berry (karl AT freefriends DOT org) suggested how to escape
+;; additional special characters in image filenames.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -80,9 +83,18 @@
 \\usepackage{hyperref}
 \\usepackage[pdftex]{graphicx}
 
+\\def\\museincludegraphics{%
+  \\begingroup
+  \\catcode`\\|=0
+  \\catcode`\\\\=12
+  \\catcode`\\#=12
+  \\includegraphics[width=0.75\\textwidth]
+}
+
 \\begin{document}
 
-\\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
+\\title{<lisp>(muse-publish-escape-specials-in-string
+  (muse-publishing-directive \"title\") 'document)</lisp>}
 \\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
 \\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
 
@@ -112,7 +124,8 @@
 \\begin{document}
 \\begin{CJK*}<lisp>(muse-latexcjk-encoding)</lisp>
 
-\\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
+\\title{<lisp>(muse-publish-escape-specials-in-string
+  (muse-publishing-directive \"title\") 'document)</lisp>}
 \\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
 \\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
 
@@ -144,7 +157,8 @@ filename."
 
 \\begin{document}
 
-\\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
+\\title{<lisp>(muse-publish-escape-specials-in-string
+  (muse-publishing-directive \"title\") 'document)</lisp>}
 \\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
 \\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
 
@@ -170,7 +184,8 @@ You must have the Beamer extension for LaTeX installed for this to work."
 
 \\begin{document}
 
-\\title{<lisp>(muse-publishing-directive \"title\")</lisp>}
+\\title{<lisp>(muse-publish-escape-specials-in-string
+  (muse-publishing-directive \"title\") 'document)</lisp>}
 \\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
 \\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
 
@@ -212,14 +227,14 @@ For more on the structure of this list, see
 
 (defcustom muse-latex-markup-strings
   '((image-with-desc . "\\begin{figure}[h]
-\\centering\\includegraphics[width=0.75\\textwidth]{%s.%s}
+\\centering\\museincludegraphics{%s.%s}|endgroup
 \\caption{%s}
 \\end{figure}")
     (image           . "\\begin{figure}[h]
-\\centering\\includegraphics[width=0.75\\textwidth]{%s.%s}
+\\centering\\museincludegraphics{%s.%s}|endgroup
 \\end{figure}")
     (image-link      . "%% %s
-\\includegraphics[width=0.75\\textwidth]{%s.%s}")
+\\museincludegraphics{%s.%s}|endgroup")
     (anchor-ref      . "\\ref{%s}")
     (url             . "\\url{%s}")
     (url-and-desc    . "\\href{%s}{%s}\\footnote{%1%}")
@@ -395,7 +410,7 @@ These are applied to URLs."
   :group 'muse-latex)
 
 (defcustom muse-latex-markup-specials-image
-  '((?\\ . "\\textbackslash{}")     ; cannot find suitable replacement
+  '((?\\ . "\\\\")
     (?\< . "\\<")
     (?\> . "\\>")
     (?\$ . "\\$")
@@ -403,8 +418,8 @@ These are applied to URLs."
     (?\{ . "\\{")
     (?\} . "\\}")
     (?\& . "\\&")
-    (?\# . "\\#")                   ; cannot find suitable replacement
-    )
+    (?\# . "\\#")
+    (?\| . "\\|"))
   "A table of characters which must be represented specially.
 These are applied to image filenames."
   :type '(alist :key-type character :value-type string)

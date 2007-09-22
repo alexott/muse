@@ -1,5 +1,34 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.12
+
+** LaTeX publishing (lisp/muse-latex.el)
+
+*** Escape specials in image filenames properly
+Previously, it was not possible to escape "/", "#", or "|" in image
+filenames.  In order to make this work, be certain that you have the
+following LaTeX code in your header.
+
+\def\museincludegraphics{%
+  \begingroup
+  \catcode`\|=0
+  \catcode`\\=12
+  \catcode`\#=12
+  \includegraphics[width=0.75\textwidth]
+}
+
+*** Escape specials in the title string in headers
+In order to achieve this effect in custom headers, replace
+
+  \title{<lisp>(muse-publishing-directive "title")</lisp>}
+
+with
+
+  \title{<lisp>(muse-publish-escape-specials-in-string
+    (muse-publishing-directive "title") 'document)</lisp>}
+
+in your headers.
+
 * Changes in Muse 3.11
 
 ** Update my example settings in examples/mwolson.
