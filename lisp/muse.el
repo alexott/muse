@@ -89,10 +89,11 @@ Call this after changing `muse-project-alist'."
   (dolist (buffer (buffer-list))
     (when (buffer-live-p buffer)
       (with-current-buffer buffer
-        (when (and (derived-mode-p 'muse-mode)
-                   muse-current-project)
-          (setq muse-current-project nil)
-          (setq muse-current-project (muse-project-of-file)))))))
+        (when (derived-mode-p 'muse-mode)
+          (and (boundp 'muse-current-project)
+               (fboundp 'muse-project-of-file)
+               (setq muse-current-project nil)
+               (setq muse-current-project (muse-project-of-file))))))))
 
 ;; Default file extension
 
@@ -539,7 +540,8 @@ If fourth arg FIXEDCASE is non-nil, do not alter case of replacement text.
 If fifth arg LITERAL is non-nil, insert REPLACEMENT literally."
   (cond
    ((and (featurep 'xemacs) (fboundp 'replace-in-string))
-    (replace-in-string text regexp replacement literal))
+    (and (fboundp 'replace-in-string)   ; stupid byte-compiler warning
+         (replace-in-string text regexp replacement literal)))
    ((fboundp 'replace-regexp-in-string)
     (replace-regexp-in-string regexp replacement text fixedcase literal))
    (t (error (concat "Neither `replace-in-string' nor "

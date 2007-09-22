@@ -148,10 +148,9 @@ If you want this replacement to happen, you must add
   (setq project (muse-project project))
   (let ((flist nil))
     (save-match-data
-      (mapcar (function (lambda (file)
-                          (when (string-match " " (car file))
-                            (setq flist (cons (car file) flist)))))
-              (muse-project-file-alist project)))
+      (dolist (filename (muse-project-file-alist project))
+        (when (string-match " " filename)
+          (setq flist (cons filename flist)))))
     flist))
 
 (defun muse-wiki-update-interwiki-regexp ()

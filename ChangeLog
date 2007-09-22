@@ -5,6 +5,16 @@
 	publish it.  Thanks to Darlan Cavalcante Moreira for the
 	suggestion.
 
+	* lisp/muse-wiki.el (muse-wiki-project-files-with-spaces): Fix
+	byte-compiler warning.
+
+	* lisp/muse.el (muse-update-values): Fix byte-compiler warning.
+	Also, update the value of muse-current-project for all Muse
+	buffers, even if they are new.  This should be more intuitive.  I
+	don't think there are any cases where developers will want this
+	value to be nil.
+	(muse-replace-regexp-in-string): Fix byte-compiler warning.
+
 2007-09-19  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-replace-regexp-in-string): Remove fallback
