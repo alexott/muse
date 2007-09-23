@@ -1,3 +1,12 @@
+2007-09-23  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-context.el (muse-context-pdf-generate): Change
+	default-directory instead of calling "cd" in the command.
+
+	* lisp/muse-latex.el (muse-latex-pdf-generate): Change
+	default-directory instead of calling "cd" in the command.  This
+	should fix a bug with Windows.  Thanks to Jia Ye for the report.
+
 2007-09-22  Michael Olson  <mwolson@gnu.org>
 
 	* AUTHORS: Bookkeeping.

@@ -565,10 +565,11 @@ default Muse will add a footnote for each link."
    (function
     (lambda (file output-path)
       (let* ((fnd (file-name-directory output-path))
-             (command (format "cd \"%s\"; %s \"%s\""
-                              fnd muse-latex-pdf-program
+             (command (format "%s \"%s\""
+                              muse-latex-pdf-program
                               (file-relative-name file fnd)))
              (times 0)
+             (default-directory fnd)
              result)
         ;; XEmacs can sometimes return a non-number result.  We'll err
         ;; on the side of caution by continuing to attempt to generate

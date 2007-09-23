@@ -402,10 +402,11 @@ and it will do what you expect."
    (function
     (lambda (file output-path)
       (let* ((fnd (file-name-directory output-path))
-             (command (format "cd \"%s\"; %s \"%s\""
-                              fnd muse-context-pdf-program
+             (command (format "%s \"%s\""
+                              muse-context-pdf-program
                               (file-relative-name file fnd)))
              (times 0)
+             (default-directory fnd)
              result)
         ;; XEmacs can sometimes return a non-number result.  We'll err
         ;; on the side of caution by continuing to attempt to generate
