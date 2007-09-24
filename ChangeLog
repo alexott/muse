@@ -1,3 +1,9 @@
+2007-09-24  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex2png.el (muse-publish-math-tag): Fix bug
+	introduced by recent change.  Thanks to Darlan Cavalcante Moreira
+	for the report.
+
 2007-09-23  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-context.el (muse-context-pdf-generate): Change

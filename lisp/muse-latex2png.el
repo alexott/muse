@@ -247,6 +247,7 @@ centered in the published output, among other things."
                                    (concat "latex2png-" (muse-page-name))))
                        (if centered nil
                          '(("inline" . t))))))
+    (goto-char beg)
     (muse-insert-markup tag-beg)
     (goto-char end)
     (muse-insert-markup tag-end)
