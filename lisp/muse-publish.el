@@ -33,6 +33,8 @@
 ;; reference implementation for nested lists, as well as some code for
 ;; the "style" element of the <literal> tag.
 
+;; Deus Max (deusmax AT gmail DOT com) provided the <php> tag.
+
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -272,6 +274,7 @@ current style."
     ("class"    t   t   nil muse-publish-class-tag)
     ("command"  t   t   nil muse-publish-command-tag)
     ("perl"     t   t   nil muse-publish-perl-tag)
+    ("php"      t   t   nil muse-publish-php-tag)
     ("python"   t   t   nil muse-publish-python-tag)
     ("ruby"     t   t   nil muse-publish-ruby-tag)
     ("comment"  t   nil nil muse-publish-comment-tag)
@@ -1983,6 +1986,11 @@ BEG is modified to be the start of the published markup."
 (defun muse-publish-perl-tag (beg end attrs)
   (muse-publish-command-tag beg end
                             (cons (cons "interp" (executable-find "perl"))
+                                  attrs)))
+
+(defun muse-publish-php-tag (beg end attrs)
+  (muse-publish-command-tag beg end
+                            (cons (cons "interp" (executable-find "php"))
                                   attrs)))
 
 (defun muse-publish-python-tag (beg end attrs)
