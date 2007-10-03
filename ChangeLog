@@ -1,3 +1,14 @@
+2007-10-03  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-colors.el (muse-unhighlight-region): Remove
+	muse-no-implicit link property.
+	(muse-colors-implicit-link): Check for muse-no-implicit-link
+	property.
+
+	* lisp/muse-wiki.el (muse-wiki-colors-nop-tag): Add the
+	muse-no-implicit-link property.  This makes colorization of <nop>
+	work.  Add docstring.
+
 2007-09-24  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex2png.el (muse-publish-math-tag): Fix bug

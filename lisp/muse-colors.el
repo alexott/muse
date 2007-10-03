@@ -654,7 +654,8 @@ This is used to delay highlighting of <lisp> tags in #title until later.")
          begin end '(face nil font-lock-multiline nil end-glyph nil
                           invisible nil intangible nil display nil
                           mouse-face nil keymap nil help-echo nil
-                          muse-link nil muse-directive nil muse-comment nil))
+                          muse-link nil muse-directive nil muse-comment nil
+                          muse-no-implicit-link nil))
       (set-buffer-modified-p modified-p))))
 
 (defun muse-colors-example-tag (beg end)
@@ -888,6 +889,7 @@ in place of an image link defined by BEG and END."
   (unless (or (eq (get-text-property (match-beginning 0) 'invisible) 'muse)
               (get-text-property (match-beginning 0) 'muse-comment)
               (get-text-property (match-beginning 0) 'muse-directive)
+              (get-text-property (match-beginning 0) 'muse-no-implicit-link)
               (eq (char-before (match-beginning 0)) ?\")
               (eq (char-after (match-end 0)) ?\"))
     ;; remove flyspell overlays
