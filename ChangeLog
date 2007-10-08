@@ -1,3 +1,11 @@
+2007-10-08  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-mode): Set fill-paragraph-function.
+	(muse-mode-fill-paragraph): New function that fills the paragraph
+	at point.  If a definition list term is on the same line, then
+	prefix subsequent lines with two spaces when filling.  Otherwise,
+	return nil, so that normal filling can take place.
+
 2007-10-03  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el (muse-unhighlight-region): Remove

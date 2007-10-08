@@ -238,6 +238,8 @@ index at intervals."
          (concat paragraph-start "\\|" regexp))
     (set (make-local-variable 'paragraph-separate)
          (concat paragraph-separate "\\|\\*+\\s-+")))
+  (set (make-local-variable 'fill-paragraph-function)
+       'muse-mode-fill-paragraph)
 
   ;; Comment syntax is `; comment'
   (set (make-local-variable 'comment-start)
@@ -279,6 +281,21 @@ fill mode."
                                (line-beginning-position) t)
            (string= (or (match-string 0) "")
                     "[[")))))
+
+(defun muse-mode-fill-paragraph (arg)
+  "If a definition list is at point, use special filling rules for it.
+Otherwise return nil to let the normal filling function take care
+of things.
+
+ARG is passed to `fill-paragraph'."
+  (and (not (muse-mode-fill-nobreak-p))
+       (save-excursion
+         (beginning-of-line)
+         (looking-at muse-dl-term-regexp))
+       (let ((fill-prefix "  ")
+             (fill-paragraph-function nil))
+         (prog1 t
+           (fill-paragraph arg)))))
 
 (defun muse-mode-flyspell-p ()
   "Return non-nil if we should allow spell-checking to occur at point.
