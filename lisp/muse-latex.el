@@ -377,6 +377,7 @@ need to be escaped."
 
 (defcustom muse-latex-markup-specials-literal
   '((?\n . "\\\n")
+    (?\\ . "\\textbackslash{}")
     (?_  . "\\textunderscore{}")
     (?\< . "\\textless{}")
     (?\> . "\\textgreater{}")

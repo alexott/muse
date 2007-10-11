@@ -1,3 +1,9 @@
+2007-10-11  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-markup-specials-literal): Escape
+	backslash as "\textbackslash{}".  Thanks to Joost Kremers for the
+	report.
+
 2007-10-08  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-mode.el (muse-mode): Set fill-paragraph-function.
