@@ -288,14 +288,19 @@ Otherwise return nil to let the normal filling function take care
 of things.
 
 ARG is passed to `fill-paragraph'."
-  (and (not (muse-mode-fill-nobreak-p))
-       (save-excursion
-         (beginning-of-line)
-         (looking-at muse-dl-term-regexp))
-       (let ((fill-prefix "  ")
-             (fill-paragraph-function nil))
-         (prog1 t
-           (fill-paragraph arg)))))
+  (let ((count 2))
+    (and (not (muse-mode-fill-nobreak-p))
+         (save-excursion
+           (beginning-of-line)
+           (and (looking-at muse-dl-term-regexp)
+                (prog1 t
+                  ;; Take initial whitespace into account
+                  (when (looking-at (concat "[" muse-regexp-blank "]+"))
+                    (setq count (+ count (length (match-string 0))))))))
+         (let ((fill-prefix (make-string count ?\ ))
+               (fill-paragraph-function nil))
+           (prog1 t
+             (fill-paragraph arg))))))
 
 (defun muse-mode-flyspell-p ()
   "Return non-nil if we should allow spell-checking to occur at point.

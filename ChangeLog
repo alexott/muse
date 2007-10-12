@@ -4,6 +4,8 @@
 	that specifies the initial text to use when reading a URL.  Thanks
 	to Seweryn Kokot for the suggestion.
 	(muse-insert-url): Use it.
+	(muse-mode-fill-paragraph): Take into account any indentation that
+	is already in front of the term.
 
 	* lisp/muse-project.el (muse-project-determine-last-mod): New
 	function split from muse-project-file-alist.
