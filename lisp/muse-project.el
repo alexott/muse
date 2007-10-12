@@ -430,36 +430,44 @@ For an example of the use of this function, see
 (defvar muse-updating-file-alist-p nil
   "Make sure that recursive calls to `muse-project-file-alist' are bounded.")
 
+(defun muse-project-determine-last-mod (project &optional no-check-p)
+  "Return the most recent last-modified timestamp of dirs in PROJECT."
+  (let ((last-mod nil))
+    (unless (or muse-under-windows-p no-check-p)
+      (let ((pats (cadr project)))
+        (while pats
+          (if (symbolp (car pats))
+              (setq pats (cddr pats))
+            (let* ((fnd (file-name-directory (car pats)))
+                   (dir (cond ((file-directory-p (car pats))
+                               (car pats))
+                              ((and (not (file-readable-p (car pats)))
+                                    fnd
+                                    (file-directory-p fnd))
+                               fnd))))
+              (when dir
+                (let ((mod-time (nth 5 (file-attributes dir))))
+                  (when (or (null last-mod)
+                            (and mod-time
+                                 (muse-time-less-p last-mod mod-time)))
+                    (setq last-mod mod-time)))))
+            (setq pats (cdr pats))))))
+    last-mod))
+
 (defun muse-project-file-alist (&optional project no-check-p)
   "Return member filenames for the given Muse PROJECT.
-On UNIX, this list is only updated if one of the directories'
+Also, update the `muse-project-file-alist' variable.
+
+On UNIX, this alist is only updated if one of the directories'
 contents have changed.  On Windows, it is always reread from
-disk."
+disk.
+
+If NO-CHECK-P is non-nil, do not update the alist, just return
+the current one."
   (setq project (muse-project project))
   (when (and project muse-project-alist)
     (let* ((file-alist (assoc (car project) muse-project-file-alist))
-           (last-mod (cdr (cdr file-alist))))
-      ;; Determine the last modified of any directory mentioned in the
-      ;; project's pattern list
-      (unless (or muse-under-windows-p no-check-p)
-        (let ((pats (cadr project)))
-          (while pats
-            (if (symbolp (car pats))
-                (setq pats (cddr pats))
-              (let* ((fnd (file-name-directory (car pats)))
-                     (dir (cond ((file-directory-p (car pats))
-                                 (car pats))
-                                ((and (not (file-readable-p (car pats)))
-                                      fnd
-                                      (file-directory-p fnd))
-                                 fnd))))
-                (when dir
-                  (let ((mod-time (nth 5 (file-attributes dir))))
-                    (when (or (null last-mod)
-                              (and mod-time
-                                   (muse-time-less-p last-mod mod-time)))
-                      (setq last-mod mod-time)))))
-              (setq pats (cdr pats))))))
+           (last-mod (muse-project-determine-last-mod project no-check-p)))
       ;; Either return the currently known list, or read it again from
       ;; disk
       (if (or (and no-check-p (cadr file-alist))
@@ -488,6 +496,39 @@ disk."
                        (nconc names (muse-project-file-entries (car pats)))
                        (setq pats (cdr pats))))
                    (cdr names))))
+            (run-hooks 'muse-project-file-alist-hook)))))))
+
+(defun muse-project-add-to-alist (file &optional project)
+  "Make sure FILE is added to `muse-project-file-alist'.
+
+It works by either calling the `muse-project-file-alist' function
+if a directory has been modified since we last checked, or
+manually forcing the file entry to exist in the alist.  This
+works around an issue where if several files being saved at the
+same time, only the first one will make it into the alist.  It is
+meant to be called by `muse-project-after-save-hook'.
+
+The project of the file is determined by either the PROJECT
+argument, or `muse-project-of-file' if PROJECT is not specified."
+  (setq project (or (muse-project project) (muse-project-of-file file)))
+  (when (and project muse-project-alist)
+    (let* ((file-alist (assoc (car project) muse-project-file-alist))
+           (last-mod (muse-project-determine-last-mod project)))
+      ;; Determine whether we need to call this
+      (if (or (null (cddr file-alist))
+              (null last-mod)
+              (muse-time-less-p (cddr file-alist) last-mod))
+          ;; The directory will show up as modified, so go ahead and
+          ;; call `muse-project-file-alist'
+          (muse-project-file-alist project)
+        ;; It is not showing as modified, so forcefully add the
+        ;; current file to the project file-alist
+        (let ((muse-updating-file-alist-p t))
+          (prog1
+              (save-match-data
+                (setcar (cdr file-alist)
+                        (nconc (muse-project-file-entries file)
+                               (cadr file-alist))))
             (run-hooks 'muse-project-file-alist-hook)))))))
 
 (defun muse-project-of-file (&optional pathname)
@@ -532,7 +573,7 @@ If PATHNAME is nil, the current buffer's filename is used."
   "Update Muse's file-alist if we are saving a Muse file."
   (let ((project (muse-project-of-file)))
     (when project
-      (muse-project-file-alist project))))
+      (muse-project-add-to-alist (buffer-file-name) project))))
 
 (add-hook 'after-save-hook 'muse-project-after-save-hook)
 

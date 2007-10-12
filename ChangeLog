@@ -5,6 +5,16 @@
 	to Seweryn Kokot for the suggestion.
 	(muse-insert-url): Use it.
 
+	* lisp/muse-project.el (muse-project-determine-last-mod): New
+	function split from muse-project-file-alist.
+	(muse-project-file-alist): Improve docstring.
+	(muse-project-add-to-alist): New function that ensures that the
+	current file is added the its project file-alist.
+	(muse-project-after-save-hook): Call muse-project-add-to-alist
+	instead of muse-project-file-alist.  This fixes an issue where if
+	several files were being saved at once, only the first would make
+	it into the project file-alist.
+
 2007-10-11  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-markup-specials-literal): Escape
