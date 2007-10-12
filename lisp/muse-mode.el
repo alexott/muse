@@ -523,11 +523,17 @@ Valid values of OPERATION are 'increase and 'decrease."
    (muse-make-link (file-relative-name (read-file-name "Link: "))
                    (read-string "Text: "))))
 
+(defcustom muse-insert-url-initial-input "http://"
+  "The string to insert before reading a URL interactively.
+This is used by the `muse-insert-url' command."
+  :type 'string
+  :group 'muse-mode)
+
 (defun muse-insert-url ()
   "Insert a URL, with optional description, at point."
   (interactive)
   (insert
-   (muse-make-link (read-string "URL: ")
+   (muse-make-link (read-string "URL: " muse-insert-url-initial-input)
                    (read-string "Text: "))))
 
 ;;;###autoload

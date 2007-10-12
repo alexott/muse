@@ -1,3 +1,10 @@
+2007-10-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-insert-url-initial-input): New option
+	that specifies the initial text to use when reading a URL.  Thanks
+	to Seweryn Kokot for the suggestion.
+	(muse-insert-url): Use it.
+
 2007-10-11  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-markup-specials-literal): Escape
