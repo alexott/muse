@@ -51,3 +51,33 @@ somewhat.
 
  - Take markup features from phpBB and make a format out of it.  This
    could interest the forum crowd in our work.
+
+*** Publishing to some plain text formats
+
+It would be interesting if Muse could generate Markdown,
+reStructuredText, or MoinMoin-style markup pages.  The file
+experimental/muse-message.el also needs some attention, so that it can
+do plain text.  Maybe it should be renamed to muse-plain-text.el.
+
+*** Allow pages made by M-x muse-index to be refreshed automatically
+
+The idea is to update the contents of the index page whenever a new
+page is saved.  This should be controlled by a new customizable option
+called `muse-index-update', which is either nil or non-nil.
+
+`muse-index' should be modified to add the generated buffer into a new
+variable called `muse-index-buffers'.
+
+A new function called `muse-index-update-buffers' should be made,
+which goes through the list `muse-index-buffers', doing the following.
+It must check `muse-index-update' first to see whether it should do
+anything.  It must take no arguments.
+
+  (let ((index (muse-index-as-string as-list exclude-private)))
+    (dolist (buffer muse-index-buffers)
+      (with-current-buffer buffer
+        (erase-buffer)
+        (insert index)
+        (current-buffer))))
+
+This function should be added to after-save-hook in muse-mode.el.
