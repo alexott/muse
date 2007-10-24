@@ -1,3 +1,9 @@
+2007-10-24  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup-regexps): Recognize
+	"---" as a valid mdash.  Before, it was doing mdash followed by a
+	single dash.  Thanks to jordanb for the suggestion.
+
 2007-10-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-mode.el (muse-insert-url-initial-input): New option

@@ -171,8 +171,8 @@ If non-nil, publish comments using the markup of the current style."
     ;; blockquote and centered text
     (2400 ,(concat "^\\([" muse-regexp-blank "]+\\).+") 0 quote)
 
-    ;; the emdash ("--")
-    (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]*\\)--\\($\\|["
+    ;; the emdash ("--" or "---")
+    (2500 ,(concat "\\(^\\|[" muse-regexp-blank "]*\\)---?\\($\\|["
                    muse-regexp-blank "]*\\)")
           0 emdash)
 
