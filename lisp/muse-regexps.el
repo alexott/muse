@@ -203,7 +203,7 @@ The first match string must contain the term."
 
 (defcustom muse-tag-regexp
   (concat "<\\([^/" muse-regexp-blank "\n][^" muse-regexp-blank
-          "</>\n]*\\)\\(\\s-+[^<>\n]+[^</>\n]\\)?\\(/\\)?>")
+          "</>\n]*\\)\\(\\s-+[^<>]+[^</>\n]\\)?\\(/\\)?>")
   "A regexp used to find XML-style tags within a buffer when publishing.
 Group 1 should be the tag name, group 2 the properties, and group
 3 the optional immediate ending slash."

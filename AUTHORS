@@ -8,12 +8,15 @@ John Wiegley: Original author
 
 Michael Olson: Current maintainer
 
-Jean Magnan de Bornier: Author of muse-context.el,
-                        Contributor
-                        (assigned past and future changes)
+Florian Beck: Contributor:
+               - muse-regexps.el: 1 line changed
 
 Karl Berry: Contributor:
              - muse-latex.el: 5 lines changed
+
+Jean Magnan de Bornier: Author of muse-context.el,
+                        Contributor
+                        (assigned past and future changes)
 
 Trent Buck: Contributor:
              - muse-latex.el: 4 lines changed

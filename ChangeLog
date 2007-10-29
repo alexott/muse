@@ -1,3 +1,8 @@
+2007-10-29  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-regexps.el (muse-tag-regexp): Permit tag attributes to
+	span more than one line.  Thanks to Florian Beck for the fix.
+
 2007-10-24  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-markup-regexps): Recognize
