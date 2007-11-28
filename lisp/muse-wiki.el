@@ -238,8 +238,7 @@ use the first style we find."
                          (muse-project project))
                     (muse-project)
                     (car muse-project-alist))
-        page (or page (muse-get-keyword :default
-                                        (cadr project))))
+        page (or page (muse-get-keyword :default (cadr project))))
   (let* ((page-path (and muse-project-alist
                          (muse-project-page-file page project)))
          (remote-styles (and page-path (muse-project-applicable-styles
