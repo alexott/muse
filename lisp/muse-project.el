@@ -375,7 +375,8 @@ For an example of the use of this function, see
                            (string= expanded-path (cdr file)))
                       (throw 'done (cdr file))
                     (let ((pos (string-match (concat (regexp-quote dir) "\\'")
-                                             (file-name-directory (cdr file)))))
+                                             (file-name-directory
+                                              (cdr file)))))
                       (when pos
                         (setq matches (cons (cons pos (cdr file))
                                             matches)))))))
