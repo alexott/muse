@@ -1625,8 +1625,11 @@ of link, the cadr is the page name, and the cddr is the anchor."
            (if (eq (aref target 0) ?\#)
               (cons 'anchor-ref (cons nil (substring target 1)))
              (cons 'link-and-anchor
-                   (cons (muse-publish-link-page
-                          (substring target 0 (match-beginning 0)))
+                   ;; match-data is changed by
+                   ;; `muse-publish-link-page' or descendants.
+                   (cons (save-match-data
+                           (muse-publish-link-page
+                            (substring target 0 (match-beginning 0))))
                          (substring target (match-end 0))))))
           (t
            (cons 'link (cons (muse-publish-link-page target) nil))))))
