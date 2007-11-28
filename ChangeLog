@@ -3,6 +3,14 @@
 	* lisp/muse-project.el (muse-project-page-file): If page argument
 	is nil, then choose the first directory in the project.
 
+	* lisp/muse-wiki.el (muse-wiki-resolve-project-page): Style fix.
+
+2007-11-07  Adrian Aichner  <adrian@xemacs.org>
+
+	* lisp/muse-publish.el (muse-publish-classify-url): Wrap call of
+	`muse-publish-link-page' in `save-match-data', so that correct
+	match data gets restored for subsequent use by `match-end'.
+
 2007-10-29  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-regexps.el (muse-tag-regexp): Permit tag attributes to

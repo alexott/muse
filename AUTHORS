@@ -8,6 +8,9 @@ John Wiegley: Original author
 
 Michael Olson: Current maintainer
 
+Adrian Aichner: Contributor:
+                 - muse-publish.el: 2 lines changes
+
 Florian Beck: Contributor:
                - muse-regexps.el: 1 line changed
 
