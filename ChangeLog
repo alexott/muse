@@ -1,3 +1,10 @@
+2007-12-05  Magnus Henoch  <mange@freemail.hu>
+
+	* lisp/muse.el (muse-escape-specials-in-string): Move
+	save-match-data outside of with-temp-buffer, because apparently
+	some implementations of with-temp-buffer can mangle the match
+	data.
+
 2007-11-28  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-page-file): If page argument
