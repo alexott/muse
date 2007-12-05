@@ -429,10 +429,10 @@ If REVERSE is specified, reverse an already-escaped string."
                                                (car rule)))
                                (if reverse (car rule) (cdr rule))))
                        specials)))
-    (with-temp-buffer
-      (insert string)
-      (goto-char (point-min))
-      (save-match-data
+    (save-match-data
+      (with-temp-buffer
+        (insert string)
+        (goto-char (point-min))
         (while (not (eobp))
           (unless (catch 'found
                     (dolist (rule rules)
