@@ -430,19 +430,16 @@ If REVERSE is specified, reverse an already-escaped string."
                                (if reverse (car rule) (cdr rule))))
                        specials)))
     (save-match-data
-      ;; apparently some Emacsen have an implementation of
-      ;; with-temp-buffer that modifies the match data
       (with-temp-buffer
         (insert string)
         (goto-char (point-min))
-        (save-match-data
-          (while (not (eobp))
-            (unless (catch 'found
-                      (dolist (rule rules)
-                        (when (looking-at (car rule))
-                          (replace-match (cdr rule) t t)
-                          (throw 'found t))))
-              (forward-char))))
+        (while (not (eobp))
+          (unless (catch 'found
+                    (dolist (rule rules)
+                      (when (looking-at (car rule))
+                        (replace-match (cdr rule) t t)
+                        (throw 'found t))))
+            (forward-char)))
         (buffer-string)))))
 
 (defun muse-trim-whitespace (string)
