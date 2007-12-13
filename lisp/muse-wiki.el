@@ -440,6 +440,17 @@ Example: <nop>WikiWord"
 
 (eval-after-load "muse-publish"
   '(progn
+     (defun muse-wiki-publish-nop-tag (beg end)
+       "Inhibit the colorization of inhibit links just after the tag.
+
+Example: <nop>WikiWord"
+       (unless (= (point) (point-max))
+         (muse-publish-mark-read-only (point) (+ (point) 1))))
+
+     (add-to-list 'muse-publish-markup-tags
+                  '("nop" nil nil nil muse-wiki-publish-nop-tag)
+                  t)
+
      (add-to-list 'muse-publish-markup-regexps
                   '(3100 muse-wiki-interwiki-regexp 0 link)
                   t)

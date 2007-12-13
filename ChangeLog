@@ -1,3 +1,8 @@
+2007-12-13  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-wiki.el ("muse-publish"): Interpret <nop> tags when
+	publishing.
+
 2007-12-05  Magnus Henoch  <mange@freemail.hu>
 
 	* lisp/muse.el (muse-escape-specials-in-string): Move
