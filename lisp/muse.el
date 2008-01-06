@@ -280,10 +280,13 @@ Unlike `with-temp-buffer', this will never attempt to save the
 temp buffer.  It is meant to be used along with
 `insert-file-contents' or `muse-insert-file-contents'.
 
-Additionally, if `debug-on-error' is set to t, keep the buffer
-around for debugging purposes rather than removing it."
+The undo feature will be disabled in the new buffer.
+
+If `debug-on-error' is set to t, keep the buffer around for
+debugging purposes rather than removing it."
   (let ((temp-buffer (make-symbol "temp-buffer")))
     `(let ((,temp-buffer (generate-new-buffer " *muse-temp*")))
+       (buffer-disable-undo ,temp-buffer)
        (unwind-protect
            (if debug-on-error
                (with-current-buffer ,temp-buffer
