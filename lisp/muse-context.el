@@ -218,8 +218,8 @@ This may be text or a filename."
   :group 'muse-context)
 
 (defcustom muse-context-markup-specials-document
-  '((?\\ . "\\textbackslash")
-    (?\_ . "\\textunderscore")
+  '((?\\ . "\\textbackslash{}")
+    (?\_ . "\\textunderscore{}")
     (?\< . "\\switchtobodyfont[small]")
     (?\> . "\\switchtobodyfont[big]")
     (?^  . "\\^")
