@@ -64,9 +64,7 @@ If you want to use the `xemacs' binary to perform the compilation, you
 must copy `Makefile.defs.default' to `Makefile.defs' in the top-level
 directory, and then edit `Makefile.defs' as follows.  You can put
 either a full path to an Emacs or XEmacs binary or just the command
-name, as long as it is in the PATH.  Depending on your setup, changes
-to the PREFIX, ELISPDIR, and/or INFODIR variables may also need to be
-made.
+name, as long as it is in the PATH.
 
 EMACS    = xemacs
 SITEFLAG = -no-site-file
@@ -87,9 +85,10 @@ Copy `Makefile.defs.default' to `Makefile.defs' in the top-level
 directory, if you haven't done so already.  Then edit the
 `Makefile.defs' file so that ELISPDIR points to where you want the
 source and compiled Muse files to be installed and INFODIR indicates
-where to put the Muse manual.  As mentioned earlier, you will want to
-edit EMACS and SITEFLAG as shown in the Compilation section if you are
-using XEmacs.
+where to put the Muse manual.  You may use a combination of DESTDIR
+and PREFIX to further determine where the installed files should be
+placed.  As mentioned earlier, you will want to edit EMACS and
+SITEFLAG as shown in the Compilation section if you are using XEmacs.
 
 If you are installing Muse on a Debian or Ubuntu system, you might
 want to change the value of INSTALLINFO as specified in

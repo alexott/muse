@@ -1,3 +1,19 @@
+2008-01-15  Michael Olson  <mwolson@gnu.org>
+
+	* Makefile.defs.default (DESTDIR): New variable which allows the
+	destination directory to be easily set.  Thanks to gour for the
+	suggestion.
+	(ELISPDIR, INFODIR): Use it.
+
+	* README (Compilation): Don't mention PREFIX, ELISPDIR, and
+	INFODIR here.
+	(Installation): Mention DESTDIR and PREFIX.
+
+	* texi/muse.texi: Update copyright year.
+	(Installation): Don't mention PREFIX, ELISPDIR, and INFODIR in the
+	compilation step.  Do mention DESTDIR and PREFIX in the
+	installation step.
+
 2008-01-06  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-with-temp-buffer): Don't keep track of undo

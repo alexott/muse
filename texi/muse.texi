@@ -14,8 +14,8 @@
 @copying
 This manual is for Emacs Muse version 3.11.
 
-Copyright @copyright{} 2004, 2005, 2006,
-2007 Free Software Foundation, Inc.
+Copyright @copyright{} 2004, 2005, 2006, 2007,
+2008 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -401,9 +401,7 @@ compilation, you must copy @file{Makefile.defs.default} to
 @file{Makefile.defs} in the top-level directory, and then edit
 @file{Makefile.defs} as follows.  You can put either a full path to an
 Emacs or XEmacs binary or just the command name, as long as it is in the
-@env{PATH}.  Depending on your setup, changes to the @option{PREFIX},
-@option{ELISPDIR}, and/or @option{INFODIR} variables may also need to be
-made.
+@env{PATH}.
 
 @example
 EMACS    = xemacs
@@ -426,9 +424,11 @@ Copy @file{Makefile.defs.default} to @file{Makefile.defs} in the
 top-level directory, if you haven't done so already.  Then edit the
 @file{Makefile.defs} file so that @env{ELISPDIR} points to where you
 want the source and compiled Muse files to be installed and
-@env{INFODIR} indicates where to put the Muse manual.  As mentioned
-earlier, you will want to edit @env{EMACS} and @env{SITEFLAG} as shown
-in the Compilation section if you are using XEmacs.
+@env{INFODIR} indicates where to put the Muse manual.  You may use a
+combination of @env{DESTDIR} and @env{PREFIX} to further determine where
+the installed files should be placed.  As mentioned earlier, you will
+want to edit @env{EMACS} and @env{SITEFLAG} as shown in the Compilation
+section if you are using XEmacs.
 
 If you are installing Muse on a Debian or Ubuntu system, you might want
 to change the value of @env{INSTALLINFO} as specified in
