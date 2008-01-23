@@ -1,3 +1,10 @@
+2008-01-23  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-url): Add comments.  Move
+	target detection higher.  Use unescaped description for image
+	links, so that they don't get erroneously escaped.  Thanks to Suno
+	Ano for the report.
+
 2008-01-15  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile.defs.default (DESTDIR): New variable which allows the

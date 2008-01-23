@@ -1646,13 +1646,12 @@ of link, the cadr is the page name, and the cddr is the anchor."
   "Resolve a URL into its final <a href> form."
   (let ((unesc-url url)
         (unesc-orig-url orig-url)
+        (unesc-desc desc)
         type anchor)
+    ;; Transform URL
     (dolist (transform muse-publish-url-transforms)
       (setq url (save-match-data (when url (funcall transform url explicit)))))
-    (if desc
-        (setq desc (muse-publish-url-desc desc explicit))
-      (if orig-url
-          (setq orig-url (muse-publish-url-desc orig-url explicit))))
+    ;; Classify URL
     (let ((target (muse-publish-classify-url url)))
       (setq type (car target)
             url (if (eq type 'image)
@@ -1661,10 +1660,18 @@ of link, the cadr is the page name, and the cddr is the anchor."
                   (muse-publish-escape-specials-in-string (cadr target) 'url))
             anchor (muse-publish-escape-specials-in-string
                     (cddr target) 'url)))
+    ;; Transform description
+    (if desc
+        (setq desc (muse-publish-url-desc desc explicit))
+      (when orig-url
+        (setq orig-url (muse-publish-url-desc orig-url explicit))))
+    ;; Act on URL classification
     (cond ((eq type 'anchor-ref)
            (muse-markup-text 'anchor-ref anchor (or desc orig-url)))
-          ((and desc (string-match muse-image-regexp desc))
+          ((and unesc-desc (string-match muse-image-regexp unesc-desc))
            (let ((ext (or (file-name-extension desc) "")))
+             (setq desc (muse-publish-escape-specials-in-string unesc-desc
+                                                                'image))
              (setq desc (muse-path-sans-extension desc))
              (muse-markup-text 'image-link url desc ext)))
           ((string= url "")
