@@ -78,7 +78,8 @@
   "\\documentclass{article}
 
 \\usepackage[english]{babel}
-\\usepackage[latin1]{inputenc}
+\\usepackage{ucs}
+\\usepackage[utf8x]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{hyperref}
 \\usepackage[pdftex]{graphicx}
@@ -151,7 +152,8 @@ filename."
   "\\documentclass[ignorenonframetext]{beamer}
 
 \\usepackage[english]{babel}
-\\usepackage[latin1]{inputenc}
+\\usepackage{ucs}
+\\usepackage[utf8x]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{hyperref}
 
@@ -178,7 +180,8 @@ You must have the Beamer extension for LaTeX installed for this to work."
 \\usepackage{beamerarticle}
 
 \\usepackage[english]{babel}
-\\usepackage[latin1]{inputenc}
+\\usepackage{ucs}
+\\usepackage[utf8x]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{hyperref}
 

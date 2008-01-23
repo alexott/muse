@@ -1,5 +1,9 @@
 2008-01-23  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-latex.el (muse-latex-header)
+	(muse-latex-slides-header, muse-latex-lecture-notes-header):
+	Default to using UTF-8, rather than latin1.
+
 	* lisp/muse-publish.el (muse-publish-url): Add comments.  Move
 	target detection higher.  Use unescaped description for image
 	links, so that they don't get erroneously escaped.  Thanks to Suno
