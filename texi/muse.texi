@@ -983,8 +983,8 @@ Paragraphs in Muse must be separated by a blank line.
 
 A line that begins with six or more columns of whitespace (either tabs
 or spaces) indicates a centered paragraph.  Alternatively, you can use
-the @verb{|<center>|} tag to surround regions that are to be published as
-centered paragraphs.
+the @verb{|<center>|} tag to surround regions that are to be published
+as centered paragraphs.
 
 @cindex paragraphs, quoted
 @cindex quotations
@@ -1023,6 +1023,14 @@ This will leave the region alone if the current publishing style is
 otherwise.  It is also possible to leave the text alone only for one
 particular style, rather than its derivations, by adding
 @code{exact="t"} to the tag.
+
+@cindex line breaks
+@subheading Line breaks
+
+If you need a line break, then use the @samp{<br>} tag.  Most of the
+time this tag is unnecessary, because Muse will automatically detect
+paragraphs by means of blank lines.  If you want to preserve newlines in
+several lines of text, then use verse markup instead (@pxref{Verse}).
 
 @node Headings, Directives, Paragraphs, Markup Rules
 @comment  node-name,  next,  previous,  up
@@ -1680,6 +1688,12 @@ This is the complete list of tags that Muse accepts, including those
 that were mentioned in previous sections.
 
 @table @samp
+
+@item <br>
+Insert a line break.
+
+Muse will automatically detect paragraphs when publishing by means of
+blank lines, so this tag is usually unnecessary.
 
 @item <cite>
 Insert a citation to another source.
@@ -3367,10 +3381,15 @@ Horizontal rule or section separator.
 
 Prevent lines from being split before or after these characters.
 
+@item line-break
+@samp{<br>}
+
+Break a line at point.
+
 @item fn-sep
 @samp{Footnotes:}
 
-beginning of footnotes section
+Beginning of footnotes section.
 
 @item footnote
 @samp{[1]}

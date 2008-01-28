@@ -270,6 +270,7 @@ current style."
     ("quote"    t   nil t   muse-publish-quote-tag)
     ("literal"  t   t   nil muse-publish-literal-tag)
     ("verbatim" t   nil nil muse-publish-verbatim-tag)
+    ("br"       nil nil nil muse-publish-br-tag)
     ("lisp"     t   t   nil muse-publish-lisp-tag)
     ("class"    t   t   nil muse-publish-class-tag)
     ("command"  t   t   nil muse-publish-command-tag)
@@ -286,9 +287,9 @@ XML-style tags are the best way to add custom markup to Muse.
 This is easily accomplished by customizing this list of markup tags.
 
 For each entry, the name of the tag is given, whether it expects
-a closing tag and/or an optional set of attributes, whether it is
-nestable, and a function that performs whatever action is desired
-within the delimited region.
+a closing tag, whether it takes an optional set of attributes,
+whether it is nestable, and a function that performs whatever
+action is desired within the delimited region.
 
 The tags themselves are deleted during publishing, before the
 function is called.  The function is called with three arguments,
@@ -1866,6 +1867,11 @@ is exactly this style."
 (defun muse-publish-verbatim-tag (beg end)
   (muse-publish-escape-specials beg end nil 'verbatim)
   (muse-publish-mark-read-only beg end))
+
+(defun muse-publish-br-tag (beg end)
+  "Insert a line break."
+  (delete-region beg end)
+  (muse-insert-markup (muse-markup-text 'line-break)))
 
 (defalias 'muse-publish-class-tag 'ignore)
 
