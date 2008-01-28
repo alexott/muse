@@ -116,6 +116,7 @@ For more on the structure of this list, see
     (emdash          . "\\(em")
     (rule            . "\n.RULE\n")
     (no-break-space  . "\\h")
+    (line-break      . "\\p")
     (enddots         . "....")
     (dots            . "...")
 ;;     (part            . "\\part{")

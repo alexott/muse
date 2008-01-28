@@ -133,6 +133,7 @@ For more on the structure of this list, see
     (comment-end     . "\n@end ignore\n")
     (rule            . "@sp 1")
     (no-break-space  . "@w{ }")
+    (line-break      . "@*")
     (enddots         . "@enddots{}")
     (dots            . "@dots{}")
     (section         . "@chapter ")

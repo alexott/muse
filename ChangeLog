@@ -1,3 +1,12 @@
+2008-01-28  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-groff.el (muse-groff-markup-strings)
+	* lisp/muse-html.el (muse-html-markup-strings)
+	(muse-xhtml-markup-strings):
+	* lisp/muse-latex.el (muse-latex-markup-strings)
+	* lisp/muse-texinfo.el (muse-texinfo-markup-strings): Add markup
+	string for line-break.
+
 2008-01-23  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-header)

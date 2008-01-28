@@ -249,6 +249,7 @@ For more on the structure of this list, see
     (comment-begin   . "% ")
     (rule            . "\\vspace{.5cm}\\hrule\\vspace{.5cm}")
     (no-break-space  . "~")
+    (line-break      . "\\\\")
     (enddots         . "\\ldots{}")
     (dots            . "\\dots{}")
     (part            . "\\part{")
