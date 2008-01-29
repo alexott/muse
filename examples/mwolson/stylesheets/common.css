@@ -51,7 +51,7 @@ blockquote {
 }
 
 body {
-  background-color: #DCDCDC;    /* gainsboro */
+  background-color: #E5E5E5;    /* gainsboro */
   color: black;
   margin-left: 2%;
   margin-right: 2%;
@@ -95,7 +95,7 @@ h2 {
 
 h3 {
   border-bottom: solid 1px #708090; /* slate gray */
-  border-right: solid 2px #DCDCDC;  /* gainsboro */
+  border-right: solid 2px #E5E5E5;  /* gainsboro */
   font-size: medium;
   margin-top: 2em;
   margin-bottom: .5em;
@@ -105,7 +105,7 @@ h3 {
 
 h4 {
   border-bottom: dashed 1px #BEBEBE;    /* light gray */
-  border-right: solid 2px #DCDCDC;      /* gainsboro */
+  border-right: solid 2px #E5E5E5;      /* gainsboro */
   margin-top: 1.5em;
   margin-bottom: .7em;
   overflow: hidden;             /* don't crowd the menu */
@@ -132,21 +132,21 @@ p.verse {
 }
 
 p {
-  line-height: 1.2em;
+  line-height: 120%;
 }
 
 pre.example {
   margin-left: 3%;
   margin-top: 1.2em;
   margin-bottom: 1.2em;
-  clear: right;
+  /* clear: right; */
 }
 
 pre.src {
   margin-left: 0%;
   margin-top: 1.2em;
   margin-bottom: 1.2em;
-  clear: right;  
+  /* clear: right;   */
 }
 
 pre.verse {
@@ -162,7 +162,8 @@ pre {
 }
 
 span.footdate {
-  color: red;
+  color: #556B2F;               /* dark olive green */
+  font-weight: bold;
 }
 
 strong {
@@ -185,7 +186,7 @@ ul {
 /* Menu */
 
 .menu {
-  background-color: #BEBEBE;    /* gray */
+  background-color: #CDCDCD;    /* gray/gainsboro */
   border: 1px solid black;
   display: inline;
   float: right;
@@ -196,7 +197,7 @@ ul {
 }
 
 .menuitem {
-  background-color: #D3D3D3;    /* light gray */
+  background-color: #E5E5E5;    /* gainsboro */
   margin: 0;
   padding-top: 2px;
   padding-bottom: 3px;
@@ -231,4 +232,50 @@ ul {
 
 #tooltip {
   color: #006400;               /* dark green */
+}
+
+/* Footnote */
+
+.navfoot hr {
+  margin-top: 20px;
+  margin-bottom: 2px;
+  padding: 0;
+  height: 4px;
+}
+
+.navfoot a img {
+  padding-top: 2px;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 2px;
+}
+
+.navfoot table {
+  border-spacing: 0;
+  border-width: 0;
+  clear: right;
+  margin: 0;
+  padding: 0;
+}
+
+.navfoot td {
+  border-spacing: 0;
+  border-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.navfoot td.iconbox {
+  background-color: #F5F5F5;    /* white smoke */
+  border-spacing: 0;
+  border-width: 1;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-right: 1px solid #D3D3D3;    /* light gray */
+  border-bottom: 1px solid #D3D3D3;   /* light gray */
+  margin: 0;
+  padding-top: 2px;
+  padding-right: 5px;
+  padding-bottom: 2px;
+  padding-left: 2px;
 }

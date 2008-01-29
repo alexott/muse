@@ -15,8 +15,8 @@
 ;;; Setup
 
 ;; Add to load path
-(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/master/lisp")
-(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/master/experimental")
+(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/git-muse/lisp")
+(add-to-list 'load-path "/home/mwolson/proj/emacs/muse/git-muse/experimental")
 
 ;; Initialize
 (require 'outline)       ; I like outline-style faces
@@ -63,6 +63,23 @@
 (muse-derive-style "latex-draft" "latex"
                    :strings 'muse-latex-draft-markup-strings)
 (muse-derive-style "pdf-draft" "latex-draft"
+                   :final   'muse-latex-pdf-generate
+                   :browser 'muse-latex-pdf-browse-file
+                   :link-suffix 'muse-latex-pdf-extension
+                   :osuffix 'muse-latex-pdf-extension)
+
+;; Define a style with unnumbered titles
+
+(defvar muse-latex-uh-markup-strings
+   '((chapter      . "\\chapter*{")
+     (section      . "\\section*{")
+     (subsection   . "\\subsection*{")
+     (subsubsection . "\\subsubsection*{"))
+  "Strings used for marking up Latex text with unnumbered headings.")
+
+(muse-derive-style "latex-uh" "latex"
+                   :strings 'muse-latex-uh-markup-strings)
+(muse-derive-style "pdf-uh" "latex-uh"
                    :final   'muse-latex-pdf-generate
                    :browser 'muse-latex-pdf-browse-file
                    :link-suffix 'muse-latex-pdf-extension
@@ -131,13 +148,17 @@
                                       "~/personal-site/site/classes"
                                       "xhtml"))
 
-        ("MA453" ("~/proj/classes/ma453")
-         (:base "pdf"
-                :path "~/proj/classes/ma453"))
+        ("MA366" ("~/proj/classes/ma366")
+         (:base "pdf-uh"
+                :path "~/proj/classes/ma366"))
 
-        ("CS565" ("~/proj/classes/cs565")
-         (:base "pdf"
-                :path "~/proj/classes/cs565"))
+        ("ENGL238" ("~/proj/classes/engl238")
+         (:base "pdf-uh"
+                :path "~/proj/classes/engl238"))
+
+        ("CS426" ("~/proj/classes/cs426")
+         (:base "pdf-uh"
+                :path "~/proj/classes/cs426"))
 
         ("Plans" ("~/proj/wiki/plans/"
                   :default "TaskPool"
@@ -253,14 +274,20 @@ If FILE is not specified, use the published version of the current file."
     (delete-region beg end)
     (insert "[[" link "][" text "]]")))
 
-(defun my-muse-surround-math (beg end)
-  (interactive "r")
-  (save-restriction
-    (narrow-to-region beg end)
-    (goto-char (point-min))
+(defun my-muse-surround-math (&optional beg end)
+  "If a region is higlighted, surround it with <math>...</math>.
+If no region is highlighted, insert <math></math> and leave the point
+between the two tags."
+  (interactive (list (ignore-errors (mark)) (point)))
+  (if (and beg end)
+      (save-restriction
+        (narrow-to-region beg end)
+        (goto-char (point-min))
+        (insert "<math>")
+        (goto-char (point-max))
+        (insert "</math>"))
     (insert "<math>")
-    (goto-char (point-max))
-    (insert "</math>")))
+    (save-excursion (insert "</math>"))))
 
 (defun my-muse-cdotize-region (beg end)
   (interactive "r")
@@ -312,6 +339,7 @@ If FILE is not specified, use the published version of the current file."
  '(muse-latex-header "~/personal-site/muse/header.tex")
  '(muse-mode-hook (quote (flyspell-mode footnote-mode)))
  '(muse-publish-comments-p t)
+ '(muse-publish-date-format "%b. %e, %Y")
  '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki muse-publish-strip-URL)))
  '(muse-wiki-publish-small-title-words (quote ("the" "and" "at" "on" "of" "for" "in" "an" "a" "page")))
  '(muse-xhtml-footer "~/personal-site/muse/generic-footer.html")

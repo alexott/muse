@@ -6,28 +6,6 @@
             permitted.  Attribution of credit to me is optional.
 */
 
-/* Footnote */
-
-.navfoot hr {
-  margin-bottom: 0;
-  padding: 0;
-}
-
-.navfoot table {
-  border-spacing: 0;
-  border-width: 0;
-  clear: right;
-  margin: 0;
-  padding: 0;
-}
-
-.navfoot td {
-  border-spacing: 0;
-  border-width: 0;
-  margin: 0;
-  padding: 0;
-}
-
 /* Table of Contents */
 
 .contents {
