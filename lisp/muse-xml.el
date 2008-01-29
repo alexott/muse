@@ -131,6 +131,7 @@ For more on the structure of this list, see
     (rule            . "<hr />")
     (fn-sep          . "<hr />\n")
     (no-break-space  . "&nbsp;")
+    (line-break      . "<br>")
     (enddots         . "....")
     (dots            . "...")
     (section         . "<section level=\"1\"><title>")

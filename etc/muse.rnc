@@ -1,11 +1,11 @@
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace rng = "http://relaxng.org/ns/structure/1.0"
 
-#   Emacs Muse RELAX NG Schema v. 1.1
-#   Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
+#   Emacs Muse RELAX NG Schema v. 1.2
+#   Copyright (C) 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
 
 #   Author: Brad Collins (brad AT chenla DOT org)
-#   Maintainer: Michael Olson (mwolson AT gnu DOT org)
+#   Maintainer: Michael Olson <mwolson@gnu.org>
 
 #   This is free software; you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by
@@ -53,6 +53,10 @@ namespace rng = "http://relaxng.org/ns/structure/1.0"
 #
 #   Version 1.1:
 #    - Add the <cite> tag.
+#
+#   Version 1.2:
+#    - Add the <br> tag.
+#    - Don't allow <cite> tags inside of format elements.
 
 # Contributors:
 
@@ -126,7 +130,8 @@ muse.element.blockquote = element blockquote {
 
    ## paragraph element
 muse.element.p = element p {
-   muse.element.code*
+   muse.element.br*
+   & muse.element.code*
    & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
@@ -145,7 +150,8 @@ muse.element.verse = element verse {
 
   ## verse line element
 muse.element.line = element line {
-   muse.element.code*
+   muse.element.br*
+   & muse.element.code*
    & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
@@ -166,6 +172,7 @@ muse.element.list = element list {
 muse.element.item = element item {
    muse.element.term?
    & muse.element.definition*
+   & muse.element.br*
    & muse.element.code*
    & muse.element.cite*
    & muse.element.format*
@@ -184,7 +191,8 @@ muse.element.item = element item {
 # ------------------------------------------------
 
 muse.element.term = element term {
-   muse.element.code*
+   muse.element.br*
+   & muse.element.code*
    & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
@@ -194,7 +202,8 @@ muse.element.term = element term {
 
    ## def
 muse.element.definition = element definition {
-   muse.element.code*
+   muse.element.br*
+   & muse.element.code*
    & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
@@ -213,7 +222,6 @@ muse.element.format = element format {
    muse.attribute.type?
    & muse.attribute.level?
    & muse.element.code*
-   & muse.element.cite*
    & muse.element.format*
    & text }?
 
@@ -286,7 +294,8 @@ muse.element.tr = element tr {
 
   ## td element
 muse.element.td = element td {
-   muse.element.code*
+   muse.element.br*
+   & muse.element.code*
    & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
@@ -298,7 +307,8 @@ muse.element.td = element td {
 
   ## th element
 muse.element.th = element th {
-   muse.element.code*
+   muse.element.br*
+   & muse.element.code*
    & muse.element.cite*
    & muse.element.format*
    & muse.element.image*
