@@ -11,6 +11,10 @@
 	* lisp/muse-xml.el (muse-xml-markup-strings): Add markup string
 	for line-break.
 
+	* lisp/muse-project.el (muse-project-of-file): Fix bug where
+	directory names without slashes in projects were not being
+	recognized.  Thanks to Mirko Vukovic and ktneely for the report.
+
 2008-01-23  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-header)

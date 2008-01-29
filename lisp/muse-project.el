@@ -567,7 +567,7 @@ If PATHNAME is nil, the current buffer's filename is used."
                       (setq pats (cddr pats))
                     (let ((tname (file-truename (car pats))))
                       (cond ((or (string= tname file)
-                                 (string= tname dir))
+                                 (string= (file-name-as-directory tname) dir))
                              (throw 'found project-entry))
                             ((string-match (concat "\\`" (regexp-quote tname))
                                            file)
