@@ -33,31 +33,56 @@ None of these ideas has been finalized yet.
 
 *** Support for different source markup formats
 
-For any of these to be done, we have to figure out how to determine
-which markup format to use, and parametrize the publishing functions
-somewhat.
+For any of these to be done, we have to write functions that call the
+right program to do the publishing for us.  If the markup format has
+some project-aware tools, write Elisp wrappers for those at the
+project-publish level.
 
  - Markdown: http://daringfireball.net/projects/markdown/
 
+   mwolson: I hate this format, but it's popular.
+
  - reStructuredText: http://docutils.sourceforge.net/rst.html
 
- - Allow publishing in Org Mode's format, though this might not be
-   needed now that org-publish.el exists.
+   mwolson: I like this format from an initial glance.
+
+ - AsciiDoc: http://www.methods.co.nz/asciidoc/index.html
+
+   Git uses this, but it has heavy dependencies.
+
+ - Org Mode: http://orgmode.org/
+
+   Just use org-publish functions.
 
  - Like Muse's default markup, but allow tags to be specified in
    Texinfo style: namely, "@tagname{contents}" instead of
    "<tagname>contents</tagname>" for small regions and
    "@tagname\ncontents\n@end tagname" for large regions.
 
+   This might be a pain to implement, and only one person has asked
+   for it.
+
  - Take markup features from phpBB and make a format out of it.  This
    could interest the forum crowd in our work.
 
-*** Publishing to some plain text formats
+   mwolson: I do not have interest in making a new markup format at
+   the moment.
 
-It would be interesting if Muse could generate Markdown,
-reStructuredText, or MoinMoin-style markup pages.  The file
-experimental/muse-message.el also needs some attention, so that it can
-do plain text.  Maybe it should be renamed to muse-plain-text.el.
+*** Publishing to plain text
+
+ - The file experimental/muse-message.el also needs some attention, so
+   that it can do plain text.  Maybe it should be renamed to
+   muse-plain-text.el.
+
+ - People have requested being able to publish Muse format to other
+   stuff like rst and markdown.
+
+   mwolson: I'm not in any hurry to implement this.
+
+*** Make tags for every "main" Muse markup syntax
+
+The idea is to have something to fall back on.  One use case is
+putting a list into a table.
 
 *** Allow pages made by M-x muse-index to be refreshed automatically
 
