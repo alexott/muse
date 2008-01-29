@@ -1,6 +1,6 @@
 ;;; muse-backlink.el --- backlinks for Muse
 
-;; Copyright (C) 2005, 2006, 2007 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
 
 ;; Author: Jim Ottaway <j.ottaway@lse.ac.uk>
 ;; Keywords:

@@ -22,7 +22,7 @@ History:
 License:
 
    Copyright (c) 2006 Nathan Kent Bullock
-   Copyright (c) 2006, 2007 Michael Olson
+   Copyright (c) 2006, 2007, 2008 Michael Olson
 
    Permission is hereby granted, free of charge, to any person obtaining
    a copy of this software and associated documentation files (the
