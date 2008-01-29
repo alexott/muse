@@ -1,5 +1,7 @@
 2008-01-28  Michael Olson  <mwolson@gnu.org>
 
+	* Update copyright years.
+
 	* etc/muse.rnc: Add support for the <br> tag.  Don't allow <cite>
 	tags inside of format elements.
 
