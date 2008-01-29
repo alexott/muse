@@ -1,8 +1,12 @@
 2008-01-28  Michael Olson  <mwolson@gnu.org>
 
+	* Release Emacs Muse 3.12.
+
 	* NEWS: Update.
 
 	* Update copyright years.
+
+	* examples/mwolson: Update init file, stylesheets, and templates.
 
 	* etc/muse.rnc: Add support for the <br> tag.  Don't allow <cite>
 	tags inside of format elements.

@@ -4,10 +4,10 @@
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: muse.el
-;; Version: 3.11
-;; Date: Fri 24-Aug-2007
+;; Version: 3.12
+;; Date: Fri 28-Jan-2008
 ;; Keywords: hypermedia
-;; Author: John Wiegley (johnw AT gnu DOT org)
+;; Author: John Wiegley <johnw@gnu.org>
 ;; Maintainer: Michael Olson <mwolson@gnu.org>
 ;; Description: An authoring and publishing tool for Emacs
 ;; URL: http://mwolson.org/projects/EmacsMuse.html
