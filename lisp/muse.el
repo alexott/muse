@@ -48,7 +48,7 @@
 ;; Indicate that this version of Muse supports nested tags
 (provide 'muse-nested-tags)
 
-(defvar muse-version "3.11"
+(defvar muse-version "3.12"
   "The version of Muse currently loaded")
 
 (defun muse-version (&optional insert)
