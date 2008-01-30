@@ -316,8 +316,9 @@ debugging purposes rather than removing it."
 
 (defun muse-insert-file-contents (filename &optional visit)
   "Insert the contents of file FILENAME after point.
-Do character code conversion, but none of the other unnecessary
-things like format decoding or `find-file-hook'.
+Do character code conversion and end-of-line conversion, but none
+of the other unnecessary things like format decoding or
+`find-file-hook'.
 
 If VISIT is non-nil, the buffer's visited filename
 and last save file modtime are set, and it is marked unmodified.
@@ -325,21 +326,11 @@ If visiting and the file does not exist, visiting is completed
 before the error is signaled."
   (let ((format-alist nil)
         (after-insert-file-functions nil)
-        (find-buffer-file-type-function
-         (if (fboundp 'find-buffer-file-type)
-             (symbol-function 'find-buffer-file-type)
-           nil))
         (inhibit-file-name-handlers
          (append '(jka-compr-handler image-file-handler)
                  inhibit-file-name-handlers))
         (inhibit-file-name-operation 'insert-file-contents))
-    (unwind-protect
-         (progn
-           (fset 'find-buffer-file-type (lambda (filename) t))
-           (insert-file-contents filename visit))
-      (if find-buffer-file-type-function
-          (fset 'find-buffer-file-type find-buffer-file-type-function)
-        (fmakunbound 'find-buffer-file-type)))))
+    (insert-file-contents filename visit)))
 
 (defun muse-write-file (filename)
   "Write current buffer into file FILENAME.

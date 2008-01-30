@@ -1,3 +1,9 @@
+2008-01-29  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-insert-file-contents): Fix bug where end of
+	line conversion was not happening on Windows.  Thanks to Sacha
+	Chua for the report.
+
 2008-01-28  Michael Olson  <mwolson@gnu.org>
 
 	* Release Emacs Muse 3.12.
