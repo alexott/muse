@@ -17,7 +17,7 @@ SITEFLAG = --no-site-file
 DESTDIR  =
 PREFIX   = /usr/local
 ELISPDIR = $(DESTDIR)$(PREFIX)/share/emacs/site-lisp/muse
-INFODIR  = $(DESTDIR)$(PREFIX)/info
+INFODIR  = $(DESTDIR)$(PREFIX)/share/info
 
 # Command to use to install the Info dir entry
 install_info = install-info --info-dir=$(INFODIR) $(1) || :
