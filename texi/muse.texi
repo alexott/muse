@@ -148,17 +148,13 @@ Integrating Muse and pyblosxom.cgi
 
 Making your own publishing styles
 
-* Common Elements::             Common functionality shared by styles.
-* Deriving Styles::             Deriving a new style from an existing
-                                  one.
-
-Common functionality shared by styles
-
 * Markup Functions::            Specifying functions to mark up text.
 * Markup Regexps::              Markup rules for publishing.
 * Markup Strings::              Strings specific to a publishing style.
 * Markup Tags::                 Tag specifications for special markup.
 * Style Elements::              Parameters used for defining styles.
+* Deriving Styles::             Deriving a new style from an existing
+                                  one.
 
 Miscellaneous add-ons, like a minor mode
 
@@ -3229,27 +3225,18 @@ The default XML charset to use if no translation is found in
 @chapter Making your own publishing styles
 
 @menu
-* Common Elements::             Common functionality shared by styles.
-* Deriving Styles::             Deriving a new style from an existing
-                                  one.
-@end menu
-
-@node Common Elements, Deriving Styles, , Extending Muse
-@comment  node-name,  next,  previous,  up
-@section Common functionality shared by styles
-@cindex publishing styles, common
-
-@menu
 * Markup Functions::            Specifying functions to mark up text.
 * Markup Regexps::              Markup rules for publishing.
 * Markup Strings::              Strings specific to a publishing style.
 * Markup Tags::                 Tag specifications for special markup.
 * Style Elements::              Parameters used for defining styles.
+* Deriving Styles::             Deriving a new style from an existing
+                                  one.
 @end menu
 
-@node Markup Functions, Markup Regexps, , Common Elements
+@node Markup Functions, Markup Regexps, , Extending Muse
 @comment  node-name,  next,  previous,  up
-@subsection Specifying functions to mark up text
+@section Specifying functions to mark up text
 @cindex publishing, markup functions
 
 @anchor{muse-publish-markup-functions}
@@ -3277,9 +3264,9 @@ Function to use to mark up this kind of rule if no suitable function is
 found through the @option{:functions} tag of the current style.
 @end itemize
 
-@node Markup Regexps, Markup Strings, Markup Functions, Common Elements
+@node Markup Regexps, Markup Strings, Markup Functions, Extending Muse
 @comment  node-name,  next,  previous,  up
-@subsection Markup rules for publishing
+@section Markup rules for publishing
 @cindex publishing, markup regexps
 @cindex publishing, rules
 
@@ -3447,9 +3434,9 @@ Blockquotes.
 
 @end table
 
-@node Markup Strings, Markup Tags, Markup Regexps, Common Elements
+@node Markup Strings, Markup Tags, Markup Regexps, Extending Muse
 @comment  node-name,  next,  previous,  up
-@subsection Strings specific to a publishing style
+@section Strings specific to a publishing style
 @cindex publishing, markup strings
 
 @dfn{Markup strings} are strings used for marking up text for a
@@ -3767,9 +3754,9 @@ End a table entry.
 
 @end table
 
-@node Markup Tags, Style Elements, Markup Strings, Common Elements
+@node Markup Tags, Style Elements, Markup Strings, Extending Muse
 @comment  node-name,  next,  previous,  up
-@subsection Tag specifications for special markup
+@section Tag specifications for special markup
 @cindex publishing, markup tags
 
 @anchor{muse-publish-markup-tags}
@@ -3798,17 +3785,17 @@ where tag markup will resume.
 These tag rules are processed once at the beginning of markup, and once
 at the end, to catch any tags which may have been inserted in-between.
 
-@node Style Elements, , Markup Tags, Common Elements
+@node Style Elements, Deriving Styles, Markup Tags, Extending Muse
 @comment  node-name,  next,  previous,  up
-@subsection Parameters used for defining styles
+@section Parameters used for defining styles
 @cindex publishing, style elements
 
-Style elements are tags that define a style.  Use
-@code{muse-define-style} to create a new style.
+Style elements are tags that define a style.  Use either
+@code{muse-define-style} or @code{muse-derive-style}
+(@pxref{Deriving Styles}) to create a new style.
 
-@example
-(muse-define-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
-@end example
+@defun muse-define-style name &rest elements
+@end defun
 
 @subheading Usable elements
 
@@ -3898,7 +3885,7 @@ The function used to browse the published result of files of this style.
 
 @end table
 
-@node Deriving Styles, , Common Elements, Extending Muse
+@node Deriving Styles, , Style Elements, Extending Muse
 @comment  node-name,  next,  previous,  up
 @section Deriving a new style from an existing one
 @cindex publishing styles, deriving
@@ -3907,9 +3894,8 @@ To create a new style from an existing one, use @code{muse-derive-style}
 as follows.  This is a good way to fix something you don't like about a
 particular publishing style, or to personalize it.
 
-@example
-(muse-derive-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
-@end example
+@defun muse-derive-style new-name base-name &rest elements
+@end defun
 
 The derived name is a string defining the new style, such as "my-html".
 The base name must identify an existing style, such as "html" -- if you
