@@ -3862,6 +3862,12 @@ while still in its buffer.
 This is used for generating second-stage documents like PDF files from
 just-published LaTeX files.
 
+The function must accept three arguments: the name of the muse source
+file, the name of the just-published file, and the name of the
+second-stage target file.  The name of the second-stage target file is
+the same as that of the just-published file if no second-stage
+publishing is required.
+
 @item :header
 Header used for publishing files of this style.
 

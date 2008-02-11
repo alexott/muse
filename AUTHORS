@@ -120,6 +120,9 @@ Ganesh Swami: Original author of latex2png.el, which was the basis for
 G. J. Teale: Contributor:
               - muse-project.el: 2 lines changed
 
+Sebastian Tennant: Contributor -- documentation
+                    - muse.texi: 4 lines changed
+
 Gary Vaughan: Original author of emacs-wiki-blosxom.el, which was the
               basis for muse-blosxom.el
               (assigned past and future changes)

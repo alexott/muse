@@ -3,7 +3,8 @@
 	* texi/muse.texi (Extending Muse): Flatten nodes by removing
 	Common Elements and grouping its subsections under this chapter.
 	(Style Elements): Use @defun.  Fix arguments to muse-define-style.
-	Thanks to Sebastian Tennant for the report.
+	Thanks to Sebastian Tennant for the report.  Explain the arguments
+	of the function for :final.
 	(Deriving Styles): Use @defun.  Fix argument names.
 
 2008-02-02  Michael Olson  <mwolson@gnu.org>
