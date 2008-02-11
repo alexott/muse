@@ -1509,11 +1509,10 @@ the target in a Muse link.
 @section Evaluating Emacs Lisp code in documents for extensibility
 @cindex lisp, embedded
 
-Arbitrary kinds of markup can be achieved using the @verb{|<lisp>|} tag,
-which is the only Muse tag supported in a style's header and footer
-text.  With the @verb{|<lisp>|} tag, you may generated whatever output
-text you wish.  The inserted output will get marked up, if the
-@verb{|<lisp>|} tag appears within the main text of the document.
+Arbitrary kinds of markup can be achieved using the @verb{|<lisp>|} tag.
+With the @verb{|<lisp>|} tag, you may generate whatever output text you
+wish.  The inserted output will get marked up if the @verb{|<lisp>|}
+tag appears within the main text of the document.
 
 @example
 <lisp>(concat "This form gets " "inserted")</lisp>
@@ -1646,6 +1645,10 @@ the comment syntax of the output format, then set
 Muse has several built-in tags that may prove useful during publishing.
 @xref{muse-publish-markup-tags}, to see how to customize the tags that
 Muse uses, as well as make your own tags.
+
+Only a small subset of these tags are available in header and footer
+text.  The @code{muse-publish-markup-header-footer-tags} option lists
+the tags that are allowed in headers and footers.
 
 @subheading Syntax
 

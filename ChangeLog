@@ -12,6 +12,10 @@
 	Thanks to Sebastian Tennant for the report.  Explain the arguments
 	of the function for :final.
 	(Deriving Styles): Use @defun.  Fix argument names.
+	(Embedded Lisp): Drop mention of this being the only tag allowed
+	in headers and footers.  Thanks to Phillip Lord for the
+	suggestion.
+	(Tag Summary): Mention muse-publish-markup-header-footer-tags.
 
 2008-02-02  Michael Olson  <mwolson@gnu.org>
 
