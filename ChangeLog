@@ -1,5 +1,11 @@
 2008-02-10  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-publish.el (muse-publish-enable-local-variables): New
+	option that determines whether to interpret local variables when
+	publishing.  The default is not to do so.
+	(muse-publish-file): Interpret local variables if the user wants
+	this.  Thanks to Sebastian Tennant for the idea.
+
 	* texi/muse.texi (Extending Muse): Flatten nodes by removing
 	Common Elements and grouping its subsections under this chapter.
 	(Style Elements): Use @defun.  Fix arguments to muse-define-style.

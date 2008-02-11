@@ -329,6 +329,11 @@ See `muse-publish-markup-tags' for details."
   :type '(alist :key-type character :value-type string)
   :group 'muse-publish)
 
+(defcustom muse-publish-enable-local-variables nil
+  "If non-nil, interpret local variables in a file when publishing."
+  :type 'boolean
+  :group 'muse-publish)
+
 (defvar muse-publishing-p nil
   "Set to t while a page is being published.")
 (defvar muse-batch-publishing-p nil
@@ -811,6 +816,8 @@ the file is published no matter what."
             (message "Publishing %s ..." file))
         (muse-with-temp-buffer
           (muse-insert-file-contents file)
+          (when muse-publish-enable-local-variables
+            (hack-local-variables))
           (muse-publish-markup-buffer (muse-page-name file) style)
           (when (muse-write-file output-path)
             (muse-style-run-hooks :final style file output-path target)))
