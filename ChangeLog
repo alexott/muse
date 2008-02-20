@@ -2,6 +2,7 @@
 
 	* lisp/muse-html.el (muse-html-src-allowed-modes): New option that
 	specifies the modes that we permit the <src> tag to colorize.
+	(muse-html-src-tag): Use it.  Use intern-soft instead of intern.
 
 	* lisp/muse-latex2png.el (muse-publish-latex-tag)
 	(muse-publish-math-tag):
@@ -13,6 +14,9 @@
 	(muse-publish-include-tag, muse-publish-mark-up-tag): Mark these
 	tags as potentially dangerous for text written by untrusted
 	contributors.
+
+	* lisp/muse-publish.el (muse-publish-mark-up-tag): Use intern-soft
+	instead of intern.
 
 2008-02-10  Michael Olson  <mwolson@gnu.org>
 

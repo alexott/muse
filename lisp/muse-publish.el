@@ -2098,7 +2098,7 @@ current style is exactly this style."
             (and (not exactp) (muse-style-derived-p style)))
         (let* ((function (cdr (assoc "function" attrs)))
                (muse-publish-use-header-footer-tags nil)
-               (markup-function (and function (intern function))))
+               (markup-function (and function (intern-soft function))))
           (if (and markup-function (functionp markup-function))
               (save-restriction
                 (narrow-to-region beg end)
