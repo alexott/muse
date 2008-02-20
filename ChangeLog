@@ -1,3 +1,19 @@
+2008-02-19  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-html.el (muse-html-src-allowed-modes): New option that
+	specifies the modes that we permit the <src> tag to colorize.
+
+	* lisp/muse-latex2png.el (muse-publish-latex-tag)
+	(muse-publish-math-tag):
+	* lisp/muse-poem.el (muse-poem-markup-tag):
+	* lisp/muse-publish.el (muse-publish-literal-tag)
+	(muse-publish-lisp-tag, muse-publish-command-tag)
+	(muse-publish-perl-tag, muse-publish-php-tag)
+	(muse-publish-python-tag, muse-publish-ruby-tag)
+	(muse-publish-include-tag, muse-publish-mark-up-tag): Mark these
+	tags as potentially dangerous for text written by untrusted
+	contributors.
+
 2008-02-10  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-enable-local-variables): New

@@ -416,6 +416,17 @@ This will be used if no special characters are found."
   :type 'string
   :group 'muse-html)
 
+(defcustom muse-html-src-allowed-modes t
+  "Modes that we allow the <src> tag to colorize.
+If t, permit the <src> tag to colorize any mode.
+
+If a list of mode names, such as '(\"html\" \"latex\"), and the
+lang argument to <src> is in the list, then use fundamental mode
+instead."
+  :type '(choice (const :tag "Any" t)
+                 (repeat (string :tag "Mode")))
+  :group 'muse-html)
+
 (defun muse-html-insert-anchor (anchor)
   "Insert an anchor, either around the word at point, or within a tag."
   (skip-chars-forward (concat muse-regexp-blank "\n"))

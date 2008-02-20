@@ -227,6 +227,8 @@ The form of usage is:
         (forward-line 1))
       (set-marker end nil))))
 
+(put 'muse-poem-markup-tag 'muse-dangerous-tag t)
+
 (add-to-list 'muse-publish-markup-tags muse-poem-tag)
 
 ;;; Register the Muse POEM Publishers

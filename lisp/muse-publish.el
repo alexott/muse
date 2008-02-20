@@ -1871,6 +1871,8 @@ is exactly this style."
       (when (and (bolp) (eolp) (not (eobp)))
         (delete-char 1)))))
 
+(put 'muse-publish-literal-tag 'muse-dangerous-tag t)
+
 (defun muse-publish-verbatim-tag (beg end)
   (muse-publish-escape-specials beg end nil 'verbatim)
   (muse-publish-mark-read-only beg end))
@@ -1986,6 +1988,8 @@ BEG is modified to be the start of the published markup."
           (set-text-properties 0 (length str) nil str)
           (insert str))))))
 
+(put 'muse-publish-lisp-tag 'muse-dangerous-tag t)
+
 (defun muse-publish-command-tag (beg end attrs)
   (muse-publish-markup-attribute beg end attrs nil
     (while (looking-at "\\s-*$")
@@ -2006,25 +2010,35 @@ BEG is modified to be the start of the published markup."
       (insert ?\n))
     (goto-char (point-min))))
 
+(put 'muse-publish-command-tag 'muse-dangerous-tag t)
+
 (defun muse-publish-perl-tag (beg end attrs)
   (muse-publish-command-tag beg end
                             (cons (cons "interp" (executable-find "perl"))
                                   attrs)))
+
+(put 'muse-publish-perl-tag 'muse-dangerous-tag t)
 
 (defun muse-publish-php-tag (beg end attrs)
   (muse-publish-command-tag beg end
                             (cons (cons "interp" (executable-find "php"))
                                   attrs)))
 
+(put 'muse-publish-php-tag 'muse-dangerous-tag t)
+
 (defun muse-publish-python-tag (beg end attrs)
   (muse-publish-command-tag beg end
                             (cons (cons "interp" (executable-find "python"))
                                   attrs)))
 
+(put 'muse-publish-python-tag 'muse-dangerous-tag t)
+
 (defun muse-publish-ruby-tag (beg end attrs)
   (muse-publish-command-tag beg end
                             (cons (cons "interp" (executable-find "ruby"))
                                   attrs)))
+
+(put 'muse-publish-ruby-tag 'muse-dangerous-tag t)
 
 (defun muse-publish-comment-tag (beg end)
   (if (null muse-publish-comments-p)
@@ -2052,6 +2066,8 @@ explanation of how it works."
       (error "No file attribute specified in <include> tag"))
     (muse-publish-markup-attribute beg end attrs t
       (muse-insert-file-contents filename))))
+
+(put 'muse-publish-include-tag 'muse-dangerous-tag t)
 
 (defun muse-publish-mark-up-tag (beg end attrs)
   "Run an Emacs Lisp function on the region delimted by this tag.
@@ -2092,6 +2108,8 @@ current style is exactly this style."
               (muse-publish-markup-region beg end)))
           (muse-publish-mark-read-only beg (point)))
       (delete-region beg end))))
+
+(put 'muse-publish-mark-up-tag 'muse-dangerous-tag t)
 
 ;; Miscellaneous helper functions
 

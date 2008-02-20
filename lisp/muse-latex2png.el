@@ -209,6 +209,8 @@ See `muse-latex2png-region' for valid keys for ATTRS."
       (muse-publish-mark-read-only beg end)
     (muse-latex2png-region beg end attrs)))
 
+(put 'muse-publish-latex-tag 'muse-dangerous-tag t)
+
 (defun muse-publish-math-tag (beg end)
   "Surround the given region with \"$\" characters.  Then, if the
 current style is not Latex-based, generate an image for the given
@@ -254,6 +256,8 @@ centered in the published output, among other things."
     (if (or (muse-style-derived-p "latex") (muse-style-derived-p "context"))
         (muse-publish-mark-read-only beg (point))
       (muse-latex2png-region beg (point) attrs))))
+
+(put 'muse-publish-math-tag 'muse-dangerous-tag t)
 
 ;;; Insinuate with muse-publish
 
