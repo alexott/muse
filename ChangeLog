@@ -17,6 +17,10 @@
 
 	* lisp/muse-publish.el (muse-publish-mark-up-tag): Use intern-soft
 	instead of intern.
+	(muse-publish-enable-dangerous-tags): New option that determines
+	whether to publish tags that can call external programs or expose
+	sensitive information.  This is useful to set to nil for
+	publishing files from untrusted sources.
 
 2008-02-10  Michael Olson  <mwolson@gnu.org>
 

@@ -334,6 +334,16 @@ See `muse-publish-markup-tags' for details."
   :type 'boolean
   :group 'muse-publish)
 
+(defcustom muse-publish-enable-dangerous-tags t
+  "If non-nil, publish tags like <lisp> and <command> that can
+call external programs or expose sensitive information.
+Otherwise, ignore tags like this.
+
+This is useful to set to nil when the file to publish is coming
+from an untrusted source."
+  :type 'boolean
+  :group 'muse-publish)
+
 (defvar muse-publishing-p nil
   "Set to t while a page is being published.")
 (defvar muse-batch-publishing-p nil
@@ -945,7 +955,10 @@ This function returns the matching attribute value, if found."
 (defun muse-publish-markup-tag ()
   (let ((tag-info (muse-markup-tag-info (match-string 1))))
     (when (and tag-info
-               (not (get-text-property (match-beginning 0) 'read-only)))
+               (not (get-text-property (match-beginning 0) 'read-only))
+               (nth 4 tag-info)
+               (or muse-publish-enable-dangerous-tags
+                   (not (get (nth 4 tag-info) 'muse-dangerous-tag))))
       (let ((closed-tag (match-string 3))
             (start (match-beginning 0))
             (beg (point))
