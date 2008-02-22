@@ -603,10 +603,12 @@ If PATHNAME is nil, the current buffer's filename is used."
 (defvar muse-project-page-history nil)
 
 (defun muse-read-project-file (project prompt &optional default)
-  (let ((name (funcall muse-completing-read-function
-                       prompt (muse-project-file-alist project)
-                       nil nil nil 'muse-project-page-history
-                       default)))
+  (let* ((file-list (muse-delete-dups
+                     (mapcar #'(lambda (a) (list (car a)))
+                             (muse-project-file-alist project))))
+         (name (funcall muse-completing-read-function
+                       prompt file-list nil nil nil
+                       'muse-project-page-history default)))
     (cons name (muse-project-page-file name project))))
 
 ;;;###autoload

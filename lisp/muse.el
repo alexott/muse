@@ -585,6 +585,19 @@ on the system \"/user@host:\"."
     (prog1 (buffer-substring start end)
       (delete-region start end))))
 
+(if (fboundp 'delete-dups)
+    (defalias 'muse-delete-dups 'delete-dups)
+  (defun muse-delete-dups (list)
+    "Destructively remove `equal' duplicates from LIST.
+Store the result in LIST and return it.  LIST must be a proper list.
+Of several `equal' occurrences of an element in LIST, the first
+one is kept."
+    (let ((tail list))
+      (while tail
+        (setcdr tail (delete (car tail) (cdr tail)))
+        (setq tail (cdr tail))))
+    list))
+
 ;; Set face globally in a predictable fashion
 (defun muse-copy-face (old new)
   "Copy face OLD to NEW."
