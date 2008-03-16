@@ -1,3 +1,13 @@
+2008-03-16  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup): When point is on a
+	read-only character, skip to the next non-read-only character.
+	This works around a weird edge case with the table-el rule, and
+	seems like a good thing to do in general.  Thanks to Suno Ano for
+	the report.
+	(muse-publish-table-el-table): Only proceed with table generation
+	if we have located a non-read-only "|" character.
+
 2008-02-23  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-wiki.el (muse-wiki-project-files-with-spaces): Fix

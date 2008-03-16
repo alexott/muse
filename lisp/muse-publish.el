@@ -529,7 +529,12 @@ to the text with ARGS as parameters."
         (if (and verbose (not muse-batch-publishing-p))
             (message "Publishing %s...%d%%" name
                      (* (/ (float (+ (point) base)) limit) 100)))
-        (while (and regexp (setq pos (re-search-forward regexp nil t)))
+        (while (and regexp (progn
+                             (when (get-text-property (point) 'read-only)
+                               (goto-char (or (next-single-property-change
+                                               (point) 'read-only)
+                                              (point-max))))
+                             (setq pos (re-search-forward regexp nil t))))
           (if (and verbose (not muse-batch-publishing-p))
               (message "Publishing %s...%d%%" name
                        (* (/ (float (+ (point) base)) limit) 100)))
@@ -1570,15 +1575,15 @@ The existing region will be removed, except for initial blank lines."
         (narrow-to-region (match-beginning 0) (match-end 0))
         (goto-char (point-min))
         (forward-line 1)
-        (search-forward "|" nil t)
-        (with-temp-buffer
-          (let ((temp-buf (current-buffer)))
-            (with-current-buffer muse-buf
-              (table-generate-source variant temp-buf))
-            (with-current-buffer muse-buf
-              (delete-region (point-min) (point-max))
-              (insert-buffer-substring temp-buf)
-              (muse-publish-mark-read-only (point-min) (point-max)))))))))
+        (when (search-forward "|" nil t)
+          (with-temp-buffer
+            (let ((temp-buf (current-buffer)))
+              (with-current-buffer muse-buf
+                (table-generate-source variant temp-buf))
+              (with-current-buffer muse-buf
+                (delete-region (point-min) (point-max))
+                (insert-buffer-substring temp-buf)
+                (muse-publish-mark-read-only (point-min) (point-max))))))))))
 
 (defun muse-publish-markup-table-el ()
   "Mark up table.el-style tables."
