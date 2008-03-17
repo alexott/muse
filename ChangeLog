@@ -1,5 +1,12 @@
 2008-03-16  Michael Olson  <mwolson@gnu.org>
 
+	* lisp/muse-journal.el (muse-journal-html-munge-buffer)
+	(muse-journal-latex-munge-buffer, muse-journal-rss-munge-buffer):
+	Use nil instead of current-time-zone to fix a bug where dates
+	could be interpreted incorrectly.  We don't allow the user to
+	specify the hour or minute, so it does not make sense to take the
+	current time zone into account.  Thanks to Xin Shi for the report.
+
 	* lisp/muse-publish.el (muse-publish-markup): When point is on a
 	read-only character, skip to the next non-read-only character.
 	This works around a weird edge case with the table-el rule, and
