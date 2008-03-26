@@ -345,9 +345,12 @@ from an untrusted source."
   :group 'muse-publish)
 
 (defvar muse-publishing-p nil
-  "Set to t while a page is being published.")
+  "This is set to t while a page is being published.")
 (defvar muse-batch-publishing-p nil
-  "Set to t while a page is being batch published.")
+  "This is set to t while a page is being batch published.")
+(defvar muse-inhibit-before-publish-hook nil
+  "This is set to t when publishing a file rather than just a buffer.
+It is used by `muse-publish-markup-buffer'.")
 (defvar muse-publishing-styles nil
   "The publishing styles that Muse recognizes.
 This is automatically generated when loading publishing styles.")
@@ -642,7 +645,8 @@ normally."
         (muse-publishing-p t)
         (inhibit-read-only t))
     (run-hooks 'muse-update-values-hook)
-    (run-hooks 'muse-before-publish-hook)
+    (unless muse-inhibit-before-publish-hook
+      (run-hooks 'muse-before-publish-hook))
     (muse-publish-markup-region (point-min) (point-max) title style)
     (goto-char (point-min))
     (when style-header
@@ -831,9 +835,11 @@ the file is published no matter what."
             (message "Publishing %s ..." file))
         (muse-with-temp-buffer
           (muse-insert-file-contents file)
+          (run-hooks 'muse-before-publish-hook)
           (when muse-publish-enable-local-variables
             (hack-local-variables))
-          (muse-publish-markup-buffer (muse-page-name file) style)
+          (let ((muse-inhibit-before-publish-hook t))
+            (muse-publish-markup-buffer (muse-page-name file) style))
           (when (muse-write-file output-path)
             (muse-style-run-hooks :final style file output-path target)))
         t))))
