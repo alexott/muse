@@ -329,6 +329,9 @@ For an example of the use of this function, see
 (defvar muse-current-project nil
   "Project we are currently visiting.")
 (make-variable-buffer-local 'muse-current-project)
+(defvar muse-current-project-global nil
+  "Project we are currently visiting.  This is used to propagate the value
+of `muse-current-project' into a new buffer during publishing.")
 
 (defvar muse-current-output-style nil
   "The output style that we are currently using for publishing files.")
@@ -817,6 +820,7 @@ If FORCE is given, publish the file even if it is up-to-date."
       (let* ((style (muse-project-get-applicable-style
                      buffer-file-name (cddr muse-current-project)))
              (output-dir (muse-style-element :path style))
+             (muse-current-project-global muse-current-project)
              (muse-current-output-style (list :base (car style)
                                               :path output-dir)))
         (unless (muse-publish-file buffer-file-name style output-dir force)
@@ -826,33 +830,34 @@ If FORCE is given, publish the file even if it is up-to-date."
 (defun muse-project-save-buffers (&optional project)
   (setq project (muse-project project))
   (when project
-    (map-y-or-n-p
-     (function
-      (lambda (buffer)
-        (and (buffer-modified-p buffer)
-             (not (buffer-base-buffer buffer))
-             (or (buffer-file-name buffer)
-                 (progn
-                   (set-buffer buffer)
-                   (and buffer-offer-save
-                        (> (buffer-size) 0))))
-             (with-current-buffer buffer
-               (let ((proj (muse-project-of-file)))
-                 (and proj (string= (car proj)
-                                    (car project)))))
-             (if (buffer-file-name buffer)
-                 (format "Save file %s? "
-                         (buffer-file-name buffer))
-               (format "Save buffer %s? "
-                       (buffer-name buffer))))))
-     (function
-      (lambda (buffer)
-        (set-buffer buffer)
-        (save-buffer)))
-     (buffer-list)
-     '("buffer" "buffers" "save")
-     (if (boundp 'save-some-buffers-action-alist)
-         save-some-buffers-action-alist))))
+    (save-excursion
+      (map-y-or-n-p
+       (function
+        (lambda (buffer)
+          (and (buffer-modified-p buffer)
+               (not (buffer-base-buffer buffer))
+               (or (buffer-file-name buffer)
+                   (progn
+                     (set-buffer buffer)
+                     (and buffer-offer-save
+                          (> (buffer-size) 0))))
+               (with-current-buffer buffer
+                 (let ((proj (muse-project-of-file)))
+                   (and proj (string= (car proj)
+                                      (car project)))))
+               (if (buffer-file-name buffer)
+                   (format "Save file %s? "
+                           (buffer-file-name buffer))
+                 (format "Save buffer %s? "
+                         (buffer-name buffer))))))
+       (function
+        (lambda (buffer)
+          (set-buffer buffer)
+          (save-buffer)))
+       (buffer-list)
+       '("buffer" "buffers" "save")
+       (if (boundp 'save-some-buffers-action-alist)
+           save-some-buffers-action-alist)))))
 
 (defun muse-project-publish-default (project styles &optional force)
   "Publish the pages of PROJECT that need publishing."
@@ -886,7 +891,8 @@ If FORCE is given, publish the file even if it is up-to-date."
                      current-prefix-arg))
   (setq project (muse-project project))
   (let ((styles (cddr project))
-        (muse-current-project project))
+        (muse-current-project project)
+        (muse-current-project-global project))
     ;; determine the style from the project, or else ask
     (unless styles
       (setq styles (list (muse-publish-get-style))))
@@ -919,6 +925,8 @@ If FORCE is given, publish the file even if it is up-to-date."
 
 (defun muse-project-set-variables ()
   "Load project-specific variables."
+  (when (and muse-current-project-global (null muse-current-project))
+    (setq muse-current-project muse-current-project-global))
   (let ((vars (muse-get-keyword :set (cadr muse-current-project)))
         sym custom-set var)
     (while vars
