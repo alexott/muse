@@ -1,3 +1,27 @@
+2008-03-25  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-current-project-global): New variable
+	that saves the value of muse-current-project across temporary
+	buffers when publishing.
+	(muse-project-publish-this-file, muse-project-publish): Save
+	muse-current-project.
+	(muse-project-save-buffers): Save the current buffer, so that this
+	does not throw off publishing.
+	(muse-project-set-variables): Set muse-current-project if it is
+	nil and there is a saved value for it.  Thanks to Peter Jones for
+	the report.
+
+	* lisp/muse-publish.el (muse-batch-publishing-p)
+	(muse-publishing-p): Docfix.
+	(muse-inhibit-before-publish-hook): New variable that indicates
+	whether muse-before-publish-hook should be inhibited.
+	(muse-publish-markup-buffer): Use it.
+	(muse-publish-file): Call muse-before-publish-hook here, so that
+	we can run it before checking for file-local variables, since
+	values set by the latter should overlay values set by the former.
+	Bind muse-inhibit-before-publish-hook to t so that we do not call
+	the hook twice.
+
 2008-03-16  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-journal.el (muse-journal-html-munge-buffer)
