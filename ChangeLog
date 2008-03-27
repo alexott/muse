@@ -1,3 +1,10 @@
+2008-03-26  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-project.el (muse-project-publish-this-file): Make sure
+	that we follow the same rules as muse-project-publish-file,
+	including creating the publishing directory if it does not exist.
+	Thanks to Peter Jones for the report and initial patch.
+
 2008-03-25  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-current-project-global): New variable
