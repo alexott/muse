@@ -822,8 +822,10 @@ If FORCE is given, publish the file even if it is up-to-date."
              (output-dir (muse-style-element :path style))
              (muse-current-project-global muse-current-project)
              (muse-current-output-style (list :base (car style)
-                                              :path output-dir)))
-        (unless (muse-publish-file buffer-file-name style output-dir force)
+                                              :path output-dir))
+             (fun (or (muse-style-element :publish style t)
+                      'muse-project-publish-file-default)))
+        (unless (funcall fun buffer-file-name style output-dir force)
           (message (concat "The published version is up-to-date; use"
                            " C-u C-c C-t to force an update.")))))))
 
