@@ -137,7 +137,10 @@ used as the filename of the image."
 (defun muse-make-faces-default (&optional later)
   "Generate the default face definitions for headers."
   (dolist (num '(1 2 3 4 5))
-    (let ((newsym (intern (concat "muse-header-" (int-to-string num)))))
+    (let ((newsym (intern (concat "muse-header-" (int-to-string num))))
+          (docstring (concat
+                      "Muse header face.  See "
+                      "`muse-colors-autogen-headings' before changing it.")))
       ;; put in the proper group and give documentation
       (if later
           (unless (featurep 'xemacs)
@@ -147,15 +150,16 @@ used as the filename of the image."
         (if (featurep 'xemacs)
             (eval `(defface ,newsym
                      '((t (:size
-                           ,(nth (1- num) '("24pt" "18pt" "14pt" "12pt" "11pt"))
+                           ,(nth (1- num)
+                                 '("24pt" "18pt" "14pt" "12pt" "11pt"))
                            :bold t)))
-                     "Muse header face"
+                     ,docstring
                      :group 'muse-colors))
           (eval `(defface ,newsym
                    '((t (:height ,(1+ (* 0.1 (- 5 num)))
                                  :inherit variable-pitch
                                  :weight bold)))
-                   "Muse header face"
+                   ,docstring
                    :group 'muse-colors)))))))
 
 (progn (muse-make-faces-default))
