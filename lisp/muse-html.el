@@ -373,6 +373,7 @@ and `muse-html-markup-strings' are searched."
 
 (defcustom muse-html-markup-tags
   '(("class" t t   t muse-html-class-tag)
+    ("div"   t t   t muse-html-div-tag)
     ("src"   t t nil muse-html-src-tag))
  "A list of tag specifications, for specially marking up HTML."
   :type '(repeat (list (string :tag "Markup tag")
@@ -611,6 +612,19 @@ table of contents."
       (save-excursion
         (goto-char end)
         (muse-insert-markup "</span>")))))
+
+(defun muse-html-div-tag (beg end attrs)
+  "Publish a <div> tag for HTML."
+  (let ((id (cdr (assoc "id" attrs)))
+        (style (cdr (assoc "style" attrs))))
+    (when (or id style)
+      (goto-char beg)
+      (if (null id)
+          (muse-insert-markup "<div style=\"" style "\">")
+        (muse-insert-markup "<div id=\"" id "\">"))
+      (save-excursion
+        (goto-char end)
+        (muse-insert-markup "</div>")))))
 
 (defun muse-html-src-tag (beg end attrs)
   "Publish the region using htmlize.

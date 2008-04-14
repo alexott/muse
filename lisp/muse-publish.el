@@ -273,6 +273,7 @@ current style."
     ("br"       nil nil nil muse-publish-br-tag)
     ("lisp"     t   t   nil muse-publish-lisp-tag)
     ("class"    t   t   nil muse-publish-class-tag)
+    ("div"      t   t   nil muse-publish-div-tag)
     ("command"  t   t   nil muse-publish-command-tag)
     ("perl"     t   t   nil muse-publish-perl-tag)
     ("php"      t   t   nil muse-publish-php-tag)
@@ -1907,6 +1908,7 @@ is exactly this style."
   (muse-insert-markup (muse-markup-text 'line-break)))
 
 (defalias 'muse-publish-class-tag 'ignore)
+(defalias 'muse-publish-div-tag 'ignore)
 
 (defun muse-publish-call-tag-on-buffer (tag &optional attrs)
   "Transform the current buffer as if it were surrounded by the tag TAG.
