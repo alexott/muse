@@ -83,6 +83,10 @@ Deus Max: Contributor:
 Evan Monroig: Contributor:
                - muse.el: 2 lines changed
 
+Alex Ott: Contributor:
+           - muse-html.el: 13 lines changed
+           - muse-publish.el: 2 lines changed
+
 Jim Ottaway: Author of muse-backlink.el,
              Contributor
              (assigned past and future changes)
