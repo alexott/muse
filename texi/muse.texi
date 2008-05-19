@@ -1757,6 +1757,13 @@ Table of Contents.  To change this globally, customize the
 @var{muse-publish-contents-depth} option.  To change this only for the
 current tag, use the ``depth'' argument.
 
+@item <div>
+Insert a <div> tag into HTML documents, and do not insert anything
+special for other non-HTML publishing formats.
+
+If the ``style'' argument is provided, include it with the published
+@verb{|<div>|} tag.  Likewise for the ``id'' argument.
+
 @item <example>
 Publish the region in monospace, preserving the newlines in the region.
 This is useful for snippets of code.
