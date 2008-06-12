@@ -1,3 +1,17 @@
+2008-05-18  Michael Olson  <mwolson@gnu.org>
+
+	* texi/muse.texi (Tag Summary): Document the <div> tag.
+
+2008-05-18  Alex Ott  <alexott@gmail.com>
+
+	* lisp/muse-html.el (muse-html-div-tag): New function which
+	publishes a <div> tag.
+	(muse-html-markup-tags): Add entry for "div".
+
+	* lisp/muse-publish.el (muse-publish-markup-tags): Add entry for
+	"div".
+	(muse-publish-div-tag): By default, ignore <div> tags.
+
 2008-04-16  Michael Olson  <mwolson@gnu.org>
 
 	* Makefile.defs.default (DEBNAME, LASTUPLOAD, BUILDOPTS)
