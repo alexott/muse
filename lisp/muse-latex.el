@@ -494,8 +494,9 @@ This is used by the slides and lecture-notes publishing styles."
       (muse-insert-markup "\\frametitle{")
       (insert title)
       (muse-insert-markup "}\n"))
-    (goto-char end)
-    (muse-insert-markup "\n\\end{frame}")))
+    (save-excursion
+      (goto-char end)
+      (muse-insert-markup "\n\\end{frame}"))))
 
 ;;; Post-publishing functions
 

@@ -1,3 +1,9 @@
+2008-07-09  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-slide-tag): Make sure tags inside
+	of a <slide> tag get published.  Thanks to Philipp Grau for the
+	report.
+
 2008-05-18  Michael Olson  <mwolson@gnu.org>
 
 	* texi/muse.texi (Tag Summary): Document the <div> tag.
