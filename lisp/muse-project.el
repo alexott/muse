@@ -806,20 +806,24 @@ LOCAL-STYLE to the best directory among REMOTE-STYLES."
     published))
 
 ;;;###autoload
-(defun muse-project-publish-this-file (&optional force)
+(defun muse-project-publish-this-file (&optional force style)
   "Publish the currently-visited file according to `muse-project-alist',
 prompting if more than one style applies.
 
-If FORCE is given, publish the file even if it is up-to-date."
+If FORCE is given, publish the file even if it is up-to-date.
+
+If STYLE is given, use that publishing style rather than
+prompting for one."
   (interactive (list current-prefix-arg))
   (let ((muse-current-project (muse-project-of-file)))
     (if (not muse-current-project)
         ;; file is not part of a project, so fall back to muse-publish
         (if (interactive-p) (call-interactively 'muse-publish-this-file)
           (muse-publish-this-file nil nil force))
-      (let* ((style (muse-project-get-applicable-style
-                     buffer-file-name (cddr muse-current-project)))
-             (output-dir (muse-style-element :path style))
+      (unless style
+        (setq style (muse-project-get-applicable-style
+                     buffer-file-name (cddr muse-current-project))))
+      (let* ((output-dir (muse-style-element :path style))
              (muse-current-project-global muse-current-project)
              (muse-current-output-style (list :base (car style)
                                               :path output-dir))

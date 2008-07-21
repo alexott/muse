@@ -1,3 +1,11 @@
+2008-07-20  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-mode.el (muse-browse-result): Publish page before
+	viewing it.  This addresses Bug #5172.
+
+	* lisp/muse-project.el (muse-project-publish-this-file): Accept a
+	new STYLE argument to specify which publishing style to use.
+
 2008-07-09  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-slide-tag): Make sure tags inside
