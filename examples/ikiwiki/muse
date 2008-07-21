@@ -19,12 +19,16 @@ sub htmlize (@) {
     my $content = decode_utf8(encode_utf8($params{content}));
 
     my ($fh, $filename) = File::Temp::tempfile();
+    print $fh $contents;
+    close $fh;
     my $quoted = $filename;
     $quoted =~ s/"/\\"/g;
     system "emacsclient", "--eval", qq{(muse-ikiwiki-publish "$quoted")};
     {
+        open my $ofh, $filename;
         local $/;
-        $contents = <$fh>;
+        $contents = <$ofh>;
+        close $ofh;
     }
     return $contents;
 }
