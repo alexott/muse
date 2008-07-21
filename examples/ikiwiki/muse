@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+# Ikiwiki plugin for Emacs Muse.
+# Author: Michael Olson
+# License: GPLv2 or later
+package IkiWiki::Plugin::muse;
+
+use warnings;
+use strict;
+use IkiWiki 2.00;
+use Encode;
+use File::Temp;
+
+sub import {
+    hook(type => "htmlize", id => "muse", call => \&htmlize);
+}
+
+sub htmlize (@) {
+    my %params=@_;
+    my $content = decode_utf8(encode_utf8($params{content}));
+
+    my ($fh, $filename) = File::Temp::tempfile();
+    my $quoted = $filename;
+    $quoted =~ s/"/\\"/g;
+    system "emacsclient", "--eval", qq{(muse-ikiwiki-publish "$quoted")};
+    {
+        local $/;
+        $contents = <$fh>;
+    }
+    return $contents;
+}
+
+1
