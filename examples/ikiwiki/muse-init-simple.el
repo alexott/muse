@@ -1,4 +1,4 @@
-;;; muse-init.el --- Use Emacs Muse to publish ikiwiki documents
+;;; muse-init-simple.el --- Use Emacs Muse to publish ikiwiki documents
 
 ;; The code in this file may be used, distributed, and modified
 ;; without restriction.
@@ -49,6 +49,8 @@ file containing the content is FILE."
     (let ((muse-batch-publishing-p t)
           (title (muse-page-name name))
           (style "ikiwiki")
+          (output-path file)
+          (target file)
           (muse-publishing-current-file file)
           (muse-publishing-current-output-path file)
           muse-current-output-style)
@@ -77,9 +79,4 @@ file containing the content is FILE."
  '(muse-publish-date-format "%b. %e, %Y"))
 (custom-set-faces)
 
-;;; Start server
-
-(require 'server)
-(server-start)
-
-;;; muse-init.el ends here
+;;; muse-init-simple.el ends here
