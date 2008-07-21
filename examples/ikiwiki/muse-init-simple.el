@@ -40,12 +40,14 @@
 
 ;;; Functions
 
-(defun muse-ikiwiki-publish (file)
-  "Publish a single file for ikiwiki."
+(defun muse-ikiwiki-publish (file name)
+  "Publish a single file for ikiwiki.
+The name of the real file is NAME, and the name of the temporary
+file containing the content is FILE."
   (if (not (stringp file))
       (message "Error: No file given to publish")
     (let ((muse-batch-publishing-p t)
-          (title "Unknown file from ikiwiki")
+          (title (muse-page-name name))
           (style "ikiwiki")
           (muse-publishing-current-file file)
           (muse-publishing-current-output-path file)

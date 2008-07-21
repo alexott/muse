@@ -17,13 +17,16 @@ sub import {
 sub htmlize (@) {
     my %params=@_;
     my $content = decode_utf8(encode_utf8($params{content}));
+    my $qname = $params{page};
+    $qname =~ s/"/\\"/g;
 
     my ($fh, $filename) = File::Temp::tempfile();
     print $fh $contents;
     close $fh;
-    my $quoted = $filename;
-    $quoted =~ s/"/\\"/g;
-    system "emacsclient", "--eval", qq{(muse-ikiwiki-publish "$quoted")};
+    my $qfile = $filename;
+    $qfile =~ s/"/\\"/g;
+    system "emacsclient", "--eval",
+           qq{(muse-ikiwiki-publish "$qfile" "$qname")};
     {
         open my $ofh, $filename;
         local $/;
