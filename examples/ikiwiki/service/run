@@ -1,0 +1,7 @@
+#!/bin/bash
+
+exec 2>&1
+exec sudo -u ikiwiki /usr/bin/k5start -U -K 540 -t \
+    -f /etc/keytabs/user.daemon/ikiwiki -- \
+    screen -c ~ikiwiki/.screenrc -D -m \
+    emacs -nw -q -l ~ikiwiki/elisp/muse-init.el

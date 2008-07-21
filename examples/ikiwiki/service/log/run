@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec /usr/bin/svlogd -tt /var/log/ikiwiki/muse
