@@ -134,6 +134,7 @@ Publishing Various Types of Documents
 * ConTeXt::                     Publishing ConTeXt documents.
 * DocBook::                     Publishing in DocBook XML form.
 * HTML::                        Publishing in HTML or XHTML form.
+* Ikiwiki::                     Integrating with ikiwiki.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
 * Poem::                        Publish a poem to LaTeX or PDF.
@@ -1895,6 +1896,7 @@ easy to create new styles, or derive from an existing style.
 * ConTeXt::                     Publishing ConTeXt documents.
 * DocBook::                     Publishing in DocBook XML form.
 * HTML::                        Publishing in HTML or XHTML form.
+* Ikiwiki::                     Integrating with ikiwiki.
 * Journal::                     Keeping a journal or blog.
 * LaTeX::                       Publishing LaTeX documents.
 * Poem::                        Publish a poem to LaTeX or PDF.
@@ -2399,7 +2401,7 @@ found in @code{muse-xml-encoding-map}.
 
 @end table
 
-@node HTML, Journal, DocBook, Publishing Styles
+@node HTML, Ikiwiki, DocBook, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Publishing in HTML or XHTML form
 
@@ -2532,7 +2534,54 @@ This will be used if no special characters are found.
 
 @end table
 
-@node Journal, LaTeX, HTML, Publishing Styles
+@node Ikiwiki, Journal, HTML, Publishing Styles
+@comment  node-name,  next,  previous,  up
+@section Integrating with ikiwiki
+
+Ikiwiki is a wiki compiler (@url{http://ikiwiki.info/}).  There is an
+ongoing effort to provide support for using Emacs Muse as a source
+format for ikiwiki pages.
+
+@strong{Caution}: This effort is currently in an experimental state.  An
+initial attempt has been made to prevent malicious user input from
+interfering with the rest of the system hosting the website, but it has
+not been well-tested.
+
+Some examples are available in the @file{examples/ikiwiki} directory.
+The @file{service} directory provides a sample Runit service to start a
+daemonized Emacs instance that publishes pages.
+
+@subheading Relevant options
+
+@table @code
+
+@item muse-colors-evaluate-lisp-tags
+Specify whether to evaluate the contents of @verb{|<lisp>|} tags at
+display time.  If nil, don't evaluate them.  If non-nil, evaluate
+them.
+
+The actual contents of the buffer are not changed, only the
+displayed text.
+
+@item muse-html-src-allowed-modes
+Modes that we allow the @verb{|<src>|} tag to colorize.  If @code{t},
+permit the @verb{|<src>|} tag to colorize any mode.
+
+If a list of mode names, such as @code{'("html" "latex")}, and the lang
+argument to @verb{|<src>|} is in the list, then use fundamental mode
+instead.
+
+@item muse-publish-enable-dangerous-tags
+If non-nil, publish tags like @verb{|<lisp>|} and @verb{|<command>|}
+that can call external programs or expose sensitive information.
+Otherwise, ignore tags like this.
+
+This is useful to set to @code{nil} when the file to publish is coming
+from an untrusted source.
+
+@end table
+
+@node Journal, LaTeX, Ikiwiki, Publishing Styles
 @comment  node-name,  next,  previous,  up
 @section Keeping a journal or blog
 @cindex journal
