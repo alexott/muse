@@ -422,8 +422,8 @@ This will be used if no special characters are found."
 If t, permit the <src> tag to colorize any mode.
 
 If a list of mode names, such as '(\"html\" \"latex\"), and the
-lang argument to <src> is in the list, then use fundamental mode
-instead."
+lang argument to <src> is not in the list, then use fundamental
+mode instead."
   :type '(choice (const :tag "Any" t)
                  (repeat (string :tag "Mode")))
   :group 'muse-html)

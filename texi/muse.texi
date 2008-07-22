@@ -2540,7 +2540,7 @@ This will be used if no special characters are found.
 
 Ikiwiki is a wiki compiler (@url{http://ikiwiki.info/}).  There is an
 ongoing effort to provide support for using Emacs Muse as a source
-format for ikiwiki pages.
+format for Ikiwiki pages.
 
 @strong{Caution}: This effort is currently in an experimental state.  An
 initial attempt has been made to prevent malicious user input from
@@ -2551,7 +2551,33 @@ Some examples are available in the @file{examples/ikiwiki} directory.
 The @file{service} directory provides a sample Runit service to start a
 daemonized Emacs instance that publishes pages.
 
-@subheading Relevant options
+@subheading Styles provided
+
+@table @code
+
+@cindex publishing styles, ikiwiki
+@item ikiwiki
+Supports publishing XHTML output that Ikiwiki can understand.
+
+@end table
+
+@subheading Options provided
+
+@table @code
+
+@item muse-ikiwiki-header
+Header used for publishing Ikiwiki output files.
+
+This may be text or a filename.
+
+@item muse-ikiwiki-footer
+Footer used for publishing Ikiwiki output files.
+
+This may be text or a filename.
+
+@end table
+
+@subheading Other relevant options
 
 @table @code
 
@@ -2568,7 +2594,7 @@ Modes that we allow the @verb{|<src>|} tag to colorize.  If @code{t},
 permit the @verb{|<src>|} tag to colorize any mode.
 
 If a list of mode names, such as @code{'("html" "latex")}, and the lang
-argument to @verb{|<src>|} is in the list, then use fundamental mode
+argument to @verb{|<src>|} is not in the list, then use fundamental mode
 instead.
 
 @item muse-publish-enable-dangerous-tags

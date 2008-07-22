@@ -39,8 +39,7 @@
   "Options controlling the behavior of Muse integration with Ikiwiki."
   :group 'muse-publish)
 
-(defcustom muse-ikiwiki-header
-  ""
+(defcustom muse-ikiwiki-header ""
   "Header used for publishing Ikiwiki output files.
 This may be text or a filename."
   :type 'string
@@ -53,7 +52,7 @@ This may be text or a filename."
   :group 'muse-ikiwiki)
 
 (defun muse-ikiwiki-publish-file (file name &optional style)
-  "Publish a single file for ikiwiki.
+  "Publish a single file for Ikiwiki.
 The name of the style is given by STYLE.  It defaults to \"ikiwiki\".
 The name of the real file is NAME, and the name of the temporary
 file containing the content is FILE."
