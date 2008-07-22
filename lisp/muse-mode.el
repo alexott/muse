@@ -620,17 +620,22 @@ in `muse-project-alist'."
   (setq style (muse-style style))
   (muse-project-publish-this-file nil style)
   (let* ((output-dir (muse-style-element :path style))
-         (result-path (muse-publish-output-file buffer-file-name output-dir
+         (output-suffix (muse-style-element :osuffix style))
+         (output-path (muse-publish-output-file buffer-file-name output-dir
                                                 style))
+         (target (if output-suffix
+                     (concat (muse-path-sans-extension output-path)
+                             output-suffix)
+                   output-path))
          (muse-current-output-style (list :base (car style)
                                           :path output-dir)))
-    (if (not (file-readable-p result-path))
-        (error "Cannot open output file '%s'" result-path)
+    (if (not (file-readable-p target))
+        (error "Cannot open output file '%s'" target)
       (if other-window
-          (find-file-other-window result-path)
+          (find-file-other-window target)
         (let ((func (muse-style-element :browser style t)))
           (if func
-              (funcall func result-path)
+              (funcall func target)
             (message "The %s publishing style does not support browsing."
                      style)))))))
 

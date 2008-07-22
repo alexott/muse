@@ -2935,6 +2935,11 @@ Default file extension for publishing LaTeX files.
 @item muse-latex-pdf-extension
 Default file extension for publishing LaTeX files to PDF.
 
+@item muse-latex-pdf-browser
+The program to use when browsing a published PDF file.
+
+This should be a format string.
+
 @item muse-latex-pdf-program
 The program that is called to generate PDF content from LaTeX content.
 

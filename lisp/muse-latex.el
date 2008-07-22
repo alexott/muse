@@ -64,6 +64,12 @@
   :type 'string
   :group 'muse-latex)
 
+(defcustom muse-latex-pdf-browser "open %s"
+  "The program to use when browsing a published PDF file.
+This should be a format string."
+  :type 'string
+  :group 'muse-latex)
+
 (defcustom muse-latex-pdf-program "pdflatex"
   "The program that is called to generate PDF content from LaTeX content."
   :type 'string
@@ -562,7 +568,7 @@ default Muse will add a footnote for each link."
       "")))
 
 (defun muse-latex-pdf-browse-file (file)
-  (shell-command (concat "open " file)))
+  (shell-command (format muse-latex-pdf-browser file)))
 
 (defun muse-latex-pdf-generate (file output-path final-target)
   (apply

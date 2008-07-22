@@ -1,3 +1,14 @@
+2008-07-22  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-pdf-program): New option that
+	determines the program to use when browsing a PDF file.
+	(muse-latex-pdf-browse-file): Use it.
+
+	* lisp/muse-mode.el (muse-browse-result): Support styles that use
+	an output suffix, such as PDF.
+
+	* texi/muse.texi (LaTeX): Document muse-latex-pdf-browser.
+
 2008-07-21  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-html.el (muse-html-src-allowed-modes): Docfix.
