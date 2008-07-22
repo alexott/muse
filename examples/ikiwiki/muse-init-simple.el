@@ -10,13 +10,9 @@
 ;; Initialize
 (require 'muse)          ; load generic module
 (require 'muse-html)     ; load (X)HTML publishing style
+(require 'muse-ikiwiki)  ; load Ikiwiki integration
 
 ;;; Settings
-
-;; Styles
-(muse-derive-style "ikiwiki" "xhtml"
-                   :header ""
-                   :footer "")
 
 ;; Permitted modes for <src> to colorize
 (setq muse-html-src-allowed-modes
@@ -37,37 +33,6 @@
 
 ;; Don't allow dangerous tags to be published
 (setq muse-publish-enable-dangerous-tags nil)
-
-;;; Functions
-
-(defun muse-ikiwiki-publish (file name)
-  "Publish a single file for ikiwiki.
-The name of the real file is NAME, and the name of the temporary
-file containing the content is FILE."
-  (if (not (stringp file))
-      (message "Error: No file given to publish")
-    (let ((muse-batch-publishing-p t)
-          (title (muse-page-name name))
-          (style "ikiwiki")
-          (output-path file)
-          (target file)
-          (muse-publishing-current-file file)
-          (muse-publishing-current-output-path file)
-          muse-current-output-style)
-      ;; don't activate VC when publishing files
-      (setq vc-handled-backends nil)
-      (setq muse-current-output-style (list :base style :path file))
-      (setq auto-mode-alist
-            (delete (cons (concat "\\." muse-file-extension "\\'")
-                          'muse-mode-choose-mode)
-                    auto-mode-alist))
-      (muse-with-temp-buffer
-        (muse-insert-file-contents file)
-        (run-hooks 'muse-before-publish-hook)
-        (let ((muse-inhibit-before-publish-hook t))
-          (muse-publish-markup-buffer title style))
-        (when (muse-write-file output-path)
-          (muse-style-run-hooks :final style file output-path target))))))
 
 ;;; Custom variables
 

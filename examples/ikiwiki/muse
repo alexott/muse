@@ -28,7 +28,7 @@ sub htmlize (@) {
     eval {
         system qw( emacs -q --no-site-file -batch
                    -l muse-init-simple.el --eval ),
-               qq{(muse-ikiwiki-publish "$qfile" "$qname")};
+               qq{(muse-ikiwiki-publish-file "$qfile" "$qname")};
         {
             open my $ifh, '<', $filename;
             local $/;

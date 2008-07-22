@@ -1,4 +1,4 @@
-;;; muse-init.el --- Use Emacs Muse to publish ikiwiki documents
+;;; muse-init-project.el --- Use Emacs Muse to publish ikiwiki documents
 
 ;; The code in this file may be used, distributed, and modified
 ;; without restriction.
@@ -10,15 +10,11 @@
 ;; Initialize
 (require 'muse)          ; load generic module
 (require 'muse-html)     ; load (X)HTML publishing style
+(require 'muse-ikiwiki)  ; load Ikiwiki integration
 (require 'muse-project)  ; load support for projects
 (require 'muse-wiki)     ; load Wiki support
 
 ;;; Settings
-
-;; Styles
-(muse-derive-style "ikiwiki" "xhtml"
-                   :header ""
-                   :footer "")
 
 ;; New variables
 (defvar muse-ikiwiki-project "HCoopWiki"
@@ -73,20 +69,6 @@
 ;; Don't allow dangerous tags to be published
 (setq muse-publish-enable-dangerous-tags nil)
 
-;;; Functions
-
-(defun muse-ikiwiki-publish (file &optional force)
-  "Publish a single file for ikiwiki."
-  (if (not (stringp file))
-      (message "Error: No file given to publish")
-    (let* ((project (muse-project muse-ikiwiki-project))
-           (styles (and project (cddr project)))
-           (muse-current-project project)
-          (muse-batch-publishing-p t))
-      (if (not project)
-          (message "Error: project `%s' does not exist" muse-ikiwiki-project)
-        (muse-project-publish-file file styles force)))))
-
 ;;; Custom variables
 
 (custom-set-variables
@@ -103,4 +85,4 @@
 (require 'server)
 (server-start)
 
-;;; muse-init.el ends here
+;;; muse-init-project.el ends here
