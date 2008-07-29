@@ -1,3 +1,17 @@
+2008-07-28  Michael Olson  <mwolson@gnu.org>
+
+	* examples/ikiwiki/muse: New file that provides a plugin for
+	Ikiwiki that allows it to publish Muse files.
+
+	* examples/ikiwiki/muse-init-project.el: Sample Muse init file
+	that provides project-aware publishing of single files for
+	Ikiwiki.
+
+	* examples/ikiwiki/muse-init-simple.el: Sample Muse init file that
+	provides basic single-file publishing support for Ikiwiki.
+
+	* texi/muse.texi (Ikiwiki): Finish documenting Ikiwiki support.
+
 2008-07-22  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-pdf-program): New option that
