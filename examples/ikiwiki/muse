@@ -2,6 +2,11 @@
 # Ikiwiki plugin for Emacs Muse.
 # Author: Michael Olson
 # License: GPLv2 or later
+#
+# In your ikiwiki.setup file, set the muse_init option to the location
+# of the init file for Muse.  Some examples provided in this directory
+# are muse-init-simple.el and muse-init-project.el.
+
 package IkiWiki::Plugin::muse;
 
 use warnings;
@@ -26,8 +31,8 @@ sub htmlize (@) {
     my $qfile = $filename;
     $qfile =~ s/"/\\"/g;
     eval {
-        system qw( emacs -q --no-site-file -batch
-                   -l muse-init-simple.el --eval ),
+        system qw( emacs -q --no-site-file -batch -l ),
+               $config{muse_init}, '--eval',
                qq{(muse-ikiwiki-publish-file "$qfile" "$qname")};
         {
             open my $ifh, '<', $filename;
