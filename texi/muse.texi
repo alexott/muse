@@ -2547,9 +2547,12 @@ initial attempt has been made to prevent malicious user input from
 interfering with the rest of the system hosting the website, but it has
 not been well-tested.
 
-Some examples are available in the @file{examples/ikiwiki} directory.
-The @file{service} directory provides a sample Runit service to start a
-daemonized Emacs instance that publishes pages.
+The @file{lisp/muse-ikiwiki.el} file provides publishing functions and
+styles for Ikiwiki.  The plugin for Ikiwiki to recognize Muse files is
+provided by the @file{examples/ikiwiki/muse} file.  Two sample init
+files are available in the @file{examples/ikiwiki} directory.  Configure
+your @file{ikiwiki.setup} file so that the @code{muse_init} variable
+has the location of your Muse init file.
 
 @subheading Styles provided
 
