@@ -819,7 +819,7 @@ prompting for one."
     (if (not muse-current-project)
         ;; file is not part of a project, so fall back to muse-publish
         (if (interactive-p) (call-interactively 'muse-publish-this-file)
-          (muse-publish-this-file nil nil force))
+          (muse-publish-this-file style nil force))
       (unless style
         (setq style (muse-project-get-applicable-style
                      buffer-file-name (cddr muse-current-project))))

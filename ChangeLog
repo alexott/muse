@@ -4,6 +4,10 @@
 	fragile, so that <example> works.  This may be slower, but it is
 	always correct, and requires no additional work on my end.
 
+	* lisp/muse-project.el (muse-project-publish-this-file): Correctly
+	pass style to muse-publish-this-file.  This fixes a bug when using
+	C-c C-v on a file not part of any project.
+
 2008-07-28  Michael Olson  <mwolson@gnu.org>
 
 	* examples/ikiwiki/muse: New file that provides a plugin for
