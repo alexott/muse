@@ -1,3 +1,9 @@
+2008-08-07  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-slide-tag): Mark all frames as
+	fragile, so that <example> works.  This may be slower, but it is
+	always correct, and requires no additional work on my end.
+
 2008-07-28  Michael Olson  <mwolson@gnu.org>
 
 	* examples/ikiwiki/muse: New file that provides a plugin for

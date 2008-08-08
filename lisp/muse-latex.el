@@ -495,7 +495,7 @@ and it will do what you expect."
 This is used by the slides and lecture-notes publishing styles."
   (let ((title (cdr (assoc "title" attrs))))
     (goto-char beg)
-    (muse-insert-markup "\\begin{frame}\n")
+    (muse-insert-markup "\\begin{frame}[fragile]\n")
     (when title
       (muse-insert-markup "\\frametitle{")
       (insert title)
