@@ -1,3 +1,11 @@
+2008-09-13  Wang Diancheng  <dianchengwang@gmail.com>
+
+	* lisp/muse-publish.el (muse-publish-markup-regexps): Use
+	muse-table-el-line-regexp.
+
+	* lisp/muse-regexps.el (muse-table-el-line-regexp): New regexp
+	that represents lines in table.el style tables.
+
 2008-08-07  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-slide-tag): Mark all frames as

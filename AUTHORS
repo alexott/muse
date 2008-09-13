@@ -37,6 +37,10 @@ Li Daobing: Author of muse-mathml.el,
             Contributor
             (assigned past and future changes)
 
+Wang Diancheng: Contributor:
+                 - muse-publish.el: 1 line changed
+                 - muse-regexps.el: 6 lines changed
+
 Clinton Ebadi: Contributor:
                 - muse-html.el: 4 lines changed
 
