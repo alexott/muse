@@ -155,7 +155,7 @@ If non-nil, publish comments using the markup of the current style."
 
     ;; support table.el style tables
     (2300 ,(concat "^" muse-table-el-border-regexp "\n"
-                   "\\(\\(" muse-table-line-regexp "\n\\)+"
+                   "\\(\\(" muse-table-el-line-regexp "\n\\)+"
                    "\\(" muse-table-el-border-regexp "\\)"
                    "\\(\n\\|\\'\\)\\)+")
           0 table-el)
