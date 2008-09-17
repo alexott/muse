@@ -297,7 +297,9 @@ For an example of the use of this function, see
     (when (string= fnd "")
       ;; deal with cases like "foo/" that have a trailing slash
       (setq fnd (file-name-nondirectory (substring entry-dir 0 -1))))
-    (cons `(:base ,style :path ,(expand-file-name output-dir)
+    (cons `(:base ,style :path ,(if (muse-file-remote-p output-dir)
+                                    output-dir
+                                  (expand-file-name output-dir))
                   :include ,(concat "/" fnd "/[^/]+$")
                   ,@other)
           (mapcar (lambda (dir)
