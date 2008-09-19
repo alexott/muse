@@ -534,7 +534,8 @@ to the text with ARGS as parameters."
             (message "Publishing %s...%d%%" name
                      (* (/ (float (+ (point) base)) limit) 100)))
         (while (and regexp (progn
-                             (when (get-text-property (point) 'read-only)
+                             (when (and (get-text-property (point) 'read-only)
+                                        (> (point) (point-min)))
                                (goto-char (or (next-single-property-change
                                                (point) 'read-only)
                                               (point-max))))
