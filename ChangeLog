@@ -1,3 +1,10 @@
+2008-09-18  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-markup): Do not skip past the
+	beginning of the buffer even if the first character is read-only.
+	This fixes a bug where the first paragraph would not be published
+	properly if it started with a link.
+
 2008-09-17  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-project.el (muse-project-alist-styles): If output
