@@ -852,6 +852,7 @@ the file is published no matter what."
 Prompt for both the STYLE and OUTPUT-DIR if they are not
 supplied."
   (interactive (muse-publish-get-info))
+  (setq style (muse-style style))
   (if buffer-file-name
       (let ((muse-current-output-style (list :base (car style)
                                              :path output-dir)))
