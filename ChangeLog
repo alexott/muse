@@ -1,3 +1,8 @@
+2008-09-28  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-publish.el (muse-publish-this-file): Handle style
+	arguments that are strings.
+
 2008-09-18  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-markup): Do not skip past the
