@@ -128,13 +128,16 @@ PREAMBLE indicates extra packages and definitions to include."
     (call-process "latex" nil nil nil texfile)
     (if (file-exists-p (concat texfile ".dvi"))
         (progn
-          (shell-command-to-string
-           (concat "dvipng " texfile ".dvi -E"
-                   " -fg " muse-latex2png-fg
-                   " -bg " muse-latex2png-bg " -T tight"
-                   " -x " (format  "%s" (* muse-latex2png-scale-factor 1000))
-                   " -y " (format  "%s" (* muse-latex2png-scale-factor 1000))
-                   " -o " texfile ".png"))
+          (call-process
+           "dvipng" nil nil nil
+           "-E"
+           "-fg" muse-latex2png-fg
+           "-bg" muse-latex2png-bg
+           "-T" "tight"
+           "-x" (format  "%s" (* muse-latex2png-scale-factor 1000))
+           "-y" (format  "%s" (* muse-latex2png-scale-factor 1000))
+           "-o" (concat texfile ".png")
+           (concat texfile ".dvi"))
           (if (file-exists-p (concat texfile ".png"))
               (progn
                 (delete-file (concat texfile ".dvi"))
