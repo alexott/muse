@@ -1,3 +1,9 @@
+2008-09-30  Clinton Ebadi  <clinton@unknownlamer.org>
+
+	* muse-latex2png (muse-latex2png): Use call-process rather than
+	shell-command-to-string, so that filenames with spaces in them are
+	handled correctly.
+
 2008-09-28  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-publish.el (muse-publish-this-file): Handle style
