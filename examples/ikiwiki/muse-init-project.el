@@ -80,9 +80,4 @@
 (custom-set-faces
  '(muse-bad-link ((t (:foreground "DeepPink" :underline "DeepPink" :weight bold)))))
 
-;;; Start server
-
-(require 'server)
-(server-start)
-
 ;;; muse-init-project.el ends here

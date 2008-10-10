@@ -332,13 +332,17 @@ before the error is signaled."
         (inhibit-file-name-operation 'insert-file-contents))
     (insert-file-contents filename visit)))
 
-(defun muse-write-file (filename)
+(defun muse-write-file (filename nomessage)
   "Write current buffer into file FILENAME.
 Unlike `write-file', this does not visit the file, try to back it
 up, or interact with vc.el in any way.
 
 If the file was not written successfully, return nil.  Otherwise,
-return non-nil."
+return non-nil.
+
+If the NOMESSAGE argument is non-nil, suppress the \"Wrote file\"
+message."
+  (when nomessage (setq nomessage 'nomessage))
   (let ((backup-inhibited t)
         (buffer-file-name filename)
         (buffer-file-truename (file-truename filename)))
@@ -361,7 +365,8 @@ return non-nil."
                  (or (and (boundp 'save-buffer-coding-system)
                           save-buffer-coding-system)
                      coding-system-for-write)))
-            (write-region (point-min) (point-max) buffer-file-name))
+            (write-region (point-min) (point-max) buffer-file-name
+                          nil nomessage))
           (when (boundp 'last-file-coding-system-used)
             (when (boundp 'buffer-file-coding-system-explicit)
               (setq buffer-file-coding-system-explicit

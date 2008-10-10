@@ -864,6 +864,7 @@ supplied."
 (defun muse-batch-publish-files ()
   "Publish Muse files in batch mode."
   (let ((muse-batch-publishing-p t)
+        (font-lock-verbose nil)
         muse-current-output-style
         style output-dir)
     ;; don't activate VC when publishing files

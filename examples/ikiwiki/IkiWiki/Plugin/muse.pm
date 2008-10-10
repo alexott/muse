@@ -4,8 +4,9 @@
 # License: GPLv2 or later
 #
 # In your ikiwiki.setup file, set the muse_init option to the location
-# of the init file for Muse.  Some examples provided in this directory
-# are muse-init-simple.el and muse-init-project.el.
+# of the init file for Muse.  Some examples provided in the
+# examples/ikiwiki directory are muse-init-simple.el and
+# muse-init-project.el.
 
 package IkiWiki::Plugin::muse;
 
@@ -21,7 +22,7 @@ sub import {
 
 sub htmlize (@) {
     my %params=@_;
-    my $content = decode_utf8(encode_utf8($params{content}));
+    my $content = encode_utf8($params{content});
     my $qname = $params{page};
     $qname =~ s/"/\\"/g;
 
@@ -32,22 +33,21 @@ sub htmlize (@) {
     $qfile =~ s/"/\\"/g;
     eval {
         system qw( emacs -q --no-site-file -batch -l ),
-               $config{muse_init}, '--eval',
-               qq{(muse-ikiwiki-publish-file "$qfile" "$qname")};
+          $config{muse_init}, '--eval',
+            qq{(muse-ikiwiki-publish-file "$qfile" "$qname")};
         {
             open my $ifh, '<', $filename;
             local $/;
             $content = <$ifh>;
             close $ifh;
         }
+        unlink $filename;
     };
-    unlink $filename;
-    return $content;
-}
-
-sub test {
-    print htmlize(content => "<example>\nHello\n</example>\n\nParagraph.\n",
-                  page => "some_page.muse");
+    if ($@) {
+        unlink $filename;
+        die $@;
+    }
+    return decode_utf8($content);
 }
 
 1

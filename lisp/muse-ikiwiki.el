@@ -66,6 +66,7 @@ file containing the content is FILE."
           (target file)
           (muse-publishing-current-file file)
           (muse-publishing-current-output-path file)
+          (font-lock-verbose nil)
           muse-current-output-style)
       ;; don't activate VC when publishing files
       (setq vc-handled-backends nil)
@@ -79,7 +80,7 @@ file containing the content is FILE."
         (run-hooks 'muse-before-publish-hook)
         (let ((muse-inhibit-before-publish-hook t))
           (muse-publish-markup-buffer title style))
-        (when (muse-write-file output-path)
+        (when (muse-write-file output-path t)
           (muse-style-run-hooks :final style file output-path target))))))
 
 ;; Styles
