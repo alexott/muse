@@ -1,3 +1,24 @@
+2008-10-09  Michael Olson  <mwolson@gnu.org>
+
+	* examples/ikiwiki/IkiWiki/Plugin/muse.pm: Move here from
+	examples/ikiwiki/muse.  Encode/decode UTF-8 properly.  Take pains
+	to remove the temp file.  Die on errors.  Remove test sub.
+
+	* examples/ikiwiki/muse-init-project.el: Remove server stuff.
+
+	* lisp/muse-ikiwiki.el (muse-ikiwiki-publish-file): Set
+	font-lock-verbose to nil to avoid spurious messages when
+	publishing.  Silence the "Wrote file" message.
+
+	* lisp/muse-publish.el (muse-batch-publish-files): Set
+	font-lock-verbose to nil to avoid spurious messages when
+	publishing.
+
+	* lisp/muse.el (muse-write-file): Take NOMESSAGE argument.
+
+	* texi/muse.texi (Ikiwiki): Add instructions for using
+	IkiWiki::Plugin::muse.
+
 2008-09-30  Clinton Ebadi  <clinton@unknownlamer.org>
 
 	* muse-latex2png (muse-latex2png): Use call-process rather than
