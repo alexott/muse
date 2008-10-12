@@ -1,3 +1,8 @@
+2008-10-12  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse.el (muse-write-file): Make nomessage argument
+	optional.
+
 2008-10-09  Michael Olson  <mwolson@gnu.org>
 
 	* examples/ikiwiki/IkiWiki/Plugin/muse.pm: Move here from
