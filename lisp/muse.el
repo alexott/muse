@@ -332,7 +332,7 @@ before the error is signaled."
         (inhibit-file-name-operation 'insert-file-contents))
     (insert-file-contents filename visit)))
 
-(defun muse-write-file (filename nomessage)
+(defun muse-write-file (filename &optional nomessage)
   "Write current buffer into file FILENAME.
 Unlike `write-file', this does not visit the file, try to back it
 up, or interact with vc.el in any way.
