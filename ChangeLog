@@ -1,3 +1,33 @@
+2008-10-13  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-colors.el (muse-colors-regexp, muse-colors-vector):
+	Remove.
+	(muse-colors-highlighting-registry)
+	(muse-colors-make-highlighting-struct)
+	(muse-colors-highlighting.regexp, muse-colors-highlighting.vector)
+	(muse-colors-highlighting.remaining)
+	(muse-colors-highlighting-entry)
+	(muse-colors-find-highlighting, muse-colors-define-highlighting):
+	New scheme for separating highlighting rules according to
+	major-mode.
+	(muse-configure-highlighting, muse-use-font-lock): Use
+	muse-colors-define-highlighting.
+	(muse-colors-region): Permit the vector to contain more than one
+	rule.  Handle case where we have rules that are not in the vector
+	and do not have the same function handler.  Make sure that the
+	match data exactly corresponds to the regexp that goes with the
+	rule.
+	(muse-colors-custom-tags, muse-colors-explicit-link): No need to
+	explicitly call `looking-at', because the match data will be
+	correct.
+	(muse-colors-implicit-link): Use match-string 0 instead of
+	match-string 1, now that the match data is accurate.
+
+	* lisp/muse-wiki.el (muse-wiki-update-project-file-regexp)
+	(muse-wiki-wikiword-regexp): Call muse-colors-define-highlighting.
+	(muse-wiki-update-interwiki-regexp): Only update the highlighting
+	if the value has changed.
+
 2008-10-12  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse.el (muse-write-file): Make nomessage argument
