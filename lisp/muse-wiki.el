@@ -84,8 +84,7 @@ all the files in the project."
                       "\\)"))))
     ;; update coloring setup
     (when (featurep 'muse-colors)
-      (muse-configure-highlighting
-       'muse-colors-markup muse-colors-markup))))
+      (muse-colors-define-highlighting 'muse-mode muse-colors-markup))))
 
 (add-hook 'muse-update-values-hook
           'muse-wiki-update-project-file-regexp)
@@ -101,8 +100,7 @@ all the files in the project."
         (lambda (sym value)
           (set sym value)
           (when (featurep 'muse-colors)
-            (muse-configure-highlighting
-             'muse-colors-markup muse-colors-markup))))
+            (muse-colors-define-highlighting 'muse-mode muse-colors-markup))))
   :type 'regexp
   :group 'muse-wiki)
 
@@ -158,28 +156,30 @@ If you want this replacement to happen, you must add
 `muse-wiki-interwiki-alist' and `muse-project-alist'."
   (if (null muse-project-alist)
       (setq muse-wiki-interwiki-regexp nil)
-    (setq muse-wiki-interwiki-regexp
-          (concat "\\<\\(" (regexp-opt (mapcar #'car muse-project-alist))
-                  (when muse-wiki-interwiki-alist
-                    (let ((interwiki-rules (mapcar #'car
-                                                   muse-wiki-interwiki-alist)))
-                      (when interwiki-rules
-                        (concat "\\|" (regexp-opt interwiki-rules)))))
-                  "\\)\\(?:\\(" muse-wiki-interwiki-delimiter
-                  "\\)\\("
-                  (when muse-wiki-match-all-project-files
-                    ;; append the files from the project
-                    (let ((files nil))
-                      (dolist (proj muse-project-alist)
-                        (setq files
-                              (nconc (muse-wiki-project-files-with-spaces
-                                      (car proj))
-                                     files)))
-                      (when files
-                        (concat (regexp-opt files) "\\|"))))
-                  "\\sw+\\)\\(#\\S-+\\)?\\)?\\>"))
-    (when (featurep 'muse-colors)
-      (muse-configure-highlighting 'muse-colors-markup muse-colors-markup))))
+    (let ((old-value muse-wiki-interwiki-regexp))
+      (setq muse-wiki-interwiki-regexp
+            (concat "\\<\\(" (regexp-opt (mapcar #'car muse-project-alist))
+                    (when muse-wiki-interwiki-alist
+                      (let ((interwiki-rules
+                             (mapcar #'car muse-wiki-interwiki-alist)))
+                        (when interwiki-rules
+                          (concat "\\|" (regexp-opt interwiki-rules)))))
+                    "\\)\\(?:\\(" muse-wiki-interwiki-delimiter
+                    "\\)\\("
+                    (when muse-wiki-match-all-project-files
+                      ;; append the files from the project
+                      (let ((files nil))
+                        (dolist (proj muse-project-alist)
+                          (setq files
+                                (nconc (muse-wiki-project-files-with-spaces
+                                        (car proj))
+                                       files)))
+                        (when files
+                          (concat (regexp-opt files) "\\|"))))
+                    "\\sw+\\)\\(#\\S-+\\)?\\)?\\>"))
+      (when (and (featurep 'muse-colors)
+                 (not (string= old-value muse-wiki-interwiki-regexp)))
+        (muse-colors-define-highlighting 'muse-mode muse-colors-markup)))))
 
 (defcustom muse-wiki-interwiki-alist
   '(("EmacsWiki" . "http://www.emacswiki.org/cgi-bin/wiki/"))
@@ -434,7 +434,7 @@ Example: <nop>WikiWord"
                   '("''''" ?\' muse-colors-wikiword-separate)
                   nil)
 
-     (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)))
+     (muse-colors-define-highlighting 'muse-mode muse-colors-markup)))
 
 ;;; Publishing setup
 

@@ -238,43 +238,98 @@ whether progress messages should be displayed to the user."
   :type 'hook
   :group 'muse-colors)
 
-(defvar muse-colors-regexp nil
-  "Regexp matching each car of `muse-colors-markup'.")
-(defvar muse-colors-vector nil
-  "Vector of all characters that are part of Muse markup.
-This is composed of the 2nd element of each `muse-colors-markup'
-entry.")
+(defvar muse-colors-highlighting-registry nil
+  "The rules for highlighting Muse and Muse-derived buffers.
+This is automatically generated when using font-lock in Muse buffers.
+
+This an alist of major-mode symbols to `muse-colors-rule' objects.")
+
+(defun muse-colors-make-highlighting-struct ()
+  (list nil nil nil))
+(defconst muse-colors-highlighting.regexp 0
+  "Regexp matching each car of the markup of the current rule.")
+(defconst muse-colors-highlighting.vector 1
+  "Vector of all characters that are part of the markup of the current rule.
+This is composed of the 2nd element of each markup entry.")
+(defconst muse-colors-highlighting.remaining 2
+  "Expressions for highlighting a buffer which have no corresponding
+entry in the vector.")
+
+(defsubst muse-colors-highlighting-entry (mode)
+  "Return the highlighting rules for MODE."
+  (assq mode muse-colors-highlighting-registry))
+
+(defun muse-colors-find-highlighting (mode)
+  "Return the highlighting rules to be used for MODE.
+If MODE does not have highlighting rules, check its parent modes."
+  (let ((seen nil))
+    (catch 'rules
+      (while (and mode (not (memq mode seen)))
+        (let ((entry (muse-colors-highlighting-entry mode)))
+          (when entry (throw 'rules (cdr entry))))
+        (setq seen (cons mode seen))
+        (setq mode (get mode 'derived-mode-parent)))
+      nil)))
+
+(defun muse-colors-define-highlighting (mode markup)
+  "Create or update the markup rules for MODE, using MARKUP.
+
+See `muse-colors-markup' for an explanation of the format that MARKUP
+should take."
+  (unless (and (symbolp mode) mode (consp markup))
+    (error "Invalid arguments"))
+  (let* ((highlighting-entry (muse-colors-highlighting-entry mode))
+         (struct (cdr highlighting-entry))
+         (regexp nil)
+         (vector nil)
+         (remaining nil))
+    ;; Initialize struct
+    (if struct
+        (setq vector (nth muse-colors-highlighting.vector struct))
+      (setq struct (muse-colors-make-highlighting-struct)))
+    ;; Initialize vector
+    (if vector
+        (let ((i 0))
+          (while (< i 128)
+            (aset vector i nil)
+            (setq i (1+ i))))
+      (setq vector (make-vector 128 nil)))
+    ;; Determine vector, regexp, remaining
+    (let ((regexps nil)
+          (rules nil))
+      (dolist (rule markup)
+        (let ((value (cond ((symbolp (car rule))
+                            (symbol-value (car rule)))
+                           ((stringp (car rule))
+                            (car rule))
+                           (t nil))))
+          (when value
+            (setq rules (cons rule rules))
+            (setq regexps (cons value regexps)))))
+      (setq regexps (nreverse regexps))
+      (setq regexp (concat "\\(" (mapconcat #'identity regexps "\\|") "\\)"))
+      (dolist (rule rules)
+        (if (eq (nth 1 rule) t)
+            (setq remaining (cons (cons (nth 0 rule) (nth 2 rule))
+                                  remaining))
+          (aset vector (nth 1 rule)
+                (cons (cons (nth 0 rule) (nth 2 rule))
+                      (aref vector (nth 1 rule)))))))
+    ;; Update the struct
+    (setcar (nthcdr muse-colors-highlighting.regexp struct) regexp)
+    (setcar (nthcdr muse-colors-highlighting.vector struct) vector)
+    (setcar (nthcdr muse-colors-highlighting.remaining struct) remaining)
+    ;; Update entry for mode in muse-colors-highlighting-registry
+    (if highlighting-entry
+        (setcdr highlighting-entry struct)
+      (setq muse-colors-highlighting-registry
+            (cons (cons mode struct)
+                  muse-colors-highlighting-registry)))))
 
 (defun muse-configure-highlighting (sym val)
   "Extract color markup information from VAL and set to SYM.
 This is usually called with `muse-colors-markup' as both arguments."
-  (let ((regexps nil)
-        (rules nil))
-    (dolist (rule val)
-      (let ((value (cond ((symbolp (car rule))
-                          (symbol-value (car rule)))
-                         ((stringp (car rule))
-                          (car rule))
-                         (t nil))))
-        (when value
-          (setq rules (cons rule rules))
-          (setq regexps (cons value regexps)))))
-    (setq rules (nreverse rules)
-          regexps (nreverse regexps))
-    (setq muse-colors-regexp (concat "\\("
-                                     (mapconcat #'identity regexps "\\|")
-                                     "\\)")
-          muse-colors-vector (make-vector 128 nil))
-    (while rules
-      (if (eq (cadr (car rules)) t)
-          (let ((i 0) (l 128))
-            (while (< i l)
-              (unless (aref muse-colors-vector i)
-                (aset muse-colors-vector i (nth 2 (car rules))))
-              (setq i (1+ i))))
-        (aset muse-colors-vector (cadr (car rules))
-              (nth 2 (car rules))))
-      (setq rules (cdr rules))))
+  (muse-colors-define-highlighting 'muse-mode val)
   (set sym val))
 
 (defun muse-colors-emphasized ()
@@ -490,7 +545,7 @@ fontification in that area."
   (set (make-local-variable 'font-lock-unfontify-region-function)
        'muse-unhighlight-region)
   (muse-make-faces)
-  (muse-configure-highlighting 'muse-colors-markup muse-colors-markup)
+  (muse-colors-define-highlighting 'muse-mode muse-colors-markup)
   (font-lock-mode t))
 
 (defun muse-colors-buffer ()
@@ -524,7 +579,14 @@ of the functions listed in `muse-colors-markup'."
         (muse-colors-fontifying-p t)
         (muse-colors-region-end (muse-line-end-position end))
         (muse-colors-delayed-commands nil)
+        (highlighting (muse-colors-find-highlighting major-mode))
+        regexp vector remaining
         deactivate-mark)
+    (unless highlighting
+      (error "No highlighting found for this mode"))
+    (setq regexp (nth muse-colors-highlighting.regexp highlighting)
+          vector (nth muse-colors-highlighting.vector highlighting)
+          remaining (nth muse-colors-highlighting.remaining highlighting))
     (unwind-protect
         (save-excursion
           (save-restriction
@@ -551,17 +613,37 @@ of the functions listed in `muse-colors-markup'."
             ;; And apply fontification based on `muse-colors-markup'
             (let ((len (float (- end beg)))
                   (case-fold-search nil)
-                  markup-func)
+                  markup-list)
               (goto-char beg)
               (while (and (< (point) end)
-                          (re-search-forward muse-colors-regexp end t))
+                          (re-search-forward regexp end t))
                 (if verbose
                     (message "Highlighting buffer...%d%%"
                              (* (/ (float (- (point) beg)) len) 100)))
-                (setq markup-func
-                      (aref muse-colors-vector
-                            (char-after (match-beginning 0))))
-                (when markup-func (funcall markup-func)))
+                (let ((ch (char-after (match-beginning 0))))
+                  (when (< ch 128)
+                    (setq markup-list (aref vector ch))))
+                (unless markup-list
+                  (setq markup-list remaining))
+                (let ((prev (point)))
+                  ;; backtrack and figure out which rule matched
+                  (goto-char (match-beginning 0))
+                  (catch 'done
+                    (dolist (entry markup-list)
+                      (let ((value (cond ((symbolp (car entry))
+                                          (symbol-value (car entry)))
+                                         ((stringp (car entry))
+                                          (car entry))
+                                         (t nil))))
+                        (when (and (stringp value) (looking-at value))
+                          (goto-char (match-end 0))
+                          (when (cdr entry)
+                            (funcall (cdr entry)))
+                          (throw 'done t))))
+                    ;; if no rule matched, which should never happen,
+                    ;; return to previous position so that forward
+                    ;; progress is ensured
+                    (goto-char prev))))
               (dolist (command muse-colors-delayed-commands)
                 (apply (car command) (cdr command)))
               (run-hook-with-args 'muse-colors-buffer-hook
@@ -609,9 +691,6 @@ This is used to delay highlighting of <lisp> tags in #title until later.")
 
 (defun muse-colors-custom-tags ()
   "Highlight `muse-colors-tags'."
-  (save-excursion
-    (goto-char (match-beginning 0))
-    (looking-at muse-tag-regexp))
   (let ((tag-info (muse-colors-tag-info (match-string 1))))
     (unless (or (not tag-info)
                 (get-text-property (match-beginning 0) 'muse-comment)
@@ -842,9 +921,6 @@ in place of an image link defined by BEG and END."
         (while (> (match-end 0) cur)
           (flyspell-unhighlight-at cur)
           (setq cur (1+ cur)))))
-    (save-excursion
-      (goto-char (match-beginning 0))
-      (looking-at muse-explicit-link-regexp))
     (let* ((unesc-link (muse-get-link))
            (unesc-desc (muse-get-link-desc))
            (link (muse-link-unescape unesc-link))
@@ -903,12 +979,12 @@ in place of an image link defined by BEG and END."
           (flyspell-unhighlight-at cur)
           (setq cur (1+ cur)))))
     ;; colorize link
-    (let ((link (muse-match-string-no-properties 1))
-          (face (muse-link-face (match-string 1))))
+    (let ((link (muse-match-string-no-properties 0))
+          (face (muse-link-face (match-string 0))))
       (when face
-        (add-text-properties (match-beginning 1) (match-end 0)
+        (add-text-properties (match-beginning 0) (match-end 0)
                              (muse-link-properties
-                              (muse-match-string-no-properties 1) face))))))
+                              (muse-match-string-no-properties 0) face))))))
 
 (defun muse-colors-title ()
   "Color #title directives."
