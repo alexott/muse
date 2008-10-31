@@ -401,73 +401,72 @@ If EXPLICIT is non-nil, TITLE will be returned unmodified."
 
 ;;; Coloring setup
 
-(eval-after-load "muse-colors"
-  '(progn
-     (defun muse-wiki-colors-nop-tag (beg end)
-       "Inhibit the colorization of inhibit links just after the tag.
+(defun muse-wiki-colors-nop-tag (beg end)
+  "Inhibit the colorization of inhibit links just after the tag.
 
 Example: <nop>WikiWord"
-       (when muse-wiki-hide-nop-tag
-         (add-text-properties beg (+ beg 5)
-                              '(invisible muse intangible t)))
-       (unless (> (+ beg 6) (point-max))
-         (add-text-properties (+ beg 5) (+ beg 6)
-                              '(muse-no-implicit-link t))))
-     (defun muse-colors-wikiword-separate ()
-       (add-text-properties (match-beginning 0) (match-end 0)
-                            '(invisible muse intangible t)))
+  (when muse-wiki-hide-nop-tag
+    (add-text-properties beg (+ beg 5)
+                         '(invisible muse intangible t)))
+  (unless (> (+ beg 6) (point-max))
+    (add-text-properties (+ beg 5) (+ beg 6)
+                         '(muse-no-implicit-link t))))
 
-     (add-to-list 'muse-colors-tags
-                  '("nop" nil nil nil muse-wiki-colors-nop-tag)
-                  t)
+(defun muse-colors-wikiword-separate ()
+  (add-text-properties (match-beginning 0) (match-end 0)
+                       '(invisible muse intangible t)))
 
-     (add-to-list 'muse-colors-markup
-                  '(muse-wiki-interwiki-regexp t muse-colors-implicit-link)
-                  t)
-     (add-to-list 'muse-colors-markup
-                  '(muse-wiki-wikiword-regexp t muse-colors-implicit-link)
-                  t)
-     (add-to-list 'muse-colors-markup
-                  '(muse-wiki-project-file-regexp t muse-colors-implicit-link)
-                  t)
-     (add-to-list 'muse-colors-markup
-                  '("''''" ?\' muse-colors-wikiword-separate)
-                  nil)
+(defun muse-wiki-insinuate-colors ()
+  (add-to-list 'muse-colors-tags
+               '("nop" nil nil nil muse-wiki-colors-nop-tag)
+               t)
+  (add-to-list 'muse-colors-markup
+               '(muse-wiki-interwiki-regexp t muse-colors-implicit-link)
+               t)
+  (add-to-list 'muse-colors-markup
+               '(muse-wiki-wikiword-regexp t muse-colors-implicit-link)
+               t)
+  (add-to-list 'muse-colors-markup
+               '(muse-wiki-project-file-regexp t muse-colors-implicit-link)
+               t)
+  (add-to-list 'muse-colors-markup
+               '("''''" ?\' muse-colors-wikiword-separate)
+               nil)
+  (muse-colors-define-highlighting 'muse-mode muse-colors-markup))
 
-     (muse-colors-define-highlighting 'muse-mode muse-colors-markup)))
+(eval-after-load "muse-colors" '(muse-wiki-insinuate-colors))
 
 ;;; Publishing setup
 
-(eval-after-load "muse-publish"
-  '(progn
-     (defun muse-wiki-publish-nop-tag (beg end)
-       "Inhibit the colorization of inhibit links just after the tag.
+(defun muse-wiki-publish-nop-tag (beg end)
+  "Inhibit the colorization of inhibit links just after the tag.
 
 Example: <nop>WikiWord"
-       (unless (= (point) (point-max))
-         (muse-publish-mark-read-only (point) (+ (point) 1))))
+  (unless (= (point) (point-max))
+    (muse-publish-mark-read-only (point) (+ (point) 1))))
 
-     (add-to-list 'muse-publish-markup-tags
-                  '("nop" nil nil nil muse-wiki-publish-nop-tag)
-                  t)
+(defun muse-wiki-insinuate-publish ()
+  (add-to-list 'muse-publish-markup-tags
+               '("nop" nil nil nil muse-wiki-publish-nop-tag)
+               t)
+  (add-to-list 'muse-publish-markup-regexps
+               '(3100 muse-wiki-interwiki-regexp 0 link)
+               t)
+  (add-to-list 'muse-publish-markup-regexps
+               '(3200 muse-wiki-wikiword-regexp 0 link)
+               t)
+  (add-to-list 'muse-publish-markup-regexps
+               '(3250 muse-wiki-project-file-regexp 0 link)
+               t)
+  (add-to-list 'muse-publish-markup-regexps
+               '(3300 "''''" 0 "")
+               t)
+  (custom-add-option 'muse-publish-desc-transforms
+                     'muse-wiki-publish-pretty-interwiki)
+  (custom-add-option 'muse-publish-desc-transforms
+                     'muse-wiki-publish-pretty-title))
 
-     (add-to-list 'muse-publish-markup-regexps
-                  '(3100 muse-wiki-interwiki-regexp 0 link)
-                  t)
-     (add-to-list 'muse-publish-markup-regexps
-                  '(3200 muse-wiki-wikiword-regexp 0 link)
-                  t)
-     (add-to-list 'muse-publish-markup-regexps
-                  '(3250 muse-wiki-project-file-regexp 0 link)
-                  t)
-     (add-to-list 'muse-publish-markup-regexps
-                  '(3300 "''''" 0 "")
-                  t)
-
-     (custom-add-option 'muse-publish-desc-transforms
-                        'muse-wiki-publish-pretty-interwiki)
-     (custom-add-option 'muse-publish-desc-transforms
-                        'muse-wiki-publish-pretty-title)))
+(eval-after-load "muse-publish" '(muse-wiki-insinuate-publish))
 
 ;;; Insinuate link handling
 
