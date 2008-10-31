@@ -35,6 +35,9 @@
 (require 'muse-html)
 (require 'muse-publish)
 
+(eval-when-compile
+  (require 'muse-colors))
+
 (defgroup muse-ikiwiki nil
   "Options controlling the behavior of Muse integration with Ikiwiki."
   :group 'muse-publish)
@@ -50,6 +53,8 @@ This may be text or a filename."
 This may be text or a filename."
   :type 'string
   :group 'muse-ikiwiki)
+
+;;; Publishing
 
 (defun muse-ikiwiki-publish-file (file name &optional style)
   "Publish a single file for Ikiwiki.
@@ -82,6 +87,75 @@ file containing the content is FILE."
           (muse-publish-markup-buffer title style))
         (when (muse-write-file output-path t)
           (muse-style-run-hooks :final style file output-path target))))))
+
+;;; Colors
+
+(defface muse-ikiwiki-directive
+  '((((class color) (background light))
+     (:foreground "dark green"))
+    (((class color) (background dark))
+     (:foreground "green")))
+  "Face for Ikiwiki directives."
+  :group 'muse-ikiwiki)
+
+(defun muse-colors-ikiwiki-directive ()
+  "Color ikiwiki directives."
+  (let ((start (match-beginning 0)))
+    (unless (or (eq (get-text-property start 'invisible) 'muse)
+                (get-text-property start 'muse-comment)
+                (get-text-property start 'muse-directive))
+      ;; beginning of line or space or symbol
+      (save-excursion
+        (and
+         (catch 'valid
+           (while t
+             (skip-chars-forward "^\"]" muse-colors-region-end)
+             (cond ((eq (point) (point-max))
+                    (throw 'valid nil))
+                   ((eq (char-after) ?\")
+                    (if (and (< (1+ (point)) muse-colors-region-end)
+                             (eq (char-after (1+ (point))) ?\"))
+                        (if (and (> (+ 2 (point)) muse-colors-region-end)
+                                 (eq (char-after (+ 2 (point))) ?\"))
+                            ;; triple-quote
+                            (forward-char 3)
+                            (or (re-search-forward
+                                 "\"\"\"" muse-colors-region-end t)
+                                (throw 'valid nil))
+                          ;; empty quotes ("")
+                          (forward-char 2))
+                      ;; quote with content
+                      (forward-char)
+                      (skip-chars-forward "^\"" muse-colors-region-end)))
+                   ((eq (char-after) ?\])
+                    (forward-char)
+                    (when (and (< (point) muse-colors-region-end)
+                               (eq (char-after (point)) ?\]))
+                      (forward-char)
+                      (throw 'valid t)))
+                   ((eq (point) muse-colors-region-end)
+                    (throw 'valid nil))
+                   (t (throw 'valid nil)))))
+         ;; found a valid directive
+         (progn
+           (add-text-properties start (point)
+                                '(face muse-ikiwiki-directive
+                                  muse-directive t))
+           (when (save-excursion
+                   (let ((end (point)))
+                     (goto-char start)
+                     (skip-chars-forward "^\n" end)
+                     (and (eq (char-after) ?\n)
+                          (not (= (point) end)))))
+             (add-text-properties start (point)
+                                  '(font-lock-multiline t)))))))))
+
+(defun muse-ikiwiki-insinuate-colors ()
+  (add-to-list 'muse-colors-markup
+               '("\\[\\[!" ?\[ muse-colors-ikiwiki-directive)
+               nil))
+
+(eval-after-load "muse-colors" '(muse-ikiwiki-insinuate-colors))
 
 ;; Styles
 (muse-derive-style "ikiwiki" "xhtml"
