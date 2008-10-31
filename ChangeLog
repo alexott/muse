@@ -1,3 +1,14 @@
+2008-10-30  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-ikiwiki.el (muse-ikiwiki-directive): New face for
+	coloring Ikiwiki directives.
+	(muse-colors-ikiwiki-directive): Colorize ikiwiki directives.
+	(muse-ikiwiki-insinuate-colors): Stuff to do when both
+	muse-ikiwiki and muse-colors are loaded.
+
+	* lisp/muse-wiki.el: Move some code out of eval-after-load
+	statement.
+
 2008-10-13  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-colors.el (muse-colors-regexp, muse-colors-vector):
