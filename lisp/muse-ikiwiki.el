@@ -112,29 +112,34 @@ file containing the content is FILE."
              (skip-chars-forward "^\"]" muse-colors-region-end)
              (cond ((eq (point) (point-max))
                     (throw 'valid nil))
+                   ((> (point) muse-colors-region-end)
+                    (throw 'valid nil))
                    ((eq (char-after) ?\")
                     (if (and (< (1+ (point)) muse-colors-region-end)
                              (eq (char-after (1+ (point))) ?\"))
-                        (if (and (> (+ 2 (point)) muse-colors-region-end)
+                        (if (and (< (+ 2 (point)) muse-colors-region-end)
                                  (eq (char-after (+ 2 (point))) ?\"))
                             ;; triple-quote
-                            (forward-char 3)
-                            (or (re-search-forward
-                                 "\"\"\"" muse-colors-region-end t)
-                                (throw 'valid nil))
-                          ;; empty quotes ("")
-                          (forward-char 2))
+                            (progn
+                              (forward-char 3)
+                              (or (and (looking-at "\"\"\"")
+                                       (goto-char (match-end 0)))
+                                  (re-search-forward
+                                   "\"\"\"" muse-colors-region-end t)
+                                  (throw 'valid nil)))
+                          ;; empty quotes (""), which are invalid
+                          (throw 'valid nil))
                       ;; quote with content
-                      (forward-char)
-                      (skip-chars-forward "^\"" muse-colors-region-end)))
+                      (forward-char 1)
+                      (skip-chars-forward "^\"" muse-colors-region-end)
+                      (when (eq (char-after) ?\")
+                        (forward-char 1))))
                    ((eq (char-after) ?\])
-                    (forward-char)
+                    (forward-char 1)
                     (when (and (< (point) muse-colors-region-end)
                                (eq (char-after (point)) ?\]))
-                      (forward-char)
+                      (forward-char 1)
                       (throw 'valid t)))
-                   ((eq (point) muse-colors-region-end)
-                    (throw 'valid nil))
                    (t (throw 'valid nil)))))
          ;; found a valid directive
          (progn
