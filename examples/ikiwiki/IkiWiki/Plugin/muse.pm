@@ -17,7 +17,24 @@ use Encode;
 use File::Temp;
 
 sub import {
+    hook(type => "getsetup", id => "mdwn", call => \&getsetup);
     hook(type => "htmlize", id => "muse", call => \&htmlize);
+}
+
+sub getsetup () {
+    return (
+        plugin => {
+            safe => 1,
+            rebuild => 1,         # format plugin
+        },
+        muse_init => {
+            type => "string",
+            example => "~/ikiwiki/muse-init.el",
+            description => "the location of your Muse init file",
+            safe => 1,
+            rebuild => 1,
+        },
+    );
 }
 
 sub htmlize (@) {
