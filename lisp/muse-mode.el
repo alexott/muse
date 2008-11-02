@@ -307,10 +307,11 @@ ARG is passed to `fill-paragraph'."
 Otherwise return nil.
 
 This is used to keep links from being improperly colorized by flyspell."
-  (and (not (get-text-property (if (bobp) (point) (1- (point)))
-                               'muse-link))
-       (save-match-data
-         (null (muse-link-at-point)))))
+  (let ((pos (if (bobp) (point) (1- (point)))))
+    (and (not (get-text-property pos 'muse-no-flyspell))
+         (not (get-text-property pos 'muse-link))
+         (save-match-data
+           (null (muse-link-at-point))))))
 
 ;;;###autoload
 (defun muse-mode-choose-mode ()

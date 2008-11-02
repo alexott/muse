@@ -738,7 +738,7 @@ This is used to delay highlighting of <lisp> tags in #title until later.")
                           invisible nil intangible nil display nil
                           mouse-face nil keymap nil help-echo nil
                           muse-link nil muse-directive nil muse-comment nil
-                          muse-no-implicit-link nil))
+                          muse-no-implicit-link nil muse-no-flyspell nil))
       (set-buffer-modified-p modified-p))))
 
 (defun muse-colors-example-tag (beg end)

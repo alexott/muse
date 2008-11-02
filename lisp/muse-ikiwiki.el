@@ -142,17 +142,22 @@ file containing the content is FILE."
                       (throw 'valid t)))
                    (t (throw 'valid nil)))))
          ;; found a valid directive
-         (progn
-           (add-text-properties start (point)
+         (let ((end (point)))
+           ;; remove flyspell overlays
+           (when (fboundp 'flyspell-unhighlight-at)
+             (let ((cur start))
+               (while (> end cur)
+                 (flyspell-unhighlight-at cur)
+                 (setq cur (1+ cur)))))
+           (add-text-properties start end
                                 '(face muse-ikiwiki-directive
-                                  muse-directive t))
-           (when (save-excursion
-                   (let ((end (point)))
-                     (goto-char start)
-                     (skip-chars-forward "^\n" end)
-                     (and (eq (char-after) ?\n)
-                          (not (= (point) end)))))
-             (add-text-properties start (point)
+                                  muse-directive t muse-no-flyspell t))
+           (when (progn
+                   (goto-char start)
+                   (skip-chars-forward "^\n" end)
+                   (and (eq (char-after) ?\n)
+                        (not (= (point) end))))
+             (add-text-properties start end
                                   '(font-lock-multiline t)))))))))
 
 (defun muse-ikiwiki-insinuate-colors ()
