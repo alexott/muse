@@ -1,3 +1,19 @@
+2008-11-01  Michael Olson  <mwolson@gnu.org>
+
+	* examples/ikiwiki/IkiWiki/Plugin/muse.pm (import): Add hook for
+	getsetup.
+	(getsetup): New function that provides info about this plugin.
+
+	* lisp/muse-colors.el (muse-unhighlight-region): Reset
+	muse-no-flyspell property.
+
+	* lisp/muse-ikiwiki.el (muse-colors-ikiwiki-directive): Fix some
+	logic errors with quote detection.  Remove flyspell overlays and
+	set a property to inhibit them.
+
+	* lisp/muse-mode.el (muse-mode-flyspell-p): Don't highlight at
+	point if muse-no-flyspell property present.
+
 2008-10-30  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-ikiwiki.el (muse-ikiwiki-directive): New face for
