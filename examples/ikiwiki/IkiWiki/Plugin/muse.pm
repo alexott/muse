@@ -17,7 +17,7 @@ use Encode;
 use File::Temp;
 
 sub import {
-    hook(type => "getsetup", id => "mdwn", call => \&getsetup);
+    hook(type => "getsetup", id => "muse", call => \&getsetup);
     hook(type => "htmlize", id => "muse", call => \&htmlize);
 }
 
