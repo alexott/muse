@@ -217,7 +217,9 @@ found in `muse-docbook-encoding-map'."
       (goto-char (match-beginning 0))
       (when (save-excursion
               (save-match-data
-                (and (re-search-backward
+                (and (not (get-text-property (max (point-min) (1- (point)))
+                                             'muse-no-paragraph))
+                     (re-search-backward
                       "<\\(/?\\)\\(para\\|footnote\\|literallayout\\)[ >]"
                       nil t)
                      (cond ((string= (match-string 2) "literallayout")
@@ -241,6 +243,9 @@ found in `muse-docbook-encoding-map'."
      ((eobp)
       (unless (bolp)
         (insert "\n")))
+     ((get-text-property (point) 'muse-no-paragraph)
+      (forward-char 1)
+      nil)
      ((eq (char-after) ?\<)
       (when (looking-at (concat "<\\(emphasis\\|systemitem\\|inlinemediaobject"
                                 "\\|u?link\\|anchor\\|email\\)[ >]"))

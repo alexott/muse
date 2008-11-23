@@ -457,7 +457,9 @@ mode instead."
     (goto-char (match-beginning 0))
     (when (save-excursion
             (save-match-data
-              (and (re-search-backward "<\\(/?\\)p[ >]" nil t)
+              (and (not (get-text-property (max (point-min) (1- (point)))
+                                           'muse-no-paragraph))
+                   (re-search-backward "<\\(/?\\)p[ >]" nil t)
                    (not (string-equal (match-string 1) "/")))))
       (when (get-text-property (1- (point)) 'muse-end-list)
         (goto-char (previous-single-property-change (1- (point))
@@ -468,6 +470,9 @@ mode instead."
    ((eobp)
     (unless (bolp)
       (insert "\n")))
+   ((get-text-property (point) 'muse-no-paragraph)
+    (forward-char 1)
+    nil)
    ((eq (char-after) ?\<)
     (cond
      ((looking-at "<\\(em\\|strong\\|code\\|span\\)[ >]")
