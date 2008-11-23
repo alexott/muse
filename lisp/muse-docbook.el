@@ -232,8 +232,9 @@ found in `muse-docbook-encoding-map'."
                            ((string= (match-string 2) "footnote")
                             (string= (match-string 1) "/"))
                            (t nil)))))
-        (when (get-text-property (1- (point)) 'end-list)
-          (goto-char (previous-single-property-change (1- (point)) 'end-list)))
+        (when (get-text-property (1- (point)) 'muse-end-list)
+          (goto-char (previous-single-property-change (1- (point))
+                                                      'muse-end-list)))
         (muse-insert-markup "</para>"))
       (goto-char end))
     (cond

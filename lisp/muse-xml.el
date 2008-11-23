@@ -228,8 +228,9 @@ found in `muse-xml-encoding-map'."
             (save-match-data
               (and (re-search-backward "<\\(/?\\)p[ >]" nil t)
                    (not (string-equal (match-string 1) "/")))))
-      (when (get-text-property (1- (point)) 'end-list)
-        (goto-char (previous-single-property-change (1- (point)) 'end-list)))
+      (when (get-text-property (1- (point)) 'muse-end-list)
+        (goto-char (previous-single-property-change (1- (point))
+                                                    'muse-end-list)))
       (muse-insert-markup "</p>"))
     (goto-char end))
   (cond

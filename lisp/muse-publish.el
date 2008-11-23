@@ -1218,7 +1218,7 @@ The following contexts exist in Muse.
 (defun muse-insert-markup-end-list (&rest args)
   (let ((beg (point)))
     (apply 'insert args)
-    (add-text-properties beg (point) '(end-list t))
+    (add-text-properties beg (point) '(muse-end-list t))
     (muse-publish-mark-read-only beg (point))))
 
 (defun muse-publish-determine-dl-indent (continue indent-sym determine-sym)

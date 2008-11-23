@@ -771,12 +771,12 @@ the contents of `muse-list-item-regexp'."
 
 (defun muse-forward-paragraph (&optional pattern)
   "Move forward safely by one paragraph, or according to PATTERN."
-  (when (get-text-property (point) 'end-list)
-    (goto-char (next-single-property-change (point) 'end-list)))
+  (when (get-text-property (point) 'muse-end-list)
+    (goto-char (next-single-property-change (point) 'muse-end-list)))
   (setq pattern (if pattern
                     (concat "^\\(?:" pattern "\\|\n\\|\\'\\)")
                   "^\\s-*\\(\n\\|\\'\\)"))
-  (let ((next-list-end (or (next-single-property-change (point) 'end-list)
+  (let ((next-list-end (or (next-single-property-change (point) 'muse-end-list)
                            (point-max))))
     (forward-line 1)
     (if (re-search-forward pattern nil t)
@@ -823,7 +823,7 @@ provide a very liberal INDENT value, such as
     (while (progn
              (muse-forward-paragraph list-pattern)
              ;; make sure we don't go past boundary
-             (and (not (or (get-text-property (point) 'end-list)
+             (and (not (or (get-text-property (point) 'muse-end-list)
                            (>= (point) (point-max))))
                   ;; move past markup that is part of another construct
                   (or (and (match-beginning 1)
@@ -837,7 +837,7 @@ provide a very liberal INDENT value, such as
                       (and (not no-skip-nested)
                            (muse-forward-list-item-1 type empty-line
                                                      indented-line))))))
-    (cond ((or (get-text-property (point) 'end-list)
+    (cond ((or (get-text-property (point) 'muse-end-list)
                (>= (point) (point-max)))
            ;; at a list boundary, so stop
            nil)
