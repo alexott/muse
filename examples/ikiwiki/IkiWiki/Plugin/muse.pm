@@ -53,7 +53,8 @@ sub scan (@) {
     pos = undef;
     while ( m/ \G \# ([a-zA-Z-]+) \s+ (.+?) \n+ /sgx ) {
         my ($key, $val) = ($1, $2);
-        if ( $key =~ m/^(tags?|category)$/s && $cantag ) {
+        if ( $key =~ m/^(tags?|category)$/s ) {
+            next unless $cantag;
             $fun = sub {
                 IkiWiki::Plugin::tag::preprocess_tag(
                     (map { $_ => '' } (split /\s+/, $val)),
@@ -64,6 +65,7 @@ sub scan (@) {
             };
         }
         else {
+            next unless $canmeta;
             if ( $key eq 'date' ) {
                 # Support pyblosxom-style dates (YYYY-MM-DD(-hh-mm)?)
                 my $re = qr/ ^ ([0-9]{4}) - ([0-1][0-9]) - ([0-3][0-9])
