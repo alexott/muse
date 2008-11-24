@@ -54,7 +54,34 @@ This may be text or a filename."
   :type 'string
   :group 'muse-ikiwiki)
 
+(defcustom muse-ikiwiki-markup-regexps
+  `(;; Ikiwiki directives
+    (1350 ,(concat "\\(\\\\?\\)\\[\\[!""\\(?:-\\|\\w\\)+"
+                   "\\([" muse-regexp-blank "\n]+"
+                   "\\(?:\\(?:\\(?:-\\|\\w\\)+=\\)?"
+                   "\\(?:\"\"\".*?\"\"\"\\|\"[^\"]+\""
+                   "\\|[^]" muse-regexp-blank "\n]+\\)"
+                   "[" muse-regexp-blank "\n]*\\)*\\)?\\]\\]")
+          0 muse-ikiwiki-markup-directive))
+  "List of markup rules for publishing Ikiwiki markup on Muse pages.
+For more on the structure of this list, see `muse-publish-markup-regexps'."
+  :type '(repeat (choice
+                  (list :tag "Markup rule"
+                        integer
+                        (choice regexp symbol)
+                        integer
+                        (choice string function symbol))
+                  function))
+  :group 'muse-ikiwiki)
+
 ;;; Publishing
+
+(defun muse-ikiwiki-markup-directive ()
+  "Handle publishing of an Ikiwiki directive."
+  (unless (get-text-property (match-beginning 0) 'read-only)
+    (add-text-properties (match-beginning 0) (match-end 0)
+                         '(muse-no-paragraph t))
+    (muse-publish-mark-read-only (match-beginning 0) (match-end 0))))
 
 (defun muse-ikiwiki-publish-file (file name &optional style)
   "Publish a single file for Ikiwiki.
@@ -169,8 +196,9 @@ file containing the content is FILE."
 
 ;; Styles
 (muse-derive-style "ikiwiki" "xhtml"
-                   :header 'muse-ikiwiki-header
-                   :footer 'muse-ikiwiki-footer)
+                   :header  'muse-ikiwiki-header
+                   :footer  'muse-ikiwiki-footer
+                   :regexps 'muse-ikiwiki-markup-regexps)
 
 (provide 'muse-ikiwiki)
 

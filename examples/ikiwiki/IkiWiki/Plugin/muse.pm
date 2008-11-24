@@ -13,11 +13,14 @@ package IkiWiki::Plugin::muse;
 use warnings;
 use strict;
 use IkiWiki 2.00;
-use Encode;
-use File::Temp;
+use Date::Format qw();
+use Encode qw();
+use File::Temp qw();
 
 sub import {
     hook(type => "getsetup", id => "muse", call => \&getsetup);
+    hook(type => "scan", id => "muse", call => \&scan);
+    hook(type => "filter", id => "muse", call => \&filter);
     hook(type => "htmlize", id => "muse", call => \&htmlize);
 }
 
@@ -37,9 +40,72 @@ sub getsetup () {
     );
 }
 
-sub htmlize (@) {
+# Handle Muse directives
+sub scan (@) {
     my %params=@_;
-    my $content = encode_utf8($params{content});
+    return unless pagetype($pagesources{$params{page}}) eq 'muse';
+    my $canmeta = IkiWiki::Plugin::meta->can("preprocess");
+    my $cantag = IkiWiki::Plugin::tag->can("preprocess_tag");
+    return unless $canmeta || $cantag;
+    my $fun;
+
+    $_ = $params{content};
+    pos = undef;
+    while ( m/ \G \# ([a-zA-Z-]+) \s+ (.+?) \n+ /sgx ) {
+        my ($key, $val) = ($1, $2);
+        if ( $key =~ m/^(tags?|category)$/s && $cantag ) {
+            $fun = sub {
+                IkiWiki::Plugin::tag::preprocess_tag(
+                    (map { $_ => '' } (split /\s+/, $val)),
+                    page     => $params{page},
+                    destpage => $params{page},
+                    preview  => 1,
+                );
+            };
+        }
+        else {
+            if ( $key eq 'date' ) {
+                # Support pyblosxom-style dates (YYYY-MM-DD(-hh-mm)?)
+                my $re = qr/ ^ ([0-9]{4}) - ([0-1][0-9]) - ([0-3][0-9])
+                             (?: - ([0-2][0-9]) - ([0-5][0-9]) )? $ /sx;
+                if ( $val =~ m/$re/ ) {
+                    my @array = (0, $5 || 0, $4 || 0, $3, $2, $1 - 1900);
+                    $val = Date::Format::strftime("%a, %e %b %Y %T", @array);
+                }
+            }
+            $fun = sub {
+                IkiWiki::Plugin::meta::preprocess(
+                    $key, $val,
+                    page     => $params{page},
+                    destpage => $params{page},
+                    preview  => 1,
+                );
+            };
+        }
+        if ( $params{muse_filter} ) {
+            # Make "wantarray" work in the meta plugin
+            my $ret = $fun->();
+        }
+        else {
+            $fun->();
+        }
+    }
+}
+
+# Pass the content of the page to Muse for publishing
+sub filter (@) {
+    my %params=@_;
+    return $params{content}
+      unless pagetype($pagesources{$params{page}}) eq 'muse';
+
+    # Force detection of the Muse #date directive
+    scan(
+        content     => $params{content},
+        page        => $params{page},
+        muse_filter => 1,
+    );
+
+    my $content = Encode::encode_utf8($params{content});
     my $qname = $params{page};
     $qname =~ s/"/\\"/g;
 
@@ -64,7 +130,13 @@ sub htmlize (@) {
         unlink $filename;
         die $@;
     }
-    return decode_utf8($content);
+    return Encode::decode_utf8($content);
+}
+
+# Fake handler to make publishing work
+sub htmlize (@) {
+    my %params=@_;
+    return $params{content};
 }
 
 1
