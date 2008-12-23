@@ -498,7 +498,7 @@ they have.
 Muse Mode should automatically be activated when you visit a file with a
 ``.muse'' extension.  One such file is @file{QuickStart.muse}, which is
 available in the @file{examples} directory of the Muse distribution.
-You can tell that Muse Mose has been activated by checking for the text
+You can tell that Muse Mode has been activated by checking for the text
 ``Muse'' in your mode line.  If Muse Mode has not been activated, you
 may activate it by type @kbd{M-x muse-mode RET}.
 
