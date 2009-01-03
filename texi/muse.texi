@@ -2544,15 +2544,15 @@ be used as a source format for Ikiwiki pages with the plugin
 
 The @file{lisp/muse-ikiwiki.el} file provides publishing functions and
 styles for Ikiwiki.  The plugin for Ikiwiki to recognize Muse files is
-provided by the @file{examples/ikiwiki/muse} file.  Two sample init
-files are available in the @file{examples/ikiwiki} directory.  Configure
-your @file{ikiwiki.setup} file so that the @code{muse_init} variable
-has the location of your Muse init file.
+provided by the @file{contrib/ikiwiki/IkiWiki/Plugin/muse.pm} file.  Two
+sample init files are available in the @file{examples/ikiwiki}
+directory.  Configure your @file{ikiwiki.setup} file so that the
+@code{muse_init} variable has the location of your Muse init file.
 
-If you are using CGI, The directory @file{examples/ikiwiki/IkiWiki} must
+If you are using CGI, The directory @file{contrib/ikiwiki/IkiWiki} must
 be copied to the same directory as the CGI script that Ikiwiki
 generates.  When publishing your wiki, the @var{PERL5LIB} environment
-variable must contain the path to the @file{examples/ikiwiki/IkiWiki}
+variable must contain the path to the @file{contrib/ikiwiki/IkiWiki}
 directory.
 
 @subheading Styles provided
