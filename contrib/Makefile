@@ -16,6 +16,9 @@ contrib: $(ELC)
 $(PROJECT)-build.elc: ../scripts/$(PROJECT)-build.el
 	@echo $(PROJECT)-build.el is not byte-compiled
 
+htmlize-hack.elc: htmlize-hack.el
+	@echo htmlize-hack.el is not byte-compiled
+
 %.elc: %.el
 	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
 	    -f batch-byte-compile $<
