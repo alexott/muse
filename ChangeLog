@@ -1,3 +1,18 @@
+2009-01-03  Michael Olson  <mwolson@gnu.org>
+
+	* contrib/ikiwiki/Ikiwiki/Plugin/muse.pm: Move here from
+	examples/ikiwiki/IkiWiki/Plugin/muse.pm.
+
+	* contrib/Makefile (htmlize-hack.elc): Don't byte-compile
+	htmlize-hack.el, since it is only useful if htmlize.el is
+	installed.
+
+	* contrib/cgi.el: Add compatibility functions for calendar, so
+	that it works with both Emacs 21 and Emacs 23.  Thanks to Brent
+	Goodrick for the report.
+
+	* texi/muse.texi (Using Muse Mode): Fix typo.
+
 2008-11-23  Michael Olson  <mwolson@gnu.org>
 
 	* examples/ikiwiki/IkiWiki/Plugin/muse.pm: Loop in Muse closer to
