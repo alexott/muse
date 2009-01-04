@@ -12,10 +12,11 @@ package IkiWiki::Plugin::muse;
 
 use warnings;
 use strict;
-use IkiWiki 2.00;
-use Date::Format qw();
-use Encode qw();
-use File::Temp qw();
+use IkiWiki 3.00;
+
+use Date::Format ();
+use Encode ();
+use File::Temp ();
 
 sub import {
     hook(type => "getsetup", id => "muse", call => \&getsetup);
@@ -44,8 +45,8 @@ sub getsetup () {
 sub scan (@) {
     my %params=@_;
     return unless pagetype($pagesources{$params{page}}) eq 'muse';
-    my $canmeta = IkiWiki::Plugin::meta->can("preprocess");
-    my $cantag = IkiWiki::Plugin::tag->can("preprocess_tag");
+    my $canmeta = UNIVERSAL::can('IkiWiki::Plugin::meta', 'preprocess');
+    my $cantag = UNIVERSAL::can('IkiWiki::Plugin::tag', 'preprocess_tag');
     return unless $canmeta || $cantag;
     my $fun;
 
@@ -129,8 +130,9 @@ sub filter (@) {
         unlink $filename;
     };
     if ($@) {
+        my $ret = $@;
         unlink $filename;
-        die $@;
+        die $ret;
     }
     return Encode::decode_utf8($content);
 }
