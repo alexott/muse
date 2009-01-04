@@ -2,7 +2,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace rng = "http://relaxng.org/ns/structure/1.0"
 
 #   Emacs Muse RELAX NG Schema v. 1.2
-#   Copyright (C) 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
+#   Copyright (C) 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
 
 #   Author: Brad Collins (brad AT chenla DOT org)
 #   Maintainer: Michael Olson <mwolson@gnu.org>

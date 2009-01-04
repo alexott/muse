@@ -1,6 +1,7 @@
 ;;; muse-groff.el --- publish groff -mom -mwww files
 
-;; Copyright (C) 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009
+;;   Free Software Foundation, Inc.
 
 ;; Author: Andrew J. Korty (ajk AT iu DOT edu)
 ;; Date: Tue 5-Jul-2005

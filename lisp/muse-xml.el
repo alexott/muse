@@ -1,6 +1,7 @@
 ;;; muse-xml.el --- publish XML files
 
-;; Copyright (C) 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009
+;;   Free Software Foundation, Inc.
 
 ;; Author: Michael Olson <mwolson@gnu.org>
 ;; Date: Sat 23-Jul-2005
