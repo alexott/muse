@@ -31,6 +31,13 @@ sub getsetup () {
             safe => 1,
             rebuild => 1,         # format plugin
         },
+        muse_emacs => {
+            type => "string",
+            example => "/usr/bin/emacs",
+            description => "the location of Emacs",
+            safe => 1,
+            rebuild => 1,
+        },
         muse_init => {
             type => "string",
             example => "~/ikiwiki/muse-init.el",
@@ -95,6 +102,22 @@ sub scan (@) {
     }
 }
 
+# Determine the emacs binary to use
+sub locate_emacs {
+    my $err = sub {
+        die "Unable to find your emacs binary.\n",
+          "  Set muse_emacs config to the right value.\n";
+    };
+    if ( $config{muse_emacs} ) {
+        ( -x $config{muse_emacs} ) ? return $config{muse_emacs} : $err->();
+    }
+    else {
+        my $emacs = `which emacs`;
+        chomp $emacs;
+        ( $emacs ) ? return $emacs : $err->();
+    }
+}
+
 # Pass the content of the page to Muse for publishing
 sub filter (@) {
     my %params=@_;
@@ -118,13 +141,12 @@ sub filter (@) {
     my $qfile = $filename;
     $qfile =~ s/"/\\"/g;
     eval {
-        system qw( emacs -q --no-site-file -batch -l ),
-          $config{muse_init}, '--eval',
-            qq{(muse-ikiwiki-publish-file "$qfile" "$qname")};
+        system locate_emacs(),
+          qw( -q --no-site-file -batch -l ), $config{muse_init},
+          '--eval', qq{(muse-ikiwiki-publish-file "$qfile" "$qname")};
         {
             open my $ifh, '<', $filename;
-            local $/;
-            $content = <$ifh>;
+            local $/; $content = <$ifh>;
             close $ifh;
         }
         unlink $filename;
