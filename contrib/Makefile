@@ -7,7 +7,8 @@ DEFS = $(shell test -f ../Makefile.defs && echo ../Makefile.defs \
 include $(DEFS)
 
 EL  = $(wildcard *.el)
-ELC = $(patsubst %.el,%.elc,$(EL))
+EL_NOT_BYTE_COMPILED = htmlize-hack.el
+ELC = $(patsubst %.el,%.elc,$(filter-out $(EL_NOT_BYTE_COMPILED),$(EL)))
 
 all: contrib
 
@@ -15,9 +16,6 @@ contrib: $(ELC)
 
 $(PROJECT)-build.elc: ../scripts/$(PROJECT)-build.el
 	@echo $(PROJECT)-build.el is not byte-compiled
-
-htmlize-hack.elc: htmlize-hack.el
-	@echo htmlize-hack.el is not byte-compiled
 
 %.elc: %.el
 	@$(EMACS) -q $(SITEFLAG) -batch -l ../scripts/$(PROJECT)-build.el \
