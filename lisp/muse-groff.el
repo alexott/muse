@@ -155,9 +155,9 @@ For more on the structure of this list, see
     (end-example     . ".QUOTE OFF")
     (begin-quote     . ".BLOCKQUOTE")
     (end-quote       . ".BLOCKQUOTE OFF")
-    (begin-cite     . "")
-    (begin-cite-author . "")
-    (begin-cite-year . "")
+    (begin-cite     . "%2%")
+    (begin-cite-author . "%2%")
+    (begin-cite-year . "%2%")
     (end-cite        . "")
     (begin-uli       . ".list BULLET\n.SHIFT_LIST 2m\n.ITEM\n")
     (end-uli         . "\n.LIST OFF")
@@ -250,7 +250,7 @@ command characters."
 (muse-define-style "groff"
                    :suffix    'muse-groff-extension
                    :regexps   'muse-groff-markup-regexps
-;;;		   :functions 'muse-groff-markup-functions
+;;;                :functions 'muse-groff-markup-functions
                    :strings   'muse-groff-markup-strings
                    :tags      'muse-groff-markup-tags
                    :specials  'muse-groff-markup-specials

@@ -364,6 +364,10 @@ This is automatically generated when loading publishing styles.")
   "The style of the file that is currently being published.")
 (defvar muse-publishing-directives nil
   "An alist of publishing directives from the top of a file.")
+(defvar muse-publish-cite-list nil
+  "A list of citations used in current buffer")
+(defvar muse-publish-cite-counter 0
+  "A counter of citations used in current buffer")
 (defvar muse-publish-generate-contents nil
   "Non-nil if a table of contents should be generated.
 If non-nil, it is a cons cell specifying (MARKER . DEPTH), to
@@ -829,6 +833,8 @@ the file is published no matter what."
                              output-suffix)
                    output-path))
          (threshhold (nth 7 (file-attributes file))))
+    (setq muse-publish-cite-list nil)
+    (setq muse-publish-cite-counter 0)
     (if (not threshhold)
         (message "Please save %s before publishing" file)
       (when (or force (file-newer-than-file-p file target))
@@ -1853,15 +1859,19 @@ This is usually applied to explicit links."
 
 (defun muse-publish-cite-tag (beg end attrs)
   (let* ((type (muse-publish-get-and-delete-attr "type" attrs))
+         (bib-key (buffer-substring beg end))
          (citetag (cond ((string-equal type "author")
                          'begin-cite-author)
                         ((string-equal type "year")
                          'begin-cite-year)
                         (t
                          'begin-cite))))
+    (setq muse-publish-cite-list (cons bib-key muse-publish-cite-list))
+    (setq muse-publish-cite-counter (1+ muse-publish-cite-counter))
     (goto-char beg)
-    (insert (muse-markup-text citetag (muse-publishing-directive "bibsource")))
-    (goto-char end)
+    (delete-region beg end)
+    (insert (muse-markup-text citetag (muse-publishing-directive "bibsource")
+                              bib-key (number-to-string muse-publish-cite-counter)))
     (insert (muse-markup-text 'end-cite))
     (muse-publish-mark-read-only beg (point))))
 

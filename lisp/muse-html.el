@@ -50,6 +50,8 @@
 (require 'muse-regexps)
 (require 'muse-xml-common)
 
+(require 'bibtex)
+
 (defgroup muse-html nil
   "Options controlling the behavior of Muse HTML publishing."
   :group 'muse-publish)
@@ -284,10 +286,10 @@ For more on the structure of this list, see
     (end-underline   . "</u>")
     (begin-literal   . "<code>")
     (end-literal     . "</code>")
-    (begin-cite      . "<span class=\"citation\">")
-    (begin-cite-author . "<span class=\"citation-author\">")
-    (begin-cite-year . "<span class=\"citation-year\">")
-    (end-cite        . "</span>")
+    (begin-cite      . "<span class=\"citation\">[<a href=\"#bib-%2%\">%3%")
+    (begin-cite-author . "<span class=\"citation-author\">[<a href=\"#bib-%2%\">%3%")
+    (begin-cite-year . "<span class=\"citation-year\">[<a href=\"#bib-%2%\">%3%")
+    (end-cite        . "</a>]</span>")
     (begin-emph      . "<em>")
     (end-emph        . "</em>")
     (begin-more-emph . "<strong>")
@@ -704,13 +706,93 @@ This tag requires htmlize 1.34 or later in order to work."
          (concat muse-html-meta-content-type "; charset="
                  (muse-html-encoding)))))
 
+(defun muse-parse-bibtex-file ()
+  (let* ((bib (make-hash-table :test 'equal)))
+    (goto-char (point-min))
+    (while (search-forward "@" nil t)
+      (backward-char)
+      (let* ((bp (bibtex-parse-entry))
+             (key (assoc "=key=" bp)))
+        ;; (message "%s" bp)
+        (when (and bp key)
+          ;; (message "record '%s'" (cdr key))
+          (puthash (cdr key) bp bib)
+          )
+      ))
+    bib))
+
+;; TODO: add stripping of ~, and other LaTeX Characters
+(defun muse-html-get-bib-data (bn bdata)
+  "Get data for given field, stripping unnecessary formatting"
+  (let ((b (assoc bn bdata)))
+    (when b
+      (let* ((bc (cdr b))
+             (fc (substring bc 0 1)))
+        (if (or (string= fc "\"") (string= fc "{"))
+            (substring bc 1 (- (length bc ) 1))
+            bc)))))
+
+(defun muse-html-generate-bib-entry (entry bib)
+  "Create HTML text for given bibtex entry"
+  (let ((bdata (gethash entry bib nil)))
+    (when bdata
+      (let ((author (muse-html-get-bib-data "author" bdata))
+            (title (muse-html-get-bib-data "title" bdata))
+            (year (muse-html-get-bib-data "year" bdata))
+            (publisher (muse-html-get-bib-data "publisher" bdata))
+            )
+        (concat (format "<a name=\"bib-%s\"></a>" entry)
+                (if author (concat author ". ") "")
+                (or title "")
+                (if publisher
+                    (concat ". " publisher (if year (concat ", " year) ""))
+                  (if year (concat ", " year) "")
+                )))
+      )))
+
+(defun muse-html-insert-bibliography ()
+  "Inserts bibliography after text of article"
+  (let ((bib-file (concat (muse-publishing-directive "bibsource") ".bib")))
+    (when (file-exists-p bib-file)
+      (save-excursion
+        (let* ((c-buf (current-buffer))
+               (b-buf (find-file-noselect bib-file))
+               (bib nil)
+              )
+          (switch-to-buffer b-buf)
+          (setq bib (muse-parse-bibtex-file))
+          (switch-to-buffer c-buf)
+
+          ;; insert content into buffer
+          (muse-insert-markup (concat "<a name=\"bibliography\"></a>\n"
+                                      (cdr (assoc 'section muse-html-markup-strings))
+                                      "Bibliography"
+                                      (cdr (assoc 'section-end muse-html-markup-strings))
+                                      "\n"))
+          (muse-insert-markup (cdr (assoc 'begin-oli muse-html-markup-strings)))
+          (dolist (x muse-publish-cite-list)
+            (let ((btext (muse-html-generate-bib-entry x bib)))
+              (when btext
+                  (muse-insert-markup (concat (cdr (assoc 'begin-oli-item muse-html-markup-strings))
+                                              btext
+                                              (cdr (assoc 'end-oli-item muse-html-markup-strings))
+                                              "\n")))))
+          (muse-insert-markup (cdr (assoc 'end-oli muse-html-markup-strings)))
+          )))))
+
 (defun muse-html-munge-buffer ()
+;; generate bibliography
+  (when muse-publish-cite-list
+    ;; (message "biblist isn't empty! '%s'" muse-publish-cite-list)
+    (muse-html-insert-bibliography))
+;; generate content
   (if muse-publish-generate-contents
       (progn
         (goto-char (car muse-publish-generate-contents))
         (muse-html-insert-contents (cdr muse-publish-generate-contents))
         (setq muse-publish-generate-contents nil))
-    (muse-html-denote-headings)))
+    (muse-html-denote-headings))
+  )
 
 (defun muse-html-finalize-buffer ()
   (when (and (boundp 'buffer-file-coding-system)
