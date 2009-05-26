@@ -736,14 +736,18 @@ This tag requires htmlize 1.34 or later in order to work."
   "Create HTML text for given bibtex entry"
   (let ((bdata (gethash entry bib nil)))
     (when bdata
-      (let ((author (muse-html-get-bib-data "author" bdata))
+      (let ((author (or (muse-html-get-bib-data "author" bdata)
+                        (muse-html-get-bib-data "ALTauthor" bdata)))
             (title (muse-html-get-bib-data "title" bdata))
             (year (muse-html-get-bib-data "year" bdata))
             (publisher (muse-html-get-bib-data "publisher" bdata))
+            (url (muse-html-get-bib-data "url" bdata))
             )
         (concat (format "<a name=\"bib-%s\"></a>" entry)
                 (if author (concat author ". ") "")
+                (if url (concat "<a href=\"" url "\">") "")
                 (or title "")
+                (if url "</a>" "")
                 (if publisher
                     (concat ". " publisher (if year (concat ", " year) ""))
                   (if year (concat ", " year) "")
@@ -770,7 +774,7 @@ This tag requires htmlize 1.34 or later in order to work."
                                       (cdr (assoc 'section-end muse-html-markup-strings))
                                       "\n"))
           (muse-insert-markup (cdr (assoc 'begin-oli muse-html-markup-strings)))
-          (dolist (x muse-publish-cite-list)
+          (dolist (x (reverse muse-publish-cite-list))
             (let ((btext (muse-html-generate-bib-entry x bib)))
               (when btext
                   (muse-insert-markup (concat (cdr (assoc 'begin-oli-item muse-html-markup-strings))
