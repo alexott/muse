@@ -773,15 +773,12 @@ This tag requires htmlize 1.34 or later in order to work."
                                       "Bibliography"
                                       (cdr (assoc 'section-end muse-html-markup-strings))
                                       "\n"))
-          (muse-insert-markup (cdr (assoc 'begin-oli muse-html-markup-strings)))
           (dolist (x (reverse muse-publish-cite-list))
-            (let ((btext (muse-html-generate-bib-entry x bib)))
+            (let ((btext (muse-html-generate-bib-entry (car x) bib)))
               (when btext
-                  (muse-insert-markup (concat (cdr (assoc 'begin-oli-item muse-html-markup-strings))
+                  (muse-insert-markup (concat (format "<p>%s. " (cdr x))
                                               btext
-                                              (cdr (assoc 'end-oli-item muse-html-markup-strings))
-                                              "\n")))))
-          (muse-insert-markup (cdr (assoc 'end-oli muse-html-markup-strings)))
+                                              "</p>\n")))))
           )))))
 
 (defun muse-html-munge-buffer ()
