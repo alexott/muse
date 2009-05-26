@@ -245,7 +245,7 @@ For more on the structure of this list, see
 \\end{figure}")
     (image-link      . "%% %s
 \\museincludegraphics{%s.%s}|endgroup")
-    (anchor-ref      . "\\ref{%s}")
+    (anchor-ref      . "%2%~(\\ref{%1%})")
     (url             . "\\url{%s}")
     (url-and-desc    . "\\href{%s}{%s}\\footnote{%1%}")
     (link            . "\\href{%s}{%s}\\footnote{%1%}")
