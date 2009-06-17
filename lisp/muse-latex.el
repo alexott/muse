@@ -76,7 +76,8 @@ This should be a format string."
   :type 'string
   :group 'muse-latex)
 
-(defcustom muse-latex-pdf-cruft '(".aux" ".toc" ".out" ".log")
+(defcustom muse-latex-pdf-cruft
+  '(".aux" ".log" ".nav" ".out" ".snm" ".toc" ".vrb")
   "Extensions of files to remove after generating PDF output successfully."
   :type 'string
   :group 'muse-latex)
