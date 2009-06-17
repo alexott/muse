@@ -1,3 +1,8 @@
+2009-06-17  Michael Olson  <Michael.Olson@ticketmaster.com>
+
+	* lisp/muse-latex.el (muse-latex-pdf-cruft): Remove additional
+	cruft files from beamer.
+
 2009-01-03  Michael Olson  <mwolson@gnu.org>
 
 	* contrib/ikiwiki/Ikiwiki/Plugin/muse.pm: Move here from
