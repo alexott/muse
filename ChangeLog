@@ -1,4 +1,10 @@
-2009-06-17  Michael Olson  <Michael.Olson@ticketmaster.com>
+2009-06-18  Michael Olson  <mwolson@gnu.org>
+
+	* lisp/muse-latex.el (muse-latex-slides-header)
+	(muse-latex-lecture-notes-header): Handle images.  Generate title
+	page correctly.  Generate table of contents page if requested.
+
+2009-06-17  Michael Olson  <mwolson@gnu.org>
 
 	* lisp/muse-latex.el (muse-latex-pdf-cruft): Remove additional
 	cruft files from beamer.
