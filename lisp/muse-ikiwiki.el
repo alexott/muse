@@ -83,37 +83,50 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
                          '(muse-no-paragraph t))
     (muse-publish-mark-read-only (match-beginning 0) (match-end 0))))
 
+(defun muse-ikiwiki-publish-buffer (name title &optional style)
+  "Publish a buffer for Ikiwki.
+The name of the corresponding file is NAME.
+The name of the style is given by STYLE.  It defaults to \"ikiwiki\"."
+  (unless style (setq style "ikiwiki"))
+  (unless title (setq title (muse-page-name name)))
+  (let ((muse-batch-publishing-p t)
+        (muse-publishing-current-file name)
+        (muse-publishing-current-output-path file)
+        (muse-publishing-current-style style)
+        (font-lock-verbose nil)
+        (vc-handled-backends nil)) ; don't activate VC when publishing files
+    (run-hooks 'muse-before-publish-hook)
+    (let ((muse-inhibit-before-publish-hook t))
+      (muse-publish-markup-buffer title style))))
+
 (defun muse-ikiwiki-publish-file (file name &optional style)
   "Publish a single file for Ikiwiki.
-The name of the style is given by STYLE.  It defaults to \"ikiwiki\".
 The name of the real file is NAME, and the name of the temporary
-file containing the content is FILE."
+file containing the content is FILE.
+The name of the style is given by STYLE.  It defaults to \"ikiwiki\"."
   (if (not (stringp file))
       (message "Error: No file given to publish")
     (unless style
       (setq style "ikiwiki"))
-    (let ((muse-batch-publishing-p t)
-          (title (muse-page-name name))
-          (output-path file)
+    (let ((output-path file)
           (target file)
-          (muse-publishing-current-file file)
-          (muse-publishing-current-output-path file)
-          (font-lock-verbose nil)
+          (vc-handled-backends nil) ; don't activate VC when publishing files
+          auto-mode-alist
           muse-current-output-style)
-      ;; don't activate VC when publishing files
-      (setq vc-handled-backends nil)
-      (setq muse-current-output-style (list :base style :path file))
       (setq auto-mode-alist
             (delete (cons (concat "\\." muse-file-extension "\\'")
                           'muse-mode-choose-mode)
                     auto-mode-alist))
+      (setq muse-current-output-style (list :base style :path file))
       (muse-with-temp-buffer
         (muse-insert-file-contents file)
-        (run-hooks 'muse-before-publish-hook)
-        (let ((muse-inhibit-before-publish-hook t))
-          (muse-publish-markup-buffer title style))
+        (muse-ikiwiki-publish-buffer name nil nil style)
         (when (muse-write-file output-path t)
           (muse-style-run-hooks :final style file output-path target))))))
+
+(defun muse-ikiwiki-start-server (port)
+  "Start Muse IPC server, initializing with the client on PORT."
+  (muse-ipc-start "foo" #'muse-ikiwiki-publish-buffer port))
 
 ;;; Colors
 
