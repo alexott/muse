@@ -76,7 +76,8 @@ This should be a format string."
   :type 'string
   :group 'muse-latex)
 
-(defcustom muse-latex-pdf-cruft '(".aux" ".toc" ".out" ".log")
+(defcustom muse-latex-pdf-cruft
+  '(".aux" ".log" ".nav" ".out" ".snm" ".toc" ".vrb")
   "Extensions of files to remove after generating PDF output successfully."
   :type 'string
   :group 'muse-latex)
@@ -164,17 +165,25 @@ filename."
 \\usepackage[T1]{fontenc}
 \\usepackage{hyperref}
 
-\\begin{document}
+\\def\\museincludegraphics{%
+  \\begingroup
+  \\catcode`\\|=0
+  \\catcode`\\\\=12
+  \\catcode`\\#=12
+  \\includegraphics[width=0.50\\textwidth]
+}
 
 \\title{<lisp>(muse-publish-escape-specials-in-string
   (muse-publishing-directive \"title\") 'document)</lisp>}
 \\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
 \\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
 
-\\maketitle
+\\begin{document}
+
+\\frame{\\titlepage}
 
 <lisp>(and muse-publish-generate-contents
-           \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
+           \"\\\\frame{\\\\tableofcontents}\")</lisp>\n\n"
   "Header for publishing of slides using LaTeX.
 This may be text or a filename.
 
@@ -191,18 +200,27 @@ You must have the Beamer extension for LaTeX installed for this to work."
 \\usepackage[utf8x]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{hyperref}
+\\usepackage[pdftex]{graphicx}
 
-\\begin{document}
+\\def\\museincludegraphics{%
+  \\begingroup
+  \\catcode`\\|=0
+  \\catcode`\\\\=12
+  \\catcode`\\#=12
+  \\includegraphics[width=0.50\\textwidth]
+}
 
 \\title{<lisp>(muse-publish-escape-specials-in-string
   (muse-publishing-directive \"title\") 'document)</lisp>}
 \\author{<lisp>(muse-publishing-directive \"author\")</lisp>}
 \\date{<lisp>(muse-publishing-directive \"date\")</lisp>}
 
-\\maketitle
+\\begin{document}
+
+\\frame{\\titlepage}
 
 <lisp>(and muse-publish-generate-contents
-           \"\\\\tableofcontents\n\\\\newpage\")</lisp>\n\n"
+           \"\\\\frame{\\\\tableofcontents}\")</lisp>\n\n"
   "Header for publishing of lecture notes using LaTeX.
 This may be text or a filename.
 

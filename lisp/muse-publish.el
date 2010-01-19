@@ -799,9 +799,7 @@ The result is placed in a new buffer that includes TITLE in its name."
   (when (interactive-p)
     (unless title (setq title (read-string "Title: ")))
     (unless style (setq style (muse-publish-get-style))))
-  (let ((muse-publishing-current-style style)
-        (muse-publishing-p t)
-        (text (buffer-substring beg end))
+  (let ((text (buffer-substring beg end))
         (buf (generate-new-buffer (concat "*Muse: " title "*"))))
     (with-current-buffer buf
       (insert text)

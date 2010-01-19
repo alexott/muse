@@ -328,7 +328,7 @@ before the error is signaled."
   (let ((format-alist nil)
         (after-insert-file-functions nil)
         (inhibit-file-name-handlers
-         (append '(jka-compr-handler image-file-handler)
+         (append '(jka-compr-handler image-file-handler epa-file-handler)
                  inhibit-file-name-handlers))
         (inhibit-file-name-operation 'insert-file-contents))
     (insert-file-contents filename visit)))
