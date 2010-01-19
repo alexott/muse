@@ -721,16 +721,37 @@ This tag requires htmlize 1.34 or later in order to work."
       ))
     bib))
 
-;; TODO: add stripping of ~, and other LaTeX Characters
+(setq muse-bibtex-replacements
+      '(
+        ("{" . "")
+        ("}" . "")
+        ("\\\\#" . "#")
+        ("\\\\&" . "&")
+        ("\"" . "")
+        ("~" . " ")
+        (" and " . ", ")
+        ("\\'e" . "é")
+        ;; ("" . "")
+        ;; ("" . "")
+        ;; ("" . "")
+        ))
+
+(defun muse-bibtex-replace-text (str from to)
+  (let ((tstr str))
+    (while (string-match from tstr)
+      (setq tstr (replace-match to t t tstr)))
+    tstr))
+
+(defun muse-bibtex-normalize-string (str)
+  (let ((tstr str))
+    (dolist (elt muse-bibtex-replacements tstr)
+      (setq tstr (muse-bibtex-replace-text tstr (car elt) (cdr elt))))))
+
 (defun muse-html-get-bib-data (bn bdata)
   "Get data for given field, stripping unnecessary formatting"
   (let ((b (assoc bn bdata)))
     (when b
-      (let* ((bc (cdr b))
-             (fc (substring bc 0 1)))
-        (if (or (string= fc "\"") (string= fc "{"))
-            (substring bc 1 (- (length bc ) 1))
-            bc)))))
+      (muse-bibtex-normalize-string (cdr b)))))
 
 (defun muse-html-generate-bib-entry (entry bib)
   "Create HTML text for given bibtex entry"
