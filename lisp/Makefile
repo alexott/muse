@@ -63,11 +63,13 @@ muse-html.elc: muse-publish.elc muse-regexps.elc muse-xml-common.elc
 
 muse-http.elc: muse-html.elc muse-project.elc
 
-muse-ikiwiki.elc: muse-html.elc muse-publish.elc muse.elc
+muse-ikiwiki.elc: muse-html.elc muse-ipc.elc muse-publish.elc muse.elc
 
 muse-import-docbook.elc: muse-import-xml.elc
 
 muse-import-latex.elc: muse-regexps.elc muse.elc
+
+muse-ipc.elc: muse-publish.elc muse.elc
 
 muse-journal.elc: muse-book.elc muse-html.elc muse-latex.elc
 muse-journal.elc: muse-publish.elc
