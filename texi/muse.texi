@@ -12,7 +12,7 @@
 @syncodeindex fn cp
 
 @copying
-This manual is for Emacs Muse version 3.12.
+This manual is for Emacs Muse version 3.20.
 
 Copyright @copyright{} 2004, 2005, 2006, 2007,
 2008, 2009, 2010  Free Software Foundation, Inc.
@@ -2538,8 +2538,10 @@ This will be used if no special characters are found.
 @comment  node-name,  next,  previous,  up
 @section Integrating with ikiwiki
 
+Note: Support for Ikiwiki is not yet complete.  Use at your own risk.
+
 Ikiwiki is a wiki compiler (@url{http://ikiwiki.info/}).  Emacs Muse can
-be used as a source format for Ikiwiki pages with the plugin
+(not yet) be used as a source format for Ikiwiki pages with the plugin
 @file{IkiWiki::Plugin::muse}.
 
 The @file{lisp/muse-ikiwiki.el} file provides publishing functions and
