@@ -1,6 +1,6 @@
 ;;; muse-ikiwiki.el --- integrate with Ikiwiki
 
-;; Copyright (C) 2008, 2009  Free Software Foundation, Inc.
+;; Copyright (C) 2008, 2009, 2010  Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
@@ -33,6 +33,7 @@
 
 (require 'muse)
 (require 'muse-html)
+(require 'muse-ipc)
 (require 'muse-publish)
 
 (eval-when-compile
@@ -91,7 +92,7 @@ The name of the style is given by STYLE.  It defaults to \"ikiwiki\"."
   (unless title (setq title (muse-page-name name)))
   (let ((muse-batch-publishing-p t)
         (muse-publishing-current-file name)
-        (muse-publishing-current-output-path file)
+        (muse-publishing-current-output-path name)
         (muse-publishing-current-style style)
         (font-lock-verbose nil)
         (vc-handled-backends nil)) ; don't activate VC when publishing files
@@ -120,7 +121,7 @@ The name of the style is given by STYLE.  It defaults to \"ikiwiki\"."
       (setq muse-current-output-style (list :base style :path file))
       (muse-with-temp-buffer
         (muse-insert-file-contents file)
-        (muse-ikiwiki-publish-buffer name nil nil style)
+        (muse-ikiwiki-publish-buffer name nil style)
         (when (muse-write-file output-path t)
           (muse-style-run-hooks :final style file output-path target))))))
 

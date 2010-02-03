@@ -1,6 +1,6 @@
 ;;; muse-context.el --- publish entries in ConTeXt or PDF format
 
-;; Copyright (C) 2007, 2008, 2009  Free Software Foundation, Inc.
+;; Copyright (C) 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 
 ;; Author: Jean Magnan de Bornier (jean@bornier.net)
 ;; Created: 16-Apr-2007

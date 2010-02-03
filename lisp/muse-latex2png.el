@@ -1,6 +1,6 @@
 ;; muse-latex2png.el --- generate PNG images from inline LaTeX code
 
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Michael Olson <mwolson@gnu.org>

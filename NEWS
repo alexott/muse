@@ -1,5 +1,59 @@
 Emacs Muse NEWS --- History of user-visible changes    -*- outline -*-
 
+* Changes in Muse 3.20
+
+** Fix bug with duplicates in completing-read of wiki page names.
+
+** Mark some tags as dangerous for text by untrusted contributors.
+
+** Implement <div> tag.
+
+** When viewing a page, publish it first.
+
+** Include non-working alpha of Ikiwiki publishing.
+
+** Make it easier to browse published PDF files.
+
+** Fix bug with C-c C-v on a file not part of any project.
+
+** Add workaround for Emacs 23 and htmlize issue.
+
+** muse-latex2png: Fix handling of filenames with spaces in them.
+
+** muse-colors: Separate highlighting rules according to major mode.
+
+** muse-latex: Make lecture notes and slides work with images,
+title page, and table of contents.
+
+** Publishing
+
+*** Fix end-of-line conversion bug when using Windows.
+
+*** Fix bug where dates in journal entries could be published incorrectly.
+
+*** Preserve the value of muse-current-project.
+
+*** Conditionally interpret local variables.
+
+*** Values set by file-local variables trump project variables.
+
+*** muse-latex: Fix publishing of tags inside of <slide> tags.
+
+*** Render <example> correctly in slides.
+
+*** Fix bug in publishing of table.el style tables.
+
+*** Fix bug where the first paragraph would not be published properly
+if it started with a link.
+
+** Build system
+
+*** Makefile.defs.default (INFODIR): Place files in .../share/info.
+
+** Manual
+
+*** Miscellaneous updates.
+
 * Changes in Muse 3.12
 
 ** New interactive function `muse-update-values': Call this after

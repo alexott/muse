@@ -36,7 +36,7 @@ install_info = install-info --info-dir=$(INFODIR) $(1) || :
 
 # Useful only for the maintainer
 PROJECT     = muse
-VERSION     = 3.12
+VERSION     = 3.20
 MANUAL      = muse
 
 # Location of Emacs Lisp Package Archive entries
