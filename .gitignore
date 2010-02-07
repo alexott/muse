@@ -10,3 +10,15 @@
 /lisp/muse-autoloads.el
 /texi/muse.info
 /texi/muse.html
+/texi/gendocs.sh
+/texi/gendocs_template
+/texi/muse.aux
+/texi/muse.cp
+/texi/muse.cps
+/texi/muse.fn
+/texi/muse.ky
+/texi/muse.log
+/texi/muse.pg
+/texi/muse.toc
+/texi/muse.tp
+/texi/muse.vr
