@@ -360,6 +360,10 @@ the line if point is on a blank line."
                (call-interactively cmd))
       (message "Not inserting anything"))))
 
+(defun muse-get-new-line-character ()
+  "Returns newline character that is needed, dependent on mode"
+  (if longlines-mode hard-newline "\n"))
+
 ;;;###autoload
 (defun muse-insert-list-item ()
   "Insert a list item at the current point, taking into account
@@ -391,7 +395,7 @@ your current list type and indentation level."
                            (number-to-string itemno)
                            nil nil newitem))))))
     ;; insert the new item
-    (insert (concat "\n" newitem))))
+    (insert (concat (muse-get-new-line-character) newitem))))
 
 (defun muse-alter-list-item-indentation (operation)
   "Alter the indentation of the current list item.
@@ -902,7 +906,8 @@ function, you might want to set this manually.")
     ;; Insert the tag, closing if necessary
     (when tag (insert (concat "<" tag options ">")))
     (when (nth 1 tag-entry)
-      (insert (concat "\n\n</" tag ">\n"))
+      (insert (concat (muse-get-new-line-character) (muse-get-new-line-character)
+		      "</" tag ">" (muse-get-new-line-character)))
       (forward-line -2))))
 
 ;;; Muse list edit minor mode
