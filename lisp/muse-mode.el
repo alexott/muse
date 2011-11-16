@@ -563,19 +563,27 @@ Do not rename the page originally referred to."
          t t))
     (error "There is no valid link at point")))
 
+(defcustom muse-add-extension-p t
+  "If nil, open file link as-is
+If non-nil, append muse-file-extension to file name if it has none."
+  :type 'boolean
+  :group 'muse)
+
 (defun muse-get-link-filename (link)
   "Generates correct file name for given link, when source file doesn't belong to any
 project. Creates directory if link contains directory part, and it doesn't exists"
-  (let ((directory (file-name-directory link))
-	(filename (file-name-nondirectory link)))
-    (when (and (not (file-name-extension filename))
-	       muse-file-extension
-	       (not (string= muse-file-extension ""))
-	       (not (file-exists-p link)))
-      (setq filename (concat filename "." muse-file-extension)))
-    (when (and directory (not (file-exists-p directory)))
-      (make-directory directory t))    
-    (expand-file-name filename directory)))
+  (if muse-add-extension-p
+      (let ((directory (file-name-directory link))
+	    (filename (file-name-nondirectory link)))
+	(when (and (not (file-name-extension filename))
+		   muse-file-extension
+		   (not (string= muse-file-extension ""))
+		   (not (file-exists-p link)))
+	  (setq filename (concat filename "." muse-file-extension)))
+	(when (and directory (not (file-exists-p directory)))
+	  (make-directory directory t))    
+	(expand-file-name filename directory))
+    link))
 
 (defun muse-visit-link-default (link &optional other-window)
   "Visit the URL or link named by LINK.
