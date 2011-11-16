@@ -563,6 +563,20 @@ Do not rename the page originally referred to."
          t t))
     (error "There is no valid link at point")))
 
+(defun muse-get-link-filename (link)
+  "Generates correct file name for given link, when source file doesn't belong to any
+project. Creates directory if link contains directory part, and it doesn't exists"
+  (let ((directory (file-name-directory link))
+	(filename (file-name-nondirectory link)))
+    (when (and (not (file-name-extension filename))
+	       muse-file-extension
+	       (not (string= muse-file-extension ""))
+	       (not (file-exists-p link)))
+      (setq filename (concat filename "." muse-file-extension)))
+    (when (and directory (not (file-exists-p directory)))
+      (make-directory directory t))    
+    (expand-file-name filename directory)))
+
 (defun muse-visit-link-default (link &optional other-window)
   "Visit the URL or link named by LINK.
 If ANCHOR is specified, search for it after opening LINK.
@@ -595,8 +609,8 @@ in `muse-project-alist'."
                                         (and other-window
                                              'find-file-other-window))
               (if other-window
-                  (find-file-other-window link)
-                (find-file link))))))
+                  (find-file-other-window (muse-get-link-filename link))
+                (find-file (muse-get-link-filename link)))))))
       (when anchor
         (let ((pos (point))
               (regexp (concat "^\\W*" (regexp-quote anchor) "\\b"))
