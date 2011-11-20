@@ -38,6 +38,7 @@
 ;;; Code
 
 (require 'muse-publish)
+(require 'muse-latex2mathjax)
 
 (defgroup muse-latex2png nil
   "Publishing LaTeX formulas as PNG files."
@@ -252,7 +253,7 @@ centered in the published output, among other things."
     (muse-insert-markup tag-end)
     (if (muse-publish-latex-tag-as-is)
         (muse-publish-mark-read-only beg (point))
-      (muse-latex2png-region beg (point) attrs)))))
+      (muse-latex2png-region beg (point) attrs))))
 
 (put 'muse-publish-math-tag 'muse-dangerous-tag t)
 

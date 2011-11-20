@@ -39,6 +39,7 @@
 ;;; Code
 
 (require 'muse-publish)
+(require 'muse-html)
 
 (defgroup muse-latex2mathjax nil
   "Publishing LaTeX formulas as MathJaX."
@@ -94,7 +95,7 @@ all options after the default are ignored."
 (defcustom muse-mathjax-html-header
   (muse-replace-regexp-in-string
    "<head>"
-   (concat "<head>\n<script src=\"<lisp>muse-mathjax-src-url</lisp>\" type=\"text/javascript\">")
+   (concat "<head>\n<script src=\"<lisp>muse-mathjax-src-url</lisp>\" type=\"text/javascript\"></script>\n")
    muse-html-header)
   "Header for HTML files generated with the mathjax-html style."
   :type 'string
