@@ -3,10 +3,8 @@
 ;; Copyright (C) 2011
 ;;   Free Software Foundation, Inc.
 
-;; Author: Leo Butler <mwolson@gnu.org>
+;; Author: Leo Butler <nb0yjxtr+github@sdf.org>
 ;; Created: 19-Nov-2011
-
-;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
 
 ;; Emacs Muse is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
@@ -107,7 +105,7 @@ itself."
   :type 'string
   :group 'muse-mathjax-html)
 
-(defcustom muse-mathjax-html-header
+(defvar muse-mathjax-html-header
   (muse-replace-regexp-in-string
    "<head>"
    (concat "<head>\n"
@@ -120,9 +118,7 @@ itself."
    muse-html-header)
   "Header for HTML files generated with the mathjax-html
 style. See `muse-mathjax-configuration' and
-`muse-mathjax-src-url'."
-  :type 'string
-  :group 'muse-mathjax-html)
+`muse-mathjax-src-url'.")
 
 
 (defun muse-publish-latex-delimiters (centered begin)
@@ -145,8 +141,10 @@ delimiter to insert."
 	    (setq delimiter-alist	(cdr delimiter-alist))))
     (or delim (cdr (assoc nil delimiter-alist)))))
   
-(defvar muse-publish-latex-tag-as-is '("latex" "context" "mathjax-html")
-  "Styles which should publish La/TeX source as is.")
+(defcustom muse-publish-latex-tag-as-is '("latex" "context" "mathjax-html")
+  "Styles which should publish La/TeX source as is."
+  :type 'string
+  :group 'muse-mathjax-html)
 
 (defun muse-publish-latex-tag-as-is ()
   "Query the variable `muse-publish-latex-tag-as-is' if STYLE should
