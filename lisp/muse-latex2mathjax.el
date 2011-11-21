@@ -109,12 +109,12 @@ itself."
   (muse-replace-regexp-in-string
    "<head>"
    (concat "<head>\n"
+	   "<script src=\"<lisp>muse-mathjax-src-url</lisp>\" type=\"text/javascript\"></script>\n"
 	   "<script type=\"text/x-mathjax-config\">
              MathJax.Hub.Config({
 	     <lisp>muse-mathjax-configuration</lisp>
              });
-            </script>
-	    <script src=\"<lisp>muse-mathjax-src-url</lisp>\" type=\"text/javascript\"></script>\n")
+            </script>")
    muse-html-header)
   "Header for HTML files generated with the mathjax-html
 style. See `muse-mathjax-configuration' and
