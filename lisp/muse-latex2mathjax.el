@@ -49,7 +49,7 @@
   "Support for publishing LaTeX formulas as MathJaX."
   :group 'muse-publish)
 
-(defcustom muse-publish-latex2mathjax-centered-begin-delimiters
+(defcustom muse-latex2mathjax-centered-begin-delimiters
   '(("context"	. "\\startformula ")
     (nil	. "\\["))
   "An assoc list of the opening delimiters for centered math mode. The
@@ -58,7 +58,7 @@ all options after the default are ignored."
   :group 'muse-latex2mathjax
   :type '(alist :key-type sexp :value-type string))
 
-(defcustom muse-publish-latex2mathjax-centered-end-delimiters
+(defcustom muse-latex2mathjax-centered-end-delimiters
   '(("context"	. "\\endformula ")
     (nil	. "\\]"))
   "An assoc list of the opening delimiters for centered math mode. The
@@ -67,7 +67,7 @@ all options after the default are ignored."
   :group 'muse-latex2mathjax
   :type '(alist :key-type sexp :value-type string))
 
-(defcustom muse-publish-latex2mathjax-inline-begin-delimiters
+(defcustom muse-latex2mathjax-inline-begin-delimiters
   '(("mathjax-html"	. " \\( ")
     (nil		. "$"))
   "An assoc list of the opening delimiters for inline math mode. The
@@ -76,7 +76,7 @@ all options after the default are ignored."
   :group 'muse-latex2mathjax
   :type '(alist :key-type sexp :value-type string))
 
-(defcustom muse-publish-latex2mathjax-inline-end-delimiters
+(defcustom muse-latex2mathjax-inline-end-delimiters
   '(("mathjax-html"	. " \\) ")
     (nil		. "$"))
   "An assoc list of the opening delimiters for inline math mode. The
@@ -92,29 +92,52 @@ all options after the default are ignored."
   :type 'string
   :group 'muse-mathjax-html)
 
+(defcustom muse-mathjax-configuration
+  "
+  tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']],
+            displayMath: [['$$','$$'], ['\\\\[','\\\\]']]}
+  "
+  "Configuration of the MathJaX processer. See
+http://www.mathjax.org/docs/1.1/options/tex2jax.html#configure-tex2jax
+for information.
+
+This configuration information is inserted into the <head>
+section of the HTML page before the link to the MathJaX page
+itself."
+  :type 'string
+  :group 'muse-mathjax-html)
+
 (defcustom muse-mathjax-html-header
   (muse-replace-regexp-in-string
    "<head>"
-   (concat "<head>\n<script src=\"<lisp>muse-mathjax-src-url</lisp>\" type=\"text/javascript\"></script>\n")
+   (concat "<head>\n"
+	   "<script type=\"text/x-mathjax-config\">
+             MathJax.Hub.Config({
+	     <lisp>muse-mathjax-configuration</lisp>
+             });
+            </script>
+	    <script src=\"<lisp>muse-mathjax-src-url</lisp>\" type=\"text/javascript\"></script>\n")
    muse-html-header)
-  "Header for HTML files generated with the mathjax-html style."
+  "Header for HTML files generated with the mathjax-html
+style. See `muse-mathjax-configuration' and
+`muse-mathjax-src-url'."
   :type 'string
   :group 'muse-mathjax-html)
 
 
 (defun muse-publish-latex-delimiters (centered begin)
   "Queries the variables
-`muse-publish-latex2mathjax-inline-begin-delimiters',
-`muse-publish-latex2mathjax-inline-end-delimiters',
-`muse-publish-latex2mathjax-centered-begin-delimiters' and
-`muse-publish-latex2mathjax-centered-end-delimiters' for the correct
+`muse-latex2mathjax-inline-begin-delimiters',
+`muse-latex2mathjax-inline-end-delimiters',
+`muse-latex2mathjax-centered-begin-delimiters' and
+`muse-latex2mathjax-centered-end-delimiters' for the correct
 delimiter to insert."
   (let* ((delimiter-alist (cond (centered
-				 (if begin muse-publish-latex2mathjax-centered-begin-delimiters
-				   muse-publish-latex2mathjax-centered-end-delimiters))
+				 (if begin muse-latex2mathjax-centered-begin-delimiters
+				   muse-latex2mathjax-centered-end-delimiters))
 				(t
-				 (if begin muse-publish-latex2mathjax-inline-begin-delimiters
-				   muse-publish-latex2mathjax-inline-end-delimiters))))
+				 (if begin muse-latex2mathjax-inline-begin-delimiters
+				   muse-latex2mathjax-inline-end-delimiters))))
 	 delim style)
     (while (and
 	    (setq style			(caar delimiter-alist))
