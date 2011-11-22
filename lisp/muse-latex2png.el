@@ -38,7 +38,7 @@
 ;;; Code
 
 (require 'muse-publish)
-(require 'muse-latex2mathjax)
+(require 'muse-latex)
 
 (defgroup muse-latex2png nil
   "Publishing LaTeX formulas as PNG files."
