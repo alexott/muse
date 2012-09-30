@@ -1,0 +1,466 @@
+#author John Wiegley
+#title The Emacs Muse
+
+Emacs Muse は Emacs のための文書編集・出版環境です．
+Emacs Muse を利用すれば，文書を執筆したりいろいろなフォーマットで出版したりといったことが簡単にできます．
+
+Muse は大きく分けて2つの部分から成り立っています：文書を作成したり
+Muse プロジェクト内で編集の行き来をするための拡張テキストモードと，
+様々なフォーマットでの出力を生成するための公開スタイルのセットです．
+
+<contents>
+
+* この文書について
+
+この文書では Muse をすぐに使うためのマークアップや機能の例を紹介します．
+
+この文書がどういうふうに出力されるか知りたいときは =make examples=
+と入力してください．そうすれば，Info 形式と HTML 形式，PDF
+形式（処理に必要なフォントとともに LaTeX がインストールされているならば）での出力が得られます．
+
+* まずはじめに
+
+Muse を使うためには， =.emacs= ファイル内で =load-path= という変数に
+Muse 関連のファイルがあるディレクトリを追加します．
+そして文書作成モードをロードし，利用したい出力スタイルを追加します．
+以下に例を示します：
+
+<example>
+(add-to-list 'load-path "<path to Muse>")
+
+(require 'muse-mode)     ; load authoring mode
+
+(require 'muse-html)     ; load publishing styles I use
+(require 'muse-latex)
+(require 'muse-texinfo)
+(require 'muse-docbook)
+</example>
+
+ロードが完了すれば =M-x muse-publish-this-file= というコマンドで文書を出力（出版）できるようになります．
+=M-x muse-mode= と入力してそのバッファを =muse-mode= にすれば，このコマンドは
+=C-c C-t= に割り当てられています．
+
+* Muse プロジェクトの作成
+
+あるディレクトリに存在するすべてのファイルに対して，自動的に特定のスタイルで出力して欲しいと思うことがしばしばあります．
+そういう目的のために，Muse では「プロジェクト」を作成することができます．
+以下に例を示します．
+これは =.emacs= ファイルに記述すべき内容です．
+
+<example>
+(require 'muse-project)
+
+(setq muse-project-alist
+      '(("website"                      ; my various writings
+         ("~/Pages" :default "index")
+         (:base "html" :path "~/public_html")
+         (:base "pdf" :path "~/public_html/pdf"))))
+</example>
+
+この例では「website」という名前のプロジェクトが定義され，このプロジェクトに属するファイルは =~/Pages= というディレクトリにあるとされています．
+そしてそのプロジェクトのデフォルトページは =index= になっています．
+このプロジェクトが出力されると，HTML 形式のファイルが =~/public_html=
+ディレクトリに出力され，PDF 形式のファイルが =~/public_html/pdf=
+ディレクトリに出力されます．
+どのプロジェクトのページでも， =[[pagename]]= と書けば他のページへのリンクを作ることができます．
+
+* マークアップの規則
+
+Muse 文書の中では，出力をどのようにフォーマットするかを決めるための特別なマークアップ規則が利用されます．
+例えば段落全体が字下げされていれば，Muse ではそれは引用であると解釈されます．
+
+マークアップ規則はそれほど多くはありません．
+また文書のフォーマットではなく文書の執筆自体に専念できるよう，それらの規則は努めて簡単なものにしています．
+
+** 段落
+
+Muse で段落を分けるときは間に空行を入れます．
+
+例えばこの節の文章は次のように入力されています．
+
+<example>
+Muse で段落を分けるときは間に空行を入れます．
+
+例えばこの節の文章は次のように入力されています．
+</example>
+
+** センタリングと引用
+
+6個以上の空白文字（タブまたは空白）で始まっている行はセンタリングされます．
+
+                           センタリングされていますね
+
+  しかし6個未満の空白文字で始まる行は，それが引用であることを示します．
+
+** 見出し
+
+見出しは印刷されると章や節の題名になります -- これは出力スタイルによりますが．
+見出しを書くには新しい段落を1個から3個までのアスタリスクで始め，その次に空白とタイトルを記述します．
+そして次の段落にその節の本文を入力するというわけです．
+
+<example>
+* いちばん大きな見出し
+
+** 2番目のレベル
+
+*** 3番目のレベル
+</example>
+
+** 水平線
+
+4個以上のダッシュは水平線を意味します．
+その前後に空白を入れるのを忘れないでください．
+さもなければそれは前後の段落の一部だと見做されてしまいます．
+
+----
+
+上記のセパレータは次のように入力されました：
+
+<example>
+----
+</example>
+
+** 文字の強調
+
+文字を強調したいときは，その文字を特別な文字で挟みます：
+
+<example>
+*強調*
+**もっと強調**
+***もっともっと強調***
+_アンダーライン_
+=入力したまま等幅文字で=
+</example>
+
+これら一連の文字は次のように出力されます：
+
+<verse>
+*強調*
+**もっと強調**
+***もっともっと強調***
+_アンダーライン_
+=入力したまま等幅文字で=
+</verse>
+
+** 脚注
+
+脚注は，かぎ括弧で挟まれた数値 <verbatim>[1]</verbatim> で簡単に表現できます．[1]
+脚注の本文はファイルの末尾に記述します．
+脚注を記述するには =footnote-mode= を利用するととても便利です．
+
+<example>
+ 脚注：
+ [1]  脚注は，本文中に書かれたのと同じ数値をかぎ括弧で囲んで
+      行頭に書くことで定義できます．footnote-mode を利用して
+      C-c ! というコマンドを使えばとても簡単に脚注を入力する
+      ことができます．入力していた元の位置に戻るには C-x C-x
+      を使います．
+</example>
+
+** 詩
+
+詩では空白文字の数や位置も表現の一部です．
+しかしそれなら等幅文字にするだけというわけにはいきません．
+これはメールの引用文のようなマークアップを利用すれば解決します：
+
+<example>
+> A line of Emacs verse;
+>   forgive its being so terse.
+</example>
+
+これは次のように出力されます：
+
+> A line of Emacs verse;
+>   forgive its being so terse.
+
+これとは別に =<literal><verse></literal>= というタグを利用することもできます：
+
+<example>
+<verse>
+A line of Emacs verse;
+  forgive its being so terse.
+</verse>
+</example>
+
+** 記述したまま出力する段落
+
+例を示すには =<literal><example></literal>= タグを利用します．
+このタグ内では空白の数や位置がそのまま出力されますし，文字は等幅文字で出力され，出力スタイルによって特別な意味があるような文字はエスケープされます．
+
+もうひとつ =<literal><literal></literal>= というタグもあります．
+このタグで囲まれた部分は完全にそのままの形で出力されます．
+例えば直に手で書いた HTML のブロックを HTML 形式の出力の中に入れたいときに便利でしょう．
+
+** リスト
+
+リストは特別な文字で行を始めることで表現できます．
+箇条書きや番号付き箇条書きの先頭は必ず空白でなければなりません．
+これはそのような文字で始まる文章と区別するためです．
+
+Muse でサポートされているリストは以下の通りです：
+
+<example>
+  - 箇条書きその1
+  - 箇条書きその2
+
+  1. 番号付き箇条書きその1
+  2. 番号付き箇条書きその2
+
+項目1 :: 定義その1
+
+項目2 :: 定義その2
+</example>
+
+これらはそれぞれ次のように出力されます．
+箇条書き：
+
+  - 箇条書きその1
+  - 箇条書きその2
+
+番号付き箇条書き：
+
+  1. 番号付き箇条書きその1
+  2. 番号付き箇条書きその2
+
+定義リスト：
+
+項目1 ::
+  これは定義その1です．
+  しかし2行目もありました；
+  いやいや3行目も作りましょう．
+
+項目2 ::
+  これは定義その2です．
+
+** 表
+
+とても簡単な構造の表だけがサポートされています．
+文法は次の通りです：
+
+<example>
+  2本線で  || 見出し行を分割します
+
+  1本線は   | 本体の行を分割します
+  ここはもう1行の | 本体部分です
+
+  3本線は ||| フッタを分割します
+</example>
+
+これは次のように出力されます：
+
+2本線で  || 見出し行を分割します
+
+1本線は   | 本体の行を分割します
+ここはもう1行の | 本体部分です
+
+3本線は ||| フッタを分割します
+
+<comment>
+2本線で  || 見出し行を分割します
+
+1本線は   | 本体の行を分割します
+ここはもう1行の | 本体部分です
+
+3本線は ||| フッタを分割します
+</comment>
+
+** アンカーとリンク
+
+#example 行の先頭を「#anchor」（ここで「anchor」は空白を含まないどんな名前でもよい）で始めれば，その場所にアンカーを定義したことになります．
+その場所は「page#anchor」という名前で参照できるようになります．
+
+[[#example][ここ]] をクリックすると上の段落に戻ります．
+
+** URL とメールアドレス
+
+URL やメールアドレスはハイパーリンクとして出力されます（出力スタイルがそれを許していれば）．
+例：最新の Muse のソース一式は http://download.gna.org/muse-el
+からダウンロードできます．
+メールは mwolson@gnu.org へ送ってください．
+
+** 画像
+
+URL に画像ファイル形式の拡張子があった場合，可能ならばその画像が文中に表示されます．
+画像を文中に表示するのではなく画像へのリンクを作るには，リンクの直前に「URL:」という文字列を付けます．
+
+これが文中に画像を表示する例です:
+
+<example>
+[[muse-made-with.png]] Emacs Muse にて作成。
+</example>
+
+これは次のように出力されます:
+
+[[muse-made-with.png]] Emacs Muse にて作成。
+
+これが説明付き画像の例です:
+
+<example>
+[[emacs-muse.png][Emacs Muse, the publishing choice of (a subset of) Great Thinkers]]
+</example>
+
+これは次のように出力されます:
+
+[[emacs-muse.png][偉大な考える人（の一部）のための文書出版ツール Emacs Muse]]
+
+次の例はリンクのみが出力されます．
+
+<example>
+The Muse logo: [[URL:http://mwolson.org/static/logos/emacs-muse.png]].
+</example>
+
+The Muse logo: [[URL:http://mwolson.org/static/logos/emacs-muse.png]].
+
+** リンク
+
+ここでリンクとは Muse プロジェクト内の別のページへのリンクか一般の URL です．
+リンクの説明があれば，そのリンクを直接出力せずに説明の方を出力します（出力スタイルがサポートしていれば）．
+書式は次の通りです：
+
+<example>
+[[リンク][説明]]
+[[説明なしのリンク]]
+</example>
+
+つまり，この文書:
+
+<example>
+Muse は [[http://download.gna.org/muse-el/][ここ]] か
+[[http://download.gna.org/muse-el/]] からダウンロードできます．
+</example>
+
+は次のように出力されます:
+
+Muse は [[http://download.gna.org/muse-el/][ここ]] か
+[[http://download.gna.org/muse-el/]] からダウンロードできます．
+
+** ソースコード
+
+htmlize.el バージョン 1.34 以降をインストールしてあれば， =<literal><src></literal>= タグを使うことで
+Emacs のどのメジャーモードのソースコードでも色付きの HTML として出力することができます．
+HTML を出力しない場合は，そのタグで囲まれた文書は =<literal><example></literal>= 要素のように扱われます．
+
+これが C ソースコードの例です．Muse は =<literal>lang</literal>= 要素に ="-mode"= を追加したものから，コードの色付けにどのメジャーモードを使うかを決めています．
+
+<example>
+<src lang="c">
+#include <stdlib.h>
+
+char *unused;
+
+int main (int argc, char *argv[])
+{
+    puts("Hello, world!\n");
+}
+</src>
+</example>
+
+これが色付きの出力です．カスタマイズしたフェイスを使っている場合には，これとは違って見えるかもしれません．
+また，コンソール上の Emacs から出力しているのか，X 上の Emacs から出力しているのかによっても見た目が変わります -- （X 上の Emacs では） C ファイルを開いているときの見た目のままの出力となります．
+
+<src lang="c">
+#include <stdlib.h>
+
+char *unused;
+
+int main (int argc, char *argv[])
+{
+    puts("Hello, world!\n");
+}
+</src>
+
+** lisp, Perl, Ruby, Python, Shell の埋め込み
+
+=<literal><lisp></literal>= タグを使えば様々な種類のマークアップを実現できます．
+このタグは出力スタイルのヘッダやフッタの中で利用できる唯一の Muse のタグです．
+=<literal><lisp></literal>= タグを使うことでどんな出力も思いのままになります．
+また =<literal><lisp></literal>= タグが文書の本文中に書かれていた場合は，その出力がマークアップされます．
+
+<example>
+<lisp>(concat "This form gets " "inserted")</lisp>
+</example>
+
+この例は次のように出力されます：<lisp>(concat "This form gets " "inserted")</lisp>
+
+="example"=, ="src"= または ="verse"= をタグの =markup= 属性として指定することで，
+=<literal><example></literal>=, =<literal><src></literal>=, =<literal><verse></literal>= で囲まれてるかのように出力することができます．
+
+以下の例は:
+
+<example>
+<lisp markup="example">
+(concat "Insert" " me")
+</lisp>
+</example>
+
+このように出力されます:
+
+<lisp markup="example">
+(concat "Insert" " me")
+</lisp>
+
+この =markup= 属性は =<literal><perl></literal>=, =<literal><ruby></literal>=,
+=<literal><python></literal>=, =<literal><command></literal>= タグに渡すこともできます．
+これらのタグはそれぞれ文字列を Perl, Ruby, Python, Shell のコードとして解釈を行います．
+
+* 出力スタイル
+
+Muse 最大の特長のひとつは，シンプルな構造の文書ひとつから様々な種類のスタイルで出力することができるということです．
+また，新しい出力スタイルを作成することや既存のスタイルを利用して新しいスタイルを定義することも Muse なら簡単にできます．
+
+** 既存のスタイルを利用する
+
+既存のものを利用して新しいスタイルを作成するには =muse-derive-style= を使います：
+
+<example>
+(muse-derive-style DERIVED-NAME BASE-NAME STYLE-PARAMETERS)
+</example>
+
+DERIVED-NAME はこれから定義する新しいスタイルの名前（「my-html」のような）です．
+BASE-NAME には例えば「html」のような既存の出力スタイルの名前を記述します
+-- もし =muse-html= がロードされているならば，ですが．
+STYLE-PARAMETERS は，それが元になるスタイルで定義されていたパラメータを上書きするという点を除けば，スタイルを新しく作成するときに使うものと同じです．
+
+たいていの場合，プロジェクトの独自ヘッダ，フッタ，スタイルシートを設定するのに役立ちます．
+これが1つの例です．
+
+<example>
+(setq my-different-style-sheet
+      (concat "<link rel=\"stylesheet\" type=\"text/css\""
+              " charset=\"utf-8\" media=\"all\""
+              " href=\"/different.css\" />"))
+
+(muse-derive-style "my-xhtml" "xhtml"
+                   :header "~/.emacs.d/muse/different-header.html"
+                   :footer "~/.emacs.d/muse/different-footer.html"
+                   :style-sheet my-different-style-sheet)
+</example>
+
+多くのパラメータは部分的な上書きをサポートしています．
+例えば =:functions= パラメータでは，マークアップのための関数が新しいスタイル内に見付からなかった場合，元となったスタイルの関数群の中から探します．
+
+パラメータで指定された関数が nil でない値を返した場合，それ以上処理は行われません．
+nil を返した場合は，元となったスタイルの他の関数が呼ばれます．
+
+** 新しいスタイルを作成する
+
+新しいスタイルを作成するには， =muse-define-style= を使います:
+
+<example>
+(muse-define-style NAME STYLE-PARAMETERS)
+</example>
+
+新しいスタイルを作りたい場合は，他のスタイルのソースコードを調べ，何をする必要があるかを把握のが最良の方法です．
+それぞれの出力形式は元となったスタイルを全て含む，独自のファイルを持ちます．
+例えば =latex=, =latex-slides=, =pdf= スタイルは全て =muse-latex.el= に含まれています．
+
+Free Software Foundation の copyright paper に署名する意思があるなら（我々はその手続きを手伝いますし），Muse の著作者はあなたの成果物を将来の Muse のバージョンに取り込むことに興味を持つでしょう．
+
+* ライセンス
+
+この QuickStart 文書は Free Software Foundation が発行する GNU General Public License，バージョン 3 もしくは（あなたが選択する）それ以降のバージョン，の元に再頒布もしくは修正される可能性があります。
+
+脚注：
+[1]  これは脚注です．
+
+[2]  どこからも参照されていない別の脚注です．
