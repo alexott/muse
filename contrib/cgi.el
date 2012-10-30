@@ -1,13 +1,13 @@
-;;; cgi.el -- using Emacs for CGI scripting
-;;;
-;;; Author: Eric Marsden  <emarsden@laas.fr>
-;;;         Michael Olson <mwolson@gnu.org> (slight modifications)
-;;; Keywords: CGI web scripting slow
-;;; Version: 0.3
-;;; Time-stamp: <2001-08-24 emarsden>
-;;; Copyright: (C) 2000  Eric Marsden
-;;; Parts copyright (C) 2006 Free Software Foundation, Inc.
-;;
+;;; cgi.el -- Using Emacs for CGI scripting
+
+;; Copyright (C) 2000, 2006, 2012 Free Software Foundation, Inc.
+
+;; Author: Eric Marsden  <emarsden@laas.fr>
+;;         Michael Olson <mwolson@gnu.org> (slight modifications)
+;; Keywords: CGI web scripting slow
+;; Version: 0.3
+;; Time-stamp: <2001-08-24 emarsden>
+
 ;;     This program is free software; you can redistribute it and/or
 ;;     modify it under the terms of the GNU General Public License as
 ;;     published by the Free Software Foundation; either version 3 of
@@ -22,10 +22,9 @@
 ;;     License along with this program; if not, write to the Free
 ;;     Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ;;     MA 02111-1307, USA.
-;;
-;;
+
 ;;; Commentary:
-;;
+
 ;; People who like this sort of thing will find this the sort of
 ;; thing they like.                           -- Abraham Lincoln
 ;;
@@ -55,7 +54,7 @@
 ;; mechanism and run them straight from the cgi-bin directory.
 ;;
 ;; Efficiency would be improved by having Emacs bind to the http
-;; service port and spawn a thread per connection. Extending Emacs to
+;; service port and spawn a thread per connection.  Extending Emacs to
 ;; support server sockets and multithreading is left as an exercise
 ;; for the reader.
 ;;
@@ -215,5 +214,4 @@
    (princ "\r\n</pre></body></html>\r\n")))
 
 (provide 'cgi)
-
-;; cgi.el ends here
+;;; cgi.el ends here
