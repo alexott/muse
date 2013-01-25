@@ -3,7 +3,7 @@
 ;; Copyright (C) 2011
 ;;   Free Software Foundation, Inc.
 
-;; Author: Leo Butler <nb0yjxtr+github@sdf.lonestar.org>
+;; Author: Leo Butler <leo.butler@member.fsf.org>
 ;; Created: 19-Nov-2011
 
 ;; Emacs Muse is free software; you can redistribute it and/or modify
@@ -29,8 +29,6 @@
 ;;;
 ;;; This code provides the conversion of Muse tags <latex> and <math>
 ;;; for use with MathJaX.
-
-;;; To do
 
 ;;; To do
 
