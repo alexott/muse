@@ -67,7 +67,7 @@
 @setfilename <lisp>(concat (muse-page-name) \".info\")</lisp>
 @settitle <lisp>(muse-publishing-directive \"title\")</lisp>
 
-@documentencoding iso-8859-1
+@documentencoding ISO-8859-1
 
 @iftex
 @finalout
