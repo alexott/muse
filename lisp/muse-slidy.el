@@ -1,11 +1,12 @@
-;;; muse-html-slidy.el
+;; muse-slidy.el
 
-;; Copyright (C) 2010 Fabio Arcinegas
+;; Copyright (C) 2010 Fabio Arcinegas A.
 
 ;; Author: Fabio Arciniegas (fab DOT arciniegas AT gmail DOT com)
-;; Keywords: declarative graphics
+;; Keywords: muse, slidy, presentations, emacs powerpoint alternative, slide maker
+;;
 ;; Version 1.0 August 07, 2010 (21:48:34) 
-;; Muse 2.0 September 16, 2013 (15:26:59) 
+;; Version 2.0 September 16, 2013 (15:26:59) 
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
@@ -28,220 +29,293 @@
 ;; This is an extension to emacs muse allowing for the creation of self-contained
 ;; xhtml presentations.
 ;;
-;; Essentially, the goal is to convert emacs muse files (plain text with simple 
-;; wiki-like mark up) into platform-independent self-contained HTML
+;; Convert emacs muse files (plain text with simple 
+;; wiki-like mark up) into platform-independent self-contained 
 ;; presentations that do not require M$ powerpoint
 ;;
+;; All sections and subsections of the muse file (headers level 1 and
+;; 2) are converted to individual slides.
 
+;; todo: different treatment for level 1 and 2
 
 ;;; Usage
-;; (require 'muse-html-slidy)
-
-;;; Commentary: Code works mainly by embedded lisp calls inside the
-;;; footer and headers.
-;;;
-;;;             There are essentially two stages: in the first, a list
-;;;             of entity references is created in a temp file using
-;;;             (create-entity-files). At the end of the publishing
-;;;             process, using the footer callback, a replacement of
-;;;             all entity definitions with the base64 content of the
-;;;             files they refer to is made.
-;;; 
-;;;             The references to each entity are replaced using plain
-;;;             &ref; style markup. This is accomplished by replacing
-;;;             the string REPLACE_WITH_SEQUENTIAL_ENTITY which is left by the
-;;;             muse handling of img tag
+;;
+;; (require 'muse-slidy)
+;;
+;; ;; open any muse file 
+;; ;; M-x muse-publish-this-file slidy
+;; ;; The result is a self-containted presentation, use M-x
+;; ;; customize-group html-slidy to configure look and feel  
  
 
-;;; Contributors:
+;;; Configuration options
+;;; 
+;;; Base configurations are grouped in predefined themes. You can
+;;; override specific values using the customization variables below.
+;;;
+;;;
+;;; (defun current-date-string ()
+;;;  "Returns current date as a string."
+;;;  (format-time-string "%B %d, %Y" (current-time)))
 
-;;; Code:
+(defcustom muse-slidy-theme "blue"
+  "Base theme to use when publishing muse slidy presentations.
 
-(require 'muse-publish)
-(require 'muse-regexps)
-(require 'muse-xml-common)
-(require 'muse-html)
-
-(defgroup muse-html-slidy nil
-  "Options controlling the behavior of Muse HTML Slidy (presentations) publishing.
-See `muse-html-slidy' for more information."
-  :group 'muse-publish)
-
-;; TODO: stop needing ending trail
-(defcustom muse-html-slidy-style-dir "/Users/fabio/ss/tools/muse/html-slidy-support/"
-  "Directory with the slidy source code and stylesheet. Note ending trail"
-  :type 'string
-  :group 'muse-html-slidy)
-
-(setq muse-html-slidy-replace-entities-in-file nil) 
-
-(defcustom muse-html-slidy-embed-with-shell t
-  "Use shell command to post-process the file and embed the graphics.
-
-Make nil to use a pure emacs implementation of base64 embedding.\nUsing the shell is recommended because emacs can reach max buffer insert limits with large image files resulting in errors."
-  :type '(choice (const :tag "Embed graphics using a shell invocation" t)
-                 (const :tag "Embed graphics using emacs only" 'nil))
-  :group 'muse-html-slidy)
-
-
-(defcustom muse-html-slidy-slidy-src "slidy.js"
-  "Slidy javascript source. This code is embedded at the top of the output file"
-  :type 'string 
-  :group 'muse-html-slidy)
-
-(defcustom muse-html-slidy-slidy-css "slidy.css"
-  "Slidy source. This code is embedded at the top of the output file"
-  :type 'string 
-  :group 'muse-html-slidy)
-
-(defun current-date-string ()
-  "Returns current date as a string."
-  (format-time-string "%B %d, %Y" (current-time)))
-
-(defun create-tmp-entities-file ()
- (muse-html-slidy-embed-all-images)
-)
-
-(defun muse-html-slidy-embed-all-images ()
-  (setq embedded-image-count 0)
-  (setq tmp (make-temp-file "entities-")) 
-  (with-temp-buffer
-    (null (insert-file-contents-literally muse-publishing-current-file))
-
-;; TODO: improve list of file exts
-    (while (re-search-forward "\\\[\\{2\\}\\(\[^]:\]+\\)\\.\\(png\\|jpg\\|gif\\|ps\\)\\\]" nil t)
-      (progn 
-	(setq filename (concat (match-string 1) "." (match-string 2)))
-	(when (file-writable-p tmp) 
-	  (append-to-file (format "<!ENTITY IMAGE_%d @%s@>\n" 
-				  (setq embedded-image-count (+ embedded-image-count 1))
-				  (file-truename filename)
-				  ) nil tmp))
-      )
-    )
-  )
-;; perl -pi -M"MIME::Base64" -e "local $/=undef;" -e "s/ENTITY IMAGE_(.*) \"(.*)\"/open TMP, $2;\"ENTITY IMAGE_$1 '\".encode_base64(<TMP>).\"'\"/ge" entities-1.test
-;; TODO: NO BAK FILE
-  tmp
-)
-
-;; TODO: make sure all extensions for appropriate files are considered
-;; TODO: make right mime type
-;; TODO: see if gzip is possible for embedded references
-;; TODO: consider auto-resize
-
-
-(defun replace-all-entity-references ()
-  (setq embedded-image-count 0)
-  (setq muse-html-slidy-replace-entities-in-file output-path)
-  (setq muse-buffer-point (point))
-  (goto-char 0)
-  (while (re-search-forward "REPLACE_WITH_SEQUENTIAL_ENTITY" nil t)
-    (replace-match (format "&IMAGE_%d;" (setq embedded-image-count (+ embedded-image-count 1))))
-    )
-  (setq tmp "")
+Caution: when you set a new theme, specific customization are
+  preserved until set to nil. Set individual overrides to nil or use M-x
+  muse-slidy-reset-look-and-feel to reset all customizations to nil." 
+  :type '(choice (const :tag "Black on white classic clean look" "white")
+		 (const :tag "W3C Slidy standard blue look" "blue")
+		 (const :tag "Gray on white space look" "black"))
+  :group 'muse-slidy
   )
 
-;; TODO: allow for comments on entities
-(defcustom muse-html-slidy-markup-strings
+
+
+
+;;; Muse integration
+;;; 
+;;; Base configurations are grouped in predefined themes. You can
+;;; override specific values using the customization variables below.
+;;;
+;;;
+;;; (defun current-date-string ()
+;;;  "Returns current date as a string."
+;;;  (format-time-string "%B %d, %Y" (current-time)))
+
+(defcustom muse-slidy-markup-strings
   '(
-    (section . "</div><div class=\"slide\"><h1>")
-    (section-end . "</h1><img src=\"data:img/jpeg;base64,&IMAGE_HEAD;\" width=\"100%%\" alt=\"head\" style=\"position: absolute; top: 0px; left:0px; z-index:-1\"/><img src=\"data:img/jpeg;base64,&IMAGE_FOOT;\" width=\"100%%\" alt=\"foot\" style=\"position: absolute; bottom: 0px; right:0px; z-index:-1\"/>")
-;    (image-with-desc . "<img src=\"data:img/jpg;base64,&%2%\">")
-    (image-with-desc . "<img class=\"illustration\" src=\"data:img/jpg;base64,REPLACE_WITH_SEQUENTIAL_ENTITY\"/>")
-    (image . "<img class=\"illustration\" src=\"data:img/jpg;base64,REPLACE_WITH_SEQUENTIAL_ENTITY\"/>")
+    (section . "</div>\n<div class=\"slide\"><h1>")
+    (section-end . "</h1>")
+    (image . "<img class=\"illustration\" src=\"data:img/jpg\;base64,\&IMAGE_%s.%s\"/>\n")
+    (image-with-desc . "<img class=\"illustration\" src=\"data\:img/jpg;base64,\&IMAGE_\"/>\n")
     (subsection . "</div><div class=\"slide\"><h1>")
     (subsection-end . "</h1>"))
     "Strings used for marking up text as HTML Slidy."
   :type '(alist :key-type symbol :value-type string)
   :group 'muse-html)
 
-;;<!ENTITY FIRST_IMAGE \"<lisp>(null (base64-encode-region (point) (+ (point) (car (cdr (insert-file-contents-literally (concat muse-html-slidy-style-dir \"first.jpg\"))))) 1))</lisp>\">
+(defcustom muse-slidy-footer "
+<lisp>(muse-slidy-reference-all-images)</lisp>
+<!-- This presentation published with Emacs Muse slidy mode. RmFiaW8gQXJjaW5pZWdhcyx0aGFuayB5b3Ug-->
+</div>
+  </body>
+</html>\n"
+  "Footer used for publishing XHTML muse-slidy presentation files."
+  :type 'string
+  :group 'muse-slidy)
 
 
-;; TODO: Customize fonts.
-;; TODO: Customize colors.
-;; TODO: Customize top and bottom image independently
-;; TODO: make code pure emacs, no perl
-;; TODO: make consistent with packaging
-;; TODO: merge with muse in github
-;; TODO: decide what to do with level 3 headers and below
-
-(defcustom muse-html-slidy-header  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+(defcustom muse-slidy-header  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
     \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"
 [
-<!ENTITY IMAGE_FIRST @<lisp>(concat muse-html-slidy-style-dir \"first.jpg\")</lisp>@>
-<!ENTITY IMAGE_HEAD @<lisp>(concat muse-html-slidy-style-dir \"head.jpg\")</lisp>@>
-<!ENTITY IMAGE_FOOT @<lisp>(concat muse-html-slidy-style-dir \"foot.jpg\")</lisp>@>
-<lisp>(setq entities (create-tmp-entities-file))
-(insert-file-contents-literally entities)
-(delete-file entities)
-</lisp>
+<!ENTITY LEADER_IMAGE \"<lisp>(muse-slidy-configuration-as-base64 \"leader-image\")</lisp>\">
+<!ENTITY IMAGE_HEAD \"<lisp>(muse-slidy-configuration-as-base64 \"header-image\")</lisp>\">
+<!ENTITY IMAGE_FOOT \"<lisp>(muse-slidy-configuration-as-base64 \"footer-image\")</lisp>\">
+<lisp>(null (setq muse-slidy-end-of-entities (point)))</lisp>
 ]
 >
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
-    <title><lisp>
-  (muse-publishing-directive \"title\")</lisp></title>
+    <title><lisp>(muse-publishing-directive \"title\")</lisp></title>
+
+    <meta name=\"copyright\" 
+content=\"Copyright &#169; <lisp>(let ((author (muse-publishing-directive \"author\")))
+            (if (not (string= author (user-full-name)))
+                (concat author )))</lisp> <lisp>(current-year-string)</lisp>\" /> 
+<!--
     <meta http-equiv=\"<lisp>muse-html-meta-http-equiv</lisp>\"
           content=\"<lisp>muse-html-meta-content-type</lisp>\" />
-  <style type=\"text/css\" media=\"screen, projection, print\">
-  <link href=\"http://fonts.googleapis.com/css?family=Cabin:regular,500\" rel=\"stylesheet\" type=\"text/css\"/>
-<link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'/>
-/*<![CDATA[*/
-    <lisp>(insert-file (concat muse-html-slidy-style-dir muse-html-slidy-slidy-css))</lisp>
-/*]]>*/
-  </style>
-  <script type=\"text/javascript\">
-//<![CDATA[
-    <lisp>(insert-file (concat muse-html-slidy-style-dir muse-html-slidy-slidy-src))</lisp>
-//]]>
-  </script>
+-->
+
+   <lisp>(insert muse-slidy-slidy-js)</lisp>
+   <lisp>(muse-slidy-configuration-as-base64 \"slidy-css\")</lisp>
+
   </head>
   <body>
-<div class=\"slide\">
-     <img src=\"data:image/gif;base64,&IMAGE_FIRST;\" width=\"100%%\" style=\"position: absolute; left:0px; bottom: 0px; z-index:-1\"/>
-    <div style=\"position: relative; top: 300px;\"><br/><br/>      
-      <span class=\"title-h1\"><lisp>
-     (muse-publishing-directive \"title\")</lisp></span><br/><span class=\"title-author\"><lisp>
-          (let ((author (muse-publishing-directive \"author\")))
+
+<div class=\"background\"> 
+   <lisp>(muse-slidy-configuration-as-base64 \"head-icon\")</lisp>
+   <lisp>(muse-slidy-configuration-as-base64 \"head-logo\")</lisp>
+</div> 
+
+<div class=\"slide cover\"> 
+   <lisp>(muse-slidy-configuration-as-base64 \"cover-image\")</lisp>
+
+ <br clear=\"all\" />            
+ <h1> <lisp>(muse-publishing-directive \"title\")</lisp></h1>
+ <p><lisp>(let ((author (muse-publishing-directive \"author\")))
             (if (not (string= author (user-full-name)))
-                (concat author )))</lisp>
-       <lisp>(current-date-string)</lisp></span>
-      </div>
+                (concat author )))</lisp> <lisp>(current-year-string)</lisp></p> 
+</div> 
+<!-- extra open div so section can start always with clossing-->
+<div>
 "
-  "Header used for publishing Slidy files. Contains elisp code, alter with care."
-  :type 'string
-  :group 'muse-html)
-
-(defcustom muse-html-slidy-footer "
-<lisp>(replace-all-entity-references)</lisp>
-<!-- This presentation published with Emacs Muse. RmFiaW8gQXJjaW5pZWdhcyx0aGFuayB5b3Ug-->
-</div>
-  </body>
-</html>\n"
-  "Footer used for publishing XHTML files. This may be text or a filename."
+  "Header used for publishing Slidy files. Contains elisp code."
   :type 'string
   :group 'muse-html)
 
 
-(defun replace-entity-filenames-with-base64-batch ()
-  (if muse-html-slidy-replace-entities-in-file
-      (shell-command (concat "perl -i.bak \"" (concat muse-html-slidy-style-dir "replace-entities-in-file.pl") "\" \"" muse-html-slidy-replace-entities-in-file "\"" ))
-  (setq muse-html-slidy-replace-entities-in-file nil)
-))
 
-(muse-derive-style "html-slidy" "xhtml"
-                   :strings 'muse-html-slidy-markup-strings
-                   :header 'muse-html-slidy-header
-                   :footer 'muse-html-slidy-footer)
+;;todo muse-slidy-reset-look-and-feel
+;;todo implement background gradients
 
-;; Must change this so it does it really automatically on a
-;; muse-publish-this-file
-;; TODO: make work muse-publish-this-file
-(add-hook 'after-save-hook
-	  'replace-entitiy-filenames-with-base64-batch
+
+;; TODO: see if it this initialization can be grouped
+(setq muse-slidy-white-theme (make-hash-table :test 'equal))
+(puthash 'muse-slidy-theme-name "Standard White" muse-slidy-white-theme)
+(puthash 'muse-slidy-header-image "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCB1jYAAAAAIAAc/INeUAAAAASUVORK5CYII=" muse-slidy-white-theme)
+(puthash 'muse-slidy-footer-image "~/Desktop/IMG_2562.JPG" muse-slidy-white-theme)
+(puthash 'muse-slidy-leader-image "~/Desktop/IMG_2562.JPG" muse-slidy-white-theme)
+(puthash 'muse-slidy-background-color "#FFFFFF" muse-slidy-white-theme)
+(puthash 'muse-slidy-foreground-color "#000000" muse-slidy-white-theme)
+;; TODO: enable fonts
+(puthash 'muse-slidy-header-font "font" muse-slidy-white-theme)
+(puthash 'muse-slidy-content-font "font" muse-slidy-white-theme)
+
+
+(setq muse-slidy-blue-theme (make-hash-table :test 'equal))
+(puthash 'muse-slidy-theme-name "Standard Blue" muse-slidy-blue-theme)
+(puthash 'muse-slidy-header-image "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCB1jYAAAAAIAAc/INeUAAAAASUVORK5CYII=" muse-slidy-blue-theme)
+(puthash 'muse-slidy-footer-image "~/Desktop/IMG_2562.JPG" muse-slidy-blue-theme)
+(puthash 'muse-slidy-leader-image "~/Desktop/IMG_2562.JPG" muse-slidy-blue-theme)
+(puthash 'muse-slidy-background-color "#FFFFFF" muse-slidy-blue-theme)
+(puthash 'muse-slidy-slidy-css "
+<link rel=\"stylesheet\" href=\"http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css\" type=\"text/css\" />
+<link rel=\"stylesheet\" type=\"text/css\" media=\"screen, projection, print\"
+ href=\"http://www.w3.org/Talks/Tools/Slidy2/styles/w3c-blue.css\" />
+" muse-slidy-blue-theme)
+(puthash 'muse-slidy-foreground-color "#000000" muse-slidy-blue-theme)
+;; TODO: enable fonts
+(puthash 'muse-slidy-header-font "font" muse-slidy-blue-theme)
+(puthash 'muse-slidy-content-font "font" muse-slidy-blue-theme)
+(puthash 'muse-slidy-head-icon "<img id=\"head-icon\" alt=\"graphic with four colored squares\" src=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/icon-blue.png\"/>" muse-slidy-blue-theme)
+(puthash 'muse-slidy-head-logo "<object id=\"head-logo\" data=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/w3c-logo-white.svg\" type=\"image/svg+xml\" title=\"W3C logo\"><a href=\"http://www.w3.org/\"><img alt=\"W3C logo\" id=\"head-logo-fallback\" src=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/w3c-logo-white.gif\" /></a></object>" muse-slidy-blue-theme)
+(puthash 'muse-slidy-cover-image " <img src=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/keys2.jpg\" alt=\"Cover page images (keys)\" class=\"cover\" />" muse-slidy-blue-theme)
+
+
+
+;; Configuration options are organized in themes, but overridable by individual 
+;; variables.
+(defun muse-slidy-get-configuration-option (name theme)
+  "Get the current value of a configuration option (header-image,footer-image,etc).
+
+If an override value for header,footer, or openning image have been set,
+use it. Otherwise default to the one in the selected theme.
+names of options include header-image, footer-image,opening-image,header-font, and content-font."
+  (if (boundp (intern  (concat "muse-slidy-override-" name)))
+      (eval (intern  (concat "muse-slidy-override-" name)))
+      (if (boundp (intern  (concat "muse-slidy-" theme "-theme")))
+	  (gethash (intern (concat "muse-slidy-" name))
+		   (eval (intern (concat "muse-slidy-" theme "-theme")))))
+  )
 )
 
-(provide 'muse-html-slidy)
+(defun muse-slidy-get-themed-customization (name)
+  "Return the value of the customization denoted by string name"
+  (muse-slidy-get-configuration-option name muse-slidy-theme)
+)
+
+(defun file-contents-as-base64 (filepath)
+  "Return the contents of a file as a base64-encoded string."
+
+    (with-temp-buffer 
+      (insert-file-contents-literally filepath)
+      (mark-whole-buffer)
+      (base64-encode-region 1 (point-max) t)
+      (buffer-string)
+    )
+)
+
+(defun muse-slidy-configuration-as-base64 (option)
+  "Return the value of a configuration option (header, footer, etc.) as a base64 string.
+
+If the value of the configuration option is a valid filepath, return the contents as base64, otherwise assume the value is base64 information already and return the literal value of the configuration option"
+ (setq c (muse-slidy-get-themed-customization option))
+ 
+ (if (file-exists-p c)
+     (file-contents-as-base64 c)
+     c)
+)
+
+;; packages
+;; muse-slidy-override-header-image
+
+(require 'muse-publish)
+(require 'muse-regexps)
+(require 'muse-xml-common)
+(require 'muse-html)
+
+(defgroup muse-slidy nil
+  "Options controlling the behavior of Muse Slidy publishing.
+See `muse-slidy' for more information."
+  :group 'muse-publish)
+
+(defun current-date-string ()
+  "Returns current date as a string."
+  (format-time-string "%B %d, %Y" (current-time)))
+
+(defun current-year-string ()
+  "Returns current year as a string."
+  (format-time-string "%Y" (current-time)))
+
+
+(defun muse-slidy-embed-all-images ()
+  (setq embedded-image-count 0)
+  (setq entities "")
+  (while (re-search-forward "\&IMAGE_\\(\.*\\)\"/>" nil t)
+    (setq entities 
+	  (concat entities (progn 
+			     (setq image_filename (match-string 1))
+			     (with-temp-buffer
+			       (insert (format "<!ENTITY IMAGE_%d \"%s\">\n" 
+					       (setq embedded-image-count (+ embedded-image-count 1))
+					       (file-contents-as-base64 image_filename)))
+			       (buffer-string))))))
+  (setq embedded-image-count 0)
+  entities)
+
+
+(defun muse-slidy-reference-all-images ()
+  (setq embedded-image-count 0)
+  (save-excursion
+    (beginning-of-buffer)
+    (setq muse-slidy-entity-definitions (muse-slidy-embed-all-images))
+    (beginning-of-buffer)
+    (forward-char muse-slidy-end-of-entities)
+    (insert muse-slidy-entity-definitions)
+    (setq muse-slidy-embed-all-images nil)
+    (while (re-search-forward "<img class=\"illustration\" src=\"data:img/jpg;base64,\&IMAGE_\.+\"/>" nil t)
+      (replace-match (format "<img class=\"illustration\" src=\"data:img/jpg;base64,&IMAGE_%d;\"/>" (setq embedded-image-count (+ embedded-image-count 1))) nil nil)
+      )
+    )
+)
+
+
+;; TODO: make right mime type
+;; TODO: see if gzip is possible for embedded references
+;; TODO: consider auto-resize
+
+;; TODO: allow for comments on images
+
+;; TODO: decide what to do with level 3 headers and below
+
+(setq muse-slidy-slidy-css "
+<link rel=\"stylesheet\" type=\"text/css\" media=\"screen, projection, print\"
+ href=\"http://www.w3.org/Talks/Tools/Slidy2/styles/w3c-blue.css\" /> 
+")
+
+(setq muse-slidy-slidy-js "
+<script src=\"http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js\" 
+   charset=\"utf-8\" type=\"text/javascript\"></script> 
+")
+
+
+
+(muse-derive-style "slidy" "xhtml"
+                   :strings 'muse-slidy-markup-strings
+                   :header 'muse-slidy-header
+                   :footer 'muse-slidy-footer)
+
+(provide 'muse-slidy)
