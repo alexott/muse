@@ -5,6 +5,8 @@
 ;; Author: Fabio Arciniegas (fab DOT arciniegas AT gmail DOT com)
 ;; Keywords: muse, slidy, presentations, emacs powerpoint alternative, slide maker
 ;;
+;; uses slidy by W3C
+;;
 ;; Version 1.0 August 07, 2010 (21:48:34) 
 ;; Version 2.0 September 16, 2013 (15:26:59) 
 
@@ -131,8 +133,8 @@ Caution: when you set a new theme, specific customization are
   '(
     (section . "</div>\n<div class=\"slide\"><h1>")
     (section-end . "</h1>")
-    (image . "<div align=\"center\"><img class=\"illustration\" src=\"data:img/jpg\;base64,\&IMAGE_%s.%s\"/></div>\n")
-    (image-with-desc . "<div align=\"center\"><img class=\"illustration\" src=\"data:img/jpg\;base64,\&IMAGE_%s.%s\"/><div>%s</div></div>\n")
+    (image . "<div class=\"image-container\"><img class=\"illustration\" src=\"data:img/jpg\;base64,\&IMAGE_%s.%s\"/></div>\n")
+    (image-with-desc . "<div class=\"image-container\"><img class=\"illustration\" src=\"data:img/jpg\;base64,\&IMAGE_%s.%s\"/></div><div class=\"image-description\">%s</div>\n")
     (subsection . "</div><div class=\"slide\"><h1>")
     (subsection-end . "</h1>"))
     "Strings used for marking up text as HTML Slidy."
@@ -145,10 +147,16 @@ Caution: when you set a new theme, specific customization are
 </div>
   </body>
 </html>\n"
-  "Footer used for publishing XHTML muse-slidy presentation files."
+  "DO NOT MODIFY UNLESS YOU ARE SURE. ALL LOOK AND FEEL OF PRESENTATIONS CAN BE MODIFIED THROUGH MUSE-SLIDY-OVERRIDE-* CUSTOMIZATIONS. Footer used for publishing XHTML muse-slidy presentation files."
   :type 'string
   :group 'muse-slidy)
 
+
+
+(defcustom muse-slidy-override-header-image "~/Desktop/aliens.jpg"
+  "Override the theme's header image with a custom image."
+  :type 'string
+  :group 'muse-slidy)
 
 (defcustom muse-slidy-header  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
@@ -176,6 +184,11 @@ content=\"Copyright &#169; <lisp>(let ((author (muse-publishing-directive \"auth
    <lisp>(insert muse-slidy-slidy-js)</lisp>
    <lisp>(muse-slidy-configuration-as-base64 \"slidy-css\")</lisp>
 
+   <script>
+$(window).load(function(){
+    $(\'#illustration\').imagefit();
+});
+</script>
   </head>
   <body>
 
@@ -220,7 +233,7 @@ content=\"Copyright &#169; <lisp>(let ((author (muse-publishing-directive \"auth
 (puthash 'muse-slidy-head-icon "<img id=\"head-icon\" alt=\"graphic with four colored squares\" src=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/icon-blue.png\"/>" muse-slidy-white-theme)
 (puthash 'muse-slidy-head-logo "<img id=\"head-icon\" alt=\"graphic with four colored squares\" src=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/icon-blue.png\"/>" muse-slidy-white-theme)
 (puthash 'muse-slidy-cover-image " <img src=\"~/ss/tools/muse/html-slidy-support/lead.jpg\" alt=\"Cover page images (keys)\" class=\"cover\" />" muse-slidy-white-theme)
-(puthash 'muse-slidy-slidy-css "<style type=\"text/css\" media=\"screen, projection, print\"><link href=\"http://fonts.googleapis.com/css?family=Cabin:regular,500\" rel=\"stylesheet\" type=\"text/css\"/><link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'/>/*<![CDATA[*/body{width:100%;height:100%;font-family:\"Droid Serif\", sans-serif;color:#000;margin:0;padding:0;}.title-slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;background-color:transparent;border-width:0;margin:0;padding:20px 20px 0;}.title-content{position:absolute;bottom:10px;left:20px;}.title-h1{font-family:Cabin, serif;font-size:82px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.title-author{font-family:Cabin, serif;font-size:50px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.hidden{display:none;visibility:hidden;}div.toolbar{position:fixed;z-index:200;top:auto;bottom:0;left:0;right:0;height:1.2em;text-align:right;padding-left:1em;padding-right:1em;font-size:60%;color:gray;background:transparent;}div.background{display:none;}div.handout{margin-left:20px;margin-right:20px;}div.slide.titlepage.h1{padding-top:40%;}div.slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;line-height:120%;font-size:24pt;background-color:transparent;border-width:0;margin:0;padding:10px 20px 0;}div.slide + div[class].slide{page-break-before:always;}div.slide h1{font-family:Cabin, serif;font-size:46px;font-style:normal;color:#c00;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;text-align:center;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}div.toc{position:absolute;top:auto;bottom:4em;left:4em;right:auto;width:60%;max-width:30em;height:30em;border:solid thin #000;background:#f0f0f0;color:#000;z-index:300;overflow:auto;display:block;visibility:visible;padding:1em;}div.toc-heading{width:100%;border-bottom:solid 1px #b4b4b4;margin-bottom:1em;text-align:center;}pre{font-size:80%;font-weight:700;line-height:120%;color:#00428C;background-color:#E4E5E7;border-color:#95ABD0;border-style:solid;border-width:thin thin thin 1em;padding:.2em 1em;}li pre{margin-left:0;}blockquote{font-style:italic;}img{background-color:transparent;}img.illustration{display:block;margin-left:auto;margin-right:auto;-moz-border-radius:1em 1em 1em 4em;border-radius:1em 1em 1em 4em;background-color:#fffee7;padding:10px;}.footnote{font-size:smaller;margin-left:2em;}a img{border-style:none;border-width:0;}a{color:#000;text-decoration:none;text-shadow:2px 2px 2px #00f;}.navbar a:link{color:#FFF;}.navbar a:visited{color:#FF0;}ul{list-style-type:disc;margin:.5em .5em .5em 3.5em;padding:0;}ul ul{list-style-type:square;}ul ul ul{list-style-type:circle;}ul ul ul ul{list-style-type:disc;}li{margin-left:1.5em;margin-top:.5em;}li li{font-size:85%;font-style:italic;}li li li{font-size:85%;font-style:normal;}div dt{margin-left:0;margin-top:1em;margin-bottom:.5em;font-weight:700;}div dd{margin-left:2em;margin-bottom:.5em;}p,pre,ul,ol,blockquote,h2,h3,h4,h5,h6,dl,table{margin-left:1em;margin-right:1em;}p.subhead{font-weight:700;margin-top:2em;}.bigger{font-size:130%;}td,th{padding:.2em;}ol{margin:.5em 1.5em .5em .5em;padding:0;}li ul li{font-size:85%;font-style:italic;list-style-type:disc;background:transparent;padding:0;}li li ul li{font-size:85%;font-style:normal;list-style-type:circle;background:transparent;padding:0;}li li li ul li{list-style-type:disc;background:transparent;padding:0;}ol.outline{list-style:decimal;}ol.outline ol{list-style-type:lower-alpha;}a.titleslide{font-weight:700;font-style:italic;}div.slide.titlepage,.center{text-align:center;}strong,.navbar a:active,.navbar a:hover{color:red;}p.copyright,.smaller{font-size:smaller;}a:visited,a:link{text-shadow:1px 1px 1px #ccc;}a:hover,a:active{color:red;text-decoration:underline;}li ol li,li li ol li{list-style-type:decimal;}ol.outline li:hover,ul.outline li:hover{cursor:pointer;}ol.outline li.nofold:hover,ul.outline li.nofold:hover{cursor:default;}ol.outline li.nofold,ul.outline li.nofold{background:transparent url(nofold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded,ul.outline li.unfolded{background:transparent url(fold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded,ul.outline li.folded{background:transparent url(unfold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded:hover,ul.outline li.unfolded:hover{background:transparent url(fold.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded:hover,ul.outline li.folded:hover{background:transparent url(unfold.gif) no-repeat 0 .5em;padding:0 0 0 20px;}@media print{div.slide{display:block;visibility:visible;position:relative;border-top-style:solid;border-top-width:thin;border-top-color:#000;}div.slide pre{font-size:60%;padding-left:.5em;}div.handout{display:block;visibility:visible;}}/*]]>*/</style>" muse-slidy-white-theme)
+(puthash 'muse-slidy-slidy-css "<style type=\"text/css\" media=\"screen, projection, print\"><link href=\"http://fonts.googleapis.com/css?family=Cabin:regular,500\" rel=\"stylesheet\" type=\"text/css\"/><link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'/>/*<![CDATA[*/body{width:100%;height:100%;font-family:\"Droid Serif\", sans-serif;color:#000;margin:0;padding:0;}.title-slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;background-color:transparent;border-width:0;margin:0;padding:20px 20px 0;}.title-content{position:absolute;bottom:10px;left:20px;}.title-h1{font-family:Cabin, serif;font-size:82px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.title-author{font-family:Cabin, serif;font-size:50px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.hidden{display:none;visibility:hidden;}div.toolbar{position:fixed;z-index:200;top:auto;bottom:0;left:0;right:0;height:1.2em;text-align:right;padding-left:1em;padding-right:1em;font-size:60%;color:gray;background:transparent;}div.background{display:none;}div.handout{margin-left:20px;margin-right:20px;}div.slide.titlepage.h1{padding-top:40%;}div.slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;line-height:120%;font-size:24pt;background-color:transparent;border-width:0;margin:0;padding:10px 20px 0;}div.slide + div[class].slide{page-break-before:always;}div.slide h1{font-family:Cabin, serif;font-size:46px;font-style:normal;color:#c00;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;text-align:center;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}div.toc{position:absolute;top:auto;bottom:4em;left:4em;right:auto;width:60%;max-width:30em;height:30em;border:solid thin #000;background:#f0f0f0;color:#000;z-index:300;overflow:auto;display:block;visibility:visible;padding:1em;}div.toc-heading{width:100%;border-bottom:solid 1px #b4b4b4;margin-bottom:1em;text-align:center;}pre{font-size:80%;font-weight:700;line-height:120%;color:#00428C;background-color:#E4E5E7;border-color:#95ABD0;border-style:solid;border-width:thin thin thin 1em;padding:.2em 1em;}li pre{margin-left:0;}blockquote{font-style:italic;}. footnote{font-size:smaller;margin-left:2em;}a img{border-style:none;border-width:0;}a{color:#000;text-decoration:none;text-shadow:2px 2px 2px #00f;}.navbar a:link{color:#FFF;}.navbar a:visited{color:#FF0;}ul{list-style-type:disc;margin:.5em .5em .5em 3.5em;padding:0;}ul ul{list-style-type:square;}ul ul ul{list-style-type:circle;}ul ul ul ul{list-style-type:disc;}li{margin-left:1.5em;margin-top:.5em;}li li{font-size:85%;font-style:italic;}li li li{font-size:85%;font-style:normal;}div dt{margin-left:0;margin-top:1em;margin-bottom:.5em;font-weight:700;}div dd{margin-left:2em;margin-bottom:.5em;}p,pre,ul,ol,blockquote,h2,h3,h4,h5,h6,dl,table{margin-left:1em;margin-right:1em;}p.subhead{font-weight:700;margin-top:2em;}.bigger{font-size:130%;}td,th{padding:.2em;}ol{margin:.5em 1.5em .5em .5em;padding:0;}li ul li{font-size:85%;font-style:italic;list-style-type:disc;background:transparent;padding:0;}li li ul li{font-size:85%;font-style:normal;list-style-type:circle;background:transparent;padding:0;}li li li ul li{list-style-type:disc;background:transparent;padding:0;}ol.outline{list-style:decimal;}ol.outline ol{list-style-type:lower-alpha;}a.titleslide{font-weight:700;font-style:italic;}div.slide.titlepage,.center{text-align:center;}strong,.navbar a:active,.navbar a:hover{color:red;}p.copyright,.smaller{font-size:smaller;}a:visited,a:link{text-shadow:1px 1px 1px #ccc;}a:hover,a:active{color:red;text-decoration:underline;}li ol li,li li ol li{list-style-type:decimal;}ol.outline li:hover,ul.outline li:hover{cursor:pointer;}ol.outline li.nofold:hover,ul.outline li.nofold:hover{cursor:default;}ol.outline li.nofold,ul.outline li.nofold{background:transparent url(nofold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded,ul.outline li.unfolded{background:transparent url(fold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded,ul.outline li.folded{background:transparent url(unfold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded:hover,ul.outline li.unfolded:hover{background:transparent url(fold.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded:hover,ul.outline li.folded:hover{background:transparent url(unfold.gif) no-repeat 0 .5em;padding:0 0 0 20px;} div.image-container{  margin-left: 1em;  margin-right: 1em;  margin-top: 0;  margin-left:auto;  margin-right:auto;  overflow:auto;  max-width: 90%;  max-height: 70%;  text-align:left;  clear:both;}div.image-description{  clear:both;  text-align: center;  font-style: italic;}}/*]]>*/</style>" muse-slidy-white-theme)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -306,20 +319,11 @@ See `muse-slidy' for more information."
 ;; TODO: see if gzip is possible for embedded references
 ;; TODO: consider auto-resize
 
-;; TODO: allow for comments on images
-
 ;; TODO: decide what to do with level 3 headers and below
 
-(setq muse-slidy-slidy-css "
-<link rel=\"stylesheet\" type=\"text/css\" media=\"screen, projection, print\"
- href=\"http://www.w3.org/Talks/Tools/Slidy2/styles/w3c-blue.css\" /> 
-")
 
-(setq muse-slidy-slidy-js "
-<script src=\"http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js\" 
-   charset=\"utf-8\" type=\"text/javascript\"></script> 
-")
-
+(setq muse-slidy-slidy-js "<!-- compressed inlined version of http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js -->
+<script type=\"text/javascript\" src=\"http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js.gz\"/>")
 
 
 (muse-derive-style "slidy" "xhtml"
@@ -328,3 +332,9 @@ See `muse-slidy' for more information."
                    :footer 'muse-slidy-footer)
 
 (provide 'muse-slidy)
+
+
+
+
+
+
