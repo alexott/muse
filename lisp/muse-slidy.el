@@ -99,10 +99,13 @@ names of options include header-image, footer-image,opening-image,header-font, a
 If the value of the configuration option is a valid filepath, return the contents as base64, otherwise assume the value is base64 information already and return the literal value of the configuration option"
  (setq c (muse-slidy-get-themed-customization option))
  
- (if (file-exists-p c)
+ (if (string= "" c)
+     ""
+   (if (file-exists-p c)
      (file-contents-as-base64 c)
      c)
-)
+   )
+ )
 
 (defcustom muse-slidy-theme "white"
   "Base theme to use when publishing muse slidy presentations.
@@ -131,7 +134,7 @@ Caution: when you set a new theme, specific customization are
 
 (defcustom muse-slidy-markup-strings
   '(
-    (section . "</div>\n<div class=\"slide\"><h1>")
+    (section . "</div>\n<div class=\"slide\"><img src=\"data:img/jpeg;base64,&STATIC_HEAD;\" width=\"100%%\" style=\"position: absolute; top: 0px; left:0px; z-index:-1\"/><img src=\"data:img/jpeg;base64,&STATIC_FOOT;\" width=\"100%%\" style=\"position: absolute; bottom: 0px; right:0px; z-index:-1\"/><h1>")
     (section-end . "</h1>")
     (image . "<div class=\"image-container\"><img class=\"illustration\" src=\"data:img/jpg\;base64,\&IMAGE_%s.%s\"/></div>\n")
     (image-with-desc . "<div class=\"image-container\"><img class=\"illustration\" src=\"data:img/jpg\;base64,\&IMAGE_%s.%s\"/></div><div class=\"image-description\">%s</div>\n")
@@ -153,18 +156,18 @@ Caution: when you set a new theme, specific customization are
 
 
 
-(defcustom muse-slidy-override-header-image "~/Desktop/aliens.jpg"
-  "Override the theme's header image with a custom image."
-  :type 'string
-  :group 'muse-slidy)
+;;(defcustom muse-slidy-override-header-image "~/Desktop/aliens.jpg"
+;;  "Override the theme's header image with a custom image."
+;;  :type 'string
+;;  :group 'muse-slidy)
 
 (defcustom muse-slidy-header  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
     \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"
 [
-<!ENTITY LEADER_IMAGE \"<lisp>(muse-slidy-configuration-as-base64 \"leader-image\")</lisp>\">
-<!ENTITY IMAGE_HEAD \"<lisp>(muse-slidy-configuration-as-base64 \"header-image\")</lisp>\">
-<!ENTITY IMAGE_FOOT \"<lisp>(muse-slidy-configuration-as-base64 \"footer-image\")</lisp>\">
+<!ENTITY STATIC_LEAD \"<lisp>(muse-slidy-configuration-as-base64 \"leader-image\")</lisp>\">
+<!ENTITY STATIC_HEAD \"<lisp>(muse-slidy-configuration-as-base64 \"header-image\")</lisp>\">
+<!ENTITY STATIC_FOOT \"<lisp>(muse-slidy-configuration-as-base64 \"footer-image\")</lisp>\">
 <lisp>(null (setq muse-slidy-end-of-entities (point)))</lisp>
 ]
 >
@@ -198,13 +201,14 @@ $(window).load(function(){
 </div> 
 
 <div class=\"slide cover\"> 
+     <img src=\"data:image/gif;base64,&STATIC_LEAD;\" width=\"100%%\" style=\"position: absolute; left:0px; bottom: 0px; z-index:-1\"/>
    <lisp>(muse-slidy-configuration-as-base64 \"cover-image\")</lisp>
 
- <br clear=\"all\" />            
- <h1> <lisp>(muse-publishing-directive \"title\")</lisp></h1>
- <p><lisp>(let ((author (muse-publishing-directive \"author\")))
+    <div style=\"position: relative; top: 300px;\"><br/><br/>      
+      <span class=\"title-h1\"><lisp>(muse-publishing-directive \"title\")</lisp></span><br/><span class=\"title-author\"><lisp>(let ((author (muse-publishing-directive \"author\")))
             (if (not (string= author (user-full-name)))
-                (concat author )))</lisp> <lisp>(current-year-string)</lisp></p> 
+                (concat author )))</lisp> <lisp>(current-year-string)</lisp></span>
+      </div>
 </div> 
 <!-- extra open div so section can start always with clossing-->
 <div>
@@ -223,17 +227,18 @@ $(window).load(function(){
 (setq muse-slidy-white-theme (make-hash-table :test 'equal))
 
 (puthash 'muse-slidy-theme-name "Standard White" muse-slidy-white-theme)
-(puthash 'muse-slidy-header-image "~/ss/tools/muse/html-slidy-support/head.jpg" muse-slidy-white-theme)
+(puthash 'muse-slidy-header-image "top.jpg" muse-slidy-white-theme)
 (puthash 'muse-slidy-footer-image "~/ss/tools/muse/html-slidy-support/foot.jpg" muse-slidy-white-theme)
 (puthash 'muse-slidy-leader-image "~/ss/tools/muse/html-slidy-support/first.jpg" muse-slidy-white-theme)
 (puthash 'muse-slidy-background-color "#FFFFFF" muse-slidy-white-theme)
 (puthash 'muse-slidy-foreground-color "#000000" muse-slidy-white-theme)
 (puthash 'muse-slidy-header-font "font" muse-slidy-white-theme)
 (puthash 'muse-slidy-content-font "font" muse-slidy-white-theme)
-(puthash 'muse-slidy-head-icon "<img id=\"head-icon\" alt=\"graphic with four colored squares\" src=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/icon-blue.png\"/>" muse-slidy-white-theme)
-(puthash 'muse-slidy-head-logo "<img id=\"head-icon\" alt=\"graphic with four colored squares\" src=\"http://www.w3.org/Talks/Tools/Slidy2/graphics/icon-blue.png\"/>" muse-slidy-white-theme)
-(puthash 'muse-slidy-cover-image " <img src=\"~/ss/tools/muse/html-slidy-support/lead.jpg\" alt=\"Cover page images (keys)\" class=\"cover\" />" muse-slidy-white-theme)
-(puthash 'muse-slidy-slidy-css "<style type=\"text/css\" media=\"screen, projection, print\"><link href=\"http://fonts.googleapis.com/css?family=Cabin:regular,500\" rel=\"stylesheet\" type=\"text/css\"/><link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'/>/*<![CDATA[*/body{width:100%;height:100%;font-family:\"Droid Serif\", sans-serif;color:#000;margin:0;padding:0;}.title-slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;background-color:transparent;border-width:0;margin:0;padding:20px 20px 0;}.title-content{position:absolute;bottom:10px;left:20px;}.title-h1{font-family:Cabin, serif;font-size:82px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.title-author{font-family:Cabin, serif;font-size:50px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.hidden{display:none;visibility:hidden;}div.toolbar{position:fixed;z-index:200;top:auto;bottom:0;left:0;right:0;height:1.2em;text-align:right;padding-left:1em;padding-right:1em;font-size:60%;color:gray;background:transparent;}div.background{display:none;}div.handout{margin-left:20px;margin-right:20px;}div.slide.titlepage.h1{padding-top:40%;}div.slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;line-height:120%;font-size:24pt;background-color:transparent;border-width:0;margin:0;padding:10px 20px 0;}div.slide + div[class].slide{page-break-before:always;}div.slide h1{font-family:Cabin, serif;font-size:46px;font-style:normal;color:#c00;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;text-align:center;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}div.toc{position:absolute;top:auto;bottom:4em;left:4em;right:auto;width:60%;max-width:30em;height:30em;border:solid thin #000;background:#f0f0f0;color:#000;z-index:300;overflow:auto;display:block;visibility:visible;padding:1em;}div.toc-heading{width:100%;border-bottom:solid 1px #b4b4b4;margin-bottom:1em;text-align:center;}pre{font-size:80%;font-weight:700;line-height:120%;color:#00428C;background-color:#E4E5E7;border-color:#95ABD0;border-style:solid;border-width:thin thin thin 1em;padding:.2em 1em;}li pre{margin-left:0;}blockquote{font-style:italic;}. footnote{font-size:smaller;margin-left:2em;}a img{border-style:none;border-width:0;}a{color:#000;text-decoration:none;text-shadow:2px 2px 2px #00f;}.navbar a:link{color:#FFF;}.navbar a:visited{color:#FF0;}ul{list-style-type:disc;margin:.5em .5em .5em 3.5em;padding:0;}ul ul{list-style-type:square;}ul ul ul{list-style-type:circle;}ul ul ul ul{list-style-type:disc;}li{margin-left:1.5em;margin-top:.5em;}li li{font-size:85%;font-style:italic;}li li li{font-size:85%;font-style:normal;}div dt{margin-left:0;margin-top:1em;margin-bottom:.5em;font-weight:700;}div dd{margin-left:2em;margin-bottom:.5em;}p,pre,ul,ol,blockquote,h2,h3,h4,h5,h6,dl,table{margin-left:1em;margin-right:1em;}p.subhead{font-weight:700;margin-top:2em;}.bigger{font-size:130%;}td,th{padding:.2em;}ol{margin:.5em 1.5em .5em .5em;padding:0;}li ul li{font-size:85%;font-style:italic;list-style-type:disc;background:transparent;padding:0;}li li ul li{font-size:85%;font-style:normal;list-style-type:circle;background:transparent;padding:0;}li li li ul li{list-style-type:disc;background:transparent;padding:0;}ol.outline{list-style:decimal;}ol.outline ol{list-style-type:lower-alpha;}a.titleslide{font-weight:700;font-style:italic;}div.slide.titlepage,.center{text-align:center;}strong,.navbar a:active,.navbar a:hover{color:red;}p.copyright,.smaller{font-size:smaller;}a:visited,a:link{text-shadow:1px 1px 1px #ccc;}a:hover,a:active{color:red;text-decoration:underline;}li ol li,li li ol li{list-style-type:decimal;}ol.outline li:hover,ul.outline li:hover{cursor:pointer;}ol.outline li.nofold:hover,ul.outline li.nofold:hover{cursor:default;}ol.outline li.nofold,ul.outline li.nofold{background:transparent url(nofold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded,ul.outline li.unfolded{background:transparent url(fold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded,ul.outline li.folded{background:transparent url(unfold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded:hover,ul.outline li.unfolded:hover{background:transparent url(fold.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded:hover,ul.outline li.folded:hover{background:transparent url(unfold.gif) no-repeat 0 .5em;padding:0 0 0 20px;} div.image-container{  margin-left: 1em;  margin-right: 1em;  margin-top: 0;  margin-left:auto;  margin-right:auto;  overflow:auto;  max-width: 90%;  max-height: 70%;  text-align:left;  clear:both;}div.image-description{  clear:both;  text-align: center;  font-style: italic;}}/*]]>*/</style>" muse-slidy-white-theme)
+(puthash 'muse-slidy-head-icon "" muse-slidy-white-theme)
+(puthash 'muse-slidy-head-logo "" muse-slidy-white-theme)
+;;(puthash 'muse-slidy-cover-image " <img src=\"a.jpeg\" class=\"cover\" />" muse-slidy-white-theme)
+(puthash 'muse-slidy-cover-image "" muse-slidy-white-theme)
+(puthash 'muse-slidy-slidy-css "<style type=\"text/css\" media=\"screen, projection, print\"><link href=\"http://fonts.googleapis.com/css?family=Cabin:regular,500\" rel=\"stylesheet\" type=\"text/css\"/><link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'/>/*<![CDATA[*/body{width:100%;height:100%;font-family:\"Droid Serif\", sans-serif;color:#000;margin:0;padding:0;}.title-slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;background-color:transparent;border-width:0;margin:0;padding:20px 20px 0;}.title-content{position:absolute;bottom:10px;left:20px;}.title-h1{font-family:Cabin, serif;font-size:82px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.title-author{font-family:Cabin, serif;font-size:50px;font-style:normal;font-weight:700;color:#000;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}.hidden{display:none;visibility:hidden;}div.toolbar{position:fixed;z-index:200;top:auto;bottom:0;left:0;right:0;height:1.2em;text-align:right;padding-left:1em;padding-right:1em;font-size:60%;color:gray;background:transparent;}div.background{display:none;}div.handout{margin-left:20px;margin-right:20px;}div.slide.titlepage.h1{padding-top:40%;}div.slide{z-index:20;clear:both;top:0;bottom:0;left:0;right:0;line-height:120%;font-size:24pt;background-color:transparent;border-width:0;margin:0;padding:10px 20px 0;}div.slide + div[class].slide{page-break-before:always;}div.slide h1{font-family:Cabin, serif;font-size:46px;font-style:normal;color:#c00;text-shadow:2px 2px 2px #aaa;text-decoration:none;text-transform:none;text-align:center;letter-spacing:-.015em;word-spacing:-.009em;line-height:0.89;}div.toc{position:absolute;top:auto;bottom:4em;left:4em;right:auto;width:60%;max-width:30em;height:30em;border:solid thin #000;background:#f0f0f0;color:#000;z-index:300;overflow:auto;display:block;visibility:visible;padding:1em;}div.toc-heading{width:100%;border-bottom:solid 1px #b4b4b4;margin-bottom:1em;text-align:center;}pre{font-size:80%;font-weight:700;line-height:120%;color:#00428C;background-color:#E4E5E7;border-color:#95ABD0;border-style:solid;border-width:thin thin thin 1em;padding:.2em 1em;}li pre{margin-left:0;}blockquote{font-style:italic;}. footnote{font-size:smaller;margin-left:2em;}a img{border-style:none;border-width:0;}a{color:#000;text-decoration:none;text-shadow:2px 2px 2px #00f;}.navbar a:link{color:#FFF;}.navbar a:visited{color:#FF0;}ul{list-style-type:disc;margin:.5em .5em .5em 3.5em;padding:0;}ul ul{list-style-type:square;}ul ul ul{list-style-type:circle;}ul ul ul ul{list-style-type:disc;}li{margin-left:1.5em;margin-top:.5em;}li li{font-size:85%;font-style:italic;}li li li{font-size:85%;font-style:normal;}div dt{margin-left:0;margin-top:1em;margin-bottom:.5em;font-weight:700;}div dd{margin-left:2em;margin-bottom:.5em;}p,pre,ul,ol,blockquote,h2,h3,h4,h5,h6,dl,table{margin-left:1em;margin-right:1em;}p.subhead{font-weight:700;margin-top:2em;}.bigger{font-size:130%;}td,th{padding:.2em;}ol{margin:.5em 1.5em .5em .5em;padding:0;}li ul li{font-size:85%;font-style:italic;list-style-type:disc;background:transparent;padding:0;}li li ul li{font-size:85%;font-style:normal;list-style-type:circle;background:transparent;padding:0;}li li li ul li{list-style-type:disc;background:transparent;padding:0;}ol.outline{list-style:decimal;}ol.outline ol{list-style-type:lower-alpha;}a.titleslide{font-weight:700;font-style:italic;}div.slide.titlepage,.center{text-align:center;}strong,.navbar a:active,.navbar a:hover{color:red;}p.copyright,.smaller{font-size:smaller;}a:visited,a:link{text-shadow:1px 1px 1px #ccc;}a:hover,a:active{color:red;text-decoration:underline;}li ol li,li li ol li{list-style-type:decimal;}ol.outline li:hover,ul.outline li:hover{cursor:pointer;}ol.outline li.nofold:hover,ul.outline li.nofold:hover{cursor:default;}ol.outline li.nofold,ul.outline li.nofold{background:transparent url(nofold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded,ul.outline li.unfolded{background:transparent url(fold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded,ul.outline li.folded{background:transparent url(unfold-dim.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.unfolded:hover,ul.outline li.unfolded:hover{background:transparent url(fold.gif) no-repeat 0 .5em;padding:0 0 0 20px;}ol.outline li.folded:hover,ul.outline li.folded:hover{background:transparent url(unfold.gif) no-repeat 0 .5em;padding:0 0 0 20px;} div.image-container{  margin-left: 1em;  margin-right: 1em;  margin-top: 0;  margin-left:auto;  margin-right:auto;  overflow:auto;  max-width: 80%; text-align:left;  clear:both;}div.image-description{  clear:both;  text-align: center;  font-style: italic;}}/*]]>*/</style>" muse-slidy-white-theme)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -242,9 +247,10 @@ $(window).load(function(){
 
 (setq muse-slidy-blue-theme (make-hash-table :test 'equal))
 (puthash 'muse-slidy-theme-name "Standard Blue" muse-slidy-blue-theme)
-(puthash 'muse-slidy-header-image "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCB1jYAAAAAIAAc/INeUAAAAASUVORK5CYII=" muse-slidy-blue-theme)
-(puthash 'muse-slidy-footer-image "~/Desktop/IMG_2562.JPG" muse-slidy-blue-theme)
-(puthash 'muse-slidy-leader-image "~/Desktop/IMG_2562.JPG" muse-slidy-blue-theme)
+;; Instead of leaving the header images empty, use a transparent 1x1 png
+(puthash 'muse-slidy-header-image "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADUlEQVQIHWP478vAAAAE6AFNd1XdIgAAAABJRU5ErkJggg==" muse-slidy-blue-theme)
+(puthash 'muse-slidy-footer-image "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADUlEQVQIHWP478vAAAAE6AFNd1XdIgAAAABJRU5ErkJggg==" muse-slidy-blue-theme)
+(puthash 'muse-slidy-leader-image "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADUlEQVQIHWP478vAAAAE6AFNd1XdIgAAAABJRU5ErkJggg==" muse-slidy-blue-theme)
 (puthash 'muse-slidy-background-color "#FFFFFF" muse-slidy-blue-theme)
 (puthash 'muse-slidy-slidy-css "
 <link rel=\"stylesheet\" href=\"http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css\" type=\"text/css\" />
