@@ -1,0 +1,85 @@
+#title Emacs Muse Slidy
+#author self-contained slides with emacs
+
+* This deck of slides
+
+ - is a self-contained xhtml file
+ - (yes, the images get embedded too)
+[[~/cat.jpeg]]
+ - it displays properly in all modern browsers
+ - (including silk, safari, and other tablet browsers)
+ - was written as (very) plain text in emacs
+
+* How it is made
+
+<example>
+#title Emacs Muse Slidy
+#author Fabio Arciniegas
+
+* This deck of slides
+
+ - is a self-contained xhtml file
+ - (yes, the images get embedded in the single file too)
+
+[[~/Desktop/cat.jpeg]]
+
+ - it displays properly in all modern browsers
+ - (including silk, safari, and other tablet browsers)
+ - was written quickly as plain text in emacs
+
+* How it is made
+
+...
+</example>
+And then...
+<example>M-x muse-publish-this-file muse-slidy</example>
+That's it.
+
+* Emacs Muse Slidy
+
+ - Based on [[http://www.gnu.org/software/emacs-muse/][Emacs muse]]
+ - And [[http://www.w3.org/Talks/Tools/Slidy2/][W3C slidy]]
+ - Themes use fonts from [[http://www.google.com/fonts#][google fonts]]
+ - Available for download at github (https://github.com/fabioarciniegas/muse)
+
+* Other things you can put in your presentation
+
+| a   | table                                                           |
+|-----+-----------------------------------------------------------------|
+| and | things like *emphasis text*                                     |
+| or  | [[~/highfive.png][images with captions (all images get embedded!)]] |
+| ... | and of course [[http://emacsslidy.net][links]]                  |
+
+ 1. numbered
+ 2. lists ...and **more emphasis** etc.
+
+* Themes
+
+Emacs Muse slidy comes with a number of pre-packaged themes:
+
+ - Classic white
+ - Emacs Muse slidy default
+ - W3C standard slidy blue
+ - Fancy Black
+ - Treehug Green
+
+
+<example>
+ M-x customize-variable muse-slidy-theme 
+</example>
+
+
+* Customization
+
+You can customize any item in emacs muse slidy:
+
+<example>M-x customize-variable muse-slidy-override-head-icon mylogo.png
+</example>
+
+* What you can customize
+
+* Thank you!
+
+Fabio Arciniegas, 2014 https://github.com/fabioarciniegas/muse
+
+(Emacs muse slidy is distributed for free under the GNU license)
