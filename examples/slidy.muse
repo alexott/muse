@@ -1,16 +1,18 @@
 #title Emacs Muse Slidy
-#author self-contained slides with emacs
+#author web-ready, self-contained slides with emacs
 
 * This deck of slides
 
+ - can be displayed directly in all modern browsers (no plugin)
  - is a self-contained xhtml file
  - (yes, the images get embedded too)
 [[~/cat.jpeg]]
- - it displays properly in all modern browsers
- - (including silk, safari, and other tablet browsers)
- - was written as (very) plain text in emacs
+ - displays also in silk, safari, and other tablet browsers
+ - *was written as (very) plain text in emacs*
 
-* How it is made
+* How it works
+
+You write a text file with minimum markup in emacs:
 
 <example>
 #title Emacs Muse Slidy
@@ -21,7 +23,7 @@
  - is a self-contained xhtml file
  - (yes, the images get embedded in the single file too)
 
-[[~/Desktop/cat.jpeg]]
+[[~/cat2.jpg]]
 
  - it displays properly in all modern browsers
  - (including silk, safari, and other tablet browsers)
@@ -31,23 +33,18 @@
 
 ...
 </example>
-And then...
+Then execute:
 <example>M-x muse-publish-this-file muse-slidy</example>
-That's it.
 
-* Emacs Muse Slidy
+That's it. The output is literally the presentation you are reading.
 
- - Based on [[http://www.gnu.org/software/emacs-muse/][Emacs muse]]
- - And [[http://www.w3.org/Talks/Tools/Slidy2/][W3C slidy]]
- - Themes use fonts from [[http://www.google.com/fonts#][google fonts]]
- - Available for download at github (https://github.com/fabioarciniegas/muse)
 
 * Other things you can put in your presentation
 
 | a   | table                                                           |
 |-----+-----------------------------------------------------------------|
 | and | things like *emphasis text*                                     |
-| or  | [[~/highfive.png][images with captions (all images get embedded!)]] |
+| or  | [[~/cat2.jpg][images with captions (all images get embedded!)]] |
 | ... | and of course [[http://emacsslidy.net][links]]                  |
 
  1. numbered
@@ -57,29 +54,64 @@ That's it.
 
 Emacs Muse slidy comes with a number of pre-packaged themes:
 
- - Classic white
- - Emacs Muse slidy default
- - W3C standard slidy blue
- - Fancy Black
- - Treehug Green
+ - [[white.xhtml#(5)][Classic white]]
+ - [[index.xhtml#(5)][Muse slidy default]]
+ - [[blue.xhtml#(5)][W3C standard slidy blue]]
+ - [[green.xhtml#(5)][Treehug Green]]
+ - [[black.xhtml#(5)][Fancy Black]]
 
-
+To change themes execute:
 <example>
  M-x customize-variable muse-slidy-theme 
 </example>
 
 
-* Customization
+* Installation
 
-You can customize any item in emacs muse slidy:
+Two options:
 
-<example>M-x customize-variable muse-slidy-override-head-icon mylogo.png
+ 1. Get muse-slidy with full themes, including images from git or [[https://github.com/fabioarciniegas/muse/archive/master.zip][download as zip]]
+<example>git clone git clone git@github.com:fabioarciniegas/muse.git</example>
+
+ 2. Get muse-slidy with CSS-only themes, without images:  [[lightweight-museslidy.zip][download as zip]]
+
+Then Add the following to your .emacs file
+<example>
+(add-to-list 'load-path "~/muse/lisp")
+(require 'muse-mode)     
+(require 'muse-slidy)     
 </example>
 
-* What you can customize
+You're ready to go.
+
+* Usage
+ 
+ 1. open a plain text muse file (see muse/examples/slidy.muse for this file)
+ 2. M-x muse-publish-this-file slidy
+ 3. To change themes use: M-x customize-variable muse-slidy-theme
+
+
+* Itemized Customization
+
+Beyond themes, you can customize any item in emacs muse slidy:
+
+<example>M-x customize-variable muse-slidy-override-head-icon mylogo.png</example>
+
+
 
 * Thank you!
 
 Fabio Arciniegas, 2014 https://github.com/fabioarciniegas/muse
 
-(Emacs muse slidy is distributed for free under the GNU license)
+Emacs muse slidy is distributed for free under the GNU license and is based on 
+other free projects:
+
+
+ - [[http://www.gnu.org/software/emacs/][Emacs]]
+ - [[http://www.gnu.org/software/emacs-muse/][Emacs muse]] by Michael Olson, currently maintained by Alex Ott
+ - [[http://www.w3.org/Talks/Tools/Slidy2/][W3C slidy]] by the W3C
+ - Themes use fonts from [[http://www.google.com/fonts#][google fonts]]
+ - Themes use free decorations from Jeya @ [[http://mediamilitia.com/decorative-elements-pack-33-free-vectors-brushes-and-images/][mediamillitia.com]]
+
+
+Available for download at github (https://github.com/fabioarciniegas/muse)
