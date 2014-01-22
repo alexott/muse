@@ -6,8 +6,8 @@
  - can be displayed directly in all modern browsers (no plugin)
  - is a self-contained xhtml file
  - (yes, the images get embedded too)
-[[~/cat.jpeg]]
- - displays also in silk, safari, and other tablet browsers
+[[~/Desktop/migu.jpg]]
+ - displays properly in iphone, ipad, kindle fire etc 
  - *was written as (very) plain text in emacs*
 
 * How it works
@@ -23,7 +23,7 @@ You write a text file with minimum markup in emacs:
  - is a self-contained xhtml file
  - (yes, the images get embedded in the single file too)
 
-[[~/cat2.jpg]]
+[[~/migu.jpg]]
 
  - it displays properly in all modern browsers
  - (including silk, safari, and other tablet browsers)
@@ -44,7 +44,7 @@ That's it. The output is literally the presentation you are reading.
 | a   | table                                                           |
 |-----+-----------------------------------------------------------------|
 | and | things like *emphasis text*                                     |
-| or  | [[~/cat2.jpg][images with captions (all images get embedded!)]] |
+| or  | [[~/Desktop/cormac.jpg][images with captions (all images get embedded!)]] |
 | ... | and of course [[http://emacsslidy.net][links]]                  |
 
  1. numbered
@@ -70,10 +70,8 @@ To change themes execute:
 
 Two options:
 
- 1. Get muse-slidy with full themes, including images from git or [[https://github.com/fabioarciniegas/muse/archive/master.zip][download as zip]]
+ 1. Get muse-slidy. [[https://github.com/fabioarciniegas/muse/archive/master.zip][download as zip]] or clone from github:
 <example>git clone git clone git@github.com:fabioarciniegas/muse.git</example>
-
- 2. Get muse-slidy with CSS-only themes, without images:  [[lightweight-museslidy.zip][download as zip]]
 
 Then Add the following to your .emacs file
 <example>
@@ -93,19 +91,16 @@ You're ready to go.
 
 * Itemized Customization
 
-Beyond themes, you can customize any item in emacs muse slidy:
+Beyond themes, you can customize via the following variables:
 
 <example>M-x customize-variable muse-slidy-override-head-icon mylogo.png</example>
 
+[[~/Desktop/overrides.jpg]]
 
 
 * Thank you!
 
-Fabio Arciniegas, 2014 https://github.com/fabioarciniegas/muse
-
-Emacs muse slidy is distributed for free under the GNU license and is based on 
-other free projects:
-
+Muse slidy by Fabio Arciniegas, 2014. Emacs muse slidy is distributed for free, without warranty under the GNU license and is based on other free projects:
 
  - [[http://www.gnu.org/software/emacs/][Emacs]]
  - [[http://www.gnu.org/software/emacs-muse/][Emacs muse]] by Michael Olson, currently maintained by Alex Ott
