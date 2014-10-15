@@ -1,6 +1,6 @@
 ;;; muse-project.el --- handle Muse projects
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
@@ -86,11 +86,13 @@ has been modified via the customize interface.")
           ;; Turn settings of first part into cons cells, symbol->string
           (while head
             (cond ((stringp (car head))
-                   (add-to-list 'res (car head) t)
+                   (unless (member (car head) res)
+                     (setq res (append res (list (car head)))))
                    (setq head (cdr head)))
                   ((symbolp (car head))
-                   (add-to-list 'res (list (symbol-name (car head))
-                                           (cadr head)) t)
+                   (let ((x (list (symbol-name (car head)) (cadr head))))
+                     (unless (member x res)
+                       (setq res (append res (list x)))))
                    (setq head (cddr head)))
                   (t
                    (setq head (cdr head)))))
@@ -123,10 +125,13 @@ Muse can make use of."
         ;; Turn cons cells into flat list, string->symbol
         (while head
           (cond ((stringp (car head))
-                 (add-to-list 'res (car head) t))
+                 (unless (member (car head) res)
+                   (setq res (append res (list (car head))))))
                 ((consp (car head))
-                 (add-to-list 'res (intern (caar head)) t)
-                 (add-to-list 'res (car (cdar head)) t)))
+                 (let ((x (intern (caar head)))
+                       (y (car (cdar head))))
+                   (unless (member x res) (setq res (append res (list x))))
+                   (unless (member y res) (setq res (append res (list y)))))))
           (setq head (cdr head)))
         (setcdr (car val) (cons res (cdr (cdar val)))))
       (let ((styles (cdar val)))
@@ -942,7 +947,8 @@ prompting for one."
       (setq sym (car vars))
       (setq custom-set (or (get sym 'custom-set) 'set))
       (setq var (if (eq (get sym 'custom-type) 'hook)
-                    (make-local-hook sym)
+                    (if (fboundp 'make-local-hook)
+                        (make-local-hook sym))
                   (make-local-variable sym)))
       (funcall custom-set var (car (cdr vars)))
       (setq vars (cdr (cdr vars))))))

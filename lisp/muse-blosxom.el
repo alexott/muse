@@ -1,6 +1,6 @@
 ;;; muse-blosxom.el --- publish a document tree for serving by (py)Blosxom
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Michael Olson <mwolson@gnu.org>
@@ -258,7 +258,8 @@ The page will be initialized with the current date and TITLE."
               (tags nil))
           (while (progn (setq tag (read-string "Tag (RET to continue): "))
                         (not (string= tag "")))
-            (add-to-list 'tags tag t))
+            (unless (member tag tags)
+              (setq tags (append tags (list tag)))))
           tags)
       (funcall muse-completing-read-function
                "Category: "

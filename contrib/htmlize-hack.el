@@ -2,7 +2,7 @@
 ;; To use it, add the path to this directory to your load path and
 ;; add (require 'htmlize-hack) to your Emacs init file.
 
-(eval-when-compile (require 'cl))
+(require 'cl)
 (if t (require 'htmlize))               ; Don't load during compilation.
 
 (when (equal htmlize-version "1.34")

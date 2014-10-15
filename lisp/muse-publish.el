@@ -1,6 +1,6 @@
 ;;; muse-publish.el --- base publishing implementation
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
@@ -844,6 +844,8 @@ the file is published no matter what."
           (when (muse-write-file output-path)
             (muse-style-run-hooks :final style file output-path target)))
         t))))
+
+(defvar muse-current-output-style)
 
 ;;;###autoload
 (defun muse-publish-this-file (style output-dir &optional force)

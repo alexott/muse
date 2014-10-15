@@ -1,6 +1,6 @@
 ;;; muse-backlink.el --- backlinks for Muse
 
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Jim Ottaway <j.ottaway@lse.ac.uk>
@@ -261,7 +261,7 @@ The parent buffer of the forthcomingly visited muse page.")
       (save-buffer)
       (when muse-backlink-parent-buffer
         (with-current-buffer muse-backlink-parent-buffer
-          (font-lock-fontify-buffer))))
+          (font-lock-fontify-buffer)))) ;FIXME: Why?  --Stef
     (setq muse-backlink-links nil
           muse-backlink-parent-buffer nil
           muse-backlink-pending nil)

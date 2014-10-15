@@ -1,6 +1,6 @@
 ;;; muse-html.el --- publish to HTML and XHTML
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
@@ -667,7 +667,9 @@ This tag requires htmlize 1.34 or later in order to work."
               (if (functionp mode)
                   (funcall mode)
                 (fundamental-mode))
-              (font-lock-fontify-buffer)
+              (if (fboundp 'font-lock-ensure)
+                  (font-lock-ensure)
+                (font-lock-fontify-buffer))
               ;; silence the byte-compiler
               (when (fboundp 'htmlize-region-for-paste)
                 ;; transform the region to HTML

@@ -1,6 +1,6 @@
 ;;; cgi.el -- Using Emacs for CGI scripting
 
-;; Copyright (C) 2000, 2006, 2012 Free Software Foundation, Inc.
+;; Copyright (C) 2000, 2006, 2012, 2014 Free Software Foundation, Inc.
 
 ;; Author: Eric Marsden  <emarsden@laas.fr>
 ;;         Michael Olson <mwolson@gnu.org> (slight modifications)
@@ -120,11 +120,12 @@
 ;; Substrings are plus-decoded and then URI-decoded.
 (defun cgi-decode (q)
   (when q
-    (flet ((split-= (str)
-	    (let ((pos (or (cgi-position ?= str) 0)))
-	      (cons (cgi-decode-string (substring str 0 pos))
-		    (cgi-decode-string (substring str (+ pos 1)))))))
-      (mapcar #'split-= (split-string q "&")))))
+    (let ((split-=
+           (lambda (str)
+             (let ((pos (or (cgi-position ?= str) 0)))
+               (cons (cgi-decode-string (substring str 0 pos))
+                     (cgi-decode-string (substring str (+ pos 1))))))))
+      (mapcar split-= (split-string q "&")))))
 
 (defun cgi-lose (fmt &rest args)
   (let ((why (apply #'format fmt args)))
