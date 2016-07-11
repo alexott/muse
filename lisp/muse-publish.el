@@ -1017,17 +1017,17 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property.
 CONTEXT is used to figure out what kind of specials to escape.
 
 The following contexts exist in Muse.
-'underline  _underlined text_
-'literal    =monospaced text= or <code> region (monospaced, escaped)
-'emphasis   *emphasized text*
-'email      email@example.com
-'url        http://example.com
-'url-desc   [[...][description of an explicit link]]
-'image      [[image.png]]
-'example    <example> region (monospaced, block context, escaped)
-'verbatim   <verbatim> region (escaped)
-'footnote   footnote text
-'document   normal text"
+`underline'  _underlined text_
+`literal'    =monospaced text= or <code> region (monospaced, escaped)
+`emphasis'   *emphasized text*
+`email'      email@example.com
+`url'        http://example.com
+`url-desc'   [[...][description of an explicit link]]
+`image'      [[image.png]]
+`example'    <example> region (monospaced, block context, escaped)
+`verbatim'   <verbatim> region (escaped)
+`footnote'   footnote text
+`document'   normal text"
   (let ((specials (muse-style-element :specials nil t)))
     (cond ((functionp specials)
            (setq specials (funcall specials context)))

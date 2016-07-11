@@ -403,7 +403,7 @@ before the second."
 The rating is stripped out in the returned list.
 Default sorting is highest-first.
 
-If TEST if specified, use it to sort the list.  The default test is '>."
+If TEST if specified, use it to sort the list.  The default test is `>'."
   (unless test (setq test '>))
   (mapcar (function cdr)
           (muse-sort-with-closure
@@ -476,8 +476,8 @@ never modify the directory part of the path."
 
 (defun muse-list* (arg &rest rest)
   "Return a new list with specified args as elements, cons'd to last arg.
-Thus, `(list* A B C D)' is equivalent to `(nconc (list A B C) D)', or to
-`(cons A (cons B (cons C D)))'."
+Thus, (muse-list* A B C D) is equivalent to (nconc (list A B C) D)' or to
+(cons A (cons B (cons C D)))."
   (cond ((not rest) arg)
         ((not (cdr rest)) (cons arg (car rest)))
         (t (let* ((n (length rest))
@@ -742,7 +742,7 @@ function."
 
 (defun muse-list-item-type (str)
   "Determine the type of list given STR.
-Returns either 'ul, 'ol, 'dl-term, 'dl-entry, or nil."
+Returns either `ul', `ol', `dl-term', `dl-entry', or nil."
   (save-match-data
     (cond ((or (string= str "")
                (< (length str) 2))

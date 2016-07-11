@@ -399,7 +399,7 @@ your current list type and indentation level."
 
 (defun muse-alter-list-item-indentation (operation)
   "Alter the indentation of the current list item.
-Valid values of OPERATION are 'increase and 'decrease."
+Valid values of OPERATION are `increase' and `decrease'."
   (let ((pstart (muse-get-paragraph-start))
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
@@ -950,7 +950,7 @@ function, you might want to set this manually.")
           "\\|[" muse-regexp-blank "][0-9]+\\.[" muse-regexp-blank "]*\\)")
   "Regexp used to match the beginning of a list item.
 This is used by `muse-list-edit-minor-mode'.
-The '%s' will be replaced with a whitespace regexp when publishing.")
+The `%s' will be replaced with a whitespace regexp when publishing.")
 
 (defun muse-l-e-m-m-insert-list-item ()
   "Insert a list item at the current point, taking into account
