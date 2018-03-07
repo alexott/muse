@@ -85,14 +85,14 @@
   :set (function
         (lambda (sym value)
           (if value
-              (add-hook 'find-file-hooks 'muse-mode-maybe)
-            (remove-hook 'find-file-hooks 'muse-mode-maybe))
+              (add-hook 'find-file-hook 'muse-mode-maybe)
+            (remove-hook 'find-file-hook 'muse-mode-maybe))
           (set sym value)))
   :group 'muse-mode)
 
 (defun muse-mode-maybe-after-init ()
   (when muse-mode-auto-p
-    (add-hook 'find-file-hooks 'muse-mode-maybe)))
+    (add-hook 'find-file-hook 'muse-mode-maybe)))
 
 ;; If the user sets this value in their init file, make sure that
 ;; it takes effect
