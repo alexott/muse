@@ -792,7 +792,7 @@ contains a marker.  This is the case with Muse tag functions."
   "Apply the given STYLE's markup rules to the given region.
 The result is placed in a new buffer that includes TITLE in its name."
   (interactive "r")
-  (when (interactive-p)
+  (when (called-interactively-p 'interactive)
     (unless title (setq title (read-string "Title: ")))
     (unless style (setq style (muse-publish-get-style))))
   (let ((text (buffer-substring beg end))

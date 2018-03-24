@@ -642,7 +642,7 @@ first directory within the project's fileset is used."
      (list entry project)))
   (setq project (muse-project project))
   (let ((project-name (car project)))
-    (unless (interactive-p)
+    (unless (called-interactively-p 'interactive)
       (setq project (muse-project project)
             name (cons name (muse-project-page-file name project))))
     ;; If we're given a relative or absolute filename, open it as-is
@@ -826,7 +826,7 @@ prompting for one."
   (let ((muse-current-project (muse-project-of-file)))
     (if (not muse-current-project)
         ;; file is not part of a project, so fall back to muse-publish
-        (if (interactive-p) (call-interactively 'muse-publish-this-file)
+        (if (called-interactively-p 'interactive) (call-interactively 'muse-publish-this-file)
           (muse-publish-this-file style nil force))
       (unless style
         (setq style (muse-project-get-applicable-style
