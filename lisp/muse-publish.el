@@ -108,7 +108,7 @@ If non-nil, publish comments using the markup of the current style."
     (1200 "\\`#\\([a-zA-Z-]+\\)\\s-+\\(.+\\)\n+" 0 directive)
 
     ;; commented lines
-    (1250 ,(concat "^;\\(?:[" muse-regexp-blank "]+\\(.+\\)\\|$\\|'\\)")
+    (1250 ,(concat "^;\\(?:[" muse-regexp-blank "]+\\(.+\\)\\|$\\|\\'\\)")
           0 comment)
 
     ;; markup tags
