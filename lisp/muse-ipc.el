@@ -48,7 +48,7 @@
   :type 'number)
 
 (defcustom muse-ipc-ignore-done nil
-  "If non-nil, ignore any 'done' messages that we get from clients."
+  "If non-nil, ignore any `done' messages that we get from clients."
   :group 'muse-ipc
   :type 'boolean)
 

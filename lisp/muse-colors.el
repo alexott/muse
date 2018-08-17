@@ -61,7 +61,7 @@ See `muse-colors-buffer' for more information."
   "Specify whether the heading faces should be auto-generated.
 The default is to scale them.
 
-Choosing 'outline will copy the colors from the outline-mode
+Choosing `outline' will copy the colors from the outline-mode
 headings.
 
 If you want to customize each of the headings individually, set

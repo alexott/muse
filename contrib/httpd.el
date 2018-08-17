@@ -1,13 +1,13 @@
-;;; httpd.el -- a web server in Emacs Lisp
-;;;
-;;; Author: Eric Marsden <emarsden@laas.fr>
-;;;         John Wiegley <johnw@gnu.org>
-;;;         Michael Olson <mwolson@gnu.org> (slight modifications)
-;;; Version: 1.1
-;;; Keywords: games
-;;; Copyright (C) 2001, 2003 Eric Marsden
-;;; Parts copyright (C) 2006 Free Software Foundation, Inc.
-;;
+;;; httpd.el -- A web server in Emacs Lisp
+
+;; Copyright (C) 2001, 2003, 2006, 2012 Free Software Foundation, Inc.
+
+;; Author: Eric Marsden <emarsden@laas.fr>
+;;         John Wiegley <johnw@gnu.org>
+;;         Michael Olson <mwolson@gnu.org> (slight modifications)
+;; Version: 1.1
+;; Keywords: games
+
 ;;     This program is free software; you can redistribute it and/or
 ;;     modify it under the terms of the GNU General Public License as
 ;;     published by the Free Software Foundation; either version 3 of
@@ -28,8 +28,8 @@
 ;;     <URL:http://purl.org/net/emarsden/home/downloads/>
 
 ;;; Commentary:
-;;
-;; httpd.el is an HTTP server embedded in the Emacs. It can handle GET
+
+;; httpd.el is an HTTP server embedded in the Emacs.  It can handle GET
 ;; and HEAD requests; adding support for POST should not be too
 ;; difficult.  By default, httpd.el will listen on server side Emacs
 ;; sockets for HTTP requests.
@@ -46,7 +46,7 @@
 ;;
 ;; Thanks to John Wiegley and Cyprian Adam Laskowski.
 
-;;; Code
+;;; Code:
 
 (defvar httpd-document-root "/var/www")
 
@@ -285,5 +285,4 @@ content.")
     (setq httpd-process nil)))
 
 (provide 'httpd)
-
-;; httpd.el ends here
+;;; httpd.el ends here

@@ -44,7 +44,7 @@
 
 (defcustom muse-regexp-use-character-classes 'undecided
   "Indicate whether to use extended character classes like [:space:].
-If 'undecided, Muse will use them if your emacs is known to support them.
+If `undecided', Muse will use them if your emacs is known to support them.
 
 Emacs 22 and Emacs 21.3.50 are known to support them.  XEmacs
 does not support them.
@@ -149,7 +149,7 @@ the time."
           "\\|[" muse-regexp-blank "]-[" muse-regexp-blank "]*"
           "\\|[" muse-regexp-blank "][0-9]+\\.[" muse-regexp-blank "]*\\)")
   "Regexp used to match the beginning of a list item.
-The '%s' will be replaced with a whitespace regexp when publishing."
+The `%s' will be replaced with a whitespace regexp when publishing."
   :type 'regexp
   :group 'muse-regexp)
 

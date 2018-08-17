@@ -1,6 +1,6 @@
 ;;; muse-html.el --- publish to HTML and XHTML
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
@@ -400,7 +400,7 @@ change this to \"application/xhtml+xml\"."
                                               'detect
                                             "iso-8859-1")
   "The charset to append to the HTML <meta> tag.
-If set to the symbol 'detect, use `muse-html-encoding-map' to try
+If set to the symbol `detect', use `muse-html-encoding-map' to try
 and determine the HTML charset from emacs's coding.  If set to a
 string, this string will be used to force a particular charset"
   :type '(choice string symbol)
@@ -422,7 +422,7 @@ This will be used if no special characters are found."
   "Modes that we allow the <src> tag to colorize.
 If t, permit the <src> tag to colorize any mode.
 
-If a list of mode names, such as '(\"html\" \"latex\"), and the
+If a list of mode names, such as (\"html\" \"latex\"), and the
 lang argument to <src> is not in the list, then use fundamental
 mode instead."
   :type '(choice (const :tag "Any" t)
@@ -667,7 +667,9 @@ This tag requires htmlize 1.34 or later in order to work."
               (if (functionp mode)
                   (funcall mode)
                 (fundamental-mode))
-              (font-lock-fontify-buffer)
+              (if (fboundp 'font-lock-ensure)
+                  (font-lock-ensure)
+                (font-lock-fontify-buffer))
               ;; silence the byte-compiler
               (when (fboundp 'htmlize-region-for-paste)
                 ;; transform the region to HTML
