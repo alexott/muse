@@ -38,6 +38,7 @@
 ;;; Code
 
 (require 'muse-publish)
+(require 'muse-latex)
 
 (defgroup muse-latex2png nil
   "Publishing LaTeX formulas as PNG files."
@@ -209,7 +210,7 @@ See `muse-latex2png-region' for valid keys for ATTRS."
     (setq attrs (cons (cons "prefix"
                             (concat "latex2png-" (muse-page-name)))
                       attrs)))
-  (if (or (muse-style-derived-p "latex") (muse-style-derived-p "context"))
+  (if (muse-publish-latex-tag-as-is)
       (muse-publish-mark-read-only beg end)
     (muse-latex2png-region beg end attrs)))
 
@@ -233,22 +234,15 @@ centered in the published output, among other things."
                             (looking-at (concat "[" muse-regexp-blank "]*$"))))
                         (prog1 t
                           (replace-match "")
-                          (when (and (or (muse-style-derived-p "latex")
-                                         (muse-style-derived-p "context"))
+                          (when (and (muse-publish-latex-tag-as-is)
                                      (not (bobp)))
                             (backward-char 1)
                             (if (bolp)
                                 (delete-char 1)
                               (forward-char 1)))
                           (setq beg (point)))))
-         (tag-beg (if centered
-                      (if (muse-style-derived-p "context")
-                          "\\startformula " "\\[ ")
-                    "$"))
-         (tag-end (if centered
-                      (if (muse-style-derived-p "context")
-                          " \\stopformula" " \\]")
-                    "$"))
+         (tag-beg (muse-publish-latex-delimiters centered t))
+         (tag-end (muse-publish-latex-delimiters centered nil))
          (attrs (nconc (list (cons "prefix"
                                    (concat "latex2png-" (muse-page-name))))
                        (if centered nil
@@ -257,7 +251,7 @@ centered in the published output, among other things."
     (muse-insert-markup tag-beg)
     (goto-char end)
     (muse-insert-markup tag-end)
-    (if (or (muse-style-derived-p "latex") (muse-style-derived-p "context"))
+    (if (muse-publish-latex-tag-as-is)
         (muse-publish-mark-read-only beg (point))
       (muse-latex2png-region beg (point) attrs))))
 

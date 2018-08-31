@@ -2418,6 +2418,12 @@ Supports publishing to HTML 4.0 and HTML 4.01, Strict or Transitional.
 @item xhtml
 Supports publishing to XHTML 1.0 and XHTML 1.1, Strict or Transitional.
 
+@item mathjax-html
+Extension of html style to support embedding raw LaTeX code in HTML.
+
+@item mathjax-xhtml
+Extension of xhtml style to support embedding raw LaTeX code in XHTML.
+
 @end table
 
 @subheading Options provided
@@ -2531,6 +2537,23 @@ The default HTML meta charset to use if no translation is found in
 @item muse-html-encoding-default
 The default Emacs buffer encoding to use in published files.
 This will be used if no special characters are found.
+
+@item muse-mathjax-src-url
+The URL of the MathJaX Javascript source.
+
+@item muse-mathjax-configuration
+Javascript code that is passed to @code{MathJaX.Hub.Config} to configure
+MathJaX at load time. By default, this sets allowed delimiters for LaTeX
+code.
+
+@item muse-mathjax-html-header
+The HTML header inserted into pages published with the mathjax-html
+style. By default, this is the @code{muse-html-header} with the
+@code{muse-mathjax-src-url} and @code{muse-mathjax-configuration}
+inserted.
+
+@item muse-mathjax-xhtml-header
+The analogue of @code{muse-mathjax-html-header} for mathjax-xhtml.
 
 @end table
 
@@ -2929,6 +2952,16 @@ This can also use the @verb{|<slide>|} tag.
 @item lecture-notes-pdf
 Publish a PDF document of lecture notes, using the Beamer extension.
 
+@cindex publishing styles, mathjax-html
+@item mathjax-html
+Publish an HTML document using the MathJaX Javascript extension to
+display LaTeX in the browser.
+
+@cindex publishing styles, mathjax-xhtml
+@item mathjax-xhtml
+Publish an XHTML document using the MathJaX Javascript extension to
+display LaTeX in the browser.
+
 @end table
 
 @subheading Options provided
@@ -3051,6 +3084,28 @@ ignore the @verb{|<contents>|} tag.
 
 If you don't agree with this, then set this option to non-nil,
 and it will do what you expect.
+
+@item muse-latex-centered-begin-delimiters
+An alist of styles and the associated opening delimiter used when
+publishing @verb{|<math>|} regions in that style. The @verb{|NIL|} style
+supplies the default value of @verb{|$$|}.
+
+@item muse-latex-centered-end-delimiters
+An alist of styles and the associated closing delimiter used when
+publishing @verb{|<math>|} regions in that style. The @verb{|NIL|} style
+supplies the default value of @verb{|$$|}.
+
+@item muse-latex-inline-begin-delimiters
+An alist of styles and the associated opening delimiter used when
+publishing @verb{|<math>|} regions in that style. The @verb{|NIL|} style
+supplies the default value of @verb{|$|}.
+
+@item muse-latex-inline-end-delimiters
+An alist of styles and the associated closing delimiter used when
+publishing @verb{|<math>|} regions in that style. The @verb{|NIL|} style
+supplies the default value of @verb{|$|}.
+
+
 
 @end table
 
