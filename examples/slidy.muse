@@ -1,0 +1,112 @@
+#title Emacs Muse Slidy
+#author web-ready, self-contained slides with emacs
+
+* This deck of slides
+
+ - can be displayed directly in all modern browsers (no plugin)
+ - is a self-contained xhtml file
+ - (yes, the images get embedded too)
+[[~/Desktop/migu.jpg]]
+ - displays properly in iphone, ipad, kindle fire etc 
+ - *was written as (very) plain text in emacs*
+
+* How it works
+
+You write a text file with minimum markup in emacs:
+
+<example>
+#title Emacs Muse Slidy
+#author Fabio Arciniegas
+
+* This deck of slides
+
+ - is a self-contained xhtml file
+ - (yes, the images get embedded in the single file too)
+
+[[~/migu.jpg]]
+
+ - it displays properly in all modern browsers
+ - (including silk, safari, and other tablet browsers)
+ - was written quickly as plain text in emacs
+
+* How it is made
+
+...
+</example>
+Then execute:
+<example>M-x muse-publish-this-file muse-slidy</example>
+
+That's it. The output is literally the presentation you are reading.
+
+
+* Other things you can put in your presentation
+
+| a   | table                                                           |
+|-----+-----------------------------------------------------------------|
+| and | things like *emphasis text*                                     |
+| or  | [[~/Desktop/cormac.jpg][images with captions (all images get embedded!)]] |
+| ... | and of course [[http://emacsslidy.net][links]]                  |
+
+ 1. numbered
+ 2. lists ...and **more emphasis** etc.
+
+* Themes
+
+Emacs Muse slidy comes with a number of pre-packaged themes:
+
+ - [[white.xhtml#(5)][Classic white]]
+ - [[index.xhtml#(5)][Muse slidy default]]
+ - [[blue.xhtml#(5)][W3C standard slidy blue]]
+ - [[green.xhtml#(5)][Treehug Green]]
+ - [[black.xhtml#(5)][Fancy Black]]
+
+To change themes execute:
+<example>
+ M-x customize-variable muse-slidy-theme 
+</example>
+
+
+* Installation
+
+Two options:
+
+ 1. Get muse-slidy. [[https://github.com/fabioarciniegas/muse/archive/master.zip][download as zip]] or clone from github:
+<example>git clone git clone git@github.com:fabioarciniegas/muse.git</example>
+
+Then Add the following to your .emacs file
+<example>
+(add-to-list 'load-path "~/muse/lisp")
+(require 'muse-mode)     
+(require 'muse-slidy)     
+</example>
+
+You're ready to go.
+
+* Usage
+ 
+ 1. open a plain text muse file (see muse/examples/slidy.muse for this file)
+ 2. M-x muse-publish-this-file slidy
+ 3. To change themes use: M-x customize-variable muse-slidy-theme
+
+
+* Itemized Customization
+
+Beyond themes, you can customize via the following variables:
+
+<example>M-x customize-variable muse-slidy-override-head-icon mylogo.png</example>
+
+[[~/Desktop/overrides.jpg]]
+
+
+* Thank you!
+
+Muse slidy by Fabio Arciniegas, 2014. Emacs muse slidy is distributed for free, without warranty under the GNU license and is based on other free projects:
+
+ - [[http://www.gnu.org/software/emacs/][Emacs]]
+ - [[http://www.gnu.org/software/emacs-muse/][Emacs muse]] by Michael Olson, currently maintained by Alex Ott
+ - [[http://www.w3.org/Talks/Tools/Slidy2/][W3C slidy]] by the W3C
+ - Themes use fonts from [[http://www.google.com/fonts#][google fonts]]
+ - Themes use free decorations from Jeya @ [[http://mediamilitia.com/decorative-elements-pack-33-free-vectors-brushes-and-images/][mediamillitia.com]]
+
+
+Available for download at github (https://github.com/fabioarciniegas/muse)
