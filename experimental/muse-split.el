@@ -38,7 +38,6 @@
 ;; muse-publish.
 
 (require 'muse-publish)
-(require 'assoc)
 (eval-when-compile
   (require 'cl))
 
@@ -220,8 +219,7 @@ where position is the last position that should appear in output-file"
           (if (not split-function)
               (muse-publish-no-split-function file)
             (funcall split-function file))))
-    (aput 'muse-publish-split-file-split-values
-          file split-alist)
+    (push (cons file split-alist) muse-publish-split-file-split-values)
     split-alist))
 
 (defun muse-publish-presplit-directive (&optional name value)
@@ -235,14 +233,13 @@ where position is the last position that should appear in output-file"
 
 (defun muse-publish-presplit-anchor()
   "Stores the location and names of anchors"
-  (let ((alist (aget muse-publish-presplit-anchor-location
-                     muse-publish-presplit-splitting-file)))
+  (let ((alist (cdr (assoc muse-publish-presplit-splitting-file
+                           muse-publish-presplit-anchor-location))))
 
     (add-to-list 'alist
                  `(,(match-string 2) . ,(match-beginning 2)))
-    (aput 'muse-publish-presplit-anchor-location
-          muse-publish-presplit-splitting-file
-          alist)))
+    (push (cons muse-publish-presplit-splitting-file alist)
+          muse-publish-presplit-anchor-location)))
 
 
 ;; ;;(setq muse-publish-split-file-split-values nil)
@@ -288,22 +285,19 @@ the anchor will be output"
          ;; either numbers, or file-locations
          (anchor-alist
           (or
-           (aget muse-publish-presplit-anchor-location
-                 base-file)
+           (cdr (assoc base-file muse-publish-presplit-anchor-location))
            (progn
              (muse-publish-presplit-publish base-file)
-             (aget muse-publish-presplit-anchor-location
-                   base-file))))
+             (cdr (assoc base-file muse-publish-presplit-anchor-location)))))
 
          ;; this should be a list of triples: file, start, stop.
          (split-list
-          (or (aget muse-publish-split-file-split-values
-                    base-file)
+          (or (cdr (assoc base-file muse-publish-split-file-split-values))
               (muse-publish-split-file base-file)))
          ;; this should be either the position of the anchor in a
          ;; buffer as an int, or a output file location
          (anchor-position-or-location
-          (aget anchor-alist anchor))
+          (cdr (assoc anchor anchor-alist)))
          ;; this should definately be the output file location
          (anchor-output
           (if (stringp anchor-position-or-location)
@@ -322,11 +316,9 @@ the anchor will be output"
 
     ;; ensure that we put the location back into the stored list so
     ;; that we don't have to work it out next time
-    (aput
-     'anchor-alist anchor anchor-output)
+    (push (cons anchor anchor-output) anchor-alist)
 
-    (aput 'muse-publish-presplit-anchor-location
-          base-file anchor-alist)
+    (push (cons base-file anchor-alist) muse-publish-presplit-anchor-location)
 
     (file-name-nondirectory anchor-output)))
 
