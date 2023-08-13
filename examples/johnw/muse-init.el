@@ -412,11 +412,11 @@
 
 ;;(setq
 ;; muse-cite-titles
-;; '(("Bah·'u'll·h"
-;;    ("Kit·b-i-Õq·n"
+;; '(("Bah√°'u'll√°h"
+;;    ("Kit√°b-i-√çq√°n"
 ;;     "http://bahai-library.com/?file=bahaullah_kitab_iqan.html"
 ;;     "http://bahai-library.com/?file=bahaullah_kitab_iqan.html#%d"))
-;;   ("`Abdu'l-Bah·"
+;;   ("`Abdu'l-Bah√°"
 ;;    ("Promulgation of Universal Peace"
 ;;     "http://bahai-library.com/?file=abdulbaha_promulgation_universal_peace.html"
 ;;     "http://www.bahai-library.com/writings/abdulbaha/pup/pup.html#%d"))))
