@@ -585,7 +585,7 @@ this is if you use Planner with Muse and run @code{(plan)} from your
 any such visits happen:
 
 @lisp
-(add-hook 'find-file-hooks 'muse-mode-maybe)
+(add-hook 'find-file-hook 'muse-mode-maybe)
 @end lisp
 
 

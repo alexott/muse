@@ -1,6 +1,6 @@
 ;;; muse-backlink.el --- backlinks for Muse
 
-;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Jim Ottaway <j.ottaway@lse.ac.uk>
@@ -83,10 +83,10 @@ that for the default value of SEPARATORS leading and trailing whitespace
 are effectively trimmed).  If nil, all zero-length substrings are retained,
 which correctly parses CSV format, for example.
 
-Note that the effect of `(split-string STRING)' is the same as
-`(split-string STRING split-string-default-separators t)').  In the rare
+Note that the effect of (split-string STRING) is the same as
+(split-string STRING split-string-default-separators t).  In the rare
 case that you wish to retain zero-length substrings when splitting on
-whitespace, use `(split-string STRING split-string-default-separators)'.
+whitespace, use (split-string STRING split-string-default-separators).
 
 Modifies the match data; use `save-match-data' if necessary."
         (let ((keep-nulls (not (if separators omit-nulls t)))
@@ -261,7 +261,7 @@ The parent buffer of the forthcomingly visited muse page.")
       (save-buffer)
       (when muse-backlink-parent-buffer
         (with-current-buffer muse-backlink-parent-buffer
-          (font-lock-fontify-buffer))))
+          (font-lock-fontify-buffer)))) ;FIXME: Why?  --Stef
     (setq muse-backlink-links nil
           muse-backlink-parent-buffer nil
           muse-backlink-pending nil)

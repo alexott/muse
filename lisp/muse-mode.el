@@ -85,14 +85,14 @@
   :set (function
         (lambda (sym value)
           (if value
-              (add-hook 'find-file-hooks 'muse-mode-maybe)
-            (remove-hook 'find-file-hooks 'muse-mode-maybe))
+              (add-hook 'find-file-hook 'muse-mode-maybe)
+            (remove-hook 'find-file-hook 'muse-mode-maybe))
           (set sym value)))
   :group 'muse-mode)
 
 (defun muse-mode-maybe-after-init ()
   (when muse-mode-auto-p
-    (add-hook 'find-file-hooks 'muse-mode-maybe)))
+    (add-hook 'find-file-hook 'muse-mode-maybe)))
 
 ;; If the user sets this value in their init file, make sure that
 ;; it takes effect
@@ -399,7 +399,7 @@ your current list type and indentation level."
 
 (defun muse-alter-list-item-indentation (operation)
   "Alter the indentation of the current list item.
-Valid values of OPERATION are 'increase and 'decrease."
+Valid values of OPERATION are `increase' and `decrease'."
   (let ((pstart (muse-get-paragraph-start))
         (list-item (format muse-list-item-regexp
                            (concat "[" muse-regexp-blank "]*")))
@@ -913,8 +913,7 @@ function, you might want to set this manually.")
      (car muse-tag-history))))
   (when (equal tag "")
     (setq tag (car muse-tag-history)))
-  (unless (interactive-p)
-    (require 'muse-publish))
+  (require 'muse-publish)
   (let ((tag-entry (assoc tag muse-publish-markup-tags))
         (options ""))
     ;; Add to custom list if no entry exists
@@ -950,7 +949,7 @@ function, you might want to set this manually.")
           "\\|[" muse-regexp-blank "][0-9]+\\.[" muse-regexp-blank "]*\\)")
   "Regexp used to match the beginning of a list item.
 This is used by `muse-list-edit-minor-mode'.
-The '%s' will be replaced with a whitespace regexp when publishing.")
+The `%s' will be replaced with a whitespace regexp when publishing.")
 
 (defun muse-l-e-m-m-insert-list-item ()
   "Insert a list item at the current point, taking into account

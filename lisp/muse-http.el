@@ -42,7 +42,7 @@
   :group 'press)
 
 (defcustom muse-http-maintainer (concat "webmaster@" (system-name))
-  "The maintainer address to use for the HTTP 'From' field."
+  "The maintainer address to use for the HTTP `From' field."
   :type 'string
   :group 'muse-http)
 

@@ -1,6 +1,6 @@
 ;;; muse-publish.el --- base publishing implementation
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2014
 ;;   Free Software Foundation, Inc.
 
 ;; This file is part of Emacs Muse.  It is not part of GNU Emacs.
@@ -792,7 +792,7 @@ contains a marker.  This is the case with Muse tag functions."
   "Apply the given STYLE's markup rules to the given region.
 The result is placed in a new buffer that includes TITLE in its name."
   (interactive "r")
-  (when (interactive-p)
+  (when (called-interactively-p 'interactive)
     (unless title (setq title (read-string "Title: ")))
     (unless style (setq style (muse-publish-get-style))))
   (let ((text (buffer-substring beg end))
@@ -844,6 +844,8 @@ the file is published no matter what."
           (when (muse-write-file output-path)
             (muse-style-run-hooks :final style file output-path target)))
         t))))
+
+(defvar muse-current-output-style)
 
 ;;;###autoload
 (defun muse-publish-this-file (style output-dir &optional force)
@@ -1015,17 +1017,17 @@ If IGNORE-READ-ONLY is non-nil, ignore the read-only property.
 CONTEXT is used to figure out what kind of specials to escape.
 
 The following contexts exist in Muse.
-'underline  _underlined text_
-'literal    =monospaced text= or <code> region (monospaced, escaped)
-'emphasis   *emphasized text*
-'email      email@example.com
-'url        http://example.com
-'url-desc   [[...][description of an explicit link]]
-'image      [[image.png]]
-'example    <example> region (monospaced, block context, escaped)
-'verbatim   <verbatim> region (escaped)
-'footnote   footnote text
-'document   normal text"
+`underline'  _underlined text_
+`literal'    =monospaced text= or <code> region (monospaced, escaped)
+`emphasis'   *emphasized text*
+`email'      email@example.com
+`url'        http://example.com
+`url-desc'   [[...][description of an explicit link]]
+`image'      [[image.png]]
+`example'    <example> region (monospaced, block context, escaped)
+`verbatim'   <verbatim> region (escaped)
+`footnote'   footnote text
+`document'   normal text"
   (let ((specials (muse-style-element :specials nil t)))
     (cond ((functionp specials)
            (setq specials (funcall specials context)))
