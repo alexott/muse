@@ -621,6 +621,81 @@ default Muse will add a footnote for each link."
           nil))))
    muse-latex-pdf-cruft))
 
+;;; LaTeX Delimiters
+
+(defcustom muse-latex-centered-begin-delimiters
+  '(("context"	. "\\startformula ")
+    (nil	. "\\["))
+  "An assoc list of the opening delimiters for centered math mode. The
+CAR is the style and the CDR is the delimiter. NIL is the default, and
+all options after the default are ignored."
+  :group 'muse-latex
+  :type '(alist :key-type sexp :value-type string))
+
+(defcustom muse-latex-centered-end-delimiters
+  '(("context"	. "\\endformula ")
+    (nil	. "\\]"))
+  "An assoc list of the closing delimiters for centered math mode. The
+CAR is the style and the CDR is the delimiter. NIL is the default, and
+all options after the default are ignored."
+  :group 'muse-latex
+  :type '(alist :key-type sexp :value-type string))
+
+(defcustom muse-latex-inline-begin-delimiters
+  '(("mathjax-html"	. " \\( ")
+    ("mathjax-xhtml"	. " \\( ")
+    (nil		. "$"))
+  "An assoc list of the opening delimiters for inline math mode. The
+CAR is the style and the CDR is the delimiter. NIL is the default, and
+all options after the default are ignored."
+  :group 'muse-latex
+  :type '(alist :key-type sexp :value-type string))
+
+(defcustom muse-latex-inline-end-delimiters
+  '(("mathjax-html"	. " \\) ")
+    ("mathjax-xhtml"	. " \\) ")
+    (nil		. "$"))
+  "An assoc list of the closing delimiters for inline math mode. The
+CAR is the style and the CDR is the delimiter. NIL is the default, and
+all options after the default are ignored."
+  :group 'muse-latex
+  :type '(alist :key-type sexp :value-type string))
+
+
+(defun muse-publish-latex-delimiters (centered begin)
+  "Queries the variables
+`muse-latex-inline-begin-delimiters',
+`muse-latex-inline-end-delimiters',
+`muse-latex-centered-begin-delimiters' and
+`muse-latex-centered-end-delimiters' for the correct
+delimiter to insert."
+  (let* ((delimiter-alist (cond (centered
+				 (if begin muse-latex-centered-begin-delimiters
+				   muse-latex-centered-end-delimiters))
+				(t
+				 (if begin muse-latex-inline-begin-delimiters
+				   muse-latex-inline-end-delimiters))))
+	 delim style)
+    (while (and
+	    (setq style			(caar delimiter-alist))
+	    (null (setq delim		(if (muse-style-derived-p style) (cdar delimiter-alist))))
+	    (setq delimiter-alist	(cdr delimiter-alist))))
+    (or delim (cdr (assoc nil delimiter-alist)))))
+  
+(defcustom muse-publish-latex-tag-as-is '("latex" "context" "mathjax-html" "mathjax-xhtml")
+  "Styles which should publish La/TeX source as is."
+  :type '(repeat string)
+  :group 'muse-latex)
+
+(defun muse-publish-latex-tag-as-is ()
+  "Query the variable `muse-publish-latex-tag-as-is' if STYLE should
+publish <latex> tags as literals."
+  (memq t
+	(mapcar (lambda(x) (muse-style-derived-p x)) muse-publish-latex-tag-as-is)))
+
+
+
+
 ;;; Register the Muse LATEX Publishers
 
 (muse-define-style "latex"
